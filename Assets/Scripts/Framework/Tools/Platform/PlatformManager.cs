@@ -1,5 +1,4 @@
-﻿using DG.Tweening.Plugins.Core.PathCore;
-using Platform;
+﻿using Platform;
 using UnityEngine;
 public abstract class PlatformManager
 {
