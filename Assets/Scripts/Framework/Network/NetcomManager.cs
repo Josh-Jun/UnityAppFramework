@@ -13,6 +13,7 @@ public partial class NetcomManager : Singleton<NetcomManager>
     public const string Token = "1837bc8456fe33e2df9a4fe17cf7ffb7cd392b0f63d77a9c";
     public const string Identifier = "10";
     public const string id = "e671d95cb4fb445e88c5e7540ad13177";
+    public const int Port = 17888; //通信端口
 
     private string MakeUrl(string url, params object[] args)
     {
