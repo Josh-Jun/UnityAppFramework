@@ -8,3 +8,4 @@ obj/
 *.csproj
 *.sln
 Assets/XLua/Gen/
+Assets/XLua/Gen.meta
