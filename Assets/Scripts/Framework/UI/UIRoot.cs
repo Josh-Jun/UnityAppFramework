@@ -111,10 +111,7 @@ public class UIRoot : SingletonMono<UIRoot>
     public UIWindowBase LoadWindow(string path)
     {
         UIWindowBase uiWindowBase = null;
-        if (!App.IsHotfixAssets)
-        {
-            
-        }
+        
         return uiWindowBase;
     }
     /// <summary> 
