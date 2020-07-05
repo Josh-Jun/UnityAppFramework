@@ -11,7 +11,7 @@ namespace Hotfix
         public HotfixRoot()
         {
             string prefab_HotfixPath = "App/Hotfix/Windows/HotfixWin";
-            hotfixWin = AssetsManager.Instance.LoadLocalWindow<HotfixWin>(prefab_HotfixPath);
+            hotfixWin = UIRoot.Instance.LoadLocalWindow<HotfixWin>(prefab_HotfixPath);
         }
 
         public void Begin()

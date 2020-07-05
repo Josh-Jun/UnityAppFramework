@@ -3,10 +3,11 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using System.Linq;
+using EventController;
 
 public class UIRoot : SingletonMono<UIRoot>
 {
-    private Camera uiCamera;//UI相机
+    private Camera UICamera;//UI相机
     private GameObject canvasObject;//Canvas游戏对象
     private GameObject eventSystemObject;//EventSystem游戏对象
 
@@ -16,14 +17,14 @@ public class UIRoot : SingletonMono<UIRoot>
     void Awake()
     {
         #region Camera
-        uiCamera = gameObject.AddComponent<Camera>();
-        uiCamera.clearFlags = CameraClearFlags.Depth;
-        uiCamera.cullingMask = 1 << 5;
-        uiCamera.orthographic = true;
-        uiCamera.nearClipPlane = 0;
-        uiCamera.useOcclusionCulling = false;
-        uiCamera.allowMSAA = false;
-        uiCamera.allowHDR = false;
+        UICamera = gameObject.AddComponent<Camera>();
+        UICamera.clearFlags = CameraClearFlags.Depth;
+        UICamera.cullingMask = 1 << 5;
+        UICamera.orthographic = true;
+        UICamera.nearClipPlane = 0;
+        UICamera.useOcclusionCulling = false;
+        UICamera.allowMSAA = false;
+        UICamera.allowHDR = false;
         #endregion
 
         #region UI Canvas
@@ -31,12 +32,12 @@ public class UIRoot : SingletonMono<UIRoot>
         canvasObject.transform.SetParent(transform);
         canvasObject.layer = 5;
 
-        GetCanvas().renderMode = RenderMode.ScreenSpaceCamera;
-        GetCanvas().worldCamera = uiCamera;
+        UICanvas.renderMode = RenderMode.ScreenSpaceCamera;
+        UICanvas.worldCamera = UICamera;
 
-        GetCanvasScaler().uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        GetCanvasScaler().referenceResolution = new Vector2(Screen.width, Screen.height);
-        GetCanvasScaler().screenMatchMode = CanvasScaler.ScreenMatchMode.Shrink;
+        UICanvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        UICanvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
+        UICanvasScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Shrink;
         #endregion
 
         #region EventSystem
@@ -45,58 +46,27 @@ public class UIRoot : SingletonMono<UIRoot>
         #endregion
     }
 
-    /// <summary>
-    /// 获取Canvas组件
-    /// </summary>
-    /// <returns></returns>
-    public Canvas GetCanvas()
-    {
-        return canvasObject.GetComponent<Canvas>();
-    }
-    /// <summary>
-    /// 获取Canvas根RectTransform
-    /// </summary>
-    /// <returns></returns>
-    public RectTransform GetRectTransform()
-    {
-        return canvasObject.GetComponent<RectTransform>();
-    }
-    /// <summary>
-    /// 获取CanvasScaler组件
-    /// </summary>
-    /// <returns></returns>
-    public CanvasScaler GetCanvasScaler()
-    {
-        return canvasObject.GetComponent<CanvasScaler>();
-    }
-    /// <summary>
-    /// 获取GraphicRaycaster组件
-    /// </summary>
-    /// <returns></returns>
-    public GraphicRaycaster GetGraphicRaycaster()
-    {
-        return canvasObject.GetComponent<GraphicRaycaster>();
-    }
-    /// <summary>
-    /// UGUI坐标
-    /// </summary>
-    /// <param name="mousePosition"></param>
-    /// <returns></returns>
+    /// <summary> Canvas组件 </summary>
+    public Canvas UICanvas { get { return canvasObject.GetComponent<Canvas>(); } private set { } }
+    /// <summary> 获取Canvas根RectTransform </summary>
+     public RectTransform UIRectTransform { get { return canvasObject.GetComponent<RectTransform>(); } private set { } }
+    /// <summary> 获取CanvasScaler组件 </summary>
+    public CanvasScaler UICanvasScaler { get { return canvasObject.GetComponent<CanvasScaler>(); } private set { } }
+    /// <summary> 获取GraphicRaycaster组件 </summary>
+    public GraphicRaycaster UIGraphicRaycaster { get { return canvasObject.GetComponent<GraphicRaycaster>(); } private set { } }
+
+    /// <summary> UGUI坐标 mousePosition</summary>
     public Vector2 ScreenPointInRectangle(Vector2 mousePosition)
     {
-        if (GetCanvas().worldCamera.orthographic == true)
+        if (UICanvas.worldCamera.orthographic == true)
         {
             return (mousePosition - new Vector2(Screen.width / 2, Screen.height / 2));
         }
         Vector2 position;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(GetRectTransform(), mousePosition, GetCanvas().worldCamera, out position);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(UIRectTransform, mousePosition, UICanvas.worldCamera, out position);
         return position;
     }
-    /// <summary>
-    /// 判断是否点中UI
-    /// </summary>
-    /// <param name="layer"></param>
-    /// <returns></returns>
+    /// <summary> 判断是否点中UI </summary>
     public bool CheckUIRaycastObjects(int layer = 0)
     {
         PointerEventData eventData = new PointerEventData(EventSystem.current);
@@ -114,19 +84,14 @@ public class UIRoot : SingletonMono<UIRoot>
             }
         }
         List<RaycastResult> list = new List<RaycastResult>();
-        this.GetGraphicRaycaster().Raycast(eventData, list);
+        this.UIGraphicRaycaster.Raycast(eventData, list);
         return list.Count > layer;
     }
 
-    /// <summary>
-    /// 添加空的UI子物体(Image,RawImage,Text)
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="parent"></param>
-    /// <returns></returns>
+    /// <summary> 添加空的UI子物体(Image,RawImage,Text) </summary>
     public T AddChild<T>(GameObject parent = null) where T : Component
     {
-        RectTransform rectParent = parent ? parent.TryGetComponect<RectTransform>() : GetRectTransform();
+        RectTransform rectParent = parent ? parent.TryGetComponect<RectTransform>() : UIRectTransform;
         GameObject go = new GameObject(typeof(T).ToString().Split('.').Last(), typeof(RectTransform), typeof(CanvasRenderer));
         RectTransform rectTransform = go.TryGetComponect<RectTransform>();
         rectTransform.SetParent(rectParent, false);
@@ -134,25 +99,65 @@ public class UIRoot : SingletonMono<UIRoot>
         return t;
     }
 
-    /// <summary>
-    /// 添加UI预制体，返回GameObject
-    /// </summary>
-    /// <param name="prefab"></param>
-    /// <param name="parent"></param>
-    /// <returns></returns>
+    /// <summary> 添加UI预制体，返回GameObject </summary>
     public GameObject AddChild(GameObject prefab, GameObject parent = null)
     {
-        RectTransform rectParent = parent ? parent.TryGetComponect<RectTransform>() : GetRectTransform();
+        RectTransform rectParent = parent ? parent.TryGetComponect<RectTransform>() : UIRectTransform;
         GameObject go = Instantiate(prefab, rectParent);
         return go;
     }
 
-    /// <summary>
-    /// 移动到某个场景
-    /// </summary>
-    /// <param name="scene"></param>
-    public void MoveToScene(string sceneName)
+    /// <summary>  </summary>
+    public UIWindowBase LoadWindow(string path)
     {
-        AssetsManager.Instance.MoveGameObjectToScene(gameObject, sceneName);
+        UIWindowBase uiWindowBase = null;
+        if (!App.IsHotfixAssets)
+        {
+            
+        }
+        return uiWindowBase;
+    }
+    /// <summary> 
+    /// 加载窗口 添加T(Component)类型脚本
+    /// path = sceneName/folderName/assetName
+    /// scnenName 打包资源的第一层文件夹名称
+    /// folderName 打包资源的第二层文件夹名称
+    /// assetName 资源名称
+    /// state 初始化窗口是否显示
+    /// </summary>
+    public T LoadWindow<T>(string path, bool state = false) where T : Component
+    {
+        GameObject go = AssetsManager.Instance.LoadAsset<GameObject>(path);
+        if (go != null)
+        {
+            go = Instantiate(go, UIRectTransform);
+            go.transform.localEulerAngles = Vector3.zero;
+            go.transform.localScale = Vector3.one;
+            go.name = go.name.Replace("(Clone)", "");
+            T t = go.AddComponent<T>();
+            EventDispatcher.TriggerEvent(go.name, state);
+            return t;
+        }
+        return null;
+    }
+    /// <summary> 
+    /// 加载窗口 添加T(Component)类型脚本
+    /// 加载本地资源，即Resources文件夹下资源
+    /// state 初始化窗口是否显示
+    /// </summary>
+    public T LoadLocalWindow<T>(string path, bool state = false) where T : Component
+    {
+        GameObject go = AssetsManager.Instance.LoadLocalAsset<GameObject>(path);
+        if (go != null)
+        {
+            go = Instantiate(go, UIRectTransform);
+            go.transform.localEulerAngles = Vector3.zero;
+            go.transform.localScale = Vector3.one;
+            go.name = go.name.Replace("(Clone)", "");
+            T t = go.AddComponent<T>();
+            EventDispatcher.TriggerEvent(go.name, state);
+            return t;
+        }
+        return null;
     }
 }

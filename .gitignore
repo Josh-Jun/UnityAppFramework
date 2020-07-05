@@ -7,3 +7,4 @@ Temp/
 obj/
 *.csproj
 *.sln
+Assets/XLua/Gen/

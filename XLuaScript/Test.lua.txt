@@ -1,0 +1,30 @@
+local UnityEngine=CS.UnityEngine
+
+function InitEvent()
+    print("lua Init...")
+	
+end
+
+function RegisterEvent(isRemove)
+    
+end
+
+function InitWindow()
+    print("lua InitWindow...")
+end
+
+function OpenWindow()
+    print("lua OpenWindow...")
+end
+
+function CloseWindow()
+    print("lua CloseWindow...")
+end
+
+function Update()
+    print("lua Update")
+end
+
+function OnDestroy()
+    print("lua OnDestroy")
+end

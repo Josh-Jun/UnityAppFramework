@@ -47,52 +47,6 @@ public class AssetsManager : Singleton<AssetsManager>
     }
     #endregion
 
-    #region 加载窗口
-    /// <summary> 
-    /// 加载窗口 添加T(Component)类型脚本
-    /// path = sceneName/folderName/assetName
-    /// scnenName 打包资源的第一层文件夹名称
-    /// folderName 打包资源的第二层文件夹名称
-    /// assetName 资源名称
-    /// state 初始化窗口是否显示
-    /// </summary>
-    public T LoadWindow<T>(string path, bool state = false) where T : Component
-    {
-        GameObject go = LoadAsset<GameObject>(path);
-        if (go != null)
-        {
-            go = UnityEngine.Object.Instantiate(go, UIRoot.Instance.GetRectTransform());
-            go.transform.localEulerAngles = Vector3.zero;
-            go.transform.localScale = Vector3.one;
-            go.name = go.name.Replace("(Clone)", "");
-            T t = go.AddComponent<T>();
-            EventDispatcher.TriggerEvent(go.name, state);
-            return t;
-        }
-        return null;
-    }
-    /// <summary> 
-    /// 加载窗口 添加T(Component)类型脚本
-    /// 加载本地资源，即Resources文件夹下资源
-    /// state 初始化窗口是否显示
-    /// </summary>
-    public T LoadLocalWindow<T>(string path, bool state = false) where T : Component
-    {
-        GameObject go = LoadLocalAsset<GameObject>(path);
-        if (go != null)
-        {
-            go = UnityEngine.Object.Instantiate(go, UIRoot.Instance.GetRectTransform());
-            go.transform.localEulerAngles = Vector3.zero;
-            go.transform.localScale = Vector3.one;
-            go.name = go.name.Replace("(Clone)", "");
-            T t = go.AddComponent<T>();
-            EventDispatcher.TriggerEvent(go.name, state);
-            return t;
-        }
-        return null;
-    }
-    #endregion
-
     #region 加载资源
     /// <summary> 
     /// 加载ab包中的资源，返回T
