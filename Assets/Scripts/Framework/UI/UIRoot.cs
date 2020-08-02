@@ -7,7 +7,7 @@ using EventController;
 
 public class UIRoot : SingletonMono<UIRoot>
 {
-    private Camera UICamera;//UI相机
+    private Camera uiCamera;//UI相机
     private GameObject canvasObject;//Canvas游戏对象
     private GameObject eventSystemObject;//EventSystem游戏对象
 
@@ -17,14 +17,14 @@ public class UIRoot : SingletonMono<UIRoot>
     void Awake()
     {
         #region Camera
-        UICamera = gameObject.AddComponent<Camera>();
-        UICamera.clearFlags = CameraClearFlags.Depth;
-        UICamera.cullingMask = 1 << 5;
-        UICamera.orthographic = true;
-        UICamera.nearClipPlane = 0;
-        UICamera.useOcclusionCulling = false;
-        UICamera.allowMSAA = false;
-        UICamera.allowHDR = false;
+        uiCamera = gameObject.AddComponent<Camera>();
+        uiCamera.clearFlags = CameraClearFlags.Depth;
+        uiCamera.cullingMask = 1 << 5;
+        uiCamera.orthographic = true;
+        uiCamera.nearClipPlane = 0;
+        uiCamera.useOcclusionCulling = false;
+        uiCamera.allowMSAA = false;
+        uiCamera.allowHDR = false;
         #endregion
 
         #region UI Canvas
@@ -33,7 +33,7 @@ public class UIRoot : SingletonMono<UIRoot>
         canvasObject.layer = 5;
 
         UICanvas.renderMode = RenderMode.ScreenSpaceCamera;
-        UICanvas.worldCamera = UICamera;
+        UICanvas.worldCamera = uiCamera;
 
         UICanvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         UICanvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
@@ -46,10 +46,12 @@ public class UIRoot : SingletonMono<UIRoot>
         #endregion
     }
 
+    /// <summary> UI相机 </summary>
+    public Camera UICamera { get { return uiCamera; } private set { } }
     /// <summary> Canvas组件 </summary>
     public Canvas UICanvas { get { return canvasObject.GetComponent<Canvas>(); } private set { } }
     /// <summary> 获取Canvas根RectTransform </summary>
-     public RectTransform UIRectTransform { get { return canvasObject.GetComponent<RectTransform>(); } private set { } }
+    public RectTransform UIRectTransform { get { return canvasObject.GetComponent<RectTransform>(); } private set { } }
     /// <summary> 获取CanvasScaler组件 </summary>
     public CanvasScaler UICanvasScaler { get { return canvasObject.GetComponent<CanvasScaler>(); } private set { } }
     /// <summary> 获取GraphicRaycaster组件 </summary>
