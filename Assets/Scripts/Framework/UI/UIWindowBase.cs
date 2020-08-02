@@ -5,12 +5,15 @@ using UnityEngine;
 public class UIWindowBase : EventBaseMono
 {
     private bool isInitWindow = true;//打开窗口初始化一次
-    private void Awake()
+    protected virtual void Awake()
     {
         InitEvent();
         RegisterEvent();
     }
+    protected virtual void Start()
+    {
 
+    }
     /// <summary>初始化</summary>
     protected virtual void InitEvent()
     {
