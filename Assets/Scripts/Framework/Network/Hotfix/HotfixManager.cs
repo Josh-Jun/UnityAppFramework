@@ -6,7 +6,7 @@ using System.Collections.Generic;
 /// <summary>
 /// 热更管理者
 /// </summary>
-public class HotfixManager : Singleton<HotfixManager>
+public class HotfixManager : SingletonEvent<HotfixManager>
 {
     private string LocalPath;
     private string XmlLocalVersionPath;
