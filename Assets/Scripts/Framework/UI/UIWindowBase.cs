@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UIWindowBase : EventBaseMono
 {
-    private bool isInitWindow = true;//打开窗口初始化一次
+    private bool FirstInitWindow = true;//第一次初始化窗口
     protected virtual void Awake()
     {
         InitEvent();
@@ -42,9 +42,9 @@ public class UIWindowBase : EventBaseMono
         if (isActive)
         {
             OpenWindow();
-            if (isInitWindow)
+            if (FirstInitWindow)
             {
-                isInitWindow = false;
+                FirstInitWindow = false;
                 InitWindow();
             }
         }
