@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 namespace EventListener
 {
-    public class Eventlistener : EventTrigger
+    public class EventListener : EventTrigger
     {
         public delegate void VoidDelegate(GameObject go);
         public delegate void VectorDelegate(GameObject go, Vector2 screenPosition);
@@ -16,20 +16,20 @@ namespace EventListener
         public VectorDelegate onDrag;//拖拽中事件
         public VectorDelegate onEndDrag;//结束拖拽事件
 
-        static public Eventlistener Get(GameObject go)
+        static public EventListener Get(GameObject go)
         {
             PhysicsRaycaster raycaster = Camera.main.gameObject.GetComponent<PhysicsRaycaster>();
             if (raycaster == null) raycaster = Camera.main.gameObject.AddComponent<PhysicsRaycaster>();
-            Eventlistener listener = go.GetComponent<Eventlistener>();
-            if (listener == null) listener = go.AddComponent<Eventlistener>();
+            EventListener listener = go.GetComponent<EventListener>();
+            if (listener == null) listener = go.AddComponent<EventListener>();
             return listener;
         }
-        static public Eventlistener Get(Component com)
+        static public EventListener Get(Component com)
         {
             PhysicsRaycaster raycaster = Camera.main.gameObject.GetComponent<PhysicsRaycaster>();
             if (raycaster == null) raycaster = Camera.main.gameObject.AddComponent<PhysicsRaycaster>();
-            Eventlistener listener = com.GetComponent<Eventlistener>();
-            if (listener == null) listener = com.gameObject.AddComponent<Eventlistener>();
+            EventListener listener = com.GetComponent<EventListener>();
+            if (listener == null) listener = com.gameObject.AddComponent<EventListener>();
             return listener;
         }
         public override void OnPointerClick(PointerEventData eventData)
