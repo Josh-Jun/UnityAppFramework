@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>功能:定时服务</summary>
-public class TaskTimerManager : SingletonMono<TaskTimerManager>
+public class TimerTaskManager : SingletonMono<TimerTaskManager>
 {
-    private TaskTimer timer;//计时器
+    private TimerTask timer;//计时器
     private static readonly string lockTask = "lockTask";//任务锁
     private Queue<TaskPack> timerQueue = new Queue<TaskPack>();//定时任务队列
     public void Awake()
     {
-        timer = new TaskTimer(50);//1秒=1000毫秒 50毫秒调用1次
+        timer = new TimerTask(50);//1秒=1000毫秒 50毫秒调用1次
         #region 注册Handle后,子线程中执行完后,可在主线程中执行回调
         //1.在子线程处理，子线程中执行逻辑
         //2.在子线程处理，主线程中执行逻辑

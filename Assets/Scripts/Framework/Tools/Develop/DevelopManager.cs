@@ -30,10 +30,10 @@ public static class DevelopManager
         }
         _animator.Play(stateName, layer, normalizedTime);
         _animator.Update(0);
-        DEVELOP_ANIMATOR_TIME_ID = TaskTimerManager.Instance.AddTimeTask((int id) =>
+        DEVELOP_ANIMATOR_TIME_ID = TimerTaskManager.Instance.AddTimeTask((int id) =>
         {
             callback?.Invoke();
-            TaskTimerManager.Instance.DeleteTimeTask(DEVELOP_ANIMATOR_TIME_ID);
+            TimerTaskManager.Instance.DeleteTimeTask(DEVELOP_ANIMATOR_TIME_ID);
         }, _time, TimeUnit.Second);
     }
 
@@ -54,7 +54,7 @@ public static class DevelopManager
             return;
         }
         int index = 0;//可以用来控制起始播放的动画帧索引
-        DEVELOP_ANIMATOR_TIME_ID = TaskTimerManager.Instance.AddTimeTask((int id) =>
+        DEVELOP_ANIMATOR_TIME_ID = TimerTaskManager.Instance.AddTimeTask((int id) =>
         {
             //当我们需要在整个动画播放完之后  重复播放后面的部分 就可以展现我们纯代码播放的自由性
             if (index > orderFrames.Length - 1)
@@ -66,7 +66,7 @@ public static class DevelopManager
                 }
                 else
                 {
-                    TaskTimerManager.Instance.DeleteTimeTask(DEVELOP_ANIMATOR_TIME_ID);
+                    TimerTaskManager.Instance.DeleteTimeTask(DEVELOP_ANIMATOR_TIME_ID);
                 }
             }
             image.sprite = orderFrames[index];
