@@ -166,7 +166,7 @@ public static class DevelopManager
     /// <param name="args"></param>
     public static void OnClick(this GameObject go, UnityAction<object[]> cb, params object[] args)
     {
-        UIEventListener.Get(go).onClick = (obj) =>
+        Eventlistener.Get(go).onClick = (obj) =>
         {
             cb?.Invoke(args);
         };
@@ -179,7 +179,7 @@ public static class DevelopManager
     /// <param name="args"></param>
     public static void OnClick(this Component com, UnityAction<object[]> cb, params object[] args)
     {
-        UIEventListener.Get(com).onClick = (obj) =>
+        Eventlistener.Get(com).onClick = (obj) =>
         {
             cb?.Invoke(args);
         };

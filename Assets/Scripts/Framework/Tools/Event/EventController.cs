@@ -26,16 +26,6 @@ namespace EventController {
         public bool AddEventListener<T>(string eventType,Action<T> handler,bool isDesignateRemove,EventDispatcherMode eventDispatcherMode = EventDispatcherMode.DEFAULT) {
             return OnListenerAdding(eventType,handler,isDesignateRemove,eventDispatcherMode);
         }
-        public bool AddEventListener<T, U>(string eventType,Action<T,U> handler,bool isDesignateRemove,EventDispatcherMode eventDispatcherMode = EventDispatcherMode.DEFAULT) {
-            return OnListenerAdding(eventType,handler,isDesignateRemove,eventDispatcherMode);
-        }
-        public bool AddEventListener<T, U, V>(string eventType,Action<T,U,V> handler,bool isDesignateRemove,EventDispatcherMode eventDispatcherMode = EventDispatcherMode.DEFAULT) {
-            return OnListenerAdding(eventType,handler,isDesignateRemove,eventDispatcherMode);
-        }
-        public bool AddEventListener<T, U, V, W>(string eventType,Action<T,U,V,W> handler,bool isDesignateRemove,EventDispatcherMode eventDispatcherMode = EventDispatcherMode.DEFAULT) {
-            return OnListenerAdding(eventType,handler,isDesignateRemove,eventDispatcherMode);
-        }
-
         //内部实现
         private bool OnListenerAdding(string eventType,Delegate handler,bool isDesignateRemove,EventDispatcherMode eventDispatcherMode) {
             //返回值，是否插入成功
@@ -55,7 +45,7 @@ namespace EventController {
                 //添加事件的监听
                 Hashtable event_table = EventSubscription_Table[eventType] as Hashtable;
                 //创建一个事件监听的相关数据对象
-                EventListenerData eventListenerData = new EventListenerData(listenerObject,eventType,handler,eventDispatcherMode);
+                EventData eventListenerData = new EventData(listenerObject,eventType,handler,eventDispatcherMode);
                 //转化为字符串  
                 string eventListenerData_string = EventListenerData_To_String(eventListenerData);
                 //判断该事件是否有这个类中这个函数的监听
@@ -77,7 +67,7 @@ namespace EventController {
             if(EventSubscription_Table.ContainsKey(eventType)) {
                 //内层
                 Hashtable event_table = EventSubscription_Table[eventType] as Hashtable;
-                EventListenerData eventListenerData = new EventListenerData(listenerObject,eventType,handler,EventDispatcherMode.DEFAULT);
+                EventData eventListenerData = new EventData(listenerObject,eventType,handler,EventDispatcherMode.DEFAULT);
                 string eventListenerData_string = EventListenerData_To_String(eventListenerData);
                 //
                 if(event_table.Contains(eventListenerData_string)) {
@@ -103,13 +93,12 @@ namespace EventController {
                 //获取建立监听的对象
                 object listenerObject = GetListenerObject(handler);
                 //内层
-                string eventListenerData_string = EventListenerData_To_String(new EventListenerData(listenerObject,eventType,handler,EventDispatcherMode.DEFAULT));
+                string eventListenerData_string = EventListenerData_To_String(new EventData(listenerObject,eventType,handler,EventDispatcherMode.DEFAULT));
                 event_table.Remove(eventListenerData_string);
                 isSuccess = true;
             }
             return isSuccess;
         }
-
 
         //删除所有事件的所有监听
         public void RemoveAllEventListeners() {
@@ -165,72 +154,6 @@ namespace EventController {
             }
             return isSuccess;
         }
-        //触发某个事件
-        public bool DispatchEvent<T, U>(string eventType,T arg1,U arg2) {
-            //返回值
-            bool isSuccess = false;
-            List<Delegate> handlerList = new List<Delegate>();
-            if(OnDispatchEvent(eventType,ref handlerList)) {
-                if(handlerList != null) {
-                    foreach(Delegate temp in handlerList) {
-                        Action<T,U> action = temp as Action<T,U>;
-                        try {
-                            action(arg1,arg2);
-                        } catch(Exception e) {
-                            Debug.LogException(e);
-                        }
-                    }
-
-                    isSuccess = true;
-                }
-            }
-            return isSuccess;
-        }
-        //触发某个事件
-        public bool DispatchEvent<T, U, V>(string eventType,T arg1,U arg2,V arg3) {
-            //返回值
-            bool isSuccess = false;
-            List<Delegate> handlerList = new List<Delegate>();
-            if(OnDispatchEvent(eventType,ref handlerList)) {
-                if(handlerList != null) {
-                    foreach(Delegate temp in handlerList) {
-                        Action<T,U,V> action = temp as Action<T,U,V>;
-                        try {
-                            action(arg1,arg2,arg3);
-                        } catch(Exception e) {
-                            Debug.LogException(e);
-                        }
-                    }
-
-                    isSuccess = true;
-                }
-            }
-            return isSuccess;
-        }
-        //触发某个事件
-        public bool DispatchEvent<T, U, V, W>(string eventType,T arg1,U arg2,V arg3,W arg4) {
-            //返回值
-            bool isSuccess = false;
-            List<Delegate> handlerList = new List<Delegate>();
-            if(OnDispatchEvent(eventType,ref handlerList)) {
-                if(handlerList != null) {
-                    foreach(Delegate temp in handlerList) {
-                        Action<T,U,V,W> action = temp as Action<T,U,V,W>;
-                        try {
-                            action(arg1,arg2,arg3,arg4);
-                        } catch(Exception e) {
-                            Debug.LogException(e);
-                        }
-                    }
-
-                    isSuccess = true;
-                }
-            }
-            return isSuccess;
-        }
-
-
-
         //内部，触发某个事件
         private bool OnDispatchEvent(string eventType,ref List<Delegate> handlerList) {
             //返回值
@@ -241,12 +164,12 @@ namespace EventController {
                 Hashtable event_table = EventSubscription_Table[eventType] as Hashtable;
                 IEnumerator event_table_itor = event_table.GetEnumerator();
                 DictionaryEntry dictionaryEntry;//外层某一对
-                EventListenerData eventListenerData;//内层某一个元素
+                EventData eventListenerData;//内层某一个元素
                 ArrayList toBeRemoved_arraylist = new ArrayList();//记录该事件需要单次调用的监听
                                                                   //循环该类型事件的所有监听
                 while(event_table_itor.MoveNext()) {
                     dictionaryEntry = (DictionaryEntry)event_table_itor.Current;
-                    eventListenerData = dictionaryEntry.Value as EventListenerData;
+                    eventListenerData = dictionaryEntry.Value as EventData;
                     handlerList.Add(eventListenerData.EventDelegate);
                     //单次
                     if(eventListenerData.EventListeningMode == EventDispatcherMode.SINGLE_SHOT) {
@@ -256,9 +179,9 @@ namespace EventController {
                     isSuccess = true;
                 }
 
-                EventListenerData toBeRemoved_eventlistenerdata;
+                EventData toBeRemoved_eventlistenerdata;
                 for(int count_int = toBeRemoved_arraylist.Count - 1 ; count_int >= 0 ; count_int--) {
-                    toBeRemoved_eventlistenerdata = toBeRemoved_arraylist[count_int] as EventListenerData;
+                    toBeRemoved_eventlistenerdata = toBeRemoved_arraylist[count_int] as EventData;
                     RemoveEventListener(toBeRemoved_eventlistenerdata.EventName,toBeRemoved_eventlistenerdata.EventDelegate);
                 }
             }
@@ -266,9 +189,8 @@ namespace EventController {
             return isSuccess;
         }
 
-
         //一个事件监听的相关数据对象转化为字符串，作为第二层table的键值
-        private string EventListenerData_To_String(EventListenerData aEventListenerData) {
+        private string EventListenerData_To_String(EventData aEventListenerData) {
             return aEventListenerData.EventListener.GetType().FullName + "_" + aEventListenerData.EventListener.GetType().GUID + "_" + aEventListenerData.EventName + "_" + (aEventListenerData.EventDelegate as System.Delegate).Method.Name.ToString();
         }
 

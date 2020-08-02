@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 namespace EventListener
 {
-    public class UIEventListener : EventTrigger
+    public class Eventlistener : EventTrigger
     {
         public delegate void VoidDelegate(GameObject go);
         public delegate void VectorDelegate(GameObject go, Vector2 screenPosition);
@@ -16,20 +16,20 @@ namespace EventListener
         public VectorDelegate onDrag;//拖拽中事件
         public VectorDelegate onEndDrag;//结束拖拽事件
 
-        static public UIEventListener Get(GameObject go)
+        static public Eventlistener Get(GameObject go)
         {
             PhysicsRaycaster raycaster = Camera.main.gameObject.GetComponent<PhysicsRaycaster>();
             if (raycaster == null) raycaster = Camera.main.gameObject.AddComponent<PhysicsRaycaster>();
-            UIEventListener listener = go.GetComponent<UIEventListener>();
-            if (listener == null) listener = go.AddComponent<UIEventListener>();
+            Eventlistener listener = go.GetComponent<Eventlistener>();
+            if (listener == null) listener = go.AddComponent<Eventlistener>();
             return listener;
         }
-        static public UIEventListener Get(Component com)
+        static public Eventlistener Get(Component com)
         {
             PhysicsRaycaster raycaster = Camera.main.gameObject.GetComponent<PhysicsRaycaster>();
             if (raycaster == null) raycaster = Camera.main.gameObject.AddComponent<PhysicsRaycaster>();
-            UIEventListener listener = com.GetComponent<UIEventListener>();
-            if (listener == null) listener = com.gameObject.AddComponent<UIEventListener>();
+            Eventlistener listener = com.GetComponent<Eventlistener>();
+            if (listener == null) listener = com.gameObject.AddComponent<Eventlistener>();
             return listener;
         }
         public override void OnPointerClick(PointerEventData eventData)

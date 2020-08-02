@@ -107,13 +107,6 @@ public class UIRoot : SingletonMono<UIRoot>
         return go;
     }
 
-    /// <summary>  </summary>
-    public UIWindowBase LoadWindow(string path)
-    {
-        UIWindowBase uiWindowBase = null;
-        
-        return uiWindowBase;
-    }
     /// <summary> 
     /// 加载窗口 添加T(Component)类型脚本
     /// path = sceneName/folderName/assetName

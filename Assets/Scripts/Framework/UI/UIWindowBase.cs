@@ -21,7 +21,7 @@ public class UIWindowBase : EventBaseMono
     protected virtual void RegisterEvent(bool isRemove = true)
     {
         //显隐
-        AddEventMsgPro(name, (object[] args) => {
+        AddEventMsgParams(name, (object[] args) => {
             SetWindowActive((bool)args[0]);
         }, isRemove);
     }
