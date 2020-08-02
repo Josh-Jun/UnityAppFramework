@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
 using UnityEditor;
+using UnityEditor.Sprites;
 using UnityEngine;
 /// <summary>
 /// AssetBundle编辑
@@ -15,9 +16,9 @@ public class AssetBundleWindowEditor : EditorWindow
 
     private BuildTarget buildTarget = BuildTarget.StandaloneWindows;
     private string outputPath = "Assets/StreamingAssets";
-    private string buildPath = "Assets/AssetsFolder";
-    private Dictionary<string, Dictionary<string, string>> sceneDic = new Dictionary<string, Dictionary<string, string>>();
-    private Dictionary<string, string> desDic = new Dictionary<string, string>();
+    private string buildPath = "Assets/Resources/AssetsFolder";
+    private readonly Dictionary<string, Dictionary<string, string>> sceneDic = new Dictionary<string, Dictionary<string, string>>();
+    private readonly Dictionary<string, string> desDic = new Dictionary<string, string>();
 
     private string version = "1";
 
@@ -310,6 +311,8 @@ public class AssetBundleWindowEditor : EditorWindow
     //[MenuItem("AssetBundle/BuildAllAssetBundle(一键打包)")]
     void BuildAllAssetBundles()
     {
+        //移动到根目录
+        string newPath = MoveAssetsToRoot(buildPath);
         string outPath = Application.dataPath.Replace("Assets", "") + outputPath + "/" + PlatformManager.Instance.Name();
         if (!FileManager.FolderExist(outPath))
         {
@@ -318,6 +321,8 @@ public class AssetBundleWindowEditor : EditorWindow
         BuildPipeline.BuildAssetBundles(outPath, BuildAssetBundleOptions.None, buildTarget);
 
         AssetDatabase.Refresh();
+        //移动回原始目录
+        MoveAssetsToOriginPath(newPath, buildPath);
         Debug.Log("AssetBundle 打包成功!");
     }
     #endregion
@@ -456,6 +461,100 @@ public class AssetBundleWindowEditor : EditorWindow
         }
         md5.Dispose();
         return sb.ToString();
+    }
+    #endregion
+
+    #region 资源移动
+    /// <summary>
+    /// 将资源移动到根目录
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    private static string MoveAssetsToRoot(string path)
+    {
+        path = AbsolutePathToRelativePath(path);
+        string floderName = path.Split('/').Last();
+        EditorUtility.DisplayProgressBar("正在移动资源", "", 0);
+        //移动资源
+        string newPath = string.Format("Assets/{0}", floderName);
+        AssetDatabase.MoveAsset(path, newPath);
+        //计算Sprite数量
+        string[] GUIDs = AssetDatabase.FindAssets("t:Sprite", new string[] { newPath });
+        List<TextureImporter> importerList = new List<TextureImporter>();
+        foreach (var item in GUIDs)
+        {
+            string assetPath = AssetDatabase.GUIDToAssetPath(item);
+            TextureImporter ti = AssetImporter.GetAtPath(assetPath) as TextureImporter;
+            if (ti.textureType == TextureImporterType.Sprite)
+            {
+                importerList.Add(ti);
+            }
+        }
+        //重置Tag
+        float completedCount = 0;
+        int totalCount = importerList.Count;
+        foreach (var item in importerList)
+        {
+            completedCount++;
+            EditorUtility.DisplayProgressBar("正在重设Tag", item.assetPath, completedCount / totalCount);
+            item.spritePackingTag = floderName;
+        }
+        //ReImport
+        DirectoryInfo direction = new DirectoryInfo(newPath);
+        FileInfo[] files = direction.GetFiles("*", SearchOption.AllDirectories);
+        completedCount = 0;
+        totalCount = files.Length;
+        foreach (var item in files)
+        {
+            completedCount++;
+            if (item.Name.EndsWith(".meta"))
+            {
+                continue;
+            }
+            string filePath = item.FullName.Substring(item.FullName.IndexOf("Assets"));
+            AssetDatabase.ImportAsset(filePath);
+            EditorUtility.DisplayProgressBar("Reimport", filePath, completedCount / totalCount);
+        }
+        EditorUtility.DisplayProgressBar("正在打包图集", "", 0);
+        //打包图集
+        Packer.RebuildAtlasCacheIfNeeded(EditorUserBuildSettings.activeBuildTarget, true, Packer.Execution.ForceRegroup);
+        EditorUtility.ClearProgressBar();
+        return RelativePathToAbsolutePath(newPath);
+    }
+
+    /// <summary>
+    /// 将资源移动到原始目录
+    /// </summary>
+    /// <param name="currentPath"></param>
+    /// <param name="originPath"></param>
+    private static void MoveAssetsToOriginPath(string currentPath, string originPath)
+    {
+        currentPath = AbsolutePathToRelativePath(currentPath);
+        originPath = AbsolutePathToRelativePath(originPath);
+        EditorUtility.DisplayProgressBar("正在移动资源", "", 0);
+        AssetDatabase.MoveAsset(currentPath, originPath);
+        AssetDatabase.Refresh();
+        EditorUtility.ClearProgressBar();
+    }
+
+    /// <summary>
+    /// 相对路径转到绝对路径
+    /// </summary>
+    /// <param name="relativePath"></param>
+    /// <returns></returns>
+    private static string RelativePathToAbsolutePath(string relativePath)
+    {
+        return string.Format("{0}/{1}", Application.dataPath, relativePath.Replace("Assets/", ""));
+    }
+
+    /// <summary>
+    /// 绝对路径转到相对路径
+    /// </summary>
+    /// <param name="absolutePath"></param>
+    /// <returns></returns>
+    private static string AbsolutePathToRelativePath(string absolutePath)
+    {
+        return absolutePath.Substring(absolutePath.IndexOf("Assets"));
     }
     #endregion
 }
