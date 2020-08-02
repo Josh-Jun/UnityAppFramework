@@ -17,7 +17,7 @@ namespace Hotfix
         public void Begin()
         {
             //SendEventMsg("HotfixWin", true);
-            hotfixWin.SetWindowActive(true);
+            //hotfixWin.SetWindowActive(true);
             hotfixWin.StartHotfix();
         }
 

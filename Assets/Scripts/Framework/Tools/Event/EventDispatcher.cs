@@ -25,8 +25,8 @@ namespace EventController {
             m_eventController.DispatchEvent(eventType);
         }
 
-        public static void TriggerEvent<T>(string eventType,T arg1) {
-            m_eventController.DispatchEvent<T>(eventType,arg1);
+        public static void TriggerEvent(string eventType,params object[] args) {
+            m_eventController.DispatchEvent(eventType, args);
         }
         #endregion
 
