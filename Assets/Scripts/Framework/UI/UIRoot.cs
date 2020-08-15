@@ -132,24 +132,4 @@ public class UIRoot : SingletonMono<UIRoot>
         }
         return null;
     }
-    /// <summary> 
-    /// 加载窗口 添加T(Component)类型脚本
-    /// 加载本地资源，即Resources文件夹下资源
-    /// state 初始化窗口是否显示
-    /// </summary>
-    public T LoadLocalWindow<T>(string path, bool state = false) where T : Component
-    {
-        GameObject go = AssetsManager.Instance.LoadLocalAsset<GameObject>(path);
-        if (go != null)
-        {
-            go = Instantiate(go, UIRectTransform);
-            go.transform.localEulerAngles = Vector3.zero;
-            go.transform.localScale = Vector3.one;
-            go.name = go.name.Replace("(Clone)", "");
-            T t = go.AddComponent<T>();
-            EventDispatcher.TriggerEvent(go.name, state);
-            return t;
-        }
-        return null;
-    }
 }

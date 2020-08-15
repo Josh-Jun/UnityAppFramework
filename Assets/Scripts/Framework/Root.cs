@@ -14,7 +14,7 @@ public class Root
         {
             if (ao.isDone)
             {
-                TextAsset config = AssetsManager.Instance.LoadLocalAsset<TextAsset>(path_AppRootConfig);
+                TextAsset config = Resources.Load<TextAsset>(path_AppRootConfig);
                 rootConfig = XmlSerializeManager.ProtoDeSerialize<RootConfig>(config.bytes);
                 for (int i = 0; i < rootConfig.ScriptNames.Count; i++)
                 {

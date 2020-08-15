@@ -4,7 +4,7 @@ using System.Timers;
 /// <summary>功能:计时器</summary>
 public class TimerTask
 {
-    private Action<Action<int>, int> taskHandle;//任务委托
+    private Action<Action, int> taskHandle;//任务委托
     private DateTime startDateTime;//开始日期计算机元年
     private Timer timer;//开启时间线程
 
@@ -122,7 +122,7 @@ public class TimerTask
                     }
                     else
                     {
-                        timeTask.action?.Invoke(timeTask.id);//Action不为空进行调用
+                        timeTask.action?.Invoke();//Action不为空进行调用
                     }
                 }
                 catch (Exception e)
@@ -196,7 +196,7 @@ public class TimerTask
     /// <param name="destTime">时间</param>
     /// <param name="timeUnit">时间类型</param>
     /// <param name="count">执行次数</param>
-    public int AddTimeTask(Action<int> action, double delayTime, TimeUnit timeUnit = TimeUnit.Millisecond, int count = 1)
+    public int AddTimeTask(Action action, double delayTime, TimeUnit timeUnit = TimeUnit.Millisecond, int count = 1)
     {
         double Millisecond = GetMillisecond(delayTime, timeUnit); //换算同一单位(毫秒)
         int idIndex = GetIdIndex();//获取唯一下标
@@ -230,7 +230,7 @@ public class TimerTask
     /// </summary>
     /// <param name="id">所替换的id</param>
     /// <returns></returns>
-    public bool ReplaceTimeTask(int id, Action<int> action, double delayTime, TimeUnit timeUnit = TimeUnit.Millisecond, int count = 1)
+    public bool ReplaceTimeTask(int id, Action action, double delayTime, TimeUnit timeUnit = TimeUnit.Millisecond, int count = 1)
     {
         double Millisecond = GetMillisecond(delayTime, timeUnit);
         TimeTask timeTask = new TimeTask()
@@ -305,7 +305,7 @@ public class TimerTask
                     }
                     else
                     {
-                        frameTask.action?.Invoke(frameTask.id);//Action不为空进行调用
+                        frameTask.action?.Invoke();//Action不为空进行调用
                     }
                 }
                 catch (Exception e)
@@ -378,7 +378,7 @@ public class TimerTask
     /// <param name="action">方法</param>
     /// <param name="destTime">时间</param>
     /// <param name="count">执行次数</param>
-    public int AddFrameTask(Action<int> action, int delayFrame, int count = 1)
+    public int AddFrameTask(Action action, int delayFrame, int count = 1)
     {
         int idIndex = GetIdIndex();//获取唯一下标
         lock (lockFrame)
@@ -448,7 +448,7 @@ public class TimerTask
     /// </summary>
     /// <param name="id">所替换的id</param>
     /// <returns></returns>
-    public bool ReplaceFrameTask(int id, Action<int> action, int delayFrame, int count = 1)
+    public bool ReplaceFrameTask(int id, Action action, int delayFrame, int count = 1)
     {
         FrameTask frameTask = new FrameTask()
         {
@@ -584,7 +584,7 @@ public class TimerTask
     }
 
     /// <summary> 设置Handle </summary>
-    public void SetHandle(Action<Action<int>, int> handle)
+    public void SetHandle(Action<Action, int> handle)
     {
         taskHandle = handle;
     }
@@ -673,7 +673,7 @@ public class TimeTask
 {
     public int id;
     public double endTime;//结束时间
-    public Action<int> action;//调用方法
+    public Action action;//调用方法
     public double delayTime;//延迟时间
     public int count;//执行次数(0:一直执行,count对应次数)
 }
@@ -683,7 +683,7 @@ public class FrameTask
 {
     public int id;
     public int endFrame;//结束帧
-    public Action<int> action;//调用方法
+    public Action action;//调用方法
     public int delayFrame;//延迟帧
     public int count;//执行次数(0:一直执行,count对应次数)
 }
@@ -692,7 +692,7 @@ public class FrameTask
 public class TaskPack
 {
     public int id;
-    public Action<int> cb;
+    public Action cb;
 }
 /// <summary>事件单位类型 </summary>
 public enum TimeUnit

@@ -9,100 +9,44 @@ using System;
 public class VideoManager : SingletonMono<VideoManager>
 {
     private RenderTexture movie;
-    private VideoPlayer videoPlayer;
+    public VideoPlayer VideoPlayer { get; private set; }
     private void Awake()
     {
-        videoPlayer = CreateVideoPlayer();
-        movie = new RenderTexture(Screen.width, Screen.height, 24);
+        VideoPlayer = this.TryGetComponect<VideoPlayer>();
+        VideoPlayer.sendFrameReadyEvents = true;
     }
 
-    private VideoPlayer CreateVideoPlayer(bool playOnAwake = false)
+    /// <summary>在RawImage上播放视频，URL</summary>
+    public void PlayVideo(RawImage rawImage, string url, Action cb = null, int width = 0, int height = 0)
     {
-        VideoPlayer video = this.TryGetComponect<VideoPlayer>();
-        video.playOnAwake = playOnAwake;
-        return video;
+        SetRenderTexture(width, height);
+        VideoPlayer.source = VideoSource.Url;
+        VideoPlayer.url = url;
+        rawImage.texture = movie;
+        VideoPlayer.Play();
+        VideoPlayer.loopPointReached += (VideoPlayer vp) => { cb?.Invoke(); };
     }
-
-    public void PlayVideo(Image image, VideoClip clip, UnityAction cb = null, bool loop = false, int width = 1920, int height = 1080)
+    /// <summary>在RawImage上播放视频，URL</summary>
+    public void PlayVideo(RawImage rawImage, VideoClip clip, Action cb = null, int width = 0, int height = 0)
     {
-        //在Image上播放视频
-        if (videoPlayer.targetTexture == null) return;
-        videoPlayer.renderMode = VideoRenderMode.RenderTexture;
-        videoPlayer.targetTexture = movie;
-        videoPlayer.source = VideoSource.VideoClip;
-        videoPlayer.clip = clip;
-        videoPlayer.isLooping = loop;
-        videoPlayer.Play();
-        PlayEndCallback(() => { cb?.Invoke(); });
-        int w = videoPlayer.targetTexture.width;
-        int h = videoPlayer.targetTexture.height;
-        image.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
-        Texture2D t = new Texture2D(w, h, TextureFormat.ARGB32, false);
-        RenderTexture.active = videoPlayer.targetTexture;
-        t.ReadPixels(new Rect(0, 0, w, h), 0, 0);
-        t.Apply();
-        image.sprite = Sprite.Create(t, new Rect(0, 0, t.width, t.height), new Vector2(0.5f, 0.5f)) as Sprite;
+        SetRenderTexture(width, height);
+        VideoPlayer.source = VideoSource.VideoClip;
+        VideoPlayer.clip = clip;
+        rawImage.texture = movie;
+        VideoPlayer.Play();
+        VideoPlayer.loopPointReached += (VideoPlayer vp) => { cb?.Invoke(); };
     }
-    public void PlayVideo(Image image, string url, UnityAction cb = null, bool loop = false, int width = 1920, int height = 1080)
+    /// <summary>设置RenderTexture</summary>
+    private void SetRenderTexture(int width, int height, int depth = 24)
     {
-        //在Image上播放视频
-        if (videoPlayer.targetTexture == null) return;
-        videoPlayer.renderMode = VideoRenderMode.RenderTexture;
-        videoPlayer.targetTexture = movie;
-        videoPlayer.source = VideoSource.Url;
-        videoPlayer.url = url;
-        videoPlayer.isLooping = loop;
-        videoPlayer.Play();
-        PlayEndCallback(() => { cb?.Invoke(); });
-        int w = videoPlayer.targetTexture.width;
-        int h = videoPlayer.targetTexture.height;
-        image.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
-        Texture2D t = new Texture2D(w, h, TextureFormat.ARGB32, false);
-        RenderTexture.active = videoPlayer.targetTexture;
-        t.ReadPixels(new Rect(0, 0, w, h), 0, 0);
-        t.Apply();
-        image.sprite = Sprite.Create(t, new Rect(0, 0, t.width, t.height), new Vector2(0.5f, 0.5f)) as Sprite;
-    }
-    public void PlayVideo(RawImage rawImage, VideoClip clip, UnityAction cb = null, bool loop = false, int width = 1920, int height = 1080)
-    {
-        //在RawImage上播放视频
-        if (videoPlayer.texture == null) return;
-        videoPlayer.renderMode = VideoRenderMode.APIOnly;
-        videoPlayer.source = VideoSource.VideoClip;
-        videoPlayer.clip = clip;
-        videoPlayer.isLooping = loop;
-        videoPlayer.Play();
-        PlayEndCallback(() => { cb?.Invoke(); });
-        rawImage.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
-        rawImage.texture = videoPlayer.texture;
-    }
-    public void PlayVideo(RawImage rawImage, string url, UnityAction cb = null, bool loop = false, int width = 1920, int height = 1080)
-    {
-        //在RawImage上播放视频
-        if (videoPlayer.texture == null) return;
-        videoPlayer.renderMode = VideoRenderMode.APIOnly;
-        videoPlayer.source = VideoSource.Url;
-        videoPlayer.url = url;
-        videoPlayer.isLooping = loop;
-        videoPlayer.Play();
-        PlayEndCallback(() => { cb?.Invoke(); });
-        rawImage.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
-        rawImage.texture = videoPlayer.texture;
-    }
-    /// <summary>播放结束回调</summary>
-    private void PlayEndCallback(UnityAction cb)
-    {
-        if (videoPlayer != null && videoPlayer.isPrepared)
+        VideoPlayer.renderMode = VideoRenderMode.RenderTexture;
+        VideoPlayer.targetTexture = movie;
+        if (width == 0 || height == 0)
         {
-            videoPlayer.loopPointReached += (videoPlayer) =>
-            {
-                if (videoPlayer != null)
-                {
-                    videoPlayer.frame = 1;
-                }
-                cb?.Invoke();
-            };
+            width = Screen.width;
+            height = Screen.height;
         }
+        movie = new RenderTexture(width, height, depth);
     }
 
     private long frameIndex = 0;
@@ -110,15 +54,15 @@ public class VideoManager : SingletonMono<VideoManager>
     /// <summary>获取视频某帧图片</summary>
     public void GetVideoFrameTexture(VideoClip clip, long frameId, Action<Texture2D> action)
     {
-        videoPlayer.renderMode = VideoRenderMode.APIOnly;
-        videoPlayer.source = VideoSource.VideoClip;
-        videoPlayer.clip = clip;
-        videoPlayer.waitForFirstFrame = true;
-        videoPlayer.sendFrameReadyEvents = true;
-        videoPlayer.frameReady += OnFrameReadyEvent;
-        videoPlayer.Play();
         frameIndex = frameId;
         callback = action;
+        VideoPlayer.renderMode = VideoRenderMode.APIOnly;
+        VideoPlayer.source = VideoSource.VideoClip;
+        VideoPlayer.clip = clip;
+        VideoPlayer.waitForFirstFrame = true;
+        VideoPlayer.sendFrameReadyEvents = true;
+        VideoPlayer.frameReady += OnFrameReadyEvent;
+        VideoPlayer.Play();
     }
     private void OnFrameReadyEvent(VideoPlayer source, long frameIdx)
     {
@@ -130,9 +74,9 @@ public class VideoManager : SingletonMono<VideoManager>
             texture.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
             texture.Apply();
             RenderTexture.active = null;
-            videoPlayer.frameReady -= OnFrameReadyEvent;
-            videoPlayer.sendFrameReadyEvents = false;
-            videoPlayer.Stop();
+            VideoPlayer.frameReady -= OnFrameReadyEvent;
+            VideoPlayer.sendFrameReadyEvents = false;
+            VideoPlayer.Stop();
             callback?.Invoke(texture);
         }
     }

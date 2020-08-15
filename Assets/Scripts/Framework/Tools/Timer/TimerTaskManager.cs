@@ -13,7 +13,7 @@ public class TimerTaskManager : SingletonMono<TimerTaskManager>
         #region 注册Handle后,子线程中执行完后,可在主线程中执行回调
         //1.在子线程处理，子线程中执行逻辑
         //2.在子线程处理，主线程中执行逻辑
-        timer.SetHandle((Action<int> cb, int id) =>
+        timer.SetHandle((Action cb, int id) =>
         {
             if (cb != null)
             {
@@ -39,7 +39,7 @@ public class TimerTaskManager : SingletonMono<TimerTaskManager>
                 taskPack = timerQueue.Dequeue();
                 if (taskPack != null)
                 {
-                    taskPack.cb(taskPack.id);
+                    taskPack.cb();
                 }
             }
         }
@@ -47,7 +47,7 @@ public class TimerTaskManager : SingletonMono<TimerTaskManager>
 
     #region 时间任务
     /// <summary>添加时间任务(默认:毫秒)</summary>
-    public int AddTimeTask(Action<int> action, float delayTime, TimeUnit timeUnit = TimeUnit.Millisecond, int count = 1)
+    public int AddTimeTask(Action action, float delayTime, TimeUnit timeUnit = TimeUnit.Millisecond, int count = 1)
     {
         return timer.AddTimeTask(action, delayTime, timeUnit, count);
     }
@@ -59,7 +59,7 @@ public class TimerTaskManager : SingletonMono<TimerTaskManager>
     }
 
     /// <summary>替换时间任务</summary>
-    public bool ReplaceTimeTask(int id, Action<int> action, float delayTime, TimeUnit timeUnit = TimeUnit.Millisecond, int count = 1)
+    public bool ReplaceTimeTask(int id, Action action, float delayTime, TimeUnit timeUnit = TimeUnit.Millisecond, int count = 1)
     {
         return timer.ReplaceTimeTask(id, action, delayTime, timeUnit, count);
     }
@@ -67,7 +67,7 @@ public class TimerTaskManager : SingletonMono<TimerTaskManager>
 
     #region 帧任务
     /// <summary>添加帧任务</summary>
-    public int AddFrameTask(Action<int> action, int delayFrame, int count = 1)
+    public int AddFrameTask(Action action, int delayFrame, int count = 1)
     {
         return timer.AddFrameTask(action, delayFrame, count);
     }
@@ -79,7 +79,7 @@ public class TimerTaskManager : SingletonMono<TimerTaskManager>
     }
 
     /// <summary>替换帧任务</summary>
-    public bool ReplaceFrameTask(int id, Action<int> action, int delayFrame, int count = 1)
+    public bool ReplaceFrameTask(int id, Action action, int delayFrame, int count = 1)
     {
         return timer.ReplaceFrameTask(id, action, delayFrame, count);
     }

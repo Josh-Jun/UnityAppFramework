@@ -19,7 +19,7 @@ public class TimerManager : SingletonMono<TimerManager> {
     }
 
     /// <summary>开始计时</summary>
-    public TimerData StartTimer(Action<float> cb) {
+    public int StartTimer(Action<float> cb) {
         timeId += 1;
         TimerData timer = new TimerData
         {
@@ -29,7 +29,7 @@ public class TimerManager : SingletonMono<TimerManager> {
             cb = cb,
         };
         timerLst.Add(timer);
-        return timer;
+        return timeId;
     }
 
     /// <summary>暂停计时</summary>

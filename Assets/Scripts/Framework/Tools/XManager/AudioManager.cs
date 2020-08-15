@@ -27,7 +27,7 @@ public class AudioManager : SingletonMono<AudioManager>
     /// <param name="cb"></param>
     public void PlayBackgroundAudio(AudioClip clip, UnityAction cb = null)
     {
-        PlayAudio(backgroundAudio, clip, cb, true);
+        PlayAudio(backgroundAudio, clip, cb, true, false);
     }
     /// <summary>
     /// 播放特效音乐
@@ -36,15 +36,7 @@ public class AudioManager : SingletonMono<AudioManager>
     /// <param name="cb"></param>
     public void PlayEffectAudio(AudioClip clip, UnityAction cb = null, bool overlap = false)
     {
-        AudioSource audio = overlap ? CreateAudioSource() : effectAudio;
-        PlayAudio(audio, clip, () =>
-        {
-            if (overlap)
-            {
-                Destroy(audio);
-            }
-            cb?.Invoke();
-        }, false);
+        PlayAudio(effectAudio, clip, cb, false, overlap);
     }
     /// <summary>
     /// 停止播放背景音乐
@@ -60,11 +52,18 @@ public class AudioManager : SingletonMono<AudioManager>
     /// <param name="clip"></param>
     /// <param name="callback"></param>
     /// <param name="isLoop"></param>
-    private void PlayAudio(AudioSource _audio, AudioClip clip, UnityAction callback = null, bool isLoop = false)
+    private void PlayAudio(AudioSource _audio, AudioClip clip, UnityAction callback = null, bool isLoop = false, bool overlap = false)
     {
-        _audio.clip = clip;
         _audio.loop = isLoop;
-        _audio.Play();
+        if (overlap)
+        {
+            _audio.PlayOneShot(clip);
+        }
+        else
+        {
+            _audio.clip = clip;
+            _audio.Play();
+        }
         StartCoroutine(AudioPlayFinished(_audio.clip.length, callback));
     }
     private IEnumerator AudioPlayFinished(float time, UnityAction callback)

@@ -57,15 +57,16 @@ public class AssetsManager : Singleton<AssetsManager>
     /// </summary>
     public T LoadAsset<T>(string path) where T : UnityEngine.Object
     {
-        string[] names = path.Split('/');
-        return AssetBundleManager.Instance.LoadAsset<T>(names[0], names[1], names[names.Length - 1]);
-    }
-    /// <summary> 
-    /// 加载本地资源，返回T，即Resources文件夹下资源
-    /// </summary>
-    public T LoadLocalAsset<T>(string path) where T : UnityEngine.Object
-    {
-        return Resources.Load<T>(path);
+        if (PlatformManager.Instance.IsEditor())
+        {
+            string assetPath = string.Format("AssetsFolder/{0}", path);
+            return Resources.Load<T>(assetPath);
+        }
+        else
+        {
+            string[] names = path.Split('/');
+            return AssetBundleManager.Instance.LoadAsset<T>(names[0], names[1], names[names.Length - 1]);
+        }
     }
     #endregion
 }
