@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using XLua;
 
-namespace XLua
+namespace XLuaFrame
 {
     /// <summary> 窗口生命周期</summary>
     public enum WindowLifeCycle

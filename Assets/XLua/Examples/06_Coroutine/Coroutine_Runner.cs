@@ -19,10 +19,9 @@ namespace XLuaTest
             get
             {
                 return new List<Type>()
-            {
-                typeof(WaitForSeconds),
-                typeof(WWW)
-            };
+                {
+                    typeof(WaitForSeconds),
+                };
             }
         }
     }

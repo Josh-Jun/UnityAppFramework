@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using XLua;
 
-namespace XLua
+namespace XLuaFrame
 {
     /// <summary> LuaUI类</summary>
     public class XLuaUIWindow : UIWindowBase {

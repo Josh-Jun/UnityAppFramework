@@ -4,8 +4,8 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using System.Linq;
 using EventController;
-using XLua;
 using System.Reflection;
+using XLuaFrame;
 
 public class UIRoot : SingletonMono<UIRoot>
 {

@@ -2,8 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using XLua;
 
-namespace XLua
+namespace XLuaFrame
 {
     public class XLuaRoot : SingletonEvent<XLuaRoot>, IRoot
     {
