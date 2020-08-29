@@ -4,6 +4,8 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using System.Linq;
 using EventController;
+using XLua;
+using System.Reflection;
 
 public class UIRoot : SingletonMono<UIRoot>
 {
@@ -117,7 +119,7 @@ public class UIRoot : SingletonMono<UIRoot>
     /// assetName 资源名称
     /// state 初始化窗口是否显示
     /// </summary>
-    public T LoadWindow<T>(string path, bool state = false) where T : Component
+    public UIWindowBase LoadWindow(string path, bool state = false)
     {
         GameObject go = AssetsManager.Instance.LoadAsset<GameObject>(path);
         if (go != null)
@@ -126,9 +128,57 @@ public class UIRoot : SingletonMono<UIRoot>
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
-            T t = go.AddComponent<T>();
+            UIWindowBase window = null;
+            string wndName = path.Split('/')[path.Split('/').Length - 1];
+            if (go.TryGetComponect<UIWindowBase>())
+            {
+                Debug.LogErrorFormat("{0}:脚本已存在,", wndName);
+            }
+            else
+            {
+                if (XLuaManager.Instance.IsLuaFileExist(path))
+                {
+                    window = go.AddComponent<XLuaUIWindow>().Init(path);//加载lua文件
+                }
+                else
+                {
+                    window = (UIWindowBase)go.AddComponent(Assembly.GetExecutingAssembly().GetType(wndName));
+                }
+            }
             EventDispatcher.TriggerEvent(go.name, state);
-            return t;
+            return window;
+        }
+        return null;
+    }
+    /// <summary> 加载本地窗口 </summary>
+    public UIWindowBase LoadLocalWindow(string path, bool state = false)
+    {
+        GameObject go = Resources.Load<GameObject>(path);
+        if (go != null)
+        {
+            go = Instantiate(go, UIRectTransform);
+            go.transform.localEulerAngles = Vector3.zero;
+            go.transform.localScale = Vector3.one;
+            go.name = go.name.Replace("(Clone)", "");
+            UIWindowBase window = null;
+            string wndName = path.Split('/')[path.Split('/').Length - 1];
+            if (go.TryGetComponect<UIWindowBase>())
+            {
+                Debug.LogErrorFormat("{0}:脚本已存在,", wndName);
+            }
+            else
+            {
+                if (XLuaManager.Instance.IsLuaFileExist(path))
+                {
+                    window = go.AddComponent<XLuaUIWindow>().Init(path);//加载lua文件
+                }
+                else
+                {
+                    window = (UIWindowBase)go.AddComponent(Assembly.GetExecutingAssembly().GetType(wndName));
+                }
+            }
+            EventDispatcher.TriggerEvent(go.name, state);
+            return window;
         }
         return null;
     }

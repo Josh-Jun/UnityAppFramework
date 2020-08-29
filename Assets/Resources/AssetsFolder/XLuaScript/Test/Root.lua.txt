@@ -1,0 +1,12 @@
+
+function Init()
+    print("lua Init...")
+end
+
+function Begin()
+    print("lua Begin...")
+end
+
+function End()
+    print("lua End")
+end

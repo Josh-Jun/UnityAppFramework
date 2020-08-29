@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-namespace XLuaFrame {
+namespace XLua {
     /// <summary> Xlua拓展类 </summary>
     public static class XluaCustomClass {
         /// <summary> 批量打[Hotfix]标签 </summary>

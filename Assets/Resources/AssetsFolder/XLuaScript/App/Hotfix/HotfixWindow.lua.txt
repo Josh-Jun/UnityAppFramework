@@ -1,0 +1,25 @@
+﻿--HotfixWindow--
+
+function InitWindow()
+	
+end
+
+function RegisterEvent()
+    
+end
+
+function OpenWindow()
+    
+end
+
+function CloseWindow()
+    
+end
+
+function Update()
+    
+end
+
+function OnDestroy()
+    
+end

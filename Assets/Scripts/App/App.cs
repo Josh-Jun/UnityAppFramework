@@ -34,6 +34,6 @@ public class App : MonoBehaviour
     private void OnDestroy()
     {
         //结束接口实现
-        Root.Finish();
+        Root.End();
     }
 }

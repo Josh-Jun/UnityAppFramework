@@ -1,0 +1,21 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class #SCRIPTNAME# : SingletonEvent<#SCRIPTNAME#>, IRoot
+{
+	public #SCRIPTNAME#()
+    {
+        #NOTRIM#
+    }
+	
+    public void Begin()
+    {
+        #NOTRIM#
+    }
+	
+    public void End()
+    {
+        #NOTRIM#
+    }
+}

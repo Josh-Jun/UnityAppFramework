@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using XLua;
 
-namespace XLuaFrame
+namespace XLua
 {
     /// <summary> 窗口生命周期</summary>
-    public enum WndLifeCycle
+    public enum WindowLifeCycle
     {
         InitWindow,
         RegisterEvent,
@@ -17,6 +16,13 @@ namespace XLuaFrame
         OnDestroy,
     }
 
+    /// <summary> Root生命周期</summary>
+    public enum RootLifeCycle
+    {
+        Init,
+        Begin,
+        End,
+    }
     /// <summary> 所有lua行为仅共享一个luaenv </summary>
     public class XLuaManager : SingletonMono<XLuaManager>
     {

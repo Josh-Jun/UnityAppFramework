@@ -6,7 +6,7 @@ using Data;
 
 namespace Hotfix
 {
-    public class HotfixWin : UIWindowBase
+    public class HotfixWindow : UIWindowBase
     {
         private RectTransform progressBarPanel;
         private Image image_Progress;

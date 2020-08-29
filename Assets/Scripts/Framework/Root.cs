@@ -1,12 +1,14 @@
-﻿using System;
+﻿using Hotfix;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using XLua;
 
 public class Root
 {
     private const string path_HotfixScene = "A0_App/Scenes/HotfixScene";
     private const string path_AppRootConfig = "AppRootConfig";
-    private static RootConfig rootConfig;
+    private static RootScriptConfig rootConfig;
     private static Dictionary<string, IRoot> iRootPairs = new Dictionary<string, IRoot>();
     public static void Init()
     {
@@ -15,15 +17,25 @@ public class Root
             if (ao.isDone)
             {
                 TextAsset config = Resources.Load<TextAsset>(path_AppRootConfig);
-                rootConfig = XmlSerializeManager.ProtoDeSerialize<RootConfig>(config.bytes);
-                for (int i = 0; i < rootConfig.ScriptNames.Count; i++)
+                rootConfig = XmlSerializeManager.ProtoDeSerialize<RootScriptConfig>(config.bytes);
+                for (int i = 0; i < rootConfig.RootScript.Count; i++)
                 {
-                    Type type = Type.GetType(rootConfig.ScriptNames[i]);
-                    object obj = Activator.CreateInstance(type);
-                    IRoot iRoot = obj as IRoot;
-                    if (!iRootPairs.ContainsKey(rootConfig.ScriptNames[i]))
+                    IRoot iRoot = null;
+                    if (XLuaManager.Instance.IsLuaFileExist(rootConfig.RootScript[i].LuaScriptPath))
                     {
-                        iRootPairs.Add(rootConfig.ScriptNames[i], iRoot);
+                        XLuaRoot root = new XLuaRoot();
+                        root.Init(rootConfig.RootScript[i].LuaScriptPath);
+                        iRoot = root as IRoot;
+                    }
+                    else
+                    {
+                        Type type = Type.GetType(rootConfig.RootScript[i].ScriptName);
+                        object obj = Activator.CreateInstance(type);
+                        iRoot = obj as IRoot;
+                    }
+                    if (!iRootPairs.ContainsKey(rootConfig.RootScript[i].ScriptName))
+                    {
+                        iRootPairs.Add(rootConfig.RootScript[i].ScriptName, iRoot);
                     }
                 }
             }
@@ -33,14 +45,14 @@ public class Root
     {
         for (int i = 0; i < iRootPairs.Count; i++)
         {
-            iRootPairs[rootConfig.ScriptNames[i]].Begin();
+            iRootPairs[rootConfig.RootScript[i].ScriptName].Begin();
         }
     }
-    public static void Finish()
+    public static void End()
     {
         for (int i = 0; i < iRootPairs.Count; i++)
         {
-            iRootPairs[rootConfig.ScriptNames[i]].Finish();
+            iRootPairs[rootConfig.RootScript[i].ScriptName].End();
         }
     }
 }
