@@ -14,9 +14,5 @@ namespace Platform
         {
             return "Windows";
         }
-        public override string CachePath()
-        {
-            return string.Format(@"{0}/", Application.persistentDataPath);
-        }
     }
 }

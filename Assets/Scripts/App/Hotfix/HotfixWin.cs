@@ -18,9 +18,9 @@ namespace Hotfix
         private Text text_Content;
         private Button btn_NextTime;
         private Button btn_UpdateNow;
-        protected override void InitEvent()
+        protected override void InitWindow()
         {
-            base.InitEvent();
+            base.InitWindow();
 
             progressBarPanel = this.FindComponent<RectTransform>("ProgressBarPanel");
             image_Progress = this.FindComponent<Image>("ProgressBarPanel/Progress");
@@ -33,9 +33,9 @@ namespace Hotfix
             btn_NextTime = this.FindComponent<Button>("UpdateTipsPanel/NextTime");
             btn_UpdateNow = this.FindComponent<Button>("UpdateTipsPanel/UpdateNow");
         }
-        protected override void RegisterEvent(bool isRemove = true)
+        protected override void RegisterEvent()
         {
-            base.RegisterEvent(isRemove);
+            base.RegisterEvent();
 
         }
         protected override void OpenWindow()

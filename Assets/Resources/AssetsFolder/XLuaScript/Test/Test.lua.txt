@@ -1,16 +1,12 @@
 local UnityEngine=CS.UnityEngine
 
-function InitEvent()
-    print("lua Init...")
+function InitWindow()
+    print("lua InitWindow...")
 	
 end
 
-function RegisterEvent(isRemove)
-    
-end
-
-function InitWindow()
-    print("lua InitWindow...")
+function RegisterEvent()
+    print("lua RegisterEvent...")
 end
 
 function OpenWindow()

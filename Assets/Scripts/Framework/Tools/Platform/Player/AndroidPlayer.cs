@@ -15,11 +15,6 @@ namespace Platform
         {
             return "Android";
         }
-        public override string CachePath()
-        {
-            return string.Format(@"{0}/", Application.persistentDataPath);
-        }
-
         #region AndroidCallBack
         private AndroidJavaObject JavaObject()
         {

@@ -1,32 +1,51 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class UIWindowBase : EventBaseMono
 {
-    private bool FirstInitWindow = true;//第一次初始化窗口
+    private bool IsInitWindow = false;//是否初始化
+    [Obsolete("此方法已弃用，请使用Init初始化方法", true)]
     protected virtual void Awake()
     {
-        InitEvent();
-        RegisterEvent();
+        
     }
+    [Obsolete("此方法已弃用，请使用Init初始化方法", true)]
     protected virtual void Start()
     {
-
+        
     }
-    /// <summary>初始化</summary>
-    protected virtual void InitEvent()
+    /// <summary>初始化UI窗口</summary>
+    protected virtual void InitWindow()
     {
 
     }
 
     /// <summary>注册消息事件,默认删除此事件</summary>
-    protected virtual void RegisterEvent(bool isRemove = true)
+    protected virtual void RegisterEvent()
     {
         //显隐
         AddEventMsgParams(name, (object[] args) => {
             SetWindowActive((bool)args[0]);
-        }, isRemove);
+        }, true);
+    }
+
+    /// <summary>打开窗口</summary>
+    protected virtual void OpenWindow()
+    {
+        if (!IsInitWindow)
+        {
+            IsInitWindow = true;
+            InitWindow();
+            RegisterEvent();
+        }
+    }
+
+    /// <summary>关闭窗口</summary>
+    protected virtual void CloseWindow()
+    {
+
     }
 
     /// <summary>设置窗体显/隐</summary>
@@ -42,11 +61,6 @@ public class UIWindowBase : EventBaseMono
         if (isActive)
         {
             OpenWindow();
-            if (FirstInitWindow)
-            {
-                FirstInitWindow = false;
-                InitWindow();
-            }
         }
         else
         {
@@ -58,24 +72,6 @@ public class UIWindowBase : EventBaseMono
     public bool GetWindowActive()
     {
         return gameObject.activeSelf;
-    }
-
-    /// <summary>打开窗口</summary>
-    protected virtual void OpenWindow()
-    {
-        
-    }
-
-    /// <summary>执行OpenWnd后,初始化窗口(只执行一次)</summary>
-    protected virtual void InitWindow()
-    {
-
-    }
-
-    /// <summary>关闭窗口</summary>
-    protected virtual void CloseWindow()
-    {
-
     }
 
 }

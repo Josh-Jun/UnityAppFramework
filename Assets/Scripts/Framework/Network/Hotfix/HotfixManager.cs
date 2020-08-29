@@ -21,7 +21,7 @@ public class HotfixManager : SingletonEvent<HotfixManager>
     //开始热更新
     public void StartHotfix(Action<bool, List<Scene>> HotfixCallBack)
     {
-        LocalPath = PlatformManager.Instance.CachePath() + PlatformManager.Instance.Name() + "/";
+        LocalPath = string.Format("@{0}/{1}/", Application.persistentDataPath, PlatformManager.Instance.Name());
         ServerUrl = NetcomManager.URL + PlatformManager.Instance.Name() + "/";
 
         XmlLocalVersionPath = LocalPath + "AssetBundleConfig.xml";
