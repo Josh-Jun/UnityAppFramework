@@ -15,7 +15,7 @@ public class AssetBundleWindowEditor : EditorWindow
     private static GUIStyle titleStyle;
 
     private BuildTarget buildTarget = BuildTarget.StandaloneWindows;
-    private string outputPath = "Assets/StreamingAssets";
+    private string outputPath = "AssetBundle";
     private string buildPath = "Assets/Resources/AssetsFolder";
     private readonly Dictionary<string, Dictionary<string, string>> sceneDic = new Dictionary<string, Dictionary<string, string>>();
     private readonly Dictionary<string, string> desDic = new Dictionary<string, string>();
@@ -43,7 +43,7 @@ public class AssetBundleWindowEditor : EditorWindow
 
         // AssetBundle Labels.
         EditorGUILayout.Space();
-        if (GUILayout.Button("Set AssetBundle Labels(自动做标记)"))
+        if (GUILayout.Button("1.Set AssetBundle Labels(自动做标记)"))
         {
             EditorApplication.delayCall += SetAssetBundleLabels;
         }
@@ -108,21 +108,21 @@ public class AssetBundleWindowEditor : EditorWindow
 
         // build.
         EditorGUILayout.Space();
-        if (GUILayout.Button("BuildAllAssetBundle(一键打包)"))
+        if (GUILayout.Button("2.BuildAllAssetBundle(一键打包)"))
         {
             EditorApplication.delayCall += BuildAllAssetBundles;
         }
 
         // MD5 file.
         EditorGUILayout.Space();
-        if (GUILayout.Button("CreateMD5File(生成MD5文件)"))
+        if (GUILayout.Button("3.CreateMD5File(生成MD5文件)"))
         {
             EditorApplication.delayCall += CreateFile;
         }
 
         // delete.
         EditorGUILayout.Space();
-        if (GUILayout.Button("DeleteAllAssetBundle(一键删除)"))
+        if (GUILayout.Button("4.DeleteAllAssetBundle(一键删除)"))
         {
             EditorApplication.delayCall += DeleteAssetBundle;
         }
@@ -274,35 +274,6 @@ public class AssetBundleWindowEditor : EditorWindow
             // 如果是场景
             // Scene1.unity
             return sceneName;
-        }
-    }
-
-    /// <summary>
-    /// 7. 保存对应的文件夹名和具体路径 ；
-    /// </summary>
-    private void OnWriteConfig(string sceneName, Dictionary<string, string> namePathDic)
-    {
-        if (FileManager.FolderExist(Application.dataPath.Replace("Assets", "") + outputPath + "/" + PlatformManager.Instance.Name()))
-        {
-            FileManager.CreateFolder(Application.dataPath.Replace("Assets", "") + outputPath + "/" + PlatformManager.Instance.Name());
-        }
-        string path = Application.dataPath.Replace("Assets", "") + outputPath + "/" + PlatformManager.Instance.Name() + "/" + sceneName + "Record.txt";
-        // Debug.Log(path); // D:/Unity_forWork/Unity_Project/AssetBundle02_Senior/Assets/AssetBundles/Scene3Record.config
-        if (!File.Exists(path))
-        {
-            File.Create(path);
-        }
-        using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write))
-        {
-            using (StreamWriter sw = new StreamWriter(fs))
-            {
-                sw.WriteLine(namePathDic.Count);
-
-                foreach (var item in namePathDic)
-                {
-                    sw.WriteLine(item.Key + "--" + item.Value);
-                }
-            }
         }
     }
     #endregion

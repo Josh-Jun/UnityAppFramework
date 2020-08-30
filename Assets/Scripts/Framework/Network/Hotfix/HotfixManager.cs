@@ -22,7 +22,7 @@ public class HotfixManager : SingletonEvent<HotfixManager>
     public void StartHotfix(Action<bool, List<Scene>> HotfixCallBack)
     {
         LocalPath = string.Format("@{0}/{1}/", Application.persistentDataPath, PlatformManager.Instance.Name());
-        ServerUrl = NetcomManager.URL + PlatformManager.Instance.Name() + "/";
+        ServerUrl = NetcomManager.ServerUrl + PlatformManager.Instance.Name() + "/";
 
         XmlLocalVersionPath = LocalPath + "AssetBundleConfig.xml";
         XmlServerVersionPath = ServerUrl + "AssetBundleConfig.xml";

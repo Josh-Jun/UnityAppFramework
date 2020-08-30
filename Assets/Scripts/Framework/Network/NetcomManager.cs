@@ -9,11 +9,25 @@ using System.Net.Sockets;
 
 public partial class NetcomManager : Singleton<NetcomManager>
 {
-    public const string URL = "file://E:/WorkSpace/MyFramework/Assets/StreamingAssets/";//"https://www.shijunzh.com/wp-content/uploads/2019/";
-    public const string Token = "1837bc8456fe33e2df9a4fe17cf7ffb7cd392b0f63d77a9c";
-    public const string Identifier = "10";
-    public const string id = "e671d95cb4fb445e88c5e7540ad13177";
-    public const int Port = 17888; //通信端口
+    public static string ServerUrl
+    {
+        private set { }
+        get
+        {
+            if (PlatformManager.Instance.IsEditor())
+            {
+                return string.Format("{0}{1}/", Application.dataPath.Replace("Assets", ""), "AssetBundle");
+            }
+            else
+            {
+                return "https://www.shijunzh.com/wp-content/uploads/2019/";//服务器地址
+            }
+        }
+    }
+    public static string Token = "1837bc8456fe33e2df9a4fe17cf7ffb7cd392b0f63d77a9c";
+    public static string Identifier = "10";
+    public static string id = "e671d95cb4fb445e88c5e7540ad13177";
+    public static int Port = 17888; //通信端口
 
     private string MakeUrl(string url, params object[] args)
     {
@@ -195,8 +209,8 @@ public partial class NetcomManager : Singleton<NetcomManager>
             yield return uwr.SendWebRequest();
             while (!uwr.isDone)
             {
-                actionResult?.Invoke(new NetcomData 
-                { 
+                actionResult?.Invoke(new NetcomData
+                {
                     progress = uwr.downloadProgress,
                     isDown = false,
                 });
