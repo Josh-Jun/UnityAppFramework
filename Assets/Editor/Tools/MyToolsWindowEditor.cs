@@ -1,10 +1,5 @@
-﻿using Microsoft.CSharp;
-using System.CodeDom.Compiler;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.Experimental;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -60,14 +55,6 @@ public class MyToolsWindowEditor : EditorWindow
     private static Dictionary<string, string> FileNames = new Dictionary<string, string>();
 
     private string filesPath = "";
-    #endregion
-
-    #region 3、代码打包Dll
-    private string dllOutPath = "";
-
-    private string dllsPath = "";
-
-    private string scriptsPath = "";
     #endregion
 
     [MenuItem("Tools/My ToolsWindow")]
@@ -166,82 +153,6 @@ public class MyToolsWindowEditor : EditorWindow
 
         GUILayout.EndVertical();
         #endregion
-
-        #region 3、代码打包Dll
-        GUILayout.Label(new GUIContent("Build Dll Package"), titleStyle);
-
-        EditorGUILayout.Space();
-
-        GUILayout.BeginVertical();
-
-        dllsPath = EditorGUILayout.TextField("Dlls Path", dllsPath);
-
-        GUILayout.BeginHorizontal();
-        GUILayout.FlexibleSpace();
-        if (GUILayout.Button("Browse", GUILayout.MaxWidth(75f)))
-        {
-            var newPath = EditorUtility.OpenFolderPanel("Dlls Folder", prefabsPath, string.Empty);
-            if (!string.IsNullOrEmpty(newPath))
-            {
-                var gamePath = System.IO.Path.GetFullPath(".");
-                gamePath = gamePath.Replace("\\", "/");
-                if (newPath.StartsWith(gamePath) && newPath.Length > gamePath.Length)
-                    newPath = newPath.Remove(0, gamePath.Length + 1);
-                dllsPath = newPath;
-            }
-        }
-        GUILayout.EndHorizontal();
-
-        EditorGUILayout.Space();
-
-        scriptsPath = EditorGUILayout.TextField("Scripts Path", scriptsPath);
-
-        GUILayout.BeginHorizontal();
-        GUILayout.FlexibleSpace();
-        if (GUILayout.Button("Browse", GUILayout.MaxWidth(75f)))
-        {
-            var newPath = EditorUtility.OpenFolderPanel("Scripts Folder", prefabsPath, string.Empty);
-            if (!string.IsNullOrEmpty(newPath))
-            {
-                var gamePath = System.IO.Path.GetFullPath(".");
-                gamePath = gamePath.Replace("\\", "/");
-                if (newPath.StartsWith(gamePath) && newPath.Length > gamePath.Length)
-                    newPath = newPath.Remove(0, gamePath.Length + 1);
-                scriptsPath = newPath;
-            }
-        }
-        GUILayout.EndHorizontal();
-
-        EditorGUILayout.Space();
-
-        dllOutPath = EditorGUILayout.TextField("DllOutPath Path", dllOutPath);
-
-        GUILayout.BeginHorizontal();
-        GUILayout.FlexibleSpace();
-        if (GUILayout.Button("Browse", GUILayout.MaxWidth(75f)))
-        {
-            var newPath = EditorUtility.OpenFolderPanel("Output Folder", prefabsPath, string.Empty);
-            if (!string.IsNullOrEmpty(newPath))
-            {
-                var gamePath = System.IO.Path.GetFullPath(".");
-                gamePath = gamePath.Replace("\\", "/");
-                if (newPath.StartsWith(gamePath) && newPath.Length > gamePath.Length)
-                    newPath = newPath.Remove(0, gamePath.Length + 1);
-                dllOutPath = newPath;
-            }
-        }
-        GUILayout.EndHorizontal();
-
-        EditorGUILayout.Space();
-
-        if (GUILayout.Button("Build Dll Package(打Dll文件包)"))
-        {
-
-            EditorApplication.delayCall += BuildDllPackage;
-        }
-
-        GUILayout.EndVertical();
-        #endregion
     }
 
     #region 1、更换预制体字体
@@ -305,90 +216,6 @@ public class MyToolsWindowEditor : EditorWindow
         }
         Debug.Log("查找完了");
         FileNames.Clear();
-    }
-    #endregion
-
-    #region 3、代码打包Dll
-    [System.Obsolete]
-    private void BuildDllPackage()
-    {
-        ICodeCompiler complier = new CSharpCodeProvider().CreateCompiler();
-        //设置编译参数
-        CompilerParameters paras = new CompilerParameters();
-        //引入第三方dll
-        //paras.ReferencedAssemblies.Add(@"Microsoft.CSharp.dll");
-        paras.ReferencedAssemblies.Add(@"mscorlib.dll");
-        paras.ReferencedAssemblies.Add(@"System.dll");
-        paras.ReferencedAssemblies.Add(@"System.Core.dll");
-        //paras.ReferencedAssemblies.Add(@"System.Data.dll");
-        //paras.ReferencedAssemblies.Add(@"System.Data.DataSetExtensions.dll");
-        //paras.ReferencedAssemblies.Add(@"System.Net.Http.dll");
-        paras.ReferencedAssemblies.Add(@"System.Xml.dll");
-        //paras.ReferencedAssemblies.Add(@"System.Xml.Linq.dll");
-
-
-        List<FileInfo> fileList = new List<FileInfo>();
-        DirectoryInfo directoryInfo = new DirectoryInfo(dllsPath);
-        ListFiles(directoryInfo, ref fileList);
-
-        //引入自定义dll
-        for (int i = 0; i < fileList.Count; i++)
-        {
-            if (fileList[i].Extension == ".dll")
-            {
-                paras.ReferencedAssemblies.Add(fileList[i].FullName);
-            }
-        }
-
-        //是否内存中生成输出
-        paras.GenerateInMemory = false;
-        //是否生成可执行文件
-        paras.GenerateExecutable = false;
-        paras.OutputAssembly = dllOutPath + "/HotFix.dll.bytes";
-
-        //引入脚本
-        string[] allPath = AssetDatabase.FindAssets("t:Script", new string[] { scriptsPath });
-        List<string> allScript = new List<string>();
-        for (int i = 0; i < allPath.Length; i++)
-        {
-            string path = AssetDatabase.GUIDToAssetPath(allPath[i]);
-            allScript.Add(path);
-        }
-
-        //编译代码
-        CompilerResults result = complier.CompileAssemblyFromFileBatch(paras, allScript.ToArray());
-
-        for (int i = 0; i < result.Errors.Count; i++)
-        {
-            Debug.Log(result.Errors[i]);
-        }
-        AssetDatabase.Refresh();
-    }
-    /// <summary>
-    /// 遍历文件夹下所有的文件
-    /// </summary>
-    /// <param name="fileSystemInfo"></param>
-    /// <param name="list"></param>
-    private void ListFiles(FileSystemInfo fileSystemInfo, ref List<FileInfo> list)
-    {
-        if (fileSystemInfo.Extension == ".meta")
-            return;
-
-        DirectoryInfo directoryInfo = fileSystemInfo as DirectoryInfo;
-        FileSystemInfo[] fileSystemInfoArr = directoryInfo.GetFileSystemInfos();
-
-        foreach (FileSystemInfo item in fileSystemInfoArr)
-        {
-            // fileInfoItem != null 就是文件,就把该文件加到list里
-            if (item is FileInfo fileInfoItem)
-            {
-                list.Add(fileInfoItem);
-            }
-            else // fileInfoItem == null 就是文件夹, 递归调用自己,再从该文件夹里遍历所有文件
-            {
-                ListFiles(item, ref list);
-            }
-        }
     }
     #endregion
 }
