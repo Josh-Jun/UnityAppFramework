@@ -41,21 +41,12 @@ public class ManifestLoader : Singleton<ManifestLoader>
     /// <returns></returns>
     public void Load()
     {
-        NetcomManager.Instance.GetAssetBundle(manifestPath, (netcomData) =>
+        UnityWebRequester requester = new UnityWebRequester();
+        requester.GetAssetBundle(manifestPath, (AssetBundle ab) =>
         {
-            if(netcomData.isDown)
-            {
-                if (!netcomData.isError)
-                {
-                    this.assetBundle = netcomData.assetbundle;
-                    this.manifest = assetBundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
-                    this.IsFinish = true;
-                }
-                else
-                {
-                    Debug.LogErrorFormat("{0} : {1}", GetType(), netcomData.error);
-                }
-            }
+            this.assetBundle = ab;
+            this.manifest = assetBundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
+            this.IsFinish = true;
         });
     }
 

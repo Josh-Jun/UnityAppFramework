@@ -133,20 +133,20 @@ public class HotfixManager : SingletonEvent<HotfixManager>
     /// <param name="action"></param>
     private void DownLoad(string url, Action<byte[]> action)
     {
-        NetcomManager.Instance.GetBytes(url, (NetcomData data) =>
-        {
-            if (data.isDown)
-            {
-                if (!data.isError)
-                {
-                    action?.Invoke(data.data);
-                }
-                else
-                {
-                    Debug.LogErrorFormat("[HotfixManager] Error : {0}", data.error);
-                }
-            }
-        });
+        //NetcomManager.Instance.GetBytes(url, (NetcomData data) =>
+        //{
+        //    if (data.isDown)
+        //    {
+        //        if (!data.isError)
+        //        {
+        //            action?.Invoke(data.data);
+        //        }
+        //        else
+        //        {
+        //            Debug.LogErrorFormat("[HotfixManager] Error : {0}", data.error);
+        //        }
+        //    }
+        //});
     }
     /// <summary>
     /// 下载AB包
@@ -176,24 +176,24 @@ public class HotfixManager : SingletonEvent<HotfixManager>
                             //将manifest文件写入本地
                             FileManager.CreateFile(LocalPath + bandleName + ".manifest", _manifest_data);
                             //下载ab包
-                            NetcomManager.Instance.GetBytes(ServerUrl + bandleName, (NetcomData netcom) =>
-                            {
-                                float LoadingSize = netcom.progress * size / 1024f;
-                                if (netcom.progress == 1)
-                                {
-                                    if (!netcom.isError)
-                                    {
-                                        //将ab文件写入本地
-                                        FileManager.CreateFile(LocalPath + bandleName, netcom.data);
-                                    }
-                                    LoadedSize += LoadingSize;
-                                    LoadingSize = 0;
-                                }
-                                if (LoadedSize == LoadTotalSize)
-                                {
-                                    DownCallBack?.Invoke((LoadedSize + LoadingSize) / LoadTotalSize);
-                                }
-                            });
+                            //NetcomManager.Instance.GetBytes(ServerUrl + bandleName, (NetcomData netcom) =>
+                            //{
+                            //    float LoadingSize = netcom.progress * size / 1024f;
+                            //    if (netcom.progress == 1)
+                            //    {
+                            //        if (!netcom.isError)
+                            //        {
+                            //            //将ab文件写入本地
+                            //            FileManager.CreateFile(LocalPath + bandleName, netcom.data);
+                            //        }
+                            //        LoadedSize += LoadingSize;
+                            //        LoadingSize = 0;
+                            //    }
+                            //    if (LoadedSize == LoadTotalSize)
+                            //    {
+                            //        DownCallBack?.Invoke((LoadedSize + LoadingSize) / LoadTotalSize);
+                            //    }
+                            //});
                         });
                     }
                 }

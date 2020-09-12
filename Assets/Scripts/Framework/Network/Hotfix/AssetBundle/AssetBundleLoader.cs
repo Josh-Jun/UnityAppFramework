@@ -64,29 +64,19 @@ public class AssetBundleLoader
         // 注 : 如果发布到手机端,就不需要www加载了,通过下面方式加载:
         //AssetBundleCreateRequest abcr = AssetBundle.LoadFromFileAsync(bundlePath);
         //yield return abcr;
-
-        NetcomManager.Instance.GetAssetBundle(bundlePath, (netcomData) =>
+        UnityWebRequester requester = new UnityWebRequester();
+        requester.GetAssetBundle(bundlePath, (AssetBundle ab) =>
         {
-            this.progress = netcomData.progress;
-            if (netcomData.progress == 1)
-            {
-                if (!netcomData.isError)
-                {
-                    // 创建 AssetLoader 类,给 assetBundle 赋值
-                    assetLoader = new AssetLoader(netcomData.assetbundle);
-                    while (progress < 1)
-                    {
-                        lp(bundleName, progress);
-                    }
-                    lp(bundleName, progress);
-                    lc(bundleName);
-                }
-                else
-                {
-                    Debug.LogFormat("[{0}] Error : {1}", GetType(), netcomData.error);
-                }
-            }
+            // 创建 AssetLoader 类,给 assetBundle 赋值
+            assetLoader = new AssetLoader(ab);
+            lp?.Invoke(bundleName, requester.DownloadedProgress);
+            lc?.Invoke(bundleName);
         });
+        while (!requester.IsDown)
+        {
+            this.progress = requester.DownloadedProgress;
+            lp?.Invoke(bundleName, progress);
+        }
     }
 
     /// <summary>
