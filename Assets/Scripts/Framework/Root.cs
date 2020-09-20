@@ -35,7 +35,14 @@ public class Root
                     }
                     if (!iRootPairs.ContainsKey(rootConfig.RootScript[i].ScriptName))
                     {
-                        iRootPairs.Add(rootConfig.RootScript[i].ScriptName, iRoot);
+                        if (iRoot != null)
+                        {
+                            iRootPairs.Add(rootConfig.RootScript[i].ScriptName, iRoot);
+                        }
+                        else
+                        {
+                            Debug.LogErrorFormat("Root脚本为空 脚本名称:{0}", rootConfig.RootScript[i].ScriptName);
+                        }
                     }
                 }
             }

@@ -25,7 +25,7 @@ public class AssetsManager : Singleton<AssetsManager>
         {
             AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(name, mode);
             cb?.Invoke(asyncOperation);
-            asyncOperation.completed += (ao) =>
+            asyncOperation.completed += (AsyncOperation ao) =>
             {
                 Scene scene = SceneManager.GetSceneByName(name);
                 SceneManager.SetActiveScene(scene);
@@ -39,7 +39,7 @@ public class AssetsManager : Singleton<AssetsManager>
         if (!string.IsNullOrEmpty(name))
         {
             AsyncOperation asyncOperation = SceneManager.UnloadSceneAsync(name);
-            asyncOperation.completed += (ao) =>
+            asyncOperation.completed += (AsyncOperation ao) =>
             {
                 cb?.Invoke(asyncOperation.progress);
             };
