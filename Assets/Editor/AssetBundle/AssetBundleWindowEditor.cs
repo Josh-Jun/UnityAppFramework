@@ -16,7 +16,7 @@ public class AssetBundleWindowEditor : EditorWindow
 
     private BuildTarget buildTarget = BuildTarget.StandaloneWindows;
     private string outputPath = "AssetBundle";
-    private string buildPath = "Assets/Resources/AssetsFolder";
+    private string buildPath = "Assets/Resources";
     private readonly Dictionary<string, Dictionary<string, string>> sceneDic = new Dictionary<string, Dictionary<string, string>>();
     private readonly Dictionary<string, string> desDic = new Dictionary<string, string>();
 

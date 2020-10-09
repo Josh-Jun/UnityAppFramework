@@ -6,10 +6,10 @@ using XLuaFrame;
 
 public class Root
 {
-    private const string path_HotfixScene = "A0_App/Scenes/HotfixScene";
-    private const string path_AppRootConfig = "AppRootConfig";
+    private const string path_HotfixScene = "App/Scenes/HotfixScene";
+    private const string path_AppRootConfig = "App/Assets/AppConfig/AppRootConfig";
     private static RootScriptConfig rootConfig;
-    private static Dictionary<string, IRoot> iRootPairs = new Dictionary<string, IRoot>();
+    private static readonly Dictionary<string, IRoot> iRootPairs = new Dictionary<string, IRoot>();
     public static void Init()
     {
         AssetsManager.Instance.LoadSceneAsync(path_HotfixScene, (ao) =>

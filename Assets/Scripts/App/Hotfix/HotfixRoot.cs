@@ -10,7 +10,7 @@ namespace Hotfix
         private HotfixWindow hotfixWin;
         public HotfixRoot()
         {
-            string prefab_HotfixPath = "App/Hotfix/Windows/HotfixWin";
+            string prefab_HotfixPath = "App/Assets/AppHotfix/Windows/HotfixWindow";
             hotfixWin = (HotfixWindow)UIRoot.Instance.LoadLocalWindow(prefab_HotfixPath);
         }
 
