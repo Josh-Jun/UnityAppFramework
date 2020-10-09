@@ -1,18 +1,18 @@
 ﻿public class SingletonEvent<T> : EventBase where T : EventBase, new()
 {
-    private static T s_Instance;
-    private static readonly object SingletonObject = "EventObject";
+    private static T _Instance;
+    private static readonly object SingletonLock = "EventLock";
     public static T Instance
     {
         get
         {
-            lock (SingletonObject)
+            lock (SingletonLock)
             {
-                if (null == s_Instance)
+                if (null == _Instance)
                 {
-                    s_Instance = new T();
+                    _Instance = new T();
                 }
-                return s_Instance;
+                return _Instance;
             }
         }
     }

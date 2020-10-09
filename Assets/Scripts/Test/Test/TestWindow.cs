@@ -10,7 +10,6 @@ namespace Test
         protected override void InitWindow()
         {
             base.InitWindow();
-
         }
 
         protected override void RegisterEvent()

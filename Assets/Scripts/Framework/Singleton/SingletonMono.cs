@@ -2,25 +2,25 @@
 
 public class SingletonMono<T> : MonoBehaviour where T : MonoBehaviour
 {
-    private static T s_Instance;
-    private static readonly string SingletonObject = "MonoObject";
+    private static T _Instance;
+    private static readonly object SingletonLock = "MonoLock";
     public static T Instance
     {
         get
         {
-            lock (SingletonObject)
+            lock (SingletonLock)
             {
-                if (s_Instance == null)
+                if (_Instance == null)
                 {
-                    s_Instance = FindObjectOfType<T>();
-                    if(s_Instance == null)
+                    _Instance = FindObjectOfType<T>();
+                    if(_Instance == null)
                     {
                         GameObject go = new GameObject(typeof(T).ToString());
-                        s_Instance = go.AddComponent<T>();
+                        _Instance = go.AddComponent<T>();
                     }
                 }
             }
-            return s_Instance;
+            return _Instance;
         }
     }
 }

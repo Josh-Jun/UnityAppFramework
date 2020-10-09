@@ -1,18 +1,18 @@
 ﻿public class Singleton<T> where T : class, new()
 {
-    private static T s_Instance;
-    private static readonly object SingletonObject = "Object";
+    private static T _Instance;
+    private static readonly object SingletonLock = "Lock";
     public static T Instance
     {
         get
         {
-            lock (SingletonObject)
+            lock (SingletonLock)
             {
-                if (null == s_Instance)
+                if (null == _Instance)
                 {
-                    s_Instance = new T();
+                    _Instance = new T();
                 }
-                return s_Instance;
+                return _Instance;
             }
         }
     }

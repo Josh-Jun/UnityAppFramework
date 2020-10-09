@@ -5,16 +5,15 @@ using UnityEngine;
 
 public class UIWindowBase : EventBaseMono
 {
-    private bool IsInitWindow = false;//是否初始化
-    [Obsolete("此方法已弃用，请使用Init初始化方法", true)]
+    [Obsolete("此方法已弃用，请使用InitWindow方法", true)]
     protected virtual void Awake()
     {
-        
+        InitWindow();
     }
-    [Obsolete("此方法已弃用，请使用Init初始化方法", true)]
+    [Obsolete("此方法已弃用，请使用RegisterEvent方法", true)]
     protected virtual void Start()
     {
-        
+        RegisterEvent();
     }
     /// <summary>初始化UI窗口</summary>
     protected virtual void InitWindow()
@@ -34,12 +33,7 @@ public class UIWindowBase : EventBaseMono
     /// <summary>打开窗口</summary>
     protected virtual void OpenWindow()
     {
-        if (!IsInitWindow)
-        {
-            IsInitWindow = true;
-            InitWindow();
-            RegisterEvent();
-        }
+
     }
 
     /// <summary>关闭窗口</summary>

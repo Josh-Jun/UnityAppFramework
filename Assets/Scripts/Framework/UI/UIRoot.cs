@@ -9,9 +9,25 @@ using XLuaFrame;
 
 public class UIRoot : SingletonMono<UIRoot>
 {
+    #region Private Variable
     private Camera uiCamera;//UI相机
     private GameObject canvasObject;//Canvas游戏对象
     private GameObject eventSystemObject;//EventSystem游戏对象
+    #endregion
+
+    #region Public Variable
+    /// <summary> UI相机 </summary>
+    public Camera UICamera { get { return uiCamera; } private set { } }
+    /// <summary> Canvas组件 </summary>
+    public Canvas UICanvas { get { return canvasObject.GetComponent<Canvas>(); } private set { } }
+    /// <summary> 获取Canvas根RectTransform </summary>
+    public RectTransform UIRectTransform { get { return canvasObject.GetComponent<RectTransform>(); } private set { } }
+    /// <summary> 获取CanvasScaler组件 </summary>
+    public CanvasScaler UICanvasScaler { get { return canvasObject.GetComponent<CanvasScaler>(); } private set { } }
+    /// <summary> 获取GraphicRaycaster组件 </summary>
+    public GraphicRaycaster UIGraphicRaycaster { get { return canvasObject.GetComponent<GraphicRaycaster>(); } private set { } }
+
+    #endregion
 
     /// <summary>
     /// UIRoot脚本初始化
@@ -48,26 +64,15 @@ public class UIRoot : SingletonMono<UIRoot>
         #endregion
     }
 
-    /// <summary> UI相机 </summary>
-    public Camera UICamera { get { return uiCamera; } private set { } }
-    /// <summary> Canvas组件 </summary>
-    public Canvas UICanvas { get { return canvasObject.GetComponent<Canvas>(); } private set { } }
-    /// <summary> 获取Canvas根RectTransform </summary>
-    public RectTransform UIRectTransform { get { return canvasObject.GetComponent<RectTransform>(); } private set { } }
-    /// <summary> 获取CanvasScaler组件 </summary>
-    public CanvasScaler UICanvasScaler { get { return canvasObject.GetComponent<CanvasScaler>(); } private set { } }
-    /// <summary> 获取GraphicRaycaster组件 </summary>
-    public GraphicRaycaster UIGraphicRaycaster { get { return canvasObject.GetComponent<GraphicRaycaster>(); } private set { } }
+    #region Private Function
 
+    #endregion
+
+    #region Public Function
     /// <summary> UGUI坐标 mousePosition</summary>
     public Vector2 ScreenPointInRectangle(Vector2 mousePosition)
     {
-        if (UICanvas.worldCamera.orthographic == true)
-        {
-            return (mousePosition - new Vector2(Screen.width / 2, Screen.height / 2));
-        }
-        Vector2 position;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(UIRectTransform, mousePosition, UICanvas.worldCamera, out position);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(UIRectTransform, mousePosition, UICanvas.worldCamera, out Vector2 position);
         return position;
     }
     /// <summary> 判断是否点中UI </summary>
@@ -182,4 +187,5 @@ public class UIRoot : SingletonMono<UIRoot>
         }
         return null;
     }
+    #endregion
 }
