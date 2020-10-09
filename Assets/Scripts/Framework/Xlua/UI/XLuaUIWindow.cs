@@ -50,8 +50,8 @@ namespace XLuaFrame
             scriptEnv.SetMetaTable(meta);
             //值已经传递过去了，就释放他
             meta.Dispose();
-            //这里的"this"和上面的"__index"是一个道理啦。将c#脚本绑定到LuaTable
-            scriptEnv.Set("this", this);
+            //这里的"self"和上面的"__index"是一个道理啦。将c#脚本绑定到LuaTable
+            scriptEnv.Set("self", this);
 
             //执行lua语句，三个参数的意思分别是lua代码，lua代码在c#里的代号，lua代码在lua虚拟机里的代号
             XLuaManager.luaEnv.DoString(luaFileContent, this.name, scriptEnv);

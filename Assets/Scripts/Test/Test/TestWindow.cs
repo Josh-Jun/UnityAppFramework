@@ -1,34 +1,34 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NameSpace
+namespace Test
 {
-    public class #SCRIPTNAME# : UIWindowBase
+    public class TestWindow : UIWindowBase
     {
         protected override void InitWindow()
         {
             base.InitWindow();
-			#NOTRIM#
+
         }
 
         protected override void RegisterEvent()
         {
             base.RegisterEvent();
-			#NOTRIM#
+
         }
 
         protected override void OpenWindow()
         {
             base.OpenWindow();
-			#NOTRIM#
+
         }
 
         protected override void CloseWindow()
         {
             base.CloseWindow();
-			#NOTRIM#
+
         }
     }
 }

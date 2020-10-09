@@ -59,8 +59,7 @@ public class AssetsManager : Singleton<AssetsManager>
     {
         if (PlatformManager.Instance.IsEditor())
         {
-            string assetPath = string.Format("AssetsFolder/{0}", path);
-            return Resources.Load<T>(assetPath);
+            return Resources.Load<T>(path);
         }
         else
         {

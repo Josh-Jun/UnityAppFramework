@@ -21,7 +21,8 @@ public class Root
                 for (int i = 0; i < rootConfig.RootScript.Count; i++)
                 {
                     IRoot iRoot = null;
-                    if (XLuaManager.Instance.IsLuaFileExist(rootConfig.RootScript[i].LuaScriptPath))
+                    //判断是否存在XLua脚本，如果存在，执行XLua代码，不存在执行C#代码
+                    if (XLuaManager.Instance.IsLuaFileExist(rootConfig.RootScript[i].LuaScriptPath) && App.RunXLuaScripts)
                     {
                         XLuaRoot root = new XLuaRoot();
                         root.Init(rootConfig.RootScript[i].LuaScriptPath);

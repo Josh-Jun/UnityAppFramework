@@ -5,7 +5,7 @@
 public class App : MonoBehaviour
 {
     public static App app = null;
-    public const bool IsHotfix = false;
+    public const bool RunXLuaScripts = false;
     private void Awake()
     {
         if (app == null)

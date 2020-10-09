@@ -1,23 +1,23 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NameSpace
+namespace Test
 {
-    public class #SCRIPTNAME# : SingletonEvent<#SCRIPTNAME#>, IRoot
+    public class TestRoot : SingletonEvent<TestRoot>, IRoot
     {
-        public #SCRIPTNAME#()
+        public TestRoot()
         {
-			#NOTRIM#
+
         }
         public void Begin()
         {
-			#NOTRIM#
+
         }
 
         public void End()
         {
-			#NOTRIM#
+
         }
     }
 }

@@ -31,7 +31,7 @@ public static class DevelopManager
         }
         _animator.Play(stateName, layer, normalizedTime);
         _animator.Update(0);
-        DEVELOP_ANIMATOR_TIME_ID = TimerManager.Instance.StartTimer((float time)=> 
+        DEVELOP_ANIMATOR_TIME_ID = TimerManager.Instance.StartTimer((float time) =>
         {
             if (time >= _time)
             {
@@ -61,7 +61,7 @@ public static class DevelopManager
         float recordTime = 0;
         DEVELOP_SEQUENCEFRAMES_TIME_ID = TimerManager.Instance.StartTimer((float currentTime) =>
         {
-            if(currentTime - recordTime>= time)
+            if (currentTime - recordTime >= time)
             {
                 recordTime = currentTime;
                 //当我们需要在整个动画播放完之后  重复播放后面的部分 就可以展现我们纯代码播放的自由性
@@ -109,12 +109,16 @@ public static class DevelopManager
     /// <typeparam name="T"></typeparam>
     /// <param name="go"></param>
     /// <param name="enable"></param>
-    public static void SetComponentEnable<T>(this GameObject go, bool enable = true) where T : MonoBehaviour
+    public static void SetComponentEnable<T>(this GameObject go, bool enable = true) where T : Behaviour
     {
         T t = go.GetComponent<T>();
         if (t != null)
         {
             t.enabled = enable;
+        }
+        else
+        {
+            Debug.LogErrorFormat("对象{0} --- 没有脚本:{1}", go.name, typeof(T).Name);
         }
     }
     /// <summary>
@@ -123,12 +127,16 @@ public static class DevelopManager
     /// <typeparam name="T"></typeparam>
     /// <param name="com"></param>
     /// <param name="enable"></param>
-    public static void SetComponentEnable<T>(this Component com, bool enable = true) where T : MonoBehaviour
+    public static void SetComponentEnable<T>(this Component com, bool enable = true) where T : Behaviour
     {
         T t = com.gameObject.GetComponent<T>();
         if (t != null)
         {
             t.enabled = enable;
+        }
+        else
+        {
+            Debug.LogErrorFormat("对象{0} --- 没有脚本:{1}", com.gameObject.name, typeof(T).Name);
         }
     }
     #endregion
@@ -217,12 +225,8 @@ public static class DevelopManager
     /// <param name="ua"></param>
     public static void AddEventTrigger(this GameObject obj, EventTriggerType eventType, UnityAction<BaseEventData> ua)
     {
-        EventTrigger eventTrigger = obj.GetComponent<EventTrigger>();
-        if (eventTrigger == null)
-        {
-            eventTrigger = obj.AddComponent<EventTrigger>();
-            eventTrigger.triggers = new List<EventTrigger.Entry>();
-        }
+        EventTrigger eventTrigger = obj.TryGetComponect<EventTrigger>();
+        eventTrigger.triggers = new List<EventTrigger.Entry>();
 
         UnityAction<BaseEventData> callback = new UnityAction<BaseEventData>(ua);
 
@@ -237,12 +241,9 @@ public static class DevelopManager
     /// <param name="obj"></param>
     public static void RemoveEventTrigger(this GameObject obj)
     {
-        EventTrigger eventTrigger = obj.GetComponent<EventTrigger>();
-        if (eventTrigger == null)
-        {
-            return;
-        }
+        EventTrigger eventTrigger = obj.TryGetComponect<EventTrigger>();
         eventTrigger.triggers.Clear();
+        Object.Destroy(eventTrigger);
     }
 
     /// <summary>
@@ -253,12 +254,8 @@ public static class DevelopManager
     /// <param name="ua"></param>
     public static void AddEventTrigger(this Component com, EventTriggerType eventType, UnityAction<BaseEventData> ua)
     {
-        EventTrigger eventTrigger = com.GetComponent<EventTrigger>();
-        if (eventTrigger == null)
-        {
-            eventTrigger = com.gameObject.AddComponent<EventTrigger>();
-            eventTrigger.triggers = new List<EventTrigger.Entry>();
-        }
+        EventTrigger eventTrigger = com.TryGetComponect<EventTrigger>();
+        eventTrigger.triggers = new List<EventTrigger.Entry>();
 
         UnityAction<BaseEventData> callback = new UnityAction<BaseEventData>(ua);
 
@@ -273,12 +270,9 @@ public static class DevelopManager
     /// <param name="com"></param>
     public static void RemoveEventTrigger(this Component com)
     {
-        EventTrigger eventTrigger = com.gameObject.GetComponent<EventTrigger>();
-        if (eventTrigger == null)
-        {
-            return;
-        }
+        EventTrigger eventTrigger = com.TryGetComponect<EventTrigger>();
         eventTrigger.triggers.Clear();
+        Object.Destroy(eventTrigger);
     }
     #endregion
 
