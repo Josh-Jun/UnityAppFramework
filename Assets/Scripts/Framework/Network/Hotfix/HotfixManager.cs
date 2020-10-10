@@ -20,6 +20,7 @@ public class HotfixManager : SingletonEvent<HotfixManager>
 
     private List<Scene> downloadScenes = new List<Scene>();
     private readonly List<Folder> alreadyDownLoadList = new List<Folder>();
+    private Dictionary<Folder, UnityWebRequester> unityWebRequesterPairs = new Dictionary<Folder, UnityWebRequester>();
     private UnityWebRequester unityWebRequester;
     private byte[] bytes = null;
     #endregion
@@ -34,7 +35,7 @@ public class HotfixManager : SingletonEvent<HotfixManager>
     public void StartHotfix(Action<bool, string> HotfixCallBack)
     {
         LocalPath = string.Format(@"{0}/{1}/", Application.persistentDataPath, PlatformManager.Instance.Name());
-        ServerUrl = NetcomManager.ServerUrl + PlatformManager.Instance.Name() + "/";
+        ServerUrl = NetcomManager.ABUrl + PlatformManager.Instance.Name() + "/";
 
         XmlLocalVersionPath = LocalPath + "AssetBundleConfig.xml";
         XmlServerVersionPath = ServerUrl + "AssetBundleConfig.xml";
@@ -78,16 +79,17 @@ public class HotfixManager : SingletonEvent<HotfixManager>
     {
         return GetLoadedSize() / LoadTotalSize;
     }
-    /// <summary> 获取当前下载大小 </summary>
+    /// <summary> 获取当前下载大小(M) </summary>
     public float GetLoadedSize()
     {
         float alreadySize = alreadyDownLoadList.Sum(f => f.Size);
         float currentAlreadySize = 0;
         if (unityWebRequester != null)
         {
-            currentAlreadySize = unityWebRequester.DownloadedLength;
+            Folder folder = unityWebRequesterPairs.FirstOrDefault(r => r.Value == unityWebRequester).Key;
+            currentAlreadySize = unityWebRequester.DownloadedProgress * folder.Size;
         }
-        return alreadySize + currentAlreadySize;
+        return (alreadySize + currentAlreadySize) / 1024f;
     }
     /// <summary> 加载AB包 </summary>
     public void LoadAssetBundle(Action<bool, string, float> LoadCallBack)
@@ -123,7 +125,7 @@ public class HotfixManager : SingletonEvent<HotfixManager>
     #region Private Function
     private IEnumerator IE_DownLoad()
     {
-        Dictionary<Folder, UnityWebRequester> requesters = new Dictionary<Folder, UnityWebRequester>();
+        unityWebRequesterPairs.Clear();
         for (int i = 0; i < downloadScenes.Count; i++)
         {
             for (int j = 0; j < downloadScenes[i].Folders.Count; j++)
@@ -131,7 +133,7 @@ public class HotfixManager : SingletonEvent<HotfixManager>
                 string bandleName = downloadScenes[i].Folders[j].BundleName;
                 float size = downloadScenes[i].Folders[j].Size;
                 //添加到下载列表
-                requesters.Add(downloadScenes[i].Folders[j], new UnityWebRequester(ServerUrl + bandleName));
+                unityWebRequesterPairs.Add(downloadScenes[i].Folders[j], new UnityWebRequester(ServerUrl + bandleName));
                 //下载manifest文件
                 DownLoad(ServerUrl + bandleName + ".manifest", (byte[] _manifest_data) =>
                 {
@@ -140,7 +142,7 @@ public class HotfixManager : SingletonEvent<HotfixManager>
                 });
             }
         }
-        foreach (var requester in requesters)
+        foreach (var requester in unityWebRequesterPairs)
         {
             unityWebRequester = requester.Value;
             yield return requester.Value.IE_GetBytes(ServerUrl + requester.Key.BundleName, (UnityWebRequest uwr) =>
@@ -202,7 +204,7 @@ public class HotfixManager : SingletonEvent<HotfixManager>
                             }
                         }
                     }
-                    LoadTotalSize = downloadScenes.Sum(s => s.Folders.Sum(f => f.Size));
+                    LoadTotalSize = downloadScenes.Sum(s => s.Folders.Sum(f => f.Size)) / 1024f;
                     cb?.Invoke();
                 }
                 else

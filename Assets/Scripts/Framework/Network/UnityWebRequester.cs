@@ -25,14 +25,14 @@ public class UnityWebRequester
         }
         private set { }
     }
-    /// <summary> 获取当前下载大小 </summary>
-    public long DownloadedLength
+    /// <summary> 获取当前下载大小(KB) </summary>
+    public float DownloadedLength
     {
         get
         {
             if (uwr != null)
             {
-                return (long)uwr.downloadedBytes;
+                return uwr.downloadedBytes / 1024f;
             }
             return 0;
         }
@@ -45,7 +45,7 @@ public class UnityWebRequester
         {
             if (uwr != null)
             {
-                return (long)uwr.downloadProgress;
+                return uwr.downloadProgress;
             }
             return 0;
         }

@@ -5,27 +5,13 @@ using System.Net.Sockets;
 
 public partial class NetcomManager : Singleton<NetcomManager>
 {
-    public static string ServerUrl
-    {
-        private set { }
-        get
-        {
-            if (PlatformManager.Instance.IsEditor())
-            {
-                return string.Format(@"{0}{1}/", Application.dataPath.Replace("Assets", ""), "AssetBundle");
-            }
-            else
-            {
-                return "https://www.shijunzh.com/wp-content/uploads/2019/";//服务器地址
-            }
-        }
-    }
+    public static string ServerUrl = "https://www.shijunzh.com";
     public static string Token = "1837bc8456fe33e2df9a4fe17cf7ffb7cd392b0f63d77a9c";
     public static string Identifier = "10";
     public static string id = "e671d95cb4fb445e88c5e7540ad13177";
     public static int Port = 17888; //通信端口
 
-    private string MakeUrl(string url, params object[] args)
+    public string MakeUrl(string url, params object[] args)
     {
         StringBuilder sb = new StringBuilder(url);
         for (int i = 0; i < args.Length; i++)
@@ -35,7 +21,7 @@ public partial class NetcomManager : Singleton<NetcomManager>
         Debug.Log("URL : " + sb.ToString());
         return sb.ToString();
     }
-    private string MakeUrlWithToken(string url, params object[] args)
+    public string MakeUrlWithToken(string url, params object[] args)
     {
         StringBuilder sb = new StringBuilder(url);
         sb.AppendFormat("?token={0}&identifier={1}", Token, Identifier);

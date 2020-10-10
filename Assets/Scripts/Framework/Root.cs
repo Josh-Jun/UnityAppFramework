@@ -6,10 +6,11 @@ using XLuaFrame;
 
 public class Root
 {
-    private const string hotfixScriptName = "Hotfix.HotfixRoot";
-    private const string path_AppRootConfig = "App/Assets/AppRootConfig";
-    private static RootScriptConfig rootConfig;
+    private static readonly bool RunXLuaScripts = false;
+    private static readonly string hotfixScriptName = "Hotfix.HotfixRoot";
+    private static readonly string path_AppRootConfig = "App/Assets/AppRootConfig";
     private static readonly Dictionary<string, IRoot> iRootPairs = new Dictionary<string, IRoot>();
+    private static RootScriptConfig rootConfig;
     private static IRoot HotfixRoot = null;
     public static void Init()
     {
@@ -26,7 +27,7 @@ public class Root
         {
             IRoot iRoot;
             //判断是否存在XLua脚本，如果存在，执行XLua代码，不存在执行C#代码
-            if (XLuaManager.Instance.IsLuaFileExist(rootConfig.RootScript[i].LuaScriptPath) && App.RunXLuaScripts)
+            if (XLuaManager.Instance.IsLuaFileExist(rootConfig.RootScript[i].LuaScriptPath) && RunXLuaScripts)
             {
                 XLuaRoot root = new XLuaRoot();
                 root.Init(rootConfig.RootScript[i].LuaScriptPath);

@@ -26,6 +26,7 @@ namespace Hotfix
         private void StartHotfix()
         {
             hotfixWin.SetTipsText("检查更新中...");
+            hotfixWin.SetProgressValue(0);
             HotfixManager.Instance.StartHotfix((bool isUpdate, string des) =>
             {
                 if (isUpdate)
@@ -42,6 +43,7 @@ namespace Hotfix
         private void UpdateNow()
         {
             hotfixWin.SetUpdateTipsActive(false);
+            hotfixWin.SetProgressBarActive(true);
             hotfixWin.SetTipsText("下载中...");
             HotfixManager.Instance.DownLoadAssetBundle();
             App.app.StartCoroutine(DownLoading());
@@ -55,16 +57,13 @@ namespace Hotfix
             while (HotfixManager.Instance.GetProgress() != 1)
             {
                 yield return new WaitForEndOfFrame();
-                if (time == 0)
-                {
-                    previousSize = HotfixManager.Instance.GetLoadedSize();
-                }
-                if (time > 0.1f)
-                {
-                    time = 0;
-                    speed = (HotfixManager.Instance.GetLoadedSize() - previousSize) / 0.1f;
-                }
                 time += Time.deltaTime;
+                if (time >= 1f)
+                {
+                    speed = (HotfixManager.Instance.GetLoadedSize() - previousSize);
+                    previousSize = HotfixManager.Instance.GetLoadedSize();
+                    time = 0;
+                }
                 hotfixWin.SetSpeedText(speed);
                 hotfixWin.SetProgressText(HotfixManager.Instance.GetLoadedSize(), HotfixManager.Instance.LoadTotalSize);
                 hotfixWin.SetProgressValue(HotfixManager.Instance.GetProgress());
