@@ -2,157 +2,62 @@
 using UnityEngine;
 using Data;
 using System.Collections.Generic;
+using UnityEngine.Networking;
+using System.Linq;
+using System.Collections;
 
 /// <summary>
 /// 热更管理者
 /// </summary>
 public class HotfixManager : SingletonEvent<HotfixManager>
 {
+    #region Private Var
     private string LocalPath;
     private string XmlLocalVersionPath;
 
     private string ServerUrl;
     private string XmlServerVersionPath;
 
-    public Dictionary<string, Dictionary<string, string>> ScenePairs { get; private set; } = new Dictionary<string, Dictionary<string, string>>();
+    private List<Scene> downloadScenes = new List<Scene>();
+    private readonly List<Folder> alreadyDownLoadList = new List<Folder>();
+    private UnityWebRequester unityWebRequester;
+    private byte[] bytes = null;
+    #endregion
 
+    #region Public Var
+    public Dictionary<string, Dictionary<string, string>> ABScenePairs { get; private set; } = new Dictionary<string, Dictionary<string, string>>();
     public float LoadTotalSize { private set; get; } = 0; // 需要加载资源的总大小 KB
-    public float LoadedSize { private set; get; } = 0;    // 已经下载资源大小 KB
-    //开始热更新
-    public void StartHotfix(Action<bool, List<Scene>> HotfixCallBack)
+    #endregion
+
+    #region Public Function
+    /// <summary> 开始热更新 </summary>
+    public void StartHotfix(Action<bool, string> HotfixCallBack)
     {
-        LocalPath = string.Format("@{0}/{1}/", Application.persistentDataPath, PlatformManager.Instance.Name());
+        LocalPath = string.Format(@"{0}/{1}/", Application.persistentDataPath, PlatformManager.Instance.Name());
         ServerUrl = NetcomManager.ServerUrl + PlatformManager.Instance.Name() + "/";
 
         XmlLocalVersionPath = LocalPath + "AssetBundleConfig.xml";
         XmlServerVersionPath = ServerUrl + "AssetBundleConfig.xml";
 
-        if (!FileManager.FileExist(XmlLocalVersionPath))
+        //读取本地热更文件
+        DownLoad(XmlLocalVersionPath, (byte[] bytes) =>
         {
-            //本地无版本，全部更新
-            DownLoad(XmlServerVersionPath, (byte[] data) =>
-             {
-                 AssetBundleConfig abConfig = XmlSerializeManager.ProtoDeSerialize<AssetBundleConfig>(data);
-                 FileManager.CreateFile(XmlLocalVersionPath, data);//将xml文件写入本地
-
-                 ComputeLoadSize(abConfig);
-
-                 HotfixCallBack?.Invoke(true, abConfig.Scenes);
-             });
-        }
-        else
-        {
-            //获取本地版本信息，判断是否热更
-            DownLoad(XmlLocalVersionPath, (byte[] bytes) =>
+            AssetBundleConfig ab_config = bytes.Length > 0 ? XmlSerializeManager.ProtoDeSerialize<AssetBundleConfig>(bytes) : null;
+            //检查版本更新信息
+            CheckHotfix(ab_config, () =>
             {
-                AssetBundleConfig localABConfig = XmlSerializeManager.ProtoDeSerialize<AssetBundleConfig>(bytes);
-
-                ComputeLoadSize(localABConfig);
-
-                //检查版本更新信息
-                CheckHotfix(localABConfig, (scenes) =>
+                string des = "";
+                for (int i = 0; i < downloadScenes.Count; i++)
                 {
-                    if (scenes.Count > 0)
-                    {
-                        HotfixCallBack?.Invoke(true, scenes);
-                    }
-                    else
-                    {
-                        HotfixCallBack?.Invoke(false, null);
-                    }
-                });
+                    des += downloadScenes[i].Des + "\n";
+                }
+                HotfixCallBack?.Invoke(downloadScenes.Count > 0, des);
             });
-        }
-    }
-    /// <summary>
-    /// 检查更新
-    /// </summary>
-    /// <param name="localABConfig"></param>
-    /// <param name="cb"></param>
-    private void CheckHotfix(AssetBundleConfig localABConfig, Action<List<Scene>> cb = null)
-    {
-        if (Application.internetReachability == NetworkReachability.NotReachable)
-        {
-            //提示网络错误，检测网络链接是否正常
-            Debug.Log("网络异常");
-        }
-        else
-        {
-            DownLoad(XmlServerVersionPath, (byte[] bytes) =>
-            {
-                AssetBundleConfig serverABConfig = XmlSerializeManager.ProtoDeSerialize<AssetBundleConfig>(bytes);
-                if (Application.version == serverABConfig.GameVersion)
-                {
-                    //无大版本更新，校验本地ab包
-                    CheckScenesVersion(localABConfig, (scenes) =>
-                    {
-                        cb?.Invoke(scenes);
-                    });
-                }
-                else
-                {
-                    //大版本更新,下载新程序覆盖安装
-
-                }
-            });
-        }
-    }
-    /// <summary>
-    /// 校验ab包
-    /// </summary>
-    /// <param name="localABConfig"></param>
-    /// <param name="cb"></param>
-    private void CheckScenesVersion(AssetBundleConfig localABConfig, Action<List<Scene>> cb)
-    {
-        List<Scene> scenes = new List<Scene>();
-        DownLoad(XmlServerVersionPath, (byte[] data) =>
-        {
-            AssetBundleConfig serverABConfig = XmlSerializeManager.ProtoDeSerialize<AssetBundleConfig>(data);
-            for (int i = 0; i < localABConfig.Scenes.Count; i++)
-            {
-                for (int j = 0; j < localABConfig.Scenes[i].Folders.Count; j++)
-                {
-                    if (localABConfig.Scenes[i].Folders[j].HashCode == serverABConfig.Scenes[i].Folders[j].HashCode)
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        scenes.Add(serverABConfig.Scenes[i]);
-                        break;
-                    }
-                }
-            }
-            cb?.Invoke(scenes);
         });
     }
-    /// <summary>
-    /// 下载
-    /// </summary>
-    /// <param name="url"></param>
-    /// <param name="action"></param>
-    private void DownLoad(string url, Action<byte[]> action)
-    {
-        //NetcomManager.Instance.GetBytes(url, (NetcomData data) =>
-        //{
-        //    if (data.isDown)
-        //    {
-        //        if (!data.isError)
-        //        {
-        //            action?.Invoke(data.data);
-        //        }
-        //        else
-        //        {
-        //            Debug.LogErrorFormat("[HotfixManager] Error : {0}", data.error);
-        //        }
-        //    }
-        //});
-    }
-    /// <summary>
-    /// 下载AB包
-    /// </summary>
-    /// <param name="scenes"></param>
-    public void DownLoadAssetBundle(List<Scene> scenes, Action<float> DownCallBack)
+
+    /// <summary> 下载AB包 </summary>
+    public void DownLoadAssetBundle()
     {
         //下载总manifest文件
         DownLoad(ServerUrl + PlatformManager.Instance.Name() + ".manifest", (byte[] manifest_data) =>
@@ -164,88 +69,38 @@ public class HotfixManager : SingletonEvent<HotfixManager>
             {
                 //将ab文件写入本地
                 FileManager.CreateFile(LocalPath + PlatformManager.Instance.Name(), ab_data);
-                for (int i = 0; i < scenes.Count; i++)
-                {
-                    for (int j = 0; j < scenes[i].Folders.Count; j++)
-                    {
-                        string bandleName = scenes[i].Folders[j].BundleName;
-                        float size = scenes[i].Folders[j].Size;
-                        //下载manifest文件
-                        DownLoad(ServerUrl + bandleName + ".manifest", (byte[] _manifest_data) =>
-                        {
-                            //将manifest文件写入本地
-                            FileManager.CreateFile(LocalPath + bandleName + ".manifest", _manifest_data);
-                            //下载ab包
-                            //NetcomManager.Instance.GetBytes(ServerUrl + bandleName, (NetcomData netcom) =>
-                            //{
-                            //    float LoadingSize = netcom.progress * size / 1024f;
-                            //    if (netcom.progress == 1)
-                            //    {
-                            //        if (!netcom.isError)
-                            //        {
-                            //            //将ab文件写入本地
-                            //            FileManager.CreateFile(LocalPath + bandleName, netcom.data);
-                            //        }
-                            //        LoadedSize += LoadingSize;
-                            //        LoadingSize = 0;
-                            //    }
-                            //    if (LoadedSize == LoadTotalSize)
-                            //    {
-                            //        DownCallBack?.Invoke((LoadedSize + LoadingSize) / LoadTotalSize);
-                            //    }
-                            //});
-                        });
-                    }
-                }
+                App.app.StartCoroutine(IE_DownLoad());
             });
         });
     }
-    /// <summary>
-    /// 保存场景中的文件夹和包名
-    /// </summary>
-    /// <param name="abConfig"></param>
-    private void ComputeLoadSize(AssetBundleConfig abConfig)
+    /// <summary> 获取下载进度 </summary>
+    public float GetProgress()
     {
-        LoadTotalSize = 0;
-        //获取文件夹名和包名，用来给AssetbundleSceneManager里的folderDic赋值
-        foreach (var scene in abConfig.Scenes)
-        {
-            Dictionary<string, string> folderPairs = new Dictionary<string, string>();
-            foreach (var folder in scene.Folders)
-            {
-                if (!folderPairs.ContainsKey(folder.FolderName))
-                {
-                    folderPairs.Add(folder.FolderName, folder.BundleName);
-                }
-                LoadTotalSize += folder.Size / 1024f;
-            }
-            if (!ScenePairs.ContainsKey(scene.SceneName))
-            {
-                ScenePairs.Add(scene.SceneName, folderPairs);
-            }
-        }
+        return GetLoadedSize() / LoadTotalSize;
     }
-    /// <summary>
-    /// 加载AB包
-    /// </summary>
+    /// <summary> 获取当前下载大小 </summary>
+    public float GetLoadedSize()
+    {
+        float alreadySize = alreadyDownLoadList.Sum(f => f.Size);
+        float currentAlreadySize = 0;
+        if (unityWebRequester != null)
+        {
+            currentAlreadySize = unityWebRequester.DownloadedLength;
+        }
+        return alreadySize + currentAlreadySize;
+    }
+    /// <summary> 加载AB包 </summary>
     public void LoadAssetBundle(Action<bool, string, float> LoadCallBack)
     {
-        int totalProgress = 0;
+        int totalProgress = ABScenePairs.Values.Sum(f => f.Count);
         int loadProgress = 0;
-        foreach (var scene in ScenePairs)
-        {
-            foreach (var folder in scene.Value)
-            {
-                totalProgress++;
-            }
-        }
-        foreach (var scene in ScenePairs)
+        foreach (var scene in ABScenePairs)
         {
             foreach (var folder in scene.Value)
             {
                 AssetBundleManager.Instance.LoadAssetBundle(scene.Key, folder.Key, (bundleName, progress) =>
                 {
-                    if(progress == 1)
+                    if (progress == 1)
                     {
                         loadProgress++;
                     }
@@ -254,9 +109,7 @@ public class HotfixManager : SingletonEvent<HotfixManager>
             }
         }
     }
-    /// <summary>
-    /// 清理本地AB包和版本XML文件
-    /// </summary>
+    /// <summary> 清理本地AB包和版本XML文件 </summary>
     public void DeleteLocalVersionXml()
     {
         if (FileManager.FileExist(XmlLocalVersionPath))
@@ -265,4 +118,120 @@ public class HotfixManager : SingletonEvent<HotfixManager>
             FileManager.DeleteFolder(LocalPath);
         }
     }
+    #endregion
+
+    #region Private Function
+    private IEnumerator IE_DownLoad()
+    {
+        Dictionary<Folder, UnityWebRequester> requesters = new Dictionary<Folder, UnityWebRequester>();
+        for (int i = 0; i < downloadScenes.Count; i++)
+        {
+            for (int j = 0; j < downloadScenes[i].Folders.Count; j++)
+            {
+                string bandleName = downloadScenes[i].Folders[j].BundleName;
+                float size = downloadScenes[i].Folders[j].Size;
+                //添加到下载列表
+                requesters.Add(downloadScenes[i].Folders[j], new UnityWebRequester(ServerUrl + bandleName));
+                //下载manifest文件
+                DownLoad(ServerUrl + bandleName + ".manifest", (byte[] _manifest_data) =>
+                {
+                    //将manifest文件写入本地
+                    FileManager.CreateFile(LocalPath + bandleName + ".manifest", _manifest_data);
+                });
+            }
+        }
+        foreach (var requester in requesters)
+        {
+            unityWebRequester = requester.Value;
+            yield return requester.Value.IE_GetBytes(ServerUrl + requester.Key.BundleName, (UnityWebRequest uwr) =>
+            {
+                if (!uwr.isNetworkError)
+                {
+                    FileManager.CreateFile(LocalPath + requester.Key.BundleName, uwr.downloadHandler.data);
+                    unityWebRequester = null;
+                    alreadyDownLoadList.Add(requester.Key);
+                }
+                else
+                {
+                    Debug.LogErrorFormat("[HotfixManager] Error:{0}", uwr.error);
+                }
+            });
+        }
+        FileManager.CreateFile(XmlLocalVersionPath, bytes);
+    }
+    /// <summary> 下载 </summary>
+    private void DownLoad(string url, Action<byte[]> action)
+    {
+        UnityWebRequester requester = new UnityWebRequester(url);
+        requester.GetBytes((UnityWebRequest uwr) =>
+        {
+            byte[] data = uwr.isNetworkError ? null : uwr.downloadHandler.data;
+            action?.Invoke(data);
+            requester.Destory();
+        });
+    }
+    /// <summary> 检查更新 </summary>
+    private void CheckHotfix(AssetBundleConfig localABConfig, Action cb = null)
+    {
+        if (Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            //提示网络错误，检测网络链接是否正常
+            Debug.Log("网络异常");
+        }
+        else
+        {
+            DownLoad(XmlServerVersionPath, (byte[] bytes) =>
+            {
+                AssetBundleConfig serverABConfig = XmlSerializeManager.ProtoDeSerialize<AssetBundleConfig>(bytes);
+                this.bytes = bytes;
+                GetABScenePairs(serverABConfig);
+                if (Application.version == serverABConfig.GameVersion)
+                {
+                    //无大版本更新，校验本地ab包
+                    downloadScenes = localABConfig != null ? new List<Scene>() : serverABConfig.Scenes;
+                    if (localABConfig != null)
+                    {
+                        for (int i = 0; i < localABConfig.Scenes.Count; i++)
+                        {
+                            for (int j = 0; j < localABConfig.Scenes[i].Folders.Count; j++)
+                            {
+                                if (localABConfig.Scenes[i].Folders[j].HashCode != serverABConfig.Scenes[i].Folders[j].HashCode)
+                                {
+                                    downloadScenes.Add(serverABConfig.Scenes[i]);
+                                }
+                            }
+                        }
+                    }
+                    LoadTotalSize = downloadScenes.Sum(s => s.Folders.Sum(f => f.Size));
+                    cb?.Invoke();
+                }
+                else
+                {
+                    //大版本更新,下载新程序覆盖安装
+
+                }
+            });
+        }
+    }
+    /// <summary> 获取文件夹名和包名 </summary>
+    private void GetABScenePairs(AssetBundleConfig config)
+    {
+        //获取文件夹名和包名，用来给AssetbundleSceneManager里的folderDic赋值
+        foreach (var scene in config.Scenes)
+        {
+            Dictionary<string, string> folderPairs = new Dictionary<string, string>();
+            foreach (var folder in scene.Folders)
+            {
+                if (!folderPairs.ContainsKey(folder.FolderName))
+                {
+                    folderPairs.Add(folder.FolderName, folder.BundleName);
+                }
+            }
+            if (!ABScenePairs.ContainsKey(scene.SceneName))
+            {
+                ABScenePairs.Add(scene.SceneName, folderPairs);
+            }
+        }
+    }
+    #endregion
 }

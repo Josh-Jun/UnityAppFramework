@@ -9,11 +9,12 @@ public class UIWindowBase : EventBaseMono
     protected virtual void Awake()
     {
         InitWindow();
+        RegisterEvent();
     }
     [Obsolete("此方法已弃用，请使用RegisterEvent方法", true)]
     protected virtual void Start()
     {
-        RegisterEvent();
+
     }
     /// <summary>初始化UI窗口</summary>
     protected virtual void InitWindow()

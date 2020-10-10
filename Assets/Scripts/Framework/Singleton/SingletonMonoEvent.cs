@@ -15,7 +15,7 @@ public class SingletonMonoEvent<T> : EventBaseMono where T : SingletonMonoEvent<
                     _Instance = FindObjectOfType<T>();
                     if (_Instance == null)
                     {
-                        GameObject go = new GameObject(typeof(T).ToString());
+                        GameObject go = new GameObject(typeof(T).Name);
                         _Instance = go.AddComponent<T>();
                     }
                 }

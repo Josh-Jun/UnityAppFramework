@@ -16,7 +16,7 @@ public class AssetBundleWindowEditor : EditorWindow
 
     private BuildTarget buildTarget = BuildTarget.StandaloneWindows;
     private string outputPath = "AssetBundle";
-    private string buildPath = "Assets/Resources";
+    private string buildPath = "Assets/Resources/AssetsFolder";
     private readonly Dictionary<string, Dictionary<string, string>> sceneDic = new Dictionary<string, Dictionary<string, string>>();
     private readonly Dictionary<string, string> desDic = new Dictionary<string, string>();
 
@@ -169,7 +169,7 @@ public class AssetBundleWindowEditor : EditorWindow
                 if (!sceneDic.ContainsKey(tempDirectoryInfo.Name))
                     sceneDic.Add(tempDirectoryInfo.Name, namePathDic);
                 if (!desDic.ContainsKey(tempDirectoryInfo.Name))
-                    desDic.Add(tempDirectoryInfo.Name, "");
+                    desDic.Add(tempDirectoryInfo.Name, "请输入本版更新描述");
             }
         }
         Debug.Log("AssetBundle Labels设置成功!");

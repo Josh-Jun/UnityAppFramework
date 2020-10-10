@@ -12,7 +12,7 @@ public partial class NetcomManager : Singleton<NetcomManager>
         {
             if (PlatformManager.Instance.IsEditor())
             {
-                return string.Format("{0}{1}/", Application.dataPath.Replace("Assets", ""), "AssetBundle");
+                return string.Format(@"{0}{1}/", Application.dataPath.Replace("Assets", ""), "AssetBundle");
             }
             else
             {

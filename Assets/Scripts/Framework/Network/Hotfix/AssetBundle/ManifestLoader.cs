@@ -29,7 +29,7 @@ public class ManifestLoader : Singleton<ManifestLoader>
 
     public ManifestLoader()
     {
-        this.manifestPath = string.Format("@{0}/{1}/{2}", Application.persistentDataPath, PlatformManager.Instance.Name(), PlatformManager.Instance.Name());
+        this.manifestPath = string.Format(@"{0}/{1}/{2}", Application.persistentDataPath, PlatformManager.Instance.Name(), PlatformManager.Instance.Name());
         this.manifest = null;
         this.assetBundle = null;
         this.IsFinish = false;
@@ -41,8 +41,8 @@ public class ManifestLoader : Singleton<ManifestLoader>
     /// <returns></returns>
     public void Load()
     {
-        UnityWebRequester requester = new UnityWebRequester();
-        requester.GetAssetBundle(manifestPath, (AssetBundle ab) =>
+        UnityWebRequester requester = new UnityWebRequester(manifestPath);
+        requester.GetAssetBundle((AssetBundle ab) =>
         {
             this.assetBundle = ab;
             this.manifest = assetBundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");

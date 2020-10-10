@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 
 <RootScriptConfig>
-  <!--<RootScript ScriptName = "Hotfix.HotfixRoot"></RootScript>-->
   <RootScript ScriptName = "Test.TestRoot">XLuaScripts/Test/Test/TestRoot</RootScript>
 </RootScriptConfig>

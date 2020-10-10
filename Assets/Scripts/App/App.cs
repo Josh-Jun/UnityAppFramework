@@ -26,11 +26,6 @@ public class App : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    private void Start()
-    {
-        //开始接口实现
-        Root.Begin();
-    }
     private void OnDestroy()
     {
         //结束接口实现

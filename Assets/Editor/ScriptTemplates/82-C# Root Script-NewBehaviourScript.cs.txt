@@ -10,11 +10,7 @@ namespace NameSpace
         {
 			#NOTRIM#
         }
-        public void Begin()
-        {
-			#NOTRIM#
-        }
-
+        
         public void End()
         {
 			#NOTRIM#

@@ -6,6 +6,7 @@ using System.Linq;
 using EventController;
 using System.Reflection;
 using XLuaFrame;
+using System;
 
 public class UIRoot : SingletonMono<UIRoot>
 {
@@ -124,7 +125,7 @@ public class UIRoot : SingletonMono<UIRoot>
     /// assetName 资源名称
     /// state 初始化窗口是否显示
     /// </summary>
-    public UIWindowBase LoadWindow(string path, bool state = false)
+    public UIWindowBase LoadWindow(string path, string _namespace = null, bool state = false)
     {
         GameObject go = AssetsManager.Instance.LoadAsset<GameObject>(path);
         if (go != null)
@@ -134,10 +135,9 @@ public class UIRoot : SingletonMono<UIRoot>
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
             UIWindowBase window = null;
-            string wndName = path.Split('/')[path.Split('/').Length - 1];
-            if (go.TryGetComponect<UIWindowBase>())
+            if (go.GetComponent<UIWindowBase>())
             {
-                Debug.LogErrorFormat("{0}:脚本已存在,", wndName);
+                Debug.LogErrorFormat("{0}:脚本已存在,", go.name);
             }
             else
             {
@@ -147,7 +147,16 @@ public class UIRoot : SingletonMono<UIRoot>
                 }
                 else
                 {
-                    window = (UIWindowBase)go.AddComponent(Assembly.GetExecutingAssembly().GetType(wndName));
+                    string fullName = string.IsNullOrEmpty(_namespace) ? go.name : string.Format("{0}.{1}", _namespace, go.name);
+                    Type type = Assembly.GetExecutingAssembly().GetType(fullName);
+                    if (type != null)
+                    {
+                        window = (UIWindowBase)go.AddComponent(type);
+                    }
+                    else
+                    {
+                        Debug.LogErrorFormat("{0}:脚本已存在,", fullName);
+                    }
                 }
             }
             EventDispatcher.TriggerEvent(go.name, state);
@@ -156,7 +165,7 @@ public class UIRoot : SingletonMono<UIRoot>
         return null;
     }
     /// <summary> 加载本地窗口 </summary>
-    public UIWindowBase LoadLocalWindow(string path, bool state = false)
+    public UIWindowBase LoadLocalWindow(string path, string _namespace = null, bool state = false)
     {
         GameObject go = Resources.Load<GameObject>(path);
         if (go != null)
@@ -166,10 +175,9 @@ public class UIRoot : SingletonMono<UIRoot>
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
             UIWindowBase window = null;
-            string wndName = path.Split('/')[path.Split('/').Length - 1];
-            if (go.TryGetComponect<UIWindowBase>())
+            if (go.GetComponent<UIWindowBase>())
             {
-                Debug.LogErrorFormat("{0}:脚本已存在,", wndName);
+                Debug.LogErrorFormat("{0}:脚本已存在,", go.name);
             }
             else
             {
@@ -179,7 +187,16 @@ public class UIRoot : SingletonMono<UIRoot>
                 }
                 else
                 {
-                    window = (UIWindowBase)go.AddComponent(Assembly.GetExecutingAssembly().GetType(wndName));
+                    string fullName = string.IsNullOrEmpty(_namespace) ? go.name : string.Format("{0}.{1}", _namespace, go.name);
+                    Type type = Assembly.GetExecutingAssembly().GetType(fullName);
+                    if (type != null)
+                    {
+                        window = (UIWindowBase)go.AddComponent(type);
+                    }
+                    else
+                    {
+                        Debug.LogErrorFormat("{0}:脚本已存在,", fullName);
+                    }
                 }
             }
             EventDispatcher.TriggerEvent(go.name, state);

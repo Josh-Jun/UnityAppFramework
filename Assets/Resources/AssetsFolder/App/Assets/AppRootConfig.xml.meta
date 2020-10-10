@@ -3,5 +3,5 @@ guid: e60baff019cbbab4fb881cfab6401c27
 TextScriptImporter:
   externalObjects: {}
   userData: 
-  assetBundleName: 
-  assetBundleVariant: 
+  assetBundleName: app/assets
+  assetBundleVariant: ab
