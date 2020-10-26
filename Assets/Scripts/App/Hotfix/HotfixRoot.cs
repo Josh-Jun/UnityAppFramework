@@ -15,7 +15,8 @@ namespace Hotfix
             AddEvent();
 
             string prefab_HotfixPath = "App/Hotfix/Windows/HotfixWindow";
-            hotfixWin = (HotfixWindow)UIRoot.Instance.LoadLocalWindow(prefab_HotfixPath, GetType().Namespace, true);
+            hotfixWin = (HotfixWindow)this.LoadLocalWindow(prefab_HotfixPath, true);
+
 
             StartHotfix();
         }

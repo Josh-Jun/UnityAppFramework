@@ -1,9 +1,13 @@
-﻿using EventListener;
+﻿using EventController;
+using EventListener;
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using XLuaFrame;
 
 public static class DevelopManager
 {
@@ -243,7 +247,7 @@ public static class DevelopManager
     {
         EventTrigger eventTrigger = obj.TryGetComponect<EventTrigger>();
         eventTrigger.triggers.Clear();
-        Object.Destroy(eventTrigger);
+        UnityEngine.Object.Destroy(eventTrigger);
     }
 
     /// <summary>
@@ -272,7 +276,7 @@ public static class DevelopManager
     {
         EventTrigger eventTrigger = com.TryGetComponect<EventTrigger>();
         eventTrigger.triggers.Clear();
-        Object.Destroy(eventTrigger);
+        UnityEngine.Object.Destroy(eventTrigger);
     }
     #endregion
 
@@ -405,6 +409,98 @@ public static class DevelopManager
             }
         }
         return transform.GetComponent<T>();
+    }
+    #endregion
+
+    #region LoadWindow
+    /// <summary> 
+    /// 加载窗口 添加T(Component)类型脚本
+    /// path = sceneName/folderName/assetName
+    /// scnenName 打包资源的第一层文件夹名称
+    /// folderName 打包资源的第二层文件夹名称
+    /// assetName 资源名称
+    /// state 初始化窗口是否显示
+    /// </summary>
+    public static UIWindowBase LoadWindow(this object obj, string path, bool state = false)
+    {
+        GameObject go = AssetsManager.Instance.LoadAsset<GameObject>(path);
+        if (go != null)
+        {
+            go = UnityEngine.Object.Instantiate(go, UIRoot.Instance.UIRectTransform);
+            go.transform.localEulerAngles = Vector3.zero;
+            go.transform.localScale = Vector3.one;
+            go.name = go.name.Replace("(Clone)", "");
+            UIWindowBase window = null;
+            if (go.GetComponent<UIWindowBase>())
+            {
+                Debug.LogErrorFormat("{0}:脚本已存在,", go.name);
+            }
+            else
+            {
+                if (XLuaManager.Instance.IsLuaFileExist(path))
+                {
+                    window = go.AddComponent<XLuaUIWindow>().Init(path);//加载lua文件
+                }
+                else
+                {
+                    string _namespace = obj.GetType().Namespace;
+                    string fullName = string.IsNullOrEmpty(_namespace) ? go.name : string.Format("{0}.{1}", _namespace, go.name);
+                    Type type = Assembly.GetExecutingAssembly().GetType(fullName);
+                    if (type != null)
+                    {
+                        window = (UIWindowBase)go.AddComponent(type);
+                    }
+                    else
+                    {
+                        Debug.LogErrorFormat("{0}:脚本已存在,", fullName);
+                    }
+                }
+            }
+            EventDispatcher.TriggerEvent(go.name, state);
+            return window;
+        }
+        return null;
+    }
+    /// <summary> 加载本地窗口 </summary>
+    public static UIWindowBase LoadLocalWindow(this object obj, string path, bool state = false)
+    {
+        GameObject go = Resources.Load<GameObject>(path);
+        if (go != null)
+        {
+            go = UnityEngine.Object.Instantiate(go, UIRoot.Instance.UIRectTransform);
+            go.transform.localEulerAngles = Vector3.zero;
+            go.transform.localScale = Vector3.one;
+            go.name = go.name.Replace("(Clone)", "");
+            UIWindowBase window = null;
+            if (go.GetComponent<UIWindowBase>())
+            {
+                Debug.LogErrorFormat("{0}:脚本已存在,", go.name);
+            }
+            else
+            {
+                if (XLuaManager.Instance.IsLuaFileExist(path))
+                {
+                    window = go.AddComponent<XLuaUIWindow>().Init(path);//加载lua文件
+                }
+                else
+                {
+                    string _namespace = obj.GetType().Namespace;
+                    string fullName = string.IsNullOrEmpty(_namespace) ? go.name : string.Format("{0}.{1}", _namespace, go.name);
+                    Type type = Assembly.GetExecutingAssembly().GetType(fullName);
+                    if (type != null)
+                    {
+                        window = (UIWindowBase)go.AddComponent(type);
+                    }
+                    else
+                    {
+                        Debug.LogErrorFormat("{0}:脚本已存在,", fullName);
+                    }
+                }
+            }
+            EventDispatcher.TriggerEvent(go.name, state);
+            return window;
+        }
+        return null;
     }
     #endregion
 }

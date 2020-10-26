@@ -14,6 +14,7 @@ public class Root
     private static IRoot HotfixRoot = null;
     public static void Init()
     {
+        //初始化热更脚本
         Type type = Type.GetType(hotfixScriptName);
         object obj = Activator.CreateInstance(type);
         HotfixRoot = obj as IRoot;
