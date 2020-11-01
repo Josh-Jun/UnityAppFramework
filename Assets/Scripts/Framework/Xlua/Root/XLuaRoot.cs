@@ -45,11 +45,7 @@ namespace XLuaFrame
                 LuaCallbackPairs.Add(item, scriptEnv.Get<Action>(enumName));
             }
         }
-        public void Begin()
-        {
-            LuaCallbackPairs[(int)RootLifeCycle.Begin]?.Invoke();
-        }
-
+		
         public void End()
         {
             LuaCallbackPairs[(int)RootLifeCycle.End]?.Invoke();

@@ -21,7 +21,6 @@ namespace XLuaFrame
     public enum RootLifeCycle
     {
         Init,
-        Begin,
         End,
     }
     /// <summary> 所有lua行为仅共享一个luaenv </summary>
