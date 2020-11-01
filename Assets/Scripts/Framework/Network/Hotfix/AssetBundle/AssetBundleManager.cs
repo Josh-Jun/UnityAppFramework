@@ -64,7 +64,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         }
         else
         {
-            Debug.LogError("不存在该场景:" + sceneName);
+            Debug.Log("Error:不存在该场景:" + sceneName);
         }
     }
 
@@ -83,7 +83,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         }
         else
         {
-            Debug.LogError("不存在该场景:" + sceneName);
+            Debug.Log("Error:不存在该场景:" + sceneName);
             return null;
         }
     }
@@ -102,7 +102,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         }
         else
         {
-            Debug.LogError("不存在该场景:" + sceneName);
+            Debug.Log("Error:不存在该场景:" + sceneName);
             return false;
         }
     }
@@ -121,7 +121,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         }
         else
         {
-            Debug.LogError("不存在该场景:" + sceneName);
+            Debug.Log("Error:不存在该场景:" + sceneName);
             return false;
         }
     }
@@ -141,7 +141,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         }
         else
         {
-            Debug.LogError("不存在该场景:" + sceneName);
+            Debug.Log("Error:不存在该场景:" + sceneName);
             return null;
         }
     }
@@ -169,7 +169,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         }
         else
         {
-            Debug.LogError("不存在该场景:" + sceneName);
+            Debug.Log("Error:不存在该场景:" + sceneName);
             return null;
         }
     }
@@ -188,7 +188,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         }
         else
         {
-            Debug.LogError("不存在该场景:" + sceneName);
+            Debug.Log("Error:不存在该场景:" + sceneName);
             return null;
         }
     }
@@ -206,7 +206,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         }
         else
         {
-            Debug.LogError("不存在该场景:" + sceneName);
+            Debug.Log("Error:不存在该场景:" + sceneName);
             return;
         }
     }
@@ -225,7 +225,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         }
         else
         {
-            Debug.LogError("不存在该场景:" + sceneName);
+            Debug.Log("Error:不存在该场景:" + sceneName);
             return;
         }
     }
@@ -242,7 +242,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         }
         else
         {
-            Debug.LogError("不存在该场景:" + sceneName);
+            Debug.Log("Error:不存在该场景:" + sceneName);
             return;
         }
     }
@@ -259,7 +259,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         }
         else
         {
-            Debug.LogError("不存在该场景:" + sceneName);
+            Debug.Log("Error:不存在该场景:" + sceneName);
             return;
         }
     }
@@ -276,7 +276,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         }
         else
         {
-            Debug.LogError("不存在该场景:" + sceneName);
+            Debug.Log("Error:不存在该场景:" + sceneName);
             return;
         }
     }
@@ -293,7 +293,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         }
         else
         {
-            Debug.LogError("不存在该场景:" + sceneName);
+            Debug.Log("Error:不存在该场景:" + sceneName);
             return;
         }
     }
@@ -310,7 +310,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         }
         else
         {
-            Debug.LogError("不存在该场景:" + sceneName);
+            Debug.Log("Error:不存在该场景:" + sceneName);
             return;
         }
     }

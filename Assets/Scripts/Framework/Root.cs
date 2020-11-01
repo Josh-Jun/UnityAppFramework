@@ -6,23 +6,33 @@ using XLuaFrame;
 
 public class Root
 {
-    private static readonly bool RunXLuaScripts = false;
+    public const string path_AppRootConfig = "App/Assets/AppRootConfig";
+    public static bool IsHotfix { get; private set; } = true;//是否热更
+    public static bool IsLoadAB { get; private set; } = true;//是否加载AB包
+    public static bool RunXLuaScripts { get; private set; } = false;//是否运行XLua脚本
+
     private static readonly string hotfixScriptName = "Hotfix.HotfixRoot";
-    private static readonly string path_AppRootConfig = "App/Assets/AppRootConfig";
     private static readonly Dictionary<string, IRoot> iRootPairs = new Dictionary<string, IRoot>();
     private static RootScriptConfig rootConfig;
     private static IRoot HotfixRoot = null;
     public static void Init()
     {
-        //初始化热更脚本
-        Type type = Type.GetType(hotfixScriptName);
-        object obj = Activator.CreateInstance(type);
-        HotfixRoot = obj as IRoot;
+        if (IsHotfix)
+        {
+            //初始化热更脚本
+            Type type = Type.GetType(hotfixScriptName);
+            object obj = Activator.CreateInstance(type);
+            HotfixRoot = obj as IRoot;
+        }
+        else
+        {
+            TextAsset config = Resources.Load<TextAsset>(string.Format("AssetsFolder/{0}", path_AppRootConfig));
+            InitRootScripts(config);
+        }
     }
 
-    public static void InitRootScripts()
+    public static void InitRootScripts(TextAsset config)
     {
-        TextAsset config = AssetsManager.Instance.LoadAsset<TextAsset>(path_AppRootConfig);
         rootConfig = XmlSerializeManager.ProtoDeSerialize<RootScriptConfig>(config.bytes);
         for (int i = 0; i < rootConfig.RootScript.Count; i++)
         {
@@ -56,7 +66,7 @@ public class Root
 
     public static void End()
     {
-        HotfixRoot.End();
+        HotfixRoot?.End();
         for (int i = 0; i < iRootPairs.Count; i++)
         {
             iRootPairs[rootConfig.RootScript[i].ScriptName].End();

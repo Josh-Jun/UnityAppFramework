@@ -57,15 +57,14 @@ public class AssetsManager : Singleton<AssetsManager>
     /// </summary>
     public T LoadAsset<T>(string path) where T : UnityEngine.Object
     {
-        if (PlatformManager.Instance.IsEditor())
-        {
-
-            return Resources.Load<T>(string.Format("AssetsFolder/{0}", path));
-        }
-        else
+        if (Root.IsLoadAB)
         {
             string[] names = path.Split('/');
             return AssetBundleManager.Instance.LoadAsset<T>(names[0], names[1], names[names.Length - 1]);
+        }
+        else
+        {
+            return Resources.Load<T>(string.Format("AssetsFolder/{0}", path));
         }
     }
     #endregion

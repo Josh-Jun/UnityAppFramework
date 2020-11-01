@@ -4,7 +4,7 @@
 /// </summary>
 public partial class NetcomManager : Singleton<NetcomManager>
 {
-    private static readonly bool IsLocalPath = false;
+    private static readonly bool IsLocalPath = true;
     public static string ABUrl
     {
         private set { }

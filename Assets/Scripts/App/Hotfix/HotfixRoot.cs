@@ -15,9 +15,8 @@ namespace Hotfix
             AddEvent();
 
             string prefab_HotfixPath = "App/Hotfix/Windows/HotfixWindow";
-            hotfixWin = (HotfixWindow)this.LoadLocalWindow(prefab_HotfixPath, true);
-
-
+            hotfixWin = this.LoadWindow<HotfixWindow>(prefab_HotfixPath, true);
+            
             StartHotfix();
         }
         private void AddEvent()
@@ -84,7 +83,11 @@ namespace Hotfix
                     hotfixWin.SetProgressBarActive(false);
                     Debug.Log("加载完成");
                     //AB包加载完成
-                    Root.InitRootScripts();
+                    TimerTaskManager.Instance.AddFrameTask(() =>
+                    {
+                        TextAsset config = AssetsManager.Instance.LoadAsset<TextAsset>(Root.path_AppRootConfig);
+                        Root.InitRootScripts(config);
+                    }, 1);
                 }
             });
         }

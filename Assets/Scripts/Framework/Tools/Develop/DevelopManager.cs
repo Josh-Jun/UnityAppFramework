@@ -462,7 +462,7 @@ public static class DevelopManager
         return null;
     }
     /// <summary> 加载本地窗口 </summary>
-    public static UIWindowBase LoadLocalWindow(this object obj, string path, bool state = false)
+    public static T LoadWindow<T>(this object obj, string path, bool state = false) where T : Component
     {
         GameObject go = Resources.Load<GameObject>(path);
         if (go != null)
@@ -471,34 +471,12 @@ public static class DevelopManager
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
-            UIWindowBase window = null;
-            if (go.GetComponent<UIWindowBase>())
-            {
-                Debug.LogErrorFormat("{0}:脚本已存在,", go.name);
-            }
-            else
-            {
-                if (XLuaManager.Instance.IsLuaFileExist(path))
-                {
-                    window = go.AddComponent<XLuaUIWindow>().Init(path);//加载lua文件
-                }
-                else
-                {
-                    string _namespace = obj.GetType().Namespace;
-                    string fullName = string.IsNullOrEmpty(_namespace) ? go.name : string.Format("{0}.{1}", _namespace, go.name);
-                    Type type = Assembly.GetExecutingAssembly().GetType(fullName);
-                    if (type != null)
-                    {
-                        window = (UIWindowBase)go.AddComponent(type);
-                    }
-                    else
-                    {
-                        Debug.LogErrorFormat("{0}:脚本已存在,", fullName);
-                    }
-                }
-            }
+            string _namespace = obj.GetType().Namespace;
+            string fullName = string.IsNullOrEmpty(_namespace) ? go.name : string.Format("{0}.{1}", _namespace, go.name);
+            Type type = Assembly.GetExecutingAssembly().GetType(fullName);
+            T t = (T)go.AddComponent(type);
             EventDispatcher.TriggerEvent(go.name, state);
-            return window;
+            return t;
         }
         return null;
     }

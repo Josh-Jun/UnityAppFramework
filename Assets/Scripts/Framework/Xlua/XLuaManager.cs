@@ -56,7 +56,7 @@ namespace XLuaFrame
         {
             string path = string.Format("{0}{1}", filePath, LuaSuffixName);
             TextAsset textAsset = AssetsManager.Instance.LoadAsset<TextAsset>(path);
-            return textAsset;
+            return !string.IsNullOrEmpty(textAsset.text);
         }
 
 
