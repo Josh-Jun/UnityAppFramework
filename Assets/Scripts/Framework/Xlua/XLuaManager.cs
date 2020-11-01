@@ -54,9 +54,13 @@ namespace XLuaFrame
         /// <summary> Lua文件是否存在 </summary>
         public bool IsLuaFileExist(string filePath)
         {
-            string path = string.Format("{0}{1}", filePath, LuaSuffixName);
-            TextAsset textAsset = AssetsManager.Instance.LoadAsset<TextAsset>(path);
-            return !string.IsNullOrEmpty(textAsset.text);
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                string path = string.Format("{0}{1}", filePath, LuaSuffixName);
+                TextAsset textAsset = AssetsManager.Instance.LoadAsset<TextAsset>(path);
+                return !string.IsNullOrEmpty(textAsset.text);
+            }
+            return false;
         }
 
 
