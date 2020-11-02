@@ -481,4 +481,23 @@ public static class DevelopManager
         return null;
     }
     #endregion
+
+    #region AndroidJavaCallBackMethed
+    public static void CallJavaMethed(this AndroidJavaObject javaObject, string methedName, params object[] args)
+    {
+        javaObject.Call(methedName, args);
+    }
+    public static T CallJavaMethed<T>(this AndroidJavaObject javaObject, string methedName, params object[] args)
+    {
+        return (T)Convert.ChangeType(javaObject.Call<T>(methedName, args), typeof(T));
+    }
+    public static void CallJavaStaticMethed(this AndroidJavaObject javaObject, string methedName, params object[] args)
+    {
+        javaObject.CallStatic(methedName, args);
+    }
+    public static T CallJavaStaticMethed<T>(this AndroidJavaObject javaObject, string methedName, params object[] args)
+    {
+        return (T)Convert.ChangeType(javaObject.CallStatic<T>(methedName, args), typeof(T));
+    }
+    #endregion
 }

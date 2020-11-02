@@ -16,10 +16,10 @@ public abstract class PlatformManager
                         _instance = new WindowPlayer();
                         break;
                     case RuntimePlatform.IPhonePlayer:
-                        _instance = new AndroidPlayer();
+                        _instance = new IPhonePlayer();
                         break;
                     case RuntimePlatform.Android:
-                        _instance = new IPhonePlayer();
+                        _instance = new AndroidPlayer();
                         break;
                     case RuntimePlatform.WindowsEditor:
                         _instance = new EditorPlayer();
