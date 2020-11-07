@@ -44,6 +44,7 @@ public class UIRoot : SingletonMono<UIRoot>
         uiCamera.useOcclusionCulling = false;
         uiCamera.allowMSAA = false;
         uiCamera.allowHDR = false;
+        uiCamera.depth = 1024;
         #endregion
 
         #region UI Canvas
@@ -60,8 +61,11 @@ public class UIRoot : SingletonMono<UIRoot>
         #endregion
 
         #region EventSystem
-        eventSystemObject = new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
-        eventSystemObject.transform.SetParent(transform);
+        if(EventSystem.current == null)
+        {
+            eventSystemObject = new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
+            eventSystemObject.transform.SetParent(transform);
+        }
         #endregion
     }
 

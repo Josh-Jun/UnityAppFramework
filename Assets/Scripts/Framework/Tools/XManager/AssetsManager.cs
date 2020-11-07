@@ -18,27 +18,25 @@ public class AssetsManager : Singleton<AssetsManager>
     #endregion
 
     #region 加载场景
-    public void LoadSceneAsync(string path, Action<AsyncOperation> cb = null, LoadSceneMode mode = LoadSceneMode.Additive)
+    public void LoadSceneAsync(string sceneName, Action<AsyncOperation> cb = null, LoadSceneMode mode = LoadSceneMode.Additive)
     {
-        string name = path.Split('/').Last();
-        if (!string.IsNullOrEmpty(name))
+        if (!string.IsNullOrEmpty(sceneName))
         {
-            AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(name, mode);
+            AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName, mode);
             cb?.Invoke(asyncOperation);
             asyncOperation.completed += (AsyncOperation ao) =>
             {
-                Scene scene = SceneManager.GetSceneByName(name);
+                Scene scene = SceneManager.GetSceneByName(sceneName);
                 SceneManager.SetActiveScene(scene);
                 cb?.Invoke(asyncOperation);
             };
         }
     }
-    public void UnLoadSceneAsync(string path, Action<float> cb = null)
+    public void UnLoadSceneAsync(string sceneName, Action<float> cb = null)
     {
-        string name = path.Split('/').Last();
-        if (!string.IsNullOrEmpty(name))
+        if (!string.IsNullOrEmpty(sceneName))
         {
-            AsyncOperation asyncOperation = SceneManager.UnloadSceneAsync(name);
+            AsyncOperation asyncOperation = SceneManager.UnloadSceneAsync(sceneName);
             asyncOperation.completed += (AsyncOperation ao) =>
             {
                 cb?.Invoke(asyncOperation.progress);

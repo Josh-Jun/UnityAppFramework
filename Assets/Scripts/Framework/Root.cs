@@ -62,6 +62,18 @@ public class Root
                 }
             }
         }
+        LoadMainScene();
+    }
+    private static readonly string MainSceneName = "TestScene";
+    private static void LoadMainScene()
+    {
+        AssetsManager.Instance.LoadSceneAsync(MainSceneName, (AsyncOperation async) =>
+        {
+            if (async.isDone && async.progress == 1)
+            {
+
+            }
+        });
     }
 
     public static void End()
