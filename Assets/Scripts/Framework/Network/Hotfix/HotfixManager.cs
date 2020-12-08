@@ -133,7 +133,7 @@ public class HotfixManager : SingletonEvent<HotfixManager>
                 string bandleName = downloadScenes[i].Folders[j].BundleName;
                 float size = downloadScenes[i].Folders[j].Size;
                 //添加到下载列表
-                unityWebRequesterPairs.Add(downloadScenes[i].Folders[j], new UnityWebRequester(ServerUrl + bandleName));
+                unityWebRequesterPairs.Add(downloadScenes[i].Folders[j], new UnityWebRequester(App.app));
                 //下载manifest文件
                 DownLoad(ServerUrl + bandleName + ".manifest", (byte[] _manifest_data) =>
                 {
@@ -164,8 +164,8 @@ public class HotfixManager : SingletonEvent<HotfixManager>
     /// <summary> 下载 </summary>
     private void DownLoad(string url, Action<byte[]> action)
     {
-        UnityWebRequester requester = new UnityWebRequester(url);
-        requester.GetBytes((UnityWebRequest uwr) =>
+        UnityWebRequester requester = new UnityWebRequester(App.app);
+        requester.GetBytes(url, (UnityWebRequest uwr) =>
         {
             byte[] data = uwr.isNetworkError ? null : uwr.downloadHandler.data;
             action?.Invoke(data);

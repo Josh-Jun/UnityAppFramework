@@ -18,6 +18,14 @@ public class SingletonMonoEvent<T> : EventBaseMono where T : SingletonMonoEvent<
                         GameObject go = new GameObject(typeof(T).Name);
                         _Instance = go.AddComponent<T>();
                     }
+                    else
+                    {
+                        Destroy(_Instance.gameObject);
+                    }
+                }
+                else
+                {
+                    Destroy(_Instance.gameObject);
                 }
             }
             return _Instance;

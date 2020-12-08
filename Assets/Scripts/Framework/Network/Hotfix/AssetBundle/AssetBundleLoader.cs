@@ -64,8 +64,8 @@ public class AssetBundleLoader
         // 注 : 如果发布到手机端,就不需要www加载了,通过下面方式加载:
         //AssetBundleCreateRequest abcr = AssetBundle.LoadFromFileAsync(bundlePath);
         //yield return abcr;
-        UnityWebRequester requester = new UnityWebRequester(bundlePath);
-        requester.GetAssetBundle((AssetBundle ab) =>
+        UnityWebRequester requester = new UnityWebRequester(App.app);
+        requester.GetAssetBundle(bundlePath, (AssetBundle ab) =>
         {
             // 创建 AssetLoader 类,给 assetBundle 赋值
             assetLoader = new AssetLoader(ab);

@@ -7,10 +7,10 @@ using UnityEngine.Networking;
 public class UnityWebRequester
 {
     private UnityWebRequest uwr;
-    private readonly string url;
-    public UnityWebRequester(string url)
+    private MonoBehaviour mono;
+    public UnityWebRequester(MonoBehaviour mono)
     {
-        this.url = url;
+        this.mono = mono;
     }
     /// <summary> 是否下载完 </summary>
     public bool IsDown
@@ -67,7 +67,7 @@ public class UnityWebRequester
     /// <param name="url"></param>
     /// <param name="actionResult"></param>
     /// <param name="actionProgress"></param>
-    public void Get(Action<UnityWebRequest> actionResult)
+    public void Get(string url, Action<UnityWebRequest> actionResult)
     {
         App.app.StartCoroutine(IE_Get(url, actionResult));
     }
@@ -80,7 +80,7 @@ public class UnityWebRequester
     /// <param name="actionResult">请求发起后处理回调结果的委托,处理请求结果的byte数组</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void GetBytes(Action<UnityWebRequest> actionResult)
+    public void GetBytes(string url, Action<UnityWebRequest> actionResult)
     {
         App.app.StartCoroutine(IE_GetBytes(url, actionResult));
     }
@@ -92,7 +92,7 @@ public class UnityWebRequester
     /// <param name="actionResult">请求发起后处理回调结果的委托,处理请求结果的图片</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void GetTexture(Action<Texture2D> actionResult)
+    public void GetTexture(string url, Action<Texture2D> actionResult)
     {
         App.app.StartCoroutine(IE_GetTexture(url, actionResult));
     }
@@ -104,7 +104,7 @@ public class UnityWebRequester
     /// <param name="actionResult">请求发起后处理回调结果的委托,处理请求结果的AssetBundle</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void GetAssetBundle(Action<AssetBundle> actionResult)
+    public void GetAssetBundle(string url, Action<AssetBundle> actionResult)
     {
         App.app.StartCoroutine(IE_GetAssetBundle(url, actionResult));
     }
@@ -117,7 +117,7 @@ public class UnityWebRequester
     /// <param name="actionProgress"></param>
     /// <param name="audioType">音效类型</param>
     /// <returns></returns>
-    public void GetAudioClip(Action<AudioClip> actionResult, AudioType audioType = AudioType.WAV)
+    public void GetAudioClip(string url, Action<AudioClip> actionResult, AudioType audioType = AudioType.WAV)
     {
         App.app.StartCoroutine(IE_GetAudioClip(url, actionResult, audioType));
     }
@@ -130,7 +130,7 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托,处理请求对象</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void Post(List<IMultipartFormSection> lstformData, Action<UnityWebRequest> actionResult)
+    public void Post(string url, List<IMultipartFormSection> lstformData, Action<UnityWebRequest> actionResult)
     {
         //List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
         //formData.Add(new MultipartFormDataSection("field1=foo&field2=bar"));
@@ -147,7 +147,7 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托,处理请求对象</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void Post(WWWForm formData, Action<UnityWebRequest> actionResult)
+    public void Post(string url, WWWForm formData, Action<UnityWebRequest> actionResult)
     {
         App.app.StartCoroutine(IE_Post(url, formData, actionResult));
     }
@@ -160,7 +160,7 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托,处理请求对象</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void Post(Dictionary<string, string> formFields, Action<UnityWebRequest> actionResult)
+    public void Post(string url, Dictionary<string, string> formFields, Action<UnityWebRequest> actionResult)
     {
         App.app.StartCoroutine(IE_Post(url, formFields, actionResult));
     }
@@ -173,7 +173,7 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托,处理请求对象</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void Post(string postData, Action<UnityWebRequest> actionResult)
+    public void Post(string url, string postData, Action<UnityWebRequest> actionResult)
     {
         App.app.StartCoroutine(IE_Post(url, postData, actionResult));
     }
@@ -186,7 +186,7 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void Put(byte[] contentBytes, Action<UnityWebRequest> actionResult)
+    public void Put(string url, byte[] contentBytes, Action<UnityWebRequest> actionResult)
     {
         App.app.StartCoroutine(IE_Put(url, contentBytes, actionResult));
     }
@@ -199,7 +199,7 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void Put(string content, Action<UnityWebRequest> actionResult)
+    public void Put(string url, string content, Action<UnityWebRequest> actionResult)
     {
         App.app.StartCoroutine(IE_Put(url, content, actionResult));
     }

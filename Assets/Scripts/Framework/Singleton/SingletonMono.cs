@@ -18,6 +18,14 @@ public class SingletonMono<T> : MonoBehaviour where T : MonoBehaviour
                         GameObject go = new GameObject(typeof(T).Name);
                         _Instance = go.AddComponent<T>();
                     }
+                    else
+                    {
+                        Destroy(_Instance.gameObject);
+                    }
+                }
+                else
+                {
+                    Destroy(_Instance.gameObject);
                 }
             }
             return _Instance;

@@ -41,8 +41,8 @@ public class ManifestLoader : Singleton<ManifestLoader>
     /// <returns></returns>
     public void Load()
     {
-        UnityWebRequester requester = new UnityWebRequester(manifestPath);
-        requester.GetAssetBundle((AssetBundle ab) =>
+        UnityWebRequester requester = new UnityWebRequester(App.app);
+        requester.GetAssetBundle(manifestPath, (AssetBundle ab) =>
         {
             this.assetBundle = ab;
             this.manifest = assetBundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
