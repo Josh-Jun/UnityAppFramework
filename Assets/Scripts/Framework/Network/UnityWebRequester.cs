@@ -130,13 +130,13 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托,处理请求对象</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void Post(string url, List<IMultipartFormSection> lstformData, Action<UnityWebRequest> actionResult)
+    public void Post(string url, List<IMultipartFormSection> lstformData, Action<UnityWebRequest> actionResult, string contentType = "application/json")
     {
         //List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
         //formData.Add(new MultipartFormDataSection("field1=foo&field2=bar"));
         //formData.Add(new MultipartFormFileSection("my file data", "myfile.txt"));
 
-        App.app.StartCoroutine(IE_Post(url, lstformData, actionResult));
+        App.app.StartCoroutine(IE_Post(url, lstformData, actionResult, contentType));
     }
 
     /// <summary>
@@ -147,9 +147,9 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托,处理请求对象</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void Post(string url, WWWForm formData, Action<UnityWebRequest> actionResult)
+    public void Post(string url, WWWForm formData, Action<UnityWebRequest> actionResult, string contentType = "application/json")
     {
-        App.app.StartCoroutine(IE_Post(url, formData, actionResult));
+        App.app.StartCoroutine(IE_Post(url, formData, actionResult, contentType));
     }
 
     /// <summary>
@@ -160,9 +160,9 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托,处理请求对象</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void Post(string url, Dictionary<string, string> formFields, Action<UnityWebRequest> actionResult)
+    public void Post(string url, Dictionary<string, string> formFields, Action<UnityWebRequest> actionResult, string contentType = "application/json")
     {
-        App.app.StartCoroutine(IE_Post(url, formFields, actionResult));
+        App.app.StartCoroutine(IE_Post(url, formFields, actionResult, contentType));
     }
 
     /// <summary>
@@ -173,9 +173,9 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托,处理请求对象</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void Post(string url, string postData, Action<UnityWebRequest> actionResult)
+    public void Post(string url, string postData, Action<UnityWebRequest> actionResult, string contentType = "application/json")
     {
-        App.app.StartCoroutine(IE_Post(url, postData, actionResult));
+        App.app.StartCoroutine(IE_Post(url, postData, actionResult, contentType));
     }
 
     /// <summary>
@@ -313,13 +313,15 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public IEnumerator IE_Post(string url, List<IMultipartFormSection> lstformData, Action<UnityWebRequest> actionResult)
+    public IEnumerator IE_Post(string url, List<IMultipartFormSection> lstformData, Action<UnityWebRequest> actionResult, string contentType = "application/json")
     {
         //List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
         //formData.Add(new MultipartFormDataSection("field1=foo&field2=bar"));
         //formData.Add(new MultipartFormFileSection("my file data", "myfile.txt"));
         using (uwr = UnityWebRequest.Post(url, lstformData))
         {
+            if (!string.IsNullOrEmpty(contentType))
+                uwr.SetRequestHeader("Content-Type", contentType);
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
         }
@@ -332,10 +334,12 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public IEnumerator IE_Post(string url, WWWForm formData, Action<UnityWebRequest> actionResult)
+    public IEnumerator IE_Post(string url, WWWForm formData, Action<UnityWebRequest> actionResult, string contentType = "application/json")
     {
         using (uwr = UnityWebRequest.Post(url, formData))
         {
+            if (!string.IsNullOrEmpty(contentType))
+                uwr.SetRequestHeader("Content-Type", contentType);
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
         }
@@ -348,10 +352,12 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public IEnumerator IE_Post(string url, string postData, Action<UnityWebRequest> actionResult)
+    public IEnumerator IE_Post(string url, string postData, Action<UnityWebRequest> actionResult, string contentType = "application/json")
     {
         using (uwr = UnityWebRequest.Post(url, postData))
         {
+            if (!string.IsNullOrEmpty(contentType))
+                uwr.SetRequestHeader("Content-Type", contentType);
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
         }
@@ -364,10 +370,12 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public IEnumerator IE_Post(string url, Dictionary<string, string> formFields, Action<UnityWebRequest> actionResult)
+    public IEnumerator IE_Post(string url, Dictionary<string, string> formFields, Action<UnityWebRequest> actionResult, string contentType = "application/json")
     {
         using (uwr = UnityWebRequest.Post(url, formFields))
         {
+            if (!string.IsNullOrEmpty(contentType))
+                uwr.SetRequestHeader("Content-Type", contentType);
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
         }
