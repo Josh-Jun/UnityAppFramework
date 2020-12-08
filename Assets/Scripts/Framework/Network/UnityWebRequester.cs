@@ -69,7 +69,7 @@ public class UnityWebRequester
     /// <param name="actionProgress"></param>
     public void Get(string url, Action<UnityWebRequest> actionResult)
     {
-        App.app.StartCoroutine(IE_Get(url, actionResult));
+        mono.StartCoroutine(IE_Get(url, actionResult));
     }
 
 
@@ -82,7 +82,7 @@ public class UnityWebRequester
     /// <returns></returns>
     public void GetBytes(string url, Action<UnityWebRequest> actionResult)
     {
-        App.app.StartCoroutine(IE_GetBytes(url, actionResult));
+        mono.StartCoroutine(IE_GetBytes(url, actionResult));
     }
 
     /// <summary>
@@ -94,7 +94,7 @@ public class UnityWebRequester
     /// <returns></returns>
     public void GetTexture(string url, Action<Texture2D> actionResult)
     {
-        App.app.StartCoroutine(IE_GetTexture(url, actionResult));
+        mono.StartCoroutine(IE_GetTexture(url, actionResult));
     }
 
     /// <summary>
@@ -106,7 +106,7 @@ public class UnityWebRequester
     /// <returns></returns>
     public void GetAssetBundle(string url, Action<AssetBundle> actionResult)
     {
-        App.app.StartCoroutine(IE_GetAssetBundle(url, actionResult));
+        mono.StartCoroutine(IE_GetAssetBundle(url, actionResult));
     }
 
     /// <summary>
@@ -119,7 +119,7 @@ public class UnityWebRequester
     /// <returns></returns>
     public void GetAudioClip(string url, Action<AudioClip> actionResult, AudioType audioType = AudioType.WAV)
     {
-        App.app.StartCoroutine(IE_GetAudioClip(url, actionResult, audioType));
+        mono.StartCoroutine(IE_GetAudioClip(url, actionResult, audioType));
     }
 
     /// <summary>
@@ -136,7 +136,7 @@ public class UnityWebRequester
         //formData.Add(new MultipartFormDataSection("field1=foo&field2=bar"));
         //formData.Add(new MultipartFormFileSection("my file data", "myfile.txt"));
 
-        App.app.StartCoroutine(IE_Post(url, lstformData, actionResult, contentType));
+        mono.StartCoroutine(IE_Post(url, lstformData, actionResult, contentType));
     }
 
     /// <summary>
@@ -149,7 +149,7 @@ public class UnityWebRequester
     /// <returns></returns>
     public void Post(string url, WWWForm formData, Action<UnityWebRequest> actionResult, string contentType = "application/json")
     {
-        App.app.StartCoroutine(IE_Post(url, formData, actionResult, contentType));
+        mono.StartCoroutine(IE_Post(url, formData, actionResult, contentType));
     }
 
     /// <summary>
@@ -162,7 +162,7 @@ public class UnityWebRequester
     /// <returns></returns>
     public void Post(string url, Dictionary<string, string> formFields, Action<UnityWebRequest> actionResult, string contentType = "application/json")
     {
-        App.app.StartCoroutine(IE_Post(url, formFields, actionResult, contentType));
+        mono.StartCoroutine(IE_Post(url, formFields, actionResult, contentType));
     }
 
     /// <summary>
@@ -175,7 +175,7 @@ public class UnityWebRequester
     /// <returns></returns>
     public void Post(string url, string postData, Action<UnityWebRequest> actionResult, string contentType = "application/json")
     {
-        App.app.StartCoroutine(IE_Post(url, postData, actionResult, contentType));
+        mono.StartCoroutine(IE_Post(url, postData, actionResult, contentType));
     }
 
     /// <summary>
@@ -188,7 +188,7 @@ public class UnityWebRequester
     /// <returns></returns>
     public void Put(string url, byte[] contentBytes, Action<UnityWebRequest> actionResult)
     {
-        App.app.StartCoroutine(IE_Put(url, contentBytes, actionResult));
+        mono.StartCoroutine(IE_Put(url, contentBytes, actionResult));
     }
 
     /// <summary>
@@ -201,7 +201,7 @@ public class UnityWebRequester
     /// <returns></returns>
     public void Put(string url, string content, Action<UnityWebRequest> actionResult)
     {
-        App.app.StartCoroutine(IE_Put(url, content, actionResult));
+        mono.StartCoroutine(IE_Put(url, content, actionResult));
     }
 
     /// <summary>
