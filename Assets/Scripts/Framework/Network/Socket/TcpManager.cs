@@ -6,17 +6,17 @@ public class TcpManager : SingletonMono<TcpManager>
 {
     private static readonly string lockNetTcp = "lockNetTcp";//加锁
 
-    private SocketTcp<SessionTcp, SocketMsg> server; //Server Socket连接
+    private SocketTcp<SessionTcp> server; //Server Socket连接
     private Queue<MsgPackage> msgPackageQueue = new Queue<MsgPackage>();//消息队列(Server)
     private Queue<SessionTcp> offLineQueue = new Queue<SessionTcp>();//离线队列
     public Dictionary<SessionTcp, string> clientKeyValuePairs = new Dictionary<SessionTcp, string>();//Client Session字典
 
-    private SocketTcp<SessionTcp, SocketMsg> client; //Client Socket连接
+    private SocketTcp<SessionTcp> client; //Client Socket连接
     private Queue<SocketMsg> msgQueue = new Queue<SocketMsg>();//消息队列(Client)
     /// <summary>服务端网络初始化</summary>
     public void InitServerNet(string ip, int port)
     {
-        server = new SocketTcp<SessionTcp, SocketMsg>();
+        server = new SocketTcp<SessionTcp>();
         #region 网络日志
         //日志是否开启、日志的回调函数(内容，级别) 覆盖unity日志系统 查看网络错误
         server.SetLog(true, (string msg, int lv) =>
@@ -52,7 +52,7 @@ public class TcpManager : SingletonMono<TcpManager>
     /// <summary>网络服务初始化</summary>
     public void InitClientNet(string ip, int port)
     {
-        client = new SocketTcp<SessionTcp, SocketMsg>();
+        client = new SocketTcp<SessionTcp>();
         #region 网络日志
         //日志是否开启、日志的回调函数(内容，级别) 覆盖unity日志系统 查看网络错误
         client.SetLog(true, (string msg, int lv) =>
@@ -225,6 +225,23 @@ public class TcpManager : SingletonMono<TcpManager>
 
     #region Server 发送消息 To Client
     /// <summary>发送消息</summary>
+    public void SendMsg(SessionTcp session, string msg)
+    {
+        if (session != null)
+        {
+            try
+            {
+                byte[] bytes = SocketTools.PackageLengthInfo(msg);
+                session.SendMsg(bytes);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+        }
+    }
+
+    /// <summary>发送消息</summary>
     public void SendMsg(SessionTcp session, SocketMsg msg)
     {
         if (session != null)
@@ -248,7 +265,7 @@ public class TcpManager : SingletonMono<TcpManager>
         {
             try
             {
-                session.SendMsg(bytes);
+                session.SendMsg(SocketTools.PackageLengthInfo(bytes));
             }
             catch (Exception e)
             {
@@ -268,13 +285,21 @@ public class TcpManager : SingletonMono<TcpManager>
     /// <summary>发送消息(部分客户端) deviceIdList:客户端列表</summary>
     public void SendMsgAll(byte[] bytes)
     {
+        byte[] data = SocketTools.PackageLengthInfo(bytes);
         foreach (SessionTcp session in clientKeyValuePairs.Keys)
         {
-            session.SendMsg(bytes);
+            session.SendMsg(data);
         }
     }
-
-
+    /// <summary>发送消息(部分客户端) deviceIdList:客户端列表</summary>
+    public void SendMsgAll(string msg)
+    {
+        byte[] data = SocketTools.PackageLengthInfo(msg);
+        foreach (SessionTcp session in clientKeyValuePairs.Keys)
+        {
+            session.SendMsg(data);
+        }
+    }
     /// <summary>发送消息(部分客户端) deviceIdList:客户端列表</summary>
     public void SendMsgAll(SocketMsg msg, List<string> deviceIdList)
     {
@@ -287,10 +312,58 @@ public class TcpManager : SingletonMono<TcpManager>
             }
         }
     }
+    /// <summary>发送消息(部分客户端) deviceIdList:客户端列表</summary>
+    public void SendMsgAll(byte[] bytes, List<string> deviceIdList)
+    {
+        byte[] data = SocketTools.PackageLengthInfo(bytes);
+        foreach (SessionTcp session in clientKeyValuePairs.Keys)
+        {
+            if (deviceIdList.Contains(clientKeyValuePairs[session]))
+            {
+                session.SendMsg(data);
+            }
+        }
+    }
+    /// <summary>发送消息(部分客户端) deviceIdList:客户端列表</summary>
+    public void SendMsgAll(string msg, List<string> deviceIdList)
+    {
+        byte[] bytes = SocketTools.PackageLengthInfo(msg);
+        foreach (SessionTcp session in clientKeyValuePairs.Keys)
+        {
+            if (deviceIdList.Contains(clientKeyValuePairs[session]))
+            {
+                session.SendMsg(bytes);
+            }
+        }
+    }
     /// <summary>发送消息(所有学生端) sessionTcp：除去某一个学生端</summary>
     public void SendMsgAll(SessionTcp sessionTcp, SocketMsg gameMsg)
     {
         byte[] bytes = SocketTools.PackageNetMsg(gameMsg);
+        foreach (SessionTcp session in clientKeyValuePairs.Keys)
+        {
+            if (session != sessionTcp)
+            {
+                session.SendMsg(bytes);
+            }
+        }
+    }
+    /// <summary>发送消息(所有学生端) sessionTcp：除去某一个学生端</summary>
+    public void SendMsgAll(SessionTcp sessionTcp, byte[] bytes)
+    {
+        byte[] data = SocketTools.PackageLengthInfo(bytes);
+        foreach (SessionTcp session in clientKeyValuePairs.Keys)
+        {
+            if (session != sessionTcp)
+            {
+                session.SendMsg(data);
+            }
+        }
+    }
+    /// <summary>发送消息(所有学生端) sessionTcp：除去某一个学生端</summary>
+    public void SendMsgAll(SessionTcp sessionTcp, string msg)
+    {
+        byte[] bytes = SocketTools.PackageLengthInfo(msg);
         foreach (SessionTcp session in clientKeyValuePairs.Keys)
         {
             if (session != sessionTcp)
@@ -329,7 +402,7 @@ public class TcpManager : SingletonMono<TcpManager>
         {
             try
             {
-                client.session.SendMsg(msg);
+                client.session.SendMsg(SocketTools.PackageNetMsg(msg));
             }
             catch (Exception e)
             {
@@ -337,7 +410,21 @@ public class TcpManager : SingletonMono<TcpManager>
             }
         }
     }
-
+    /// <summary>发送消息</summary>
+    public void SendMsg(string msg)
+    {
+        if (client != null && client.session != null)
+        {
+            try
+            {
+                client.session.SendMsg(SocketTools.PackageLengthInfo(msg));
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+        }
+    }
     /// <summary>发送消息</summary>
     public void SendMsg(byte[] bytes)
     {
@@ -345,7 +432,7 @@ public class TcpManager : SingletonMono<TcpManager>
         {
             try
             {
-                client.session.SendMsg(bytes);
+                client.session.SendMsg(SocketTools.PackageLengthInfo(bytes));
             }
             catch (Exception e)
             {

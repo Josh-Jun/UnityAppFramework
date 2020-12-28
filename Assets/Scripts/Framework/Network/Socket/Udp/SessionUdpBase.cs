@@ -43,7 +43,7 @@ public class SessionUdpBase
 	{
 		try
 		{
-			byte[] array = new byte[1024];
+			byte[] array = Encoding.UTF8.GetBytes(msg);
 			array = Encoding.UTF8.GetBytes(msg);
 			socketUdp.SendTo(array, array.Length, SocketFlags.None, ep);
 		}

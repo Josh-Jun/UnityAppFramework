@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Net.Sockets;
+using System.Text;
 
-public class SessionTcpBase<T> where T : SocketMsg
+public class SessionTcpBase
 {
     private Socket socketTcp;
 
@@ -69,7 +70,7 @@ public class SessionTcpBase<T> where T : SocketMsg
                 }
                 else
                 {
-                    T msg = SocketTools.DeSerialize<T>(package.bodyBuffer);
+                    string msg = Encoding.UTF8.GetString(package.bodyBuffer);
                     OnReciveMsg(msg);
                     package.ResetData();
                     socketTcp.BeginReceive(package.headBuffer, 0, package.headLength, SocketFlags.None, ReceiveHeadData, package);
@@ -87,14 +88,27 @@ public class SessionTcpBase<T> where T : SocketMsg
         }
     }
 
-    public void SendMsg(T msg)
+    public void SendMsg(string msg)
     {
-        byte[] data = SocketTools.PackageLengthInfo(SocketTools.Serialize(msg));
-        SendMsg(data);
+        byte[] data = SocketTools.PackageLengthInfo(msg);
+        NetworkStream networkStream = null;
+        try
+        {
+            networkStream = new NetworkStream(socketTcp);
+            if (networkStream.CanWrite)
+            {
+                networkStream.BeginWrite(data, 0, data.Length, SendCallBack, networkStream);
+            }
+        }
+        catch (Exception ex)
+        {
+            SocketTools.LogMsg("SndMsgError:" + ex.Message, LogLevel.Error);
+        }
     }
 
-    public void SendMsg(byte[] data)
+    public void SendMsg(byte[] _data)
     {
+        byte[] data = SocketTools.PackageLengthInfo(_data);
         NetworkStream networkStream = null;
         try
         {
@@ -136,7 +150,7 @@ public class SessionTcpBase<T> where T : SocketMsg
         SocketTools.LogMsg("New Session Connected.", LogLevel.Info);
     }
 
-    protected virtual void OnReciveMsg(T msg)
+    protected virtual void OnReciveMsg(string msg)
     {
         SocketTools.LogMsg("Receive Network Message.", LogLevel.Info);
     }

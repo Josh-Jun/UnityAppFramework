@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 
-public class SocketTcp<T, K> where T : SessionTcpBase<K>, new() where K : SocketMsg
+public class SocketTcp<T> where T : SessionTcpBase, new()
 {
 	private Socket socketTcp = null;
 

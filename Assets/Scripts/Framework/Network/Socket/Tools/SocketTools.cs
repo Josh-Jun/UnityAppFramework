@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 
 public enum LogLevel
 {
@@ -23,6 +24,16 @@ public class SocketTools
 
 	public static byte[] PackageLengthInfo(byte[] data)
 	{
+		int num = data.Length;
+		byte[] array = new byte[num + 4];
+		byte[] bytes = BitConverter.GetBytes(num);
+		bytes.CopyTo(array, 0);
+		data.CopyTo(array, 4);
+		return array;
+	}
+	public static byte[] PackageLengthInfo(string msg)
+	{
+		byte[] data = Encoding.UTF8.GetBytes(msg.ToCharArray());
 		int num = data.Length;
 		byte[] array = new byte[num + 4];
 		byte[] bytes = BitConverter.GetBytes(num);
