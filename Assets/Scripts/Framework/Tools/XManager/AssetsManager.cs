@@ -18,7 +18,7 @@ public class AssetsManager : Singleton<AssetsManager>
     #endregion
 
     #region 加载场景
-    public void LoadSceneAsync(string sceneName, Action<AsyncOperation> cb = null, LoadSceneMode mode = LoadSceneMode.Additive)
+    public void LoadSceneAsync(string sceneName, Action<AsyncOperation> cb = null, LoadSceneMode mode = LoadSceneMode.Single)
     {
         if (!string.IsNullOrEmpty(sceneName))
         {

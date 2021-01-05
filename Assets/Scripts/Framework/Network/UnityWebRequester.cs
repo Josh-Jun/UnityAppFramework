@@ -80,7 +80,7 @@ public class UnityWebRequester
     /// <param name="actionResult">请求发起后处理回调结果的委托,处理请求结果的byte数组</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void GetBytes(string url, Action<UnityWebRequest> actionResult)
+    public void GetBytes(string url, Action<byte[]> actionResult)
     {
         mono.StartCoroutine(IE_GetBytes(url, actionResult));
     }
@@ -227,12 +227,19 @@ public class UnityWebRequester
     /// <param name="actionResult">请求发起后处理回调结果的委托,处理请求结果的byte数组</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public IEnumerator IE_GetBytes(string url, Action<UnityWebRequest> actionResult)
+    public IEnumerator IE_GetBytes(string url, Action<byte[]> actionResult)
     {
         using (uwr = UnityWebRequest.Get(url))
         {
             yield return uwr.SendWebRequest();
-            actionResult?.Invoke(uwr);
+            if (!uwr.isNetworkError)
+            {
+                actionResult?.Invoke(uwr.downloadHandler.data);
+            }
+            else
+            {
+                Debug.LogErrorFormat("[Error:Bytes] {0}", uwr.error);
+            }
         }
     }
     /// <summary>

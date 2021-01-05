@@ -145,7 +145,7 @@ public class HotfixManager : SingletonEvent<HotfixManager>
         foreach (var requester in unityWebRequesterPairs)
         {
             unityWebRequester = requester.Value;
-            yield return requester.Value.IE_GetBytes(ServerUrl + requester.Key.BundleName, (UnityWebRequest uwr) =>
+            yield return requester.Value.IE_Get(ServerUrl + requester.Key.BundleName, (UnityWebRequest uwr) =>
             {
                 if (!uwr.isNetworkError)
                 {
@@ -165,7 +165,7 @@ public class HotfixManager : SingletonEvent<HotfixManager>
     private void DownLoad(string url, Action<byte[]> action)
     {
         UnityWebRequester requester = new UnityWebRequester(App.app);
-        requester.GetBytes(url, (UnityWebRequest uwr) =>
+        requester.Get(url, (UnityWebRequest uwr) =>
         {
             byte[] data = uwr.isNetworkError ? null : uwr.downloadHandler.data;
             action?.Invoke(data);
