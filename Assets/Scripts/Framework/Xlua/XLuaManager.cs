@@ -45,7 +45,7 @@ namespace XLuaFrame
         /// <summary> 加载Lua</summary>
         public byte[] LoadLua(ref string filePath)
         {
-            string path = string.Format("{0}{1}", filePath, LuaSuffixName);
+            string path = string.Format("XLuaScripts/{0}{1}", filePath, LuaSuffixName);
             TextAsset textAsset = AssetsManager.Instance.LoadAsset<TextAsset>(path);
             return System.Text.Encoding.UTF8.GetBytes(textAsset.text);
         }
@@ -55,7 +55,7 @@ namespace XLuaFrame
         {
             if (!string.IsNullOrEmpty(filePath))
             {
-                string path = string.Format("{0}{1}", filePath, LuaSuffixName);
+                string path = string.Format("XLuaScripts/{0}{1}", filePath, LuaSuffixName);
                 TextAsset textAsset = AssetsManager.Instance.LoadAsset<TextAsset>(path);
                 return !string.IsNullOrEmpty(textAsset.text);
             }
@@ -66,7 +66,7 @@ namespace XLuaFrame
         /// <summary> 加载Lua</summary>
         public string LoadLua(string filePath)
         {
-            string path = string.Format("{0}{1}", filePath, LuaSuffixName);
+            string path = string.Format("XLuaScripts/{0}{1}", filePath, LuaSuffixName);
             TextAsset textAsset = AssetsManager.Instance.LoadAsset<TextAsset>(path);
             return textAsset.text;
         }
