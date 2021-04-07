@@ -6,11 +6,13 @@ using XLuaFrame;
 
 public class Root
 {
+    public const string MainSceneName = "TestScene";
     public const string path_AppRootConfig = "App/Assets/AppRootConfig";
     public static bool IsHotfix { get; private set; } = true;//是否热更
     public static bool IsLoadAB { get; private set; } = true;//是否加载AB包
     public static bool RunXLuaScripts { get; private set; } = false;//是否运行XLua脚本
 
+    private static readonly Dictionary<string, List<string>> sceneScriptsPairs = new Dictionary<string, List<string>>();
     private static readonly string hotfixScriptName = "Hotfix.HotfixRoot";
     private static readonly Dictionary<string, IRoot> iRootPairs = new Dictionary<string, IRoot>();
     private static RootScriptConfig rootConfig;
@@ -26,13 +28,13 @@ public class Root
         }
         else
         {
-            TextAsset config = Resources.Load<TextAsset>(string.Format("AssetsFolder/{0}", path_AppRootConfig));
-            InitRootScripts(config);
+            InitRootScripts(()=> { LoadScene(MainSceneName); });
         }
     }
 
-    public static void InitRootScripts(TextAsset config)
+    public static void InitRootScripts(Action callback = null)
     {
+        TextAsset config = Resources.Load<TextAsset>(string.Format("AssetsFolder/{0}", path_AppRootConfig));
         rootConfig = XmlSerializeManager.ProtoDeSerialize<RootScriptConfig>(config.bytes);
         for (int i = 0; i < rootConfig.RootScript.Count; i++)
         {
@@ -61,17 +63,30 @@ public class Root
                     Debug.LogErrorFormat("Root脚本为空 脚本名称:{0}", rootConfig.RootScript[i].ScriptName);
                 }
             }
+            if (!sceneScriptsPairs.ContainsKey(rootConfig.RootScript[i].SceneName))
+            {
+                List<string> scripts = new List<string>();
+                scripts.Add(rootConfig.RootScript[i].ScriptName);
+                sceneScriptsPairs.Add(rootConfig.RootScript[i].SceneName, scripts);
+            }
+            else
+            {
+                sceneScriptsPairs[rootConfig.RootScript[i].SceneName].Add(rootConfig.RootScript[i].ScriptName);
+            }
         }
-        LoadMainScene();
+        callback?.Invoke();
     }
-    private static readonly string MainSceneName = "TestScene";
-    private static void LoadMainScene()
+    public static void LoadScene(string sceneName, Action callback = null)
     {
-        AssetsManager.Instance.LoadSceneAsync(MainSceneName, (AsyncOperation async) =>
+        AssetsManager.Instance.LoadSceneAsync(sceneName, (AsyncOperation async) =>
         {
             if (async.isDone && async.progress == 1)
             {
-
+                for (int i = 0; i < sceneScriptsPairs[sceneName].Count; i++)
+                {
+                    iRootPairs[sceneScriptsPairs[sceneName][i]].Begin();
+                }
+                callback?.Invoke();
             }
         });
     }

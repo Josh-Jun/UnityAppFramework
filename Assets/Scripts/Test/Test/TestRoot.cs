@@ -10,7 +10,10 @@ namespace Test
         {
 
         }
+        public void Begin()
+        {
 
+        }
         public void End()
         {
 

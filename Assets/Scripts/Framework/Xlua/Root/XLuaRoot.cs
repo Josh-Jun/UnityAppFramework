@@ -17,7 +17,10 @@ namespace XLuaFrame
             LuaCallbackPairs[(int)RootLifeCycle.Init]?.Invoke();
             return this;
         }
-
+        public void Begin()
+        {
+            LuaCallbackPairs[(int)RootLifeCycle.Begin]?.Invoke();
+        }
         /// <summary>初始化Lua代码</summary>
         private void InitLuaEnv(string luaFileContent)
         {

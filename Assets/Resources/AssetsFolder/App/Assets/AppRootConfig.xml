@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 
 <RootScriptConfig>
-  <RootScript ScriptName = "Test.TestRoot">Test/Test/TestRoot</RootScript>
+  <RootScript SceneName = "TestScene" ScriptName = "Test.TestRoot">Test/Test/TestRoot</RootScript>
 </RootScriptConfig>

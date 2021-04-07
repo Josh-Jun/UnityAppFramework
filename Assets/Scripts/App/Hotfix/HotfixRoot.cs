@@ -15,16 +15,11 @@ namespace Hotfix
             AddEvent();
 
             string prefab_HotfixPath = "App/Hotfix/Windows/HotfixWindow";
-            hotfixWin = this.LoadWindow<HotfixWindow>(prefab_HotfixPath, true);
-            
-            StartHotfix();
+            hotfixWin = this.LoadWindow<HotfixWindow>(prefab_HotfixPath);
         }
-        private void AddEvent()
+        public void Begin()
         {
-            AddEventMsg("UpdateNow", () => { UpdateNow(); }, true);
-        }
-        private void StartHotfix()
-        {
+            hotfixWin.SetWindowActive();
             hotfixWin.SetTipsText("检查更新中...");
             hotfixWin.SetProgressValue(0);
             HotfixManager.Instance.StartHotfix((bool isUpdate, string des) =>
@@ -39,6 +34,10 @@ namespace Hotfix
                     LoadAssetBundle();
                 }
             });
+        }
+        private void AddEvent()
+        {
+            AddEventMsg("UpdateNow", () => { UpdateNow(); }, true);
         }
         private void UpdateNow()
         {
@@ -85,8 +84,7 @@ namespace Hotfix
                     //AB包加载完成
                     TimerTaskManager.Instance.AddFrameTask(() =>
                     {
-                        TextAsset config = AssetsManager.Instance.LoadAsset<TextAsset>(Root.path_AppRootConfig);
-                        Root.InitRootScripts(config);
+                        Root.InitRootScripts(()=> { Root.LoadScene(Root.MainSceneName); });
                     }, 1);
                 }
             });

@@ -46,6 +46,7 @@ public class UIWindowBase : EventBaseMono
     /// <summary>设置窗体显/隐</summary>
     public void SetWindowActive(bool isActive = true)
     {
+        if (this == null) return;
         if (gameObject != null)
         {
             if (gameObject.activeSelf != isActive)

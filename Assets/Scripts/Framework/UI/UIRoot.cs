@@ -74,6 +74,16 @@ public class UIRoot : SingletonMono<UIRoot>
     #endregion
 
     #region Public Function
+    public void Init3DUIRoot(Camera camera3d = null)
+    {
+        Camera camera = camera3d == null ? Camera.main : camera3d;
+        UICanvas.renderMode = RenderMode.WorldSpace;
+        UIRectTransform.localPosition = Vector3.forward * 5;
+        UIRectTransform.localScale = Vector3.one * 0.0025f;
+        UIRectTransform.sizeDelta = new Vector2(1920, 1080);
+        UICanvas.worldCamera = camera;
+        UICanvasScaler.referencePixelsPerUnit = 50;
+    }
     /// <summary> UGUI坐标 mousePosition</summary>
     public Vector2 ScreenPointInRectangle(Vector2 mousePosition)
     {

@@ -61,12 +61,23 @@ public class UnityWebRequester
             uwr = null;
         }
     }
-
+    /// <summary>
+    /// 文件下载，断点续传
+    /// </summary>
+    /// <param name="url"></param>
+    /// <param name="filePath"></param>
+    /// <param name="callBack"></param>
     public void DownloadFile(string url, string filePath, Action<float> callBack)
     {
         mono.StartCoroutine(IE_DownloadFile(url, filePath, callBack));
     }
-
+    /// <summary>
+    /// 文件下载，断点续传
+    /// </summary>
+    /// <param name="url"></param>
+    /// <param name="filePath"></param>
+    /// <param name="callBack"></param>
+    /// <returns></returns>
     public IEnumerator IE_DownloadFile(string url, string filePath, Action<float> callBack)
     {
         //获取要下载的文件的总大小
@@ -96,7 +107,7 @@ public class UnityWebRequester
         {
             request.SendWebRequest();
             var index = 0;
-            while (!IsDown)
+            while (!request.isDone)
             {
                 yield return new WaitForEndOfFrame();
                 var buffer = request.downloadHandler.data;
