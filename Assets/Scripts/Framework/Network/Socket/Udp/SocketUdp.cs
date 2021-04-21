@@ -21,7 +21,7 @@ public class SocketUdp<T> where T : SessionUdpBase, new()
 		socketUdp = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 	}
 
-	public void StartAsServer(int port)
+	public void StartAsServer(int port, Action<bool> cb = null)
 	{
 		try
 		{
@@ -31,10 +31,12 @@ public class SocketUdp<T> where T : SessionUdpBase, new()
 			thread = new Thread(StartServerReceive);
 			thread.Start();
 			SocketTools.LogMsg("Udp服务端开启成功!", LogLevel.Info);
+			cb?.Invoke(true);
 		}
 		catch (Exception ex)
 		{
 			SocketTools.LogMsg("Udp服务端开启失败!" + ex.Message, LogLevel.Error);
+			cb?.Invoke(false);
 		}
 	}
 
@@ -45,7 +47,7 @@ public class SocketUdp<T> where T : SessionUdpBase, new()
 		session.ReceiveData();
 	}
 
-	public void StartAsClient(int port)
+	public void StartAsClient(int port, Action<bool> cb = null)
 	{
 		try
 		{
@@ -55,10 +57,12 @@ public class SocketUdp<T> where T : SessionUdpBase, new()
 			thread = new Thread(StartClientReceive);
 			thread.Start();
 			SocketTools.LogMsg("Udp客户端开启成功!", LogLevel.Info);
+			cb?.Invoke(true);
 		}
 		catch (Exception ex)
 		{
 			SocketTools.LogMsg("Udp客户端开启失败!" + ex.Message, LogLevel.Error);
+			cb?.Invoke(false);
 		}
 	}
 
@@ -66,5 +70,18 @@ public class SocketUdp<T> where T : SessionUdpBase, new()
 	{
 		session.StartReceiveData(socketUdp, ep, thread);
 		session.ReceiveData();
+	}
+	public void Close()
+	{
+		if (thread != null)
+		{
+			thread.Interrupt();
+			thread.Abort();
+		}
+		if (socketUdp != null)
+		{
+			socketUdp.Close();
+		}
+		SocketTools.LogMsg("UDP已关闭...", LogLevel.Info);
 	}
 }

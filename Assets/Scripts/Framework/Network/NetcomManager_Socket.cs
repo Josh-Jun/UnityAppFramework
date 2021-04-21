@@ -9,9 +9,9 @@ public partial class NetcomManager : Singleton<NetcomManager>
     #region Tcp
     #region Server
     /// <summary> 开启Tcp服务端 </summary>
-    public void StartTcpServer(string ip)
+    public void StartTcpServer(string ip, Action<bool> cb = null)
     {
-        TcpManager.Instance.InitServerNet(ip, Port);
+        TcpManager.Instance.InitServerNet(ip, Port, cb);
     }
     /// <summary> 给所有客户端发送消息 </summary>
     public void ServerSendToClientMsg_All(string eventName, params object[] objs)
@@ -68,9 +68,9 @@ public partial class NetcomManager : Singleton<NetcomManager>
 
     #region Client
     /// <summary> 开启Tcp客户端 </summary>
-    public void StartTcpClient(string ip)
+    public void StartTcpClient(string ip, Action<bool> cb = null)
     {
-        TcpManager.Instance.InitServerNet(ip, Port);
+        TcpManager.Instance.InitServerNet(ip, Port, cb);
     }
     /// <summary> 给服务端发送消息 </summary>
     public void ClientSendToServerMsg(string eventName, params object[] objs)
@@ -165,16 +165,16 @@ public partial class NetcomManager : Singleton<NetcomManager>
 
     #region Udp
     #region Server
-    public void StartUdpServer()
+    public void StartUdpServer(Action<bool> cb = null)
     {
-        UdpManager.Instance.InitServerNet(Port);
+        UdpManager.Instance.InitServerNet(Port, cb);
     }
     #endregion
 
     #region Client
-    public void StartUdpClient()
+    public void StartUdpClient(Action<bool> cb = null)
     {
-        UdpManager.Instance.InitClientNet(Port);
+        UdpManager.Instance.InitClientNet(Port, cb);
     }
     #endregion
     public void SendMsg(string msg)

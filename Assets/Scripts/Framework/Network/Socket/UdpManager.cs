@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 public class UdpManager : SingletonMono<UdpManager>
 {
@@ -6,16 +7,16 @@ public class UdpManager : SingletonMono<UdpManager>
     private SocketUdp<SessionUdp> client;
 
     /// <summary> 初始化服务端 </summary>
-    public void InitServerNet(int port)
+    public void InitServerNet(int port, Action<bool> cb = null)
     {
         server = new SocketUdp<SessionUdp>();
-        server.StartAsServer(port);
+        server.StartAsServer(port, cb);
     }
     /// <summary> 初始化客户端 </summary>
-    public void InitClientNet(int port)
+    public void InitClientNet(int port, Action<bool> cb = null)
     {
         client = new SocketUdp<SessionUdp>();
-        client.StartAsClient(port);
+        client.StartAsClient(port, cb);
     }
 
     #region 发送消息
@@ -69,10 +70,14 @@ public class UdpManager : SingletonMono<UdpManager>
         if (server != null && server.session != null)
         {
             server.session.SocketQuit();
+            server.Close();
+            client = null;
         }
         if (client != null && client.session != null)
         {
             client.session.SocketQuit();
+            client.Close();
+            server = null;
         }
     }
     #endregion

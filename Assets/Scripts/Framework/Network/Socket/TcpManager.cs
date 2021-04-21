@@ -14,7 +14,7 @@ public class TcpManager : SingletonMono<TcpManager>
     private SocketTcp<SessionTcp> client; //Client Socket连接
     private Queue<SocketMsg> msgQueue = new Queue<SocketMsg>();//消息队列(Client)
     /// <summary>服务端网络初始化</summary>
-    public void InitServerNet(string ip, int port)
+    public void InitServerNet(string ip, int port, Action<bool> cb = null)
     {
         server = new SocketTcp<SessionTcp>();
         #region 网络日志
@@ -46,11 +46,11 @@ public class TcpManager : SingletonMono<TcpManager>
             }
         });
         #endregion
-        server.StartAsServer(ip, port);//开启服务端
+        server.StartAsServer(ip, port, cb);//开启服务端
     }
 
     /// <summary>网络服务初始化</summary>
-    public void InitClientNet(string ip, int port)
+    public void InitClientNet(string ip, int port, Action<bool> cb = null)
     {
         client = new SocketTcp<SessionTcp>();
         #region 网络日志
@@ -82,7 +82,7 @@ public class TcpManager : SingletonMono<TcpManager>
             }
         });
         #endregion
-        client.StartAsClient(ip, port);//开启客户端
+        client.StartAsClient_IP(ip, port, cb);//开启客户端
     }
     private void Update()
     {
@@ -453,10 +453,14 @@ public class TcpManager : SingletonMono<TcpManager>
         if (client != null && client.session != null)
         {
             client.session.Clear();
+            client.Close();
+            client = null;
         }
         if (server != null && server.session != null)
         {
             server.session.Clear();
+            server.Close();
+            server = null;
         }
     }
 }

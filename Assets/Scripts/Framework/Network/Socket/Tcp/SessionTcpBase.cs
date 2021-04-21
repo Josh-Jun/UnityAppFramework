@@ -29,24 +29,32 @@ public class SessionTcpBase
         try
         {
             SocketPackage package = (SocketPackage)ar.AsyncState;
-            int num = socketTcp.EndReceive(ar);
-            if (num > 0)
-            {
-                package.headIndex += num;
-                if (package.headIndex < package.headLength)
-                {
-                    socketTcp.BeginReceive(package.headBuffer, package.headIndex, package.headLength - package.headIndex, SocketFlags.None, ReceiveHeadData, package);
-                }
-                else
-                {
-                    package.InitBodyBuffer();
-                    socketTcp.BeginReceive(package.bodyBuffer, 0, package.bodyLength, SocketFlags.None, ReceiveBodyData, package);
-                }
-            }
-            else
+            if (socketTcp.Available == 0)
             {
                 OnDisConnected();
                 Clear();
+            }
+            else
+            {
+                int num = socketTcp.EndReceive(ar);
+                if (num > 0)
+                {
+                    package.headIndex += num;
+                    if (package.headIndex < package.headLength)
+                    {
+                        socketTcp.BeginReceive(package.headBuffer, package.headIndex, package.headLength - package.headIndex, SocketFlags.None, ReceiveHeadData, package);
+                    }
+                    else
+                    {
+                        package.InitBodyBuffer();
+                        socketTcp.BeginReceive(package.bodyBuffer, 0, package.bodyLength, SocketFlags.None, ReceiveBodyData, package);
+                    }
+                }
+                else
+                {
+                    OnDisConnected();
+                    Clear();
+                }
             }
         }
         catch (Exception ex)
