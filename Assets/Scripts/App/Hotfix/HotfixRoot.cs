@@ -12,10 +12,10 @@ namespace Hotfix
         private HotfixWindow hotfixWin;
         public HotfixRoot()
         {
-            AddEvent();
-
             string prefab_HotfixPath = "App/Hotfix/Windows/HotfixWindow";
             hotfixWin = this.LoadWindow<HotfixWindow>(prefab_HotfixPath);
+
+            AddEventMsg("UpdateNow", () => { UpdateNow(); }, true);
         }
         public void Begin()
         {
@@ -34,10 +34,6 @@ namespace Hotfix
                     LoadAssetBundle();
                 }
             });
-        }
-        private void AddEvent()
-        {
-            AddEventMsg("UpdateNow", () => { UpdateNow(); }, true);
         }
         private void UpdateNow()
         {
