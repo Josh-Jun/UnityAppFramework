@@ -12,6 +12,7 @@ public class SuperImageEditor : Editor
     private SerializedProperty color;
     private SerializedProperty material;
     private SerializedProperty raycastTarget;
+    private SerializedProperty rayShapeFilter;
     private SerializedProperty segements;
     private SerializedProperty round;
     void OnEnable()
@@ -20,12 +21,13 @@ public class SuperImageEditor : Editor
         color = serializedObject.FindProperty("m_Color");
         material = serializedObject.FindProperty("m_Material");
         raycastTarget = serializedObject.FindProperty("m_RaycastTarget");
+        rayShapeFilter = serializedObject.FindProperty("rayShapeFilter");
         segements = serializedObject.FindProperty("segements");
         round = serializedObject.FindProperty("round");
     }
 
     [MenuItem("GameObject/UI/SuperImage")]
-    static void SuperImage()
+    public static void SuperImage()
     {
         GameObject parent = GetOrCreateCanvasGameObject();
 
@@ -46,6 +48,7 @@ public class SuperImageEditor : Editor
         EditorGUILayout.PropertyField(material);
         EditorGUILayout.PropertyField(raycastTarget);
 
+        EditorGUILayout.PropertyField(rayShapeFilter);
         EditorGUILayout.PropertyField(round);
         EditorGUILayout.PropertyField(segements);
 

@@ -13,6 +13,7 @@ namespace UnityEngine.UI
         private List<Vector3> innerVertices = new List<Vector3>();
         private List<Vector3> outterVertices = new List<Vector3>();
 
+        public bool rayShapeFilter = true;
         [Tooltip("圆角顶点个数")]
         [Range(1, 100)]
         public int segements = 20;
@@ -141,16 +142,20 @@ namespace UnityEngine.UI
         }
         public override bool IsRaycastLocationValid(Vector2 screenPoint, Camera eventCamera)
         {
-            Sprite sprite = overrideSprite;
-            if (sprite == null)
-                return true;
-            if (eventCamera.orthographic == true)
+            if (rayShapeFilter)
             {
-                return Contains(screenPoint - new Vector2(Screen.width / 2, Screen.height / 2), outterVertices, innerVertices);
+                if (eventCamera)
+                {
+                    if (eventCamera.orthographic == true)
+                    {
+                        return Contains(screenPoint - new Vector2(Screen.width / 2, Screen.height / 2), outterVertices, innerVertices);
+                    }
+                }
+                Vector2 local;
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, screenPoint, eventCamera, out local);
+                return Contains(local, outterVertices, innerVertices);
             }
-            Vector2 local;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, screenPoint, eventCamera, out local);
-            return Contains(local, outterVertices, innerVertices);
+            return true;
         }
 
         private bool Contains(Vector2 p, List<Vector3> outterVertices, List<Vector3> innerVertices)
