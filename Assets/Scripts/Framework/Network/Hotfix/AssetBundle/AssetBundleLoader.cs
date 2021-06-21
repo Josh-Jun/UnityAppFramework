@@ -77,6 +77,7 @@ public class AssetBundleLoader
             this.progress = requester.DownloadedProgress;
             lp?.Invoke(bundleName, progress);
         }
+        //lp?.Invoke(bundleName, progress);
     }
 
     /// <summary>

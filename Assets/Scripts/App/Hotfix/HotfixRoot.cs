@@ -12,14 +12,14 @@ namespace Hotfix
         private HotfixWindow hotfixWin;
         public HotfixRoot()
         {
-            string prefab_HotfixPath = "App/Hotfix/Windows/HotfixWindow";
-            hotfixWin = this.LoadWindow<HotfixWindow>(prefab_HotfixPath);
-
             AddEventMsg("UpdateNow", () => { UpdateNow(); }, true);
         }
         public void Begin()
         {
+            string prefab_HotfixPath = "App/Hotfix/Windows/HotfixWindow";
+            hotfixWin = this.LoadWindow<HotfixWindow>(prefab_HotfixPath);
             hotfixWin.SetWindowActive();
+
             hotfixWin.SetTipsText("检查更新中...");
             hotfixWin.SetProgressValue(0);
             HotfixManager.Instance.StartHotfix((bool isUpdate, string des) =>
@@ -78,10 +78,7 @@ namespace Hotfix
                     hotfixWin.SetProgressBarActive(false);
                     Debug.Log("加载完成");
                     //AB包加载完成
-                    TimerTaskManager.Instance.AddFrameTask(() =>
-                    {
-                        Root.InitRootScripts(()=> { Root.LoadScene(Root.MainSceneName); });
-                    }, 1);
+                    Root.InitRootScripts(() => { Root.LoadScene(Root.MainSceneName); });
                 }
             });
         }

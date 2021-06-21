@@ -25,6 +25,7 @@ public class Root
             Type type = Type.GetType(hotfixScriptName);
             object obj = Activator.CreateInstance(type);
             HotfixRoot = obj as IRoot;
+            HotfixRoot.Begin();
         }
         else
         {

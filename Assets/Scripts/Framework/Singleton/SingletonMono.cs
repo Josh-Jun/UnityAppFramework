@@ -20,15 +20,11 @@ public class SingletonMono<T> : MonoBehaviour where T : MonoBehaviour
                     }
                     else
                     {
-                        Destroy(_Instance.gameObject);
+                        return _Instance;
                     }
                 }
-                else
-                {
-                    Destroy(_Instance.gameObject);
-                }
+                return _Instance;
             }
-            return _Instance;
         }
     }
 }

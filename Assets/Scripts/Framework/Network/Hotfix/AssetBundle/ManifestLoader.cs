@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 /// <summary>
 /// 04
 /// 加载 Manifest文件(记录了 bundle 包的依赖关系和被依赖关系)

@@ -34,7 +34,6 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         AssetbundleSceneManager sm = nameSceneDic[sceneName];
         // 开始加载资源包
         sm.LoadAssetBundle(folderName, lp, LoadAssetBundleCallBack);
-
     }
 
     /// <summary>

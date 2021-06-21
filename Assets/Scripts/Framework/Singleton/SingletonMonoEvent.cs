@@ -20,15 +20,11 @@ public class SingletonMonoEvent<T> : EventBaseMono where T : SingletonMonoEvent<
                     }
                     else
                     {
-                        Destroy(_Instance.gameObject);
+                        return _Instance;
                     }
                 }
-                else
-                {
-                    Destroy(_Instance.gameObject);
-                }
+                return _Instance;
             }
-            return _Instance;
         }
     }
 }
