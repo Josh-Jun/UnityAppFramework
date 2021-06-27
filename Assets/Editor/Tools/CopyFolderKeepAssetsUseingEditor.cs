@@ -4,10 +4,10 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-public class CopyFolderKeepAssetsUseing
+public class CopyFolderKeepAssetsUsingEditor
 {
-    [MenuItem("Assets/Copy Folder(复制资源引用) %#D", false, 0)]
-    static private void CopFilesWithDependency()
+    [MenuItem("Assets/复制文件夹(复制依赖关系) %#D", false, 0)]
+    static public void CopyFolderKeepAssetsUsing()
     {
         string oldFolderPath = AssetDatabase.GetAssetPath(Selection.objects[0]);
         string[] s = oldFolderPath.Split('/');
@@ -18,8 +18,7 @@ public class CopyFolderKeepAssetsUseing
             return;
         }
         string copyedFolderPath = Path.GetFullPath(".") + Path.DirectorySeparatorChar + oldFolderPath;
-        string newfolderName = "Copy_" + folderName;
-        string tempFolderPath = Application.dataPath.Replace("Assets", "TempAssets") + "/" + oldFolderPath.Replace("Assets/", "").Replace(folderName, newfolderName);
+        string tempFolderPath = Application.dataPath.Replace("Assets", "TempAssets") + SplitStr(oldFolderPath) + "_Copy";
         string newFoldrPath = tempFolderPath.Replace("TempAssets", "Assets");
 
         CopyDirectory(copyedFolderPath, tempFolderPath);
@@ -31,7 +30,19 @@ public class CopyFolderKeepAssetsUseing
         AssetDatabase.Refresh();
         AssetDatabase.SaveAssets();
     }
-
+    private static string SplitStr(string path)
+    {
+        string str = "";
+        for (int i = 0; i < path.Split('/').Length; i++)
+        {
+            if (i != 0)
+            {
+                string _str = "/" + path.Split('/')[i];
+                str += _str;
+            }
+        }
+        return str;
+    }
     #region Copy
     public static void CopyDirectory(string sourceDirectory, string destDirectory)
     {
@@ -178,7 +189,8 @@ public class CopyFolderKeepAssetsUseing
 
                 contents = contents.Replace("guid: " + oldGuid, "guid: " + newGuid);
             }
-            File.WriteAllText(filePath, contents);
+            //File.WriteAllText(filePath, contents);
+            FileManager.CreateFile(filePath, System.Text.Encoding.UTF8.GetBytes(contents));
         }
 
         EditorUtility.ClearProgressBar();

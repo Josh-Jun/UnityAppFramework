@@ -16,4 +16,8 @@
             }
         }
     }
+    public SingletonEvent()
+    {
+        _Instance = this as T;
+    }
 }
