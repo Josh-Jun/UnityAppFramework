@@ -7,7 +7,7 @@ namespace XLua {
         [XLua.Hotfix]
         [XLua.ReflectionUse]
         public static List<System.Type> Developer {
-            //1、UI扩展类,2、UI框架、3、Xlua框架
+            //1、扩展类、2、Xlua框架
             get {
                 return (from type in System.Reflection.Assembly.Load("Assembly-CSharp").GetTypes()
                         where type.Name == "DevelopManager" ||
@@ -20,10 +20,12 @@ namespace XLua {
         [XLua.LuaCallCSharp]
         [XLua.ReflectionUse]
         public static List<System.Type> LuaCallCSharp {
-            //1、UI扩展类,2、消息事件框架、3、工具
+            //1、扩展类、2、消息事件控制中心、3事件监听者
             get {
                 return (from type in System.Reflection.Assembly.Load("Assembly-CSharp").GetTypes()
-                        where type.Name == "DevelopManager"
+                        where type.Name == "DevelopManager" ||
+                              type.Namespace == "EventController" ||
+                              type.Namespace == "EventListener"
                         select type).ToList();
             }
         }
