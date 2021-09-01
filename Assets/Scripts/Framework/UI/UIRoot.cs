@@ -130,5 +130,12 @@ public class UIRoot : SingletonMono<UIRoot>
         GameObject go = Instantiate(prefab, rectParent);
         return go;
     }
+    /// <summary> 添加UI预制体，返回GameObject </summary>
+    public GameObject AddChild(GameObject prefab, RectTransform parent = null)
+    {
+        RectTransform rectParent = parent ? parent : UIRectTransform;
+        GameObject go = Instantiate(prefab, rectParent);
+        return go;
+    }
     #endregion
 }
