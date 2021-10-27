@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-
+<!--SceneName = "脚本所在场景名称" ScriptName = "脚本名称(必须有命名空间)" RootScript = "Lua脚本文件路径"--> 
 <RootScriptConfig>
   <RootScript SceneName = "TestScene" ScriptName = "Test.TestRoot">Test/Test/TestRoot</RootScript>
 </RootScriptConfig>
