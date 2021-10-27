@@ -14,6 +14,7 @@ public class UIRoot : SingletonMono<UIRoot>
     private Camera uiCamera;//UI相机
     private GameObject canvasObject;//Canvas游戏对象
     private GameObject eventSystemObject;//EventSystem游戏对象
+    private GameObject obj3DRoot;//3D游戏对象根对象
     #endregion
 
     #region Public Variable
@@ -27,7 +28,8 @@ public class UIRoot : SingletonMono<UIRoot>
     public CanvasScaler UICanvasScaler { get { return canvasObject.GetComponent<CanvasScaler>(); } private set { } }
     /// <summary> 获取GraphicRaycaster组件 </summary>
     public GraphicRaycaster UIGraphicRaycaster { get { return canvasObject.GetComponent<GraphicRaycaster>(); } private set { } }
-
+    /// <summary> 获取3D游戏对象根对象 </summary>
+    public Transform Obj3DRoot { get { return obj3DRoot.transform; } private set { } }
     #endregion
 
     /// <summary>
@@ -67,6 +69,10 @@ public class UIRoot : SingletonMono<UIRoot>
             eventSystemObject.transform.SetParent(transform);
         }
         #endregion
+
+        #region Obj3DRoot
+        obj3DRoot = new GameObject("GoRoot");
+        #endregion
     }
 
     #region Private Function
@@ -74,6 +80,10 @@ public class UIRoot : SingletonMono<UIRoot>
     #endregion
 
     #region Public Function
+    public void SetObj3DRootActive(bool active = true)
+    {
+        obj3DRoot.SetGameObjectActive(active);
+    }
     public void Init3DUIRoot(Camera camera3d = null)
     {
         Camera camera = camera3d == null ? Camera.main : camera3d;
