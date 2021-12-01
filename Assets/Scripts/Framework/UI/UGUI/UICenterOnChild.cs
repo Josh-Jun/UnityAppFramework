@@ -9,7 +9,8 @@ using System;
 public class UICenterOnChild : MonoBehaviour, IBeginDragHandler, IEndDragHandler
 {
     public float scrollSpeed = 8f;
-    public Transform UIGrid;
+    public Transform Content;
+
     private ScrollRect scrollRect;
     private float[] pageArray;
     private float targetPagePosition = 0f;
@@ -17,6 +18,12 @@ public class UICenterOnChild : MonoBehaviour, IBeginDragHandler, IEndDragHandler
     private int pageCount;
     private int currentPage = 0;
     private List<Transform> items = new List<Transform>();
+
+    /// <summary> 获取当前页码 </summary>
+    public int GetCurrentPageIndex { get { return currentPage; } private set { } }
+    /// <summary> 获取总页数 </summary>
+    public int GetTotalPages { get { return pageCount; } private set { } }
+
     // Use this for initialization
     void Awake()
     {
@@ -31,7 +38,7 @@ public class UICenterOnChild : MonoBehaviour, IBeginDragHandler, IEndDragHandler
     /// </summary>
     void InitPageArray()
     {
-        foreach (Transform item in UIGrid)
+        foreach (Transform item in Content)
         {
             if (item.gameObject.activeSelf && !items.Contains(item))
             {
@@ -88,32 +95,26 @@ public class UICenterOnChild : MonoBehaviour, IBeginDragHandler, IEndDragHandler
     /// <summary>
     /// 向左移动一个元素
     /// </summary>
-    public void ToLeft()
+    public void ToLeft(Action<int> callback = null)
     {
         if (currentPage > 0)
         {
-            currentPage = currentPage - 1;
+            currentPage -= 1;
             targetPagePosition = pageArray[currentPage];
         }
+        callback?.Invoke(currentPage);
     }
     /// <summary>
     /// 向右移动一个元素
     /// </summary>
-    public void ToRight()
+    public void ToRight(Action<int> callback = null)
     {
         if (currentPage < pageCount - 1)
         {
-            currentPage = currentPage + 1;
+            currentPage += 1;
             targetPagePosition = pageArray[currentPage];
         }
-    }
-    /// <summary>
-    /// 获取当前页码
-    /// </summary>
-    /// <returns></returns>
-    public int GetCurrentPageIndex()
-    {
-        return currentPage;
+        callback?.Invoke(currentPage);
     }
     /// <summary>
     /// 设置当前页码
@@ -123,13 +124,5 @@ public class UICenterOnChild : MonoBehaviour, IBeginDragHandler, IEndDragHandler
     {
         currentPage = index;
         targetPagePosition = pageArray[currentPage];
-    }
-    /// <summary>
-    /// 获取总页数
-    /// </summary>
-    /// <returns></returns>
-    public int GetTotalPages()
-    {
-        return pageCount;
     }
 }
