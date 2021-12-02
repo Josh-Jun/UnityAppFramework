@@ -28,9 +28,6 @@ public class UICenterOnChild : MonoBehaviour, IBeginDragHandler, IEndDragHandler
     void Awake()
     {
         scrollRect = GetComponent<ScrollRect>();
-    }
-    void Start()
-    {
         InitPageArray();
     }
     /// <summary>
