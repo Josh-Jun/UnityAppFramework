@@ -15,9 +15,13 @@ namespace Platform
         {
             return "Android";
         }
-        private AndroidJavaObject JavaObject()
+        private AndroidJavaObject MainJavaObject()
         {
             return new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity");
+        }
+        private AndroidJavaObject JavaObject(string packageName)
+        {
+            return new AndroidJavaClass(packageName);
         }
     }
 }
