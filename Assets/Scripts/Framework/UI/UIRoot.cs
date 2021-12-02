@@ -84,6 +84,13 @@ public class UIRoot : SingletonMono<UIRoot>
     {
         obj3DRoot.SetGameObjectActive(active);
     }
+    /// <summary> 添加3D对象预制体，返回GameObject </summary>
+    public GameObject AddObj3DChild(GameObject prefab, Transform parent = null)
+    {
+        Transform objParent = parent ? parent : Obj3DRoot;
+        GameObject go = Instantiate(prefab, objParent);
+        return go;
+    }
     public void Init3DUIRoot(Camera camera3d = null)
     {
         Camera camera = camera3d == null ? Camera.main : camera3d;
