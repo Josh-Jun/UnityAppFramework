@@ -12,7 +12,7 @@ public class VideoManager : SingletonMono<VideoManager>
     public VideoPlayer VideoPlayer { get; private set; }
     private void Awake()
     {
-        VideoPlayer = this.TryGetComponect<VideoPlayer>();
+        VideoPlayer = this.TryGetComponent<VideoPlayer>();
         VideoPlayer.sendFrameReadyEvents = true;
     }
 

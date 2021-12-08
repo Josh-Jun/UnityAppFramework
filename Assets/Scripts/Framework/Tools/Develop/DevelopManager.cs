@@ -145,14 +145,14 @@ public static class DevelopManager
     }
     #endregion
 
-    #region Try Get Componect
+    #region Try Get Component
     /// <summary>
     /// 获取GameObject上的组件
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="go"></param>
     /// <returns></returns>
-    public static T TryGetComponect<T>(this GameObject go) where T : Component
+    public static T TryGetComponent<T>(this GameObject go) where T : Component
     {
         T t = go.GetComponent<T>();
         if (t == null)
@@ -167,7 +167,7 @@ public static class DevelopManager
     /// <typeparam name="T"></typeparam>
     /// <param name="com"></param>
     /// <returns></returns>
-    public static T TryGetComponect<T>(this Component com) where T : Component
+    public static T TryGetComponent<T>(this Component com) where T : Component
     {
         T t = com.GetComponent<T>();
         if (t == null)
@@ -229,7 +229,7 @@ public static class DevelopManager
     /// <param name="ua"></param>
     public static void AddEventTrigger(this GameObject obj, EventTriggerType eventType, UnityAction<BaseEventData> ua)
     {
-        EventTrigger eventTrigger = obj.TryGetComponect<EventTrigger>();
+        EventTrigger eventTrigger = obj.TryGetComponent<EventTrigger>();
         eventTrigger.triggers = new List<EventTrigger.Entry>();
 
         UnityAction<BaseEventData> callback = new UnityAction<BaseEventData>(ua);
@@ -245,7 +245,7 @@ public static class DevelopManager
     /// <param name="obj"></param>
     public static void RemoveEventTrigger(this GameObject obj)
     {
-        EventTrigger eventTrigger = obj.TryGetComponect<EventTrigger>();
+        EventTrigger eventTrigger = obj.TryGetComponent<EventTrigger>();
         eventTrigger.triggers.Clear();
         UnityEngine.Object.Destroy(eventTrigger);
     }
@@ -258,7 +258,7 @@ public static class DevelopManager
     /// <param name="ua"></param>
     public static void AddEventTrigger(this Component com, EventTriggerType eventType, UnityAction<BaseEventData> ua)
     {
-        EventTrigger eventTrigger = com.TryGetComponect<EventTrigger>();
+        EventTrigger eventTrigger = com.TryGetComponent<EventTrigger>();
         eventTrigger.triggers = new List<EventTrigger.Entry>();
 
         UnityAction<BaseEventData> callback = new UnityAction<BaseEventData>(ua);
@@ -274,7 +274,7 @@ public static class DevelopManager
     /// <param name="com"></param>
     public static void RemoveEventTrigger(this Component com)
     {
-        EventTrigger eventTrigger = com.TryGetComponect<EventTrigger>();
+        EventTrigger eventTrigger = com.TryGetComponent<EventTrigger>();
         eventTrigger.triggers.Clear();
         UnityEngine.Object.Destroy(eventTrigger);
     }
