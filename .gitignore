@@ -13,3 +13,4 @@ Assets/StreamingAssets.meta
 Assets/StreamingAssets/
 AssetBundle/
 ignore.conf
+.vsconfig
