@@ -1,7 +1,7 @@
 Library/
 Logs/
 Packages/
-ProjectSettings/
+ProjectSettings/ProjectVersion.txt
 Temp/
 .vs/
 obj/
