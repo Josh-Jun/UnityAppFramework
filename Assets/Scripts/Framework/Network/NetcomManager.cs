@@ -11,6 +11,25 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
     public static string id = "e671d95cb4fb445e88c5e7540ad13177";
     public static int Port = 17888; //通信端口
 
+    #region AB
+    private static readonly bool IsLocalPath = true;
+    public static string ABUrl
+    {
+        private set { }
+        get
+        {
+            if (IsLocalPath)
+            {
+                return string.Format(@"{0}{1}/", Application.dataPath.Replace("Assets", ""), "AssetBundle");//本地AB包地址
+            }
+            else
+            {
+                return string.Format(@"{0}/{1}/", ServerUrl, "wp-content/uploads/AssetBundle/");//服务器AB包地址
+            }
+        }
+    }
+    #endregion
+
     public string MakeUrl(string url, params object[] args)
     {
         StringBuilder sb = new StringBuilder(url);
