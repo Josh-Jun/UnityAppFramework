@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
@@ -142,20 +142,20 @@ public partial class NetcomManager : Singleton<NetcomManager>
         TcpManager.Instance.SendMsg(session, gameMsg);
     }
 
-    /// <summary> 学生端转发学生端(多人) </summary>
+    /// <summary> 客户端转发客户端(多人) </summary>
     public void CCPushMsg_List(GameMsg gameMsg)
     {
         List<string> list = (List<string>)gameMsg.pushMsg.Param;
         gameMsg.pushMsg.Param = null;
         TcpManager.Instance.SendMsgAll(gameMsg, list);
     }
-    /// <summary> 学生端转发学生端(移除自己) </summary>
+    /// <summary> 客户端转发客户端(移除自己) </summary>
     public void CCPushMsg_UnSelf(SessionTcp session, GameMsg gameMsg)
     {
         TcpManager.Instance.SendMsgAll(session, gameMsg);
     }
 
-    /// <summary> 学生端转发学生端(所有人) </summary>
+    /// <summary> 客户端转发客户端(所有人) </summary>
     public void CCPushMsg_All(GameMsg gameMsg)
     {
         TcpManager.Instance.SendMsgAll(gameMsg);
