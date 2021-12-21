@@ -2,7 +2,7 @@
 /// <summary>
 /// 
 /// </summary>
-public partial class NetcomManager : Singleton<NetcomManager>
+public partial class NetcomManager : SingletonEvent<NetcomManager>
 {
     private static readonly bool IsLocalPath = true;
     public static string ABUrl

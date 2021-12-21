@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// Socket
 /// </summary>
-public partial class NetcomManager : Singleton<NetcomManager>
+public partial class NetcomManager : SingletonEvent<NetcomManager>
 {
     #region Tcp
     #region Server
@@ -129,7 +129,14 @@ public partial class NetcomManager : Singleton<NetcomManager>
             return;
         }
         object[] objs = gameMsg.pushMsg.objs;
-
+        if (objs == null || objs.Length == 0)
+        {
+            SendEventMsg(eventName);
+        }
+        else
+        {
+            SendEventMsgParams(eventName, objs);
+        }
     }
 
     #region 消息转发
@@ -164,6 +171,8 @@ public partial class NetcomManager : Singleton<NetcomManager>
     #endregion
 
     #region Udp
+    public delegate void StringValueDelegate(string value);
+    public event StringValueDelegate ReceiveUdpMsg;
     #region Server
     public void StartUdpServer(Action<bool> cb = null)
     {
@@ -184,7 +193,7 @@ public partial class NetcomManager : Singleton<NetcomManager>
     public void ReceiveMsg(string msg)
     {
         Debug.Log(msg);
-
+        ReceiveUdpMsg?.Invoke(msg);
     }
     #endregion
 }
