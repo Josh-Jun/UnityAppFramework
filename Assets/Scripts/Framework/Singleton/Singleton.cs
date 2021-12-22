@@ -1,4 +1,4 @@
-﻿public class Singleton<T> where T : class, new()
+﻿public class Singleton<T> : ISingleton where T : class, ISingleton, new()
 {
     private static T _Instance;
     private static readonly object SingletonLock = "Lock";
@@ -19,5 +19,10 @@
     public Singleton()
     {
         _Instance = this as T;
+        SingletonManager.Instance.Add(_Instance);
+    }
+    public virtual void Clear()
+    {
+        _Instance = null;
     }
 }

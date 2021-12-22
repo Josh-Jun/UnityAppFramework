@@ -1,4 +1,4 @@
-﻿public class SingletonEvent<T> : EventBase where T : EventBase, new()
+﻿public class SingletonEvent<T> : EventBase, ISingleton where T : EventBase, ISingleton, new()
 {
     private static T _Instance;
     private static readonly object SingletonLock = "EventLock";
@@ -19,5 +19,10 @@
     public SingletonEvent()
     {
         _Instance = this as T;
+        SingletonManager.Instance.Add(_Instance);
+    }
+    public virtual void Clear()
+    {
+        _Instance = null;
     }
 }
