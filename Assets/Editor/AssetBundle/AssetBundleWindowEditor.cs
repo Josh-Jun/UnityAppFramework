@@ -100,6 +100,7 @@ public class AssetBundleWindowEditor : EditorWindow
         if (desDic.Count > 0)
         {
             EditorGUILayout.Space();
+            EditorGUILayout.PrefixLabel("Update Des");
             for (int i = 0; i < desDic.Keys.Count; i++)
             {
                 desDic[desDic.Keys.ToArray()[i]] = EditorGUILayout.TextField(desDic.Keys.ToArray()[i] + " Update Des", desDic[desDic.Keys.ToArray()[i]]);
