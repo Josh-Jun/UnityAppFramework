@@ -13,16 +13,16 @@ public static class DevelopManager
 {
     #region Animator Event
     private static int DEVELOP_ANIMATOR_TIME_ID = -1;//动画时间任务id
-    private static int DEVELOP_SEQUENCEFRAMES_TIME_ID = -1;//动画时间任务id
-    public static void PlayAnimator(this Animator _animator, string stateName, UnityAction callback = null, float normalizedTime = 0)
+    private static int DEVELOP_FRAMESANIMATION_TIME_ID = -1;//动画时间任务id
+    public static void PlayBack(this Animator _animator, string stateName, UnityAction callback = null)
     {
-        _animator.PlayAnimator(stateName, callback, 0, normalizedTime);
+        _animator.Play(stateName, callback, -1);
     }
-    public static void PlayAnimator(this Animator _animator, string stateName, UnityAction callback = null, int layer = 0)
+    public static void Play(this Animator _animator, string stateName, UnityAction callback = null)
     {
-        _animator.PlayAnimator(stateName, callback, layer, 0);
+        _animator.Play(stateName, callback, 1);
     }
-    public static void PlayAnimator(this Animator _animator, string stateName, UnityAction callback = null, int layer = 0, float normalizedTime = 0)
+    public static void Play(this Animator _animator, string stateName, UnityAction callback = null, float speed = 1)
     {
         AnimationClip[] AnimationClips = _animator.runtimeAnimatorController.animationClips;
         float _time = 0;
@@ -33,8 +33,10 @@ public static class DevelopManager
                 _time = AnimationClips[i].length;
             }
         }
-        _animator.Play(stateName, layer, normalizedTime);
-        _animator.Update(0);
+        _animator.enabled = true;
+        _animator.StartPlayback();
+        _animator.speed = speed;
+        _animator.Play(stateName, 0, speed < 0 ? 1 : 0);
         DEVELOP_ANIMATOR_TIME_ID = TimerManager.Instance.StartTimer((float time) =>
         {
             if (time >= _time)
@@ -45,16 +47,16 @@ public static class DevelopManager
         });
     }
 
-    public static void PlaySequenceFrames(this Image image, List<Sprite> sequenceFrames, UnityAction callback = null, float time = 0.05f, bool loop = true)
+    public static void PlayFramesAnimation(this Image image, List<Sprite> sequenceFrames, float time = 0.05f, UnityAction callback = null, bool loop = false)
     {
         if (image == null)
         {
             Debug.LogError("Image is null!!!");
             return;
         }
-        image.PlaySequenceFrames(sequenceFrames.ToArray(), callback, time, loop);
+        image.PlayFramesAnimation(sequenceFrames.ToArray(), time, callback, loop);
     }
-    public static void PlaySequenceFrames(this Image image, Sprite[] sequenceFrames, UnityAction callback = null, float time = 0.05f, bool loop = true)
+    public static void PlayFramesAnimation(this Image image, Sprite[] sequenceFrames, float time = 0.05f, UnityAction callback = null, bool loop = false)
     {
         if (image == null)
         {
@@ -63,7 +65,7 @@ public static class DevelopManager
         }
         int index = 0;//可以用来控制起始播放的动画帧索引
         float recordTime = 0;
-        DEVELOP_SEQUENCEFRAMES_TIME_ID = TimerManager.Instance.StartTimer((float currentTime) =>
+        DEVELOP_FRAMESANIMATION_TIME_ID = TimerManager.Instance.StartTimer((float currentTime) =>
         {
             if (currentTime - recordTime >= time)
             {
@@ -78,11 +80,15 @@ public static class DevelopManager
                     }
                     else
                     {
-                        TimerManager.Instance.EndTimer(DEVELOP_SEQUENCEFRAMES_TIME_ID);
+                        TimerManager.Instance.EndTimer(DEVELOP_FRAMESANIMATION_TIME_ID);
                     }
                 }
-                image.sprite = sequenceFrames[index];
-                index++;
+                else
+                {
+                    image.sprite = sequenceFrames[index];
+                    image.SetNativeSize();
+                    index++;
+                }
             }
         });
     }
