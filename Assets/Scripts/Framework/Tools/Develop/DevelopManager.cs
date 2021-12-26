@@ -470,7 +470,7 @@ public static class DevelopManager
     /// <summary> 加载本地窗口 </summary>
     public static T LoadWindow<T>(this object obj, string path, bool state = false) where T : Component
     {
-        GameObject go = Resources.Load<GameObject>(path);
+        GameObject go = AssetsManager.Instance.LoadAsset<GameObject>(path);
         if (go != null)
         {
             go = UnityEngine.Object.Instantiate(go, UIRoot.Instance.UIRectTransform);

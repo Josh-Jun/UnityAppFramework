@@ -10,11 +10,11 @@ namespace EventController {
 
         #region 注册消息
         //注册参数类型不同的消息调用;  
-        public static void AddEventListener(string eventType,Action handler,bool isDesignateRemove) {
+        public static void AddEventListener(string eventType,Action handler,bool isDesignateRemove = true) {
             m_eventController.AddEventListener(eventType,handler,isDesignateRemove);
         }
 
-        public static void AddEventListener<T>(string eventType,Action<T> handler,bool isDesignateRemove) {
+        public static void AddEventListener<T>(string eventType,Action<T> handler,bool isDesignateRemove = true) {
             m_eventController.AddEventListener(eventType,handler,isDesignateRemove);
         }
         #endregion

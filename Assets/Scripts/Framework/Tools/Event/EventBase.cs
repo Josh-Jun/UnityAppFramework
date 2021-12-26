@@ -5,7 +5,7 @@ public class EventBase
 {
     #region 添加事件
     /// <summary>添加事件-不带参数</summary>
-    public void AddEventMsg(string str, Action cb, bool isRemove)
+    public void AddEventMsg(string str, Action cb, bool isRemove = true)
     {
         EventDispatcher.AddEventListener(str, () => {
             cb?.Invoke();
@@ -13,7 +13,7 @@ public class EventBase
     }
 
     /// <summary>添加事件-带参数</summary>
-    public void AddEventMsgParams(string str, Action<object[]> cb, bool isRemove)
+    public void AddEventMsgParams(string str, Action<object[]> cb, bool isRemove = true)
     {
         EventDispatcher.AddEventListener(str, (object[] obj) => {
             cb?.Invoke(obj);

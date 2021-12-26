@@ -28,7 +28,7 @@ public class UIWindowBase : EventBaseMono
         //显隐
         AddEventMsgParams(name, (object[] args) => {
             SetWindowActive((bool)args[0]);
-        }, true);
+        });
     }
 
     /// <summary>打开窗口</summary>

@@ -8,8 +8,8 @@ public class Root
 {
     public const string MainSceneName = "TestScene";
     public const string path_AppRootConfig = "App/Assets/AppRootConfig";
-    public static bool IsHotfix { get; private set; } = true;//是否热更
-    public static bool IsLoadAB { get; private set; } = true;//是否加载AB包
+    public static bool IsHotfix { get; private set; } = false;//是否热更
+    public static bool IsLoadAB { get; private set; } = false;//是否加载AB包
     public static bool RunXLuaScripts { get; private set; } = false;//是否运行XLua脚本
 
     private static readonly Dictionary<string, List<string>> sceneScriptsPairs = new Dictionary<string, List<string>>();

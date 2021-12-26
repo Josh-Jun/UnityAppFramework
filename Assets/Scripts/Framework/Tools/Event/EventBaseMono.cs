@@ -6,7 +6,7 @@ public class EventBaseMono : MonoBehaviour
 {
     #region 添加事件
     /// <summary>添加事件-不带参数</summary>
-    public void AddEventMsg(string str, Action cb, bool isRemove)
+    public void AddEventMsg(string str, Action cb, bool isRemove = true)
     {
         EventDispatcher.AddEventListener(str, () => {
             cb?.Invoke();
@@ -14,7 +14,7 @@ public class EventBaseMono : MonoBehaviour
     }
 
     /// <summary>添加事件-带参数</summary>
-    public void AddEventMsgParams(string str, Action<object[]> cb1, bool isRemove)
+    public void AddEventMsgParams(string str, Action<object[]> cb1, bool isRemove = true)
     {
         EventDispatcher.AddEventListener(str, (object[] obj) => {
             cb1?.Invoke(obj);

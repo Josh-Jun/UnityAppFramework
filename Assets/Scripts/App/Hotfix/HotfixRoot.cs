@@ -12,7 +12,7 @@ namespace Hotfix
         private HotfixWindow hotfixWin;
         public HotfixRoot()
         {
-            AddEventMsg("UpdateNow", () => { UpdateNow(); }, true);
+            AddEventMsg("UpdateNow", () => { UpdateNow(); });
         }
         public void Begin()
         {
