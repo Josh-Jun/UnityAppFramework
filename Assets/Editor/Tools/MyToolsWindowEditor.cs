@@ -57,7 +57,7 @@ public class MyToolsWindowEditor : EditorWindow
     private string filesPath = "";
     #endregion
 
-    [MenuItem("Tools/My ToolsWindow")]
+    [MenuItem("Tools/My ToolsWindow", false, 2)]
     public static void OpenWindow()
     {
         //texture = AssetDatabase.LoadAssetAtPath("Assets/Editor/Tools/Image/bg.png", typeof(Texture)) as Texture;

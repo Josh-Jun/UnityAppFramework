@@ -22,7 +22,7 @@ public class AssetBundleWindowEditor : EditorWindow
 
     private string version = "1";
 
-    [MenuItem("Tools/Build AssetBundle")]
+    [MenuItem("Tools/Build AssetBundle", false, 1)]
     public static void OpenWindow()
     {
         titleStyle = new GUIStyle("OL Title")
