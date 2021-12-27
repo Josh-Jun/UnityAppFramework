@@ -9,11 +9,14 @@ namespace Test
         private TestWindow testWin;
         public TestRoot()
         {
+            //添加事件系统，不带参数
             AddEventMsg("BtnEvent", ButtonEvent);
+            //添加事件系统，带参数
             AddEventMsgParams("BtnParamsEvent", (object[] args)=> { ButtonParamsEvent((string)args[0]); });
         }
         public void Begin()
         {
+            //加载窗体
             string prefab_TestPath = "Test/Assets/Windows/TestWindow";
             testWin = this.LoadWindow<TestWindow>(prefab_TestPath, true);
         }

@@ -72,7 +72,6 @@ public class MyToolsWindowEditor : EditorWindow
         window.Show();
     }
 
-    [System.Obsolete]
     private void OnGUI()
     {
         #region 1、更换预制体字体
