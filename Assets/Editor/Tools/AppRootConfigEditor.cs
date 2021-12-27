@@ -9,7 +9,7 @@ public class AppRootConfigWindowEditor : EditorWindow
 {
     private static GUIStyle titleStyle;
     private static RootScriptConfig config;
-    private static string configPath = "AssetsFolder/App/Assets/AppRootConfig";
+    private static readonly string configPath = "AssetsFolder/App/Assets/AppRootConfig";
     [MenuItem("Tools/Set AppRootConfig", false, 0)]
     public static void OpenWindow()
     {
@@ -17,7 +17,7 @@ public class AppRootConfigWindowEditor : EditorWindow
         {
             alignment = TextAnchor.MiddleCenter,
             fontStyle = FontStyle.Bold,
-            fontSize = 12
+            fontSize = 12,
         };
 
         var bytes = Resources.Load<TextAsset>(configPath).bytes;
@@ -38,18 +38,24 @@ public class AppRootConfigWindowEditor : EditorWindow
             for (int i = 0; i < config.RootScript.Count; i++)
             {
                 EditorGUILayout.BeginHorizontal(titleStyle);
+                GUILayout.Label(new GUIContent("RootScript"), titleStyle);
                 GUILayout.Label("1.SceneName");
                 config.RootScript[i].SceneName = EditorGUILayout.TextField(config.RootScript[i].SceneName);
-                EditorGUILayout.Space();
                 GUILayout.Label("2.ScriptName");
                 config.RootScript[i].ScriptName = EditorGUILayout.TextField(config.RootScript[i].ScriptName);
-                EditorGUILayout.Space();
                 GUILayout.Label("3.LuaScriptPath");
                 config.RootScript[i].LuaScriptPath = EditorGUILayout.TextField(config.RootScript[i].LuaScriptPath);
                 if (GUILayout.Button("-", titleStyle))
                 {
-                    Remove(i);
-                    config.RootScript.RemoveAt(i);
+                    if (config.RootScript.Count > 1)
+                    {
+                        Remove(i);
+                        config.RootScript.RemoveAt(i);
+                    }
+                    else
+                    {
+                        Debug.Log("不能删除最后一个RootScript");
+                    }
                 }
                 EditorGUILayout.EndHorizontal();
             }
