@@ -8,6 +8,7 @@ namespace XLuaFrame
     {
         private readonly Dictionary<int, Action> LuaCallbackPairs = new Dictionary<int, Action>();//生命周期回调字典
         private LuaTable scriptEnv;
+        private XLuaUIWindow window;
         public XLuaRoot Init(string path)
         {
             string luaFileContent = XLuaManager.Instance.LoadLua(path);
@@ -18,6 +19,14 @@ namespace XLuaFrame
         public void Begin()
         {
             LuaCallbackPairs[(int)RootLifeCycle.Begin]?.Invoke();
+        }
+        public void LoadWindow(string path, bool active)
+        {
+            window = this.LoadWindow<XLuaUIWindow>(path, active);
+        }
+        public void CallWindow(string actionName, params object[] args)
+        {
+            window.Call(actionName, args);
         }
         /// <summary>初始化Lua代码</summary>
         private void InitLuaEnv(string luaFileContent)
@@ -46,7 +55,7 @@ namespace XLuaFrame
                 LuaCallbackPairs.Add(item, scriptEnv.Get<Action>(enumName));
             }
         }
-		
+
         public void End()
         {
             LuaCallbackPairs[(int)RootLifeCycle.End]?.Invoke();

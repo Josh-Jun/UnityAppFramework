@@ -7,7 +7,8 @@ using XLua;
 namespace XLuaFrame
 {
     /// <summary> LuaUI类</summary>
-    public class XLuaUIWindow : UIWindowBase {
+    public class XLuaUIWindow : UIWindowBase
+    {
         private readonly Dictionary<int, Action> LuaCallbackPairs = new Dictionary<int, Action>();//生命周期回调字典
         private LuaTable scriptEnv;
         /// <summary>初始化</summary>
@@ -21,25 +22,39 @@ namespace XLuaFrame
         protected override void InitWindow()
         {
             base.InitWindow();
-            LuaCallbackPairs[(int)WindowLifeCycle.InitWindow]?.Invoke();
+            TimerTaskManager.Instance.AddFrameTask(() =>{
+                LuaCallbackPairs[(int)WindowLifeCycle.InitWindow]?.Invoke();
+            }, 1);
         }
         /// <summary>注册事件</summary>
-        protected override void RegisterEvent() {
+        protected override void RegisterEvent()
+        {
             base.RegisterEvent();
-            LuaCallbackPairs[(int)WindowLifeCycle.RegisterEvent]?.Invoke();
+            TimerTaskManager.Instance.AddFrameTask(() => {
+                LuaCallbackPairs[(int)WindowLifeCycle.RegisterEvent]?.Invoke();
+            }, 1);
         }
         /// <summary>打开窗口</summary>
-        protected override void OpenWindow() {
+        protected override void OpenWindow()
+        {
             base.OpenWindow();
             LuaCallbackPairs[(int)WindowLifeCycle.OpenWindow]?.Invoke();
         }
         /// <summary>关闭窗口</summary>
-        protected override void CloseWindow() {
+        protected override void CloseWindow()
+        {
             base.CloseWindow();
             LuaCallbackPairs[(int)WindowLifeCycle.CloseWindow]?.Invoke();
         }
+        public void Call(string actionName, object[] args)
+        {
+            Debug.Log(actionName+" = "+args[0]);
+            Action<object[]> action = scriptEnv.Get<Action<object[]>>(actionName);
+            action(args);
+        }
         /// <summary>初始化Lua代码</summary>
-        private void InitLuaEnv(string luaFileContent) {
+        private void InitLuaEnv(string luaFileContent)
+        {
             //获取LuaTable，要用luaEnv.NewTable()，这里会做一些排序，共用虚拟机等操作
             scriptEnv = XLuaManager.luaEnv.NewTable();
             LuaTable meta = XLuaManager.luaEnv.NewTable();
@@ -58,17 +73,20 @@ namespace XLuaFrame
             //xlua搞了这么久，也就是为了最后这几个锤子，c#调用lua里的方法。
             //总结起来一句话，通过luatable这个类来完成c#调用Lua
             //怎样完成这一步呢？就是获取luatable对象，配置lua虚拟机，配置虚拟机环境，绑定c#代码，最后执行lua语句
-            foreach (int item in Enum.GetValues(typeof(WindowLifeCycle))) {
+            foreach (int item in Enum.GetValues(typeof(WindowLifeCycle)))
+            {
                 string enumName = Enum.GetName(typeof(WindowLifeCycle), item);
                 LuaCallbackPairs.Add(item, scriptEnv.Get<Action>(enumName));
             }
         }
 
-        private void Update() {
+        private void Update()
+        {
             LuaCallbackPairs[(int)WindowLifeCycle.Update]?.Invoke();
         }
 
-        private void OnDestroy() {
+        private void OnDestroy()
+        {
             LuaCallbackPairs[(int)WindowLifeCycle.OnDestroy]?.Invoke();
             LuaCallbackPairs.Clear();
             scriptEnv.Dispose();

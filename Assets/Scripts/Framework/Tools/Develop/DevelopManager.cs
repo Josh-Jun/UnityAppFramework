@@ -316,6 +316,29 @@ public static class DevelopManager
     /// <param name="go"></param>
     /// <param name="path"></param>
     /// <returns></returns>
+    public static Component FindComponent(this GameObject go, string path)
+    {
+        return go.transform.Find(path).GetComponent<Component>();
+    }
+
+    /// <summary>
+    /// 根据路径查找组件
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="com"></param>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public static Component FindComponent(this Component com, string path)
+    {
+        return com.transform.Find(path).GetComponent<Component>();
+    }
+    /// <summary>
+    /// 根据路径查找组件
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="go"></param>
+    /// <param name="path"></param>
+    /// <returns></returns>
     public static T FindComponent<T>(this GameObject go, string path) where T : Component
     {
         return go.transform.Find(path).GetComponent<T>();
@@ -381,6 +404,47 @@ public static class DevelopManager
     /// <param name="gomeObject">要在其中进行查找的父物体</param>
     /// <param name="childName">待查找的子物体名称，可以是"/"分割的多级名称</param>
     /// <returns></returns>
+    public static Component FindDeepComponent(this GameObject gomeObject, string childName)
+    {
+        Transform transform = gomeObject.transform.Find(childName);
+        if (transform == null)
+        {
+            foreach (Transform trs in gomeObject.transform)
+            {
+                transform = trs.gameObject.FindDeepComponent(childName).transform;
+                if (transform != null)
+                    return transform.GetComponent<Component>();
+            }
+        }
+        return transform.GetComponent<Component>();
+    }
+
+    /// <summary>
+    /// 查找本游戏物体下的特定名称的子物体系统，并将其返回
+    /// </summary>
+    /// <param name="com">要在其中进行查找的父物体</param>
+    /// <param name="childName">待查找的子物体名称，可以是"/"分割的多级名称</param>
+    /// <returns></returns>
+    public static Component FindDeepComponet(this Component com, string childName)
+    {
+        Transform transform = com.transform.Find(childName);
+        if (transform == null)
+        {
+            foreach (Transform trs in com.transform)
+            {
+                transform = trs.FindDeepComponet(childName).transform;
+                if (transform != null)
+                    return transform.GetComponent<Component>();
+            }
+        }
+        return transform.GetComponent<Component>();
+    }
+    /// <summary>
+    /// 查找本游戏物体下的特定名称的子物体系统，并将其返回
+    /// </summary>
+    /// <param name="gomeObject">要在其中进行查找的父物体</param>
+    /// <param name="childName">待查找的子物体名称，可以是"/"分割的多级名称</param>
+    /// <returns></returns>
     public static T FindDeepComponent<T>(this GameObject gomeObject, string childName) where T : Component
     {
         Transform transform = gomeObject.transform.Find(childName);
@@ -424,6 +488,45 @@ public static class DevelopManager
     /// path = 窗口路径，不包含AssetsFolder
     /// state 初始化窗口是否显示
     /// </summary>
+    public static Component LoadWindow(this object obj, string path, bool state = false) 
+    {
+        GameObject go = AssetsManager.Instance.LoadAsset<GameObject>(path);
+        if (go != null)
+        {
+            go = UnityEngine.Object.Instantiate(go, UIRoot.Instance.UIRectTransform);
+            go.transform.localEulerAngles = Vector3.zero;
+            go.transform.localScale = Vector3.one;
+            go.name = go.name.Replace("(Clone)", "");
+            Component t = null;
+            if (Root.RunXLuaScripts)
+            {
+                string luaPath = string.Format("{0}/{1}", path.Split('/')[0], go.name);
+                t = go.TryGetComponent<XLuaUIWindow>().Init(luaPath);
+            }
+            else
+            {
+                string _namespace = obj.GetType().Namespace;
+                string fullName = string.IsNullOrEmpty(_namespace) ? go.name : string.Format("{0}.{1}", _namespace, go.name);
+                Type type = Assembly.GetExecutingAssembly().GetType(fullName);
+                if (type != null)
+                {
+                    t = go.AddComponent(type);
+                }
+                else
+                {
+                    Debug.LogErrorFormat("{0}:脚本已存在,", fullName);
+                }
+            }
+            go.SetGameObjectActive(state);
+            return t;
+        }
+        return null;
+    }
+    /// <summary> 
+    /// 加载窗口 添加T(Component)类型脚本
+    /// path = 窗口路径，不包含AssetsFolder
+    /// state 初始化窗口是否显示
+    /// </summary>
     public static T LoadWindow<T>(this object obj, string path, bool state = false) where T : Component
     {
         GameObject go = AssetsManager.Instance.LoadAsset<GameObject>(path);
@@ -453,6 +556,25 @@ public static class DevelopManager
                     Debug.LogErrorFormat("{0}:脚本已存在,", fullName);
                 }
             }
+            go.SetGameObjectActive(state);
+            return t;
+        }
+        return null;
+    }
+    /// <summary> 加载本地窗口 </summary>
+    public static Component LoadLocalWindow(this object obj, string path, bool state = false)
+    {
+        GameObject go = Resources.Load<GameObject>(path);
+        if (go != null)
+        {
+            go = UnityEngine.Object.Instantiate(go, UIRoot.Instance.UIRectTransform);
+            go.transform.localEulerAngles = Vector3.zero;
+            go.transform.localScale = Vector3.one;
+            go.name = go.name.Replace("(Clone)", "");
+            string _namespace = obj.GetType().Namespace;
+            string fullName = string.IsNullOrEmpty(_namespace) ? go.name : string.Format("{0}.{1}", _namespace, go.name);
+            Type type = Assembly.GetExecutingAssembly().GetType(fullName);
+            Component t = go.AddComponent(type);
             go.SetGameObjectActive(state);
             return t;
         }

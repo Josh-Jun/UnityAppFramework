@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-namespace XLua {
+namespace XLuaFrame
+{
     /// <summary> Xlua拓展类 </summary>
     public static class XluaCustomClass {
         /// <summary> 批量打[Hotfix]标签 </summary>
@@ -11,6 +12,8 @@ namespace XLua {
             get {
                 return (from type in System.Reflection.Assembly.Load("Assembly-CSharp").GetTypes()
                         where type.Name == "DevelopManager" ||
+                              type.Namespace == "EventController" ||
+                              type.Namespace == "EventListener" ||
                               type.Namespace == "XLuaFrame"
                         select type).ToList();
             }
@@ -25,7 +28,8 @@ namespace XLua {
                 return (from type in System.Reflection.Assembly.Load("Assembly-CSharp").GetTypes()
                         where type.Name == "DevelopManager" ||
                               type.Namespace == "EventController" ||
-                              type.Namespace == "EventListener"
+                              type.Namespace == "EventListener" ||
+                              type.Namespace == "XLuaFrame"
                         select type).ToList();
             }
         }

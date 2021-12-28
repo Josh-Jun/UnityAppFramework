@@ -16,11 +16,13 @@ namespace Test
             btn = this.FindComponent<Button>("Button");
             btn_params = this.FindComponent<Button>("ButtonParams");
             text = this.FindComponent<Text>("Image/Text");
+            
         }
 
         protected override void RegisterEvent()
         {
             base.RegisterEvent();
+            btn.BtnOnClick((object[] objs)=> { });
             btn.onClick.AddListener(() => { SendEventMsg("BtnEvent"); });
             btn_params.onClick.AddListener(() => { SendEventMsgParams("BtnParamsEvent", "触发带参数事件"); });
         }

@@ -1,21 +1,24 @@
 local UnityEngine=CS.UnityEngine
-local testWin
+
 function Init()
     print("lua Init...")
-	self:AddEventMsg("BtnEvent--", ButtonEvent);
-	self:AddEventMsgParams("BtnParamsEvent--",function(obj)
-        ButtonParamsEvent(obj[0]);
+	self:AddEventMsg("BtnEvent", ButtonEvent);
+	self:AddEventMsgParams("BtnParamsEvent", function(obj)
+        ButtonParamsEvent(obj);
     end);
 end
 function Begin()
     print("lua Begin...")
-	
+	local prefab_TestPath = "Test/Assets/Windows/TestWindow";
+	self:LoadWindow(prefab_TestPath, true);
 end
 function ButtonEvent()
-    print("ButtonEvent")
+    print("ButtonEvent   触发不带参数事件")
+	self:CallWindow("SetText", "触发不带参数事件")
 end
 function ButtonParamsEvent(obj)
-    print("ButtonParamsEvent   ", obj)
+    print("ButtonParamsEvent   ", obj[0])
+	self:CallWindow("SetText", obj[0])
 end
 function End()
     print("lua End")
