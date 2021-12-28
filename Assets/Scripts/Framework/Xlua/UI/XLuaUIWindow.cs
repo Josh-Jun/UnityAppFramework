@@ -46,11 +46,11 @@ namespace XLuaFrame
             base.CloseWindow();
             LuaCallbackPairs[(int)WindowLifeCycle.CloseWindow]?.Invoke();
         }
+        private Action<object[]> action;
         public void Call(string actionName, object[] args)
         {
-            Debug.Log(actionName+" = "+args[0]);
-            Action<object[]> action = scriptEnv.Get<Action<object[]>>(actionName);
-            action(args);
+            action = scriptEnv.Get<Action<object[]>>(actionName);
+            action?.Invoke(args);
         }
         /// <summary>初始化Lua代码</summary>
         private void InitLuaEnv(string luaFileContent)
