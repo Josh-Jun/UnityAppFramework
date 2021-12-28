@@ -421,13 +421,10 @@ public static class DevelopManager
     #region LoadWindow
     /// <summary> 
     /// 加载窗口 添加T(Component)类型脚本
-    /// path = sceneName/folderName/assetName
-    /// scnenName 打包资源的第一层文件夹名称
-    /// folderName 打包资源的第二层文件夹名称
-    /// assetName 资源名称
+    /// path = 窗口路径，不包含AssetsFolder
     /// state 初始化窗口是否显示
     /// </summary>
-    public static UIWindowBase LoadWindow(this object obj, string path, bool state = false)
+    public static T LoadWindow<T>(this object obj, string path, bool state = false) where T : Component
     {
         GameObject go = AssetsManager.Instance.LoadAsset<GameObject>(path);
         if (go != null)
@@ -436,41 +433,35 @@ public static class DevelopManager
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
-            UIWindowBase window = null;
-            if (go.GetComponent<UIWindowBase>())
+            T t = null;
+            if (Root.RunXLuaScripts)
             {
-                Debug.LogErrorFormat("{0}:脚本已存在,", go.name);
+                string luaPath = string.Format("{0}/{1}", path.Split('/')[0], go.name);
+                t = go.TryGetComponent<XLuaUIWindow>().Init(luaPath) as T;
             }
             else
             {
-                if (XLuaManager.Instance.IsLuaFileExist(path))
+                string _namespace = obj.GetType().Namespace;
+                string fullName = string.IsNullOrEmpty(_namespace) ? go.name : string.Format("{0}.{1}", _namespace, go.name);
+                Type type = Assembly.GetExecutingAssembly().GetType(fullName);
+                if (type != null)
                 {
-                    window = go.AddComponent<XLuaUIWindow>().Init(path);//加载lua文件
+                    t = (T)go.AddComponent(type);
                 }
                 else
                 {
-                    string _namespace = obj.GetType().Namespace;
-                    string fullName = string.IsNullOrEmpty(_namespace) ? go.name : string.Format("{0}.{1}", _namespace, go.name);
-                    Type type = Assembly.GetExecutingAssembly().GetType(fullName);
-                    if (type != null)
-                    {
-                        window = (UIWindowBase)go.AddComponent(type);
-                    }
-                    else
-                    {
-                        Debug.LogErrorFormat("{0}:脚本已存在,", fullName);
-                    }
+                    Debug.LogErrorFormat("{0}:脚本已存在,", fullName);
                 }
             }
             go.SetGameObjectActive(state);
-            return window;
+            return t;
         }
         return null;
     }
     /// <summary> 加载本地窗口 </summary>
-    public static T LoadWindow<T>(this object obj, string path, bool state = false) where T : Component
+    public static T LoadLocalWindow<T>(this object obj, string path, bool state = false) where T : Component
     {
-        GameObject go = AssetsManager.Instance.LoadAsset<GameObject>(path);
+        GameObject go = Resources.Load<GameObject>(path);
         if (go != null)
         {
             go = UnityEngine.Object.Instantiate(go, UIRoot.Instance.UIRectTransform);

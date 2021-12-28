@@ -35,7 +35,7 @@ public class Root
 
     public static void InitRootScripts(Action callback = null)
     {
-        TextAsset config = Resources.Load<TextAsset>(string.Format("AssetsFolder/{0}", path_AppRootConfig));
+        TextAsset config = AssetsManager.Instance.LoadAsset<TextAsset>(path_AppRootConfig);
         rootConfig = XmlSerializeManager.ProtoDeSerialize<RootScriptConfig>(config.bytes);
         for (int i = 0; i < rootConfig.RootScript.Count; i++)
         {

@@ -1,8 +1,0 @@
-
-function Init()
-    print("lua Init...")
-end
-
-function End()
-    print("lua End")
-end

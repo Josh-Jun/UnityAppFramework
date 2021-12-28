@@ -1,0 +1,22 @@
+local UnityEngine=CS.UnityEngine
+local testWin
+function Init()
+    print("lua Init...")
+	self:AddEventMsg("BtnEvent--", ButtonEvent);
+	self:AddEventMsgParams("BtnParamsEvent--",function(obj)
+        ButtonParamsEvent(obj[0]);
+    end);
+end
+function Begin()
+    print("lua Begin...")
+	
+end
+function ButtonEvent()
+    print("ButtonEvent")
+end
+function ButtonParamsEvent(obj)
+    print("ButtonParamsEvent   ", obj)
+end
+function End()
+    print("lua End")
+end

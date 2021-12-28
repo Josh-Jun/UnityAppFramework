@@ -17,7 +17,7 @@ namespace Hotfix
         public void Begin()
         {
             string prefab_HotfixPath = "App/Hotfix/Windows/HotfixWindow";
-            hotfixWin = this.LoadWindow<HotfixWindow>(prefab_HotfixPath);
+            hotfixWin = this.LoadLocalWindow<HotfixWindow>(prefab_HotfixPath);
             hotfixWin.SetWindowActive();
 
             hotfixWin.SetTipsText("检查更新中...");
