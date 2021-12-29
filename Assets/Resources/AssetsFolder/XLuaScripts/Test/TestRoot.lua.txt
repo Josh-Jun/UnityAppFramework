@@ -13,11 +13,11 @@ function Begin()
 	self:LoadWindow(prefab_TestPath, true);
 end
 function ButtonEvent()
-    print("ButtonEvent   触发不带参数事件")
+    print("ButtonEvent = ", "触发不带参数事件")
 	self:CallWindow("SetText", "触发不带参数事件")
 end
 function ButtonParamsEvent(obj)
-    print("ButtonParamsEvent   ", obj[0])
+    print("ButtonParamsEvent = ", obj[0])
 	self:CallWindow("SetText", obj[0])
 end
 function End()

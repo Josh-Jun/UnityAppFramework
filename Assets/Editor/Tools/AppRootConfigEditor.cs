@@ -67,7 +67,7 @@ public class AppRootConfigWindowEditor : EditorWindow
             {
                 SceneName = "TestScene",
                 ScriptName = "Test.TestRoot",
-                LuaScriptPath = "Test/Test/TestRoot",
+                LuaScriptPath = "Test/TestRoot",
             };
             Add(rootScript);
             config.RootScript.Add(rootScript);
