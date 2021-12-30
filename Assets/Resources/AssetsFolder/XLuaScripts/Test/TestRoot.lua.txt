@@ -18,11 +18,11 @@ function Begin()
 end
 function ButtonEvent()
     print("ButtonEvent = ", "触发不带参数事件")
-	test:Call("SetText", "触发不带参数事件")
+	test:CallMethod("SetText", "触发不带参数事件")
 end
 function ButtonParamsEvent(obj)
     print("ButtonParamsEvent = ", obj[0])
-	test:Call("SetText", obj[0])
+	test:CallMethod("SetText", obj[0])
 end
 function End()
     print("lua End")
