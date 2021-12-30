@@ -1,5 +1,6 @@
-local UnityEngine=CS.UnityEngine
-
+local UnityEngine = CS.UnityEngine
+local TimerManager = CS.TimerManager
+local test
 function Init()
     print("lua Init...")
 	self:AddEventMsg("BtnEvent", ButtonEvent);
@@ -10,15 +11,18 @@ end
 function Begin()
     print("lua Begin...")
 	local prefab_TestPath = "Test/Assets/Windows/TestWindow";
-	self:LoadWindow(prefab_TestPath, true);
+	test = self:LoadWindow(prefab_TestPath, true);
+    TimerManager.Instance:StartTimer(function(obj)
+		--print("TimerManager = ", obj)
+	end);
 end
 function ButtonEvent()
     print("ButtonEvent = ", "触发不带参数事件")
-	self:CallWindow("SetText", "触发不带参数事件")
+	test:Call("SetText", "触发不带参数事件")
 end
 function ButtonParamsEvent(obj)
     print("ButtonParamsEvent = ", obj[0])
-	self:CallWindow("SetText", obj[0])
+	test:Call("SetText", obj[0])
 end
 function End()
     print("lua End")

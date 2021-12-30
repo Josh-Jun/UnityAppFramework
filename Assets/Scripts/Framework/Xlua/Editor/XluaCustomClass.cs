@@ -50,6 +50,8 @@ namespace XLuaFrame
             typeof(System.Action<string,System.Object[]>),
             typeof(System.Action<UnityEngine.Vector2,System.Object>),
             typeof(System.Action<UnityEngine.Vector2,System.Object[]>),
+            typeof(System.Action<float>),
+            typeof(System.Action<object[]>),
         };
     }
 }

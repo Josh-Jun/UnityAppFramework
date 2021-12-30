@@ -47,7 +47,7 @@ namespace XLuaFrame
             LuaCallbackPairs[(int)WindowLifeCycle.CloseWindow]?.Invoke();
         }
         private Action<object[]> action;
-        public void Call(string actionName, object[] args)
+        public void Call(string actionName, params object[] args)
         {
             action = scriptEnv.Get<Action<object[]>>(actionName);
             action?.Invoke(args);

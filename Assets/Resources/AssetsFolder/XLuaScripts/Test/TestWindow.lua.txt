@@ -1,4 +1,4 @@
-local UnityEngine=CS.UnityEngine
+local UnityEngine = CS.UnityEngine
 local btn
 local btn_params
 local text
