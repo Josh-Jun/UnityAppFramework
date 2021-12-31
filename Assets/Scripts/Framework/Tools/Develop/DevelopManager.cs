@@ -517,7 +517,7 @@ public static class DevelopManager
                     Debug.LogErrorFormat("{0}:脚本已存在,", fullName);
                 }
             }
-            go.SetGameObjectActive(state);
+            EventDispatcher.TriggerEvent(go.name, state);
             return t;
         }
         return null;
@@ -556,7 +556,7 @@ public static class DevelopManager
                     Debug.LogErrorFormat("{0}:脚本已存在,", fullName);
                 }
             }
-            go.SetGameObjectActive(state);
+            EventDispatcher.TriggerEvent(go.name, state);
             return t;
         }
         return null;
@@ -575,7 +575,7 @@ public static class DevelopManager
             string fullName = string.IsNullOrEmpty(_namespace) ? go.name : string.Format("{0}.{1}", _namespace, go.name);
             Type type = Assembly.GetExecutingAssembly().GetType(fullName);
             Component t = go.AddComponent(type);
-            go.SetGameObjectActive(state);
+            EventDispatcher.TriggerEvent(go.name, state);
             return t;
         }
         return null;
@@ -594,7 +594,7 @@ public static class DevelopManager
             string fullName = string.IsNullOrEmpty(_namespace) ? go.name : string.Format("{0}.{1}", _namespace, go.name);
             Type type = Assembly.GetExecutingAssembly().GetType(fullName);
             T t = (T)go.AddComponent(type);
-            go.SetGameObjectActive(state);
+            EventDispatcher.TriggerEvent(go.name, state);
             return t;
         }
         return null;

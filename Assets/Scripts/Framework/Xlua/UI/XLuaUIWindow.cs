@@ -39,7 +39,9 @@ namespace XLuaFrame
         protected override void OpenWindow()
         {
             base.OpenWindow();
-            LuaCallbackPairs[(int)WindowLifeCycle.OpenWindow]?.Invoke();
+            TimerTaskManager.Instance.AddFrameTask(() => {
+                LuaCallbackPairs[(int)WindowLifeCycle.OpenWindow]?.Invoke();
+            }, 1);
         }
         /// <summary>关闭窗口</summary>
         protected override void CloseWindow()
