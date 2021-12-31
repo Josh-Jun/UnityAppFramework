@@ -37,5 +37,13 @@ public static class DOTweenCustomExport
         typeof(DG.Tweening.TweenExtensions),
         typeof(DG.Tweening.TweenSettingsExtensions),
         typeof(DG.Tweening.ShortcutExtensions),
+        typeof(DG.Tweening.DOTweenModuleUI),
+        typeof(DG.Tweening.DOTweenCYInstruction),
+        typeof(DG.Tweening.DOTweenModuleUnityVersion),
+        typeof(DG.Tweening.DOTweenModuleSprite),
+        typeof(DG.Tweening.DOTweenModuleUtils),
+        typeof(DG.Tweening.DOTweenModulePhysics2D),
+        typeof(DG.Tweening.DOTweenModulePhysics),
+        typeof(DG.Tweening.DOTweenModuleAudio)
     };
 }
