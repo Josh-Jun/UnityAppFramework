@@ -47,7 +47,7 @@ public class TimerTaskManager : SingletonMono<TimerTaskManager>
 
     #region 时间任务
     /// <summary>添加时间任务(默认:毫秒)</summary>
-    public int AddTimeTask(Action action, float delayTime, TimeUnit timeUnit = TimeUnit.Millisecond, int count = 1)
+    public int AddTimeTask(Action action, float delayTime, TimeUnit timeUnit = TimeUnit.Second, int count = 1)
     {
         return timer.AddTimeTask(action, delayTime, timeUnit, count);
     }
@@ -59,7 +59,7 @@ public class TimerTaskManager : SingletonMono<TimerTaskManager>
     }
 
     /// <summary>替换时间任务</summary>
-    public bool ReplaceTimeTask(int id, Action action, float delayTime, TimeUnit timeUnit = TimeUnit.Millisecond, int count = 1)
+    public bool ReplaceTimeTask(int id, Action action, float delayTime, TimeUnit timeUnit = TimeUnit.Second, int count = 1)
     {
         return timer.ReplaceTimeTask(id, action, delayTime, timeUnit, count);
     }

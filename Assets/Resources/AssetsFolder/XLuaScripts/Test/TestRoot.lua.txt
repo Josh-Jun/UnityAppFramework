@@ -1,5 +1,6 @@
 local UnityEngine = CS.UnityEngine
 local TimerManager = CS.TimerManager
+local TimerTaskManager = CS.TimerTaskManager
 local test
 function Init()
     print("lua Init...")
@@ -15,6 +16,9 @@ function Begin()
     TimerManager.Instance:StartTimer(function(obj)
 		--print("TimerManager = ", obj)
 	end);
+    TimerTaskManager.Instance:AddTimeTask(function()
+		print("TimerTaskManager = 5")
+	end, 5)
 end
 function ButtonEvent()
     print("ButtonEvent = ", "触发不带参数事件")
