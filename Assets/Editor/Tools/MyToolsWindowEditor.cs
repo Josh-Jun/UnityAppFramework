@@ -114,6 +114,8 @@ public class MyToolsWindowEditor : EditorWindow
         GUILayout.EndVertical();
         #endregion
 
+        EditorGUILayout.Space();
+
         #region 2、查找同名文件
         GUILayout.Label(new GUIContent("Find Same File Name"), titleStyle);
 
@@ -150,6 +152,21 @@ public class MyToolsWindowEditor : EditorWindow
             EditorApplication.delayCall += FindSameFileName;
         }
 
+        GUILayout.EndVertical();
+        #endregion
+
+        EditorGUILayout.Space();
+
+        #region 3、清理PlayerPrefs数据
+        GUILayout.Label(new GUIContent("清理PlayerPrefs数据"), titleStyle);
+
+        EditorGUILayout.Space();
+
+        GUILayout.BeginVertical();
+        if (GUILayout.Button("清理PlayerPrefs数据"))
+        {
+            PlayerPrefs.DeleteAll();
+        }
         GUILayout.EndVertical();
         #endregion
     }
