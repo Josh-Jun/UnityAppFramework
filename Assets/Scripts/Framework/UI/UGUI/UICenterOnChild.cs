@@ -9,7 +9,7 @@ using System;
 public class UICenterOnChild : MonoBehaviour, IBeginDragHandler, IEndDragHandler
 {
     public float scrollSpeed = 8f;
-    public Transform Content;
+    public float scrollDistance = 200f;
 
     private ScrollRect scrollRect;
     private float[] pageArray;
@@ -24,6 +24,8 @@ public class UICenterOnChild : MonoBehaviour, IBeginDragHandler, IEndDragHandler
     /// <summary> 获取总页数 </summary>
     public int GetTotalPages { get { return pageCount; } private set { } }
 
+    public delegate void IntValueDelegate(int value);
+    public event IntValueDelegate OnDragEndEvent;
     // Use this for initialization
     void Awake()
     {
@@ -33,9 +35,9 @@ public class UICenterOnChild : MonoBehaviour, IBeginDragHandler, IEndDragHandler
     /// <summary>
     /// 初始化获取元素总个数
     /// </summary>
-    void InitPageArray()
+    public void InitPageArray()
     {
-        foreach (Transform item in Content)
+        foreach (Transform item in scrollRect.content)
         {
             if (item.gameObject.activeSelf && !items.Contains(item))
             {
@@ -66,33 +68,50 @@ public class UICenterOnChild : MonoBehaviour, IBeginDragHandler, IEndDragHandler
         }
     }
 
+    private Vector2 beginPos;
     public void OnBeginDrag(PointerEventData eventData)
     {
         isDrag = true;
+        beginPos = eventData.position;
     }
-
     public void OnEndDrag(PointerEventData eventData)
     {
         isDrag = false;
-        float pos = scrollRect.horizontal ? scrollRect.horizontalNormalizedPosition : scrollRect.verticalNormalizedPosition;
-        int index = 0;
-        float offset = Math.Abs(pageArray[index] - pos);
-        for (int i = 1; i < pageArray.Length; i++)
+
+        //float pos = scrollRect.horizontal ? scrollRect.horizontalNormalizedPosition : scrollRect.verticalNormalizedPosition;
+        //int index = 0;
+        //float offset = Math.Abs(pageArray[index] - pos);
+        //for (int i = 1; i < pageArray.Length; i++)
+        //{
+        //    float _offset = Math.Abs(pageArray[i] - pos);
+        //    if (_offset < offset)
+        //    {
+        //        index = i;
+        //        offset = _offset;
+        //    }
+        //}
+        //targetPagePosition = pageArray[index];
+        //currentPage = index;
+        //OnDragEndEvent?.Invoke(currentPage);
+
+        Vector2 dirV2 = eventData.position - beginPos;
+        var dir = scrollRect.horizontal ? dirV2.x > 0 : dirV2.y > 0;
+        if (Math.Abs(dirV2.x) > scrollDistance)
         {
-            float _offset = Math.Abs(pageArray[i] - pos);
-            if (_offset < offset)
+            if (dir)
             {
-                index = i;
-                offset = _offset;
+                ToPrevious((int page) => { OnDragEndEvent?.Invoke(page); });
+            }
+            else
+            {
+                ToNext((int page) => { OnDragEndEvent?.Invoke(page); });
             }
         }
-        targetPagePosition = pageArray[index];
-        currentPage = index;
     }
     /// <summary>
-    /// 向左移动一个元素
+    /// 向前移动一个元素
     /// </summary>
-    public void ToLeft(Action<int> callback = null)
+    public void ToPrevious(Action<int> callback = null)
     {
         if (currentPage > 0)
         {
@@ -102,9 +121,9 @@ public class UICenterOnChild : MonoBehaviour, IBeginDragHandler, IEndDragHandler
         callback?.Invoke(currentPage);
     }
     /// <summary>
-    /// 向右移动一个元素
+    /// 向后移动一个元素
     /// </summary>
-    public void ToRight(Action<int> callback = null)
+    public void ToNext(Action<int> callback = null)
     {
         if (currentPage < pageCount - 1)
         {
