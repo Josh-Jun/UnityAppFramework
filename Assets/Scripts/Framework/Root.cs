@@ -1,4 +1,4 @@
-﻿using Hotfix;
+using Hotfix;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,7 +41,7 @@ public class Root
         {
             IRoot iRoot;
             //判断是否存在XLua脚本，如果存在，执行XLua代码，不存在执行C#代码
-            if (XLuaManager.Instance.IsLuaFileExist(rootConfig.RootScript[i].LuaScriptPath) && RunXLuaScripts)
+            if (RunXLuaScripts && XLuaManager.Instance.IsLuaFileExist(rootConfig.RootScript[i].LuaScriptPath))
             {
                 XLuaRoot root = new XLuaRoot();
                 root.Init(rootConfig.RootScript[i].LuaScriptPath);
