@@ -198,7 +198,7 @@ public class UnityWebRequester
     /// 向服务器提交post请求
     /// </summary>
     /// <param name="url">服务器请求目标地址,like "http://www.my-server.com/myform"</param>
-    /// <param name="lstformData">form表单参数</param>
+    /// <param name="lstformData">IMultipartFormSection表单参数</param>
     /// <param name="actionResult">处理返回结果的委托,处理请求对象</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
@@ -228,7 +228,7 @@ public class UnityWebRequester
     /// 向服务器提交post请求
     /// </summary>
     /// <param name="url">服务器请求目标地址,like "http://www.my-server.com/myform"</param>
-    /// <param name="formFields">form表单参数</param>
+    /// <param name="formFields">字典</param>
     /// <param name="actionResult">处理返回结果的委托,处理请求对象</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
@@ -241,11 +241,23 @@ public class UnityWebRequester
     /// 向服务器提交post请求
     /// </summary>
     /// <param name="url">服务器请求目标地址,like "http://www.my-server.com/myform"</param>
-    /// <param name="postData">form表单参数</param>
+    /// <param name="postData">json字符串</param>
     /// <param name="actionResult">处理返回结果的委托,处理请求对象</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
     public void Post(string url, string postData, Action<UnityWebRequest> actionResult, string contentType = "application/json")
+    {
+        mono.StartCoroutine(IE_Post(url, postData, actionResult, contentType));
+    }
+    /// <summary>
+    /// 向服务器提交post请求
+    /// </summary>
+    /// <param name="url">服务器请求目标地址,like "http://www.my-server.com/myform"</param>
+    /// <param name="postData">json字符串byte[]</param>
+    /// <param name="actionResult">处理返回结果的委托,处理请求对象</param>
+    /// <param name="actionProgress"></param>
+    /// <returns></returns>
+    public void Post(string url, byte[] postData, Action<UnityWebRequest> actionResult, string contentType = "application/json")
     {
         mono.StartCoroutine(IE_Post(url, postData, actionResult, contentType));
     }
@@ -388,7 +400,7 @@ public class UnityWebRequester
     /// 向服务器提交post请求
     /// </summary>
     /// <param name="url">服务器请求目标地址,like "http://www.my-server.com/myform"</param>
-    /// <param name="lstformData">form表单参数</param>
+    /// <param name="lstformData">IMultipartFormSection表单参数</param>
     /// <param name="actionResult">处理返回结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
@@ -427,7 +439,7 @@ public class UnityWebRequester
     /// 向服务器提交post请求
     /// </summary>
     /// <param name="url">服务器请求目标地址,like "http://www.my-server.com/myform"</param>
-    /// <param name="postData">form表单参数</param>
+    /// <param name="postData">json字符串</param>
     /// <param name="actionResult">处理返回结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
@@ -445,7 +457,27 @@ public class UnityWebRequester
     /// 向服务器提交post请求
     /// </summary>
     /// <param name="url">服务器请求目标地址,like "http://www.my-server.com/myform"</param>
-    /// <param name="formFields">form表单参数</param>
+    /// <param name="postData">json字符串byte[]</param>
+    /// <param name="actionResult">处理返回结果的委托</param>
+    /// <param name="actionProgress"></param>
+    /// <returns></returns>
+    public IEnumerator IE_Post(string url, byte[] postData, Action<UnityWebRequest> actionResult, string contentType = "application/json")
+    {
+        using (uwr = UnityWebRequest.Post(url, "POST"))
+        {
+            uwr.uploadHandler = new UploadHandlerRaw(postData);
+            uwr.downloadHandler = new DownloadHandlerBuffer();
+            if (!string.IsNullOrEmpty(contentType))
+                uwr.SetRequestHeader("Content-Type", contentType);
+            yield return uwr.SendWebRequest();
+            actionResult?.Invoke(uwr);
+        }
+    }
+    /// <summary>
+    /// 向服务器提交post请求
+    /// </summary>
+    /// <param name="url">服务器请求目标地址,like "http://www.my-server.com/myform"</param>
+    /// <param name="formFields">字典</param>
     /// <param name="actionResult">处理返回结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
@@ -480,7 +512,7 @@ public class UnityWebRequester
     /// 通过PUT方式将字节流传到服务器
     /// </summary>
     /// <param name="url">服务器目标地址 like 'http://www.my-server.com/upload' </param>
-    /// <param name="content">需要上传的字节流</param>
+    /// <param name="content">需要上传的字符串</param>
     /// <param name="actionResult">处理返回结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
