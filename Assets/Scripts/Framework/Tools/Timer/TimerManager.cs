@@ -5,6 +5,7 @@ using UnityEngine;
 public class TimerManager : SingletonMono<TimerManager> {
     private int timeId = 0;//下标
     private List<TimerData> timerLst = new List<TimerData>();//计时Lst
+    private List<TimerData> timerFixedLst = new List<TimerData>();//计时Lst
 
     private void Update() {
         if(timerLst.Count > 0) {
@@ -18,45 +19,63 @@ public class TimerManager : SingletonMono<TimerManager> {
         }
     }
 
+    private void FixedUpdate(){
+        if (timerFixedLst.Count > 0){
+            for (int i = 0; i < timerFixedLst.Count; i++){
+                TimerData timeData = timerFixedLst[i];
+                if (timeData.isTime){
+                    timeData.addTime += Time.deltaTime;
+                    timeData.cb(timeData.addTime);
+                }
+            }
+        }
+    }
     /// <summary>开始计时</summary>
-    public int StartTimer(Action<float> cb) {
+    public int StartTimer(Action<float> cb, bool isFixed = false) {
         timeId += 1;
-        TimerData timer = new TimerData
-        {
+        TimerData timer = new TimerData{
             id = timeId,
             isTime = true,
             addTime = 0,
             cb = cb,
         };
+        if (isFixed){
+            timerFixedLst.Add(timer);
+        } else{
+            timerLst.Add(timer);
+        }
         timerLst.Add(timer);
         return timeId;
     }
 
     /// <summary>暂停计时</summary>
-    public void PauseTimer(int id) {
-        for(int i = 0 ; i < timerLst.Count ; i++) {
-            if(timerLst[i].id == id) {
-                timerLst[i].isTime = false;
+    public void PauseTimer(int id, bool isFixed = false) {
+        List<TimerData> data = isFixed ? timerFixedLst : timerLst;
+        for (int i = 0 ; i < data.Count ; i++) {
+            if(data[i].id == id) {
+                data[i].isTime = false;
                 break;
             }
         }
     }
 
     /// <summary>继续计时</summary>
-    public void ContinueTimer(int id) {
-        for(int i = 0 ; i < timerLst.Count ; i++) {
-            if(timerLst[i].id == id) {
-                timerLst[i].isTime = true;
+    public void ContinueTimer(int id, bool isFixed = false){
+        List<TimerData> data = isFixed ? timerFixedLst : timerLst;
+        for (int i = 0 ; i < data.Count ; i++) {
+            if(data[i].id == id) {
+                data[i].isTime = true;
                 break;
             }
         }
     }
 
     /// <summary>结束计时</summary>
-    public void EndTimer(int id) {
-        for(int i = 0 ; i < timerLst.Count ; i++) {
-            if(timerLst[i].id == id) {
-                timerLst.Remove(timerLst[i]);
+    public void EndTimer(int id, bool isFixed = false) {
+        List<TimerData> data = isFixed ? timerFixedLst : timerLst;
+        for (int i = 0 ; i < data.Count ; i++) {
+            if(data[i].id == id) {
+                data.Remove(data[i]);
                 break;
             }
         }
@@ -65,6 +84,7 @@ public class TimerManager : SingletonMono<TimerManager> {
     /// <summary>结束所有计时</summary>
     public void EndAllTimer() {
         timerLst.Clear();
+        timerFixedLst.Clear();
     }
 
     /// <summary>获取秒</summary>
@@ -129,11 +149,4 @@ public class TimerManager : SingletonMono<TimerManager> {
         int s = Mathf.FloorToInt(time - m * 60f - h * 3600f);
         return string.Format("{0:00}:{1:00}:{2:00}", h, m, s);
     }
-}
-/// <summary>计时数据</summary>
-public class TimerData {
-    public int id;//计时Id
-    public bool isTime;//是否计时
-    public float addTime;//累计时间
-    public Action<float> cb;//回调
 }

@@ -704,3 +704,11 @@ public enum TimeUnit
     Day,//天
 }
 #endregion
+/// <summary>计时数据</summary>
+public class TimerData
+{
+    public int id;//计时Id
+    public bool isTime;//是否计时
+    public float addTime;//累计时间
+    public Action<float> cb;//回调
+}
