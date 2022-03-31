@@ -45,7 +45,7 @@ public class AppRootConfigWindowEditor : EditorWindow
                 config.RootScript[i].ScriptName = EditorGUILayout.TextField(config.RootScript[i].ScriptName);
                 GUILayout.Label("3.LuaScriptPath");
                 config.RootScript[i].LuaScriptPath = EditorGUILayout.TextField(config.RootScript[i].LuaScriptPath);
-                if (GUILayout.Button("-", titleStyle))
+                if (GUILayout.Button("Remove", titleStyle))
                 {
                     if (config.RootScript.Count > 1)
                     {
@@ -61,7 +61,7 @@ public class AppRootConfigWindowEditor : EditorWindow
             }
         }
         EditorGUILayout.Space();
-        if (GUILayout.Button("+"))
+        if (GUILayout.Button("Add New Root Script"))
         {
             RootScript rootScript = new RootScript
             {
