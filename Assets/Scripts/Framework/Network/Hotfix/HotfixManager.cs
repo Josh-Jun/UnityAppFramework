@@ -147,7 +147,7 @@ public class HotfixManager : SingletonEvent<HotfixManager>
             unityWebRequester = requester.Value;
             yield return requester.Value.IE_Get(ServerUrl + requester.Key.BundleName, (UnityWebRequest uwr) =>
             {
-                if (!uwr.isNetworkError)
+                if (uwr.result == UnityWebRequest.Result.Success)
                 {
                     FileManager.CreateFile(LocalPath + requester.Key.BundleName, uwr.downloadHandler.data);
                     unityWebRequester = null;
@@ -167,7 +167,7 @@ public class HotfixManager : SingletonEvent<HotfixManager>
         UnityWebRequester requester = new UnityWebRequester(App.app);
         requester.Get(url, (UnityWebRequest uwr) =>
         {
-            byte[] data = uwr.isNetworkError ? null : uwr.downloadHandler.data;
+            byte[] data = uwr.result == UnityWebRequest.Result.Success ? uwr.downloadHandler.data : null;
             action?.Invoke(data);
             requester.Destory();
         });
