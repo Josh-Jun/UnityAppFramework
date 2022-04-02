@@ -22,7 +22,7 @@ public class AssetBundleWindowEditor : EditorWindow
 
     private string version = "1";
 
-    [MenuItem("Tools/Build AssetBundle", false, 1)]
+    [MenuItem("Tools/My ToolsWindow/Build AssetBundle", false, 1)]
     public static void OpenWindow()
     {
         titleStyle = new GUIStyle("OL Title")
@@ -285,7 +285,7 @@ public class AssetBundleWindowEditor : EditorWindow
     {
         //移动到根目录
         string newPath = MoveAssetsToRoot(buildPath);
-        string outPath = Application.dataPath.Replace("Assets", "") + outputPath + "/" + PlatformManager.Instance.Name();
+        string outPath = Application.dataPath.Replace("Assets", "") + outputPath + "/" + buildTarget;
         if (!FileManager.FolderExist(outPath))
         {
             FileManager.CreateFolder(outPath);
@@ -319,7 +319,7 @@ public class AssetBundleWindowEditor : EditorWindow
     private void CreateFile()
     {
         // outPath = E:/Shuai/AssetBundle/Assets/StreamingAssets/Windows
-        string outPath = Application.dataPath.Replace("Assets", "") + outputPath + "/" + PlatformManager.Instance.Name();
+        string outPath = Application.dataPath.Replace("Assets", "") + outputPath + "/" + buildTarget;
         string filePath = outPath + "/AssetBundleConfig.xml";
         if (File.Exists(filePath))
             File.Delete(filePath);

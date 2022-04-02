@@ -5,7 +5,7 @@ using UnityEditor;
 using DG.Tweening;
 public class EasingDemoPreviewWindowEditor : EditorWindow
 {
-    [MenuItem("Tools/Dotween Easing Demo", false, 3)]
+    [MenuItem("Tools/My ToolsWindow/Dotween Easing Demo", false, 3)]
     public static void ShowWindow()
     {
         GetWindowWithRect<EasingDemoPreviewWindowEditor>(new Rect(0, 0, 400, 480), false, "Dotween Easing Demo");

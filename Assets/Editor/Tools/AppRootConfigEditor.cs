@@ -10,7 +10,7 @@ public class AppRootConfigWindowEditor : EditorWindow
     private static GUIStyle titleStyle;
     private static RootScriptConfig config;
     private static readonly string configPath = "AssetsFolder/App/Assets/AppRootConfig";
-    [MenuItem("Tools/Set AppRootConfig", false, 0)]
+    [MenuItem("Tools/My ToolsWindow/Set AppRootConfig", false, 0)]
     public static void OpenWindow()
     {
         titleStyle = new GUIStyle("OL Title")
