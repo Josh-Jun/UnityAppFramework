@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class TcpManager : SingletonMono<TcpManager>
+public class LanTcpManager : SingletonMono<LanTcpManager>
 {
     private static readonly string lockNetTcp = "lockNetTcp";//加锁
 

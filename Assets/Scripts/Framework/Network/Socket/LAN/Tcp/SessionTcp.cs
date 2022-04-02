@@ -13,13 +13,13 @@ public class SessionTcp : SessionTcpBase
     {
         byte[] data = Encoding.UTF8.GetBytes(msg.ToCharArray());
         GameMsg gameMsg = SocketTools.DeSerialize<GameMsg>(data);
-        TcpManager.Instance.AddMsgQueue(this, gameMsg);//服务端=>加入队列
-        TcpManager.Instance.AddMsgQueue(gameMsg);//客户端=>加入队列
+        LanTcpManager.Instance.AddMsgQueue(this, gameMsg);//服务端=>加入队列
+        LanTcpManager.Instance.AddMsgQueue(gameMsg);//客户端=>加入队列
     }
 
     //断开连接
     protected override void OnDisConnected()
     {
-        TcpManager.Instance.AddOffLine(this);
+        LanTcpManager.Instance.AddOffLine(this);
     }
 }

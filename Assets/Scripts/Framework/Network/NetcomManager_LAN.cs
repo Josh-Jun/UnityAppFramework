@@ -11,45 +11,45 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
     /// <summary> 开启Tcp服务端 </summary>
     public void StartTcpServer(string ip, Action<bool> cb = null)
     {
-        TcpManager.Instance.InitServerNet(ip, Port, cb);
+        LanTcpManager.Instance.InitServerNet(ip, Port, cb);
     }
     /// <summary> 给所有客户端发送消息 </summary>
     public void ServerSendToClientMsg_All(string eventName, params object[] objs)
     {
         GameMsg gameMsg = GetServerGameMsg(CMD.SCMsg_All, eventName, objs);
-        TcpManager.Instance.SendMsgAll(gameMsg);
+        LanTcpManager.Instance.SendMsgAll(gameMsg);
     }
     /// <summary> 给客户端列表发送消息 </summary>
     public void ServerSendToClientMsg_List(string eventName, List<string> list, params object[] objs)
     {
         GameMsg gameMsg = GetServerGameMsg(CMD.SCMsg_List, eventName, objs);
-        TcpManager.Instance.SendMsgAll(gameMsg, list);
+        LanTcpManager.Instance.SendMsgAll(gameMsg, list);
     }
     /// <summary> 给单个客户端发送消息 </summary>
     public void ServerSendToClientMsg_One(string eventName, SessionTcp session, params object[] objs)
     {
         GameMsg gameMsg = GetServerGameMsg(CMD.SCMsg_One, eventName, objs);
-        TcpManager.Instance.SendMsg(session, gameMsg);
+        LanTcpManager.Instance.SendMsg(session, gameMsg);
     }
     /// <summary> 给单个客户端发送消息 </summary>
     public void ServerSendToClientMsg_One(string eventName, string deviceId, params object[] objs)
     {
-        SessionTcp session = TcpManager.Instance.GetStudentSessionByDeviceId(deviceId);
+        SessionTcp session = LanTcpManager.Instance.GetStudentSessionByDeviceId(deviceId);
         GameMsg gameMsg = GetServerGameMsg(CMD.SCMsg_One, eventName, objs);
-        TcpManager.Instance.SendMsg(session, gameMsg);
+        LanTcpManager.Instance.SendMsg(session, gameMsg);
     }
     /// <summary> 给客户端发送消息(移除自己) </summary>
     public void ServerSendToClientMsg_Unself(string eventName, string deviceId, params object[] objs)
     {
-        SessionTcp session = TcpManager.Instance.GetStudentSessionByDeviceId(deviceId);
+        SessionTcp session = LanTcpManager.Instance.GetStudentSessionByDeviceId(deviceId);
         GameMsg gameMsg = GetServerGameMsg(CMD.SCMsg_UnSelf, null, eventName, objs);
-        TcpManager.Instance.SendMsgAll(session, gameMsg);
+        LanTcpManager.Instance.SendMsgAll(session, gameMsg);
     }
     /// <summary> 给客户端发送消息(移除自己) </summary>
     public void ServerSendToClientMsg_Unself(string eventName, SessionTcp session, params object[] objs)
     {
         GameMsg gameMsg = GetServerGameMsg(CMD.SCMsg_UnSelf, null, eventName, objs);
-        TcpManager.Instance.SendMsgAll(session, gameMsg);
+        LanTcpManager.Instance.SendMsgAll(session, gameMsg);
     }
     /// <summary> 获取消息包 </summary>
     private GameMsg GetServerGameMsg(CMD cmd, string eventName, params object[] objs)
@@ -70,37 +70,37 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
     /// <summary> 开启Tcp客户端 </summary>
     public void StartTcpClient(string ip, Action<bool> cb = null)
     {
-        TcpManager.Instance.InitServerNet(ip, Port, cb);
+        LanTcpManager.Instance.InitServerNet(ip, Port, cb);
     }
     /// <summary> 给服务端发送消息 </summary>
     public void ClientSendToServerMsg(string eventName, params object[] objs)
     {
         GameMsg gameMsg = GetClientGameMsg(CMD.CSMsg, null, eventName, objs);
-        TcpManager.Instance.SendMsg(gameMsg);
+        LanTcpManager.Instance.SendMsg(gameMsg);
     }
     /// <summary> 给客户端发送消息(包含自己) </summary>
     public void ClientSendToClientMsg_All(string eventName, params object[] objs)
     {
         GameMsg gameMsg = GetClientGameMsg(CMD.CCMsg_All, null, eventName, objs);
-        TcpManager.Instance.SendMsg(gameMsg);
+        LanTcpManager.Instance.SendMsg(gameMsg);
     }
     /// <summary> 给客户端发送消息(客户端列表) </summary>
     public void ClientSendToClientMsg_List(string eventName, List<string> list, params object[] objs)
     {
         GameMsg gameMsg = GetClientGameMsg(CMD.CCMsg_List, list, eventName, objs);
-        TcpManager.Instance.SendMsg(gameMsg);
+        LanTcpManager.Instance.SendMsg(gameMsg);
     }
     /// <summary> 给客户端发送消息(一个客户端) </summary>
     public void ClientSendToClientMsg_One(string eventName, string deviceId, params object[] objs)
     {
         GameMsg gameMsg = GetClientGameMsg(CMD.CCMsg_One, deviceId, eventName, objs);
-        TcpManager.Instance.SendMsg(gameMsg);
+        LanTcpManager.Instance.SendMsg(gameMsg);
     }
     /// <summary> 给客户端发送消息(移除自己) </summary>
     public void ClientSendToClientMsg_UnSelf(string eventName, params object[] objs)
     {
         GameMsg gameMsg = GetClientGameMsg(CMD.CCMsg_UnSelf, null, eventName, objs);
-        TcpManager.Instance.SendMsg(gameMsg);
+        LanTcpManager.Instance.SendMsg(gameMsg);
     }
 
     /// <summary> 获取消息包 </summary>
@@ -144,9 +144,9 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
     public void CCPushMsg_One(GameMsg gameMsg)
     {
         string deviceId = (string)gameMsg.pushMsg.Param;
-        SessionTcp session = TcpManager.Instance.GetStudentSessionByDeviceId(deviceId);
+        SessionTcp session = LanTcpManager.Instance.GetStudentSessionByDeviceId(deviceId);
         gameMsg.pushMsg.Param = null;
-        TcpManager.Instance.SendMsg(session, gameMsg);
+        LanTcpManager.Instance.SendMsg(session, gameMsg);
     }
 
     /// <summary> 客户端转发客户端(多人) </summary>
@@ -154,18 +154,18 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
     {
         List<string> list = (List<string>)gameMsg.pushMsg.Param;
         gameMsg.pushMsg.Param = null;
-        TcpManager.Instance.SendMsgAll(gameMsg, list);
+        LanTcpManager.Instance.SendMsgAll(gameMsg, list);
     }
     /// <summary> 客户端转发客户端(移除自己) </summary>
     public void CCPushMsg_UnSelf(SessionTcp session, GameMsg gameMsg)
     {
-        TcpManager.Instance.SendMsgAll(session, gameMsg);
+        LanTcpManager.Instance.SendMsgAll(session, gameMsg);
     }
 
     /// <summary> 客户端转发客户端(所有人) </summary>
     public void CCPushMsg_All(GameMsg gameMsg)
     {
-        TcpManager.Instance.SendMsgAll(gameMsg);
+        LanTcpManager.Instance.SendMsgAll(gameMsg);
     }
     #endregion
     #endregion
@@ -176,19 +176,19 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
     #region Server
     public void StartUdpServer(Action<bool> cb = null)
     {
-        UdpManager.Instance.InitServerNet(Port, cb);
+        LanUdpManager.Instance.InitServerNet(Port, cb);
     }
     #endregion
 
     #region Client
     public void StartUdpClient(Action<bool> cb = null)
     {
-        UdpManager.Instance.InitClientNet(Port, cb);
+        LanUdpManager.Instance.InitClientNet(Port, cb);
     }
     #endregion
     public void SendMsg(string msg)
     {
-        UdpManager.Instance.SendMsg(msg);
+        LanUdpManager.Instance.SendMsg(msg);
     }
     public void ReceiveMsg(string msg)
     {

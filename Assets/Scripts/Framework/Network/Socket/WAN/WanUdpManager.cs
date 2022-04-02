@@ -7,7 +7,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Text;
 
-public class SocketUDPManager : SingletonMonoEvent<SocketUDPManager>
+public class WanUdpManager : SingletonMonoEvent<WanUdpManager>
 {
 	private Socket socketUdp;
 	private IPEndPoint iep;

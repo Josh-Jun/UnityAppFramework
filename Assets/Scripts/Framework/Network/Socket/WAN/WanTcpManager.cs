@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
 
-public class SocketTCPManager : SingletonMonoEvent<SocketTCPManager>
+public class WanTcpManager : SingletonMonoEvent<WanTcpManager>
 {
     private Socket socketTcp = null;
     public int backlog = 100;

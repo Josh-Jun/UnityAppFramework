@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public class UdpManager : SingletonMono<UdpManager>
+public class LanUdpManager : SingletonMono<LanUdpManager>
 {
     private SocketUdp<SessionUdp> server;
     private SocketUdp<SessionUdp> client;

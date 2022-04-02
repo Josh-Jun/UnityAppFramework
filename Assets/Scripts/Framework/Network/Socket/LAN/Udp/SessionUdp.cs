@@ -10,7 +10,7 @@ public class SessionUdp : SessionUdpBase
     //收到数据
     protected override void OnReciveMsg(string msg)
     {
-        UdpManager.Instance.AddMsgQueue(msg);//加入队列
+        LanUdpManager.Instance.AddMsgQueue(msg);//加入队列
     }
 
     //断开连接
