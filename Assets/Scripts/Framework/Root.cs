@@ -20,6 +20,10 @@ public class Root
     private static IRoot HotfixRoot = null;
     public static void Init()
     {
+        TextAsset config = AssetsManager.Instance.LoadAsset<TextAsset>(path_AppRootConfig);
+        rootConfig = XmlSerializeManager.ProtoDeSerialize<RootScriptConfig>(config.bytes);
+        IsDebug = rootConfig.IsDebug;
+        Debuger.Init(IsDebug);
         if (IsHotfix)
         {
             //初始化热更脚本
@@ -36,10 +40,6 @@ public class Root
 
     public static void InitRootScripts(Action callback = null)
     {
-        TextAsset config = AssetsManager.Instance.LoadAsset<TextAsset>(path_AppRootConfig);
-        rootConfig = XmlSerializeManager.ProtoDeSerialize<RootScriptConfig>(config.bytes);
-        IsDebug = rootConfig.IsDebug;
-        Debuger.Init(IsDebug);
         for (int i = 0; i < rootConfig.RootScript.Count; i++)
         {
             IRoot iRoot;
