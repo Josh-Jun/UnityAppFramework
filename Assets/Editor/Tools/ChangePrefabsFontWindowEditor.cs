@@ -15,7 +15,7 @@ public class ChangePrefabsFontWindowEditor : EditorWindow
 
     #endregion
 
-    [MenuItem("Tools/My ToolsWindow/ChangePrefabsFont", false, 2)]
+    [MenuItem("Tools/My ToolsWindow/ChangePrefabsFont", false, 4)]
     public static void OpenWindow()
     {
         titleStyle = new GUIStyle("OL Title")

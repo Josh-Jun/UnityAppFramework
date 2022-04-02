@@ -15,8 +15,8 @@ public class AssetBundleWindowEditor : EditorWindow
     private static GUIStyle titleStyle;
 
     private BuildTarget buildTarget = BuildTarget.StandaloneWindows;
-    private string outputPath = "AssetBundle";
-    private string buildPath = "Assets/Resources/AssetsFolder";
+    private string outputPath;
+    private string buildPath;
     private readonly Dictionary<string, Dictionary<string, string>> sceneDic = new Dictionary<string, Dictionary<string, string>>();
     private readonly Dictionary<string, string> desDic = new Dictionary<string, string>();
 
@@ -31,9 +31,13 @@ public class AssetBundleWindowEditor : EditorWindow
             fontStyle = FontStyle.Bold,
             fontSize = 12
         };
-
         AssetBundleWindowEditor window = GetWindow<AssetBundleWindowEditor>("BuildAssetBundleWindow");
         window.Show();
+    }
+    public void OnEnable()
+    {
+        buildPath = "Assets/Resources/AssetsFolder";
+        outputPath = Application.dataPath.Replace("Assets", "AssetBundle");
     }
     private void OnGUI()
     {
@@ -83,10 +87,6 @@ public class AssetBundleWindowEditor : EditorWindow
             var newPath = EditorUtility.OpenFolderPanel("Bundle Folder", outputPath, string.Empty);
             if (!string.IsNullOrEmpty(newPath))
             {
-                var gamePath = System.IO.Path.GetFullPath(".");
-                gamePath = gamePath.Replace("\\", "/");
-                if (newPath.StartsWith(gamePath) && newPath.Length > gamePath.Length)
-                    newPath = newPath.Remove(0, gamePath.Length + 1);
                 outputPath = newPath;
             }
         }
@@ -285,7 +285,7 @@ public class AssetBundleWindowEditor : EditorWindow
     {
         //移动到根目录
         string newPath = MoveAssetsToRoot(buildPath);
-        string outPath = Application.dataPath.Replace("Assets", "") + outputPath + "/" + buildTarget;
+        string outPath = string.Format("{0}/{1}", outputPath, buildTarget);
         if (!FileManager.FolderExist(outPath))
         {
             FileManager.CreateFolder(outPath);
@@ -303,7 +303,7 @@ public class AssetBundleWindowEditor : EditorWindow
     //[MenuItem("AssetBundle/DeleteAllAssetBundle(一键删除)")]
     private void DeleteAssetBundle()
     {
-        string outPath = Application.dataPath.Replace("Assets", "") + outputPath + "/" + PlatformManager.Instance.Name();
+        string outPath = string.Format("{0}/{1}", outputPath, buildTarget);
         if (!FileManager.FolderExist(outPath))
         {
             return;
@@ -319,7 +319,7 @@ public class AssetBundleWindowEditor : EditorWindow
     private void CreateFile()
     {
         // outPath = E:/Shuai/AssetBundle/Assets/StreamingAssets/Windows
-        string outPath = Application.dataPath.Replace("Assets", "") + outputPath + "/" + buildTarget;
+        string outPath = string.Format("{0}/{1}", outputPath, buildTarget);
         string filePath = outPath + "/AssetBundleConfig.xml";
         if (File.Exists(filePath))
             File.Delete(filePath);

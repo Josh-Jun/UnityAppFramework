@@ -50,7 +50,7 @@ public class FindSameFileNameWindowEditor : EditorWindow
     private string filesPath = "";
     #endregion
 
-    [MenuItem("Tools/My ToolsWindow/FindSameFileName", false, 2)]
+    [MenuItem("Tools/My ToolsWindow/FindSameFileName", false, 3)]
     public static void OpenWindow()
     {
         //texture = AssetDatabase.LoadAssetAtPath("Assets/Editor/Tools/Image/bg.png", typeof(Texture)) as Texture;
