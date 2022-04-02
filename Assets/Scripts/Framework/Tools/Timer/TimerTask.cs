@@ -127,7 +127,7 @@ public class TimerTask
                 }
                 catch (Exception e)
                 {
-                    UnityEngine.Debug.Log(e.ToString());
+                    Debuger.Log(e.ToString());
                 }
 
                 if (timeTask.count == 1)
@@ -310,7 +310,7 @@ public class TimerTask
                 }
                 catch (Exception e)
                 {
-                    UnityEngine.Debug.Log(e.ToString());
+                    Debuger.Log(e.ToString());
                 }
 
                 if (frameTask.count == 1)

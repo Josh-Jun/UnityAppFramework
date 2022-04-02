@@ -26,7 +26,7 @@ public class AssetCaching
     {
         if (nameAssetDic.ContainsKey(assetName))
         {
-            Debug.LogError("此" + assetName + "资源已经加载!");
+            Debuger.LogError("此" + assetName + "资源已经加载!");
             return;
         }
 
@@ -48,7 +48,7 @@ public class AssetCaching
         }
         else
         {
-            Debug.LogError("此" + assetName + "还没被加载!");
+            Debuger.LogError("此" + assetName + "还没被加载!");
             return null;
         }
 
@@ -66,7 +66,7 @@ public class AssetCaching
         }
         else
         {
-            Debug.LogError("此" + assetName + "还没被加载!");
+            Debuger.LogError("此" + assetName + "还没被加载!");
         }
     }
 

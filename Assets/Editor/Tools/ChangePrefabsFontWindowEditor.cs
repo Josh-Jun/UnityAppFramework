@@ -71,7 +71,7 @@ public class ChangePrefabsFontWindowEditor : EditorWindow
     {
         if (changeFont == null)
         {
-            Debug.Log("请选择要更换的字体");
+            Debuger.Log("请选择要更换的字体");
             return;
         }
         string[] allPath = AssetDatabase.FindAssets("t:Prefab", new string[] { prefabsPath });
@@ -85,7 +85,7 @@ public class ChangePrefabsFontWindowEditor : EditorWindow
             }
         }
         AssetDatabase.Refresh();
-        Debug.Log("更换完成");
+        Debuger.Log("更换完成");
     }
     private void SetAllTextFont(Transform go)
     {

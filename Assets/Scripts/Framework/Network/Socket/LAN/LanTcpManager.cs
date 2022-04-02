@@ -29,19 +29,19 @@ public class LanTcpManager : SingletonMono<LanTcpManager>
             {
                 case 0://普通
                     msg = "Log:" + msg;
-                    Debug.Log(msg);
+                    Debuger.Log(msg);
                     break;
                 case 1://警告
                     msg = "Warn:" + msg;
-                    Debug.LogWarning(msg);
+                    Debuger.LogWarning(msg);
                     break;
                 case 2://错误
                     msg = "Error:" + msg;
-                    Debug.LogError(msg);
+                    Debuger.LogError(msg);
                     break;
                 case 3://信息
                     msg = "Info:" + msg;
-                    Debug.Log(msg);
+                    Debuger.Log(msg);
                     break;
             }
         });
@@ -65,19 +65,19 @@ public class LanTcpManager : SingletonMono<LanTcpManager>
             {
                 case 0://普通
                     msg = "Log:" + msg;
-                    Debug.Log(msg);
+                    Debuger.Log(msg);
                     break;
                 case 1://警告
                     msg = "Warn:" + msg;
-                    Debug.LogWarning(msg);
+                    Debuger.LogWarning(msg);
                     break;
                 case 2://错误
                     msg = "Error:" + msg;
-                    Debug.LogError(msg);
+                    Debuger.LogError(msg);
                     break;
                 case 3://信息
                     msg = "Info:" + msg;
-                    Debug.Log(msg);
+                    Debuger.Log(msg);
                     break;
             }
         });
@@ -207,7 +207,7 @@ public class LanTcpManager : SingletonMono<LanTcpManager>
         }
         else
         {
-            Debug.LogError("NetTcpSvc.RemoveSession(SessionTcp session)为空 ");
+            Debuger.LogError("NetTcpSvc.RemoveSession(SessionTcp session)为空 ");
         }
     }
     /// <summary>消息包 </summary>
@@ -236,7 +236,7 @@ public class LanTcpManager : SingletonMono<LanTcpManager>
             }
             catch (Exception e)
             {
-                Debug.LogError(e);
+                Debuger.LogError(e);
             }
         }
     }
@@ -253,7 +253,7 @@ public class LanTcpManager : SingletonMono<LanTcpManager>
             }
             catch (Exception e)
             {
-                Debug.LogError(e);
+                Debuger.LogError(e);
             }
         }
     }
@@ -269,7 +269,7 @@ public class LanTcpManager : SingletonMono<LanTcpManager>
             }
             catch (Exception e)
             {
-                Debug.LogError(e);
+                Debuger.LogError(e);
             }
         }
     }
@@ -406,7 +406,7 @@ public class LanTcpManager : SingletonMono<LanTcpManager>
             }
             catch (Exception e)
             {
-                Debug.LogError(e);
+                Debuger.LogError(e);
             }
         }
     }
@@ -421,7 +421,7 @@ public class LanTcpManager : SingletonMono<LanTcpManager>
             }
             catch (Exception e)
             {
-                Debug.LogError(e);
+                Debuger.LogError(e);
             }
         }
     }
@@ -436,7 +436,7 @@ public class LanTcpManager : SingletonMono<LanTcpManager>
             }
             catch (Exception e)
             {
-                Debug.LogError(e);
+                Debuger.LogError(e);
             }
         }
     }

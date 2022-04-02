@@ -126,7 +126,7 @@ namespace EventController {
                         try {
                             action();
                         } catch(Exception e) {
-                            Debug.LogException(e);
+                            Debuger.Log(e);
                         }
                     }
                     isSuccess = true;
@@ -146,7 +146,7 @@ namespace EventController {
                         try {
                             action(arg1);
                         } catch(Exception e) {
-                            Debug.LogException(e);
+                            Debuger.Log(e);
                         }
                     }
                     isSuccess = true;

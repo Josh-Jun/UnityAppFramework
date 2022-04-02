@@ -51,7 +51,7 @@ public static class DevelopManager
     {
         if (image == null)
         {
-            Debug.LogError("Image is null!!!");
+            Debuger.LogError("Image is null!!!");
             return;
         }
         image.PlayFramesAnimation(sequenceFrames.ToArray(), time, callback, loop);
@@ -60,7 +60,7 @@ public static class DevelopManager
     {
         if (image == null)
         {
-            Debug.LogError("Image is null!!!");
+            Debuger.LogError("Image is null!!!");
             return;
         }
         int index = 0;//可以用来控制起始播放的动画帧索引
@@ -128,7 +128,7 @@ public static class DevelopManager
         }
         else
         {
-            Debug.LogErrorFormat("对象{0} --- 没有脚本:{1}", go.name, typeof(T).Name);
+            Debuger.LogError("对象{0} --- 没有脚本:{1}", go.name, typeof(T).Name);
         }
     }
     /// <summary>
@@ -146,7 +146,7 @@ public static class DevelopManager
         }
         else
         {
-            Debug.LogErrorFormat("对象{0} --- 没有脚本:{1}", com.gameObject.name, typeof(T).Name);
+            Debuger.LogError("对象{0} --- 没有脚本:{1}", com.gameObject.name, typeof(T).Name);
         }
     }
     #endregion
@@ -514,7 +514,7 @@ public static class DevelopManager
                 }
                 else
                 {
-                    Debug.LogErrorFormat("{0}:脚本已存在,", fullName);
+                    Debuger.LogError("{0}:脚本已存在,", fullName);
                 }
             }
             EventDispatcher.TriggerEvent(go.name, state);
@@ -553,7 +553,7 @@ public static class DevelopManager
                 }
                 else
                 {
-                    Debug.LogErrorFormat("{0}:脚本已存在,", fullName);
+                    Debuger.LogError("{0}:脚本已存在,", fullName);
                 }
             }
             EventDispatcher.TriggerEvent(go.name, state);

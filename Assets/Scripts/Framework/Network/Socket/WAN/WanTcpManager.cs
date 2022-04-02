@@ -36,12 +36,12 @@ public class WanTcpManager : SingletonMonoEvent<WanTcpManager>
             socketTcp.Bind(new IPEndPoint(IPAddress.Parse(ip), port));
             socketTcp.Listen(backlog);
             socketTcp.BeginAccept(ClientConnectCallBack, socketTcp);
-            Debug.Log("Tcp服务端开启成功！正在等待连接......");
+            Debuger.Log("Tcp服务端开启成功！正在等待连接......");
             serverCallBack?.Invoke(true);
         }
         catch (Exception ex)
         {
-            Debug.LogError("Tcp服务端开启失败：" + ex.Message);
+            Debuger.LogError("Tcp服务端开启失败：" + ex.Message);
             serverCallBack?.Invoke(false);
         }
     }
@@ -53,13 +53,13 @@ public class WanTcpManager : SingletonMonoEvent<WanTcpManager>
             Socket socket = socketTcp.EndAccept(ar);
             StartReceiveMsg(socket, delegate
             {
-                Debug.Log("客户端断开连接......");
+                Debuger.Log("客户端断开连接......");
             });
-            Debug.Log("Tcp连接客户端成功！正在接收数据......");
+            Debuger.Log("Tcp连接客户端成功！正在接收数据......");
         }
         catch (Exception ex)
         {
-            Debug.LogError("Tcp服务器关闭:" + ex.Message);
+            Debuger.LogError("Tcp服务器关闭:" + ex.Message);
             serverCallBack?.Invoke(false);
         }
         socketTcp.BeginAccept(ClientConnectCallBack, socketTcp);
@@ -83,7 +83,7 @@ public class WanTcpManager : SingletonMonoEvent<WanTcpManager>
         catch (Exception ex)
         {
             SocketTools.LogMsg("Tcp客户端启动失败：" + ex.Message, LogLevel.Error);
-            clientCallBack?.Invoke(obj: false);
+            clientCallBack?.Invoke(false);
         }
     }
     private void ServerConnectCallBack(IAsyncResult ar)
@@ -116,7 +116,7 @@ public class WanTcpManager : SingletonMonoEvent<WanTcpManager>
         }
         catch (Exception ex)
         {
-            Debug.LogError("StartRcvData:" + ex.Message);
+            Debuger.LogError("StartRcvData:" + ex.Message);
         }
     }
 
@@ -153,7 +153,7 @@ public class WanTcpManager : SingletonMonoEvent<WanTcpManager>
         }
         catch (Exception ex)
         {
-            Debug.LogError("ReceiveHeadError:" + ex.Message);
+            Debuger.LogError("ReceiveHeadError:" + ex.Message);
         }
     }
 
@@ -185,7 +185,7 @@ public class WanTcpManager : SingletonMonoEvent<WanTcpManager>
         }
         catch (Exception ex)
         {
-            Debug.LogError("RcvBodyError:" + ex.Message);
+            Debuger.LogError("RcvBodyError:" + ex.Message);
         }
     }
     /// <summary>把消息加入队列</summary>
@@ -225,7 +225,7 @@ public class WanTcpManager : SingletonMonoEvent<WanTcpManager>
         }
         catch (Exception ex)
         {
-            Debug.LogError("SendMsgError:" + ex.Message);
+            Debuger.LogError("SendMsgError:" + ex.Message);
         }
     }
     private byte[] PackageLengthInfo(byte[] data)
@@ -249,7 +249,7 @@ public class WanTcpManager : SingletonMonoEvent<WanTcpManager>
         }
         catch (Exception ex)
         {
-            Debug.LogError("SendMsgError:" + ex.Message);
+            Debuger.LogError("SendMsgError:" + ex.Message);
         }
     }
     private void Clear()
@@ -274,7 +274,7 @@ public class WanTcpManager : SingletonMonoEvent<WanTcpManager>
         }
         catch (Exception arg)
         {
-            Debug.LogError("Tcp关闭Socket错误：" + arg);
+            Debuger.LogError("Tcp关闭Socket错误：" + arg);
             return false;
         }
     }

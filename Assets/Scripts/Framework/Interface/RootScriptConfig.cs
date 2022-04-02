@@ -6,6 +6,8 @@ using System.Xml.Serialization;
 public class RootScriptConfig
 {
     [XmlElement]
+    public bool IsDebug;//是否打印Log
+    [XmlElement]
     public List<RootScript> RootScript;//脚本集合
 }
 

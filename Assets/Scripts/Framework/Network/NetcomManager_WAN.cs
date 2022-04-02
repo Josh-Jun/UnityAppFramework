@@ -20,5 +20,6 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
     {
         WanTcpManager.Instance.Close();
     }
+    
     #endregion
 }

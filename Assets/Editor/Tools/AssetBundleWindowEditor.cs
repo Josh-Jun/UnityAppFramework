@@ -150,8 +150,8 @@ public class AssetBundleWindowEditor : EditorWindow
             DirectoryInfo sceneDirectoryInfo = new DirectoryInfo(sceneDirectory);
             if (sceneDirectoryInfo == null)
             {
-                Debug.LogError("场景文件夹" + sceneDirectory + "不存在");
-                Debug.LogError("该目录下不存在此文件夹!" + sceneDirectory);
+                Debuger.LogError("场景文件夹" + sceneDirectory + "不存在");
+                Debuger.LogError("该目录下不存在此文件夹!" + sceneDirectory);
                 return;
             }
             else
@@ -173,7 +173,7 @@ public class AssetBundleWindowEditor : EditorWindow
                     desDic.Add(tempDirectoryInfo.Name, "请输入本版更新描述");
             }
         }
-        Debug.Log("AssetBundle Labels设置成功!");
+        Debuger.Log("AssetBundle Labels设置成功!");
     }
 
     /// <summary>
@@ -184,7 +184,7 @@ public class AssetBundleWindowEditor : EditorWindow
     private void OnSceneFileSystemInfo(FileSystemInfo fileSystemInfo, string sceneName, Dictionary<string, string> namePathDic)
     {
         if (!fileSystemInfo.Exists)
-            Debug.LogError(fileSystemInfo.FullName + "不存在！");
+            Debuger.LogError(fileSystemInfo.FullName + "不存在！");
 
         DirectoryInfo directoryInfo = fileSystemInfo as DirectoryInfo;
         // 获取所有文件系统[包括文件夹和文件]
@@ -216,13 +216,13 @@ public class AssetBundleWindowEditor : EditorWindow
         if (fileInfo.Extension == ".meta")
             return;
         string bundleName = GetBundleName(fileInfo, sceneName);
-        //Debug.Log("包名为 :" + bundleName );
+        //Debuger.Log("包名为 :" + bundleName );
 
         // D:\Unity_forWork\Unity_Project\AssetBundle02_Senior\Assets\AssetsFolder\Scene1\Character\NB\Player4.prefab
         // 获取Assetsy以及之后的目录
         int assetIndex = fileInfo.FullName.IndexOf("Assets");
         string assetPath = fileInfo.FullName.Substring(assetIndex);
-        //Debug.Log(assetPath); // Assets\AssetsFolder\Scene1\Character\NB\Player4.prefab
+        //Debuger.Log(assetPath); // Assets\AssetsFolder\Scene1\Character\NB\Player4.prefab
 
         // 6.用 AssetImporter 类 ， 修改名称和后缀 ；
         AssetImporter assetImporter = AssetImporter.GetAtPath(assetPath); // GetAtPath方法是获取Assets文件和之后的目录
@@ -252,12 +252,12 @@ public class AssetBundleWindowEditor : EditorWindow
         // windows 全路径 \ 
         string windowsPath = fileInfo.FullName;
         // D:\Unity_forWork\Unity_Project\AssetBundle02_Senior\Assets\AssetsFolder\Scene1\Character\NB\Player4.prefab
-        // Debug.Log(windowsPath);
+        // Debuger.Log(windowsPath);
         // 转换成Unity可识别的路径 把 \ 改为 /   [加@有奇效]     
         string unityPath = windowsPath.Replace(@"\", "/");
         // D:/Unity_forWork/Unity_Project/AssetBundle02_Senior/Assets/AssetsFolder/Scene1/Character/NB/Player4.prefab
         // D:/Unity_forWork/Unity_Project/AssetBundle02_Senior/Assets/AssetsFolder/Scene1/Scene1.unity
-        // Debug.Log(unityPath);
+        // Debuger.Log(unityPath);
 
         // 获取Scene之后的部分 :  Character/NB/Player4.prefab
         int sceneIndex = unityPath.IndexOf(sceneName) + sceneName.Length;
@@ -295,7 +295,7 @@ public class AssetBundleWindowEditor : EditorWindow
         AssetDatabase.Refresh();
         //移动回原始目录
         MoveAssetsToOriginPath(newPath, buildPath);
-        Debug.Log("AssetBundle 打包成功!");
+        Debuger.Log("AssetBundle 打包成功!");
     }
     #endregion
 
@@ -354,7 +354,7 @@ public class AssetBundleWindowEditor : EditorWindow
         xmlDocument.Save(filePath);
 
         AssetDatabase.Refresh();
-        Debug.Log("MD5文件生成完毕!");
+        Debuger.Log("MD5文件生成完毕!");
     }
 
     /// <summary>

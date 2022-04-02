@@ -81,7 +81,7 @@ namespace XLuaFrame
             }
             else
             {
-                Debug.LogErrorFormat("LuaEnv为空,运行Lua:{0}{1}", luaFileName, LuaSuffixName);
+                Debuger.LogError("LuaEnv为空,运行Lua:{0}{1}", luaFileName, LuaSuffixName);
             }
         }
 
@@ -94,7 +94,7 @@ namespace XLuaFrame
             }
             else
             {
-                Debug.LogErrorFormat("LuaEnv为空,释放Lua:{0}{1}", luaFileName, LuaSuffixName);
+                Debuger.LogError("LuaEnv为空,释放Lua:{0}{1}", luaFileName, LuaSuffixName);
             }
         }
 

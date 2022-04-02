@@ -37,7 +37,7 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
         {
             sb.AppendFormat("/{0}", args[i]);
         }
-        Debug.Log("URL : " + sb.ToString());
+        Debuger.Log("URL : " + sb.ToString());
         return sb.ToString();
     }
     public string MakeUrlWithToken(string url, params object[] args)
@@ -48,7 +48,7 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
         {
             sb.AppendFormat("/{0}", args[i]);
         }
-        Debug.Log("URL : " + sb.ToString());
+        Debuger.Log("URL : " + sb.ToString());
         return sb.ToString();
     }
 

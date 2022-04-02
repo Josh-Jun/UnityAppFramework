@@ -36,12 +36,12 @@ public class WanUdpManager : SingletonMonoEvent<WanUdpManager>
 			ep = iep;
 			thread = new Thread(ReceiveMsg);
 			thread.Start();
-			Debug.Log("Udp服务端开启成功!");
+			Debuger.Log("Udp服务端开启成功!");
 			cb?.Invoke(true);
 		}
 		catch (Exception ex)
 		{
-			Debug.LogError("Udp服务端开启失败! " + ex.Message);
+			Debuger.LogError("Udp服务端开启失败! " + ex.Message);
 			cb?.Invoke(false);
 		}
 	}
@@ -56,12 +56,12 @@ public class WanUdpManager : SingletonMonoEvent<WanUdpManager>
 			ep = iep;
 			thread = new Thread(ReceiveMsg);
 			thread.Start();
-			Debug.Log("Udp客户端开启成功!");
+			Debuger.Log("Udp客户端开启成功!");
 			cb?.Invoke(true);
 		}
 		catch (Exception ex)
 		{
-			Debug.LogError("Udp客户端开启失败! " + ex.Message);
+			Debuger.LogError("Udp客户端开启失败! " + ex.Message);
 			cb?.Invoke(false);
 		}
 	}
@@ -86,7 +86,7 @@ public class WanUdpManager : SingletonMonoEvent<WanUdpManager>
 		}
 		catch (Exception ex)
 		{
-			Debug.LogError("SndMsgError:" + ex.Message);
+			Debuger.LogError("SndMsgError:" + ex.Message);
 		}
 	}
 	private void ReceiveMsg()
@@ -126,6 +126,6 @@ public class WanUdpManager : SingletonMonoEvent<WanUdpManager>
 			socketUdp.Close();
 		}
         OnQuitSocket.Invoke();
-        Debug.Log("UDP已关闭...");
+        Debuger.Log("UDP已关闭...");
 	}
 }

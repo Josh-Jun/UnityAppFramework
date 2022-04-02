@@ -24,7 +24,7 @@ public class MD5Manager : Singleton<MD5Manager>
         }
         catch (System.Exception ex)
         {
-            Debug.LogError(ex);
+            Debuger.LogError(ex);
         }
         return filemd5;
     }

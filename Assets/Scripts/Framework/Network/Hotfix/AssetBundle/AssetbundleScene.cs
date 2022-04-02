@@ -69,7 +69,7 @@ public class AssetbundleScene
     {
         if (nameBundleDic.ContainsKey(bundleName))
         {
-            Debug.LogError("此包已经加载了!" + bundleName);
+            Debuger.LogError("此包已经加载了!" + bundleName);
             return;
         }
         else // 没有加载的话 , 就 new 一个
@@ -166,7 +166,7 @@ public class AssetbundleScene
         // 2.当前包有没有被加载
         if (!nameBundleDic.ContainsKey(bundleName))
         {
-            Debug.LogError("当前" + bundleName + "包没有加载,无法获取资源!");
+            Debuger.LogError("当前" + bundleName + "包没有加载,无法获取资源!");
             return null;
         }
 
@@ -226,7 +226,7 @@ public class AssetbundleScene
         // 2.当前包有没有被加载
         if (!nameBundleDic.ContainsKey(bundleName))
         {
-            Debug.LogError("当前" + bundleName + "包没有加载,无法获取资源!");
+            Debuger.LogError("当前" + bundleName + "包没有加载,无法获取资源!");
             return null;
         }
 
@@ -263,7 +263,7 @@ public class AssetbundleScene
     {
         if (!nameCacheDic.ContainsKey(bundleName))
         {
-            Debug.LogError("当前" + bundleName + "包没有缓存资源,无法卸载资源!");
+            Debuger.LogError("当前" + bundleName + "包没有缓存资源,无法卸载资源!");
         }
         else
         {
@@ -281,7 +281,7 @@ public class AssetbundleScene
     {
         if (!nameCacheDic.ContainsKey(bundleName))
         {
-            Debug.LogError("当前" + bundleName + "包没有缓存资源,无法卸载资源!");
+            Debuger.LogError("当前" + bundleName + "包没有缓存资源,无法卸载资源!");
         }
         else
         {
@@ -310,7 +310,7 @@ public class AssetbundleScene
     {
         if (!nameBundleDic.ContainsKey(bundleName))
         {
-            Debug.LogError("当前" + bundleName + "包没有被加载,无法获取资源!");
+            Debuger.LogError("当前" + bundleName + "包没有被加载,无法获取资源!");
             return;
         }
 

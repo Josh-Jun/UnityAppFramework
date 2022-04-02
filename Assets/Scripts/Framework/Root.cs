@@ -8,6 +8,7 @@ public class Root
 {
     public const string MainSceneName = "TestScene";
     public const string path_AppRootConfig = "App/Assets/AppRootConfig";
+    public static bool IsDebug { get; private set; } = false;//是否Log
     public static bool IsHotfix { get; private set; } = false;//是否热更
     public static bool IsLoadAB { get; private set; } = false;//是否加载AB包
     public static bool RunXLuaScripts { get; private set; } = true;//是否运行XLua脚本
@@ -37,6 +38,8 @@ public class Root
     {
         TextAsset config = AssetsManager.Instance.LoadAsset<TextAsset>(path_AppRootConfig);
         rootConfig = XmlSerializeManager.ProtoDeSerialize<RootScriptConfig>(config.bytes);
+        IsDebug = rootConfig.IsDebug;
+        Debuger.Init(IsDebug);
         for (int i = 0; i < rootConfig.RootScript.Count; i++)
         {
             IRoot iRoot;
@@ -61,7 +64,7 @@ public class Root
                 }
                 else
                 {
-                    Debug.LogErrorFormat("Root脚本为空 脚本名称:{0}", rootConfig.RootScript[i].ScriptName);
+                    Debuger.LogError("Root脚本为空 脚本名称:{0}", rootConfig.RootScript[i].ScriptName);
                 }
             }
             if (!sceneScriptsPairs.ContainsKey(rootConfig.RootScript[i].SceneName))

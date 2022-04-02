@@ -76,7 +76,6 @@ namespace Hotfix
                 if (isEnd && bundleProgress == 1)
                 {
                     hotfixWin.SetProgressBarActive(false);
-                    Debug.Log("加载完成");
                     //AB包加载完成
                     Root.InitRootScripts(() => { Root.LoadScene(Root.MainSceneName); });
                 }

@@ -31,12 +31,12 @@ public class AssetLoader : System.IDisposable
     {
         if (assetbundle == null)
         {
-            Debug.LogError("当前资源包为空,无法获取" + assetName + "资源");
+            Debuger.LogError("当前资源包为空,无法获取" + assetName + "资源");
             return null;
         }
         else if (!assetbundle.Contains(assetName))
         {
-            Debug.LogError("当前资源不包含" + assetName + "资源");
+            Debuger.LogError("当前资源不包含" + assetName + "资源");
             return null;
         }
         else
@@ -52,12 +52,12 @@ public class AssetLoader : System.IDisposable
     {
         if (assetbundle == null)
         {
-            Debug.LogError("当前资源包为空,无法获取" + assetName + "资源");
+            Debuger.LogError("当前资源包为空,无法获取" + assetName + "资源");
             return null;
         }
         else if (!assetbundle.Contains(assetName))
         {
-            Debug.LogError("当前资源不包含" + assetName + "资源");
+            Debuger.LogError("当前资源不包含" + assetName + "资源");
             return null;
         }
         else
@@ -72,7 +72,7 @@ public class AssetLoader : System.IDisposable
     {
         if (assetbundle == null)
         {
-            Debug.LogError("当前资源包为空,无法获取资源!");
+            Debuger.LogError("当前资源包为空,无法获取资源!");
             return null;
         }
         else
@@ -88,12 +88,12 @@ public class AssetLoader : System.IDisposable
     {
         if (assetbundle == null)
         {
-            Debug.LogError("当前资源包为空,无法获取" + assetName + "资源");
+            Debuger.LogError("当前资源包为空,无法获取" + assetName + "资源");
             return null;
         }
         else if (!assetbundle.Contains(assetName))
         {
-            Debug.LogError("当前资源不包含" + assetName + "资源");
+            Debuger.LogError("当前资源不包含" + assetName + "资源");
             return null;
         }
         else
@@ -129,6 +129,6 @@ public class AssetLoader : System.IDisposable
     {
         string[] assetNames = assetbundle.GetAllAssetNames();
         foreach (string item in assetNames)
-            Debug.Log(item);
+            Debuger.Log(item);
     }
 }

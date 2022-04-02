@@ -322,7 +322,7 @@ public class UnityWebRequester
             }
             else
             {
-                Debug.LogErrorFormat("[Error:Bytes] {0}", uwr.error);
+                Debuger.LogError("[Error:Bytes] {0}", uwr.error);
             }
         }
     }
@@ -344,7 +344,7 @@ public class UnityWebRequester
             }
             else
             {
-                Debug.LogErrorFormat("[Error:Texture2D] {0}", uwr.error);
+                Debuger.LogError("[Error:Texture2D] {0}", uwr.error);
             }
         }
     }
@@ -367,7 +367,7 @@ public class UnityWebRequester
             }
             else
             {
-                Debug.LogErrorFormat("[Error:AssetBundle] {0}", uwr.error);
+                Debuger.LogError("[Error:AssetBundle] {0}", uwr.error);
             }
         }
     }
@@ -391,7 +391,7 @@ public class UnityWebRequester
             }
             else
             {
-                Debug.LogErrorFormat("[Error:AudioClip] {0}", uwr.error);
+                Debuger.LogError("[Error:AudioClip] {0}", uwr.error);
             }
         }
     }
