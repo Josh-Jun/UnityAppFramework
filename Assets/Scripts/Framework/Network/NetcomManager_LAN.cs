@@ -9,7 +9,7 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
     #region Tcp
     #region Server
     /// <summary> 开启Tcp服务端 </summary>
-    public void StartTcpServer(string ip, Action<bool> cb = null)
+    public void StartLanTcpServer(string ip, Action<bool> cb = null)
     {
         LanTcpManager.Instance.InitServerNet(ip, Port, cb);
     }
@@ -68,7 +68,7 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
 
     #region Client
     /// <summary> 开启Tcp客户端 </summary>
-    public void StartTcpClient(string ip, Action<bool> cb = null)
+    public void StartLanTcpClient(string ip, Action<bool> cb = null)
     {
         LanTcpManager.Instance.InitServerNet(ip, Port, cb);
     }
@@ -174,14 +174,14 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
     public delegate void StringValueDelegate(string value);
     public event StringValueDelegate ReceiveUdpMsg;
     #region Server
-    public void StartUdpServer(Action<bool> cb = null)
+    public void StartLanUdpServer(Action<bool> cb = null)
     {
         LanUdpManager.Instance.InitServerNet(Port, cb);
     }
     #endregion
 
     #region Client
-    public void StartUdpClient(Action<bool> cb = null)
+    public void StartLanUdpClient(Action<bool> cb = null)
     {
         LanUdpManager.Instance.InitClientNet(Port, cb);
     }
