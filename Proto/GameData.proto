@@ -1,0 +1,9 @@
+syntax = "proto3";
+package GameData;
+
+message UserInfo
+{
+	string Name = 1;
+	string UserId = 2;
+	int64 RoleId =3;
+}
