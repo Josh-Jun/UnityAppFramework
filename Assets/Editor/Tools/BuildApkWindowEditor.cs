@@ -7,7 +7,7 @@ using UnityEngine;
 public class BuildApkWindowEditor : EditorWindow
 {
     private static GUIStyle titleStyle;
-    private static readonly string configPath = "AssetsFolder/App/Assets/AppRootConfig";
+    private static readonly string configPath = "App/Debug/DebugConfig";
     private bool DevelopmentBuild = true;
     private string outputPath;
 
@@ -52,7 +52,7 @@ public class BuildApkWindowEditor : EditorWindow
         if (GUILayout.Button("Build"))
         {
             UpdateConfig(DevelopmentBuild);
-            BuildApk();
+            //BuildApk();
         }
     }
     public void UpdateConfig(bool value)

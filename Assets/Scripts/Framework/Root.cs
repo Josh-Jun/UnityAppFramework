@@ -8,6 +8,7 @@ public class Root
 {
     public const string MainSceneName = "TestScene";
     public const string path_AppRootConfig = "App/Assets/AppRootConfig";
+    public const string path_debugConfig = "App/Debug/AppRootConfig";
     public static bool IsDebug { get; private set; } = false;//是否Log
     public static bool IsHotfix { get; private set; } = false;//是否热更
     public static bool IsLoadAB { get; private set; } = false;//是否加载AB包
@@ -17,13 +18,15 @@ public class Root
     private static readonly string hotfixScriptName = "Hotfix.HotfixRoot";
     private static readonly Dictionary<string, IRoot> iRootPairs = new Dictionary<string, IRoot>();
     private static RootScriptConfig rootConfig;
+    private static DebugConfig debugConfig;
     private static IRoot HotfixRoot = null;
     public static void Init()
     {
-        TextAsset config = AssetsManager.Instance.LoadAsset<TextAsset>(path_AppRootConfig);
-        rootConfig = XmlSerializeManager.ProtoDeSerialize<RootScriptConfig>(config.bytes);
-        IsDebug = rootConfig.IsDebug;
+        TextAsset config = Resources.Load<TextAsset>(path_debugConfig);
+        debugConfig = XmlSerializeManager.ProtoDeSerialize<DebugConfig>(config.bytes);
+        IsDebug = debugConfig.IsDebug;
         Debuger.Init(IsDebug);
+
         if (IsHotfix)
         {
             //初始化热更脚本
@@ -40,6 +43,8 @@ public class Root
 
     public static void InitRootScripts(Action callback = null)
     {
+        TextAsset config = AssetsManager.Instance.LoadAsset<TextAsset>(path_AppRootConfig);
+        rootConfig = XmlSerializeManager.ProtoDeSerialize<RootScriptConfig>(config.bytes);
         for (int i = 0; i < rootConfig.RootScript.Count; i++)
         {
             IRoot iRoot;
