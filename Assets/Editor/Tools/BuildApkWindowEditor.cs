@@ -47,7 +47,7 @@ public class BuildApkWindowEditor : EditorWindow
         EditorGUILayout.BeginHorizontal();
         GUILayout.Label(new GUIContent("Development Build"));
         GUILayout.FlexibleSpace();
-        DevelopmentBuild = EditorGUILayout.Toggle(DevelopmentBuild, GUILayout.MaxWidth(100f));
+        DevelopmentBuild = EditorGUILayout.Toggle(DevelopmentBuild, GUILayout.MaxWidth(75));
         EditorGUILayout.EndHorizontal();
         if (GUILayout.Button("Build"))
         {
