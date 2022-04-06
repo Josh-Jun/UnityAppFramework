@@ -8,8 +8,8 @@ public class Root
 {
     public const string MainSceneName = "TestScene";
     public const string path_AppRootConfig = "App/Assets/AppRootConfig";
-    public const string path_debugConfig = "App/Debug/AppRootConfig";
-    public static bool IsDebug { get; private set; } = false;//是否Log
+    public const string path_DebugConfig = "App/Debug/AppRootConfig";
+    public static DebugConfig DebugConfig;//Debug配置表
     public static bool IsHotfix { get; private set; } = false;//是否热更
     public static bool IsLoadAB { get; private set; } = false;//是否加载AB包
     public static bool RunXLuaScripts { get; private set; } = true;//是否运行XLua脚本
@@ -18,14 +18,12 @@ public class Root
     private static readonly string hotfixScriptName = "Hotfix.HotfixRoot";
     private static readonly Dictionary<string, IRoot> iRootPairs = new Dictionary<string, IRoot>();
     private static RootScriptConfig rootConfig;
-    private static DebugConfig debugConfig;
     private static IRoot HotfixRoot = null;
     public static void Init()
     {
-        TextAsset config = Resources.Load<TextAsset>(path_debugConfig);
-        debugConfig = XmlSerializeManager.ProtoDeSerialize<DebugConfig>(config.bytes);
-        IsDebug = debugConfig.IsDebug;
-        Debuger.Init(IsDebug);
+        TextAsset config = Resources.Load<TextAsset>(path_DebugConfig);
+        DebugConfig = XmlSerializeManager.ProtoDeSerialize<DebugConfig>(config.bytes);
+        Debuger.Init(DebugConfig.IsDebug);
 
         if (IsHotfix)
         {

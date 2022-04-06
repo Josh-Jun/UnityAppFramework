@@ -152,6 +152,7 @@ public class HotfixManager : SingletonEvent<HotfixManager>
                     FileManager.CreateFile(LocalPath + requester.Key.BundleName, uwr.downloadHandler.data);
                     unityWebRequester = null;
                     alreadyDownLoadList.Add(requester.Key);
+                    //下载完成后修改本地版本文件
                 }
                 else
                 {

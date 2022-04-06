@@ -1,4 +1,4 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--IsDebug-->
-<DebugConfig IsDebug="False">
+<DebugConfig IsDebug="True" IsBetaServer="True">
 </DebugConfig>

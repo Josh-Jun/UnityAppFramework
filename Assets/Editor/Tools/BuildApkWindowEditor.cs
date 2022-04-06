@@ -9,6 +9,8 @@ public class BuildApkWindowEditor : EditorWindow
     private static GUIStyle titleStyle;
     private static readonly string configPath = "App/Debug/DebugConfig";
     private bool DevelopmentBuild = true;
+    private bool IsBetaServer = true;
+    private bool IsPicoVR = false;
     private string outputPath;
 
     [MenuItem("Tools/My ToolsWindow/Build Apk", false, 0)]
@@ -34,6 +36,26 @@ public class BuildApkWindowEditor : EditorWindow
         GUILayout.Label(new GUIContent("Build Apk"), titleStyle);
         EditorGUILayout.Space();
 
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label(new GUIContent("Development Build"));
+        GUILayout.FlexibleSpace();
+        DevelopmentBuild = EditorGUILayout.Toggle(DevelopmentBuild, GUILayout.MaxWidth(75));
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label(new GUIContent("Is Beta Server"));
+        GUILayout.FlexibleSpace();
+        IsBetaServer = EditorGUILayout.Toggle(IsBetaServer, GUILayout.MaxWidth(75));
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label(new GUIContent("Is PicoVR"));
+        GUILayout.FlexibleSpace();
+        IsPicoVR = EditorGUILayout.Toggle(IsPicoVR, GUILayout.MaxWidth(75));
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.Space();
+
         outputPath = EditorGUILayout.TextField("Output Path", outputPath);
 
         GUILayout.BeginHorizontal();
@@ -44,33 +66,30 @@ public class BuildApkWindowEditor : EditorWindow
         }
         GUILayout.EndHorizontal();
 
-        EditorGUILayout.BeginHorizontal();
-        GUILayout.Label(new GUIContent("Development Build"));
-        GUILayout.FlexibleSpace();
-        DevelopmentBuild = EditorGUILayout.Toggle(DevelopmentBuild, GUILayout.MaxWidth(75));
-        EditorGUILayout.EndHorizontal();
         if (GUILayout.Button("Build"))
         {
-            UpdateConfig(DevelopmentBuild);
-            //BuildApk();
+            UpdateConfig();
+            BuildApk();
         }
     }
-    public void UpdateConfig(bool value)
+    public void UpdateConfig()
     {
         string path = string.Format(@"{0}/Resources/{1}.xml", Application.dataPath, configPath);
         XmlDocument xmlDocument = new XmlDocument();
         xmlDocument.Load(path);
         var root = xmlDocument.DocumentElement;
-        root.Attributes["IsDebug"].Value = value.ToString();
+        root.Attributes["IsDebug"].Value = DevelopmentBuild.ToString();
+        root.Attributes["IsBetaServer"].Value = IsBetaServer.ToString();
         xmlDocument.Save(path);
     }
     private void BuildApk()
     {
-        string outPath = string.Format("{0}/{1}", outputPath, "");
-        string name = DevelopmentBuild ? string.Format("{0}v{1}", "meta-beta", PlayerSettings.bundleVersion) : string.Format("{0}v{1}", "meta-pro", PlayerSettings.bundleVersion);
+        string _str = IsPicoVR ? "meta-picovr" : "meta-android";
+        string version = PlayerSettings.bundleVersion;
+        string name = DevelopmentBuild ? string.Format("{0}_v{1}_beta", _str, version) : string.Format("{0}_v{1}_release", _str, version);
         string outName = string.Format("{0}.apk", name);
         EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
-        if (Directory.Exists(outPath))
+        if (Directory.Exists(outputPath))
         {
             if (File.Exists(outName))
             {
@@ -79,9 +98,9 @@ public class BuildApkWindowEditor : EditorWindow
         }
         else
         {
-            Directory.CreateDirectory(outPath);
+            Directory.CreateDirectory(outputPath);
         }
-        string BuildPath = string.Format("{0}/{1}.apk", outPath, outName);
+        string BuildPath = string.Format("{0}/{1}.apk", outputPath, outName);
         BuildPipeline.BuildPlayer(GetBuildScenes(), BuildPath, BuildTarget.Android, BuildOptions.None);
 
         EditorUtility.DisplayDialog("Finish", string.Format("OutPut: {0}", BuildPath), "OK");

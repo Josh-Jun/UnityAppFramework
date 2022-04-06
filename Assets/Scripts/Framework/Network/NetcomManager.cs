@@ -5,20 +5,40 @@ using System.Net.Sockets;
 
 public partial class NetcomManager : SingletonEvent<NetcomManager>
 {
-    public static string ServerUrl = "https://www.shijunzh.com";
     public static string Token = "1837bc8456fe33e2df9a4fe17cf7ffb7cd392b0f63d77a9c";
     public static string Identifier = "10";
     public static string id = "e671d95cb4fb445e88c5e7540ad13177";
-    public static int Port = 17888; //通信端口
-
+    /// <summary>
+    /// 服务器地址
+    /// </summary>
+    public static string ServerUrl
+    {
+        private set { }
+        get
+        {
+            string server = Root.DebugConfig.IsBetaServer ? "" : "";//测试服务器:生产服务器
+            return server;
+        }
+    }
+    /// <summary>
+    /// 服务器地址
+    /// </summary>
+    public static int Port
+    {
+        private set { }
+        get
+        {
+            int port = Root.DebugConfig.IsBetaServer ? 17888 : 8080;//测试服务器:生产服务器
+            return port;
+        }
+    }
     #region AB
-    private static readonly bool IsLocalPath = true;
     public static string ABUrl
     {
         private set { }
         get
         {
-            if (IsLocalPath)
+            if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor)
             {
                 return string.Format(@"{0}{1}/", Application.dataPath.Replace("Assets", ""), "AssetBundle");//本地AB包地址
             }
