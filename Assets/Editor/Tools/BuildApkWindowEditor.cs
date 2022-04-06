@@ -100,7 +100,7 @@ public class BuildApkWindowEditor : EditorWindow
         {
             Directory.CreateDirectory(outputPath);
         }
-        string BuildPath = string.Format("{0}/{1}.apk", outputPath, outName);
+        string BuildPath = string.Format("{0}/{1}", outputPath, outName);
         BuildPipeline.BuildPlayer(GetBuildScenes(), BuildPath, BuildTarget.Android, BuildOptions.None);
 
         EditorUtility.DisplayDialog("Finish", string.Format("OutPut: {0}", BuildPath), "OK");
