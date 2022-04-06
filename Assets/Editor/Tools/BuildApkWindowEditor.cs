@@ -103,10 +103,9 @@ public class BuildApkWindowEditor : EditorWindow
         string BuildPath = string.Format("{0}/{1}", outputPath, outName);
         BuildPipeline.BuildPlayer(GetBuildScenes(), BuildPath, BuildTarget.Android, BuildOptions.None);
 
-        EditorUtility.DisplayDialog("Finish", string.Format("OutPut: {0}", BuildPath), "OK");
+        EditorUtility.RevealInFinder(BuildPath);
 
-        var log = string.Format("GenericBuild Success Path = {0}", BuildPath);
-        Debug.Log(log);
+        Debug.Log(string.Format("GenericBuild Success Path = {0}", BuildPath));
     }
     static string[] GetBuildScenes()
     {
