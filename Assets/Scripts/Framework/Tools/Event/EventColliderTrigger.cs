@@ -12,8 +12,8 @@ public class EventColliderTrigger : MonoBehaviour
     [Serializable]
     public class TriggerEvent : UnityEvent<GameObject> { }
     // Event delegates triggered.
-    [FormerlySerializedAs("onEnter")]
     [Header("OnTrigger Event")]
+    [FormerlySerializedAs("onEnter")]
     [Space]
     [SerializeField]
     private TriggerEvent m_OnEnter = new TriggerEvent();
