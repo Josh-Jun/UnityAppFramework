@@ -40,13 +40,6 @@ public class EventColliderTrigger : MonoBehaviour
         get { return m_OnExit; }
         set { m_OnExit = value; }
     }
-    void Awake()
-    {
-        Rigidbody rigidbody = GetComponent<Rigidbody>();
-        rigidbody.useGravity = false;
-        Collider collider = GetComponent<Collider>();
-        collider.isTrigger = true;
-    }
     // ½øÈë´¥·¢Æ÷
     void OnTriggerEnter(Collider collider)
     {
