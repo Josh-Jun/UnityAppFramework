@@ -16,7 +16,7 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
         private set { }
         get
         {
-            string server = Root.DebugConfig.IsBetaServer ? "" : "";//测试服务器:生产服务器
+            string server = Root.AppConfig.Server.Value ? "" : "";//测试服务器:生产服务器
             return server;
         }
     }
@@ -28,7 +28,7 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
         private set { }
         get
         {
-            int port = Root.DebugConfig.IsBetaServer ? 17888 : 8080;//测试服务器:生产服务器
+            int port = Root.AppConfig.Server.Value ? 17888 : 8080;//测试服务器:生产服务器
             return port;
         }
     }

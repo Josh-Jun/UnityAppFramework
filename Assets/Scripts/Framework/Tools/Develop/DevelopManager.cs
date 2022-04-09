@@ -498,7 +498,7 @@ public static class DevelopManager
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
             Component t = null;
-            if (Root.RunXLuaScripts)
+            if (Root.AppConfig.XLua.Value)
             {
                 string luaPath = string.Format("{0}/{1}", path.Split('/')[0], go.name);
                 t = go.TryGetComponent<XLuaUIWindow>().Init(luaPath);
@@ -537,7 +537,7 @@ public static class DevelopManager
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
             T t = null;
-            if (Root.RunXLuaScripts)
+            if (Root.AppConfig.XLua.Value)
             {
                 string luaPath = string.Format("{0}/{1}", path.Split('/')[0], go.name);
                 t = go.TryGetComponent<XLuaUIWindow>().Init(luaPath) as T;

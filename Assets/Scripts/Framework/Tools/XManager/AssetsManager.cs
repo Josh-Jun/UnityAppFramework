@@ -55,7 +55,7 @@ public class AssetsManager : Singleton<AssetsManager>
     /// </summary>
     public T LoadAsset<T>(string path) where T : UnityEngine.Object
     {
-        if (Root.IsLoadAB)
+        if (Root.AppConfig.LoadAB.Value)
         {
             string[] names = path.Split('/');
             return AssetBundleManager.Instance.LoadAsset<T>(names[0], names[1], names[names.Length - 1]);

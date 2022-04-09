@@ -8,11 +8,8 @@ public class Root
 {
     public const string MainSceneName = "TestScene";
     public const string path_AppRootConfig = "App/Assets/AppRootConfig";
-    public const string path_DebugConfig = "App/Debug/AppRootConfig";
-    public static DebugConfig DebugConfig;//Debug配置表
-    public static bool IsHotfix { get; private set; } = false;//是否热更
-    public static bool IsLoadAB { get; private set; } = false;//是否加载AB包
-    public static bool RunXLuaScripts { get; private set; } = true;//是否运行XLua脚本
+    public const string path_AppConfig = "App/AppConfig";
+    public static AppConfig AppConfig;//App配置表 
 
     private static readonly Dictionary<string, List<string>> sceneScriptsPairs = new Dictionary<string, List<string>>();
     private static readonly string hotfixScriptName = "Hotfix.HotfixRoot";
@@ -21,11 +18,11 @@ public class Root
     private static IRoot HotfixRoot = null;
     public static void Init()
     {
-        TextAsset config = Resources.Load<TextAsset>(path_DebugConfig);
-        DebugConfig = XmlSerializeManager.ProtoDeSerialize<DebugConfig>(config.bytes);
-        Debuger.Init(DebugConfig.IsDebug);
+        TextAsset config = Resources.Load<TextAsset>(path_AppConfig);
+        AppConfig = XmlSerializeManager.ProtoDeSerialize<AppConfig>(config.bytes);
+        Debuger.Init(AppConfig.Debug.Value);
 
-        if (IsHotfix)
+        if (AppConfig.Hotfix.Value)
         {
             //初始化热更脚本
             Type type = Type.GetType(hotfixScriptName);
@@ -47,7 +44,7 @@ public class Root
         {
             IRoot iRoot;
             //判断是否存在XLua脚本，如果存在，执行XLua代码，不存在执行C#代码
-            if (RunXLuaScripts && XLuaManager.Instance.IsLuaFileExist(rootConfig.RootScript[i].LuaScriptPath))
+            if (AppConfig.XLua.Value && XLuaManager.Instance.IsLuaFileExist(rootConfig.RootScript[i].LuaScriptPath))
             {
                 XLuaRoot root = new XLuaRoot();
                 root.Init(rootConfig.RootScript[i].LuaScriptPath);

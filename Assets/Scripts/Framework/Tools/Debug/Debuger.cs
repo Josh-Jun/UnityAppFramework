@@ -5,6 +5,7 @@ public class Debuger
     public static void Init(bool isDebug = true)
     {
         IsDebug = isDebug;
+        Log("Debuger Init : {0}", IsDebug);
     }
     public static void Log(object obj)
     {
