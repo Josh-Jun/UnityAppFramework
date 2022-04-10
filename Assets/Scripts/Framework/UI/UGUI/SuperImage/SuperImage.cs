@@ -9,6 +9,7 @@ namespace UnityEngine.UI
     public class SuperImage : BaseImage
     {
         private UIVertex uivertex;
+        private Vector2 u;
 
         private List<Vector3> innerVertices = new List<Vector3>();
         private List<Vector3> outterVertices = new List<Vector3>();
@@ -35,12 +36,6 @@ namespace UnityEngine.UI
             float ASPECT_X = w > h ? h / w : 1;
             float ASPECT_Y = h > w ? w / h : 1;
             #region 圆角矩形
-            Vector2 u;
-            //uivertex = new UIVertex();
-            //uivertex.color = color;
-            //uivertex.position = Vector2.zero;
-            //uivertex.uv0 = Vector2.zero;
-            //vh.AddVert(uivertex);
 
             #region 左下角
             for (int i = 0; i < segements + 1; i++)
@@ -135,9 +130,6 @@ namespace UnityEngine.UI
             {
                 vh.AddTriangle(0, i + 1, i + 2);
             }
-            ////首尾顶点相连
-            //vh.AddTriangle(vh.currentVertCount - 2, vh.currentVertCount - 1, 0);
-            //vh.AddTriangle(vh.currentVertCount - 1, 0, 1);
             #endregion
         }
         public override bool IsRaycastLocationValid(Vector2 screenPoint, Camera eventCamera)
