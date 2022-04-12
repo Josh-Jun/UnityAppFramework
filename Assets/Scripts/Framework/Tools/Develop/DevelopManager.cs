@@ -13,7 +13,7 @@ public static class DevelopManager
 {
     #region Animator Event
     private static int DEVELOP_ANIMATOR_TIME_ID = -1;//动画时间任务id
-    private static int DEVELOP_FRAMESANIMATION_TIME_ID = -1;//动画时间任务id
+    private static int DEVELOP_FRAMES_TIME_ID = -1;//动画时间任务id
     public static void PlayBack(this Animator _animator, string stateName, UnityAction callback = null)
     {
         _animator.Play(stateName, callback, -1);
@@ -47,16 +47,16 @@ public static class DevelopManager
         });
     }
 
-    public static void PlayFramesAnimation(this Image image, List<Sprite> sequenceFrames, float time = 0.05f, UnityAction callback = null, bool loop = false)
+    public static void PlayFrames(this Image image, List<Sprite> sequenceFrames, float time = 0.05f, UnityAction callback = null, bool loop = false, bool isNativeSize = false)
     {
         if (image == null)
         {
             Debuger.LogError("Image is null!!!");
             return;
         }
-        image.PlayFramesAnimation(sequenceFrames.ToArray(), time, callback, loop);
+        image.PlayFrames(sequenceFrames.ToArray(), time, callback, loop, isNativeSize);
     }
-    public static void PlayFramesAnimation(this Image image, Sprite[] sequenceFrames, float time = 0.05f, UnityAction callback = null, bool loop = false)
+    public static void PlayFrames(this Image image, Sprite[] sequenceFrames, float time = 0.05f, UnityAction callback = null, bool loop = false, bool isNativeSize = false)
     {
         if (image == null)
         {
@@ -65,7 +65,7 @@ public static class DevelopManager
         }
         int index = 0;//可以用来控制起始播放的动画帧索引
         float recordTime = 0;
-        DEVELOP_FRAMESANIMATION_TIME_ID = TimerManager.Instance.StartTimer((float currentTime) =>
+        DEVELOP_FRAMES_TIME_ID = TimerManager.Instance.StartTimer((float currentTime) =>
         {
             if (currentTime - recordTime >= time)
             {
@@ -80,14 +80,17 @@ public static class DevelopManager
                     }
                     else
                     {
-                        TimerManager.Instance.EndTimer(DEVELOP_FRAMESANIMATION_TIME_ID);
+                        TimerManager.Instance.EndTimer(DEVELOP_FRAMES_TIME_ID);
                     }
                 }
                 else
                 {
                     image.sprite = sequenceFrames[index];
-                    image.SetNativeSize();
                     index++;
+                    if (isNativeSize)
+                    {
+                        image.SetNativeSize();
+                    }
                 }
             }
         });
