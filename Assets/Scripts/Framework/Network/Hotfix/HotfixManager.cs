@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine.Networking;
 using System.Linq;
 using System.Collections;
+using System.Xml;
 
 /// <summary>
 /// 热更管理者
@@ -23,6 +24,8 @@ public class HotfixManager : SingletonEvent<HotfixManager>
     private Dictionary<Folder, UnityWebRequester> unityWebRequesterPairs = new Dictionary<Folder, UnityWebRequester>();
     private UnityWebRequester unityWebRequester;
     private byte[] bytes = null;
+    private AssetBundleConfig localABConfig;
+    private AssetBundleConfig serverABConfig;
     #endregion
 
     #region Public Var
@@ -43,9 +46,9 @@ public class HotfixManager : SingletonEvent<HotfixManager>
         //读取本地热更文件
         DownLoad(XmlLocalVersionPath, (byte[] bytes) =>
         {
-            AssetBundleConfig ab_config = bytes.Length > 0 ? XmlSerializeManager.ProtoDeSerialize<AssetBundleConfig>(bytes) : null;
+            localABConfig = bytes.Length > 0 ? XmlSerializeManager.ProtoDeSerialize<AssetBundleConfig>(bytes) : null;
             //检查版本更新信息
-            CheckHotfix(ab_config, () =>
+            CheckHotfix(localABConfig, () =>
             {
                 string des = "";
                 for (int i = 0; i < downloadScenes.Count; i++)
@@ -153,6 +156,7 @@ public class HotfixManager : SingletonEvent<HotfixManager>
                     unityWebRequester = null;
                     alreadyDownLoadList.Add(requester.Key);
                     //下载完成后修改本地版本文件
+                    UpdateLocalConfig(requester.Key);
                 }
                 else
                 {
@@ -161,6 +165,27 @@ public class HotfixManager : SingletonEvent<HotfixManager>
             });
         }
         FileManager.CreateFile(XmlLocalVersionPath, bytes);
+    }
+    private void UpdateLocalConfig(Folder folder)
+    {
+        XmlDocument xmlDocument = new XmlDocument();
+        xmlDocument.Load(XmlLocalVersionPath);
+
+        var scene = xmlDocument.GetElementsByTagName("Scenes");
+        for (int i = 0; i < scene.Count; i++)
+        {
+            var folders = scene[i].ChildNodes;
+            for (int j = 0; j < folders.Count; j++)
+            {
+                if (folder.FolderName == folders[j].Attributes["FolderName"].Value)
+                {
+                    folders[j].Attributes["HashCode"].Value = folder.HashCode;
+                    folders[j].Attributes["Size"].Value = folder.Size.ToString();
+                }
+            }
+        }
+
+        xmlDocument.Save(XmlLocalVersionPath);
     }
     /// <summary> 下载 </summary>
     private void DownLoad(string url, Action<byte[]> action)
@@ -185,7 +210,7 @@ public class HotfixManager : SingletonEvent<HotfixManager>
         {
             DownLoad(XmlServerVersionPath, (byte[] bytes) =>
             {
-                AssetBundleConfig serverABConfig = XmlSerializeManager.ProtoDeSerialize<AssetBundleConfig>(bytes);
+                serverABConfig = XmlSerializeManager.ProtoDeSerialize<AssetBundleConfig>(bytes);
                 this.bytes = bytes;
                 GetABScenePairs(serverABConfig);
                 if (Application.version == serverABConfig.GameVersion)

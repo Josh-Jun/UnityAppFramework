@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 using UnityEngine;
 /// <summary> 功能：对象与XML  序列化/反序列化 工具 </summary>
@@ -25,7 +27,22 @@ public class XmlSerializeManager
             return null;
         }
     }
-
+    // 将类对象转换为 字符串xml 
+    public static string ProtoSerialize<T>(object obj, bool isIndented = true)
+    {
+        MemoryStream memoryStream = new MemoryStream();
+        XmlSerializer xs = new XmlSerializer(typeof(T));
+        XmlTextWriter xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.UTF8);
+        if (isIndented)
+        {
+            xmlTextWriter.Formatting = Formatting.Indented;
+        }
+        XmlSerializerNamespaces _namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] { new XmlQualifiedName(string.Empty, string.Empty) });
+        xs.Serialize(xmlTextWriter, obj, _namespaces);
+        memoryStream = (MemoryStream)xmlTextWriter.BaseStream;
+        UTF8Encoding encoding = new UTF8Encoding();
+        return encoding.GetString(memoryStream.ToArray());
+    }
     /// <summary> Object是否可以转换xml </summary>
     public static bool Xmlserialize(string path, object obj)
     {
