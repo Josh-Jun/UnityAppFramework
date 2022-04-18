@@ -18,7 +18,7 @@ public class Root
     private static IRoot HotfixRoot = null;
     public static void Init()
     {
-        AppConfig AppConfig = Resources.Load<AppConfig>(path_AppConfig);
+        AppConfig = Resources.Load<AppConfig>(path_AppConfig);
         //Debug.Log开关
         Debug.unityLogger.logEnabled = AppConfig.IsDebug;
         //禁止程序休眠
