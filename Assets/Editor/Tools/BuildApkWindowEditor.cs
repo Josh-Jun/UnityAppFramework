@@ -35,7 +35,17 @@ public class BuildApkWindowEditor : EditorWindow
     {
         outputPath = Application.dataPath.Replace("Assets", "Apk");
         AppConfig = Resources.Load<AppConfig>(configPath);
-        if(AppConfig == null)
+        if (AppConfig != null)
+        {
+            DevelopmentBuild = AppConfig.IsDebug;
+            IsProServer = AppConfig.IsProServer;
+            IsHotfix = AppConfig.IsHotfix;
+            IsLoadAB = AppConfig.IsLoadAB;
+            RunXLuaScripts = AppConfig.RunXLua;
+            AppFrameRate = AppConfig.AppFrameRate;
+            ApkTarget = AppConfig.ApkTarget;
+        }
+        else
         {
             Debug.Log("找不到AppConfig，请新建AppConfig");
         }

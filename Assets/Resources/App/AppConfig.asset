@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AppConfig
   m_EditorClassIdentifier: 
   IsDebug: 1
-  IsProServer: 1
+  IsProServer: 0
   IsHotfix: 0
   IsLoadAB: 0
   RunXLua: 0
