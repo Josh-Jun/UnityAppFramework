@@ -16,7 +16,7 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
         private set { }
         get
         {
-            string server = Root.AppConfig.Server.Value ? "" : "";//测试服务器:生产服务器
+            string server = Root.AppConfig.IsProServer ? "" : "";//测试服务器:生产服务器
             return server;
         }
     }
@@ -28,7 +28,7 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
         private set { }
         get
         {
-            int port = Root.AppConfig.Server.Value ? 17888 : 8080;//测试服务器:生产服务器
+            int port = Root.AppConfig.IsProServer ? 17888 : 8080;//测试服务器:生产服务器
             return port;
         }
     }
@@ -57,7 +57,7 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
         {
             sb.AppendFormat("/{0}", args[i]);
         }
-        Debuger.Log("URL : " + sb.ToString());
+        Debug.Log("URL : " + sb.ToString());
         return sb.ToString();
     }
     public string MakeUrlWithToken(string url, params object[] args)
@@ -68,7 +68,7 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
         {
             sb.AppendFormat("/{0}", args[i]);
         }
-        Debuger.Log("URL : " + sb.ToString());
+        Debug.Log("URL : " + sb.ToString());
         return sb.ToString();
     }
 

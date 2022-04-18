@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Timers;
+using UnityEngine;
 /// <summary>功能:计时器</summary>
 public class TimerTask
 {
@@ -127,7 +128,7 @@ public class TimerTask
                 }
                 catch (Exception e)
                 {
-                    Debuger.Log(e.ToString());
+                    Debug.Log(e.ToString());
                 }
 
                 if (timeTask.count == 1)
@@ -310,7 +311,7 @@ public class TimerTask
                 }
                 catch (Exception e)
                 {
-                    Debuger.Log(e.ToString());
+                    Debug.Log(e.ToString());
                 }
 
                 if (frameTask.count == 1)

@@ -125,7 +125,7 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
         string eventName = gameMsg.pushMsg.eventName;
         if (string.IsNullOrEmpty(eventName))
         {
-            Debuger.LogError("消息事件名不可为空！");
+            Debug.LogError("消息事件名不可为空！");
             return;
         }
         object[] objs = gameMsg.pushMsg.objs;
@@ -192,7 +192,7 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
     }
     public void ReceiveMsg(string msg)
     {
-        Debuger.Log(msg);
+        Debug.Log(msg);
         ReceiveUdpMsg?.Invoke(msg);
     }
     #endregion

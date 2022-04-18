@@ -7,13 +7,15 @@ using UnityEngine;
 public class BuildApkWindowEditor : EditorWindow
 {
     private static GUIStyle titleStyle;
+    public static AppConfig AppConfig;//App配置表 
     private static readonly string configPath = "App/AppConfig";
     private bool DevelopmentBuild = true;
-    private bool IsBetaServer = true;
+    private bool IsProServer = true;
     private bool IsHotfix = false;
     private bool IsLoadAB = false;
     private bool RunXLuaScripts = false;
-    private AppTarget Target = AppTarget.Android;
+    private int AppFrameRate = 30;
+    private ApkTarget ApkTarget = ApkTarget.Android;
     private string outputPath;
 
     [MenuItem("Tools/My ToolsWindow/Build Apk", false, 0)]
@@ -32,6 +34,11 @@ public class BuildApkWindowEditor : EditorWindow
     public void OnEnable()
     {
         outputPath = Application.dataPath.Replace("Assets", "Apk");
+        AppConfig = Resources.Load<AppConfig>(configPath);
+        if(AppConfig == null)
+        {
+            Debug.Log("找不到AppConfig，请新建AppConfig");
+        }
     }
     public void OnGUI()
     {
@@ -46,9 +53,9 @@ public class BuildApkWindowEditor : EditorWindow
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.BeginHorizontal();
-        GUILayout.Label(new GUIContent("Is Beta Server"));
+        GUILayout.Label(new GUIContent("Is Pro Server"));
         GUILayout.FlexibleSpace();
-        IsBetaServer = EditorGUILayout.Toggle(IsBetaServer, GUILayout.MaxWidth(75));
+        IsProServer = EditorGUILayout.Toggle(IsProServer, GUILayout.MaxWidth(75));
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.BeginHorizontal();
@@ -70,9 +77,15 @@ public class BuildApkWindowEditor : EditorWindow
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.BeginHorizontal();
+        GUILayout.Label(new GUIContent("App FrameRate"));
+        GUILayout.FlexibleSpace();
+        AppFrameRate = EditorGUILayout.IntField(AppFrameRate, GUILayout.MaxWidth(75));
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.BeginHorizontal();
         GUILayout.Label(new GUIContent("Build Mold"));
         GUILayout.FlexibleSpace();
-        Target = (AppTarget)EditorGUILayout.EnumPopup(Target, GUILayout.MaxWidth(75));
+        ApkTarget = (ApkTarget)EditorGUILayout.EnumPopup(ApkTarget, GUILayout.MaxWidth(75));
         EditorGUILayout.EndHorizontal();
 
         if (GUILayout.Button("Update"))
@@ -98,19 +111,18 @@ public class BuildApkWindowEditor : EditorWindow
     }
     public void UpdateConfig()
     {
-        string path = string.Format(@"{0}/Resources/{1}.xml", Application.dataPath, configPath);
-        XmlDocument xml_doc = new XmlDocument();
-        xml_doc.Load(path);
-        xml_doc.GetElementsByTagName("Debug")[0].InnerText = DevelopmentBuild.ToString().ToLower();
-        xml_doc.GetElementsByTagName("Server")[0].InnerText = IsBetaServer.ToString().ToLower();
-        xml_doc.GetElementsByTagName("Hotfix")[0].InnerText = IsHotfix.ToString().ToLower();
-        xml_doc.GetElementsByTagName("LoadAB")[0].InnerText = IsLoadAB.ToString().ToLower();
-        xml_doc.GetElementsByTagName("XLua")[0].InnerText = RunXLuaScripts.ToString().ToLower();
-        xml_doc.Save(path);
+        EditorUserBuildSettings.development = DevelopmentBuild;
+        AppConfig.IsDebug = DevelopmentBuild;
+        AppConfig.IsHotfix = IsHotfix;
+        AppConfig.IsLoadAB = IsLoadAB;
+        AppConfig.IsProServer = IsProServer;
+        AppConfig.RunXLua = RunXLuaScripts;
+        AppConfig.AppFrameRate = AppFrameRate;
+        AppConfig.ApkTarget = ApkTarget;
     }
     private void BuildApk()
     {
-        string _str = Target == AppTarget.PicoVR ? "meta-picovr" : "meta-android";
+        string _str = ApkTarget == ApkTarget.PicoVR ? "meta-picovr" : "meta-android";
         string version = PlayerSettings.bundleVersion;
         string name = DevelopmentBuild ? string.Format("{0}_v{1}_beta", _str, version) : string.Format("{0}_v{1}_release", _str, version);
         string outName = string.Format("{0}.apk", name);

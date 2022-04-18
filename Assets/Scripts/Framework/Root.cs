@@ -18,11 +18,15 @@ public class Root
     private static IRoot HotfixRoot = null;
     public static void Init()
     {
-        TextAsset config = Resources.Load<TextAsset>(path_AppConfig);
-        AppConfig = XmlSerializeManager.ProtoDeSerialize<AppConfig>(config.bytes);
-        Debuger.Init(AppConfig.Debug.Value);
+        AppConfig AppConfig = Resources.Load<AppConfig>(path_AppConfig);
+        //Debug.Log开关
+        Debug.unityLogger.logEnabled = AppConfig.IsDebug;
+        //禁止程序休眠
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        //设置程序帧率
+        Application.targetFrameRate = AppConfig.AppFrameRate;
 
-        if (AppConfig.Hotfix.Value)
+        if (AppConfig.IsHotfix)
         {
             //初始化热更脚本
             Type type = Type.GetType(hotfixScriptName);
@@ -32,7 +36,7 @@ public class Root
         }
         else
         {
-            InitRootScripts(()=> { LoadScene(MainSceneName); });
+            InitRootScripts(() => { LoadScene(MainSceneName); });
         }
     }
 
@@ -44,7 +48,7 @@ public class Root
         {
             IRoot iRoot;
             //判断是否存在XLua脚本，如果存在，执行XLua代码，不存在执行C#代码
-            if (AppConfig.XLua.Value && XLuaManager.Instance.IsLuaFileExist(rootConfig.RootScript[i].LuaScriptPath))
+            if (AppConfig.RunXLua && XLuaManager.Instance.IsLuaFileExist(rootConfig.RootScript[i].LuaScriptPath))
             {
                 XLuaRoot root = new XLuaRoot();
                 root.Init(rootConfig.RootScript[i].LuaScriptPath);
@@ -64,7 +68,7 @@ public class Root
                 }
                 else
                 {
-                    Debuger.LogError("Root脚本为空 脚本名称:{0}", rootConfig.RootScript[i].ScriptName);
+                    Debug.LogError($"Root脚本为空 脚本名称:{rootConfig.RootScript[i].ScriptName}");
                 }
             }
             if (!sceneScriptsPairs.ContainsKey(rootConfig.RootScript[i].SceneName))

@@ -14,7 +14,7 @@ public class SingletonManager : Singleton<SingletonManager>
         }
         else
         {
-            Debuger.Log("已具有相同名称的实例:{0}", name);
+            Debug.Log($"已具有相同名称的实例:{name}");
         }
     }
     /// <summary> 删除所有单例 </summary>
@@ -37,7 +37,7 @@ public class SingletonManager : Singleton<SingletonManager>
         }
         else
         {
-            Debuger.Log("实例不存在:{0}", name);
+            Debug.Log($"实例不存在:{name}");
         }
     }
 
@@ -51,7 +51,7 @@ public class SingletonManager : Singleton<SingletonManager>
         }
         else
         {
-            Debuger.Log("实例不存在:{0}", name);
+            Debug.Log($"实例不存在:{name}");
         }
     }
 }

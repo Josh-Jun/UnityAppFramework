@@ -23,7 +23,7 @@ public class XmlSerializeManager
         }
         catch (Exception e)
         {
-            Debuger.LogError("序列化失败 ： " + e.ToString());
+            Debug.LogError("序列化失败 ： " + e.ToString());
             return null;
         }
     }
@@ -62,7 +62,7 @@ public class XmlSerializeManager
         }
         catch (Exception e)
         {
-            Debuger.LogError("此类无法转换成xml " + obj.GetType() + "," + e);
+            Debug.LogError("此类无法转换成xml " + obj.GetType() + "," + e);
         }
         return false;
     }
@@ -81,7 +81,7 @@ public class XmlSerializeManager
         }
         catch (Exception e)
         {
-            Debuger.LogError("此xml无法转成二进制: " + path + "," + e);
+            Debug.LogError("此xml无法转成二进制: " + path + "," + e);
         }
         return t;
     }
@@ -100,7 +100,7 @@ public class XmlSerializeManager
         }
         catch (Exception e)
         {
-            Debuger.LogError("此xml无法转成二进制: " + path + "," + e);
+            Debug.LogError("此xml无法转成二进制: " + path + "," + e);
         }
         return obj;
     }

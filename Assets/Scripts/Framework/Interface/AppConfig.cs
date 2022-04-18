@@ -1,48 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Xml.Serialization;
+using UnityEngine;
 
-public enum AppTarget
+[CreateAssetMenu(fileName = "AppConfig", menuName = "App/AppConfig")]
+[Serializable]
+public class AppConfig : ScriptableObject
 {
-    Android = 0,
-    PicoVR = 1
-}
+    [Header("App Config")]
 
-[Serializable]
-public class AppConfig
-{
-    [XmlElement]
-    public BoolElement Debug;//是否打印Log
-    [XmlElement]
-    public BoolElement Server;//是否测试服生产服
-    [XmlElement]
-    public BoolElement Hotfix;//是否热更
-    [XmlElement]
-    public BoolElement LoadAB;//是否加载AB
-    [XmlElement]
-    public BoolElement XLua;//是否热更
-}
-[Serializable]
-public class BoolElement
-{
-    [XmlText]
-    public bool Value;
-}
-[Serializable]
-public class StrElement
-{
-    [XmlText]
-    public string Value;
-}
-[Serializable]
-public class IntElement
-{
-    [XmlText]
-    public int Value;
-}
-[Serializable]
-public class FloatElement
-{
-    [XmlText]
-    public float Value;
+    [Tooltip("App的调试模式")]
+    public bool IsDebug;//是否打印Log
+    [Tooltip("App服务器是否生产服务器")]
+    public bool IsProServer;//是否测试服生产服
+    [Tooltip("App是否热更")]
+    public bool IsHotfix;//是否热更
+    [Tooltip("App是否加载AB包")]
+    public bool IsLoadAB;//是否加载AB
+    [Tooltip("App是否运行XLua脚本")]
+    public bool RunXLua;//是否热更
+    [Tooltip("App的运行帧频，默认30帧")]
+    public int AppFrameRate = 30;//App的运行帧频
+    [Tooltip("App安卓包不同渠道")]
+    public ApkTarget ApkTarget;//App安卓包不同渠道
 }

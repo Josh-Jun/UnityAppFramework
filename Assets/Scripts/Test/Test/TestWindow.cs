@@ -31,7 +31,7 @@ namespace Test
         protected override void OpenWindow()
         {
             base.OpenWindow();
-            Debuger.Log("OpenWindow");
+            Debug.Log("OpenWindow");
         }
 
         protected override void CloseWindow()

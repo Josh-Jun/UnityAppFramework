@@ -14,7 +14,7 @@ public class CopyFolderKeepAssetsUsingEditor
         string folderName = s[s.Length - 1];
         if (folderName.Contains("."))
         {
-            Debuger.LogError("该索引不是文件夹名字");
+            Debug.LogError("该索引不是文件夹名字");
             return;
         }
         string copyedFolderPath = Path.GetFullPath(".") + Path.DirectorySeparatorChar + oldFolderPath;
@@ -135,8 +135,8 @@ public class CopyFolderKeepAssetsUsingEditor
             }
             catch (Exception e)
             {
-                Debuger.LogError(filePath);
-                Debuger.LogError(e.ToString());
+                Debug.LogError(filePath);
+                Debug.LogError(e.ToString());
                 counter++;
                 continue;
             }

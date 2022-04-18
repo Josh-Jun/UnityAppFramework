@@ -54,7 +54,7 @@ public class AppRootConfigWindowEditor : EditorWindow
                     }
                     else
                     {
-                        Debuger.Log("不能删除最后一个RootScript");
+                        Debug.Log("不能删除最后一个RootScript");
                     }
                 }
                 EditorGUILayout.EndHorizontal();

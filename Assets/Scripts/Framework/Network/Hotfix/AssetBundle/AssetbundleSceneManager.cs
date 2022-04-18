@@ -46,7 +46,7 @@ public class AssetbundleSceneManager
         }
         else
         {
-            Debuger.LogError("找不到这个文件夹" + folderName + "对应的包!");
+            Debug.LogError("找不到这个文件夹" + folderName + "对应的包!");
             return false;
         }
 
@@ -68,7 +68,7 @@ public class AssetbundleSceneManager
         }
         else
         {
-            Debuger.LogError("找不到这个文件夹" + folderName + "对应的包!");
+            Debug.LogError("找不到这个文件夹" + folderName + "对应的包!");
             return false;
         }
     }
@@ -107,7 +107,7 @@ public class AssetbundleSceneManager
 
         if (!folderDic.ContainsKey(folderName))
         {
-            Debuger.LogError("没有这个文件夹!" + folderName);
+            Debug.LogError("没有这个文件夹!" + folderName);
             return null;
         }
 
@@ -134,7 +134,7 @@ public class AssetbundleSceneManager
         }
         else
         {
-            Debuger.LogError("找不到这个文件夹" + folderName + "对应的包!");
+            Debug.LogError("找不到这个文件夹" + folderName + "对应的包!");
         }
     }
 
@@ -157,7 +157,7 @@ public class AssetbundleSceneManager
     {
         if (sceneAssetBundles == null)
         {
-            Debuger.LogError("当前sceneAssetBundles为空,无法获取该" + assetName + "资源");
+            Debug.LogError("当前sceneAssetBundles为空,无法获取该" + assetName + "资源");
             return null;
         }
         if (folderDic.ContainsKey(folderName))
@@ -167,7 +167,7 @@ public class AssetbundleSceneManager
         }
         else
         {
-            Debuger.LogError("找不到该文件夹!" + folderName);
+            Debug.LogError("找不到该文件夹!" + folderName);
             return null;
         }
     }
@@ -180,7 +180,7 @@ public class AssetbundleSceneManager
     {
         if (sceneAssetBundles == null)
         {
-            Debuger.LogError("当前sceneAssetBundles为空,无法获取该资源");
+            Debug.LogError("当前sceneAssetBundles为空,无法获取该资源");
             return null;
         }
         if (folderDic.ContainsKey(folderName))
@@ -190,7 +190,7 @@ public class AssetbundleSceneManager
         }
         else
         {
-            Debuger.LogError("找不到该文件夹!" + folderName);
+            Debug.LogError("找不到该文件夹!" + folderName);
             return null;
         }
     }
@@ -204,7 +204,7 @@ public class AssetbundleSceneManager
     {
         if (sceneAssetBundles == null)
         {
-            Debuger.LogError("当前sceneAssetBundles为空,无法获取该" + assetName + "资源");
+            Debug.LogError("当前sceneAssetBundles为空,无法获取该" + assetName + "资源");
             return null;
         }
         if (folderDic.ContainsKey(folderName))
@@ -214,7 +214,7 @@ public class AssetbundleSceneManager
         }
         else
         {
-            Debuger.LogError("找不到该文件夹!" + folderName);
+            Debug.LogError("找不到该文件夹!" + folderName);
             return null;
         }
     }
@@ -233,7 +233,7 @@ public class AssetbundleSceneManager
         }
         else
         {
-            Debuger.LogError("找不到该文件夹!" + folderName + "对应的包!");
+            Debug.LogError("找不到该文件夹!" + folderName + "对应的包!");
         }
 
     }
@@ -251,7 +251,7 @@ public class AssetbundleSceneManager
         }
         else
         {
-            Debuger.LogError("找不到该文件夹!" + folderName + "对应的包!");
+            Debug.LogError("找不到该文件夹!" + folderName + "对应的包!");
         }
     }
 
@@ -275,7 +275,7 @@ public class AssetbundleSceneManager
         }
         else
         {
-            Debuger.LogError("找不到该文件夹!" + folderName + "对应的包!");
+            Debug.LogError("找不到该文件夹!" + folderName + "对应的包!");
         }
     }
 
@@ -307,7 +307,7 @@ public class AssetbundleSceneManager
         }
         else
         {
-            Debuger.LogError("找不到该文件夹!" + folderName + "对应的包!");
+            Debug.LogError("找不到该文件夹!" + folderName + "对应的包!");
         }
     }
     #endregion

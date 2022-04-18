@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 596a96bfce2dd8348b41e5624ae1a5cb, type: 3}
+  m_Name: AppConfig
+  m_EditorClassIdentifier: 
+  IsDebug: 1
+  IsProServer: 1
+  IsHotfix: 0
+  IsLoadAB: 0
+  RunXLua: 0
+  AppFrameRate: 30
+  ApkTarget: 1

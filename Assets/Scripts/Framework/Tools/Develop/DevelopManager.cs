@@ -51,7 +51,7 @@ public static class DevelopManager
     {
         if (image == null)
         {
-            Debuger.LogError("Image is null!!!");
+            Debug.LogError("Image is null!!!");
             return;
         }
         image.PlayFrames(sequenceFrames.ToArray(), time, callback, loop, isNativeSize);
@@ -60,7 +60,7 @@ public static class DevelopManager
     {
         if (image == null)
         {
-            Debuger.LogError("Image is null!!!");
+            Debug.LogError("Image is null!!!");
             return;
         }
         int index = 0;//可以用来控制起始播放的动画帧索引
@@ -131,7 +131,7 @@ public static class DevelopManager
         }
         else
         {
-            Debuger.LogError("对象{0} --- 没有脚本:{1}", go.name, typeof(T).Name);
+            Debug.LogError($"对象{go.name} --- 没有脚本:{typeof(T).Name}");
         }
     }
     /// <summary>
@@ -149,7 +149,7 @@ public static class DevelopManager
         }
         else
         {
-            Debuger.LogError("对象{0} --- 没有脚本:{1}", com.gameObject.name, typeof(T).Name);
+            Debug.LogError("对象{com.gameObject.name} --- 没有脚本:{typeof(T).Name}");
         }
     }
     #endregion
@@ -501,7 +501,7 @@ public static class DevelopManager
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
             Component t = null;
-            if (Root.AppConfig.XLua.Value)
+            if (Root.AppConfig.RunXLua)
             {
                 string luaPath = string.Format("{0}/{1}", path.Split('/')[0], go.name);
                 t = go.TryGetComponent<XLuaUIWindow>().Init(luaPath);
@@ -517,7 +517,7 @@ public static class DevelopManager
                 }
                 else
                 {
-                    Debuger.LogError("{0}:脚本已存在,", fullName);
+                    Debug.LogError($"{fullName}:脚本已存在,");
                 }
             }
             EventDispatcher.TriggerEvent(go.name, state);
@@ -540,7 +540,7 @@ public static class DevelopManager
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
             T t = null;
-            if (Root.AppConfig.XLua.Value)
+            if (Root.AppConfig.RunXLua)
             {
                 string luaPath = string.Format("{0}/{1}", path.Split('/')[0], go.name);
                 t = go.TryGetComponent<XLuaUIWindow>().Init(luaPath) as T;
@@ -556,7 +556,7 @@ public static class DevelopManager
                 }
                 else
                 {
-                    Debuger.LogError("{0}:脚本已存在,", fullName);
+                    Debug.LogError($"{fullName}:脚本已存在,");
                 }
             }
             EventDispatcher.TriggerEvent(go.name, state);

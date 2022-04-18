@@ -89,7 +89,7 @@ public class AssetBundleLoader
     {
         if (assetLoader == null)
         {
-            Debuger.LogError("当前assetLoader为空!" + assetLoader);
+            Debug.LogError("当前assetLoader为空!" + assetLoader);
             return null;
         }
         return assetLoader.LoadAsset(assetName);
@@ -103,7 +103,7 @@ public class AssetBundleLoader
     {
         if (assetLoader == null)
         {
-            Debuger.LogError("当前assetLoader为空!" + assetLoader);
+            Debug.LogError("当前assetLoader为空!" + assetLoader);
             return null;
         }
         return assetLoader.LoadAllAssets();
@@ -118,7 +118,7 @@ public class AssetBundleLoader
     {
         if (assetLoader == null)
         {
-            Debuger.LogError("当前assetLoader为空!" + assetLoader);
+            Debug.LogError("当前assetLoader为空!" + assetLoader);
             return null;
         }
 
@@ -133,7 +133,7 @@ public class AssetBundleLoader
     {
         if (assetLoader == null)
         {
-            Debuger.LogError("当前assetLoader为空!" + assetLoader);
+            Debug.LogError("当前assetLoader为空!" + assetLoader);
         }
         else
             assetLoader.UnloadAsset(asset);

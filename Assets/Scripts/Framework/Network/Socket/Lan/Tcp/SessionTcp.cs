@@ -5,7 +5,7 @@ public class SessionTcp : SessionTcpBase
     //建立连接
     protected override void OnConnected()
     {
-        //Debuger.Log("有客户端连接成功...");
+        //Debug.Log("有客户端连接成功...");
     }
 
     //收到数据

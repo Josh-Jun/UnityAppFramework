@@ -22,7 +22,7 @@ public class FileManager
         }
         catch
         {
-            Debuger.LogError(string.Format("<color=#0000FF> 创建文件-文件夹路径错误:{0}</color>", targetPath));
+            Debug.LogError(string.Format("<color=#0000FF> 创建文件-文件夹路径错误:{0}</color>", targetPath));
         }
     }
 
@@ -40,7 +40,7 @@ public class FileManager
         }
         catch
         {
-            Debuger.LogError(string.Format("<color=#0000FF> 创建文件-文件夹路径错误:{0}</color>", targetPath));
+            Debug.LogError(string.Format("<color=#0000FF> 创建文件-文件夹路径错误:{0}</color>", targetPath));
         }
     }
     /// <summary> 创建目录,创建到路径最后一级的文件夹 </summary>
@@ -56,7 +56,7 @@ public class FileManager
         }
         catch
         {
-            Debuger.LogError(string.Format("<color=#0000FF> 创建目录-文件夹路径错误:{0}</color>", targetPath));
+            Debug.LogError(string.Format("<color=#0000FF> 创建目录-文件夹路径错误:{0}</color>", targetPath));
         }
     }
 
@@ -72,7 +72,7 @@ public class FileManager
         }
         catch
         {
-            Debuger.LogError(string.Format("<color=#0000FF>创建文件夹-文件夹路径错误:{0}</color>", targetPath));
+            Debug.LogError(string.Format("<color=#0000FF>创建文件夹-文件夹路径错误:{0}</color>", targetPath));
         }
     }
 
@@ -88,7 +88,7 @@ public class FileManager
         }
         catch
         {
-            Debuger.LogError(string.Format("<color=#0000FF>删除文件-文件夹路径错误:{0}</color>", targetPath));
+            Debug.LogError(string.Format("<color=#0000FF>删除文件-文件夹路径错误:{0}</color>", targetPath));
         }
     }
 
@@ -116,7 +116,7 @@ public class FileManager
         }
         catch
         {
-            Debuger.LogError(string.Format("<color=#0000FF> 删除文件夹下所有文件-文件夹路径错误:{0}</color>", targetPath));
+            Debug.LogError(string.Format("<color=#0000FF> 删除文件夹下所有文件-文件夹路径错误:{0}</color>", targetPath));
         }
     }
 
@@ -140,7 +140,7 @@ public class FileManager
         }
         catch
         {
-            Debuger.LogError(string.Format("<color=#0000FF> 删除文件夹下所有文件-文件夹路径错误:{0}</color>", targetPath));
+            Debug.LogError(string.Format("<color=#0000FF> 删除文件夹下所有文件-文件夹路径错误:{0}</color>", targetPath));
         }
     }
 

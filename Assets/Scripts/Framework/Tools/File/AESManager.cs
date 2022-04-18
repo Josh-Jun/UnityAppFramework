@@ -31,7 +31,7 @@ public class AESManager
                     string headTag = Encoding.UTF8.GetString(headBuff);
                     if (headTag == AESHead)
                     {
-                        Debuger.Log(path + "已经加密过了！");
+                        Debug.Log(path + "已经加密过了！");
                         return;
                     }
                     //加密并且写入字节头
@@ -49,7 +49,7 @@ public class AESManager
         }
         catch (Exception e)
         {
-            Debuger.LogError(e);
+            Debug.LogError(e);
         }
     }
 
@@ -87,7 +87,7 @@ public class AESManager
         }
         catch (Exception e)
         {
-            Debuger.LogError(e);
+            Debug.LogError(e);
         }
     }
 
@@ -122,7 +122,7 @@ public class AESManager
         }
         catch (Exception e)
         {
-            Debuger.LogError(e);
+            Debug.LogError(e);
         }
 
         return DecBuffer;
@@ -159,7 +159,7 @@ public class AESManager
         }
         catch (Exception e)
         {
-            Debuger.LogError(e);
+            Debug.LogError(e);
         }
     }
 
@@ -235,7 +235,7 @@ public class AESManager
         }
         catch (Exception e)
         {
-            Debuger.LogError(e);
+            Debug.LogError(e);
         }
 
         return DecBuffer;

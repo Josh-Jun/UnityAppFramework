@@ -118,10 +118,10 @@ public class FindSameFileNameWindowEditor : EditorWindow
             }
             else
             {
-                Debuger.Log("重复文件:{0}\n路径:{1}    {2}", obj.name, path, FileNames[obj.name]);
+                Debug.Log($"重复文件:{obj.name}\n路径:{path}    {FileNames[obj.name]}");
             }
         }
-        Debuger.Log("查找完了");
+        Debug.Log("查找完了");
         FileNames.Clear();
     }
     #endregion
