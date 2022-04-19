@@ -44,7 +44,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 153602}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!114 &11453602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60,6 +60,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.196, g: 0.196, b: 0.196, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -126,7 +127,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 153604}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!114 &11453604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,6 +143,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.392}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -200,7 +202,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 153606}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!114 &11453606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,6 +218,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.1953125, g: 0.1953125, b: 0.1953125, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -280,7 +283,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 153608}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!114 &11453608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296,6 +299,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.196, g: 0.196, b: 0.196, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -360,7 +364,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 153610}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!114 &11453612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -376,6 +380,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -404,6 +409,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -479,7 +485,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 153612}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!114 &11453616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -495,6 +501,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -523,6 +530,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -596,7 +604,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 153614}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!114 &11453618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -612,6 +620,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.1953125, g: 0.1953125, b: 0.1953125, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

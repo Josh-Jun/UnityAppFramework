@@ -644,14 +644,18 @@ namespace CSObjectWrapEditor
             textWriter.Close();
         }
 
+        static string NonmalizeName(string name)
+        {
+            return name.Replace("+", "_").Replace(".", "_").Replace("`", "_").Replace("&", "_").Replace("[", "_").Replace("]", "_").Replace(",", "_");
+        }
+
         static void GenInterfaceBridge(IEnumerable<Type> types, string save_path)
         {
             foreach (var wrap_type in types)
             {
                 if (!wrap_type.IsInterface) continue;
 
-                string filePath = save_path + wrap_type.ToString().Replace("+", "").Replace(".", "")
-                    .Replace("`", "").Replace("&", "").Replace("[", "").Replace("]", "").Replace(",", "") + "Bridge.cs";
+                string filePath = save_path + NonmalizeName(wrap_type.ToString()) + "Bridge.cs";
                 StreamWriter textWriter = new StreamWriter(filePath, false, Encoding.UTF8);
                 GenOne(wrap_type, (type, type_info) =>
                 {
@@ -936,6 +940,8 @@ namespace CSObjectWrapEditor
                     .Where(method => !ignoreCompilerGenerated || !isDefined(method, typeof(CompilerGeneratedAttribute)))
                     .Where(method => !ignoreNotPublic || method.IsPublic)
                     .Where(method => !ignoreProperty || !method.IsSpecialName || (!method.Name.StartsWith("get_") && !method.Name.StartsWith("set_")))
+                    .Where(method => !method.GetParameters().Any(pInfo => pInfo.ParameterType.IsPointer))
+                    .Where(method => !method.ReturnType.IsPointer)
                     .Cast<MethodBase>()
                     .Concat(kv.Key.GetConstructors(bindingAttrOfConstructor).Cast<MethodBase>())
                     .Where(method => !injectByGeneric(method, kv.Value))
@@ -995,8 +1001,7 @@ namespace CSObjectWrapEditor
 
             foreach (var wrap_type in types)
             {
-                string filePath = save_path + wrap_type.ToString().Replace("+", "").Replace(".", "")
-                    .Replace("`", "").Replace("&", "").Replace("[", "").Replace("]", "").Replace(",", "") + "Wrap.cs";
+                string filePath = save_path + NonmalizeName(wrap_type.ToString()) + "Wrap.cs";
                 StreamWriter textWriter = new StreamWriter(filePath, false, Encoding.UTF8);
                 if (wrap_type.IsEnum)
                 {
@@ -1821,7 +1826,7 @@ namespace CSObjectWrapEditor
             }
             if (!DelegateBridge.Gen_Flag)
             {
-                throw new InvalidOperationException("Code has not been genrated, may be not work in phone!");
+                throw new InvalidOperationException("Code has not been generated, may be not work in phone!");
             }
         }
 #endif

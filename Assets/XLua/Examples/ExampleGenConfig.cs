@@ -43,6 +43,7 @@ public static class ExampleGenConfig
                 typeof(ParticleSystem),
                 typeof(SkinnedMeshRenderer),
                 typeof(Renderer),
+                typeof(WWW),
                 typeof(Light),
                 typeof(Mathf),
                 typeof(System.Collections.Generic.List<int>),
