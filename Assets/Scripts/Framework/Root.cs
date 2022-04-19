@@ -90,9 +90,15 @@ public class Root
         {
             if (async.isDone && async.progress == 1)
             {
-                for (int i = 0; i < sceneScriptsPairs[sceneName].Count; i++)
+                if (sceneScriptsPairs.ContainsKey(sceneName))
                 {
-                    iRootPairs[sceneScriptsPairs[sceneName][i]].Begin();
+                    for (int i = 0; i < sceneScriptsPairs[sceneName].Count; i++)
+                    {
+                        if (iRootPairs.ContainsKey(sceneScriptsPairs[sceneName][i]))
+                        {
+                            iRootPairs[sceneScriptsPairs[sceneName][i]].Begin();
+                        }
+                    }
                 }
                 callback?.Invoke();
             }
