@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--TableName = "配置表得名称" TablePath = "配置表路径"-->
+<AppTableConfig>
+  <AppTable TableName="TestTableData">Table/Test/TestTableData</AppTable>
+</AppTableConfig>

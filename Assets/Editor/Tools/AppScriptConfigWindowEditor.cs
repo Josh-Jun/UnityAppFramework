@@ -5,12 +5,12 @@ using UnityEditor.iOS;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AppRootConfigWindowEditor : EditorWindow
+public class AppScriptConfigWindowEditor : EditorWindow
 {
     private static GUIStyle titleStyle;
-    private static RootScriptConfig config;
-    private static readonly string configPath = "AssetsFolder/App/Assets/AppRootConfig";
-    [MenuItem("Tools/My ToolsWindow/Set AppRootConfig", false, 2)]
+    private static AppScriptConfig config;
+    private static readonly string configPath = "AssetsFolder/App/Assets/AppScriptConfig";
+    [MenuItem("Tools/My ToolsWindow/Set AppScriptConfig", false, 2)]
     public static void OpenWindow()
     {
         titleStyle = new GUIStyle("OL Title")
@@ -21,15 +21,15 @@ public class AppRootConfigWindowEditor : EditorWindow
         };
 
         var bytes = Resources.Load<TextAsset>(configPath).bytes;
-        config = XmlSerializeManager.ProtoDeSerialize<RootScriptConfig>(bytes);
+        config = XmlSerializeManager.ProtoDeSerialize<AppScriptConfig>(bytes);
         
-        AppRootConfigWindowEditor window = GetWindow<AppRootConfigWindowEditor>("AppRootConfigWindow");
+        AppScriptConfigWindowEditor window = GetWindow<AppScriptConfigWindowEditor>("AppScriptConfigWindow");
         window.Show();
     }
     private void OnGUI()
     {
         EditorGUILayout.Space();
-        GUILayout.Label(new GUIContent("AppRootConfig"), titleStyle);
+        GUILayout.Label(new GUIContent("AppScriptConfig"), titleStyle);
         EditorGUILayout.Space();
         EditorGUILayout.BeginVertical();
         EditorGUILayout.Space();

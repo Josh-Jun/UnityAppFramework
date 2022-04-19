@@ -7,14 +7,14 @@ using XLuaFrame;
 public class Root
 {
     public const string MainSceneName = "TestScene";
-    public const string path_AppRootConfig = "App/Assets/AppRootConfig";
+    public const string path_AppScriptConfig = "App/Assets/AppScriptConfig";
     public const string path_AppConfig = "App/AppConfig";
     public static AppConfig AppConfig;//App配置表 
 
     private static readonly Dictionary<string, List<string>> sceneScriptsPairs = new Dictionary<string, List<string>>();
     private static readonly string updateScriptName = "Update.UpdateRoot";
     private static readonly Dictionary<string, IRoot> iRootPairs = new Dictionary<string, IRoot>();
-    private static RootScriptConfig rootConfig;
+    private static AppScriptConfig appScriptConfig;
     private static IRoot UpdateRoot = null;
     public static void Init()
     {
@@ -42,44 +42,44 @@ public class Root
 
     public static void InitRootScripts(Action callback = null)
     {
-        TextAsset config = AssetsManager.Instance.LoadAsset<TextAsset>(path_AppRootConfig);
-        rootConfig = XmlSerializeManager.ProtoDeSerialize<RootScriptConfig>(config.bytes);
-        for (int i = 0; i < rootConfig.RootScript.Count; i++)
+        TextAsset config = AssetsManager.Instance.LoadAsset<TextAsset>(path_AppScriptConfig);
+        appScriptConfig = XmlSerializeManager.ProtoDeSerialize<AppScriptConfig>(config.bytes);
+        for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
         {
             IRoot iRoot;
             //判断是否存在XLua脚本，如果存在，执行XLua代码，不存在执行C#代码
-            if (AppConfig.RunXLua && XLuaManager.Instance.IsLuaFileExist(rootConfig.RootScript[i].LuaScriptPath))
+            if (AppConfig.RunXLua && XLuaManager.Instance.IsLuaFileExist(appScriptConfig.RootScript[i].LuaScriptPath))
             {
                 XLuaRoot root = new XLuaRoot();
-                root.Init(rootConfig.RootScript[i].LuaScriptPath);
+                root.Init(appScriptConfig.RootScript[i].LuaScriptPath);
                 iRoot = root as IRoot;
             }
             else
             {
-                Type type = Type.GetType(rootConfig.RootScript[i].ScriptName);
+                Type type = Type.GetType(appScriptConfig.RootScript[i].ScriptName);
                 object obj = Activator.CreateInstance(type);
                 iRoot = obj as IRoot;
             }
-            if (!iRootPairs.ContainsKey(rootConfig.RootScript[i].ScriptName))
+            if (!iRootPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
             {
                 if (iRoot != null)
                 {
-                    iRootPairs.Add(rootConfig.RootScript[i].ScriptName, iRoot);
+                    iRootPairs.Add(appScriptConfig.RootScript[i].ScriptName, iRoot);
                 }
                 else
                 {
-                    Debug.LogError($"Root脚本为空 脚本名称:{rootConfig.RootScript[i].ScriptName}");
+                    Debug.LogError($"Root脚本为空 脚本名称:{appScriptConfig.RootScript[i].ScriptName}");
                 }
             }
-            if (!sceneScriptsPairs.ContainsKey(rootConfig.RootScript[i].SceneName))
+            if (!sceneScriptsPairs.ContainsKey(appScriptConfig.RootScript[i].SceneName))
             {
                 List<string> scripts = new List<string>();
-                scripts.Add(rootConfig.RootScript[i].ScriptName);
-                sceneScriptsPairs.Add(rootConfig.RootScript[i].SceneName, scripts);
+                scripts.Add(appScriptConfig.RootScript[i].ScriptName);
+                sceneScriptsPairs.Add(appScriptConfig.RootScript[i].SceneName, scripts);
             }
             else
             {
-                sceneScriptsPairs[rootConfig.RootScript[i].SceneName].Add(rootConfig.RootScript[i].ScriptName);
+                sceneScriptsPairs[appScriptConfig.RootScript[i].SceneName].Add(appScriptConfig.RootScript[i].ScriptName);
             }
         }
         callback?.Invoke();
@@ -104,7 +104,7 @@ public class Root
         UpdateRoot?.End();
         for (int i = 0; i < iRootPairs.Count; i++)
         {
-            iRootPairs[rootConfig.RootScript[i].ScriptName].End();
+            iRootPairs[appScriptConfig.RootScript[i].ScriptName].End();
         }
     }
 }

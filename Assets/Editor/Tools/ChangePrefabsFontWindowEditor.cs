@@ -34,7 +34,12 @@ public class ChangePrefabsFontWindowEditor : EditorWindow
         #region 1、更换预制体字体
         GUILayout.BeginVertical();
 
+        EditorGUILayout.Space();
+
+        GUILayout.BeginHorizontal();
+        EditorGUILayout.LabelField("Font");
         changeFont = (Font)EditorGUILayout.ObjectField(changeFont, typeof(Font), true);
+        GUILayout.EndHorizontal();
 
         EditorGUILayout.Space();
 

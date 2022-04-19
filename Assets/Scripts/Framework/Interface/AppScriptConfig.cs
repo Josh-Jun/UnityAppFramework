@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 
 [Serializable]
-public class RootScriptConfig
+public class AppScriptConfig
 {
     [XmlElement]
     public List<RootScript> RootScript;//脚本集合
