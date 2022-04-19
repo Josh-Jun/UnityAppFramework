@@ -94,7 +94,7 @@ public class AssetbundleSceneManager
         //        }
         //    }
         //}
-        folderDic = HotfixManager.Instance.ABScenePairs[sceneName];
+        folderDic = UpdateManager.Instance.ABScenePairs[sceneName];
     }
 
     /// <summary>

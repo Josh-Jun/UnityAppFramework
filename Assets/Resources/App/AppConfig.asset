@@ -18,4 +18,4 @@ MonoBehaviour:
   IsLoadAB: 0
   RunXLua: 0
   AppFrameRate: 30
-  ApkTarget: 1
+  ApkTarget: 0

@@ -10,7 +10,7 @@ using System.Xml;
 /// <summary>
 /// 热更管理者
 /// </summary>
-public class HotfixManager : SingletonEvent<HotfixManager>
+public class UpdateManager : SingletonEvent<UpdateManager>
 {
     #region Private Var
     private string LocalPath;
@@ -35,7 +35,7 @@ public class HotfixManager : SingletonEvent<HotfixManager>
 
     #region Public Function
     /// <summary> 开始热更新 </summary>
-    public void StartHotfix(Action<bool, string> HotfixCallBack)
+    public void StartUpdate(Action<bool, string> UpdateCallBack)
     {
         LocalPath = string.Format(@"{0}/{1}/", Application.persistentDataPath, PlatformManager.Instance.Name());
         ServerUrl = NetcomManager.ABUrl + PlatformManager.Instance.Name() + "/";
@@ -46,16 +46,16 @@ public class HotfixManager : SingletonEvent<HotfixManager>
         //读取本地热更文件
         DownLoad(XmlLocalVersionPath, (byte[] bytes) =>
         {
-            localABConfig = bytes.Length > 0 ? XmlSerializeManager.ProtoDeSerialize<AssetBundleConfig>(bytes) : null;
+            localABConfig = bytes != null ? XmlSerializeManager.ProtoDeSerialize<AssetBundleConfig>(bytes) : null;
             //检查版本更新信息
-            CheckHotfix(localABConfig, () =>
+            CheckUpdate(localABConfig, () =>
             {
                 string des = "";
                 for (int i = 0; i < downloadScenes.Count; i++)
                 {
                     des += downloadScenes[i].Des + "\n";
                 }
-                HotfixCallBack?.Invoke(downloadScenes.Count > 0, des);
+                UpdateCallBack?.Invoke(downloadScenes.Count > 0, des);
             });
         });
     }
@@ -199,7 +199,7 @@ public class HotfixManager : SingletonEvent<HotfixManager>
         });
     }
     /// <summary> 检查更新 </summary>
-    private void CheckHotfix(AssetBundleConfig localABConfig, Action cb = null)
+    private void CheckUpdate(AssetBundleConfig localABConfig, Action cb = null)
     {
         if (Application.internetReachability == NetworkReachability.NotReachable)
         {

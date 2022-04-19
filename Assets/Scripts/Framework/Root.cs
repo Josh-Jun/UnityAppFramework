@@ -1,4 +1,4 @@
-using Hotfix;
+using Update;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,10 +12,10 @@ public class Root
     public static AppConfig AppConfig;//App配置表 
 
     private static readonly Dictionary<string, List<string>> sceneScriptsPairs = new Dictionary<string, List<string>>();
-    private static readonly string hotfixScriptName = "Hotfix.HotfixRoot";
+    private static readonly string updateScriptName = "Update.UpdateRoot";
     private static readonly Dictionary<string, IRoot> iRootPairs = new Dictionary<string, IRoot>();
     private static RootScriptConfig rootConfig;
-    private static IRoot HotfixRoot = null;
+    private static IRoot UpdateRoot = null;
     public static void Init()
     {
         AppConfig = Resources.Load<AppConfig>(path_AppConfig);
@@ -29,10 +29,10 @@ public class Root
         if (AppConfig.IsHotfix)
         {
             //初始化热更脚本
-            Type type = Type.GetType(hotfixScriptName);
+            Type type = Type.GetType(updateScriptName);
             object obj = Activator.CreateInstance(type);
-            HotfixRoot = obj as IRoot;
-            HotfixRoot.Begin();
+            UpdateRoot = obj as IRoot;
+            UpdateRoot.Begin();
         }
         else
         {
@@ -101,7 +101,7 @@ public class Root
 
     public static void End()
     {
-        HotfixRoot?.End();
+        UpdateRoot?.End();
         for (int i = 0; i < iRootPairs.Count; i++)
         {
             iRootPairs[rootConfig.RootScript[i].ScriptName].End();

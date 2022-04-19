@@ -438,7 +438,7 @@ GameObject:
   - component: {fileID: 5970680156419267828}
   - component: {fileID: 6554321982915497252}
   m_Layer: 5
-  m_Name: HotfixWindow
+  m_Name: UpdateWindow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

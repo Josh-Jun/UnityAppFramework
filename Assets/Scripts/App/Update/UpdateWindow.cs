@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Data;
 
-namespace Hotfix
+namespace Update
 {
-    public class HotfixWindow : UIWindowBase
+    public class UpdateWindow : UIWindowBase
     {
         private RectTransform progressBarPanel;
         private Image image_Progress;
