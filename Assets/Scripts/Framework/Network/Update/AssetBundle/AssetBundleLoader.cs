@@ -72,7 +72,7 @@ public class AssetBundleLoader
             if (ab != null)
             {
                 assetLoader = new AssetLoader(ab);
-                assetLoader.GetAllAssetNames();
+                //assetLoader.GetAllAssetNames();
                 lc?.Invoke(bundleName);
             }
         });
@@ -81,7 +81,7 @@ public class AssetBundleLoader
             this.progress = requester.DownloadedProgress;
             lp?.Invoke(bundleName, progress);
         }
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForEndOfFrame();
         lp?.Invoke(bundleName, 1);
     }
 

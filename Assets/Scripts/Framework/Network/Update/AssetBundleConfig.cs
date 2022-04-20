@@ -44,7 +44,7 @@ namespace Data
         public string Platform;//当前包的平台
 
         [XmlAttribute]
-        public string HashCode; //HashCode
+        public string MD5; //MD5
 
         [XmlAttribute]
         public float Size;//资源大小

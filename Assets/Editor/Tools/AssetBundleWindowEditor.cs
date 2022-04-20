@@ -339,7 +339,7 @@ public class AssetBundleWindowEditor : EditorWindow
                 xmlFolder.SetAttribute("FolderName", folder.Key);
                 xmlFolder.SetAttribute("BundleName", folder.Value);
                 xmlFolder.SetAttribute("Platform", target);
-                xmlFolder.SetAttribute("HashCode", GetFileMD5(file.FullName));
+                xmlFolder.SetAttribute("MD5", GetFileMD5(file.FullName));
                 xmlFolder.SetAttribute("Size", (file.Length / 1024f).ToString());
 
                 xmlScene.AppendChild(xmlFolder);

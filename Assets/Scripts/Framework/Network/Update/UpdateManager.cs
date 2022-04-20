@@ -184,7 +184,7 @@ public class UpdateManager : SingletonEvent<UpdateManager>
             {
                 if (folder.FolderName == folders[j].Attributes["FolderName"].Value)
                 {
-                    folders[j].Attributes["HashCode"].Value = folder.HashCode;
+                    folders[j].Attributes["HashCode"].Value = folder.MD5;
                     folders[j].Attributes["Size"].Value = folder.Size.ToString();
                 }
             }
@@ -228,7 +228,7 @@ public class UpdateManager : SingletonEvent<UpdateManager>
                         {
                             for (int j = 0; j < localABConfig.Scenes[i].Folders.Count; j++)
                             {
-                                if (localABConfig.Scenes[i].Folders[j].HashCode != serverABConfig.Scenes[i].Folders[j].HashCode)
+                                if (localABConfig.Scenes[i].Folders[j].MD5 != serverABConfig.Scenes[i].Folders[j].MD5)
                                 {
                                     downloadScenes.Add(serverABConfig.Scenes[i]);
                                 }

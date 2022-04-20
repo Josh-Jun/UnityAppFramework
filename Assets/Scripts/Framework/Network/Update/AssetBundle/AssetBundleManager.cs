@@ -4,9 +4,9 @@ using UnityEngine;
 /// <summary>
 /// AssetBundle管理类 用户只需要调用这个脚本里的 API 即可
 /// </summary>
-public class AssetBundleManager : SingletonMono<AssetBundleManager>
+public class AssetBundleManager : Singleton<AssetBundleManager>
 {
-    public void Awake()
+    public AssetBundleManager()
     {
         // 先加载 Manifest 文件
         ManifestLoader.Instance.Load();
@@ -59,7 +59,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         if (nameSceneDic.ContainsKey(sceneName))
         {
             AssetbundleSceneManager sm = nameSceneDic[sceneName];
-            StartCoroutine(sm.Load(bundleName));
+            App.app.StartCoroutine(sm.Load(bundleName));
         }
         else
         {
