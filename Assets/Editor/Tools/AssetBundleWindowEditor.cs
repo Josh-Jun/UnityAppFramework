@@ -14,13 +14,11 @@ public class AssetBundleWindowEditor : EditorWindow
 {
     private static GUIStyle titleStyle;
 
-    private BuildTarget buildTarget = BuildTarget.StandaloneWindows;
+    private BuildTarget buildTarget = BuildTarget.Android;
     private string outputPath;
     private string buildPath;
     private readonly Dictionary<string, Dictionary<string, string>> sceneDic = new Dictionary<string, Dictionary<string, string>>();
     private readonly Dictionary<string, string> desDic = new Dictionary<string, string>();
-
-    private string version = "1";
 
     [MenuItem("Tools/My ToolsWindow/Build AssetBundle", false, 1)]
     public static void OpenWindow()
@@ -91,10 +89,6 @@ public class AssetBundleWindowEditor : EditorWindow
             }
         }
         GUILayout.EndHorizontal();
-
-        //版本号
-        EditorGUILayout.Space();
-        version = EditorGUILayout.TextField("Version ID", version);
 
         //更新描述
         if (desDic.Count > 0)
@@ -333,7 +327,6 @@ public class AssetBundleWindowEditor : EditorWindow
         {
             var xmlScene = xmlDocument.CreateElement("Scenes");
             xmlScene.SetAttribute("SceneName", scene.Key);
-            xmlScene.SetAttribute("Version", version);
             xmlScene.SetAttribute("Des", desDic[scene.Key]);
             //root.AppendChild(xmlScene);
             foreach (var folder in scene.Value)
@@ -342,7 +335,7 @@ public class AssetBundleWindowEditor : EditorWindow
                 var xmlFolder = xmlDocument.CreateElement("Folders");
                 xmlFolder.SetAttribute("FolderName", folder.Key);
                 xmlFolder.SetAttribute("BundleName", folder.Value);
-                xmlFolder.SetAttribute("Platform", EditorUserBuildSettings.activeBuildTarget.ToString());
+                xmlFolder.SetAttribute("Platform", buildTarget.ToString());
                 xmlFolder.SetAttribute("HashCode", GetFileMD5(file.FullName));
                 xmlFolder.SetAttribute("Size", (file.Length / 1024f).ToString());
 
