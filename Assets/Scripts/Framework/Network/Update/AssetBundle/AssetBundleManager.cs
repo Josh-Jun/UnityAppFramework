@@ -140,7 +140,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         }
         else
         {
-            Debug.Log("Error:不存在该场景:" + sceneName);
+            Debug.Log("Error:不存在该场景:" + sceneName + "/" + folderName + "/" + assetName);
             return null;
         }
     }

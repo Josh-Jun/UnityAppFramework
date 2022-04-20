@@ -28,7 +28,7 @@ public class XmlSerializeManager
         }
     }
     // 将类对象转换为 字符串xml 
-    public static string ProtoSerialize<T>(object obj, bool isIndented = true)
+    public static string ProtoStrSerialize<T>(object obj, bool isIndented = true)
     {
         MemoryStream memoryStream = new MemoryStream();
         XmlSerializer xs = new XmlSerializer(typeof(T));
@@ -42,6 +42,20 @@ public class XmlSerializeManager
         memoryStream = (MemoryStream)xmlTextWriter.BaseStream;
         UTF8Encoding encoding = new UTF8Encoding();
         return encoding.GetString(memoryStream.ToArray());
+    }
+    public static byte[] ProtoByteSerialize<T>(object obj, bool isIndented = true)
+    {
+        MemoryStream memoryStream = new MemoryStream();
+        XmlSerializer xs = new XmlSerializer(typeof(T));
+        XmlTextWriter xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.UTF8);
+        if (isIndented)
+        {
+            xmlTextWriter.Formatting = Formatting.Indented;
+        }
+        XmlSerializerNamespaces _namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] { new XmlQualifiedName(string.Empty, string.Empty) });
+        xs.Serialize(xmlTextWriter, obj, _namespaces);
+        memoryStream = (MemoryStream)xmlTextWriter.BaseStream;
+        return memoryStream.ToArray();
     }
     /// <summary> Object是否可以转换xml </summary>
     public static bool Xmlserialize(string path, object obj)

@@ -39,13 +39,16 @@ public class ManifestLoader : Singleton<ManifestLoader>
     /// <returns></returns>
     public void Load()
     {
-        UnityWebRequester requester = new UnityWebRequester(App.app);
-        requester.GetAssetBundle(manifestPath, (AssetBundle ab) =>
+        if (assetBundle == null)
         {
-            this.assetBundle = ab;
-            this.manifest = assetBundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
-            this.IsFinish = true;
-        });
+            UnityWebRequester requester = new UnityWebRequester(App.app);
+            requester.GetAssetBundle(manifestPath, (AssetBundle ab) =>
+            {
+                this.assetBundle = ab;
+                this.manifest = assetBundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
+                this.IsFinish = true;
+            });
+        }
     }
 
     /// <summary>

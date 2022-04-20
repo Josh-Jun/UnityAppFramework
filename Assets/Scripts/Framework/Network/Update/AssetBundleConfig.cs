@@ -22,9 +22,6 @@ namespace Data
         public string SceneName;//AB包场景名
 
         [XmlAttribute]
-        public string Version;//当前版本热更的版本号-第几次热更
-
-        [XmlAttribute]
         public string Des;//热更描述
 
         [XmlElement]

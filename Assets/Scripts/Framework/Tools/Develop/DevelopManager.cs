@@ -496,7 +496,7 @@ public static class DevelopManager
         GameObject go = AssetsManager.Instance.LoadAsset<GameObject>(path);
         if (go != null)
         {
-            go = UnityEngine.Object.Instantiate(go, UIRoot.Instance.UIRectTransform);
+            go = UnityEngine.Object.Instantiate(go, UIRootCanvas.Instance.UIRectTransform);
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
@@ -535,7 +535,7 @@ public static class DevelopManager
         GameObject go = AssetsManager.Instance.LoadAsset<GameObject>(path);
         if (go != null)
         {
-            go = UnityEngine.Object.Instantiate(go, UIRoot.Instance.UIRectTransform);
+            go = UnityEngine.Object.Instantiate(go, UIRootCanvas.Instance.UIRectTransform);
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
@@ -570,7 +570,7 @@ public static class DevelopManager
         GameObject go = Resources.Load<GameObject>(path);
         if (go != null)
         {
-            go = UnityEngine.Object.Instantiate(go, UIRoot.Instance.UIRectTransform);
+            go = UnityEngine.Object.Instantiate(go, UIRootCanvas.Instance.UIRectTransform);
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
@@ -589,7 +589,7 @@ public static class DevelopManager
         GameObject go = Resources.Load<GameObject>(path);
         if (go != null)
         {
-            go = UnityEngine.Object.Instantiate(go, UIRoot.Instance.UIRectTransform);
+            go = UnityEngine.Object.Instantiate(go, UIRootCanvas.Instance.UIRectTransform);
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");

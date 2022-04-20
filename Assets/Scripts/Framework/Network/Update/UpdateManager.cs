@@ -168,6 +168,11 @@ public class UpdateManager : SingletonEvent<UpdateManager>
     }
     private void UpdateLocalConfig(Folder folder)
     {
+        if (!FileManager.FileExist(XmlLocalVersionPath))
+        {
+            AssetBundleConfig config = new AssetBundleConfig();
+            FileManager.CreateFile(XmlLocalVersionPath, XmlSerializeManager.ProtoByteSerialize<AssetBundleConfig>(config));
+        }
         XmlDocument xmlDocument = new XmlDocument();
         xmlDocument.Load(XmlLocalVersionPath);
 

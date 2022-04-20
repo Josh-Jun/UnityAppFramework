@@ -109,7 +109,7 @@ public class AssetbundleScene
         }
 
         // 开始加载这个包
-        assetBundleRelation.Load();
+        yield return assetBundleRelation.Load();
     }
 
     /// <summary>

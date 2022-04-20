@@ -279,7 +279,8 @@ public class AssetBundleWindowEditor : EditorWindow
     {
         //移动到根目录
         string newPath = MoveAssetsToRoot(buildPath);
-        string outPath = string.Format("{0}/{1}", outputPath, buildTarget);
+        string target = buildTarget == BuildTarget.StandaloneWindows ? "Windows" : buildTarget.ToString();
+        string outPath = string.Format("{0}/{1}", outputPath, target);
         if (!FileManager.FolderExist(outPath))
         {
             FileManager.CreateFolder(outPath);
@@ -297,7 +298,8 @@ public class AssetBundleWindowEditor : EditorWindow
     //[MenuItem("AssetBundle/DeleteAllAssetBundle(一键删除)")]
     private void DeleteAssetBundle()
     {
-        string outPath = string.Format("{0}/{1}", outputPath, buildTarget);
+        string target = buildTarget == BuildTarget.StandaloneWindows ? "Windows" : buildTarget.ToString();
+        string outPath = string.Format("{0}/{1}", outputPath, target);
         if (!FileManager.FolderExist(outPath))
         {
             return;
@@ -313,7 +315,8 @@ public class AssetBundleWindowEditor : EditorWindow
     private void CreateFile()
     {
         // outPath = E:/Shuai/AssetBundle/Assets/StreamingAssets/Windows
-        string outPath = string.Format("{0}/{1}", outputPath, buildTarget);
+        string target = buildTarget == BuildTarget.StandaloneWindows ? "Windows" : buildTarget.ToString();
+        string outPath = string.Format("{0}/{1}", outputPath, target);
         string filePath = outPath + "/AssetBundleConfig.xml";
         if (File.Exists(filePath))
             File.Delete(filePath);
@@ -335,7 +338,7 @@ public class AssetBundleWindowEditor : EditorWindow
                 var xmlFolder = xmlDocument.CreateElement("Folders");
                 xmlFolder.SetAttribute("FolderName", folder.Key);
                 xmlFolder.SetAttribute("BundleName", folder.Value);
-                xmlFolder.SetAttribute("Platform", buildTarget.ToString());
+                xmlFolder.SetAttribute("Platform", target);
                 xmlFolder.SetAttribute("HashCode", GetFileMD5(file.FullName));
                 xmlFolder.SetAttribute("Size", (file.Length / 1024f).ToString());
 

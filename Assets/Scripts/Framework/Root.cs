@@ -26,7 +26,7 @@ public class Root
         //设置程序帧率
         Application.targetFrameRate = AppConfig.AppFrameRate;
 
-        if (AppConfig.IsHotfix)
+        if (AppConfig.IsHotfix || AppConfig.IsLoadAB)
         {
             //初始化热更脚本
             Type type = Type.GetType(updateScriptName);

@@ -50,7 +50,7 @@ public class AssetBundleLoader
         this.bundleName = bundleName;
         this.progress = 0;
 
-        this.bundlePath = string.Format(@"{0}/{1}/{2}", Application.persistentDataPath, PlatformManager.Instance.Name(), bundleName);
+        this.bundlePath = string.Format("{0}/{1}/{2}", Application.persistentDataPath, PlatformManager.Instance.Name(), bundleName);
         this.assetLoader = null;
     }
 
@@ -59,25 +59,30 @@ public class AssetBundleLoader
     /// 加载资源包
     /// </summary>
     /// <returns>www.assetBundle</returns>
-    public void Load()
+    public IEnumerator Load()
     {
         // 注 : 如果发布到手机端,就不需要www加载了,通过下面方式加载:
         //AssetBundleCreateRequest abcr = AssetBundle.LoadFromFileAsync(bundlePath);
         //yield return abcr;
+        yield return new WaitForEndOfFrame();
         UnityWebRequester requester = new UnityWebRequester(App.app);
         requester.GetAssetBundle(bundlePath, (AssetBundle ab) =>
         {
             // 创建 AssetLoader 类,给 assetBundle 赋值
-            assetLoader = new AssetLoader(ab);
-            lp?.Invoke(bundleName, requester.DownloadedProgress);
-            lc?.Invoke(bundleName);
+            if (ab != null)
+            {
+                assetLoader = new AssetLoader(ab);
+                assetLoader.GetAllAssetNames();
+                lc?.Invoke(bundleName);
+            }
         });
         while (!requester.IsDown)
         {
             this.progress = requester.DownloadedProgress;
             lp?.Invoke(bundleName, progress);
         }
-        //lp?.Invoke(bundleName, progress);
+        yield return new WaitForSeconds(2f);
+        lp?.Invoke(bundleName, 1);
     }
 
     /// <summary>
@@ -89,7 +94,7 @@ public class AssetBundleLoader
     {
         if (assetLoader == null)
         {
-            Debug.LogError("当前assetLoader为空!" + assetLoader);
+            Debug.LogError("当前assetLoader为空!" + assetLoader + assetName);
             return null;
         }
         return assetLoader.LoadAsset(assetName);

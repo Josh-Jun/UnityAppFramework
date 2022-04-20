@@ -48,9 +48,9 @@ public class AssetBundleRelation
     /// 加载资源包(供上层调用)
     /// </summary>
     /// <returns></returns>
-    public void Load()
+    public IEnumerator Load()
     {
-        assetBundleLoader.Load();
+        yield return assetBundleLoader.Load();
     }
 
     #region 依赖关系

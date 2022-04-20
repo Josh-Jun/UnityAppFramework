@@ -8,7 +8,7 @@ using System.Reflection;
 using XLuaFrame;
 using System;
 
-public class UIRoot : SingletonMono<UIRoot>
+public class UIRootCanvas : SingletonMono<UIRootCanvas>
 {
     #region Private Variable
     private Camera uiCamera;//UI相机
