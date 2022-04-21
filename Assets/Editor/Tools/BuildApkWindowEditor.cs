@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using UnityEditor;
+using UnityEditor.Sprites;
 using UnityEngine;
 
 public class BuildApkWindowEditor : EditorWindow
@@ -130,13 +132,16 @@ public class BuildApkWindowEditor : EditorWindow
         AppConfig.AppFrameRate = AppFrameRate;
         AppConfig.ApkTarget = ApkTarget;
     }
+    private string assetPath = "Assets/Resources/AssetsFolder";
     private void BuildApk()
     {
+        //移动到根目录
+        string newPath = MoveAssetsToRoot(assetPath);
         string _str = ApkTarget == ApkTarget.PicoVR ? "meta-picovr" : "meta-android";
         string version = PlayerSettings.bundleVersion;
         string name = DevelopmentBuild ? string.Format("{0}_v{1}_beta", _str, version) : string.Format("{0}_v{1}_release", _str, version);
         string outName = string.Format("{0}.apk", name);
-        EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, UnityEditor.BuildTarget.Android);
+        EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
         if (Directory.Exists(outputPath))
         {
             if (File.Exists(outName))
@@ -149,7 +154,10 @@ public class BuildApkWindowEditor : EditorWindow
             Directory.CreateDirectory(outputPath);
         }
         string BuildPath = string.Format("{0}/{1}", outputPath, outName);
-        BuildPipeline.BuildPlayer(GetBuildScenes(), BuildPath, UnityEditor.BuildTarget.Android, BuildOptions.None);
+        BuildPipeline.BuildPlayer(GetBuildScenes(), BuildPath, BuildTarget.Android, BuildOptions.None);
+
+        //移动回原始目录
+        MoveAssetsToOriginPath(newPath, assetPath);
 
         EditorUtility.RevealInFinder(BuildPath);
 
@@ -167,4 +175,57 @@ public class BuildApkWindowEditor : EditorWindow
         }
         return names.ToArray();
     }
+
+    #region 资源移动
+    /// <summary>
+    /// 将资源移动到根目录
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    private static string MoveAssetsToRoot(string path)
+    {
+        path = AbsolutePathToRelativePath(path);
+        string floderName = path.Split('/').Last();
+        EditorUtility.DisplayProgressBar("正在移动资源", "", 0);
+        //移动资源
+        string newPath = string.Format("Assets/{0}", floderName);
+        AssetDatabase.MoveAsset(path, newPath);
+        return RelativePathToAbsolutePath(newPath);
+    }
+
+    /// <summary>
+    /// 将资源移动到原始目录
+    /// </summary>
+    /// <param name="currentPath"></param>
+    /// <param name="originPath"></param>
+    private static void MoveAssetsToOriginPath(string currentPath, string originPath)
+    {
+        currentPath = AbsolutePathToRelativePath(currentPath);
+        originPath = AbsolutePathToRelativePath(originPath);
+        EditorUtility.DisplayProgressBar("正在移动资源", "", 0);
+        AssetDatabase.MoveAsset(currentPath, originPath);
+        AssetDatabase.Refresh();
+        EditorUtility.ClearProgressBar();
+    }
+
+    /// <summary>
+    /// 相对路径转到绝对路径
+    /// </summary>
+    /// <param name="relativePath"></param>
+    /// <returns></returns>
+    private static string RelativePathToAbsolutePath(string relativePath)
+    {
+        return string.Format("{0}/{1}", Application.dataPath, relativePath.Replace("Assets/", ""));
+    }
+
+    /// <summary>
+    /// 绝对路径转到相对路径
+    /// </summary>
+    /// <param name="absolutePath"></param>
+    /// <returns></returns>
+    private static string AbsolutePathToRelativePath(string absolutePath)
+    {
+        return absolutePath.Substring(absolutePath.IndexOf("Assets"));
+    }
+    #endregion
 }

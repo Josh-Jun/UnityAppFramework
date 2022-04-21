@@ -154,29 +154,29 @@ public class LanTcpManager : SingletonMono<LanTcpManager>
     {
         switch (msgPack.msg.cmd)
         {
-            case (int)CMD.None:
+            case (int)LAN_CMD.None:
                 break;
-            case (int)CMD.SCMsg_All:
+            case (int)LAN_CMD.SCMsg_All:
                 break;
-            case (int)CMD.SCMsg_One:
+            case (int)LAN_CMD.SCMsg_One:
                 break;
-            case (int)CMD.SCMsg_List:
+            case (int)LAN_CMD.SCMsg_List:
                 break;
-            case (int)CMD.SCMsg_UnSelf:
+            case (int)LAN_CMD.SCMsg_UnSelf:
                 break;
-            case (int)CMD.CSMsg:
+            case (int)LAN_CMD.CSMsg:
                 NetcomManager.Instance.ReceiveMsg((GameMsg)msgPack.msg);
                 break;
-            case (int)CMD.CCMsg_All:
+            case (int)LAN_CMD.CCMsg_All:
                 NetcomManager.Instance.CCPushMsg_All((GameMsg)msgPack.msg);
                 break;
-            case (int)CMD.CCMsg_One:
+            case (int)LAN_CMD.CCMsg_One:
                 NetcomManager.Instance.CCPushMsg_One((GameMsg)msgPack.msg);
                 break;
-            case (int)CMD.CCMsg_List:
+            case (int)LAN_CMD.CCMsg_List:
                 NetcomManager.Instance.CCPushMsg_List((GameMsg)msgPack.msg);
                 break;
-            case (int)CMD.CCMsg_UnSelf:
+            case (int)LAN_CMD.CCMsg_UnSelf:
                 NetcomManager.Instance.CCPushMsg_UnSelf(msgPack.session, (GameMsg)msgPack.msg);
                 break;
             default:
