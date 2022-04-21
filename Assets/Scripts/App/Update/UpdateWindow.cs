@@ -6,7 +6,7 @@ using Data;
 
 namespace Update
 {
-    public class UpdateWindow : UIWindowBase
+    public class UpdateWindow : WindowBase
     {
         private RectTransform progressBarPanel;
         private Image image_Progress;

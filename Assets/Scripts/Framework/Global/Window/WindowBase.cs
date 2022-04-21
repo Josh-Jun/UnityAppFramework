@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIWindowBase : EventBaseMono
+public class WindowBase : EventBaseMono
 {
     [Obsolete("此方法已弃用，请使用InitWindow方法", true)]
     protected virtual void Awake()

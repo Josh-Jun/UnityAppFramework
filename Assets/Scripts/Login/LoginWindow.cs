@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Login
 {
-    public class LoginWindow : UIWindowBase
+    public class LoginWindow : WindowBase
     {
         protected override void InitWindow()
         {

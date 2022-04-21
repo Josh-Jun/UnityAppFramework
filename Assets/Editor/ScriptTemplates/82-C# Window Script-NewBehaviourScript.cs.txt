@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace NameSpace
 {
-    public class #SCRIPTNAME# : UIWindowBase
+    public class #SCRIPTNAME# : WindowBase
     {
         protected override void InitWindow()
         {

@@ -504,7 +504,7 @@ public static class DevelopManager
             if (Root.AppConfig.RunXLua)
             {
                 string luaPath = string.Format("{0}/{1}", path.Split('/')[0], go.name);
-                t = go.TryGetComponent<XLuaUIWindow>().Init(luaPath);
+                t = go.TryGetComponent<XLuaWindow>().Init(luaPath);
             }
             else
             {
@@ -543,7 +543,7 @@ public static class DevelopManager
             if (Root.AppConfig.RunXLua)
             {
                 string luaPath = string.Format("{0}/{1}", path.Split('/')[0], go.name);
-                t = go.TryGetComponent<XLuaUIWindow>().Init(luaPath) as T;
+                t = go.TryGetComponent<XLuaWindow>().Init(luaPath) as T;
             }
             else
             {

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Test
 {
-    public class TestWindow : UIWindowBase
+    public class TestWindow : WindowBase
     {
         private Button btn;
         private Button btn_params;

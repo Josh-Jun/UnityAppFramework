@@ -7,13 +7,13 @@ using XLua;
 namespace XLuaFrame
 {
     /// <summary> LuaUI类</summary>
-    public class XLuaUIWindow : UIWindowBase
+    public class XLuaWindow : WindowBase
     {
         private readonly Dictionary<int, Action> LuaCallbackPairs = new Dictionary<int, Action>();//生命周期回调字典
         private LuaTable scriptEnv;
         private Action<object[]> action;
         /// <summary>初始化</summary>
-        public XLuaUIWindow Init(string path)
+        public XLuaWindow Init(string path)
         {
             string luaFileContent = XLuaManager.Instance.LoadLua(path);
             InitLuaEnv(luaFileContent);
