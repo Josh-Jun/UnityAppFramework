@@ -9,7 +9,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using XLuaFrame;
 
-public static class DevelopManager
+public static class Developer
 {
     #region Animator Event
     private static int DEVELOP_ANIMATOR_TIME_ID = -1;//动画时间任务id
@@ -601,6 +601,23 @@ public static class DevelopManager
             return t;
         }
         return null;
+    }
+    #endregion
+
+    #region FindLoopSelectable
+    /// </summary>
+    /// 循环寻找下一个UI组件
+    /// <param name="current"></param>
+    /// <param name="dir"></param>
+    /// <returns></returns>
+    public static Selectable FindLoopSelectable(this Selectable current, Vector3 dir)
+    {
+        Selectable first = current.FindSelectable(dir);//用一个向量Vector3去寻找第一个Selectable
+        if (first != null)//如果下一个为null，用递归方法循环继续寻找第一个
+        {
+            current = first.FindLoopSelectable(dir);
+        }
+        return current;
     }
     #endregion
 }

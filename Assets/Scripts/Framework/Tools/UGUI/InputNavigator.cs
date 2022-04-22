@@ -82,28 +82,3 @@ public class InputNavigator : MonoBehaviour, ISelectHandler, IDeselectHandler
         isSelect = false;
     }
 }
-/// <summary>
-/// 拓展类（必须是静态类，类名和类放的位置随意，只要是静态的类就可以了）
-/// </summary>
-public static class Developer
-{
-    /// <summary>
-    /// 
-    /// 拓展方法（方法必须是静态方法，必须在静态类里，第一个参数前必须要有this关键词，第一个参数不用传参数，是直接[这个参数类型的变量.拓展方法]出来的，后面的参数才是要传进去的）
-    /// 
-    /// Selectable是所有UI组件都继承的类 也就相当于UI的基类，这个用来获取选中UI的
-    /// 
-    /// </summary>
-    /// <param name="current"></param>
-    /// <param name="dir"></param>
-    /// <returns></returns>
-    public static Selectable FindLoopSelectable(this Selectable current, Vector3 dir)
-    {
-        Selectable first = current.FindSelectable(dir);//用一个向量Vector3去寻找第一个Selectable
-        if (first != null)//如果下一个为null，用递归方法循环继续寻找第一个
-        {
-            current = first.FindLoopSelectable(dir);
-        }
-        return current;
-    }
-}
