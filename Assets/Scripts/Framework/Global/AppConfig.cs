@@ -20,5 +20,5 @@ public class AppConfig : ScriptableObject
     [Tooltip("App运行帧频，默认30帧")]
     public int AppFrameRate = 30;
     [Tooltip("App安卓包不同渠道")]
-    public ApkTarget ApkTarget;
+    public TargetPackage ApkTarget;
 }

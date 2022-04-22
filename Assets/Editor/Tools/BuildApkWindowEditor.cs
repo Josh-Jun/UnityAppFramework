@@ -17,7 +17,7 @@ public class BuildApkWindowEditor : EditorWindow
     private bool IsLoadAB = false;
     private bool RunXLuaScripts = false;
     private int AppFrameRate = 30;
-    private ApkTarget ApkTarget = ApkTarget.Android;
+    private TargetPackage ApkTarget = TargetPackage.Mobile ;
     private string outputPath;
 
     [MenuItem("Tools/My ToolsWindow/Build Apk", false, 0)]
@@ -97,7 +97,7 @@ public class BuildApkWindowEditor : EditorWindow
         EditorGUILayout.BeginHorizontal();
         GUILayout.Label(new GUIContent("Build Mold"));
         GUILayout.FlexibleSpace();
-        ApkTarget = (ApkTarget)EditorGUILayout.EnumPopup(ApkTarget, GUILayout.MaxWidth(75));
+        ApkTarget = (TargetPackage)EditorGUILayout.EnumPopup(ApkTarget, GUILayout.MaxWidth(75));
         EditorGUILayout.EndHorizontal();
 
         if (GUILayout.Button("Update"))
@@ -137,7 +137,7 @@ public class BuildApkWindowEditor : EditorWindow
     {
         //移动到根目录
         string newPath = MoveAssetsToRoot(assetPath);
-        string _str = ApkTarget == ApkTarget.PicoVR ? "meta-picovr" : "meta-android";
+        string _str = ApkTarget == TargetPackage.PicoVR ? "meta-picovr" : "meta-android";
         string version = PlayerSettings.bundleVersion;
         string name = DevelopmentBuild ? string.Format("{0}_v{1}_beta", _str, version) : string.Format("{0}_v{1}_release", _str, version);
         string outName = string.Format("{0}.apk", name);

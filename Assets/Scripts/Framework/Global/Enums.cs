@@ -1,6 +1,6 @@
 /// <summary>安卓包不同渠道</summary>
-public enum ApkTarget
+public enum TargetPackage
 {
-    Android = 0,
+    Mobile = 0,
     PicoVR = 1
 }
