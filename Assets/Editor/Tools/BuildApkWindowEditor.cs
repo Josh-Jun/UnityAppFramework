@@ -45,7 +45,7 @@ public class BuildApkWindowEditor : EditorWindow
             IsLoadAB = AppConfig.IsLoadAB;
             RunXLuaScripts = AppConfig.RunXLua;
             AppFrameRate = AppConfig.AppFrameRate;
-            ApkTarget = AppConfig.ApkTarget;
+            ApkTarget = AppConfig.TargetPackage;
         }
         else
         {
@@ -130,7 +130,7 @@ public class BuildApkWindowEditor : EditorWindow
         AppConfig.IsProServer = IsProServer;
         AppConfig.RunXLua = RunXLuaScripts;
         AppConfig.AppFrameRate = AppFrameRate;
-        AppConfig.ApkTarget = ApkTarget;
+        AppConfig.TargetPackage = ApkTarget;
     }
     private string assetPath = "Assets/Resources/AssetsFolder";
     private void BuildApk()
