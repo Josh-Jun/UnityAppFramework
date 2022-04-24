@@ -39,7 +39,7 @@ public class Root
         }
     }
 
-    public static void InitRootScripts(Action callback = null)
+    public static void InitRootScripts()
     {
         TextAsset config = AssetsManager.Instance.LoadAsset<TextAsset>(path_AppScriptConfig);
         appScriptConfig = XmlSerializeManager.ProtoDeSerialize<AppScriptConfig>(config.bytes);
