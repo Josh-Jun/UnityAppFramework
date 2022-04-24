@@ -316,7 +316,7 @@ public class UnityWebRequester
         using (uwr = UnityWebRequest.Get(url))
         {
             yield return uwr.SendWebRequest();
-            if (!uwr.isNetworkError)
+            if (uwr.result == UnityWebRequest.Result.Success)
             {
                 actionResult?.Invoke(uwr.downloadHandler.data);
             }
@@ -338,7 +338,7 @@ public class UnityWebRequester
         using (uwr = UnityWebRequestTexture.GetTexture(url))
         {
             yield return uwr.SendWebRequest();
-            if (!uwr.isNetworkError)
+            if (uwr.result == UnityWebRequest.Result.Success)
             {
                 actionResult?.Invoke(DownloadHandlerTexture.GetContent(uwr));
             }
@@ -361,7 +361,7 @@ public class UnityWebRequester
         using (uwr = UnityWebRequestAssetBundle.GetAssetBundle(url))
         {
             yield return uwr.SendWebRequest();
-            if (!uwr.isNetworkError)
+            if (uwr.result == UnityWebRequest.Result.Success)
             {
                 actionResult?.Invoke(DownloadHandlerAssetBundle.GetContent(uwr));
             }
@@ -385,7 +385,7 @@ public class UnityWebRequester
         using (uwr = UnityWebRequestMultimedia.GetAudioClip(url, audioType))
         {
             yield return uwr.SendWebRequest();
-            if (!uwr.isNetworkError)
+            if (uwr.result == UnityWebRequest.Result.Success)
             {
                 actionResult?.Invoke(DownloadHandlerAudioClip.GetContent(uwr));
             }
