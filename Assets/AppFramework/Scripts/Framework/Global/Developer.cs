@@ -491,12 +491,12 @@ public static class Developer
     /// path = 窗口路径，不包含AssetsFolder
     /// state 初始化窗口是否显示
     /// </summary>
-    public static Component LoadWindow(this object obj, string path, bool state = false) 
+    public static Component LoadUIWindow(this object obj, string path, bool state = false) 
     {
         GameObject go = AssetsManager.Instance.LoadAsset<GameObject>(path);
         if (go != null)
         {
-            go = UnityEngine.Object.Instantiate(go, UIRootCanvas.Instance.UIRectTransform);
+            go = UnityEngine.Object.Instantiate(go, UIRoot.Instance.UIRectTransform);
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
@@ -530,12 +530,12 @@ public static class Developer
     /// path = 窗口路径，不包含AssetsFolder
     /// state 初始化窗口是否显示
     /// </summary>
-    public static T LoadWindow<T>(this object obj, string path, bool state = false) where T : Component
+    public static T LoadUIWindow<T>(this object obj, string path, bool state = false) where T : Component
     {
         GameObject go = AssetsManager.Instance.LoadAsset<GameObject>(path);
         if (go != null)
         {
-            go = UnityEngine.Object.Instantiate(go, UIRootCanvas.Instance.UIRectTransform);
+            go = UnityEngine.Object.Instantiate(go, UIRoot.Instance.UIRectTransform);
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
@@ -565,12 +565,12 @@ public static class Developer
         return null;
     }
     /// <summary> 加载本地窗口 </summary>
-    public static Component LoadLocalWindow(this object obj, string path, bool state = false)
+    public static Component LoadLocalUIWindow(this object obj, string path, bool state = false)
     {
         GameObject go = Resources.Load<GameObject>(path);
         if (go != null)
         {
-            go = UnityEngine.Object.Instantiate(go, UIRootCanvas.Instance.UIRectTransform);
+            go = UnityEngine.Object.Instantiate(go, UIRoot.Instance.UIRectTransform);
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
@@ -584,12 +584,128 @@ public static class Developer
         return null;
     }
     /// <summary> 加载本地窗口 </summary>
-    public static T LoadLocalWindow<T>(this object obj, string path, bool state = false) where T : Component
+    public static T LoadLocalUIWindow<T>(this object obj, string path, bool state = false) where T : Component
     {
         GameObject go = Resources.Load<GameObject>(path);
         if (go != null)
         {
-            go = UnityEngine.Object.Instantiate(go, UIRootCanvas.Instance.UIRectTransform);
+            go = UnityEngine.Object.Instantiate(go, UIRoot.Instance.UIRectTransform);
+            go.transform.localEulerAngles = Vector3.zero;
+            go.transform.localScale = Vector3.one;
+            go.name = go.name.Replace("(Clone)", "");
+            string _namespace = obj.GetType().Namespace;
+            string fullName = string.IsNullOrEmpty(_namespace) ? go.name : string.Format("{0}.{1}", _namespace, go.name);
+            Type type = Assembly.GetExecutingAssembly().GetType(fullName);
+            T t = (T)go.AddComponent(type);
+            EventDispatcher.TriggerEvent(go.name, state);
+            return t;
+        }
+        return null;
+    }
+    /// <summary> 
+    /// 加载窗口 添加T(Component)类型脚本
+    /// path = 窗口路径，不包含AssetsFolder
+    /// state 初始化窗口是否显示
+    /// </summary>
+    public static Component LoadGOWindow(this object obj, string path, bool state = false)
+    {
+        GameObject go = AssetsManager.Instance.LoadAsset<GameObject>(path);
+        if (go != null)
+        {
+            go = UnityEngine.Object.Instantiate(go, GoRoot.Instance.GoTransform);
+            go.transform.localEulerAngles = Vector3.zero;
+            go.transform.localScale = Vector3.one;
+            go.name = go.name.Replace("(Clone)", "");
+            Component t = null;
+            if (Root.AppConfig.RunXLua)
+            {
+                string luaPath = string.Format("{0}/{1}", path.Split('/')[0], go.name);
+                t = go.TryGetComponent<XLuaWindow>().Init(luaPath);
+            }
+            else
+            {
+                string _namespace = obj.GetType().Namespace;
+                string fullName = string.IsNullOrEmpty(_namespace) ? go.name : string.Format("{0}.{1}", _namespace, go.name);
+                Type type = Assembly.GetExecutingAssembly().GetType(fullName);
+                if (type != null)
+                {
+                    t = go.AddComponent(type);
+                }
+                else
+                {
+                    Debug.LogError($"{fullName}:脚本已存在,");
+                }
+            }
+            EventDispatcher.TriggerEvent(go.name, state);
+            return t;
+        }
+        return null;
+    }
+    /// <summary> 
+    /// 加载窗口 添加T(Component)类型脚本
+    /// path = 窗口路径，不包含AssetsFolder
+    /// state 初始化窗口是否显示
+    /// </summary>
+    public static T LoadGOWindow<T>(this object obj, string path, bool state = false) where T : Component
+    {
+        GameObject go = AssetsManager.Instance.LoadAsset<GameObject>(path);
+        if (go != null)
+        {
+            go = UnityEngine.Object.Instantiate(go, GoRoot.Instance.GoTransform);
+            go.transform.localEulerAngles = Vector3.zero;
+            go.transform.localScale = Vector3.one;
+            go.name = go.name.Replace("(Clone)", "");
+            T t = null;
+            if (Root.AppConfig.RunXLua)
+            {
+                string luaPath = string.Format("{0}/{1}", path.Split('/')[0], go.name);
+                t = go.TryGetComponent<XLuaWindow>().Init(luaPath) as T;
+            }
+            else
+            {
+                string _namespace = obj.GetType().Namespace;
+                string fullName = string.IsNullOrEmpty(_namespace) ? go.name : string.Format("{0}.{1}", _namespace, go.name);
+                Type type = Assembly.GetExecutingAssembly().GetType(fullName);
+                if (type != null)
+                {
+                    t = (T)go.AddComponent(type);
+                }
+                else
+                {
+                    Debug.LogError($"{fullName}:脚本已存在,");
+                }
+            }
+            EventDispatcher.TriggerEvent(go.name, state);
+            return t;
+        }
+        return null;
+    }
+    /// <summary> 加载本地窗口 </summary>
+    public static Component LoadLocalGOWindow(this object obj, string path, bool state = false)
+    {
+        GameObject go = Resources.Load<GameObject>(path);
+        if (go != null)
+        {
+            go = UnityEngine.Object.Instantiate(go, GoRoot.Instance.GoTransform);
+            go.transform.localEulerAngles = Vector3.zero;
+            go.transform.localScale = Vector3.one;
+            go.name = go.name.Replace("(Clone)", "");
+            string _namespace = obj.GetType().Namespace;
+            string fullName = string.IsNullOrEmpty(_namespace) ? go.name : string.Format("{0}.{1}", _namespace, go.name);
+            Type type = Assembly.GetExecutingAssembly().GetType(fullName);
+            Component t = go.AddComponent(type);
+            EventDispatcher.TriggerEvent(go.name, state);
+            return t;
+        }
+        return null;
+    }
+    /// <summary> 加载本地窗口 </summary>
+    public static T LoadLocalGOWindow<T>(this object obj, string path, bool state = false) where T : Component
+    {
+        GameObject go = Resources.Load<GameObject>(path);
+        if (go != null)
+        {
+            go = UnityEngine.Object.Instantiate(go, GoRoot.Instance.GoTransform);
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");

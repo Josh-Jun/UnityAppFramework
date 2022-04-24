@@ -18,7 +18,7 @@ namespace Test
         {
             //加载窗体
             string prefab_TestPath = "Test/Assets/Windows/TestWindow";
-            testWin = this.LoadWindow<TestWindow>(prefab_TestPath, true);
+            testWin = this.LoadUIWindow<TestWindow>(prefab_TestPath, true);
         }
 
         private void ButtonEvent()

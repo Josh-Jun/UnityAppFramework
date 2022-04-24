@@ -8,13 +8,12 @@ using System.Reflection;
 using XLuaFrame;
 using System;
 
-public class UIRootCanvas : SingletonMono<UIRootCanvas>
+public class UIRoot : SingletonMono<UIRoot>
 {
     #region Private Variable
     private Camera uiCamera;//UI相机
     private GameObject canvasObject;//Canvas游戏对象
     private GameObject eventSystemObject;//EventSystem游戏对象
-    private GameObject obj3DRoot;//3D游戏对象根对象
     #endregion
 
     #region Public Variable

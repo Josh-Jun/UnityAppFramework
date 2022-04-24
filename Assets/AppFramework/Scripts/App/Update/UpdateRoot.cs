@@ -17,7 +17,7 @@ namespace Update
         public void Begin()
         {
             string prefab_UpdatePath = "App/Update/Windows/UpdateWindow";
-            updateWin = this.LoadLocalWindow<UpdateWindow>(prefab_UpdatePath);
+            updateWin = this.LoadLocalUIWindow<UpdateWindow>(prefab_UpdatePath);
             updateWin.SetWindowActive();
 
             updateWin.SetTipsText("检查更新中...");
