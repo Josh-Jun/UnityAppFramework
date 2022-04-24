@@ -28,6 +28,7 @@ public class AppScriptConfigWindowEditor : EditorWindow
 
         var bytes = Resources.Load<TextAsset>(configPath).bytes;
         config = XmlSerializeManager.ProtoDeSerialize<AppScriptConfig>(bytes);
+        MainSceneName = config.MainSceneName;
     }
     private void OnGUI()
     {
