@@ -1,49 +1,13 @@
 using UnityEngine;
 using System;
-using System.IO;
 using System.Text;
-using System.Security.Cryptography;
-using UnityEngine.UI;
-using System.Collections.Generic;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 
 public static class Utils
 {
-    public static int Random(int min, int max)
-    {
-        return UnityEngine.Random.Range(min, max);
-    }
-    public static float Random(float min, float max)
-    {
-        return UnityEngine.Random.Range(min, max);
-    }
-    public static string GetGuid()
-    {
-        return System.Guid.NewGuid().ToString();
-    }
-    public static long GetTimeStamp()
-    {
-        TimeSpan ts = new TimeSpan(DateTime.UtcNow.Ticks - new DateTime(1970, 1, 1, 0, 0, 0).Ticks);
-        return (long)ts.TotalMilliseconds;
-    }
-    /// <summary>
-    /// Base64编码
-    /// </summary>
-    public static string Encode(string message)
-    {
-        byte[] bytes = Encoding.GetEncoding("utf-8").GetBytes(message);
-        return Convert.ToBase64String(bytes);
-    }
-    /// <summary>
-    /// Base64解码
-    /// </summary>
-    public static string Decode(string message)
-    {
-        byte[] bytes = Convert.FromBase64String(message);
-        return Encoding.GetEncoding("utf-8").GetString(bytes);
-    }
-    /// <summary>
-    /// 网络可用
-    /// </summary>
+    #region var
+    /// <summary> 网络可用 </summary>
     public static bool NetAvailable
     {
         get
@@ -51,9 +15,7 @@ public static class Utils
             return Application.internetReachability != NetworkReachability.NotReachable;
         }
     }
-    /// <summary>
-    /// 是否是无线
-    /// </summary>
+    /// <summary> 是否是无线 </summary>
     public static bool IsWifi
     {
         get
@@ -61,98 +23,85 @@ public static class Utils
             return Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork;
         }
     }
-    public static void UnloadAsset(GameObject gameObj)
+    /// <summary> 获取IP地址 </summary>
+    public static string IPAddress
     {
-        if (gameObj != null)
+        get
         {
-            UnloadAssetType<Text>(gameObj);
-            UnloadAssetType<Image>(gameObj);
-        }
-    }
-    static void UnloadAssetType<T>(GameObject gameObj)
-    {
-        var components = gameObj.GetComponentsInChildren<T>();
-        if (components.Length > 0)
-        {
-            Type compType = typeof(T);
-            var assets = new List<UnityEngine.Object>();
-            for (int i = 0; i < components.Length; i++)
+            string output = "";
+            foreach (NetworkInterface item in NetworkInterface.GetAllNetworkInterfaces())
             {
-                var c = components[i];
-                if (compType == typeof(Image))
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+                NetworkInterfaceType _type1 = NetworkInterfaceType.Wireless80211;
+                NetworkInterfaceType _type2 = NetworkInterfaceType.Ethernet;
+
+                if ((item.NetworkInterfaceType == _type1 || item.NetworkInterfaceType == _type2) && item.OperationalStatus == OperationalStatus.Up)
+#endif
                 {
-                    var image = c as Image;
-                    if (image != null && image.sprite != null && !assets.Contains(image.sprite.texture))
+                    foreach (UnicastIPAddressInformation ip in item.GetIPProperties().UnicastAddresses)
                     {
-                        assets.Add(image.sprite.texture);
-                    }
-                }
-                else if (compType == typeof(Text))
-                {
-                    var text = c as Text;
-                    if (text != null && !assets.Contains(text.font))
-                    {
-                        assets.Add(text.font);
+                        //IPv4
+                        if (ip.Address.AddressFamily == AddressFamily.InterNetwork)
+                        {
+                            output = ip.Address.ToString();
+                        }
                     }
                 }
             }
-            for (int i = 0; i < assets.Count; i++)
-            {
-                if (assets[i] != null)
-                {
-                    Resources.UnloadAsset(assets[i]);
-                }
-            }
-            assets = null;
+            return output;
         }
     }
-    /// <summary>
-    /// 生成一个Key名
-    /// </summary>
-    public static string GetKey(string key)
+    /// <summary> 获取设备ID </summary>
+    public static string GetDeviceId
     {
-        return Application.productName + "_" + key;
-    }
-    /// <summary>
-    /// 取得数据
-    /// </summary>
-    public static string GetString(string key)
-    {
-        string name = GetKey(key);
-        return PlayerPrefs.GetString(name);
-    }
-    /// <summary>
-    /// 保存数据
-    /// </summary>
-    public static void SetString(string key, string value)
-    {
-        string name = GetKey(key);
-        PlayerPrefs.DeleteKey(name);
-        PlayerPrefs.SetString(name, value);
-    }
-    /// <summary>
-    /// 删除数据
-    /// </summary>
-    public static void DeleteString(string key)
-    {
-        string name = GetKey(key);
-        PlayerPrefs.DeleteKey(name);
-    }
-    /// <summary>
-    /// 判断数字
-    /// </summary>
-    public static bool IsNumeric(string str)
-    {
-        if (str == null || str.Length == 0) return false;
-        for (int i = 0; i < str.Length; i++)
+        get
         {
-            if (!Char.IsNumber(str[i])) { return false; }
+            return SystemInfo.deviceUniqueIdentifier;
         }
-        return true;
     }
-    /// <summary>
-    /// 判断角度
-    /// </summary>
+    /// <summary> 获取GUID </summary>
+    public static string GetGuid
+    {
+        get
+        {
+            return Guid.NewGuid().ToString();
+        }
+    }
+    /// <summary> 获取时间戳 </summary>
+    public static long GetTimeStamp
+    {
+        get
+        {
+            TimeSpan ts = new TimeSpan(DateTime.UtcNow.Ticks - new DateTime(1970, 1, 1, 0, 0, 0).Ticks);
+            return (long)ts.TotalMilliseconds;
+        }
+    }
+    #endregion
+
+    #region function
+    /// <summary> 随机数 </summary>
+    public static int Random(int min, int max)
+    {
+        return UnityEngine.Random.Range(min, max);
+    }
+    /// <summary> 随机数 </summary>
+    public static float Random(float min, float max)
+    {
+        return UnityEngine.Random.Range(min, max);
+    }
+    /// <summary> Base64编码 </summary>
+    public static string Encode(string message)
+    {
+        byte[] bytes = Encoding.GetEncoding("utf-8").GetBytes(message);
+        return Convert.ToBase64String(bytes);
+    }
+    /// <summary> Base64解码 </summary>
+    public static string Decode(string message)
+    {
+        byte[] bytes = Convert.FromBase64String(message);
+        return Encoding.GetEncoding("utf-8").GetString(bytes);
+    }
+    /// <summary> 判断角度 </summary>
     public static float PointToAngle(Vector2 p1, Vector2 p2)
     {
         float angle = Mathf.Atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Mathf.PI;
@@ -166,20 +115,10 @@ public static class Utils
             return 360 + angle;
         }
     }
-    /// <summary>
-    /// 清理内存
-    /// </summary>
+    /// <summary> 清理内存 </summary>
     public static void ClearMemory()
     {
         GC.Collect(); Resources.UnloadUnusedAssets();
     }
-    /// <summary>
-    /// 获取设备ID
-    /// </summary>
-    public static string GetDeviceId()
-    {
-        string deviceId = SystemInfo.deviceUniqueIdentifier;
-        Debug.Log("device ---> " + deviceId);
-        return deviceId;
-    }
+    #endregion
 }
