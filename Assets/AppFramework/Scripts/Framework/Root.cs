@@ -6,15 +6,14 @@ using XLuaFrame;
 
 public class Root
 {
-    public const string MainSceneName = "TestScene";
-    public const string path_AppScriptConfig = "App/Assets/AppScriptConfig";
-    public const string path_AppConfig = "App/AppConfig";
+    private const string path_AppConfig = "App/AppConfig";
     public static AppConfig AppConfig;//App配置表 
 
-    private static readonly Dictionary<string, List<string>> sceneScriptsPairs = new Dictionary<string, List<string>>();
-    private static readonly string updateScriptName = "Update.UpdateRoot";
-    private static readonly Dictionary<string, IRoot> iRootPairs = new Dictionary<string, IRoot>();
+    private const string path_AppScriptConfig = "App/Assets/AppScriptConfig";
     private static AppScriptConfig appScriptConfig;
+
+    private static readonly Dictionary<string, List<string>> sceneScriptsPairs = new Dictionary<string, List<string>>();
+    private static readonly Dictionary<string, IRoot> iRootPairs = new Dictionary<string, IRoot>();
     private static IRoot UpdateRoot = null;
     public static void Init()
     {
@@ -29,14 +28,14 @@ public class Root
         if (AppConfig.IsHotfix || AppConfig.IsLoadAB)
         {
             //初始化热更脚本
-            Type type = Type.GetType(updateScriptName);
+            Type type = Type.GetType("Update.UpdateRoot");
             object obj = Activator.CreateInstance(type);
             UpdateRoot = obj as IRoot;
             UpdateRoot.Begin();
         }
         else
         {
-            InitRootScripts(() => { LoadScene(MainSceneName); });
+            InitRootScripts();
         }
     }
 
@@ -82,7 +81,7 @@ public class Root
                 sceneScriptsPairs[appScriptConfig.RootScript[i].SceneName].Add(appScriptConfig.RootScript[i].ScriptName);
             }
         }
-        callback?.Invoke();
+        LoadScene(appScriptConfig.MainSceneName);
     }
     public static void LoadScene(string sceneName, Action callback = null)
     {

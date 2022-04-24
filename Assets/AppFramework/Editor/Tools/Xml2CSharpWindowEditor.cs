@@ -10,13 +10,18 @@ using UnityEngine;
 
 public class Xml2CSharpWindowEditor : EditorWindow
 {
-    private static GUIStyle titleStyle;
+    private GUIStyle titleStyle;
 
     private string xmlPath = "";
     private string outPutPath = "";
 
     [MenuItem("Tools/My ToolsWindow/Xml to CSharp", false, 4)]
     public static void OpenWindow()
+    {
+        Xml2CSharpWindowEditor window = GetWindow<Xml2CSharpWindowEditor>("Xml to CSharp");
+        window.Show();
+    }
+    public void OnEnable()
     {
         titleStyle = new GUIStyle("OL Title")
         {
@@ -25,11 +30,6 @@ public class Xml2CSharpWindowEditor : EditorWindow
             fontSize = 12
         };
 
-        Xml2CSharpWindowEditor window = GetWindow<Xml2CSharpWindowEditor>("Xml to CSharp");
-        window.Show();
-    }
-    public void OnEnable()
-    {
         xmlPath = "Resources/AssetsFolder/Table";
         outPutPath = "Scripts/Table";
     }

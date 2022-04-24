@@ -53,16 +53,17 @@ public class FindSameFileNameWindowEditor : EditorWindow
     [MenuItem("Tools/My ToolsWindow/FindSameFileName", false, 3)]
     public static void OpenWindow()
     {
-        //texture = AssetDatabase.LoadAssetAtPath("Assets/Editor/Tools/Image/bg.png", typeof(Texture)) as Texture;
+        FindSameFileNameWindowEditor window = GetWindow<FindSameFileNameWindowEditor>("Find Same File Name");
+        window.Show();
+    }
+    private void OnEnable()
+    {
         titleStyle = new GUIStyle("OL Title")
         {
             alignment = TextAnchor.MiddleCenter,
             fontStyle = FontStyle.Bold,
             fontSize = 12
         };
-
-        FindSameFileNameWindowEditor window = GetWindow<FindSameFileNameWindowEditor>("Find Same File Name");
-        window.Show();
     }
     private void OnGUI()
     {

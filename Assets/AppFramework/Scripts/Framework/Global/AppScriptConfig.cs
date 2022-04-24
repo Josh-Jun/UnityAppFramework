@@ -5,6 +5,8 @@ using System.Xml.Serialization;
 [Serializable]
 public class AppScriptConfig
 {
+    [XmlAttribute]
+    public string MainSceneName;//主场景名(首次进入的场景)
     [XmlElement]
     public List<RootScript> RootScript;//脚本集合
 }

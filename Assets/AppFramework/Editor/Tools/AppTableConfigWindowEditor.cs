@@ -7,11 +7,16 @@ using UnityEngine.UI;
 
 public class AppTableConfigWindowEditor : EditorWindow
 {
-    private static GUIStyle titleStyle;
-    private static AppTableConfig config;
-    private static readonly string configPath = "AssetsFolder/App/Assets/AppTableConfig";
+    private GUIStyle titleStyle;
+    private AppTableConfig config;
+    private string configPath = "AssetsFolder/App/Assets/AppTableConfig";
     [MenuItem("Tools/My ToolsWindow/Set AppTableConfig", false, 2)]
     public static void OpenWindow()
+    {
+        AppTableConfigWindowEditor window = GetWindow<AppTableConfigWindowEditor>("AppTableConfigWindow");
+        window.Show();
+    }
+    public void OnEnable()
     {
         titleStyle = new GUIStyle("OL Title")
         {
@@ -22,9 +27,6 @@ public class AppTableConfigWindowEditor : EditorWindow
 
         var bytes = Resources.Load<TextAsset>(configPath).bytes;
         config = XmlSerializeManager.ProtoDeSerialize<AppTableConfig>(bytes);
-
-        AppTableConfigWindowEditor window = GetWindow<AppTableConfigWindowEditor>("AppTableConfigWindow");
-        window.Show();
     }
     private void OnGUI()
     {

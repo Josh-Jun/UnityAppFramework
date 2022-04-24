@@ -6,7 +6,7 @@ public class ChangePrefabsFontWindowEditor : EditorWindow
 {
 
     //private static Texture texture;
-    private static GUIStyle titleStyle;
+    private GUIStyle titleStyle;
 
     #region 1、更换预制体字体
     private string prefabsPath = "";
@@ -18,17 +18,18 @@ public class ChangePrefabsFontWindowEditor : EditorWindow
     [MenuItem("Tools/My ToolsWindow/ChangePrefabsFont", false, 4)]
     public static void OpenWindow()
     {
+        ChangePrefabsFontWindowEditor window = GetWindow<ChangePrefabsFontWindowEditor>("Change Prefabs Font");
+        window.Show();
+    }
+    private void OnEnable()
+    {
         titleStyle = new GUIStyle("OL Title")
         {
             alignment = TextAnchor.MiddleCenter,
             fontStyle = FontStyle.Bold,
             fontSize = 12
         };
-
-        ChangePrefabsFontWindowEditor window = GetWindow<ChangePrefabsFontWindowEditor>("Change Prefabs Font");
-        window.Show();
     }
-
     private void OnGUI()
     {
         #region 1、更换预制体字体

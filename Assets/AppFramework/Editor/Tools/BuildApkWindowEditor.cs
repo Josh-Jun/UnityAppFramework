@@ -8,20 +8,25 @@ using UnityEngine;
 
 public class BuildApkWindowEditor : EditorWindow
 {
-    private static GUIStyle titleStyle;
-    public static AppConfig AppConfig;//App≈‰÷√±Ì 
-    private static readonly string configPath = "App/AppConfig";
+    private GUIStyle titleStyle;
+    public AppConfig AppConfig;//App≈‰÷√±Ì 
+    private readonly string configPath = "App/AppConfig";
     private bool DevelopmentBuild = true;
     private bool IsProServer = true;
     private bool IsHotfix = false;
     private bool IsLoadAB = false;
     private bool RunXLuaScripts = false;
     private int AppFrameRate = 30;
-    private TargetPackage ApkTarget = TargetPackage.Mobile ;
+    private TargetPackage ApkTarget = TargetPackage.Mobile;
     private string outputPath;
 
     [MenuItem("Tools/My ToolsWindow/Build Apk", false, 0)]
     public static void OpenWindow()
+    {
+        BuildApkWindowEditor window = GetWindow<BuildApkWindowEditor>("Build Apk");
+        window.Show();
+    }
+    public void OnEnable()
     {
         titleStyle = new GUIStyle("OL Title")
         {
@@ -30,11 +35,6 @@ public class BuildApkWindowEditor : EditorWindow
             fontSize = 12,
         };
 
-        BuildApkWindowEditor window = GetWindow<BuildApkWindowEditor>("Build Apk");
-        window.Show();
-    }
-    public void OnEnable()
-    {
         outputPath = Application.dataPath.Replace("Assets", "Apk");
         AppConfig = Resources.Load<AppConfig>(configPath);
         if (AppConfig != null)

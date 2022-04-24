@@ -12,7 +12,7 @@ using UnityEngine;
 /// </summary>
 public class AssetBundleWindowEditor : EditorWindow
 {
-    private static GUIStyle titleStyle;
+    private GUIStyle titleStyle;
 
     private BuildTarget buildTarget = BuildTarget.Android;
     private string outputPath;
@@ -23,17 +23,18 @@ public class AssetBundleWindowEditor : EditorWindow
     [MenuItem("Tools/My ToolsWindow/Build AssetBundle", false, 1)]
     public static void OpenWindow()
     {
+        AssetBundleWindowEditor window = GetWindow<AssetBundleWindowEditor>("BuildAssetBundleWindow");
+        window.Show();
+    }
+    public void OnEnable()
+    {
         titleStyle = new GUIStyle("OL Title")
         {
             alignment = TextAnchor.MiddleCenter,
             fontStyle = FontStyle.Bold,
             fontSize = 12
         };
-        AssetBundleWindowEditor window = GetWindow<AssetBundleWindowEditor>("BuildAssetBundleWindow");
-        window.Show();
-    }
-    public void OnEnable()
-    {
+
         buildPath = "Assets/Resources/AssetsFolder";
         outputPath = Application.dataPath.Replace("Assets", "AssetBundle");
     }
