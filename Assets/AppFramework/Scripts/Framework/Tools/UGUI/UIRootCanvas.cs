@@ -28,8 +28,6 @@ public class UIRootCanvas : SingletonMono<UIRootCanvas>
     public CanvasScaler UICanvasScaler { get { return canvasObject.GetComponent<CanvasScaler>(); } private set { } }
     /// <summary> 获取GraphicRaycaster组件 </summary>
     public GraphicRaycaster UIGraphicRaycaster { get { return canvasObject.GetComponent<GraphicRaycaster>(); } private set { } }
-    /// <summary> 获取3D游戏对象根对象 </summary>
-    public Transform Obj3DRoot { get { return obj3DRoot.transform; } private set { } }
     #endregion
 
     /// <summary>
@@ -69,10 +67,6 @@ public class UIRootCanvas : SingletonMono<UIRootCanvas>
             eventSystemObject.transform.SetParent(transform);
         }
         #endregion
-
-        #region Obj3DRoot
-        obj3DRoot = new GameObject("GoRoot");
-        #endregion
     }
 
     #region Private Function
@@ -80,26 +74,21 @@ public class UIRootCanvas : SingletonMono<UIRootCanvas>
     #endregion
 
     #region Public Function
-    public void SetObj3DRootActive(bool active = true)
-    {
-        obj3DRoot.SetGameObjectActive(active);
-    }
-    /// <summary> 添加3D对象预制体，返回GameObject </summary>
-    public GameObject AddObj3DChild(GameObject prefab, Transform parent = null)
-    {
-        Transform objParent = parent ? parent : Obj3DRoot;
-        GameObject go = Instantiate(prefab, objParent);
-        return go;
-    }
     public void Init3DUIRoot(Camera camera3d = null)
     {
         Camera camera = camera3d == null ? Camera.main : camera3d;
         UICanvas.renderMode = RenderMode.WorldSpace;
-        UIRectTransform.localPosition = Vector3.forward * 5;
         UIRectTransform.localScale = Vector3.one * 0.0025f;
         UIRectTransform.sizeDelta = new Vector2(1920, 1080);
         UICanvas.worldCamera = camera;
-        UICanvasScaler.referencePixelsPerUnit = 50;
+        UICanvasScaler.referencePixelsPerUnit = 100;
+    }
+    public void Reset3DUIRoot(float dis, Camera camera3d = null)
+    {
+        Camera camera = camera3d == null ? Camera.main : camera3d;
+        Vector3 target = camera.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, dis));
+        UIRectTransform.transform.position = target;
+        UIRectTransform.transform.eulerAngles = camera.transform.eulerAngles;
     }
     /// <summary> UGUI坐标 mousePosition</summary>
     public Vector2 ScreenPointInRectangle(Vector2 mousePosition)
