@@ -8,6 +8,7 @@ using UnityEditor.XR;
 using UnityEngine;
 using UnityEditor.XR.Management.Metadata;
 using UnityEngine.XR.Management;
+using System;
 
 public class BuildApkWindowEditor : EditorWindow
 {
@@ -174,7 +175,8 @@ public class BuildApkWindowEditor : EditorWindow
         }
         string _str = ApkTarget == TargetPackage.PicoVR ? "meta-picovr" : "meta-android";
         string version = PlayerSettings.bundleVersion;
-        string name = DevelopmentBuild ? string.Format("{0}_v{1}_beta", _str, version) : string.Format("{0}_v{1}_release", _str, version);
+        string date = string.Format("{0}{1:00}{2:00}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+        string name = DevelopmentBuild ? string.Format("{0}_v{1}_beta-{2}", _str, version, date) : string.Format("{0}_v{1}_release-{2}", _str, version, date);
         string outName = string.Format("{0}.apk", name);
         EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
         if (Directory.Exists(outputPath))
