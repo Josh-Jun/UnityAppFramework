@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using XLuaFrame;
+using System.Collections;
+using UnityEngine.XR.Management;
 
 public class Root
 {
@@ -25,6 +27,11 @@ public class Root
         //设置程序帧率
         Application.targetFrameRate = AppConfig.AppFrameRate;
 
+        BeginCheckUpdate();
+    }
+    private static void BeginCheckUpdate()
+    {
+        Debug.Log("BeginCheckUpdate");
         if (AppConfig.IsHotfix || AppConfig.IsLoadAB)
         {
             //初始化热更脚本
@@ -41,6 +48,7 @@ public class Root
 
     public static void InitRootScripts()
     {
+        Debug.Log("InitRootScripts");
         TextAsset config = AssetsManager.Instance.LoadAsset<TextAsset>(path_AppScriptConfig);
         appScriptConfig = XmlSerializeManager.ProtoDeSerialize<AppScriptConfig>(config.bytes);
         for (int i = 0; i < appScriptConfig.RootScript.Count; i++)

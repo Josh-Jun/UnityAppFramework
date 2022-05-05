@@ -3,8 +3,11 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using UnityEditor;
-using UnityEditor.Sprites;
+using UnityEditor.XR.Management;
+using UnityEditor.XR;
 using UnityEngine;
+using UnityEditor.XR.Management.Metadata;
+using UnityEngine.XR.Management;
 
 public class BuildApkWindowEditor : EditorWindow
 {
@@ -131,12 +134,44 @@ public class BuildApkWindowEditor : EditorWindow
         AppConfig.RunXLua = RunXLuaScripts;
         AppConfig.AppFrameRate = AppFrameRate;
         AppConfig.TargetPackage = ApkTarget;
+
+
+        XRGeneralSettings androidXRSettings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(BuildTargetGroup.Android);
+
+        if (androidXRSettings == null)
+        {
+            var assignedSettings = ScriptableObject.CreateInstance<XRManagerSettings>() as XRManagerSettings;
+            androidXRSettings.AssignedSettings = assignedSettings;
+            EditorUtility.SetDirty(androidXRSettings); // Make sure this gets picked up for serialization later.
+        }
+
+        //取消当前选择的
+        IReadOnlyList<XRLoader> list = androidXRSettings.Manager.activeLoaders;
+        int hasCount = list.Count;
+        //Debug.Log(hasCount);
+        for (int i = 0; i < hasCount; i++)
+        {
+            string nameTemp = list[0].GetType().FullName;
+            Debug.Log("disable xr plug:" + nameTemp);
+            XRPackageMetadataStore.RemoveLoader(androidXRSettings.Manager, nameTemp, BuildTargetGroup.Android);
+        }
+
+        if (ApkTarget == TargetPackage.PicoVR)
+        {
+            //启用
+            string loaderTypeName = "Unity.XR.PXR.PXR_Loader";
+            XRPackageMetadataStore.AssignLoader(androidXRSettings.Manager, loaderTypeName, BuildTargetGroup.Android);
+        }
     }
     private string assetPath = "Assets/Resources/AssetsFolder";
     private void BuildApk()
     {
-        //移动到根目录
-        string newPath = MoveAssetsToRoot(assetPath);
+        string newPath = "";
+        if (IsHotfix || IsLoadAB)
+        {
+            //移动到根目录
+            newPath = MoveAssetsToRoot(assetPath);
+        }
         string _str = ApkTarget == TargetPackage.PicoVR ? "meta-picovr" : "meta-android";
         string version = PlayerSettings.bundleVersion;
         string name = DevelopmentBuild ? string.Format("{0}_v{1}_beta", _str, version) : string.Format("{0}_v{1}_release", _str, version);
@@ -156,8 +191,11 @@ public class BuildApkWindowEditor : EditorWindow
         string BuildPath = string.Format("{0}/{1}", outputPath, outName);
         BuildPipeline.BuildPlayer(GetBuildScenes(), BuildPath, BuildTarget.Android, BuildOptions.None);
 
-        //移动回原始目录
-        MoveAssetsToOriginPath(newPath, assetPath);
+        if (IsHotfix || IsLoadAB)
+        {
+            //移动回原始目录
+            MoveAssetsToOriginPath(newPath, assetPath);
+        }
 
         EditorUtility.RevealInFinder(BuildPath);
 
