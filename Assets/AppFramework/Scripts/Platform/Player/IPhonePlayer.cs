@@ -7,6 +7,13 @@ namespace Platform
 {
     public class IPhonePlayer : PlatformManager
     {
+#if UNITY_IPHONE
+        [DllImport("__Internal")]
+        private static extern string getAppData(string key);
+        [DllImport("__Internal")]
+        private static extern void quitUnityWindow();
+#endif
+
         public override bool IsEditor()
         {
             return false;
@@ -14,6 +21,20 @@ namespace Platform
         public override string Name()
         {
             return "iOS";
+        }
+        public override string GetAppData(string key)
+        {
+#if UNITY_IPHONE
+            return getAppData(key);
+#else
+            return null;
+#endif
+        }
+        public override void QuitUnityPlayer()
+        {
+#if UNITY_IPHONE
+            quitUnityWindow();
+#endif
         }
     }
 }

@@ -14,5 +14,13 @@ namespace Platform
         {
             return "Windows";
         }
+        public override void QuitUnityPlayer()
+        {
+            Debug.Log("Quit");
+        }
+        public override string GetAppData(string key)
+        {
+            return "";
+        }
     }
 }

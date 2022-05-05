@@ -33,4 +33,6 @@ public abstract class PlatformManager
     }
     public abstract bool IsEditor();
     public abstract string Name();
+    public abstract string GetAppData(string key);
+    public abstract void QuitUnityPlayer();
 }
