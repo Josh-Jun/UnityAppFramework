@@ -11,4 +11,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Resources/AssetsFolder/Test/Scene/TestScene.unity
     guid: 282ec1f01f77fe24985b55ebfd1cfc97
-  m_configObjects: {}
+  m_configObjects:
+    Unity.XR.PXR.Settings: {fileID: 11400000, guid: b9e1fd26def765844b2ea1a1a60b0317,
+      type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 66709d4c72255474a95913f357f8064f,
+      type: 2}
