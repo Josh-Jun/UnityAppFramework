@@ -11,14 +11,11 @@ using System;
 public class UIRoot : SingletonMono<UIRoot>
 {
     #region Private Variable
-    private Camera uiCamera;//UI相机
     private GameObject canvasObject;//Canvas游戏对象
     private GameObject eventSystemObject;//EventSystem游戏对象
     #endregion
 
     #region Public Variable
-    /// <summary> UI相机 </summary>
-    public Camera UICamera { get { return uiCamera; } private set { } }
     /// <summary> Canvas组件 </summary>
     public Canvas UICanvas { get { return canvasObject.GetComponent<Canvas>(); } private set { } }
     /// <summary> 获取Canvas根RectTransform </summary>
@@ -34,25 +31,12 @@ public class UIRoot : SingletonMono<UIRoot>
     /// </summary>
     void Awake()
     {
-        #region Camera
-        uiCamera = gameObject.AddComponent<Camera>();
-        uiCamera.clearFlags = CameraClearFlags.Depth;
-        uiCamera.cullingMask = 1 << 5;
-        uiCamera.orthographic = true;
-        uiCamera.nearClipPlane = 0;
-        uiCamera.useOcclusionCulling = false;
-        uiCamera.allowMSAA = false;
-        uiCamera.allowHDR = false;
-        uiCamera.depth = 1024;
-        #endregion
-
         #region UI Canvas
         canvasObject = new GameObject("UI Canvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
         canvasObject.transform.SetParent(transform);
         canvasObject.layer = 5;
 
-        UICanvas.renderMode = RenderMode.ScreenSpaceCamera;
-        UICanvas.worldCamera = uiCamera;
+        UICanvas.renderMode = RenderMode.ScreenSpaceOverlay;
 
         UICanvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         UICanvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
@@ -60,7 +44,7 @@ public class UIRoot : SingletonMono<UIRoot>
         #endregion
 
         #region EventSystem
-        if(EventSystem.current == null)
+        if (EventSystem.current == null)
         {
             eventSystemObject = new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
             eventSystemObject.transform.SetParent(transform);
@@ -92,7 +76,7 @@ public class UIRoot : SingletonMono<UIRoot>
     /// <summary> UGUI坐标 mousePosition</summary>
     public Vector2 ScreenPointInRectangle(Vector2 mousePosition)
     {
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(UIRectTransform, mousePosition, UICanvas.worldCamera, out Vector2 position);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(UIRectTransform, mousePosition, Camera.main, out Vector2 position);
         return position;
     }
     /// <summary> 判断是否点中UI </summary>
