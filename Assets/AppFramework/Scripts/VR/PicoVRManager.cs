@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class PicoVRManager : MonoBehaviour
+public class PicoVRManager : SingletonMonoEvent<PicoVRManager>
 {
     private GameObject locomotionSystem;
-    private XRInteractionManager interactionManager;
+    private XRInteractionManager _interactionManager;
     private ActionBasedControllerManager leftController;
     private ActionBasedControllerManager rithtController;
     private void Awake()
     {
         leftController = this.FindComponent<ActionBasedControllerManager>("XR Origin/Camera Offset/LeftHand");
         rithtController = this.FindComponent<ActionBasedControllerManager>("XR Origin/Camera Offset/RightHand");
-        interactionManager = this.FindComponent<XRInteractionManager>("XR Interaction Manager");
+        _interactionManager = this.FindComponent<XRInteractionManager>("XR Interaction Manager");
         locomotionSystem = this.FindGameObject("Locomotion System");
     }
     private void Start()
@@ -21,7 +21,11 @@ public class PicoVRManager : MonoBehaviour
         SetBaseController(false);
         SetTeleportController(false);
 
-        SetTeleportEnable(false);
+        //SetTeleportEnable(false);
+    }
+    public XRInteractionManager InteractionManager
+    {
+        get { return _interactionManager; }
     }
     public void SetBaseController(bool enable)
     {
