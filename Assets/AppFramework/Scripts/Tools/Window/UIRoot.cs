@@ -37,6 +37,7 @@ public class UIRoot : SingletonMono<UIRoot>
         canvasObject.layer = 5;
 
         UICanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        UICanvas.worldCamera = Camera.main;
 
         UICanvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         UICanvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
