@@ -11,7 +11,7 @@ namespace Platform
         [DllImport("__Internal")]
         private static extern string getAppData(string key);
         [DllImport("__Internal")]
-        private static extern void quitUnityWindow();
+        private static extern void showHostMainWindow(string msg);
 #endif
 
         public override bool IsEditor()
@@ -33,7 +33,7 @@ namespace Platform
         public override void QuitUnityPlayer()
         {
 #if UNITY_IPHONE
-            quitUnityWindow();
+            showHostMainWindow("");
 #endif
         }
     }
