@@ -106,21 +106,21 @@ public class AssetBundleWindowEditor : EditorWindow
         EditorGUILayout.Space();
         if (GUILayout.Button("2.BuildAllAssetBundle(一键打包)"))
         {
-            EditorApplication.delayCall += BuildAllAssetBundles;
+            BuildAllAssetBundles();
         }
 
         // MD5 file.
         EditorGUILayout.Space();
         if (GUILayout.Button("3.CreateMD5File(生成MD5文件)"))
         {
-            EditorApplication.delayCall += CreateFile;
+            CreateFile();
         }
 
         // delete.
         EditorGUILayout.Space();
         if (GUILayout.Button("4.DeleteAllAssetBundle(一键删除)"))
         {
-            EditorApplication.delayCall += DeleteAssetBundle;
+            DeleteAssetBundle();
         }
         GUILayout.EndVertical();
     }
@@ -287,7 +287,7 @@ public class AssetBundleWindowEditor : EditorWindow
         BuildPipeline.BuildAssetBundles(outPath, BuildAssetBundleOptions.None, buildTarget);
 
         AssetDatabase.Refresh();
-        Debug.Log("AssetBundle 打包成功!");
+        Debug.Log("AssetBundle 打包成功! " + outPath);
     }
     #endregion
 

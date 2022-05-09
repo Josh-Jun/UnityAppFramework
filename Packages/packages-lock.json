@@ -7,7 +7,7 @@
       "dependencies": {}
     },
     "com.unity.burst": {
-      "version": "1.6.5",
+      "version": "1.6.4",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -188,7 +188,7 @@
       "url": "https://packages.unity.cn"
     },
     "com.unity.xr.interaction.toolkit": {
-      "version": "2.0.1",
+      "version": "2.0.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -213,7 +213,7 @@
       "url": "https://packages.unity.cn"
     },
     "com.unity.xr.management": {
-      "version": "4.1.0",
+      "version": "4.2.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {

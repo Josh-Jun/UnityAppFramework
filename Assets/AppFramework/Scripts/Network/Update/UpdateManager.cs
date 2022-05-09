@@ -37,7 +37,7 @@ public class UpdateManager : SingletonEvent<UpdateManager>
     /// <summary> 开始热更新 </summary>
     public void StartUpdate(Action<bool, string> UpdateCallBack)
     {
-        LocalPath = string.Format(@"{0}/{1}/", Application.persistentDataPath, PlatformManager.Instance.Name());
+        LocalPath = PlatformManager.Instance.GetPath(PlatformManager.Instance.Name());
         ServerUrl = NetcomManager.ABUrl + PlatformManager.Instance.Name() + "/";
 
         XmlLocalVersionPath = LocalPath + "AssetBundleConfig.xml";

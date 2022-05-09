@@ -15,6 +15,16 @@ namespace Platform
         {
             return "Android";
         }
+        public override string GetPath(string folder)
+        {
+            return string.Format("{0}/{1}/", Application.persistentDataPath, folder);
+        }
+        public override void SavePhoto(string fileName)
+        {
+#if UNITY_ANDROID
+            MainJavaObject().Call("savePhoto", fileName);
+#endif
+        }
         public override string GetAppData(string key)
         {
 #if UNITY_ANDROID

@@ -24,6 +24,9 @@ public abstract class PlatformManager
                     case RuntimePlatform.WindowsEditor:
                         _instance = new EditorPlayer();
                         break;
+                    case RuntimePlatform.OSXEditor:
+                        _instance = new EditorPlayer();
+                        break;
                     default:
                         break;
                 }
@@ -33,6 +36,8 @@ public abstract class PlatformManager
     }
     public abstract bool IsEditor();
     public abstract string Name();
+    public abstract string GetPath(string folder);
+    public abstract void SavePhoto(string fileName);
     public abstract string GetAppData(string key);
     public abstract void QuitUnityPlayer();
 }

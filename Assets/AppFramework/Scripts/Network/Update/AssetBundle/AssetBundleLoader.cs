@@ -50,7 +50,7 @@ public class AssetBundleLoader
         this.bundleName = bundleName;
         this.progress = 0;
 
-        this.bundlePath = string.Format("{0}/{1}/{2}", Application.persistentDataPath, PlatformManager.Instance.Name(), bundleName);
+        this.bundlePath = string.Format("{0}/{1}", PlatformManager.Instance.GetPath(PlatformManager.Instance.Name()), bundleName);
         this.assetLoader = null;
     }
 

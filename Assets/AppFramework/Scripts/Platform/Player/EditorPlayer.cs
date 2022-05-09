@@ -12,11 +12,19 @@ namespace Platform
         }
         public override string Name()
         {
-            return "Windows";
+            return "Android";
+        }
+        public override string GetPath(string folder)
+        {
+            return string.Format("{0}/{1}/", Application.persistentDataPath, folder);
+        }
+        public override void SavePhoto(string fileName)
+        {
+            Debug.Log("SavePhoto");
         }
         public override void QuitUnityPlayer()
         {
-            Debug.Log("Quit");
+            Debug.Log("Quit Editor");
         }
         public override string GetAppData(string key)
         {
