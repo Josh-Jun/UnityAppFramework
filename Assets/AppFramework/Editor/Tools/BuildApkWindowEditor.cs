@@ -168,7 +168,7 @@ public class BuildApkWindowEditor : EditorWindow
     private void BuildApk()
     {
         string newPath = "";
-        if (IsHotfix || IsLoadAB)
+        if (IsHotfix && IsLoadAB)
         {
             //移动到根目录
             newPath = MoveAssetsToRoot(assetPath);
@@ -193,7 +193,7 @@ public class BuildApkWindowEditor : EditorWindow
         string BuildPath = string.Format("{0}/{1}", outputPath, outName);
         BuildPipeline.BuildPlayer(GetBuildScenes(), BuildPath, BuildTarget.Android, BuildOptions.None);
 
-        if (IsHotfix || IsLoadAB)
+        if (IsHotfix && IsLoadAB)
         {
             //移动回原始目录
             MoveAssetsToOriginPath(newPath, assetPath);

@@ -7,6 +7,7 @@ using EventController;
 using System.Reflection;
 using XLuaFrame;
 using System;
+using UnityEngine.XR.Interaction.Toolkit.UI;
 
 public class UIRoot : SingletonMono<UIRoot>
 {
@@ -51,6 +52,12 @@ public class UIRoot : SingletonMono<UIRoot>
             eventSystemObject.transform.SetParent(transform);
         }
         #endregion
+
+        if(Root.AppConfig.TargetPackage == TargetPackage.PicoVR)
+        {
+            Init3DUIRoot(Camera.main);
+            Reset3DUIRoot(10);
+        }
     }
 
     #region Private Function
@@ -66,11 +73,12 @@ public class UIRoot : SingletonMono<UIRoot>
         UIRectTransform.sizeDelta = new Vector2(1920, 1080);
         UICanvas.worldCamera = camera;
         UICanvasScaler.referencePixelsPerUnit = 100;
+        UICanvas.TryGetComponent<TrackedDeviceGraphicRaycaster>();
     }
-    public void Reset3DUIRoot(float dis, Camera camera3d = null)
+    public void Reset3DUIRoot(float dis = 5f, float hight = 1f, Camera camera3d = null)
     {
         Camera camera = camera3d == null ? Camera.main : camera3d;
-        Vector3 target = camera.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, dis));
+        Vector3 target = new Vector3(0, hight, dis);
         UIRectTransform.transform.position = target;
         UIRectTransform.transform.eulerAngles = camera.transform.eulerAngles;
     }

@@ -7,14 +7,20 @@ public class PicoVRManager : SingletonMonoEvent<PicoVRManager>
 {
     private GameObject locomotionSystem;
     private XRInteractionManager _interactionManager;
-    private ActionBasedControllerManager leftController;
-    private ActionBasedControllerManager rithtController;
+    private ActionBasedControllerManager leftHand;
+    private ActionBasedControllerManager rithtHand;
+    private Camera _mainCamera;
+    public XRInteractionManager InteractionManager { get { return _interactionManager; } }
+    public GameObject LeftController { get { return leftHand.baseControllerGameObject; } }
+    public GameObject RightController { get { return rithtHand.baseControllerGameObject; } }
+    public Camera MainCamera { get { return _mainCamera; } }
     private void Awake()
     {
-        leftController = this.FindComponent<ActionBasedControllerManager>("XR Origin/Camera Offset/LeftHand");
-        rithtController = this.FindComponent<ActionBasedControllerManager>("XR Origin/Camera Offset/RightHand");
+        leftHand = this.FindComponent<ActionBasedControllerManager>("XR Origin/Camera Offset/LeftHand");
+        rithtHand = this.FindComponent<ActionBasedControllerManager>("XR Origin/Camera Offset/RightHand");
         _interactionManager = this.FindComponent<XRInteractionManager>("XR Interaction Manager");
         locomotionSystem = this.FindGameObject("Locomotion System");
+        _mainCamera = this.FindComponent<Camera>("XR Origin/Camera Offset/Main Camera");
     }
     private void Start()
     {
@@ -23,19 +29,15 @@ public class PicoVRManager : SingletonMonoEvent<PicoVRManager>
 
         //SetTeleportEnable(false);
     }
-    public XRInteractionManager InteractionManager
-    {
-        get { return _interactionManager; }
-    }
     public void SetBaseController(bool enable)
     {
-        leftController.SetBaseController(enable);
-        rithtController.SetBaseController(enable);
+        leftHand.SetBaseController(enable);
+        rithtHand.SetBaseController(enable);
     }
     public void SetTeleportController(bool enable)
     {
-        leftController.SetTeleportController(enable);
-        rithtController.SetTeleportController(enable);
+        leftHand.SetTeleportController(enable);
+        rithtHand.SetTeleportController(enable);
     }
     public void SetTeleportEnable(bool enable)
     {
