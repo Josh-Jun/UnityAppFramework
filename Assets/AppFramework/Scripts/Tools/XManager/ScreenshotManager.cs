@@ -45,6 +45,7 @@ public class ScreenshotManager : SingletonMono<ScreenshotManager>
         string imageName = string.Format("Image{0}.png", Utils.GetTimeStamp);
         string file = Path.Combine(path, imageName);
         File.WriteAllBytes(file, img);
+        yield return new WaitForEndOfFrame();
         coroutine = null;
         callback?.Invoke(texture, imageName);
     }
@@ -66,6 +67,7 @@ public class ScreenshotManager : SingletonMono<ScreenshotManager>
         string imageName = string.Format("Image{0}.png", Utils.GetTimeStamp);
         string file = Path.Combine(path, imageName);
         File.WriteAllBytes(file, img);
+        yield return new WaitForEndOfFrame();
         coroutine = null;
         callback?.Invoke(texture, imageName);
     }

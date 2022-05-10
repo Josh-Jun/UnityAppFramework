@@ -12,7 +12,10 @@ namespace Test
             //添加事件系统，不带参数
             AddEventMsg("BtnEvent", ButtonEvent);
             //添加事件系统，带参数
-            AddEventMsgParams("BtnParamsEvent", (object[] args)=> { ButtonParamsEvent((string)args[0]); });
+            AddEventMsgParams("BtnParamsEvent", (object[] args) => { ButtonParamsEvent((string)args[0]); });
+
+            AddEventMsg("BtnTakePhotoEvent", TakePhoto);
+            AddEventMsg("BtnQuitEvent", ButtonQuitEvent);
         }
         public void Begin()
         {
@@ -20,7 +23,18 @@ namespace Test
             string prefab_TestPath = "Test/Assets/Windows/TestWindow";
             testWin = this.LoadUIWindow<TestWindow>(prefab_TestPath, true);
         }
-
+        private void TakePhoto()
+        {
+            ScreenshotManager.Instance.TakePhoto(Camera.main, PlatformManager.Instance.GetDataPath("Screenshot"), new Size(1920, 1080), (Texture2D texture, string fileName) =>
+            {
+                PlatformManager.Instance.SavePhoto(fileName);
+                testWin.SetRawImage(texture);
+            });
+        }
+        private void ButtonQuitEvent()
+        {
+            PlatformManager.Instance.QuitUnityPlayer();
+        }
         private void ButtonEvent()
         {
             testWin.SetText("触发不带参数事件");

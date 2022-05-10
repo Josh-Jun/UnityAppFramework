@@ -14,15 +14,19 @@ namespace Platform
         {
             return "Android";
         }
-        public override string GetPath(string folder)
+        public override string GetDataPath(string folder)
         {
             return string.Format("{0}/{1}/", Application.persistentDataPath, folder);
+        }
+        public override string GetAlbumPath(string folder)
+        {
+            return string.Format("{0}/DCIM/{1}/", Application.persistentDataPath, folder);
         }
         public override void SavePhoto(string fileName)
         {
             Debug.Log("SavePhoto");
         }
-        public override void QuitUnityPlayer()
+        public override void QuitUnityPlayer(bool isStay = false)
         {
             Debug.Log("Quit Editor");
         }

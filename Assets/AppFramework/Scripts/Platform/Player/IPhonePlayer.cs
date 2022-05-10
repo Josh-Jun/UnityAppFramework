@@ -22,9 +22,13 @@ namespace Platform
         {
             return "iOS";
         }
-        public override string GetPath(string folder)
+        public override string GetDataPath(string folder)
         {
             return string.Format("{0}/{1}/", Application.persistentDataPath, folder);
+        }
+        public override string GetAlbumPath(string folder)
+        {
+            return string.Format("{0}/DCIM/{1}/", Application.persistentDataPath, folder);
         }
         public override void SavePhoto(string fileName)
         {
@@ -40,7 +44,7 @@ namespace Platform
             return null;
 #endif
         }
-        public override void QuitUnityPlayer()
+        public override void QuitUnityPlayer(bool isStay = false)
         {
 #if UNITY_IPHONE
             showHostMainWindow("");

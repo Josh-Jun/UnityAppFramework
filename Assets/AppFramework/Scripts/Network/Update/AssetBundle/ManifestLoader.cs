@@ -27,7 +27,7 @@ public class ManifestLoader : Singleton<ManifestLoader>
 
     public ManifestLoader()
     {
-        this.manifestPath = string.Format("{0}/{1}", PlatformManager.Instance.GetPath(PlatformManager.Instance.Name()), PlatformManager.Instance.Name());
+        this.manifestPath = string.Format("{0}/{1}", PlatformManager.Instance.GetDataPath(PlatformManager.Instance.Name()), PlatformManager.Instance.Name());
         this.manifest = null;
         this.assetBundle = null;
         this.IsFinish = false;

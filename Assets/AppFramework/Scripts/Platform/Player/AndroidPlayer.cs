@@ -7,6 +7,12 @@ namespace Platform
 {
     public class AndroidPlayer : PlatformManager
     {
+        private const string AppMainPackage = "com.unity3d.player.UnityPlayer";
+        private const string AppToolsPackage = "com.genimous.linjing.UnityTools";
+        public AndroidPlayer()
+        {
+            JavaObject(AppToolsPackage).CallStatic("init", MainJavaObject());
+        }
         public override bool IsEditor()
         {
             return false;
@@ -15,33 +21,44 @@ namespace Platform
         {
             return "Android";
         }
-        public override string GetPath(string folder)
+        public override string GetDataPath(string folder)
         {
             return string.Format("{0}/{1}/", Application.persistentDataPath, folder);
+        }
+        public override string GetAlbumPath(string folder)
+        {
+            return string.Format("{0}/{1}/", "/sdcard/DCIM", folder);
         }
         public override void SavePhoto(string fileName)
         {
 #if UNITY_ANDROID
-            MainJavaObject().Call("savePhoto", fileName);
+            JavaObject(AppToolsPackage).CallStatic("savePhoto", fileName);
 #endif
         }
         public override string GetAppData(string key)
         {
 #if UNITY_ANDROID
-            return MainJavaObject().Call<string>("getAppData", key);
+            return JavaObject(AppToolsPackage).CallStatic<string>("getAppData", key);
 #else
             return "";
 #endif
         }
-        public override void QuitUnityPlayer()
+        public override void QuitUnityPlayer(bool isStay = false)
         {
 #if UNITY_ANDROID
-            MainJavaObject().Call("quitUnityActivity");
+            if (isStay)
+            {
+                Application.Unload();
+            }
+            else
+            {
+                Application.Quit();
+            }
 #endif
         }
         private AndroidJavaObject MainJavaObject()
         {
-            return new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity");
+            return JavaObject(AppMainPackage).GetStatic<AndroidJavaObject>("currentActivity");
         }
         private AndroidJavaObject JavaObject(string packageName)
         {

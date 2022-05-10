@@ -36,8 +36,9 @@ public abstract class PlatformManager
     }
     public abstract bool IsEditor();
     public abstract string Name();
-    public abstract string GetPath(string folder);
+    public abstract string GetDataPath(string folder);
+    public abstract string GetAlbumPath(string folder);
     public abstract void SavePhoto(string fileName);
     public abstract string GetAppData(string key);
-    public abstract void QuitUnityPlayer();
+    public abstract void QuitUnityPlayer(bool isStay = false);
 }
