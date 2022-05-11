@@ -12,6 +12,8 @@ namespace Platform
         private static extern string getAppData(string key);
         [DllImport("__Internal")]
         private static extern void showHostMainWindow(string msg);
+        [DllImport("__Internal")]
+        private static extern void savePhoto(string imgPath);
 #endif
 
         public override bool IsEditor()
@@ -29,7 +31,8 @@ namespace Platform
         public override void SavePhoto(string folder, string fileName)
         {
 #if UNITY_IPHONE
-            
+            string imgPath = string.Format("{0}/{1}/{2}", Application.persistentDataPath, folder, fileName);
+            savePhoto(imgPath);
 #endif
         }
         public override string GetAppData(string key)

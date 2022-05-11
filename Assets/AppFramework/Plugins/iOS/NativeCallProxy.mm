@@ -12,6 +12,16 @@ id<NativeCallsProtocol> api = NULL;
 
 @end
 
+@implementation PhotoManager
+- ( void ) imageSaved: ( UIImage *) image didFinishSavingWithError:( NSError *)error
+          contextInfo: ( void *) contextInfo
+{
+    NSLog(@"保存结束");
+    if (error != nil) {
+        NSLog(@"有错误");
+    }
+}
+@end
 
 extern "C" {
     //退出unity显示原生界面
@@ -24,5 +34,14 @@ extern "C" {
         NSString* data = [api getAppData:[NSString stringWithUTF8String:key]];
         return strdup([data cStringUsingEncoding:NSUTF8StringEncoding]);
     }
+	void savePhoto(char *readAddr)
+	{
+		NSString *strReadAddr = [NSString stringWithUTF8String:readAddr];
+		UIImage *img = [UIImage imageWithContentsOfFile:strReadAddr];
+		NSLog([NSString stringWithFormat:@"w:%f, h:%f", img.size.width, img.size.height]);
+		PhotoManager *instance = [PhotoManager alloc];
+		UIImageWriteToSavedPhotosAlbum(img, instance,
+									@selector(imageSaved:didFinishSavingWithError:contextInfo:), nil);
+	}
 }
 
