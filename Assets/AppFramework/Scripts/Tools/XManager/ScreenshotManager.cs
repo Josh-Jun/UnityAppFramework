@@ -43,7 +43,7 @@ public class ScreenshotManager : SingletonMono<ScreenshotManager>
             FileManager.CreateFolder(path);
         }
         string imageName = string.Format("Image{0}.png", Utils.GetTimeStamp);
-        string file = Path.Combine(path, imageName);
+        string file = string.Format("{0}/{1}", path, imageName);
         File.WriteAllBytes(file, img);
         yield return new WaitForEndOfFrame();
         coroutine = null;
@@ -65,7 +65,7 @@ public class ScreenshotManager : SingletonMono<ScreenshotManager>
             FileManager.CreateFolder(path);
         }
         string imageName = string.Format("Image{0}.png", Utils.GetTimeStamp);
-        string file = Path.Combine(path, imageName);
+        string file = string.Format("{0}/{1}", path, imageName);
         File.WriteAllBytes(file, img);
         yield return new WaitForEndOfFrame();
         coroutine = null;

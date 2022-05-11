@@ -16,13 +16,9 @@ namespace Platform
         }
         public override string GetDataPath(string folder)
         {
-            return string.Format("{0}/{1}/", Application.persistentDataPath, folder);
+            return string.Format("{0}/{1}", Application.persistentDataPath, folder);
         }
-        public override string GetAlbumPath(string folder)
-        {
-            return string.Format("{0}/DCIM/{1}/", Application.persistentDataPath, folder);
-        }
-        public override void SavePhoto(string fileName)
+        public override void SavePhoto(string folder, string fileName)
         {
             Debug.Log("SavePhoto");
         }

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.UI;
 
 namespace Test
@@ -14,6 +15,11 @@ namespace Test
         private Button btn_quit;
         private Text text;
         private RawImage rawImage;
+        private RawImage mobileImage;
+        private Transform selfStick;
+        private Camera mobileCamera;
+
+        public Camera renderCamera { private set; get; }
         protected override void InitWindow()
         {
             base.InitWindow();
@@ -23,17 +29,21 @@ namespace Test
             btn_quit = this.FindComponent<Button>("BtnQuit");
             text = this.FindComponent<Text>("Image/Text");
             rawImage = this.FindComponent<RawImage>("RawImage");
+            mobileImage = this.FindComponent<RawImage>("MobileImage");
+            mobileCamera = this.FindComponent<Camera>("MobileCamera");
+            renderCamera = mobileCamera.FindComponent<Camera>("RenderCamera");
+            selfStick = this.FindComponent<Transform>("SelfStick");
             btn.transform.DORotate(new Vector3(0, 0, 90), 5).SetEase(Ease.Linear);
         }
 
         protected override void RegisterEvent()
         {
             base.RegisterEvent();
-            btn.BtnOnClick((object[] objs)=> { });
+            btn.BtnOnClick((object[] objs) => { });
             btn.onClick.AddListener(() => { SendEventMsg("BtnEvent"); });
             btn_take_photo.onClick.AddListener(() => { SendEventMsg("BtnTakePhotoEvent"); });
             btn_params.onClick.AddListener(() => { SendEventMsgParams("BtnParamsEvent", "触发带参数事件"); });
-            btn_quit.onClick.AddListener(()=> { SendEventMsg("BtnQuitEvent"); });
+            btn_quit.onClick.AddListener(() => { SendEventMsg("BtnQuitEvent"); });
         }
 
         protected override void OpenWindow()
@@ -50,6 +60,19 @@ namespace Test
         public void SetRawImage(Texture2D texture)
         {
             rawImage.texture = texture;
+        }
+
+        public void SetMobileCamera(RenderTexture renderTexture)
+        {
+            mobileCamera.targetTexture = renderTexture;
+            mobileImage.texture = renderTexture;
+            mobileCamera.TryGetComponent<ParentConstraint>().AddSource(new ConstraintSource { sourceTransform = PicoXRManager.Instance.RightController.transform, weight = 1 });
+            mobileCamera.TryGetComponent<ParentConstraint>().SetTranslationOffset(0, new Vector3(0, 0.1f, 5f));
+            selfStick.TryGetComponent<ParentConstraint>().AddSource(new ConstraintSource { sourceTransform = PicoXRManager.Instance.RightController.transform, weight = 1 });
+            selfStick.TryGetComponent<ParentConstraint>().SetTranslationOffset(0, Vector3.zero);
+            selfStick.Find("Cube/Quad").GetComponent<MeshRenderer>().sharedMaterial.mainTexture = renderTexture;
+            mobileImage.TryGetComponent<ParentConstraint>().AddSource(new ConstraintSource { sourceTransform = PicoXRManager.Instance.MainCamera.transform, weight = 1 });
+            mobileImage.TryGetComponent<ParentConstraint>().SetTranslationOffset(0, Vector3.forward * 5);
         }
         public void SetText(string value)
         {

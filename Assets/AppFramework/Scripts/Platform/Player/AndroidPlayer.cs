@@ -23,16 +23,12 @@ namespace Platform
         }
         public override string GetDataPath(string folder)
         {
-            return string.Format("{0}/{1}/", Application.persistentDataPath, folder);
+            return string.Format("{0}/{1}", Application.persistentDataPath, folder);
         }
-        public override string GetAlbumPath(string folder)
-        {
-            return string.Format("{0}/{1}/", "/sdcard/DCIM", folder);
-        }
-        public override void SavePhoto(string fileName)
+        public override void SavePhoto(string folder, string fileName)
         {
 #if UNITY_ANDROID
-            JavaObject(AppToolsPackage).CallStatic("savePhoto", fileName);
+            JavaObject(AppToolsPackage).CallStatic("savePhoto", folder, fileName);
 #endif
         }
         public override string GetAppData(string key)

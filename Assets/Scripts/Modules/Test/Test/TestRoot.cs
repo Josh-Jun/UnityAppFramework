@@ -7,6 +7,7 @@ namespace Test
     public class TestRoot : SingletonEvent<TestRoot>, IRoot
     {
         private TestWindow testWin;
+        private RenderTexture mobile;
         public TestRoot()
         {
             //添加事件系统，不带参数
@@ -22,12 +23,15 @@ namespace Test
             //加载窗体
             string prefab_TestPath = "Test/Assets/Windows/TestWindow";
             testWin = this.LoadUIWindow<TestWindow>(prefab_TestPath, true);
+
+            mobile = new RenderTexture(1920, 1080, 32);
+            testWin.SetMobileCamera(mobile);
         }
         private void TakePhoto()
         {
-            ScreenshotManager.Instance.TakePhoto(Camera.main, PlatformManager.Instance.GetDataPath("Screenshot"), new Size(1920, 1080), (Texture2D texture, string fileName) =>
+            ScreenshotManager.Instance.TakePhoto(testWin.renderCamera, PlatformManager.Instance.GetDataPath("Screenshots"), new Size(1920, 1080), (Texture2D texture, string fileName) =>
             {
-                PlatformManager.Instance.SavePhoto(fileName);
+                PlatformManager.Instance.SavePhoto("Screenshots", fileName);
                 testWin.SetRawImage(texture);
             });
         }
