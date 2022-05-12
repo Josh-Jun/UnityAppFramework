@@ -355,6 +355,79 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &3497931083185163036
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2548140531367946934}
+  - component: {fileID: 6970133151595413580}
+  - component: {fileID: 7560177622116877667}
+  m_Layer: 5
+  m_Name: MobileImageRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2548140531367946934
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3497931083185163036}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4463972096702181560}
+  m_Father: {fileID: 5838344187853514021}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &6970133151595413580
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3497931083185163036}
+  m_CullTransparentMesh: 1
+--- !u!1773428102 &7560177622116877667
+ParentConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3497931083185163036}
+  m_Enabled: 1
+  m_Weight: 1
+  m_TranslationAtRest: {x: 0, y: 0, z: 0}
+  m_RotationAtRest: {x: 0, y: 0, z: 0}
+  m_TranslationOffsets:
+  - {x: 0, y: 0, z: 5}
+  m_RotationOffsets:
+  - {x: 0, y: 0, z: 0}
+  m_AffectTranslationX: 1
+  m_AffectTranslationY: 0
+  m_AffectTranslationZ: 1
+  m_AffectRotationX: 0
+  m_AffectRotationY: 1
+  m_AffectRotationZ: 0
+  m_IsContraintActive: 1
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 0}
+    weight: 1
 --- !u!1 &3742973178054174256
 GameObject:
   m_ObjectHideFlags: 0
@@ -571,7 +644,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5789199040728859794}
   - component: {fileID: 5519701944773862635}
-  - component: {fileID: 9120987938359951584}
   - component: {fileID: 8202745512342406008}
   - component: {fileID: 198210533008013717}
   m_Layer: 0
@@ -640,14 +712,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &9120987938359951584
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4243041506346410068}
-  m_Enabled: 1
 --- !u!114 &8202745512342406008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1025,7 +1089,7 @@ RectTransform:
   - {fileID: 4653207133170437534}
   - {fileID: 8024199996278179228}
   - {fileID: 4636914066695306904}
-  - {fileID: 4463972096702181560}
+  - {fileID: 2548140531367946934}
   - {fileID: 5789199040728859794}
   - {fileID: 1668174727341452766}
   m_Father: {fileID: 0}
@@ -1054,7 +1118,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3589251392766550863}
   - component: {fileID: 3880400994565339961}
-  - component: {fileID: 9081595407268932925}
   - component: {fileID: 7933032771231109070}
   m_Layer: 0
   m_Name: RenderCamera
@@ -1121,14 +1184,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &9081595407268932925
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6065299566537749890}
-  m_Enabled: 1
 --- !u!114 &7933032771231109070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1173,7 +1228,6 @@ GameObject:
   - component: {fileID: 4463972096702181560}
   - component: {fileID: 5613821341814973344}
   - component: {fileID: 8900197269898444858}
-  - component: {fileID: 5856387050013270436}
   m_Layer: 5
   m_Name: MobileImage
   m_TagString: Untagged
@@ -1193,8 +1247,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5838344187853514021}
-  m_RootOrder: 7
+  m_Father: {fileID: 2548140531367946934}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1236,32 +1290,6 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!1773428102 &5856387050013270436
-ParentConstraint:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6224992990212300790}
-  m_Enabled: 1
-  m_Weight: 1
-  m_TranslationAtRest: {x: 0, y: 0, z: 0}
-  m_RotationAtRest: {x: 0, y: 0, z: 0}
-  m_TranslationOffsets:
-  - {x: 0, y: 0, z: 5}
-  m_RotationOffsets:
-  - {x: 0, y: 0, z: 0}
-  m_AffectTranslationX: 1
-  m_AffectTranslationY: 0
-  m_AffectTranslationZ: 1
-  m_AffectRotationX: 0
-  m_AffectRotationY: 1
-  m_AffectRotationZ: 0
-  m_IsContraintActive: 1
-  m_IsLocked: 1
-  m_Sources:
-  - sourceTransform: {fileID: 0}
-    weight: 1
 --- !u!1 &6360168653705195467
 GameObject:
   m_ObjectHideFlags: 0
