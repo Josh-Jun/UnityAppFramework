@@ -136,6 +136,7 @@ public class BuildApkWindowEditor : EditorWindow
         AppConfig.AppFrameRate = AppFrameRate;
         AppConfig.TargetPackage = ApkTarget;
 
+        EditorUtility.SetDirty(AppConfig);
 
         XRGeneralSettings androidXRSettings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(BuildTargetGroup.Android);
 
