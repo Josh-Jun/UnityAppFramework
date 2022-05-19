@@ -157,13 +157,15 @@ public class BuildApkWindowEditor : EditorWindow
             Debug.Log("disable xr plug:" + nameTemp);
             XRPackageMetadataStore.RemoveLoader(androidXRSettings.Manager, nameTemp, BuildTargetGroup.Android);
         }
-
+        androidXRSettings.InitManagerOnStart = false;
         if (ApkTarget == TargetPackage.PicoVR)
         {
+            androidXRSettings.InitManagerOnStart = true;
             //∆Ù”√
             string loaderTypeName = "Unity.XR.PXR.PXR_Loader";
             XRPackageMetadataStore.AssignLoader(androidXRSettings.Manager, loaderTypeName, BuildTargetGroup.Android);
         }
+        EditorUtility.SetDirty(androidXRSettings); // Make sure this gets picked up for serialization later.
     }
     private string assetPath = "Assets/Resources/AssetsFolder";
     private void BuildApk()
