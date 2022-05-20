@@ -8,15 +8,18 @@ using UnityEngine.XR.Management;
 
 public class Root
 {
-    private const string path_AppConfig = "App/AppConfig";
-    public static AppConfig AppConfig;//App配置表 
+    private static IRoot UpdateRoot = null;
 
     private const string path_AppScriptConfig = "App/Assets/AppScriptConfig";
     private static AppScriptConfig appScriptConfig;
 
-    private static readonly Dictionary<string, List<string>> sceneScriptsPairs = new Dictionary<string, List<string>>();
-    private static readonly Dictionary<string, IRoot> iRootPairs = new Dictionary<string, IRoot>();
-    private static IRoot UpdateRoot = null;
+    private const string path_AppConfig = "App/AppConfig";
+    public static AppConfig AppConfig;//App配置表 
+
+    public static Dictionary<string, List<string>> sceneScriptsPairs = new Dictionary<string, List<string>>();
+    public static Dictionary<string, IRoot> iRootPairs = new Dictionary<string, IRoot>();
+
+    public static LoadingScene LoadingScene { private set; get; }
     public static void Init()
     {
         AppConfig = Resources.Load<AppConfig>(path_AppConfig);
@@ -89,27 +92,40 @@ public class Root
                 sceneScriptsPairs[appScriptConfig.RootScript[i].SceneName].Add(appScriptConfig.RootScript[i].ScriptName);
             }
         }
-        LoadScene(appScriptConfig.MainSceneName);
+        LoadScene(appScriptConfig.MainSceneName, true, () => { Debug.Log("Loading End"); });
     }
-    public static void LoadScene(string sceneName, Action callback = null)
+    public static void LoadScene(string sceneName, bool isLoading = false , Action callback = null)
     {
-        AssetsManager.Instance.LoadSceneAsync(sceneName, (AsyncOperation async) =>
+        if (isLoading)
         {
-            if (async.isDone && async.progress == 1)
+            LoadingScene = new LoadingScene(sceneName, callback);
+            LoadScene("LoadingScene");
+        }
+        else
+        {
+            AssetsManager.Instance.LoadSceneAsync(sceneName, (AsyncOperation async) =>
             {
-                if (sceneScriptsPairs.ContainsKey(sceneName))
+                if (async.isDone && async.progress == 1)
                 {
-                    for (int i = 0; i < sceneScriptsPairs[sceneName].Count; i++)
-                    {
-                        if (iRootPairs.ContainsKey(sceneScriptsPairs[sceneName][i]))
-                        {
-                            iRootPairs[sceneScriptsPairs[sceneName][i]].Begin();
-                        }
-                    }
+                    InitRootBegin(sceneName, callback);
                 }
-                callback?.Invoke();
+            });
+        }
+    }
+
+    public static void InitRootBegin(string sceneName, Action callback = null)
+    {
+        if (sceneScriptsPairs.ContainsKey(sceneName))
+        {
+            for (int i = 0; i < sceneScriptsPairs[sceneName].Count; i++)
+            {
+                if (iRootPairs.ContainsKey(sceneScriptsPairs[sceneName][i]))
+                {
+                    iRootPairs[sceneScriptsPairs[sceneName][i]].Begin();
+                }
             }
-        });
+        }
+        callback?.Invoke();
     }
 
     public static void End()
@@ -119,5 +135,15 @@ public class Root
         {
             iRootPairs[appScriptConfig.RootScript[i].ScriptName].End();
         }
+    }
+}
+public struct LoadingScene
+{
+    public string Name;
+    public Action Callback;
+    public LoadingScene(string name, Action callback)
+    {
+        this.Name = name;
+        this.Callback = callback;
     }
 }
