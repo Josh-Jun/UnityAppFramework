@@ -66,7 +66,7 @@ public class AppTableConfigWindowEditor : EditorWindow
             AppTable appTable = new AppTable
             {
                 TableName = "TestTableData",
-                TablePath = "Table/TestTableData",
+                TablePath = "Table/Test/TestTableData",
             };
             Add(appTable);
             config.AppTable.Add(appTable);
