@@ -17,8 +17,6 @@ namespace Loading
             //º”‘ÿ¥∞ÃÂ
             string prefab_LoadingPath = "Loading/Assets/Windows/LoadingWindow";
             loadingWin = this.LoadUIWindow<LoadingWindow>(prefab_LoadingPath, true);
-
-            loadingWin.StartCoroutine(loadingWin.StartLoadScene());
         }
         public void End()
         {

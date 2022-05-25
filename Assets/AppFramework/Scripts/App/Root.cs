@@ -34,8 +34,7 @@ public class Root
     }
     private static void BeginCheckUpdate()
     {
-        Debug.Log("BeginCheckUpdate");
-        if (AppConfig.IsHotfix || AppConfig.IsLoadAB)
+        if (AppConfig.IsHotfix && AppConfig.IsLoadAB)
         {
             //初始化热更脚本
             Type type = Type.GetType("Update.UpdateRoot");
@@ -45,13 +44,15 @@ public class Root
         }
         else
         {
-            InitRootScripts();
+            StartApp();
         }
     }
-
-    public static void InitRootScripts()
+    public static void StartApp()
     {
-        Debug.Log("InitRootScripts");
+        InitRootScripts(() => { LoadScene(appScriptConfig.MainSceneName, true); });
+    }
+    public static void InitRootScripts(Action callback = null)
+    {
         TextAsset config = AssetsManager.Instance.LoadAsset<TextAsset>(path_AppScriptConfig);
         appScriptConfig = XmlSerializeManager.ProtoDeSerialize<AppScriptConfig>(config.bytes);
         for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
@@ -92,9 +93,9 @@ public class Root
                 sceneScriptsPairs[appScriptConfig.RootScript[i].SceneName].Add(appScriptConfig.RootScript[i].ScriptName);
             }
         }
-        LoadScene(appScriptConfig.MainSceneName, true, () => { Debug.Log("Loading End"); });
+        callback?.Invoke();
     }
-    public static void LoadScene(string sceneName, bool isLoading = false , Action callback = null)
+    public static void LoadScene(string sceneName, bool isLoading = false, Action callback = null)
     {
         if (isLoading)
         {

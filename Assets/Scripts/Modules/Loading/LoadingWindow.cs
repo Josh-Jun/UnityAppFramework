@@ -26,7 +26,7 @@ namespace Loading
         protected override void OpenWindow()
         {
             base.OpenWindow();
-            loadingSlider.value = 0f;
+            StartCoroutine(StartLoadScene());
         }
 
         protected override void CloseWindow()
@@ -37,6 +37,7 @@ namespace Loading
 
         public IEnumerator StartLoadScene()
         {
+            loadingSlider.value = 0f;
             yield return new WaitForEndOfFrame();
             int displayProgress = 0;
             int toProgress;
@@ -60,8 +61,7 @@ namespace Loading
                 loadingSlider.value = displayProgress / 100f;
                 yield return new WaitForEndOfFrame();
             }
-            while (loadingSlider.value != 1) { yield return new WaitForEndOfFrame(); }
-            yield return new WaitForEndOfFrame();
+            yield return new WaitUntil(()=> loadingSlider.value == 1);
             async.allowSceneActivation = true;
             async.completed += (AsyncOperation ao) => { Root.InitRootBegin(Root.LoadingScene.Name, Root.LoadingScene.Callback); };
         }

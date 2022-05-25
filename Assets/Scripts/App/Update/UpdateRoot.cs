@@ -78,7 +78,7 @@ namespace Update
                     updateWin.SetProgressBarActive(false);
                     //AB包加载完成
                     TimerTaskManager.Instance.AddFrameTask(() => {
-                        Root.InitRootScripts();
+                        Root.StartApp();
                     }, 1);
                 }
             });
