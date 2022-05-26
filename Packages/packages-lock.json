@@ -226,7 +226,7 @@
       "url": "https://packages.unity.cn"
     },
     "com.unity.xr.picoxr": {
-      "version": "file:../CustomPackages/UnityXR-2.0.4_B62",
+      "version": "file:../DiskPackages/UnityXR-2.0.4_B62",
       "depth": 0,
       "source": "local",
       "dependencies": {
