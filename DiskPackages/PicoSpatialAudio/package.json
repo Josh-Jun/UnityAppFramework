@@ -1,0 +1,15 @@
+{
+  "name": "com.pico.spatializer",
+  "displayName": "Pico Spatial Audio",
+  "version": "0.3.7",
+  "unity": "2020.3",
+  "description": "Spatialize sounds and simulate environmental acoustics.",
+  "keywords": [
+    "spatialization",
+    "simulation",
+    "acoustics",
+    "bytedance",
+    "pico"
+  ],
+  "type": "library"
+}
