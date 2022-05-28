@@ -6,6 +6,30 @@
       "source": "builtin",
       "dependencies": {}
     },
+    "com.unity.2d.tilemap": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {}
+    },
+    "com.unity.ads": {
+      "version": "3.7.5",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0"
+      },
+      "url": "https://packages.unity.cn"
+    },
+    "com.unity.analytics": {
+      "version": "3.6.12",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0"
+      },
+      "url": "https://packages.unity.cn"
+    },
     "com.unity.burst": {
       "version": "1.6.5",
       "depth": 1,
@@ -70,6 +94,20 @@
       "depth": 1,
       "source": "registry",
       "dependencies": {},
+      "url": "https://packages.unity.cn"
+    },
+    "com.unity.purchasing": {
+      "version": "4.1.3",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0",
+        "com.unity.modules.unityanalytics": "1.0.0",
+        "com.unity.modules.unitywebrequest": "1.0.0",
+        "com.unity.modules.jsonserialize": "1.0.0",
+        "com.unity.modules.androidjni": "1.0.0",
+        "com.unity.services.core": "1.0.1"
+      },
       "url": "https://packages.unity.cn"
     },
     "com.unity.render-pipelines.core": {
@@ -204,7 +242,7 @@
     },
     "com.unity.xr.legacyinputhelpers": {
       "version": "2.1.9",
-      "depth": 1,
+      "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.unity.modules.vr": "1.0.0",
@@ -226,7 +264,7 @@
       "url": "https://packages.unity.cn"
     },
     "com.unity.xr.picoxr": {
-      "version": "file:../DiskPackages/UnityXR-2.0.4_B62",
+      "version": "file:../DiskPackages/PicoXR/UnityXR-2.0.4_B62",
       "depth": 0,
       "source": "local",
       "dependencies": {
