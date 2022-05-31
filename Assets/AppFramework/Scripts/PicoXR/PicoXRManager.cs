@@ -106,12 +106,12 @@ public class PicoXRManager : SingletonMonoEvent<PicoXRManager>
         if (leftXRRayInteractor != null)
         {
             leftXRRayInteractor.TryGetCurrent3DRaycastHit(out RaycastHit leftRayHit);
-            leftTarget = leftRayHit.collider.gameObject;
+            leftTarget = leftRayHit.collider ? leftRayHit.collider.gameObject : null;
         }
         if (rightXRRayInteractor != null)
         {
             rightXRRayInteractor.TryGetCurrent3DRaycastHit(out RaycastHit rightRayHit);
-            rightTarget = rightRayHit.collider.gameObject;
+            rightTarget = rightRayHit.collider ? rightRayHit.collider.gameObject : null;
         }
         #endregion
         #region Trigger
