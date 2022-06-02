@@ -18,7 +18,7 @@ namespace Test
         private RectTransform mobileImageRoot;
         private Transform selfStick;
         private Camera mobileCamera;
-
+        private RawImage image;
         public Camera renderCamera { private set; get; }
         protected override void InitWindow()
         {
@@ -34,6 +34,8 @@ namespace Test
             renderCamera = mobileCamera.FindComponent<Camera>("RenderCamera");
             selfStick = this.FindComponent<Transform>("SelfStick");
             btn.transform.DORotate(new Vector3(0, 0, 90), 5).SetEase(Ease.Linear);
+
+            image = this.FindComponent<RawImage>("RawImageGif");
         }
 
         protected override void RegisterEvent()

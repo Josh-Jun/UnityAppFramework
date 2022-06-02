@@ -47,6 +47,54 @@ public static class Developer
         });
     }
 
+    public static void PlayFrames(this RawImage image, List<Texture2D> sequenceFrames, float time = 0.05f, UnityAction callback = null, bool loop = false, bool isNativeSize = false)
+    {
+        if (image == null)
+        {
+            Debug.LogError("RawImage is null!!!");
+            return;
+        }
+        image.PlayFrames(sequenceFrames.ToArray(), time, callback, loop, isNativeSize);
+    }
+    public static void PlayFrames(this RawImage image, Texture2D[] sequenceFrames, float time = 0.05f, UnityAction callback = null, bool loop = false, bool isNativeSize = false)
+    {
+        if (image == null)
+        {
+            Debug.LogError("RawImage is null!!!");
+            return;
+        }
+        int index = 0;//可以用来控制起始播放的动画帧索引
+        float recordTime = 0;
+        DEVELOP_FRAMES_TIME_ID = TimerManager.Instance.StartTimer((float currentTime) =>
+        {
+            if (currentTime - recordTime >= time)
+            {
+                recordTime = currentTime;
+                //当我们需要在整个动画播放完之后  重复播放后面的部分 就可以展现我们纯代码播放的自由性
+                if (index > sequenceFrames.Length - 1)
+                {
+                    callback?.Invoke();
+                    if (loop)
+                    {
+                        index = 0;
+                    }
+                    else
+                    {
+                        TimerManager.Instance.EndTimer(DEVELOP_FRAMES_TIME_ID);
+                    }
+                }
+                else
+                {
+                    image.texture = sequenceFrames[index];
+                    index++;
+                    if (isNativeSize)
+                    {
+                        image.SetNativeSize();
+                    }
+                }
+            }
+        });
+    }
     public static void PlayFrames(this Image image, List<Sprite> sequenceFrames, float time = 0.05f, UnityAction callback = null, bool loop = false, bool isNativeSize = false)
     {
         if (image == null)
