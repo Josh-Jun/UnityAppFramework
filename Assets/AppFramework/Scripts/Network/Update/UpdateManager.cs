@@ -37,8 +37,8 @@ public class UpdateManager : SingletonEvent<UpdateManager>
     /// <summary> 开始热更新 </summary>
     public void StartUpdate(Action<bool, string> UpdateCallBack)
     {
-        LocalPath = PlatformManager.Instance.GetDataPath(PlatformManager.Instance.Name());
-        ServerUrl = NetcomManager.ABUrl + PlatformManager.Instance.Name() + "/";
+        LocalPath = PlatformManager.Instance.GetDataPath(PlatformManager.Instance.Name);
+        ServerUrl = NetcomManager.ABUrl + PlatformManager.Instance.Name + "/";
 
         XmlLocalVersionPath = LocalPath + "AssetBundleConfig.xml";
         XmlServerVersionPath = ServerUrl + "AssetBundleConfig.xml";
@@ -64,15 +64,15 @@ public class UpdateManager : SingletonEvent<UpdateManager>
     public void DownLoadAssetBundle()
     {
         //下载总manifest文件
-        DownLoad(ServerUrl + PlatformManager.Instance.Name() + ".manifest", (byte[] manifest_data) =>
+        DownLoad(ServerUrl + PlatformManager.Instance.Name + ".manifest", (byte[] manifest_data) =>
         {
             //将manifest文件写入本地
-            FileManager.CreateFile(LocalPath + PlatformManager.Instance.Name() + ".manifest", manifest_data);
+            FileManager.CreateFile(LocalPath + PlatformManager.Instance.Name + ".manifest", manifest_data);
             //下载总AB包
-            DownLoad(ServerUrl + PlatformManager.Instance.Name(), (byte[] ab_data) =>
+            DownLoad(ServerUrl + PlatformManager.Instance.Name, (byte[] ab_data) =>
             {
                 //将ab文件写入本地
-                FileManager.CreateFile(LocalPath + PlatformManager.Instance.Name(), ab_data);
+                FileManager.CreateFile(LocalPath + PlatformManager.Instance.Name, ab_data);
                 App.app.StartCoroutine(IE_DownLoad());
             });
         });
