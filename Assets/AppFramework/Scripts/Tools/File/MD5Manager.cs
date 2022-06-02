@@ -7,10 +7,10 @@ using System.Text;
 /// 功能:MD5工具 
 /// </summary>
 [Serializable]
-public class MD5Manager : Singleton<MD5Manager>
+public class MD5Manager
 {
     /// <summary> 根据路径获取文件的MD5 </summary>
-    public string BuildFileMd5(string fliePath)
+    public static string BuildFileMd5(string fliePath)
     {
         string filemd5 = null;
         try
@@ -30,13 +30,13 @@ public class MD5Manager : Singleton<MD5Manager>
     }
 
     /// <summary> 将byte[]装换成字符串 </summary>
-    private string FormatMD5(Byte[] data)
+    private static string FormatMD5(Byte[] data)
     {
         return System.BitConverter.ToString(data).Replace("-", "").ToLower();
     }
 
     /// <summary> 根据字符串生成MD5 </summary>
-    public string EncryptWithMD5(string con)
+    public static string EncryptWithMD5(string con)
     {
         byte[] sor = Encoding.UTF8.GetBytes(con);
         MD5 md5 = MD5.Create();

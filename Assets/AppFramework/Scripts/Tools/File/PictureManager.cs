@@ -2,10 +2,10 @@
 /// <summary>
 /// 图片工具类
 /// </summary>
-public class PictureManager : Singleton<PictureManager>
+public static class PictureManager
 {
     /// <summary> 创建Sprite</summary>
-    public Texture2D CreateTexture(byte[] bytes, int width, int height)
+    public static Texture2D CreateTexture(byte[] bytes, int width, int height)
     {
         //设置头像   
         Texture2D tex2d = new Texture2D(width, height);
@@ -13,14 +13,14 @@ public class PictureManager : Singleton<PictureManager>
         return tex2d;
     }
     /// <summary> 创建Sprite</summary>
-    public Sprite CreateSprite(byte[] bytes, int width, int height)
+    public static Sprite CreateSprite(byte[] bytes, int width, int height)
     {
         //设置头像   
         Texture2D tex2d = CreateTexture(bytes, width, height);
         Sprite sprite = Sprite.Create(tex2d, new Rect(0, 0, tex2d.width, tex2d.height), new Vector2(0.5f, 0.5f));//后面Vector2就是你Anchors的Pivot的x/y属性值
         return sprite;
     }
-    public byte[] CreateByte(Sprite sp)
+    public static byte[] CreateByte(Sprite sp)
     {
         //转换成Texture
         Texture2D temp = sp.texture;
@@ -28,7 +28,7 @@ public class PictureManager : Singleton<PictureManager>
         byte[] textureByte = temp.EncodeToPNG();
         return textureByte;
     }
-    public byte[] CreateByte(Texture2D texture)
+    public static byte[] CreateByte(Texture2D texture)
     {
         //在转换成bytes
         byte[] textureByte = texture.EncodeToPNG();
@@ -40,7 +40,7 @@ public class PictureManager : Singleton<PictureManager>
     /// <param name="limitRange"></param>
     /// <param name="textureSize"></param>
     /// <returns></returns>
-    public Vector2 AdaptSize(Vector2 limitRange, Vector2 textureSize)
+    public static Vector2 AdaptSize(Vector2 limitRange, Vector2 textureSize)
     {
         Vector2 size = textureSize;
         float standard_ratio = limitRange.x / limitRange.y;

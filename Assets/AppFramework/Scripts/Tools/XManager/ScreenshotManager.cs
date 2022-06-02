@@ -30,7 +30,7 @@ public class ScreenshotManager : SingletonMono<ScreenshotManager>
         }
     }
     /// <summary>
-    /// 截屏(截取某个相机渲染的画面，不带特效)
+    /// 截屏(截取某个相机渲染的画面)
     /// </summary>
     /// <returns></returns>
     private IEnumerator Shot(Camera camera, string path, Size size, Action<Texture2D, string> callback = null)
@@ -50,7 +50,7 @@ public class ScreenshotManager : SingletonMono<ScreenshotManager>
         callback?.Invoke(texture, imageName);
     }
     /// <summary>
-    /// 截屏(截取屏幕像素，不带特效)
+    /// 截屏(截取屏幕像素)
     /// </summary>
     /// <returns></returns>
     private IEnumerator Shot(string path, Size size, Action<Texture2D, string> callback = null)
