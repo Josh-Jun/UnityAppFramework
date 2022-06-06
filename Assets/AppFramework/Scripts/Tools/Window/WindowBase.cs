@@ -69,5 +69,16 @@ public class WindowBase : EventBaseMono
     {
         return gameObject.activeSelf;
     }
-
+    public void SetAsLastSibling()
+    {
+        transform.SetAsLastSibling();
+    }
+    public void SetAsFirstSibling()
+    {
+        transform.SetAsFirstSibling();
+    }
+    public void SetSiblingIndex(int index)
+    {
+        transform.SetSiblingIndex(index);
+    }
 }

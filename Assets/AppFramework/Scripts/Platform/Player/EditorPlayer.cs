@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 namespace Platform
 {
     public class EditorPlayer : PlatformManager
@@ -18,6 +20,9 @@ namespace Platform
         }
         public override void QuitUnityPlayer(bool isStay = false)
         {
+#if UNITY_EDITOR
+            EditorApplication.isPlaying = false;
+#endif
             Debug.Log("Quit Editor");
         }
         public override string GetAppData(string key)

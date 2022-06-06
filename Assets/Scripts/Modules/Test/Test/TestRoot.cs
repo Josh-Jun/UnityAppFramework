@@ -35,9 +35,10 @@ namespace Test
                 testWin.SetRawImage(texture);
             });
         }
+
         private void ButtonQuitEvent()
         {
-            PlatformManager.Instance.QuitUnityPlayer();
+            Ask.AskRoot.Instance.ShowAskWindow("确定退出程序？", ()=> { PlatformManager.Instance.QuitUnityPlayer(); });
         }
         private void ButtonEvent()
         {

@@ -9,6 +9,7 @@ using UnityEngine.XR.Management;
 public class Root
 {
     private static IRoot UpdateRoot = null;
+    private static IRoot AskRoot = null;
 
     private const string path_AppScriptConfig = "App/Assets/AppScriptConfig";
     private static AppScriptConfig appScriptConfig;
@@ -34,12 +35,12 @@ public class Root
     }
     private static void BeginCheckUpdate()
     {
+        AskRoot = GetRoot("Ask.AskRoot");
+        AskRoot.Begin();
         if (AppConfig.IsHotfix && AppConfig.IsLoadAB)
         {
             //初始化热更脚本
-            Type type = Type.GetType("Update.UpdateRoot");
-            object obj = Activator.CreateInstance(type);
-            UpdateRoot = obj as IRoot;
+            UpdateRoot = GetRoot("Update.UpdateRoot");
             UpdateRoot.Begin();
         }
         else
@@ -63,13 +64,11 @@ public class Root
             {
                 XLuaRoot root = new XLuaRoot();
                 root.Init(appScriptConfig.RootScript[i].LuaScriptPath);
-                iRoot = root as IRoot;
+                iRoot = root;
             }
             else
             {
-                Type type = Type.GetType(appScriptConfig.RootScript[i].ScriptName);
-                object obj = Activator.CreateInstance(type);
-                iRoot = obj as IRoot;
+                iRoot = GetRoot(appScriptConfig.RootScript[i].ScriptName);
             }
             if (!iRootPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
             {
@@ -116,6 +115,7 @@ public class Root
 
     public static void InitRootBegin(string sceneName, Action callback = null)
     {
+        AskRoot.Begin();
         if (sceneScriptsPairs.ContainsKey(sceneName))
         {
             for (int i = 0; i < sceneScriptsPairs[sceneName].Count; i++)
@@ -128,7 +128,12 @@ public class Root
         }
         callback?.Invoke();
     }
-
+    public static IRoot GetRoot(string fullName)
+    {
+        Type type = Type.GetType(fullName);
+        object obj = Activator.CreateInstance(type);
+        return obj as IRoot;
+    }
     public static void End()
     {
         UpdateRoot?.End();
