@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,8 +22,6 @@ namespace Ask
         protected override void RegisterEvent()
         {
             base.RegisterEvent();
-            btn_confirm.onClick.AddListener(() => { SendEventMsg("OnConfirmEvent"); });
-            btn_cancel.onClick.AddListener(() => { SendEventMsg("OnCancelEvent"); });
         }
 
         protected override void OpenWindow()
@@ -37,9 +36,17 @@ namespace Ask
 
         }
 
-        public void SetWindowInfo(string tips)
+        public void SetWindowInfo(string tips, Action confirm_callback = null, Action cancel_callback = null)
         {
             tipsText.text = tips;
+            btn_confirm.onClick.AddListener(() => { OnClickEvent(btn_confirm, confirm_callback); });
+            btn_cancel.onClick.AddListener(() => { OnClickEvent(btn_cancel, cancel_callback); });
+        }
+        private void OnClickEvent(Button btn, Action callback)
+        {
+            btn.onClick.RemoveAllListeners();
+            SetWindowActive(false);
+            callback?.Invoke();
         }
     }
 }
