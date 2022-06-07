@@ -69,7 +69,8 @@ namespace Test
             mobileCamera.targetTexture = renderTexture;
             mobileImageRoot.FindComponent<RawImage>("MobileImage").texture = renderTexture;
             mobileCamera.TryGetComponent<ParentConstraint>().AddSource(new ConstraintSource { sourceTransform = PicoXRManager.Instance.RightController.transform, weight = 1 });
-            mobileCamera.TryGetComponent<ParentConstraint>().SetTranslationOffset(0, new Vector3(0, 0.1f, 5f));
+            mobileCamera.TryGetComponent<ParentConstraint>().SetTranslationOffset(0, new Vector3(0f, 0.1f, 5f));
+            mobileCamera.TryGetComponent<ParentConstraint>().SetRotationOffset(0, new Vector3(0f, 180f, 0f));
             selfStick.TryGetComponent<ParentConstraint>().AddSource(new ConstraintSource { sourceTransform = PicoXRManager.Instance.RightController.transform, weight = 1 });
             selfStick.TryGetComponent<ParentConstraint>().SetTranslationOffset(0, Vector3.zero);
             selfStick.Find("Cube/Quad").GetComponent<MeshRenderer>().sharedMaterial.mainTexture = renderTexture;
