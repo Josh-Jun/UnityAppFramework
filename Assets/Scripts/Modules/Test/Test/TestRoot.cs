@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -38,7 +39,8 @@ namespace Test
 
         private void ButtonQuitEvent()
         {
-            Ask.AskRoot.Instance.ShowAskWindow("确定退出程序？", ()=> { PlatformManager.Instance.QuitUnityPlayer(); });
+            //Ask.AskRoot.Instance.ShowAskWindow("确定退出程序？", () => { PlatformManager.Instance.QuitUnityPlayer(); });
+            SendEventMsgParams("ShowAskWindow", "确定退出程序？", (Action)(() => { PlatformManager.Instance.QuitUnityPlayer(); }), (Action)delegate { });
         }
         private void ButtonEvent()
         {

@@ -12,6 +12,7 @@ namespace Ask
         public Action cancelCallback;
         public AskRoot()
         {
+            AddEventMsgParams("ShowAskWindow", (object[] args) => { ShowAskWindow((string)args[0], (Action)args[1], (Action)args[2]); });
             AddEventMsg("OnConfirmEvent", OnConfirmEvent);
             AddEventMsg("OnCancelEvent", OnCancelEvent);
         }
