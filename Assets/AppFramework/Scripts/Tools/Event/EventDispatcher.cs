@@ -1,4 +1,6 @@
 ﻿using System;
+using UnityEngine;
+
 namespace EventController {
     public class EventDispatcher {
         private static EventController m_eventController = new EventController();
@@ -22,11 +24,17 @@ namespace EventController {
         #region 触发事件
         //触发某个事件
         public static void TriggerEvent(string eventType) {
-            m_eventController.DispatchEvent(eventType);
+            var isTrigger = m_eventController.DispatchEvent(eventType);
+            if (!isTrigger) {
+                Debug.Log($"{eventType}事件未注册");
+            }
         }
 
         public static void TriggerEvent(string eventType,params object[] args) {
-            m_eventController.DispatchEvent(eventType, args);
+            var isTrigger = m_eventController.DispatchEvent(eventType, args);
+            if (!isTrigger) {
+                Debug.Log($"{eventType}事件未注册");
+            }
         }
         #endregion
 
