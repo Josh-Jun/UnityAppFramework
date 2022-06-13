@@ -9,6 +9,7 @@ public class UnityWebRequester
 {
     private UnityWebRequest uwr;
     private MonoBehaviour mono;
+    private Dictionary<string, string> headerPairs = new Dictionary<string, string>();
     public UnityWebRequester(MonoBehaviour mono)
     {
         this.mono = mono;
@@ -53,6 +54,13 @@ public class UnityWebRequester
         private set { }
     }
 
+    public void AddHeader(string key, string value)
+    {
+        if (!headerPairs.ContainsKey(key))
+        {
+            headerPairs.Add(key, value);
+        }
+    }
     public void Destory()
     {
         if (uwr != null)
@@ -202,13 +210,13 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托,处理请求对象</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void Post(string url, List<IMultipartFormSection> lstformData, Action<UnityWebRequest> actionResult, string contentType = "application/json")
+    public void Post(string url, List<IMultipartFormSection> lstformData, Action<UnityWebRequest> actionResult)
     {
         //List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
         //formData.Add(new MultipartFormDataSection("field1=foo&field2=bar"));
         //formData.Add(new MultipartFormFileSection("my file data", "myfile.txt"));
 
-        mono.StartCoroutine(IE_Post(url, lstformData, actionResult, contentType));
+        mono.StartCoroutine(IE_Post(url, lstformData, actionResult));
     }
 
     /// <summary>
@@ -219,9 +227,9 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托,处理请求对象</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void Post(string url, WWWForm formData, Action<UnityWebRequest> actionResult, string contentType = "application/json")
+    public void Post(string url, WWWForm formData, Action<UnityWebRequest> actionResult)
     {
-        mono.StartCoroutine(IE_Post(url, formData, actionResult, contentType));
+        mono.StartCoroutine(IE_Post(url, formData, actionResult));
     }
 
     /// <summary>
@@ -232,9 +240,9 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托,处理请求对象</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void Post(string url, Dictionary<string, string> formFields, Action<UnityWebRequest> actionResult, string contentType = "application/json")
+    public void Post(string url, Dictionary<string, string> formFields, Action<UnityWebRequest> actionResult)
     {
-        mono.StartCoroutine(IE_Post(url, formFields, actionResult, contentType));
+        mono.StartCoroutine(IE_Post(url, formFields, actionResult));
     }
 
     /// <summary>
@@ -245,9 +253,9 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托,处理请求对象</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void Post(string url, string postData, Action<UnityWebRequest> actionResult, string contentType = "application/json")
+    public void Post(string url, string postData, Action<UnityWebRequest> actionResult)
     {
-        mono.StartCoroutine(IE_Post(url, postData, actionResult, contentType));
+        mono.StartCoroutine(IE_Post(url, postData, actionResult));
     }
     /// <summary>
     /// 向服务器提交post请求
@@ -257,9 +265,9 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托,处理请求对象</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void Post(string url, byte[] postData, Action<UnityWebRequest> actionResult, string contentType = "application/json")
+    public void Post(string url, byte[] postData, Action<UnityWebRequest> actionResult)
     {
-        mono.StartCoroutine(IE_Post(url, postData, actionResult, contentType));
+        mono.StartCoroutine(IE_Post(url, postData, actionResult));
     }
 
     /// <summary>
@@ -299,6 +307,13 @@ public class UnityWebRequester
     {
         using (uwr = UnityWebRequest.Get(url))
         {
+            if (headerPairs.Count > 0)
+            {
+                foreach (var header in headerPairs)
+                {
+                    uwr.SetRequestHeader(header.Key,header.Value);
+                }
+            }
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
         }
@@ -315,6 +330,13 @@ public class UnityWebRequester
     {
         using (uwr = UnityWebRequest.Get(url))
         {
+            if (headerPairs.Count > 0)
+            {
+                foreach (var header in headerPairs)
+                {
+                    uwr.SetRequestHeader(header.Key,header.Value);
+                }
+            }
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
             {
@@ -337,6 +359,13 @@ public class UnityWebRequester
     {
         using (uwr = UnityWebRequestTexture.GetTexture(url))
         {
+            if (headerPairs.Count > 0)
+            {
+                foreach (var header in headerPairs)
+                {
+                    uwr.SetRequestHeader(header.Key,header.Value);
+                }
+            }
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
             {
@@ -360,6 +389,13 @@ public class UnityWebRequester
     {
         using (uwr = UnityWebRequestAssetBundle.GetAssetBundle(url))
         {
+            if (headerPairs.Count > 0)
+            {
+                foreach (var header in headerPairs)
+                {
+                    uwr.SetRequestHeader(header.Key,header.Value);
+                }
+            }
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
             {
@@ -384,6 +420,13 @@ public class UnityWebRequester
     {
         using (uwr = UnityWebRequestMultimedia.GetAudioClip(url, audioType))
         {
+            if (headerPairs.Count > 0)
+            {
+                foreach (var header in headerPairs)
+                {
+                    uwr.SetRequestHeader(header.Key,header.Value);
+                }
+            }
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
             {
@@ -404,15 +447,20 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public IEnumerator IE_Post(string url, List<IMultipartFormSection> lstformData, Action<UnityWebRequest> actionResult, string contentType = "application/json")
+    public IEnumerator IE_Post(string url, List<IMultipartFormSection> lstformData, Action<UnityWebRequest> actionResult)
     {
         //List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
         //formData.Add(new MultipartFormDataSection("field1=foo&field2=bar"));
         //formData.Add(new MultipartFormFileSection("my file data", "myfile.txt"));
         using (uwr = UnityWebRequest.Post(url, lstformData))
         {
-            if (!string.IsNullOrEmpty(contentType))
-                uwr.SetRequestHeader("Content-Type", contentType);
+            if (headerPairs.Count > 0)
+            {
+                foreach (var header in headerPairs)
+                {
+                    uwr.SetRequestHeader(header.Key,header.Value);
+                }
+            }
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
         }
@@ -425,12 +473,17 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public IEnumerator IE_Post(string url, WWWForm formData, Action<UnityWebRequest> actionResult, string contentType = "application/json")
+    public IEnumerator IE_Post(string url, WWWForm formData, Action<UnityWebRequest> actionResult)
     {
         using (uwr = UnityWebRequest.Post(url, formData))
         {
-            if (!string.IsNullOrEmpty(contentType))
-                uwr.SetRequestHeader("Content-Type", contentType);
+            if (headerPairs.Count > 0)
+            {
+                foreach (var header in headerPairs)
+                {
+                    uwr.SetRequestHeader(header.Key,header.Value);
+                }
+            }
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
         }
@@ -443,12 +496,17 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public IEnumerator IE_Post(string url, string postData, Action<UnityWebRequest> actionResult, string contentType = "application/json")
+    public IEnumerator IE_Post(string url, string postData, Action<UnityWebRequest> actionResult)
     {
         using (uwr = UnityWebRequest.Post(url, postData))
         {
-            if (!string.IsNullOrEmpty(contentType))
-                uwr.SetRequestHeader("Content-Type", contentType);
+            if (headerPairs.Count > 0)
+            {
+                foreach (var header in headerPairs)
+                {
+                    uwr.SetRequestHeader(header.Key,header.Value);
+                }
+            }
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
         }
@@ -461,14 +519,19 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public IEnumerator IE_Post(string url, byte[] postData, Action<UnityWebRequest> actionResult, string contentType = "application/json")
+    public IEnumerator IE_Post(string url, byte[] postData, Action<UnityWebRequest> actionResult)
     {
         using (uwr = UnityWebRequest.Post(url, "POST"))
         {
             uwr.uploadHandler = new UploadHandlerRaw(postData);
             uwr.downloadHandler = new DownloadHandlerBuffer();
-            if (!string.IsNullOrEmpty(contentType))
-                uwr.SetRequestHeader("Content-Type", contentType);
+            if (headerPairs.Count > 0)
+            {
+                foreach (var header in headerPairs)
+                {
+                    uwr.SetRequestHeader(header.Key,header.Value);
+                }
+            }
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
         }
@@ -481,12 +544,17 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public IEnumerator IE_Post(string url, Dictionary<string, string> formFields, Action<UnityWebRequest> actionResult, string contentType = "application/json")
+    public IEnumerator IE_Post(string url, Dictionary<string, string> formFields, Action<UnityWebRequest> actionResult)
     {
         using (uwr = UnityWebRequest.Post(url, formFields))
         {
-            if (!string.IsNullOrEmpty(contentType))
-                uwr.SetRequestHeader("Content-Type", contentType);
+            if (headerPairs.Count > 0)
+            {
+                foreach (var header in headerPairs)
+                {
+                    uwr.SetRequestHeader(header.Key,header.Value);
+                }
+            }
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
         }
@@ -504,6 +572,13 @@ public class UnityWebRequester
     {
         using (uwr = UnityWebRequest.Put(url, contentBytes))
         {
+            if (headerPairs.Count > 0)
+            {
+                foreach (var header in headerPairs)
+                {
+                    uwr.SetRequestHeader(header.Key,header.Value);
+                }
+            }
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
         }
@@ -520,6 +595,13 @@ public class UnityWebRequester
     {
         using (uwr = UnityWebRequest.Put(url, content))
         {
+            if (headerPairs.Count > 0)
+            {
+                foreach (var header in headerPairs)
+                {
+                    uwr.SetRequestHeader(header.Key,header.Value);
+                }
+            }
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
         }
