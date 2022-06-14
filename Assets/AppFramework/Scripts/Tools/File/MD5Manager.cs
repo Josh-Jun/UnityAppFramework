@@ -10,7 +10,7 @@ using System.Text;
 public class MD5Manager
 {
     /// <summary> 根据路径获取文件的MD5 </summary>
-    public static string BuildFileMd5(string fliePath)
+    public static string File2Md5(string fliePath)
     {
         string filemd5 = null;
         try
@@ -36,7 +36,22 @@ public class MD5Manager
     }
 
     /// <summary> 根据字符串生成MD5 </summary>
-    public static string EncryptWithMD5(string con)
+    public static string Str2MD5(string source)
+    {
+        MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+        byte[] data = Encoding.UTF8.GetBytes(source);
+        byte[] md5Data = md5.ComputeHash(data, 0, data.Length);
+        md5.Clear();
+        string destString = "";
+        for (int i = 0; i < md5Data.Length; i++)
+        {
+            destString += Convert.ToString(md5Data[i], 16).PadLeft(2, '0');
+        }
+        destString = destString.PadLeft(32, '0');
+        return destString;
+    }
+    /// <summary> 根据字符串生成MD5(加密) </summary>
+    public static string EncryptStr2MD5(string con)
     {
         byte[] sor = Encoding.UTF8.GetBytes(con);
         MD5 md5 = MD5.Create();
@@ -45,7 +60,6 @@ public class MD5Manager
         for (int i = 0; i < result.Length; i++)
         {
             strbul.Append(result[i].ToString("x2"));//加密结果"x2"结果为32位,"x3"结果为48位,"x4"结果为64位
-
         }
         return strbul.ToString();
     }

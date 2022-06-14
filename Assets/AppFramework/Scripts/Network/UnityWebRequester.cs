@@ -440,14 +440,14 @@ public class UnityWebRequester
         //formData.Add(new MultipartFormFileSection("my file data", "myfile.txt"));
         using (uwr = UnityWebRequest.Post(url, lstformData))
         {
-            string json = JsonUtility.ToJson(lstformData);
-            byte[] postData = Encoding.UTF8.GetBytes(json);
-            uwr.uploadHandler = new UploadHandlerRaw(postData);
-            uwr.downloadHandler = new DownloadHandlerBuffer();
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
+            string json = LitJson.JsonMapper.ToJson(lstformData);
+            byte[] postData = Encoding.UTF8.GetBytes(json);
+            uwr.uploadHandler = new UploadHandlerRaw(postData);
+            uwr.downloadHandler = new DownloadHandlerBuffer();
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
         }
@@ -464,12 +464,12 @@ public class UnityWebRequester
     {
         using (uwr = UnityWebRequest.Post(url, formData))
         {
-            uwr.uploadHandler = new UploadHandlerRaw(formData.data);
-            uwr.downloadHandler = new DownloadHandlerBuffer();
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
+            uwr.uploadHandler = new UploadHandlerRaw(formData.data);
+            uwr.downloadHandler = new DownloadHandlerBuffer();
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
         }
@@ -486,12 +486,12 @@ public class UnityWebRequester
     {
         using (uwr = UnityWebRequest.Post(url, postData))
         {
-            byte[] bodyRaw = Encoding.UTF8.GetBytes(postData);
-            uwr.uploadHandler = new UploadHandlerRaw(bodyRaw);
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(postData);
+            uwr.uploadHandler = new UploadHandlerRaw(bodyRaw);
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
         }
@@ -508,12 +508,12 @@ public class UnityWebRequester
     {
         using (uwr = UnityWebRequest.Post(url, UnityWebRequest.kHttpVerbPOST))
         {
-            uwr.uploadHandler = new UploadHandlerRaw(postData);
-            uwr.downloadHandler = new DownloadHandlerBuffer();
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
+            uwr.uploadHandler = new UploadHandlerRaw(postData);
+            uwr.downloadHandler = new DownloadHandlerBuffer();
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
         }
@@ -530,14 +530,14 @@ public class UnityWebRequester
     {
         using (uwr = UnityWebRequest.Post(url, formFields))
         {
-            string json = JsonUtility.ToJson(formFields);
-            byte[] postData = Encoding.UTF8.GetBytes(json);
-            uwr.uploadHandler = new UploadHandlerRaw(postData);
-            uwr.downloadHandler = new DownloadHandlerBuffer();
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
+            string json = LitJson.JsonMapper.ToJson(formFields);
+            byte[] postData = Encoding.UTF8.GetBytes(json);
+            uwr.uploadHandler = new UploadHandlerRaw(postData);
+            uwr.downloadHandler = new DownloadHandlerBuffer();
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
         }
