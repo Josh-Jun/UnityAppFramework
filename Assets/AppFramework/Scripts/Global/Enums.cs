@@ -1,10 +1,10 @@
-/// <summary>°²×¿°ü²»Í¬ÇşµÀ</summary>
+/// <summary>å®‰å“åŒ…ä¸åŒæ¸ é“</summary>
 public enum TargetPackage
 {
     Mobile = 0,
     PicoVR = 1
 }
-/// <summary>PicoVRÊÖ±úÊÂ¼şÀàĞÍ</summary>
+/// <summary>PicoVRæ‰‹æŸ„äº‹ä»¶ç±»å‹</summary>
 public enum TrackedEventType
 {
     MenuDownEvent = 0,

@@ -13,7 +13,7 @@ using System;
 public class BuildApkWindowEditor : EditorWindow
 {
     private GUIStyle titleStyle;
-    public AppConfig AppConfig;//AppÅäÖÃ±í 
+    public AppConfig AppConfig;//Appé…ç½®è¡¨ 
     private readonly string configPath = "App/AppConfig";
     private bool DevelopmentBuild = true;
     private bool IsProServer = true;
@@ -53,7 +53,7 @@ public class BuildApkWindowEditor : EditorWindow
         }
         else
         {
-            Debug.Log("ÕÒ²»µ½AppConfig£¬ÇëĞÂ½¨AppConfig");
+            Debug.Log("æ‰¾ä¸åˆ°AppConfigï¼Œè¯·æ–°å»ºAppConfig");
         }
     }
     public void OnGUI()
@@ -147,7 +147,7 @@ public class BuildApkWindowEditor : EditorWindow
             EditorUtility.SetDirty(androidXRSettings); // Make sure this gets picked up for serialization later.
         }
 
-        //È¡Ïûµ±Ç°Ñ¡ÔñµÄ
+        //å–æ¶ˆå½“å‰é€‰æ‹©çš„
         IReadOnlyList<XRLoader> list = androidXRSettings.Manager.activeLoaders;
         int hasCount = list.Count;
         //Debug.Log(hasCount);
@@ -161,7 +161,7 @@ public class BuildApkWindowEditor : EditorWindow
         if (ApkTarget == TargetPackage.PicoVR)
         {
             androidXRSettings.InitManagerOnStart = true;
-            //ÆôÓÃ
+            //å¯ç”¨
             string loaderTypeName = "Unity.XR.PXR.PXR_Loader";
             XRPackageMetadataStore.AssignLoader(androidXRSettings.Manager, loaderTypeName, BuildTargetGroup.Android);
         }
@@ -173,7 +173,7 @@ public class BuildApkWindowEditor : EditorWindow
         string newPath = "";
         if (IsHotfix && IsLoadAB)
         {
-            //ÒÆ¶¯µ½¸ùÄ¿Â¼
+            //ç§»åŠ¨åˆ°æ ¹ç›®å½•
             newPath = MoveAssetsToRoot(assetPath);
         }
         string _str = ApkTarget == TargetPackage.PicoVR ? "meta-picovr" : "meta-android";
@@ -198,7 +198,7 @@ public class BuildApkWindowEditor : EditorWindow
 
         if (IsHotfix && IsLoadAB)
         {
-            //ÒÆ¶¯»ØÔ­Ê¼Ä¿Â¼
+            //ç§»åŠ¨å›åŸå§‹ç›®å½•
             MoveAssetsToOriginPath(newPath, assetPath);
         }
 
@@ -219,9 +219,9 @@ public class BuildApkWindowEditor : EditorWindow
         return names.ToArray();
     }
 
-    #region ×ÊÔ´ÒÆ¶¯
+    #region èµ„æºç§»åŠ¨
     /// <summary>
-    /// ½«×ÊÔ´ÒÆ¶¯µ½¸ùÄ¿Â¼
+    /// å°†èµ„æºç§»åŠ¨åˆ°æ ¹ç›®å½•
     /// </summary>
     /// <param name="path"></param>
     /// <returns></returns>
@@ -229,15 +229,15 @@ public class BuildApkWindowEditor : EditorWindow
     {
         path = AbsolutePathToRelativePath(path);
         string floderName = path.Split('/').Last();
-        EditorUtility.DisplayProgressBar("ÕıÔÚÒÆ¶¯×ÊÔ´", "", 0);
-        //ÒÆ¶¯×ÊÔ´
+        EditorUtility.DisplayProgressBar("æ­£åœ¨ç§»åŠ¨èµ„æº", "", 0);
+        //ç§»åŠ¨èµ„æº
         string newPath = string.Format("Assets/{0}", floderName);
         AssetDatabase.MoveAsset(path, newPath);
         return RelativePathToAbsolutePath(newPath);
     }
 
     /// <summary>
-    /// ½«×ÊÔ´ÒÆ¶¯µ½Ô­Ê¼Ä¿Â¼
+    /// å°†èµ„æºç§»åŠ¨åˆ°åŸå§‹ç›®å½•
     /// </summary>
     /// <param name="currentPath"></param>
     /// <param name="originPath"></param>
@@ -245,14 +245,14 @@ public class BuildApkWindowEditor : EditorWindow
     {
         currentPath = AbsolutePathToRelativePath(currentPath);
         originPath = AbsolutePathToRelativePath(originPath);
-        EditorUtility.DisplayProgressBar("ÕıÔÚÒÆ¶¯×ÊÔ´", "", 0);
+        EditorUtility.DisplayProgressBar("æ­£åœ¨ç§»åŠ¨èµ„æº", "", 0);
         AssetDatabase.MoveAsset(currentPath, originPath);
         AssetDatabase.Refresh();
         EditorUtility.ClearProgressBar();
     }
 
     /// <summary>
-    /// Ïà¶ÔÂ·¾¶×ªµ½¾ø¶ÔÂ·¾¶
+    /// ç›¸å¯¹è·¯å¾„è½¬åˆ°ç»å¯¹è·¯å¾„
     /// </summary>
     /// <param name="relativePath"></param>
     /// <returns></returns>
@@ -262,7 +262,7 @@ public class BuildApkWindowEditor : EditorWindow
     }
 
     /// <summary>
-    /// ¾ø¶ÔÂ·¾¶×ªµ½Ïà¶ÔÂ·¾¶
+    /// ç»å¯¹è·¯å¾„è½¬åˆ°ç›¸å¯¹è·¯å¾„
     /// </summary>
     /// <param name="absolutePath"></param>
     /// <returns></returns>

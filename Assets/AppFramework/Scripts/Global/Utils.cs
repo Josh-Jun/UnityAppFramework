@@ -7,7 +7,7 @@ using System.Net.Sockets;
 public static class Utils
 {
     #region var
-    /// <summary> ÍøÂç¿ÉÓÃ </summary>
+    /// <summary> ç½‘ç»œå¯ç”¨ </summary>
     public static bool NetAvailable
     {
         get
@@ -15,7 +15,7 @@ public static class Utils
             return Application.internetReachability != NetworkReachability.NotReachable;
         }
     }
-    /// <summary> ÊÇ·ñÊÇÎŞÏß </summary>
+    /// <summary> æ˜¯å¦æ˜¯æ— çº¿ </summary>
     public static bool IsWifi
     {
         get
@@ -23,7 +23,7 @@ public static class Utils
             return Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork;
         }
     }
-    /// <summary> »ñÈ¡IPµØÖ· </summary>
+    /// <summary> è·å–IPåœ°å€ </summary>
     public static string IPAddress
     {
         get
@@ -51,7 +51,7 @@ public static class Utils
             return output;
         }
     }
-    /// <summary> »ñÈ¡Éè±¸ID </summary>
+    /// <summary> è·å–è®¾å¤‡ID </summary>
     public static string GetDeviceId
     {
         get
@@ -59,7 +59,7 @@ public static class Utils
             return SystemInfo.deviceUniqueIdentifier;
         }
     }
-    /// <summary> »ñÈ¡GUID </summary>
+    /// <summary> è·å–GUID </summary>
     public static string GetGuid
     {
         get
@@ -67,7 +67,7 @@ public static class Utils
             return Guid.NewGuid().ToString();
         }
     }
-    /// <summary> »ñÈ¡Ê±¼ä´Á </summary>
+    /// <summary> è·å–æ—¶é—´æˆ³ </summary>
     public static long GetTimeStamp
     {
         get
@@ -79,29 +79,29 @@ public static class Utils
     #endregion
 
     #region function
-    /// <summary> Ëæ»úÊı </summary>
+    /// <summary> éšæœºæ•° </summary>
     public static int Random(int min, int max)
     {
         return UnityEngine.Random.Range(min, max);
     }
-    /// <summary> Ëæ»úÊı </summary>
+    /// <summary> éšæœºæ•° </summary>
     public static float Random(float min, float max)
     {
         return UnityEngine.Random.Range(min, max);
     }
-    /// <summary> Base64±àÂë </summary>
+    /// <summary> Base64ç¼–ç  </summary>
     public static string Encode(string message)
     {
         byte[] bytes = Encoding.GetEncoding("utf-8").GetBytes(message);
         return Convert.ToBase64String(bytes);
     }
-    /// <summary> Base64½âÂë </summary>
+    /// <summary> Base64è§£ç  </summary>
     public static string Decode(string message)
     {
         byte[] bytes = Convert.FromBase64String(message);
         return Encoding.GetEncoding("utf-8").GetString(bytes);
     }
-    /// <summary> ÅĞ¶Ï½Ç¶È </summary>
+    /// <summary> åˆ¤æ–­è§’åº¦ </summary>
     public static float PointToAngle(Vector2 p1, Vector2 p2)
     {
         float angle = Mathf.Atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Mathf.PI;
@@ -115,7 +115,7 @@ public static class Utils
             return 360 + angle;
         }
     }
-    /// <summary> ÇåÀíÄÚ´æ </summary>
+    /// <summary> æ¸…ç†å†…å­˜ </summary>
     public static void ClearMemory()
     {
         GC.Collect(); Resources.UnloadUnusedAssets();

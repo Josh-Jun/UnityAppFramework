@@ -7,7 +7,7 @@ public class FindSameFileNameWindowEditor : EditorWindow
 {
     private static GUIStyle titleStyle;
 
-    #region 2¡¢²éÕÒÍ¬ÃûÎÄ¼ş
+    #region 2ã€æŸ¥æ‰¾åŒåæ–‡ä»¶
     private string prefabsPath = "";
     private enum ObjType
     {
@@ -67,7 +67,7 @@ public class FindSameFileNameWindowEditor : EditorWindow
     }
     private void OnGUI()
     {
-        #region 2¡¢²éÕÒÍ¬ÃûÎÄ¼ş
+        #region 2ã€æŸ¥æ‰¾åŒåæ–‡ä»¶
         GUILayout.BeginVertical();
 
         objType = (ObjType)EditorGUILayout.EnumPopup("ObjectType", objType);
@@ -93,7 +93,7 @@ public class FindSameFileNameWindowEditor : EditorWindow
         GUILayout.EndHorizontal();
 
         EditorGUILayout.Space();
-        if (GUILayout.Button("Find Same File Name(²éÕÒÍ¬ÃûÎÄ¼ş)"))
+        if (GUILayout.Button("Find Same File Name(æŸ¥æ‰¾åŒåæ–‡ä»¶)"))
         {
 
             EditorApplication.delayCall += FindSameFileName;
@@ -103,7 +103,7 @@ public class FindSameFileNameWindowEditor : EditorWindow
         #endregion
 
     }
-    #region 2¡¢²éÕÒÍ¬ÃûÎÄ¼ş
+    #region 2ã€æŸ¥æ‰¾åŒåæ–‡ä»¶
     private void FindSameFileName()
     {
         string filter = items[(int)objType];
@@ -119,10 +119,10 @@ public class FindSameFileNameWindowEditor : EditorWindow
             }
             else
             {
-                Debug.Log($"ÖØ¸´ÎÄ¼ş:{obj.name}\nÂ·¾¶:{path}    {FileNames[obj.name]}");
+                Debug.Log($"é‡å¤æ–‡ä»¶:{obj.name}\nè·¯å¾„:{path}    {FileNames[obj.name]}");
             }
         }
-        Debug.Log("²éÕÒÍêÁË");
+        Debug.Log("æŸ¥æ‰¾å®Œäº†");
         FileNames.Clear();
     }
     #endregion

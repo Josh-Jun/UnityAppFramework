@@ -8,7 +8,7 @@ public class ChangePrefabsFontWindowEditor : EditorWindow
     //private static Texture texture;
     private GUIStyle titleStyle;
 
-    #region 1、更换预制体字体
+    #region 1銆佹洿鎹㈤鍒朵綋瀛椾綋
     private string prefabsPath = "";
 
     private Font changeFont;
@@ -32,7 +32,7 @@ public class ChangePrefabsFontWindowEditor : EditorWindow
     }
     private void OnGUI()
     {
-        #region 1、更换预制体字体
+        #region 1銆佹洿鎹㈤鍒朵綋瀛椾綋
         GUILayout.BeginVertical();
 
         EditorGUILayout.Space();
@@ -63,7 +63,7 @@ public class ChangePrefabsFontWindowEditor : EditorWindow
         GUILayout.EndHorizontal();
 
         EditorGUILayout.Space();
-        if (GUILayout.Button("Change Prefabs Font(更换字体)"))
+        if (GUILayout.Button("Change Prefabs Font(鏇存崲瀛椾綋)"))
         {
             EditorApplication.delayCall += ChangePrefabsFont;
         }
@@ -72,12 +72,12 @@ public class ChangePrefabsFontWindowEditor : EditorWindow
         #endregion
     }
 
-    #region 1、更换预制体字体
+    #region 1銆佹洿鎹㈤鍒朵綋瀛椾綋
     private void ChangePrefabsFont()
     {
         if (changeFont == null)
         {
-            Debug.Log("请选择要更换的字体");
+            Debug.Log("璇烽�夋嫨瑕佹洿鎹㈢殑瀛椾綋");
             return;
         }
         string[] allPath = AssetDatabase.FindAssets("t:Prefab", new string[] { prefabsPath });
@@ -91,7 +91,7 @@ public class ChangePrefabsFontWindowEditor : EditorWindow
             }
         }
         AssetDatabase.Refresh();
-        Debug.Log("更换完成");
+        Debug.Log("鏇存崲瀹屾垚");
     }
     private void SetAllTextFont(Transform go)
     {

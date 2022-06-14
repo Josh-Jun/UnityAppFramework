@@ -16,8 +16,8 @@ public class WanTcpManager : SingletonMonoEvent<WanTcpManager>
     private Action<bool> clientCallBack;
     private Action closeCallBack;
 
-    private Queue<byte[]> msgQueue = new Queue<byte[]>();//ÏûÏ¢¶ÓÁĞ
-    private static readonly string lockNetTcp = "lockNetTcp";//¼ÓËø
+    private Queue<byte[]> msgQueue = new Queue<byte[]>();//æ¶ˆæ¯é˜Ÿåˆ—
+    private static readonly string lockNetTcp = "lockNetTcp";//åŠ é”
 
     public delegate void BytesValueDelegate(byte[] value);
     public event BytesValueDelegate HandOutMsg;
@@ -36,12 +36,12 @@ public class WanTcpManager : SingletonMonoEvent<WanTcpManager>
             socketTcp.Bind(new IPEndPoint(IPAddress.Parse(ip), port));
             socketTcp.Listen(backlog);
             socketTcp.BeginAccept(ClientConnectCallBack, socketTcp);
-            Debug.Log("Tcp·şÎñ¶Ë¿ªÆô³É¹¦£¡ÕıÔÚµÈ´ıÁ¬½Ó......");
+            Debug.Log("TcpæœåŠ¡ç«¯å¼€å¯æˆåŠŸï¼æ­£åœ¨ç­‰å¾…è¿æ¥......");
             serverCallBack?.Invoke(true);
         }
         catch (Exception ex)
         {
-            Debug.LogError("Tcp·şÎñ¶Ë¿ªÆôÊ§°Ü£º" + ex.Message);
+            Debug.LogError("TcpæœåŠ¡ç«¯å¼€å¯å¤±è´¥ï¼š" + ex.Message);
             serverCallBack?.Invoke(false);
         }
     }
@@ -53,13 +53,13 @@ public class WanTcpManager : SingletonMonoEvent<WanTcpManager>
             Socket socket = socketTcp.EndAccept(ar);
             StartReceiveMsg(socket, delegate
             {
-                Debug.Log("¿Í»§¶Ë¶Ï¿ªÁ¬½Ó......");
+                Debug.Log("å®¢æˆ·ç«¯æ–­å¼€è¿æ¥......");
             });
-            Debug.Log("TcpÁ¬½Ó¿Í»§¶Ë³É¹¦£¡ÕıÔÚ½ÓÊÕÊı¾İ......");
+            Debug.Log("Tcpè¿æ¥å®¢æˆ·ç«¯æˆåŠŸï¼æ­£åœ¨æ¥æ”¶æ•°æ®......");
         }
         catch (Exception ex)
         {
-            Debug.LogError("Tcp·şÎñÆ÷¹Ø±Õ:" + ex.Message);
+            Debug.LogError("TcpæœåŠ¡å™¨å…³é—­:" + ex.Message);
             serverCallBack?.Invoke(false);
         }
         socketTcp.BeginAccept(ClientConnectCallBack, socketTcp);
@@ -76,13 +76,13 @@ public class WanTcpManager : SingletonMonoEvent<WanTcpManager>
             if (!flag)
             {
                 Close();
-                SocketTools.LogMsg("Tcp¿Í»§¶ËÁ¬½Ó³¬Ê±", LogLevel.Error);
+                SocketTools.LogMsg("Tcpå®¢æˆ·ç«¯è¿æ¥è¶…æ—¶", LogLevel.Error);
                 clientCallBack?.Invoke(flag);
             }
         }
         catch (Exception ex)
         {
-            SocketTools.LogMsg("Tcp¿Í»§¶ËÆô¶¯Ê§°Ü£º" + ex.Message, LogLevel.Error);
+            SocketTools.LogMsg("Tcpå®¢æˆ·ç«¯å¯åŠ¨å¤±è´¥ï¼š" + ex.Message, LogLevel.Error);
             clientCallBack?.Invoke(false);
         }
     }
@@ -93,15 +93,15 @@ public class WanTcpManager : SingletonMonoEvent<WanTcpManager>
             socketTcp.EndConnect(ar);
             StartReceiveMsg(socketTcp, delegate
             {
-                SocketTools.LogMsg("Tcp·şÎñÆ÷¶Ï¿ªÁ¬½Ó......", LogLevel.Info);
+                SocketTools.LogMsg("TcpæœåŠ¡å™¨æ–­å¼€è¿æ¥......", LogLevel.Info);
                 clientCallBack?.Invoke(false);
             });
-            SocketTools.LogMsg("TcpÁ¬½Ó·şÎñÆ÷³É¹¦£¡ÕıÔÚ½ÓÊÕÊı¾İ......", LogLevel.Info);
+            SocketTools.LogMsg("Tcpè¿æ¥æœåŠ¡å™¨æˆåŠŸï¼æ­£åœ¨æ¥æ”¶æ•°æ®......", LogLevel.Info);
             clientCallBack?.Invoke(true);
         }
         catch (Exception ex)
         {
-            SocketTools.LogMsg("Tcp¿Í»§¶Ë¹Ø±Õ£º" + ex.Message, LogLevel.Error);
+            SocketTools.LogMsg("Tcpå®¢æˆ·ç«¯å…³é—­ï¼š" + ex.Message, LogLevel.Error);
             clientCallBack?.Invoke(false);
         }
     }
@@ -188,7 +188,7 @@ public class WanTcpManager : SingletonMonoEvent<WanTcpManager>
             Debug.LogError("RcvBodyError:" + ex.Message);
         }
     }
-    /// <summary>°ÑÏûÏ¢¼ÓÈë¶ÓÁĞ</summary>
+    /// <summary>æŠŠæ¶ˆæ¯åŠ å…¥é˜Ÿåˆ—</summary>
     private void AddMsgQueue(byte[] bytes)
     {
         lock (lockNetTcp)
@@ -205,7 +205,7 @@ public class WanTcpManager : SingletonMonoEvent<WanTcpManager>
             {
                 for (int i = 0; i < msgQueue.Count; i++)
                 {
-                    HandOutMsg(msgQueue.Dequeue());//È¡ÏûÏ¢°ü ½øĞĞ·Ö·¢
+                    HandOutMsg(msgQueue.Dequeue());//å–æ¶ˆæ¯åŒ… è¿›è¡Œåˆ†å‘
                 }
             }
         }
@@ -257,7 +257,7 @@ public class WanTcpManager : SingletonMonoEvent<WanTcpManager>
         closeCallBack?.Invoke();
         socketTcp.Close();
     }
-    /// <summary>¹Ø±ÕTcp</summary>
+    /// <summary>å…³é—­Tcp</summary>
     public bool Close()
     {
         try
@@ -274,7 +274,7 @@ public class WanTcpManager : SingletonMonoEvent<WanTcpManager>
         }
         catch (Exception arg)
         {
-            Debug.LogError("Tcp¹Ø±ÕSocket´íÎó£º" + arg);
+            Debug.LogError("Tcpå…³é—­Socketé”™è¯¯ï¼š" + arg);
             return false;
         }
     }

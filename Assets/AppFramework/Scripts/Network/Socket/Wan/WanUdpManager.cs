@@ -14,8 +14,8 @@ public class WanUdpManager : SingletonMonoEvent<WanUdpManager>
 	private EndPoint ep;
 	private Thread thread;
 
-	private Queue<byte[]> msgQueue = new Queue<byte[]>();//ÏûÏ¢¶ÓÁĞ
-	private static readonly string lockNetUdp = "lockNetUdp";//¼ÓËø
+	private Queue<byte[]> msgQueue = new Queue<byte[]>();//æ¶ˆæ¯é˜Ÿåˆ—
+	private static readonly string lockNetUdp = "lockNetUdp";//åŠ é”
 
 	public delegate void BytesValueDelegate(byte[] value);
 	public event BytesValueDelegate HandOutMsg;
@@ -36,12 +36,12 @@ public class WanUdpManager : SingletonMonoEvent<WanUdpManager>
 			ep = iep;
 			thread = new Thread(ReceiveMsg);
 			thread.Start();
-			Debug.Log("Udp·şÎñ¶Ë¿ªÆô³É¹¦!");
+			Debug.Log("UdpæœåŠ¡ç«¯å¼€å¯æˆåŠŸ!");
 			cb?.Invoke(true);
 		}
 		catch (Exception ex)
 		{
-			Debug.LogError("Udp·şÎñ¶Ë¿ªÆôÊ§°Ü! " + ex.Message);
+			Debug.LogError("UdpæœåŠ¡ç«¯å¼€å¯å¤±è´¥! " + ex.Message);
 			cb?.Invoke(false);
 		}
 	}
@@ -56,12 +56,12 @@ public class WanUdpManager : SingletonMonoEvent<WanUdpManager>
 			ep = iep;
 			thread = new Thread(ReceiveMsg);
 			thread.Start();
-			Debug.Log("Udp¿Í»§¶Ë¿ªÆô³É¹¦!");
+			Debug.Log("Udpå®¢æˆ·ç«¯å¼€å¯æˆåŠŸ!");
 			cb?.Invoke(true);
 		}
 		catch (Exception ex)
 		{
-			Debug.LogError("Udp¿Í»§¶Ë¿ªÆôÊ§°Ü! " + ex.Message);
+			Debug.LogError("Udpå®¢æˆ·ç«¯å¼€å¯å¤±è´¥! " + ex.Message);
 			cb?.Invoke(false);
 		}
 	}
@@ -74,7 +74,7 @@ public class WanUdpManager : SingletonMonoEvent<WanUdpManager>
 		{
 			lock (lockNetUdp)
 			{
-                HandOutMsg(msgQueue.Dequeue());//È¡ÏûÏ¢°ü ½øĞĞ·Ö·¢
+                HandOutMsg(msgQueue.Dequeue());//å–æ¶ˆæ¯åŒ… è¿›è¡Œåˆ†å‘
             }
 		}
 	}
@@ -106,7 +106,7 @@ public class WanUdpManager : SingletonMonoEvent<WanUdpManager>
 			}
 		}
 	}
-	/// <summary>°ÑÏûÏ¢¼ÓÈë¶ÓÁĞ </summary>
+	/// <summary>æŠŠæ¶ˆæ¯åŠ å…¥é˜Ÿåˆ— </summary>
 	private void AddMsgQueue(byte[] bytes)
 	{
 		lock (lockNetUdp)
@@ -126,6 +126,6 @@ public class WanUdpManager : SingletonMonoEvent<WanUdpManager>
 			socketUdp.Close();
 		}
         OnQuitSocket.Invoke();
-        Debug.Log("UDPÒÑ¹Ø±Õ...");
+        Debug.Log("UDPå·²å…³é—­...");
 	}
 }

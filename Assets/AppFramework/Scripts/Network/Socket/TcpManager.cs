@@ -31,7 +31,7 @@ public class TcpManager : SingletonMonoEvent<TcpManager>
                 socket.ReceiveBufferSize = bufferSize;
                 socket.SendBufferSize = bufferSize;
             }
-            Debug.Log("Á¬½Ó³É¹¦");
+            Debug.Log("è¿æ¥æˆåŠŸ");
             isConnect = true;
             if (thread == null)
             {
@@ -45,11 +45,11 @@ public class TcpManager : SingletonMonoEvent<TcpManager>
             string errInfo = string.Empty;
             if (bl)
             {
-                errInfo = "·şÎñÆ÷Òì³£";
+                errInfo = "æœåŠ¡å™¨å¼‚å¸¸";
             }
             else
             {
-                errInfo = "×ÔÉíÍøÂçÒì³£";
+                errInfo = "è‡ªèº«ç½‘ç»œå¼‚å¸¸";
             }
             Debug.LogError(errInfo);
             error?.Invoke();
@@ -93,7 +93,7 @@ public class TcpManager : SingletonMonoEvent<TcpManager>
         }
     }
     private byte[] tempcon = null;
-    //´Ó·şÎñÆ÷¶Ë½ÓÊÜ·µ»ØĞÅÏ¢
+    //ä»æœåŠ¡å™¨ç«¯æ¥å—è¿”å›ä¿¡æ¯
     public List<byte[]> OnReceive(byte[] recedata, int length)
     {
         try
@@ -171,7 +171,7 @@ public class TcpManager : SingletonMonoEvent<TcpManager>
         }
         catch (Exception ex)
         {
-            Debug.LogError($"ÏûÏ¢·¢ËÍÊ§°Ü: {ex.Message}");
+            Debug.LogError($"æ¶ˆæ¯å‘é€å¤±è´¥: {ex.Message}");
             error?.Invoke();
         }
     }
@@ -213,7 +213,7 @@ public class TcpManager : SingletonMonoEvent<TcpManager>
         }
         catch
         {
-            Debug.Log("ThreadÒì³£¹Ø±Õ");
+            Debug.Log("Threadå¼‚å¸¸å…³é—­");
         }
     }
 }

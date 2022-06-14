@@ -40,17 +40,17 @@ public class EventColliderTrigger : MonoBehaviour
         get { return m_OnExit; }
         set { m_OnExit = value; }
     }
-    // ½øÈë´¥·¢Æ÷
+    // è¿›å…¥è§¦å‘å™¨
     void OnTriggerEnter(Collider collider)
     {
         m_OnEnter.Invoke(collider.gameObject);
     }
-    // Í£Áô´¥·¢Æ÷
+    // åœç•™è§¦å‘å™¨
     void OnTriggerStay(Collider collider)
     {
         m_OnStay.Invoke(collider.gameObject);
     }
-    // ÍË³ö´¥·¢Æ÷
+    // é€€å‡ºè§¦å‘å™¨
     void OnTriggerExit(Collider collider)
     {
         m_OnExit.Invoke(collider.gameObject);

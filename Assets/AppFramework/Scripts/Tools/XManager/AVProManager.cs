@@ -11,7 +11,7 @@ public class AVProManager : SingletonMono<AVProManager>
     #region Public Variable
     public MediaPlayer MediaPlayer { get { return _mediaPlayer; } private set { } }
 
-    /// <summary> ÊÇ·ñ²¥·Å </summary>
+    /// <summary> æ˜¯å¦æ’­æ”¾ </summary>
     public bool IsPlaying
     {
         get
@@ -23,7 +23,7 @@ public class AVProManager : SingletonMono<AVProManager>
             return false;
         }
     }
-    /// <summary> ÊÇ·ñ²¥·ÅÍê³É </summary>
+    /// <summary> æ˜¯å¦æ’­æ”¾å®Œæˆ </summary>
     public bool IsFinished
     {
         get
@@ -35,7 +35,7 @@ public class AVProManager : SingletonMono<AVProManager>
             return false;
         }
     }
-    /// <summary> ÊÇ·ñ¿ÉÇëÇó </summary>
+    /// <summary> æ˜¯å¦å¯è¯·æ±‚ </summary>
     public bool IsSeeking
     {
         get
@@ -47,7 +47,7 @@ public class AVProManager : SingletonMono<AVProManager>
             return false;
         }
     }
-    /// <summary> ÊÇ·ñ¿É²¥·Å </summary>
+    /// <summary> æ˜¯å¦å¯æ’­æ”¾ </summary>
     public bool CanPlay
     {
         get
@@ -77,7 +77,7 @@ public class AVProManager : SingletonMono<AVProManager>
     {
 
     }
-    /// <summary> ´ò¿ªÊÓÆµ </summary>
+    /// <summary> æ‰“å¼€è§†é¢‘ </summary>
     public bool OpenMedia(MediaPath path, bool autoPlay = true)
     {
         return _mediaPlayer.OpenMedia(path.PathType, path.Path, autoPlay);
@@ -95,7 +95,7 @@ public class AVProManager : SingletonMono<AVProManager>
         return _mediaPlayer.OpenMedia(autoPlay);
     }
 
-    /// <summary> ¿ªÊ¼²¥·Å </summary>
+    /// <summary> å¼€å§‹æ’­æ”¾ </summary>
     public void Play()
     {
         if (_mediaPlayer && _mediaPlayer.Control != null)
@@ -103,7 +103,7 @@ public class AVProManager : SingletonMono<AVProManager>
             _mediaPlayer.Play();
         }
     }
-    /// <summary> ÔİÍ£²¥·Å </summary>
+    /// <summary> æš‚åœæ’­æ”¾ </summary>
     public void Pause()
     {
         if (_mediaPlayer && _mediaPlayer.Control != null)
@@ -111,7 +111,7 @@ public class AVProManager : SingletonMono<AVProManager>
             _mediaPlayer.Pause();
         }
     }
-    /// <summary> ÉèÖÃ¿ì½ø¿ìÍË </summary>
+    /// <summary> è®¾ç½®å¿«è¿›å¿«é€€ </summary>
     public void SeekRelative(float deltaTime)
     {
         if (_mediaPlayer && _mediaPlayer.Control != null)
@@ -131,7 +131,7 @@ public class AVProManager : SingletonMono<AVProManager>
         }
         return new TimeRange();
     }
-    /// <summary> ÉèÖÃ¾²Òô </summary>
+    /// <summary> è®¾ç½®é™éŸ³ </summary>
     public void MuteAudio(bool mute)
     {
         if (_mediaPlayer && _mediaPlayer.Control != null)
@@ -140,7 +140,7 @@ public class AVProManager : SingletonMono<AVProManager>
             _mediaPlayer.Control.MuteAudio(mute);
         }
     }
-    /// <summary> ¸Ä±äÒôÁ¿ </summary>
+    /// <summary> æ”¹å˜éŸ³é‡ </summary>
     public void ChangeAudioVolume(float _audioVolume)
     {
         if (_mediaPlayer && _mediaPlayer.Control != null)
@@ -148,7 +148,7 @@ public class AVProManager : SingletonMono<AVProManager>
             _mediaPlayer.AudioVolume = _audioVolume;
         }
     }
-    /// <summary> ÉèÖÃÊÇ·ñÑ­»· </summary>
+    /// <summary> è®¾ç½®æ˜¯å¦å¾ªç¯ </summary>
     public void SetLooping(bool islooping)
     {
         if (_mediaPlayer && _mediaPlayer.Control != null)

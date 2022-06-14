@@ -6,7 +6,7 @@ public class GoRoot : SingletonMono<GoRoot>
 {
     private Dictionary<string, Transform> rootPairs = new Dictionary<string, Transform>();
 
-    /// <summary> »ñÈ¡3DÓÎÏ·¶ÔÏó¸ù¶ÔÏó </summary>
+    /// <summary> è·å–3Dæ¸¸æˆå¯¹è±¡æ ¹å¯¹è±¡ </summary>
     public Transform GoTransform { get { return transform; } private set { } }
     // Start is called before the first frame update
     void Awake()
@@ -14,7 +14,7 @@ public class GoRoot : SingletonMono<GoRoot>
 
     }
 
-    /// <summary> Ìí¼Ó3D¶ÔÏóÔ¤ÖÆÌå£¬·µ»ØGameObject</summary>
+    /// <summary> æ·»åŠ 3Då¯¹è±¡é¢„åˆ¶ä½“ï¼Œè¿”å›GameObject</summary>
     public GameObject AddChild(GameObject prefab, Transform parent = null)
     {
         Transform objParent = parent ? parent : GoTransform;
@@ -22,7 +22,7 @@ public class GoRoot : SingletonMono<GoRoot>
         return go;
     }
 
-    /// <summary> Ìí¼Ó3D¶ÔÏóÔ¤ÖÆÌå£¬·µ»ØGameObject </summary>
+    /// <summary> æ·»åŠ 3Då¯¹è±¡é¢„åˆ¶ä½“ï¼Œè¿”å›GameObject </summary>
     public Transform TryGetEmptyNode(string name)
     {
         if (!rootPairs.ContainsKey(name)) {

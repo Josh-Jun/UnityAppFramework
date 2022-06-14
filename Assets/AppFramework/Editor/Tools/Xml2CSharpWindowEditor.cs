@@ -74,7 +74,7 @@ public class Xml2CSharpWindowEditor : EditorWindow
         }
         GUILayout.EndHorizontal();
 
-        if (GUILayout.Button("Éú³ÉC#Àà"))
+        if (GUILayout.Button("ç”ŸæˆC#ç±»"))
         {
             EditorApplication.delayCall += Play;
         }
@@ -117,7 +117,7 @@ public class Xml2CSharpWindowEditor : EditorWindow
         try
         {
             XElement element = XElement.Load(fileInfo.FullName);
-            //×Ó½ÚµãÀà¼¯ºÏ
+            //å­èŠ‚ç‚¹ç±»é›†åˆ
             List<string> classList = new List<string>();
 
             Dictionary<string, int> classAttrCountDic = new Dictionary<string, int>();
@@ -139,7 +139,7 @@ public class Xml2CSharpWindowEditor : EditorWindow
                         continue;
                     }
 
-                    //Èç¹û´Ë½ÚµãÏÂÃ»ÓĞÊôĞÔÔòÖ±½ÓÌø¹ı
+                    //å¦‚æœæ­¤èŠ‚ç‚¹ä¸‹æ²¡æœ‰å±æ€§åˆ™ç›´æ¥è·³è¿‡
                     if (item.Attributes().Count() == 0)
                     {
                         StringBuilder childTxt = new StringBuilder();
@@ -151,14 +151,14 @@ public class Xml2CSharpWindowEditor : EditorWindow
                         continue;
                     }
 
-                    //Ã»ÓĞ×Ó½ÚµãÁË
+                    //æ²¡æœ‰å­èŠ‚ç‚¹äº†
                     classText1.Append("\r\n\t[Serializable]");
                     classText1.Append("\r\n\t[XmlRoot(").Append($@"""{item.Name}"")]");
                     classText1.Append($"\r\n\tpublic class {item.Name}");
                     classText1.Append("\r\n\t{");
                     //classList.Add(item.Name.ToString());
 
-                    //´´½¨¸Ã½Úµã¶ÔÓ¦µÄÊôĞÔ
+                    //åˆ›å»ºè¯¥èŠ‚ç‚¹å¯¹åº”çš„å±æ€§
                     if (item.Attributes().Count() > 0)
                     {
                         foreach (var itemAttr in item.Attributes())
@@ -176,7 +176,7 @@ public class Xml2CSharpWindowEditor : EditorWindow
                     {
                         if (_classAttr.Key != null)
                         {
-                            //·µ»ØÏÈÇ°´´½¨ÀàÔÚ×Ö·û´®ÖĞµÄÎ»ÖÃ
+                            //è¿”å›å…ˆå‰åˆ›å»ºç±»åœ¨å­—ç¬¦ä¸²ä¸­çš„ä½ç½®
                             int indexStr = classText.ToString().IndexOf($@"[XmlRoot(""{item.Name}"")]");
                             StringBuilder itemStr = new StringBuilder();
                             //itemStr.Append("\t");
@@ -204,13 +204,13 @@ public class Xml2CSharpWindowEditor : EditorWindow
                     classList.Add(item.Name.ToString());
                     classAttrCountDic.Add(item.Name.ToString(), item.Elements().Count());
 
-                    //´´½¨¸Ã½Úµã¶ÔÓ¦µÄÀà
+                    //åˆ›å»ºè¯¥èŠ‚ç‚¹å¯¹åº”çš„ç±»
                     classText1.Append("[Serializable]");
                     classText1.Append("\r\n\t[XmlRoot(").Append($@"""{item.Name}"")]");
                     classText1.Append($"\r\n\tpublic class {item.Name}");
                     classText1.Append("\r\n\t{");
 
-                    //´´½¨¸Ã½Úµã×Ó½Úµã¶ÔÓ¦µÄÀà
+                    //åˆ›å»ºè¯¥èŠ‚ç‚¹å­èŠ‚ç‚¹å¯¹åº”çš„ç±»
                     foreach (var itemElement in item.Elements())
                     {
                         StringBuilder childTxt = new StringBuilder();
@@ -245,7 +245,7 @@ public class Xml2CSharpWindowEditor : EditorWindow
                         }
                     }
 
-                    //´´½¨¸Ã½Úµã¶ÔÓ¦µÄÊôĞÔ
+                    //åˆ›å»ºè¯¥èŠ‚ç‚¹å¯¹åº”çš„å±æ€§
                     if (item.Attributes().Count() > 0)
                     {
                         foreach (var itemAttr in item.Attributes())
@@ -271,7 +271,7 @@ public class Xml2CSharpWindowEditor : EditorWindow
             string output = string.Format("{0}/{1}/{2}.cs", Application.dataPath, outPutPath, fileInfo.Name.Split('.')[0]);
             FileStream fs1 = new FileStream(output, FileMode.Create, FileAccess.Write);
             StreamWriter sw = new StreamWriter(fs1);
-            sw.WriteLine(builder.ToString());//¿ªÊ¼Ğ´ÈëÖµ
+            sw.WriteLine(builder.ToString());//å¼€å§‹å†™å…¥å€¼
             sw.Close();
             fs1.Close();
 
