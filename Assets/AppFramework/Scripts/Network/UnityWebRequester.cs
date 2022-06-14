@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -307,12 +308,9 @@ public class UnityWebRequester
     {
         using (uwr = UnityWebRequest.Get(url))
         {
-            if (headerPairs.Count > 0)
+            foreach (var header in headerPairs)
             {
-                foreach (var header in headerPairs)
-                {
-                    uwr.SetRequestHeader(header.Key,header.Value);
-                }
+                uwr.SetRequestHeader(header.Key, header.Value);
             }
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
@@ -330,12 +328,9 @@ public class UnityWebRequester
     {
         using (uwr = UnityWebRequest.Get(url))
         {
-            if (headerPairs.Count > 0)
+            foreach (var header in headerPairs)
             {
-                foreach (var header in headerPairs)
-                {
-                    uwr.SetRequestHeader(header.Key,header.Value);
-                }
+                uwr.SetRequestHeader(header.Key, header.Value);
             }
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
@@ -359,12 +354,9 @@ public class UnityWebRequester
     {
         using (uwr = UnityWebRequestTexture.GetTexture(url))
         {
-            if (headerPairs.Count > 0)
+            foreach (var header in headerPairs)
             {
-                foreach (var header in headerPairs)
-                {
-                    uwr.SetRequestHeader(header.Key,header.Value);
-                }
+                uwr.SetRequestHeader(header.Key, header.Value);
             }
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
@@ -389,12 +381,9 @@ public class UnityWebRequester
     {
         using (uwr = UnityWebRequestAssetBundle.GetAssetBundle(url))
         {
-            if (headerPairs.Count > 0)
+            foreach (var header in headerPairs)
             {
-                foreach (var header in headerPairs)
-                {
-                    uwr.SetRequestHeader(header.Key,header.Value);
-                }
+                uwr.SetRequestHeader(header.Key, header.Value);
             }
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
@@ -420,12 +409,9 @@ public class UnityWebRequester
     {
         using (uwr = UnityWebRequestMultimedia.GetAudioClip(url, audioType))
         {
-            if (headerPairs.Count > 0)
+            foreach (var header in headerPairs)
             {
-                foreach (var header in headerPairs)
-                {
-                    uwr.SetRequestHeader(header.Key,header.Value);
-                }
+                uwr.SetRequestHeader(header.Key, header.Value);
             }
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
@@ -454,12 +440,13 @@ public class UnityWebRequester
         //formData.Add(new MultipartFormFileSection("my file data", "myfile.txt"));
         using (uwr = UnityWebRequest.Post(url, lstformData))
         {
-            if (headerPairs.Count > 0)
+            string json = JsonUtility.ToJson(lstformData);
+            byte[] postData = Encoding.UTF8.GetBytes(json);
+            uwr.uploadHandler = new UploadHandlerRaw(postData);
+            uwr.downloadHandler = new DownloadHandlerBuffer();
+            foreach (var header in headerPairs)
             {
-                foreach (var header in headerPairs)
-                {
-                    uwr.SetRequestHeader(header.Key,header.Value);
-                }
+                uwr.SetRequestHeader(header.Key, header.Value);
             }
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
@@ -477,12 +464,11 @@ public class UnityWebRequester
     {
         using (uwr = UnityWebRequest.Post(url, formData))
         {
-            if (headerPairs.Count > 0)
+            uwr.uploadHandler = new UploadHandlerRaw(formData.data);
+            uwr.downloadHandler = new DownloadHandlerBuffer();
+            foreach (var header in headerPairs)
             {
-                foreach (var header in headerPairs)
-                {
-                    uwr.SetRequestHeader(header.Key,header.Value);
-                }
+                uwr.SetRequestHeader(header.Key, header.Value);
             }
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
@@ -500,12 +486,11 @@ public class UnityWebRequester
     {
         using (uwr = UnityWebRequest.Post(url, postData))
         {
-            if (headerPairs.Count > 0)
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(postData);
+            uwr.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            foreach (var header in headerPairs)
             {
-                foreach (var header in headerPairs)
-                {
-                    uwr.SetRequestHeader(header.Key,header.Value);
-                }
+                uwr.SetRequestHeader(header.Key, header.Value);
             }
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
@@ -521,16 +506,13 @@ public class UnityWebRequester
     /// <returns></returns>
     public IEnumerator IE_Post(string url, byte[] postData, Action<UnityWebRequest> actionResult)
     {
-        using (uwr = UnityWebRequest.Post(url, "POST"))
+        using (uwr = UnityWebRequest.Post(url, UnityWebRequest.kHttpVerbPOST))
         {
             uwr.uploadHandler = new UploadHandlerRaw(postData);
             uwr.downloadHandler = new DownloadHandlerBuffer();
-            if (headerPairs.Count > 0)
+            foreach (var header in headerPairs)
             {
-                foreach (var header in headerPairs)
-                {
-                    uwr.SetRequestHeader(header.Key,header.Value);
-                }
+                uwr.SetRequestHeader(header.Key, header.Value);
             }
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
@@ -548,12 +530,13 @@ public class UnityWebRequester
     {
         using (uwr = UnityWebRequest.Post(url, formFields))
         {
-            if (headerPairs.Count > 0)
+            string json = JsonUtility.ToJson(formFields);
+            byte[] postData = Encoding.UTF8.GetBytes(json);
+            uwr.uploadHandler = new UploadHandlerRaw(postData);
+            uwr.downloadHandler = new DownloadHandlerBuffer();
+            foreach (var header in headerPairs)
             {
-                foreach (var header in headerPairs)
-                {
-                    uwr.SetRequestHeader(header.Key,header.Value);
-                }
+                uwr.SetRequestHeader(header.Key, header.Value);
             }
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
@@ -572,12 +555,9 @@ public class UnityWebRequester
     {
         using (uwr = UnityWebRequest.Put(url, contentBytes))
         {
-            if (headerPairs.Count > 0)
+            foreach (var header in headerPairs)
             {
-                foreach (var header in headerPairs)
-                {
-                    uwr.SetRequestHeader(header.Key,header.Value);
-                }
+                uwr.SetRequestHeader(header.Key, header.Value);
             }
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
@@ -595,12 +575,9 @@ public class UnityWebRequester
     {
         using (uwr = UnityWebRequest.Put(url, content))
         {
-            if (headerPairs.Count > 0)
+            foreach (var header in headerPairs)
             {
-                foreach (var header in headerPairs)
-                {
-                    uwr.SetRequestHeader(header.Key,header.Value);
-                }
+                uwr.SetRequestHeader(header.Key, header.Value);
             }
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
