@@ -44,7 +44,6 @@ public class TimerManager : SingletonMono<TimerManager> {
         } else{
             timerLst.Add(timer);
         }
-        timerLst.Add(timer);
         return timeId;
     }
 

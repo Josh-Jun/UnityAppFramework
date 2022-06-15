@@ -492,6 +492,7 @@ public class UnityWebRequester
             }
             byte[] bodyRaw = Encoding.UTF8.GetBytes(postData);
             uwr.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            uwr.downloadHandler = new DownloadHandlerBuffer();
             yield return uwr.SendWebRequest();
             actionResult?.Invoke(uwr);
         }
