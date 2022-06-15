@@ -243,7 +243,7 @@ public class PicoXRManager : SingletonMonoEvent<PicoXRManager>
             }
             else
             {
-                Execute(TrackedEventType.YBDownEvent, XRNode.LeftHand, leftTarget);
+                Execute(TrackedEventType.YBUpEvent, XRNode.LeftHand, leftTarget);
             }
         }
         if (InputDevices.GetDeviceAtXRNode(XRNode.RightHand).TryGetFeatureValue(CommonUsages.secondaryButton, out bool rightYBDown))
@@ -254,7 +254,7 @@ public class PicoXRManager : SingletonMonoEvent<PicoXRManager>
             }
             else
             {
-                Execute(TrackedEventType.YBDownEvent, XRNode.RightHand, rightTarget);
+                Execute(TrackedEventType.YBUpEvent, XRNode.RightHand, rightTarget);
             }
         }
         #endregion

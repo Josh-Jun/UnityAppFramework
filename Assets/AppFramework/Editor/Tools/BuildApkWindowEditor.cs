@@ -22,6 +22,7 @@ public class BuildApkWindowEditor : EditorWindow
     private bool RunXLuaScripts = false;
     private int AppFrameRate = 30;
     private TargetPackage ApkTarget = TargetPackage.Mobile;
+    private bool NativeApp = false;
     private string outputPath;
 
     [MenuItem("Tools/My ToolsWindow/Build Apk", false, 0)]
@@ -50,6 +51,7 @@ public class BuildApkWindowEditor : EditorWindow
             RunXLuaScripts = AppConfig.RunXLua;
             AppFrameRate = AppConfig.AppFrameRate;
             ApkTarget = AppConfig.TargetPackage;
+            NativeApp = AppConfig.NativeApp;
         }
         else
         {
@@ -103,7 +105,16 @@ public class BuildApkWindowEditor : EditorWindow
         GUILayout.FlexibleSpace();
         ApkTarget = (TargetPackage)EditorGUILayout.EnumPopup(ApkTarget, GUILayout.MaxWidth(75));
         EditorGUILayout.EndHorizontal();
-
+        
+        if (ApkTarget == TargetPackage.Mobile)
+        {
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label(new GUIContent("Native App"));
+            GUILayout.FlexibleSpace();
+            NativeApp = EditorGUILayout.Toggle(NativeApp, GUILayout.MaxWidth(75));
+            EditorGUILayout.EndHorizontal();
+        }
+        
         if (GUILayout.Button("Update"))
         {
             UpdateConfig();
@@ -127,6 +138,7 @@ public class BuildApkWindowEditor : EditorWindow
     }
     public void UpdateConfig()
     {
+        EditorUserBuildSettings.exportAsGoogleAndroidProject = NativeApp;
         EditorUserBuildSettings.development = DevelopmentBuild;
         AppConfig.IsDebug = DevelopmentBuild;
         AppConfig.IsHotfix = IsHotfix;
@@ -180,7 +192,8 @@ public class BuildApkWindowEditor : EditorWindow
         string version = PlayerSettings.bundleVersion;
         string date = string.Format("{0}{1:00}{2:00}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
         string name = DevelopmentBuild ? string.Format("{0}_v{1}_beta-{2}", _str, version, date) : string.Format("{0}_v{1}_release-{2}", _str, version, date);
-        string outName = string.Format("{0}.apk", name);
+        string suffix = NativeApp ? "" : ".apk";
+        string outName = string.Format("{0}{1}", name, suffix);
         EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
         if (Directory.Exists(outputPath))
         {

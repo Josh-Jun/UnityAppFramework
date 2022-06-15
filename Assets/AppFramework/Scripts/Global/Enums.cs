@@ -2,7 +2,7 @@
 public enum TargetPackage
 {
     Mobile = 0,
-    PicoVR = 1
+    PicoVR = 1,
 }
 /// <summary>PicoVR手柄事件类型</summary>
 public enum TrackedEventType

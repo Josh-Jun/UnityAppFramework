@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "AppConfig", menuName = "App/AppConfig")]
 [Serializable]
@@ -17,8 +18,10 @@ public class AppConfig : ScriptableObject
     public bool IsLoadAB;
     [Tooltip("App运行XLua脚本")]
     public bool RunXLua;
-    [Tooltip("App运行帧频，默认30帧")]
-    public int AppFrameRate = 30;
+    [Tooltip("App运行帧频，默认60帧")]
+    public int AppFrameRate = 60;
     [Tooltip("App安卓包不同渠道")]
     public TargetPackage TargetPackage;
+    [Tooltip("App原生")]
+    public bool NativeApp;
 }
