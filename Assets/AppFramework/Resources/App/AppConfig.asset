@@ -19,4 +19,4 @@ MonoBehaviour:
   RunXLua: 0
   AppFrameRate: 30
   TargetPackage: 0
-  ExportProject: 0
+  NativeApp: 0

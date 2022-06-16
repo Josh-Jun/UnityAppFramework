@@ -9,8 +9,9 @@ using UnityEngine;
 using UnityEditor.XR.Management.Metadata;
 using UnityEngine.XR.Management;
 using System;
+using Unity.VisualScripting;
 
-public class BuildApkWindowEditor : EditorWindow
+public class BuildAppWindowEditor : EditorWindow
 {
     private GUIStyle titleStyle;
     public AppConfig AppConfig;//App配置表 
@@ -25,11 +26,11 @@ public class BuildApkWindowEditor : EditorWindow
     private bool NativeApp = false;
     private string outputPath;
 
-    [MenuItem("Tools/My ToolsWindow/Build Apk", false, 0)]
+    [MenuItem("Tools/My ToolsWindow/Build App", false, 0)]
     public static void OpenWindow()
     {
-        BuildApkWindowEditor window = GetWindow<BuildApkWindowEditor>("Build Apk");
-        window.Show();
+        BuildAppWindowEditor appWindow = GetWindow<BuildAppWindowEditor>("Build App");
+        appWindow.Show();
     }
     public void OnEnable()
     {
@@ -40,7 +41,7 @@ public class BuildApkWindowEditor : EditorWindow
             fontSize = 12,
         };
 
-        outputPath = Application.dataPath.Replace("Assets", "Apk");
+        outputPath = Application.dataPath.Replace("Assets", "App");
         AppConfig = Resources.Load<AppConfig>(configPath);
         if (AppConfig != null)
         {
@@ -61,7 +62,7 @@ public class BuildApkWindowEditor : EditorWindow
     public void OnGUI()
     {
         EditorGUILayout.Space();
-        GUILayout.Label(new GUIContent("Build Apk"), titleStyle);
+        GUILayout.Label(new GUIContent("Build App"), titleStyle);
         EditorGUILayout.Space();
 
         EditorGUILayout.BeginHorizontal();
@@ -133,12 +134,11 @@ public class BuildApkWindowEditor : EditorWindow
         if (GUILayout.Button("Build"))
         {
             UpdateConfig();
-            BuildApk();
+            BuildApp();
         }
     }
     public void UpdateConfig()
     {
-        EditorUserBuildSettings.exportAsGoogleAndroidProject = NativeApp;
         EditorUserBuildSettings.development = DevelopmentBuild;
         AppConfig.IsDebug = DevelopmentBuild;
         AppConfig.IsHotfix = IsHotfix;
@@ -150,37 +150,42 @@ public class BuildApkWindowEditor : EditorWindow
 
         EditorUtility.SetDirty(AppConfig);
 
-        XRGeneralSettings androidXRSettings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(BuildTargetGroup.Android);
-
-        if (androidXRSettings == null)
+        if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android)
         {
-            var assignedSettings = ScriptableObject.CreateInstance<XRManagerSettings>() as XRManagerSettings;
-            androidXRSettings.AssignedSettings = assignedSettings;
+            EditorUserBuildSettings.exportAsGoogleAndroidProject = NativeApp;
+            
+            XRGeneralSettings androidXRSettings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(BuildTargetGroup.Android);
+
+            if (androidXRSettings == null)
+            {
+                var assignedSettings = ScriptableObject.CreateInstance<XRManagerSettings>() as XRManagerSettings;
+                androidXRSettings.AssignedSettings = assignedSettings;
+                EditorUtility.SetDirty(androidXRSettings); // Make sure this gets picked up for serialization later.
+            }
+
+            //取消当前选择的
+            IReadOnlyList<XRLoader> list = androidXRSettings.Manager.activeLoaders;
+            int hasCount = list.Count;
+            //Debug.Log(hasCount);
+            for (int i = 0; i < hasCount; i++)
+            {
+                string nameTemp = list[0].GetType().FullName;
+                Debug.Log("disable xr plug:" + nameTemp);
+                XRPackageMetadataStore.RemoveLoader(androidXRSettings.Manager, nameTemp, BuildTargetGroup.Android);
+            }
+            androidXRSettings.InitManagerOnStart = false;
+            if (ApkTarget == TargetPackage.PicoVR)
+            {
+                androidXRSettings.InitManagerOnStart = true;
+                //启用
+                string loaderTypeName = "Unity.XR.PXR.PXR_Loader";
+                XRPackageMetadataStore.AssignLoader(androidXRSettings.Manager, loaderTypeName, BuildTargetGroup.Android);
+            }
             EditorUtility.SetDirty(androidXRSettings); // Make sure this gets picked up for serialization later.
         }
-
-        //取消当前选择的
-        IReadOnlyList<XRLoader> list = androidXRSettings.Manager.activeLoaders;
-        int hasCount = list.Count;
-        //Debug.Log(hasCount);
-        for (int i = 0; i < hasCount; i++)
-        {
-            string nameTemp = list[0].GetType().FullName;
-            Debug.Log("disable xr plug:" + nameTemp);
-            XRPackageMetadataStore.RemoveLoader(androidXRSettings.Manager, nameTemp, BuildTargetGroup.Android);
-        }
-        androidXRSettings.InitManagerOnStart = false;
-        if (ApkTarget == TargetPackage.PicoVR)
-        {
-            androidXRSettings.InitManagerOnStart = true;
-            //启用
-            string loaderTypeName = "Unity.XR.PXR.PXR_Loader";
-            XRPackageMetadataStore.AssignLoader(androidXRSettings.Manager, loaderTypeName, BuildTargetGroup.Android);
-        }
-        EditorUtility.SetDirty(androidXRSettings); // Make sure this gets picked up for serialization later.
     }
     private string assetPath = "Assets/Resources/AssetsFolder";
-    private void BuildApk()
+    private void BuildApp()
     {
         string newPath = "";
         if (IsHotfix && IsLoadAB)
@@ -188,13 +193,13 @@ public class BuildApkWindowEditor : EditorWindow
             //移动到根目录
             newPath = MoveAssetsToRoot(assetPath);
         }
-        string _str = ApkTarget == TargetPackage.PicoVR ? "meta-picovr" : "meta-android";
+        string _str = ApkTarget == TargetPackage.PicoVR ? "meta-picovr" : "meta-app";
         string version = PlayerSettings.bundleVersion;
         string date = string.Format("{0}{1:00}{2:00}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
         string name = DevelopmentBuild ? string.Format("{0}_v{1}_beta-{2}", _str, version, date) : string.Format("{0}_v{1}_release-{2}", _str, version, date);
-        string suffix = NativeApp ? "" : ".apk";
+        string suffix = NativeApp || EditorUserBuildSettings.activeBuildTarget == BuildTarget.iOS ? "" : ".apk";
         string outName = string.Format("{0}{1}", name, suffix);
-        EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
+        EditorUserBuildSettings.SwitchActiveBuildTarget(EditorUserBuildSettings.selectedBuildTargetGroup, EditorUserBuildSettings.activeBuildTarget);
         if (Directory.Exists(outputPath))
         {
             if (File.Exists(outName))
@@ -207,7 +212,7 @@ public class BuildApkWindowEditor : EditorWindow
             Directory.CreateDirectory(outputPath);
         }
         string BuildPath = string.Format("{0}/{1}", outputPath, outName);
-        BuildPipeline.BuildPlayer(GetBuildScenes(), BuildPath, BuildTarget.Android, BuildOptions.None);
+        BuildPipeline.BuildPlayer(GetBuildScenes(), BuildPath, EditorUserBuildSettings.activeBuildTarget, BuildOptions.None);
 
         if (IsHotfix && IsLoadAB)
         {
