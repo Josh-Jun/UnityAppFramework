@@ -48,9 +48,18 @@ public class Root
             StartApp();
         }
     }
+
     public static void StartApp()
     {
+        InitManager();
         InitRootScripts(() => { LoadScene(appScriptConfig.MainSceneName, true); });
+    }
+    private static void InitManager()
+    {
+        AudioManager.Instance.InitManager();
+        AVProManager.Instance.InitManager();
+        VideoManager.Instance.InitManager();
+        TableManager.Instance.InitManager();
     }
     public static void InitRootScripts(Action callback = null)
     {

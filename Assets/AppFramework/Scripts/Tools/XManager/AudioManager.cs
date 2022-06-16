@@ -12,7 +12,10 @@ public class AudioManager : SingletonMono<AudioManager>
         backgroundAudio = CreateAudioSource();
         effectAudio = CreateAudioSource();
     }
-
+    public void InitManager()
+    {
+        transform.SetParent(App.app.transform);
+    }
     private AudioSource CreateAudioSource(bool playOnAwake = false)
     {
         AudioSource audio = gameObject.AddComponent<AudioSource>();

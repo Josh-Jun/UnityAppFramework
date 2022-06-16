@@ -66,16 +66,9 @@ public class AVProManager : SingletonMono<AVProManager>
         gameObject.TryGetComponent<AudioSource>();
         gameObject.TryGetComponent<AudioOutput>().Player = MediaPlayer;
     }
-    // Start is called before the first frame update
-    void Start()
+    public void InitManager()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        transform.SetParent(App.app.transform);
     }
     /// <summary> 打开视频 </summary>
     public bool OpenMedia(MediaPath path, bool autoPlay = true)

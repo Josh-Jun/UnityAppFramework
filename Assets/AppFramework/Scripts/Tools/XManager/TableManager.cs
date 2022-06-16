@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TableManager : Singleton<TableManager>
+public class TableManager : SingletonMono<TableManager>
 {
     private const string path_AppTableConfig = "App/Assets/AppTableConfig";
     private Dictionary<string, byte[]> m_TablePairs = new Dictionary<string, byte[]>();
     private AppTableConfig appTableConfig;
-    public void Init()
+    public void Awake()
     {
         TextAsset config = AssetsManager.Instance.LoadAsset<TextAsset>(path_AppTableConfig);
         appTableConfig = XmlSerializeManager.ProtoDeSerialize<AppTableConfig>(config.bytes);
@@ -23,6 +23,10 @@ public class TableManager : Singleton<TableManager>
                 m_TablePairs.Add(appTableConfig.AppTable[i].TableName, bytes);
             }
         }
+    }
+    public void InitManager()
+    {
+        transform.SetParent(App.app.transform);
     }
     public T GetTable<T>(string tableName) where T : Component
     {

@@ -110,7 +110,7 @@ public class BuildAppWindowEditor : EditorWindow
         if (ApkTarget == TargetPackage.Mobile)
         {
             EditorGUILayout.BeginHorizontal();
-            GUILayout.Label(new GUIContent("Native App"));
+            GUILayout.Label(new GUIContent("Export Project"));
             GUILayout.FlexibleSpace();
             NativeApp = EditorGUILayout.Toggle(NativeApp, GUILayout.MaxWidth(75));
             EditorGUILayout.EndHorizontal();
