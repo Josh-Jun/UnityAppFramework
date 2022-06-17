@@ -11,6 +11,9 @@ namespace Data
         [XmlAttribute]
         public string GameVersion;//游戏版本号
 
+        [XmlAttribute]
+        public string Platform;//当前包的平台
+
         [XmlElement]
         public List<Scene> Scenes;//AB包场景
     }
@@ -39,9 +42,6 @@ namespace Data
 
         [XmlAttribute]
         public string BundleName;//包名
-
-        [XmlAttribute]
-        public string Platform;//当前包的平台
 
         [XmlAttribute]
         public string MD5; //MD5

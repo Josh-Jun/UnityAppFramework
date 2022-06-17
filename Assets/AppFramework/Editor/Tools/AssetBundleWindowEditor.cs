@@ -323,6 +323,7 @@ public class AssetBundleWindowEditor : EditorWindow
         xmlDocument.AppendChild(xmlDeclaration);
         var root = xmlDocument.CreateElement("AssetBundleConfig");
         root.SetAttribute("GameVersion", Application.version);
+        root.SetAttribute("Platform", target);
         foreach (var scene in sceneDic)
         {
             var xmlScene = xmlDocument.CreateElement("Scenes");
@@ -335,7 +336,6 @@ public class AssetBundleWindowEditor : EditorWindow
                 var xmlFolder = xmlDocument.CreateElement("Folders");
                 xmlFolder.SetAttribute("FolderName", folder.Key);
                 xmlFolder.SetAttribute("BundleName", folder.Value);
-                xmlFolder.SetAttribute("Platform", target);
                 xmlFolder.SetAttribute("MD5", GetFileMD5(file.FullName));
                 xmlFolder.SetAttribute("Size", (file.Length / 1024f).ToString());
 

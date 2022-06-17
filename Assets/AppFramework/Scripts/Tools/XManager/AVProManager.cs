@@ -2,11 +2,40 @@ using RenderHeads.Media.AVProVideo;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class AVProManager : SingletonMono<AVProManager>
 {
     #region Private Variable
     private MediaPlayer _mediaPlayer;
+    private class TrackedEvent : UnityEvent { }
+    private class Entry
+    {
+        public MediaPlayerEvent.EventType eventID = MediaPlayerEvent.EventType.Started;
+        public TrackedEvent callback = new TrackedEvent();
+    }
+
+    [SerializeField]
+    private List<Entry> m_Delegates;
+    private List<Entry> Entrys
+    {
+        get
+        {
+            if (m_Delegates == null)
+                m_Delegates = new List<Entry>();
+            return m_Delegates;
+        }
+        set { m_Delegates = value; }
+    }
+    private void Execute(MediaPlayerEvent.EventType id)
+    {
+        for (int i = 0, imax = Entrys.Count; i < imax; ++i)
+        {
+            var ent = Entrys[i];
+            if (ent.eventID == id && ent.callback != null)
+                ent.callback.Invoke();
+        }
+    }
     #endregion
     #region Public Variable
     public MediaPlayer MediaPlayer { get { return _mediaPlayer; } private set { } }
@@ -59,12 +88,22 @@ public class AVProManager : SingletonMono<AVProManager>
             return false;
         }
     }
+    public void AddTrackedEvent(MediaPlayerEvent.EventType eventID, UnityAction trackedEvent)
+    {
+        Entry entry = new Entry { eventID = eventID };
+        entry.callback.AddListener(trackedEvent);
+        Entrys.Add(entry);
+    }
     #endregion
     private void Awake()
     {
         _mediaPlayer = gameObject.TryGetComponent<MediaPlayer>();
         gameObject.TryGetComponent<AudioSource>();
         gameObject.TryGetComponent<AudioOutput>().Player = MediaPlayer;
+        MediaPlayer.AutoOpen = false;
+        MediaPlayer.AutoStart = false;
+        MediaPlayer.Loop = false;
+        MediaPlayer.Events.AddListener(OnMediaPlayerEvent);
     }
     public void InitManager()
     {
@@ -148,5 +187,18 @@ public class AVProManager : SingletonMono<AVProManager>
         {
             _mediaPlayer.Control.SetLooping(islooping);
         }
+    }
+    /// <summary>视频播放事件</summary>
+    /// <param name="mediaPlayer">播放器</param>
+    /// <param name="eventType">播放事件</param>
+    /// <param name="error">错误</param>
+    private void OnMediaPlayerEvent(MediaPlayer mediaPlayer, MediaPlayerEvent.EventType eventType, ErrorCode error)
+    {
+        if (error == ErrorCode.None)
+        {
+            Execute(eventType);
+            return;
+        }
+        Debug.Log(error);
     }
 }
