@@ -34,7 +34,7 @@ namespace Platform
             return null;
 #endif
         }
-        public override void QuitUnityPlayer(bool isStay = false)
+        public override void QuitUnityPlayer()
         {
 #if UNITY_IPHONE
             showHostMainWindow("");

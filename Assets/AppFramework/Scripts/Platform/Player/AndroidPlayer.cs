@@ -33,17 +33,10 @@ namespace Platform
             return "";
 #endif
         }
-        public override void QuitUnityPlayer(bool isStay = false)
+        public override void QuitUnityPlayer()
         {
 #if UNITY_ANDROID
-            if (isStay)
-            {
-                Application.Unload();
-            }
-            else
-            {
-                Application.Quit();
-            }
+        JavaObject(AppToolsPackage).CallStatic("quitUnityActivity");
 #endif
         }
         private AndroidJavaObject MainJavaObject()

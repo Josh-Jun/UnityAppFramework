@@ -39,5 +39,5 @@ public abstract class PlatformManager
     public abstract string GetDataPath(string folder);
     public abstract void SavePhoto(string folder, string fileName);
     public abstract string GetAppData(string key);
-    public abstract void QuitUnityPlayer(bool isStay = false);
+    public abstract void QuitUnityPlayer();
 }

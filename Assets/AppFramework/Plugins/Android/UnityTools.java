@@ -38,6 +38,9 @@ public class UnityTools extends UnityPlayerActivity {
         return mainActivity.getIntent().getStringExtra(key);
     }
 
+    //退出UnityActivity
+    public static void quitUnityActivity() { mainActivity.finish(); }
+    
     // 保存图片到相册
     public static void savePhoto(String folder, String fileName) {
         mainActivity.runOnUiThread(new Runnable() {

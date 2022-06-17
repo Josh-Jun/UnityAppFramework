@@ -16,7 +16,7 @@ namespace Platform
         {
             Debug.Log("SavePhoto");
         }
-        public override void QuitUnityPlayer(bool isStay = false)
+        public override void QuitUnityPlayer()
         {
             Debug.Log("Quit Window");
             Application.Quit();

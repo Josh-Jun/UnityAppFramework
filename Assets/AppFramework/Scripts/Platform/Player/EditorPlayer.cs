@@ -18,7 +18,7 @@ namespace Platform
         {
             Debug.Log("SavePhoto");
         }
-        public override void QuitUnityPlayer(bool isStay = false)
+        public override void QuitUnityPlayer()
         {
 #if UNITY_EDITOR
             EditorApplication.isPlaying = false;
