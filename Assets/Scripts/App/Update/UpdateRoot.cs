@@ -40,7 +40,7 @@ namespace Update
             updateWin.SetUpdateTipsActive(false);
             updateWin.SetProgressBarActive(true);
             updateWin.SetTipsText("下载中...");
-            UpdateManager.Instance.DownLoadAssetBundle();
+            UpdateManager.Instance.StartDownLoad();
             App.app.StartCoroutine(DownLoading());
 
         }

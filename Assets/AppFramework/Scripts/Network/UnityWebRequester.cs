@@ -148,7 +148,7 @@ public class UnityWebRequester
     /// <param name="url"></param>
     /// <param name="actionResult"></param>
     /// <param name="actionProgress"></param>
-    public void Get(string url, Action<UnityWebRequest> actionResult)
+    public void Get(string url, Action<string> actionResult)
     {
         mono.StartCoroutine(IE_Get(url, actionResult));
     }
@@ -211,7 +211,7 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托,处理请求对象</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void Post(string url, List<IMultipartFormSection> lstformData, Action<UnityWebRequest> actionResult)
+    public void Post(string url, List<IMultipartFormSection> lstformData, Action<string> actionResult)
     {
         //List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
         //formData.Add(new MultipartFormDataSection("field1=foo&field2=bar"));
@@ -228,7 +228,7 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托,处理请求对象</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void Post(string url, WWWForm formData, Action<UnityWebRequest> actionResult)
+    public void Post(string url, WWWForm formData, Action<string> actionResult)
     {
         mono.StartCoroutine(IE_Post(url, formData, actionResult));
     }
@@ -241,7 +241,7 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托,处理请求对象</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void Post(string url, Dictionary<string, string> formFields, Action<UnityWebRequest> actionResult)
+    public void Post(string url, Dictionary<string, string> formFields, Action<string> actionResult)
     {
         mono.StartCoroutine(IE_Post(url, formFields, actionResult));
     }
@@ -254,7 +254,7 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托,处理请求对象</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void Post(string url, string postData, Action<UnityWebRequest> actionResult)
+    public void Post(string url, string postData, Action<string> actionResult)
     {
         mono.StartCoroutine(IE_Post(url, postData, actionResult));
     }
@@ -266,7 +266,7 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托,处理请求对象</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void Post(string url, byte[] postData, Action<UnityWebRequest> actionResult)
+    public void Post(string url, byte[] postData, Action<string> actionResult)
     {
         mono.StartCoroutine(IE_Post(url, postData, actionResult));
     }
@@ -279,7 +279,7 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void Put(string url, byte[] contentBytes, Action<UnityWebRequest> actionResult)
+    public void Put(string url, byte[] contentBytes, Action<string> actionResult)
     {
         mono.StartCoroutine(IE_Put(url, contentBytes, actionResult));
     }
@@ -292,7 +292,7 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public void Put(string url, string content, Action<UnityWebRequest> actionResult)
+    public void Put(string url, string content, Action<string> actionResult)
     {
         mono.StartCoroutine(IE_Put(url, content, actionResult));
     }
@@ -304,7 +304,7 @@ public class UnityWebRequester
     /// <param name="actionResult">请求发起后处理回调结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public IEnumerator IE_Get(string url, Action<UnityWebRequest> actionResult)
+    public IEnumerator IE_Get(string url, Action<string> actionResult)
     {
         using (uwr = UnityWebRequest.Get(url))
         {
@@ -313,7 +313,14 @@ public class UnityWebRequester
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
             yield return uwr.SendWebRequest();
-            actionResult?.Invoke(uwr);
+            if (uwr.result == UnityWebRequest.Result.Success)
+            {
+                actionResult?.Invoke(uwr.downloadHandler.text);
+            }
+            else
+            {
+                Debug.LogError($"[Error:Get String] {uwr.error}");
+            }
         }
     }
 
@@ -433,7 +440,7 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public IEnumerator IE_Post(string url, List<IMultipartFormSection> lstformData, Action<UnityWebRequest> actionResult)
+    public IEnumerator IE_Post(string url, List<IMultipartFormSection> lstformData, Action<string> actionResult)
     {
         //List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
         //formData.Add(new MultipartFormDataSection("field1=foo&field2=bar"));
@@ -449,7 +456,14 @@ public class UnityWebRequester
             uwr.uploadHandler = new UploadHandlerRaw(postData);
             uwr.downloadHandler = new DownloadHandlerBuffer();
             yield return uwr.SendWebRequest();
-            actionResult?.Invoke(uwr);
+            if (uwr.result == UnityWebRequest.Result.Success)
+            {
+                actionResult?.Invoke(uwr.downloadHandler.text);
+            }
+            else
+            {
+                Debug.LogError($"[Error:Post IMultipartFormSection] {uwr.error}");
+            }
         }
     }
     /// <summary>
@@ -460,7 +474,7 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public IEnumerator IE_Post(string url, WWWForm formData, Action<UnityWebRequest> actionResult)
+    public IEnumerator IE_Post(string url, WWWForm formData, Action<string> actionResult)
     {
         using (uwr = UnityWebRequest.Post(url, formData))
         {
@@ -471,7 +485,14 @@ public class UnityWebRequester
             uwr.uploadHandler = new UploadHandlerRaw(formData.data);
             uwr.downloadHandler = new DownloadHandlerBuffer();
             yield return uwr.SendWebRequest();
-            actionResult?.Invoke(uwr);
+            if (uwr.result == UnityWebRequest.Result.Success)
+            {
+                actionResult?.Invoke(uwr.downloadHandler.text);
+            }
+            else
+            {
+                Debug.LogError($"[Error:Post WWWForm] {uwr.error}");
+            }
         }
     }
     /// <summary>
@@ -482,7 +503,7 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public IEnumerator IE_Post(string url, string postData, Action<UnityWebRequest> actionResult)
+    public IEnumerator IE_Post(string url, string postData, Action<string> actionResult)
     {
         using (uwr = UnityWebRequest.Post(url, postData))
         {
@@ -494,7 +515,14 @@ public class UnityWebRequester
             uwr.uploadHandler = new UploadHandlerRaw(bodyRaw);
             uwr.downloadHandler = new DownloadHandlerBuffer();
             yield return uwr.SendWebRequest();
-            actionResult?.Invoke(uwr);
+            if (uwr.result == UnityWebRequest.Result.Success)
+            {
+                actionResult?.Invoke(uwr.downloadHandler.text);
+            }
+            else
+            {
+                Debug.LogError($"[Error:Post String] {uwr.error}");
+            }
         }
     }
     /// <summary>
@@ -505,7 +533,7 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public IEnumerator IE_Post(string url, byte[] postData, Action<UnityWebRequest> actionResult)
+    public IEnumerator IE_Post(string url, byte[] postData, Action<string> actionResult)
     {
         using (uwr = UnityWebRequest.Post(url, UnityWebRequest.kHttpVerbPOST))
         {
@@ -516,7 +544,14 @@ public class UnityWebRequester
             uwr.uploadHandler = new UploadHandlerRaw(postData);
             uwr.downloadHandler = new DownloadHandlerBuffer();
             yield return uwr.SendWebRequest();
-            actionResult?.Invoke(uwr);
+            if (uwr.result == UnityWebRequest.Result.Success)
+            {
+                actionResult?.Invoke(uwr.downloadHandler.text);
+            }
+            else
+            {
+                Debug.LogError($"[Error:Post Bytes] {uwr.error}");
+            }
         }
     }
     /// <summary>
@@ -527,7 +562,7 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public IEnumerator IE_Post(string url, Dictionary<string, string> formFields, Action<UnityWebRequest> actionResult)
+    public IEnumerator IE_Post(string url, Dictionary<string, string> formFields, Action<string> actionResult)
     {
         using (uwr = UnityWebRequest.Post(url, formFields))
         {
@@ -540,7 +575,14 @@ public class UnityWebRequester
             uwr.uploadHandler = new UploadHandlerRaw(postData);
             uwr.downloadHandler = new DownloadHandlerBuffer();
             yield return uwr.SendWebRequest();
-            actionResult?.Invoke(uwr);
+            if (uwr.result == UnityWebRequest.Result.Success)
+            {
+                actionResult?.Invoke(uwr.downloadHandler.text);
+            }
+            else
+            {
+                Debug.LogError($"[Error:Post Dictionary] {uwr.error}");
+            }
         }
     }
 
@@ -552,7 +594,7 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public IEnumerator IE_Put(string url, byte[] contentBytes, Action<UnityWebRequest> actionResult)
+    public IEnumerator IE_Put(string url, byte[] contentBytes, Action<string> actionResult)
     {
         using (uwr = UnityWebRequest.Put(url, contentBytes))
         {
@@ -561,7 +603,14 @@ public class UnityWebRequester
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
             yield return uwr.SendWebRequest();
-            actionResult?.Invoke(uwr);
+            if (uwr.result == UnityWebRequest.Result.Success)
+            {
+                actionResult?.Invoke(uwr.downloadHandler.text);
+            }
+            else
+            {
+                Debug.LogError($"[Error:Put Bytes] {uwr.error}");
+            }
         }
     }
     /// <summary>
@@ -572,7 +621,7 @@ public class UnityWebRequester
     /// <param name="actionResult">处理返回结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    public IEnumerator IE_Put(string url, string content, Action<UnityWebRequest> actionResult)
+    public IEnumerator IE_Put(string url, string content, Action<string> actionResult)
     {
         using (uwr = UnityWebRequest.Put(url, content))
         {
@@ -581,7 +630,14 @@ public class UnityWebRequester
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
             yield return uwr.SendWebRequest();
-            actionResult?.Invoke(uwr);
+            if (uwr.result == UnityWebRequest.Result.Success)
+            {
+                actionResult?.Invoke(uwr.downloadHandler.text);
+            }
+            else
+            {
+                Debug.LogError($"[Error:Put String] {uwr.error}");
+            }
         }
     }
 }

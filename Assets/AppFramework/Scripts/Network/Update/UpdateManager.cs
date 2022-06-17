@@ -61,7 +61,7 @@ public class UpdateManager : SingletonEvent<UpdateManager>
     }
 
     /// <summary> 下载AB包 </summary>
-    public void DownLoadAssetBundle()
+    public void StartDownLoad()
     {
         //下载总manifest文件
         DownLoad(ServerUrl + PlatformManager.Instance.Name + ".manifest", (byte[] manifest_data) =>
@@ -73,7 +73,7 @@ public class UpdateManager : SingletonEvent<UpdateManager>
             {
                 //将ab文件写入本地
                 FileManager.CreateFile(LocalPath + PlatformManager.Instance.Name, ab_data);
-                App.app.StartCoroutine(IE_DownLoad());
+                DownLoadAssetBundle();
             });
         });
     }
@@ -126,7 +126,7 @@ public class UpdateManager : SingletonEvent<UpdateManager>
     #endregion
 
     #region Private Function
-    private IEnumerator IE_DownLoad()
+    private void DownLoadAssetBundle()
     {
         unityWebRequesterPairs.Clear();
         for (int i = 0; i < downloadScenes.Count; i++)
@@ -148,20 +148,13 @@ public class UpdateManager : SingletonEvent<UpdateManager>
         foreach (var requester in unityWebRequesterPairs)
         {
             unityWebRequester = requester.Value;
-            yield return requester.Value.IE_Get(ServerUrl + requester.Key.BundleName, (UnityWebRequest uwr) =>
+            requester.Value.GetBytes(ServerUrl + requester.Key.BundleName, (byte[] data) =>
             {
-                if (uwr.result == UnityWebRequest.Result.Success)
-                {
-                    FileManager.CreateFile(LocalPath + requester.Key.BundleName, uwr.downloadHandler.data);
-                    unityWebRequester = null;
-                    alreadyDownLoadList.Add(requester.Key);
-                    //下载完成后修改本地版本文件
-                    UpdateLocalConfig(requester.Key);
-                }
-                else
-                {
-                    Debug.LogErrorFormat("[HotfixManager] Error:{0}", uwr.error);
-                }
+                FileManager.CreateFile(LocalPath + requester.Key.BundleName, data);
+                unityWebRequester = null;
+                alreadyDownLoadList.Add(requester.Key);
+                //下载完成后修改本地版本文件
+                UpdateLocalConfig(requester.Key);
             });
         }
         FileManager.CreateFile(XmlLocalVersionPath, bytes);
@@ -196,9 +189,8 @@ public class UpdateManager : SingletonEvent<UpdateManager>
     private void DownLoad(string url, Action<byte[]> action)
     {
         UnityWebRequester requester = new UnityWebRequester(App.app);
-        requester.Get(url, (UnityWebRequest uwr) =>
+        requester.GetBytes(url, (byte[] data) =>
         {
-            byte[] data = uwr.result == UnityWebRequest.Result.Success ? uwr.downloadHandler.data : null;
             action?.Invoke(data);
             requester.Destory();
         });

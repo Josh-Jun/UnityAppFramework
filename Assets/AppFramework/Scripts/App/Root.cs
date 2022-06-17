@@ -51,8 +51,8 @@ public class Root
 
     public static void StartApp()
     {
-        InitManager();
         InitRootScripts(() => { LoadScene(appScriptConfig.MainSceneName, true); });
+        InitManager();
     }
     private static void InitManager()
     {
