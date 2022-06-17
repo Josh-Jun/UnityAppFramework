@@ -88,7 +88,7 @@ public class AVProManager : SingletonMono<AVProManager>
             return false;
         }
     }
-    public void AddTrackedEvent(MediaPlayerEvent.EventType eventID, UnityAction trackedEvent)
+    public void AddMediaPlayerEvent(MediaPlayerEvent.EventType eventID, UnityAction trackedEvent)
     {
         Entry entry = new Entry { eventID = eventID };
         entry.callback.AddListener(trackedEvent);

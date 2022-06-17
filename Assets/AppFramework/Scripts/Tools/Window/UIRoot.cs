@@ -53,7 +53,7 @@ public class UIRoot : SingletonMono<UIRoot>
         }
         #endregion
 
-        if(Root.AppConfig.TargetPackage == TargetPackage.PicoVR)
+        if(Root.AppConfig.TargetPackage == TargetPackage.Pico)
         {
             Init3DUIRoot(Camera.main);
             Reset3DUIRoot();

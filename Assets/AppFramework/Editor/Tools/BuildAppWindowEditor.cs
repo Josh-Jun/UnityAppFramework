@@ -174,7 +174,7 @@ public class BuildAppWindowEditor : EditorWindow
                 XRPackageMetadataStore.RemoveLoader(androidXRSettings.Manager, nameTemp, BuildTargetGroup.Android);
             }
             androidXRSettings.InitManagerOnStart = false;
-            if (ApkTarget == TargetPackage.PicoVR)
+            if (ApkTarget == TargetPackage.Pico)
             {
                 androidXRSettings.InitManagerOnStart = true;
                 //启用
@@ -194,7 +194,7 @@ public class BuildAppWindowEditor : EditorWindow
             //移动到根目录
             newPath = MoveAssetsToRoot(assetPath);
         }
-        string _str = ApkTarget == TargetPackage.PicoVR ? "meta-picovr" : "meta-app";
+        string _str = ApkTarget == TargetPackage.Mobile ? "meta-app" : "meta-vr";
         string version = PlayerSettings.bundleVersion;
         string date = string.Format("{0}{1:00}{2:00}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
         string name = DevelopmentBuild ? string.Format("{0}_v{1}_beta-{2}", _str, version, date) : string.Format("{0}_v{1}_release-{2}", _str, version, date);
