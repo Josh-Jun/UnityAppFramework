@@ -118,5 +118,6 @@ public class AppTableConfigWindowEditor : EditorWindow
             }
         }
         xmlDocument.Save(path);
+        AssetDatabase.Refresh();
     }
 }

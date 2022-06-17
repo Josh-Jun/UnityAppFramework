@@ -129,5 +129,6 @@ public class AppScriptConfigWindowEditor : EditorWindow
             }
         }
         xmlDocument.Save(path);
+        AssetDatabase.Refresh();
     }
 }

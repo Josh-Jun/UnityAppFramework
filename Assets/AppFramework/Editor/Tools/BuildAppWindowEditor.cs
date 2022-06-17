@@ -183,6 +183,7 @@ public class BuildAppWindowEditor : EditorWindow
             }
             EditorUtility.SetDirty(androidXRSettings); // Make sure this gets picked up for serialization later.
         }
+        AssetDatabase.Refresh();
     }
     private string assetPath = "Assets/Resources/AssetsFolder";
     private void BuildApp()
