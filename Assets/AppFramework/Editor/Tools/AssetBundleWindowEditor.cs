@@ -284,10 +284,13 @@ public class AssetBundleWindowEditor : EditorWindow
         {
             FileManager.CreateFolder(outPath);
         }
-        BuildPipeline.BuildAssetBundles(outPath, BuildAssetBundleOptions.None, buildTarget);
 
-        AssetDatabase.Refresh();
-        Debug.Log("AssetBundle 打包成功! " + outPath);
+        if (BuildPipeline.BuildAssetBundles(outPath, BuildAssetBundleOptions.None, buildTarget))
+        {
+
+            AssetDatabase.Refresh();
+            Debug.Log("AssetBundle 打包成功! " + outPath);
+        }
     }
     #endregion
 
