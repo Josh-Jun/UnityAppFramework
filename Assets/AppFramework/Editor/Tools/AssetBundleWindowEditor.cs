@@ -223,7 +223,7 @@ public class AssetBundleWindowEditor : EditorWindow
         AssetImporter assetImporter = AssetImporter.GetAtPath(assetPath); // GetAtPath方法是获取Assets文件和之后的目录
         assetImporter.assetBundleName = bundleName.ToLower();
         if (fileInfo.Extension == ".unity")
-            assetImporter.assetBundleVariant = "scene";
+            assetImporter.assetBundleVariant = "sc";
         else
             assetImporter.assetBundleVariant = "ab";
 
