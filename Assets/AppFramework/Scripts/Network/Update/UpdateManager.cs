@@ -126,6 +126,7 @@ public class UpdateManager : SingletonEvent<UpdateManager>
                         loadProgress++;
                     }
                     LoadCallBack?.Invoke(totalProgress == loadProgress, bundleName, progress);
+                    Debug.Log(bundleName);
                 });
             }
         }
@@ -142,22 +143,29 @@ public class UpdateManager : SingletonEvent<UpdateManager>
     #endregion
 
     #region Private Function
+    private int _indexI;
+    private int _indexJ;
     private void DownLoadAssetBundle()
     {
         unityWebRequesterPairs.Clear();
         for (int i = 0; i < downloadScenes.Count; i++)
         {
+            _indexI = i;
             for (int j = 0; j < downloadScenes[i].Folders.Count; j++)
             {
-                string bandleName = downloadScenes[i].Folders[j].BundleName;
-                float size = downloadScenes[i].Folders[j].Size;
+                _indexJ = j;
+                var folder = downloadScenes[_indexI].Folders[_indexJ];
+                // Debug.Log(folder.BundleName);
                 //添加到下载列表
-                unityWebRequesterPairs.Add(downloadScenes[i].Folders[j], new UnityWebRequester(App.app));
+                if(unityWebRequesterPairs.ContainsKey(folder))
+                    continue;
+                UnityWebRequester requester = new UnityWebRequester(App.app);
+                unityWebRequesterPairs.Add(folder, requester);
                 //下载manifest文件
-                DownLoad(ServerUrl + bandleName + ".manifest", (byte[] _manifest_data) =>
+                DownLoad(ServerUrl + folder.BundleName + ".manifest", (byte[] _manifest_data) =>
                 {
                     //将manifest文件写入本地
-                    FileManager.CreateFile(LocalPath + bandleName + ".manifest", _manifest_data);
+                    FileManager.CreateFile(LocalPath + folder.BundleName + ".manifest", _manifest_data);
                 });
             }
         }
@@ -173,33 +181,62 @@ public class UpdateManager : SingletonEvent<UpdateManager>
                 UpdateLocalConfig(requester.Key);
             });
         }
-        FileManager.CreateFile(XmlLocalVersionPath, bytes);
     }
     private void UpdateLocalConfig(Folder folder)
     {
         if (!FileManager.FileExist(XmlLocalVersionPath))
         {
             AssetBundleConfig config = new AssetBundleConfig();
+            config.GameVersion = serverABConfig.GameVersion;
+            config.Platform = serverABConfig.Platform;
+            config.Scenes = serverABConfig.Scenes;
             FileManager.CreateFile(XmlLocalVersionPath, XmlSerializeManager.ProtoByteSerialize<AssetBundleConfig>(config));
-        }
-        XmlDocument xmlDocument = new XmlDocument();
-        xmlDocument.Load(XmlLocalVersionPath);
+            
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.Load(XmlLocalVersionPath);
 
-        var scene = xmlDocument.GetElementsByTagName("Scenes");
-        for (int i = 0; i < scene.Count; i++)
-        {
-            var folders = scene[i].ChildNodes;
-            for (int j = 0; j < folders.Count; j++)
+            var scene = xmlDocument.GetElementsByTagName("Scenes");
+            for (int i = 0; i < scene.Count; i++)
             {
-                if (folder.FolderName == folders[j].Attributes["FolderName"].Value)
+                var folders = scene[i].ChildNodes;
+                for (int j = 0; j < folders.Count; j++)
                 {
-                    folders[j].Attributes["MD5"].Value = folder.MD5;
-                    folders[j].Attributes["Size"].Value = folder.Size.ToString();
+                    if (folder.BundleName == folders[j].Attributes["BundleName"].Value)
+                    {
+                        folders[j].Attributes["MD5"].Value = folder.MD5;
+                        folders[j].Attributes["Size"].Value = folder.Size.ToString();
+                    }
+                    else
+                    {
+                        folders[j].Attributes["MD5"].Value = "";
+                        folders[j].Attributes["Size"].Value = folder.Size.ToString();
+                    }
                 }
             }
-        }
 
-        xmlDocument.Save(XmlLocalVersionPath);
+            xmlDocument.Save(XmlLocalVersionPath);
+        }
+        else
+        {
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.Load(XmlLocalVersionPath);
+
+            var scene = xmlDocument.GetElementsByTagName("Scenes");
+            for (int i = 0; i < scene.Count; i++)
+            {
+                var folders = scene[i].ChildNodes;
+                for (int j = 0; j < folders.Count; j++)
+                {
+                    if (folder.BundleName == folders[j].Attributes["BundleName"].Value)
+                    {
+                        folders[j].Attributes["MD5"].Value = folder.MD5;
+                        folders[j].Attributes["Size"].Value = folder.Size.ToString();
+                    }
+                }
+            }
+
+            xmlDocument.Save(XmlLocalVersionPath);
+        }
     }
     /// <summary> 下载 </summary>
     private void DownLoad(string url, Action<byte[]> action)

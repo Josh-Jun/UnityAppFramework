@@ -148,7 +148,6 @@ public class GoRoot : SingletonMono<GoRoot>
     {
         var type = typeof(T);
         var scriptName = type.Namespace == string.Empty ? type.Name : type.FullName;
-        Debug.Log(scriptName);
         if (!windowPairs.ContainsKey(scriptName))
         {
             windowPairs.Add(scriptName, window);
