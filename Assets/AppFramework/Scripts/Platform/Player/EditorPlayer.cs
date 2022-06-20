@@ -9,7 +9,8 @@ namespace Platform
     public class EditorPlayer : PlatformManager
     {
         public override bool IsEditor { get; } = true;
-        public override string Name { get; } = "Editor";
+        public override string Name { get; } = "Android";
+        public override string PlatformName { get; } = "android";
         public override string GetDataPath(string folder)
         {
             return string.Format("{0}/{1}", Application.persistentDataPath, folder);

@@ -36,6 +36,7 @@ public abstract class PlatformManager
     }
     public abstract bool IsEditor { get; }
     public abstract string Name { get; }
+    public abstract string PlatformName { get; }
     public abstract string GetDataPath(string folder);
     public abstract void SavePhoto(string folder, string fileName);
     public abstract string GetAppData(string key);

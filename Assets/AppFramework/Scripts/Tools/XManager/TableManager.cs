@@ -7,7 +7,7 @@ public class TableManager : SingletonMono<TableManager>
     private const string path_AppTableConfig = "App/Assets/AppTableConfig";
     private Dictionary<string, byte[]> m_TablePairs = new Dictionary<string, byte[]>();
     private AppTableConfig appTableConfig;
-    public void Awake()
+    private void Awake()
     {
         TextAsset config = AssetsManager.Instance.LoadAsset<TextAsset>(path_AppTableConfig);
         appTableConfig = XmlSerializeManager.ProtoDeSerialize<AppTableConfig>(config.bytes);

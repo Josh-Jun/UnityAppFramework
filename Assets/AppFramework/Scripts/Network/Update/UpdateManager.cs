@@ -37,16 +37,32 @@ public class UpdateManager : SingletonEvent<UpdateManager>
     /// <summary> 开始热更新 </summary>
     public void StartUpdate(Action<bool, string> UpdateCallBack)
     {
-        LocalPath = PlatformManager.Instance.GetDataPath(PlatformManager.Instance.Name);
+        LocalPath = PlatformManager.Instance.GetDataPath(PlatformManager.Instance.Name) + "/";
         ServerUrl = NetcomManager.ABUrl + PlatformManager.Instance.Name + "/";
 
         XmlLocalVersionPath = LocalPath + "AssetBundleConfig.xml";
         XmlServerVersionPath = ServerUrl + "AssetBundleConfig.xml";
 
-        //读取本地热更文件
-        DownLoad(XmlLocalVersionPath, (byte[] bytes) =>
+        if (FileManager.FileExist(XmlLocalVersionPath))
         {
-            localABConfig = bytes != null ? XmlSerializeManager.ProtoDeSerialize<AssetBundleConfig>(bytes) : null;
+            //读取本地热更文件
+            DownLoad(XmlLocalVersionPath, (byte[] bytes) =>
+            {
+                localABConfig = bytes != null ? XmlSerializeManager.ProtoDeSerialize<AssetBundleConfig>(bytes) : null;
+                //检查版本更新信息
+                CheckUpdate(localABConfig, () =>
+                {
+                    string des = "";
+                    for (int i = 0; i < downloadScenes.Count; i++)
+                    {
+                        des += downloadScenes[i].Des + "\n";
+                    }
+                    UpdateCallBack?.Invoke(downloadScenes.Count > 0, des);
+                });
+            });
+        }
+        else
+        {
             //检查版本更新信息
             CheckUpdate(localABConfig, () =>
             {
@@ -57,7 +73,7 @@ public class UpdateManager : SingletonEvent<UpdateManager>
                 }
                 UpdateCallBack?.Invoke(downloadScenes.Count > 0, des);
             });
-        });
+        }
     }
 
     /// <summary> 下载AB包 </summary>

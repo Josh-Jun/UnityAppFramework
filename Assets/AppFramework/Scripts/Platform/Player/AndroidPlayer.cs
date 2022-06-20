@@ -15,6 +15,10 @@ namespace Platform
         }
         public override bool IsEditor { get; } = false;
         public override string Name { get; } = "Android";
+        public override string PlatformName
+        {
+            get { return Root.AppConfig.TargetPackage == TargetPackage.Mobile ? "android" : Root.AppConfig.TargetPackage.ToString().ToLower(); }
+        } 
         public override string GetDataPath(string folder)
         {
             return string.Format("{0}/{1}", Application.persistentDataPath, folder);

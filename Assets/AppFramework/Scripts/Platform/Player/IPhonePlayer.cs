@@ -16,6 +16,7 @@ namespace Platform
 
         public override bool IsEditor { get; } = false;
         public override string Name { get; } = "iOS";
+        public override string PlatformName { get; } = "ios";
         public override string GetDataPath(string folder)
         {
             return string.Format("{0}/{1}", Application.persistentDataPath, folder);

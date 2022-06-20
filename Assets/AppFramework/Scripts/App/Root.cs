@@ -17,8 +17,8 @@ public class Root
     private const string path_AppConfig = "App/AppConfig";
     public static AppConfig AppConfig;//App配置表 
 
-    public static Dictionary<string, List<string>> sceneScriptsPairs = new Dictionary<string, List<string>>();
-    public static Dictionary<string, IRoot> iRootPairs = new Dictionary<string, IRoot>();
+    private static Dictionary<string, List<string>> sceneScriptsPairs = new Dictionary<string, List<string>>();
+    private static Dictionary<string, IRoot> iRootPairs = new Dictionary<string, IRoot>();
 
     public static LoadingScene LoadingScene { private set; get; }
     public static void Init()
@@ -31,12 +31,20 @@ public class Root
         //设置程序帧率
         Application.targetFrameRate = AppConfig.AppFrameRate;
 
+        OutputCfgInfo();
+
         BeginCheckUpdate();
     }
+
+    private static void OutputCfgInfo()
+    {
+        string info_server = AppConfig.IsProServer ? "生产环境" : "测试环境";
+        Debug.Log("配置信息:");
+        Debug.Log($"当前服务器:{info_server}");
+    }
+
     private static void BeginCheckUpdate()
     {
-        AskRoot = GetRoot("Ask.AskRoot");
-        AskRoot.Begin();
         if (AppConfig.IsHotfix && AppConfig.IsLoadAB)
         {
             //初始化热更脚本
@@ -48,11 +56,9 @@ public class Root
             StartApp();
         }
     }
-
     public static void StartApp()
     {
-        InitRootScripts(() => { LoadScene(appScriptConfig.MainSceneName, true); });
-        InitManager();
+        InitRootScripts(() => { LoadScene(appScriptConfig.MainSceneName, true); InitManager(); });
     }
     private static void InitManager()
     {
@@ -61,8 +67,10 @@ public class Root
         VideoManager.Instance.InitManager();
         TableManager.Instance.InitManager();
     }
-    public static void InitRootScripts(Action callback = null)
+    private static void InitRootScripts(Action callback = null)
     {
+        AskRoot = GetRoot("Ask.AskRoot");
+        AskRoot.Begin();
         TextAsset config = AssetsManager.Instance.LoadAsset<TextAsset>(path_AppScriptConfig);
         appScriptConfig = XmlSerializeManager.ProtoDeSerialize<AppScriptConfig>(config.bytes);
         for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
@@ -137,11 +145,21 @@ public class Root
         }
         callback?.Invoke();
     }
-    public static IRoot GetRoot(string fullName)
+    private static IRoot GetRoot(string fullName)
     {
         Type type = Type.GetType(fullName);
         object obj = Activator.CreateInstance(type);
         return obj as IRoot;
+    }
+    public static T GetRootScript<T>() where T : class
+    {
+        var type = typeof(T);
+        var scriptName = type.Namespace == string.Empty ? type.Name : type.FullName;
+        if (!iRootPairs.ContainsKey(scriptName))
+        {
+            return null;
+        }
+        return iRootPairs[scriptName] as T;
     }
     public static void End()
     {

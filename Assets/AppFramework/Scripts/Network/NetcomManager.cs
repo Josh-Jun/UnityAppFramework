@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.IO;
+using System.Text;
 using UnityEngine;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
@@ -38,9 +39,9 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
         private set { }
         get
         {
-            if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor)
+            if (PlatformManager.Instance.IsEditor)
             {
-                return string.Format(@"{0}{1}/", Application.dataPath.Replace("Assets", ""), "AssetBundle");//本地AB包地址
+                return Path.Combine(Application.dataPath.Replace("Assets", ""), "AssetBundle/");//本地AB包地址
             }
             else
             {
