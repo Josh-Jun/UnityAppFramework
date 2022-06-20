@@ -193,7 +193,7 @@ public class UpdateManager : SingletonEvent<UpdateManager>
             {
                 if (folder.FolderName == folders[j].Attributes["FolderName"].Value)
                 {
-                    folders[j].Attributes["HashCode"].Value = folder.MD5;
+                    folders[j].Attributes["MD5"].Value = folder.MD5;
                     folders[j].Attributes["Size"].Value = folder.Size.ToString();
                 }
             }
