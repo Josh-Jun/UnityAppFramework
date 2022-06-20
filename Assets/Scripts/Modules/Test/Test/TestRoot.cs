@@ -45,6 +45,7 @@ namespace Test
         private void ButtonEvent()
         {
             testWin.SetText("触发不带参数事件");
+            SendEventMsgParams("ShowTips","触发不带参数事件", 1.2f);
         }
         private void ButtonParamsEvent(string value)
         {

@@ -14,6 +14,7 @@ public class GoRoot : SingletonMono<GoRoot>
     #region Private Variable
     private GameObject canvasObject;//Canvas游戏对象
     private GameObject eventSystemObject;//EventSystem游戏对象
+    private GameObject goObj;//3D游戏对象父物体
     
     private static Dictionary<string, WindowBase> windowPairs = new Dictionary<string, WindowBase>();
     private Dictionary<string, Transform> rootPairs = new Dictionary<string, Transform>();
@@ -31,7 +32,7 @@ public class GoRoot : SingletonMono<GoRoot>
     public GraphicRaycaster UIGraphicRaycaster { get { return canvasObject.GetComponent<GraphicRaycaster>(); } private set { } }
     
     /// <summary> 获取3D游戏对象根对象 </summary>
-    public Transform GoTransform { get { return transform; } private set { } }
+    public Transform GoTransform { get { return goObj.transform; } private set { } }
     #endregion
 
     /// <summary>
@@ -51,6 +52,9 @@ public class GoRoot : SingletonMono<GoRoot>
         UICanvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
         UICanvasScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Shrink;
         #endregion
+        
+        goObj = new GameObject("GameObjects");
+        goObj.transform.SetParent(transform);
 
         #region EventSystem
         if (EventSystem.current == null)
@@ -165,7 +169,7 @@ public class GoRoot : SingletonMono<GoRoot>
     {
         if (!rootPairs.ContainsKey(name)) {
             GameObject go = new GameObject(name);
-            go.transform.SetParent(transform, false);
+            go.transform.SetParent(GoTransform, false);
             rootPairs.Add(name, go.transform);
             return go.transform;
         } else {
