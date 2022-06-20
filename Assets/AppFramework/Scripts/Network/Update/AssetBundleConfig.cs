@@ -14,6 +14,9 @@ namespace Data
         [XmlAttribute]
         public string Platform;//当前包的平台
 
+        [XmlAttribute]
+        public string Des;//热更描述
+
         [XmlElement]
         public List<Scene> Scenes;//AB包场景
     }
@@ -23,9 +26,6 @@ namespace Data
     {
         [XmlAttribute]
         public string SceneName;//AB包场景名
-
-        [XmlAttribute]
-        public string Des;//热更描述
 
         [XmlElement]
         public List<Folder> Folders; //文件夹

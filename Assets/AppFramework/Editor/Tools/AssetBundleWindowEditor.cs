@@ -18,7 +18,7 @@ public class AssetBundleWindowEditor : EditorWindow
     private string outputPath;
     private string buildPath;
     private readonly Dictionary<string, Dictionary<string, string>> sceneDic = new Dictionary<string, Dictionary<string, string>>();
-    private readonly Dictionary<string, string> desDic = new Dictionary<string, string>();
+    private string des = "请输入本版更新描述";
 
     [MenuItem("Tools/My ToolsWindow/Build AssetBundle", false, 1)]
     public static void OpenWindow()
@@ -92,15 +92,9 @@ public class AssetBundleWindowEditor : EditorWindow
         GUILayout.EndHorizontal();
 
         //更新描述
-        if (desDic.Count > 0)
-        {
-            EditorGUILayout.Space();
-            EditorGUILayout.PrefixLabel("Update Des");
-            for (int i = 0; i < desDic.Keys.Count; i++)
-            {
-                desDic[desDic.Keys.ToArray()[i]] = EditorGUILayout.TextField(desDic.Keys.ToArray()[i] + " Update Des", desDic[desDic.Keys.ToArray()[i]]);
-            }
-        }
+        EditorGUILayout.Space();
+        des = EditorGUILayout.TextField("Update Des", des);
+        
 
         // build.
         EditorGUILayout.Space();
@@ -164,8 +158,6 @@ public class AssetBundleWindowEditor : EditorWindow
 
                 if (!sceneDic.ContainsKey(tempDirectoryInfo.Name))
                     sceneDic.Add(tempDirectoryInfo.Name, namePathDic);
-                if (!desDic.ContainsKey(tempDirectoryInfo.Name))
-                    desDic.Add(tempDirectoryInfo.Name, "请输入本版更新描述");
             }
         }
         Debug.Log("AssetBundle Labels设置成功!");
@@ -327,11 +319,11 @@ public class AssetBundleWindowEditor : EditorWindow
         var root = xmlDocument.CreateElement("AssetBundleConfig");
         root.SetAttribute("GameVersion", Application.version);
         root.SetAttribute("Platform", target);
+        root.SetAttribute("Des", des);
         foreach (var scene in sceneDic)
         {
             var xmlScene = xmlDocument.CreateElement("Scenes");
             xmlScene.SetAttribute("SceneName", scene.Key);
-            xmlScene.SetAttribute("Des", desDic[scene.Key]);
             //root.AppendChild(xmlScene);
             foreach (var folder in scene.Value)
             {

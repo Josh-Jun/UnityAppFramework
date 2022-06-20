@@ -52,12 +52,7 @@ public class UpdateManager : SingletonEvent<UpdateManager>
                 //检查版本更新信息
                 CheckUpdate(localABConfig, () =>
                 {
-                    string des = "";
-                    for (int i = 0; i < downloadScenes.Count; i++)
-                    {
-                        des += downloadScenes[i].Des + "\n";
-                    }
-                    UpdateCallBack?.Invoke(downloadScenes.Count > 0, des);
+                    UpdateCallBack?.Invoke(downloadScenes.Count > 0, serverABConfig.Des);
                 });
             });
         }
@@ -66,12 +61,7 @@ public class UpdateManager : SingletonEvent<UpdateManager>
             //检查版本更新信息
             CheckUpdate(localABConfig, () =>
             {
-                string des = "";
-                for (int i = 0; i < downloadScenes.Count; i++)
-                {
-                    des += downloadScenes[i].Des + "\n";
-                }
-                UpdateCallBack?.Invoke(downloadScenes.Count > 0, des);
+                UpdateCallBack?.Invoke(downloadScenes.Count > 0, serverABConfig.Des);
             });
         }
     }
@@ -126,7 +116,6 @@ public class UpdateManager : SingletonEvent<UpdateManager>
                         loadProgress++;
                     }
                     LoadCallBack?.Invoke(totalProgress == loadProgress, bundleName, progress);
-                    Debug.Log(bundleName);
                 });
             }
         }
@@ -192,40 +181,26 @@ public class UpdateManager : SingletonEvent<UpdateManager>
             config.Scenes = serverABConfig.Scenes;
             FileManager.CreateFile(XmlLocalVersionPath, XmlSerializeManager.ProtoByteSerialize<AssetBundleConfig>(config));
             
-            XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.Load(XmlLocalVersionPath);
-
-            var scene = xmlDocument.GetElementsByTagName("Scenes");
-            for (int i = 0; i < scene.Count; i++)
-            {
-                var folders = scene[i].ChildNodes;
-                for (int j = 0; j < folders.Count; j++)
-                {
-                    if (folder.BundleName == folders[j].Attributes["BundleName"].Value)
-                    {
-                        folders[j].Attributes["MD5"].Value = folder.MD5;
-                        folders[j].Attributes["Size"].Value = folder.Size.ToString();
-                    }
-                    else
-                    {
-                        folders[j].Attributes["MD5"].Value = "";
-                        folders[j].Attributes["Size"].Value = folder.Size.ToString();
-                    }
-                }
-            }
-
-            xmlDocument.Save(XmlLocalVersionPath);
+            UpdateConfig();
         }
         else
         {
-            XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.Load(XmlLocalVersionPath);
+            UpdateConfig(folder);
+        }
+    }
 
-            var scene = xmlDocument.GetElementsByTagName("Scenes");
-            for (int i = 0; i < scene.Count; i++)
+    private void UpdateConfig(Folder folder = null)
+    {
+        XmlDocument xmlDocument = new XmlDocument();
+        xmlDocument.Load(XmlLocalVersionPath);
+
+        var scene = xmlDocument.GetElementsByTagName("Scenes");
+        for (int i = 0; i < scene.Count; i++)
+        {
+            var folders = scene[i].ChildNodes;
+            for (int j = 0; j < folders.Count; j++)
             {
-                var folders = scene[i].ChildNodes;
-                for (int j = 0; j < folders.Count; j++)
+                if (folder != null)
                 {
                     if (folder.BundleName == folders[j].Attributes["BundleName"].Value)
                     {
@@ -233,11 +208,16 @@ public class UpdateManager : SingletonEvent<UpdateManager>
                         folders[j].Attributes["Size"].Value = folder.Size.ToString();
                     }
                 }
+                else
+                {
+                    folders[j].Attributes["MD5"].Value = "";
+                }
             }
-
-            xmlDocument.Save(XmlLocalVersionPath);
         }
+
+        xmlDocument.Save(XmlLocalVersionPath);
     }
+
     /// <summary> 下载 </summary>
     private void DownLoad(string url, Action<byte[]> action)
     {
