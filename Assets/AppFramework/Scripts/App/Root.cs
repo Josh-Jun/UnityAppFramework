@@ -62,6 +62,8 @@ public class Root
     }
     private static void InitManager()
     {
+        AssetBundleManager.Instance.InitManager();
+        AssetsManager.Instance.InitManager();
         AudioManager.Instance.InitManager();
         AVProManager.Instance.InitManager();
         VideoManager.Instance.InitManager();

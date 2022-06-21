@@ -4,8 +4,12 @@ using EventController;
 using System;
 using UnityEngine.SceneManagement;
 
-public class AssetsManager : Singleton<AssetsManager>
+public class AssetsManager : SingletonMono<AssetsManager>
 {
+    public void InitManager()
+    {
+        transform.SetParent(App.app.transform);
+    }
     #region 移动游戏对象到场景
     public void MoveGameObjectToScene(GameObject go, string sceneName)
     {
