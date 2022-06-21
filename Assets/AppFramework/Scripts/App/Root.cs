@@ -71,8 +71,6 @@ public class Root
     }
     private static void InitRootScripts(Action callback = null)
     {
-        AskRoot = GetRoot("Ask.AskRoot");
-        AskRoot.Begin();
         TextAsset config = AssetsManager.Instance.LoadAsset<TextAsset>(path_AppScriptConfig);
         appScriptConfig = XmlSerializeManager.ProtoDeSerialize<AppScriptConfig>(config.bytes);
         for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
@@ -110,6 +108,12 @@ public class Root
             {
                 sceneScriptsPairs[appScriptConfig.RootScript[i].SceneName].Add(appScriptConfig.RootScript[i].ScriptName);
             }
+        }
+        AskRoot = GetRoot("Ask.AskRoot");
+        AskRoot.Begin();
+        if (!iRootPairs.ContainsKey("Ask.AskRoot"))
+        {
+            iRootPairs.Add("Ask.AskRoot", AskRoot);
         }
         callback?.Invoke();
     }
@@ -166,9 +170,13 @@ public class Root
     public static void End()
     {
         UpdateRoot?.End();
-        for (int i = 0; i < iRootPairs.Count; i++)
+        AskRoot?.End();
+        for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
         {
-            iRootPairs[appScriptConfig.RootScript[i].ScriptName].End();
+            if (iRootPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
+            {
+                iRootPairs[appScriptConfig.RootScript[i].ScriptName].End();
+            }
         }
     }
 }
