@@ -247,10 +247,7 @@ namespace Update
 
                 UpdateConfig();
             }
-            else
-            {
-                UpdateConfig(folder);
-            }
+            UpdateConfig(folder);
         }
 
         private void UpdateConfig(Folder folder = null)
