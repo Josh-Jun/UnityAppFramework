@@ -20,8 +20,6 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
     private AssetBundle assetbundle;
 
     private string mainfestPath;
-
-    private bool IsFinished = false;
     
     private void Awake()
     {
@@ -50,7 +48,6 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
             {
                 assetbundle = ab;
                 manifest = assetbundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
-                IsFinished = true;
                 GetAssetBundlePath(loadProgress);
                 requester.Destory();
             });
@@ -144,7 +141,6 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
     public void UnLoad(string sceneName, string folderName)
     {
         string bundleName = ABScenePairs[sceneName][folderName];
-        AssetBundle ab = AssetBundlesCache[bundleName];
         if(AssetBundlesCache.ContainsKey(bundleName))
         {
             AssetBundlesCache[bundleName].Unload(false);
