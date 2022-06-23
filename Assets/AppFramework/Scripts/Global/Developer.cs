@@ -191,14 +191,66 @@ public static class Developer
     /// <summary>
     /// 多个参数的GameObject点击事件
     /// </summary>
-    /// <param name="go"></param>
+    /// <param name="com"></param>
     /// <param name="cb"></param>
     /// <param name="args"></param>
-    public static void OnClick(this GameObject go, UnityAction<object[]> cb, params object[] args)
+    public static void OnClick(this GameObject com, UnityAction cb)
     {
-        EventListener.EventListener.Get(go).onClick = (obj) =>
+        EventListener.EventListener.Get(com).onClick = (obj) =>
         {
-            cb?.Invoke(args);
+            cb?.Invoke();
+        };
+    }
+    /// <summary>
+    /// 多个参数的GameObject点击事件
+    /// </summary>
+    /// <param name="com"></param>
+    /// <param name="cb"></param>
+    /// <param name="args"></param>
+    public static void OnClick<T>(this GameObject com, UnityAction<T> cb, T arg)
+    {
+        EventListener.EventListener.Get(com).onClick = (obj) =>
+        {
+            cb?.Invoke(arg);
+        };
+    }
+    /// <summary>
+    /// 多个参数的GameObject点击事件
+    /// </summary>
+    /// <param name="com"></param>
+    /// <param name="cb"></param>
+    /// <param name="args"></param>
+    public static void OnClick<T0,T1>(this GameObject com, UnityAction<T0,T1> cb, T0 arg0,T1 arg1)
+    {
+        EventListener.EventListener.Get(com).onClick = (obj) =>
+        {
+            cb?.Invoke(arg0,arg1);
+        };
+    }
+    /// <summary>
+    /// 多个参数的GameObject点击事件
+    /// </summary>
+    /// <param name="com"></param>
+    /// <param name="cb"></param>
+    /// <param name="args"></param>
+    public static void OnClick<T0,T1,T2>(this GameObject com, UnityAction<T0,T1,T2> cb, T0 arg0,T1 arg1,T2 arg2)
+    {
+        EventListener.EventListener.Get(com).onClick = (obj) =>
+        {
+            cb?.Invoke(arg0,arg1,arg2);
+        };
+    }
+    /// <summary>
+    /// 多个参数的GameObject点击事件
+    /// </summary>
+    /// <param name="com"></param>
+    /// <param name="cb"></param>
+    /// <param name="args"></param>
+    public static void OnClick<T0,T1,T2,T3>(this GameObject com, UnityAction<T0,T1,T2,T3> cb, T0 arg0,T1 arg1,T2 arg2,T3 arg3)
+    {
+        EventListener.EventListener.Get(com).onClick = (obj) =>
+        {
+            cb?.Invoke(arg0,arg1,arg2,arg3);
         };
     }
     /// <summary>
@@ -207,11 +259,63 @@ public static class Developer
     /// <param name="com"></param>
     /// <param name="cb"></param>
     /// <param name="args"></param>
-    public static void OnClick(this Component com, UnityAction<object[]> cb, params object[] args)
+    public static void OnClick(this Component com, UnityAction cb)
     {
         EventListener.EventListener.Get(com).onClick = (obj) =>
         {
-            cb?.Invoke(args);
+            cb?.Invoke();
+        };
+    }
+    /// <summary>
+    /// 多个参数的组件点击事件
+    /// </summary>
+    /// <param name="com"></param>
+    /// <param name="cb"></param>
+    /// <param name="args"></param>
+    public static void OnClick<T>(this Component com, UnityAction<T> cb, T arg)
+    {
+        EventListener.EventListener.Get(com).onClick = (obj) =>
+        {
+            cb?.Invoke(arg);
+        };
+    }
+    /// <summary>
+    /// 多个参数的组件点击事件
+    /// </summary>
+    /// <param name="com"></param>
+    /// <param name="cb"></param>
+    /// <param name="args"></param>
+    public static void OnClick<T0,T1>(this Component com, UnityAction<T0,T1> cb, T0 arg0,T1 arg1)
+    {
+        EventListener.EventListener.Get(com).onClick = (obj) =>
+        {
+            cb?.Invoke(arg0,arg1);
+        };
+    }
+    /// <summary>
+    /// 多个参数的组件点击事件
+    /// </summary>
+    /// <param name="com"></param>
+    /// <param name="cb"></param>
+    /// <param name="args"></param>
+    public static void OnClick<T0,T1,T2>(this Component com, UnityAction<T0,T1,T2> cb, T0 arg0,T1 arg1,T2 arg2)
+    {
+        EventListener.EventListener.Get(com).onClick = (obj) =>
+        {
+            cb?.Invoke(arg0,arg1,arg2);
+        };
+    }
+    /// <summary>
+    /// 多个参数的组件点击事件
+    /// </summary>
+    /// <param name="com"></param>
+    /// <param name="cb"></param>
+    /// <param name="args"></param>
+    public static void OnClick<T0,T1,T2,T3>(this Component com, UnityAction<T0,T1,T2,T3> cb, T0 arg0,T1 arg1,T2 arg2,T3 arg3)
+    {
+        EventListener.EventListener.Get(com).onClick = (obj) =>
+        {
+            cb?.Invoke(arg0,arg1,arg2,arg3);
         };
     }
     /// <summary>
@@ -220,11 +324,60 @@ public static class Developer
     /// <param name="btn"></param>
     /// <param name="cb"></param>
     /// <param name="args"></param>
-    public static void BtnOnClick(this Button btn, UnityAction<object[]> cb, params object[] args)
+    public static void BtnOnClick(this Button btn, UnityAction cb)
+    {
+        btn.onClick.AddListener(cb);
+    }
+    /// <summary>
+    /// 多个参数的Button点击事件
+    /// </summary>
+    /// <param name="btn"></param>
+    /// <param name="cb"></param>
+    /// <param name="args"></param>
+    public static void BtnOnClick<T>(this Button btn, UnityAction<T> cb, T arg)
     {
         btn.onClick.AddListener(() =>
         {
-            cb?.Invoke(args);
+            cb?.Invoke(arg);
+        });
+    }
+    /// <summary>
+    /// 多个参数的Button点击事件
+    /// </summary>
+    /// <param name="btn"></param>
+    /// <param name="cb"></param>
+    /// <param name="args"></param>
+    public static void BtnOnClick<T0,T1>(this Button btn, UnityAction<T0,T1> cb, T0 agr0, T1 agr1)
+    {
+        btn.onClick.AddListener(() =>
+        {
+            cb?.Invoke(agr0, agr1);
+        });
+    }
+    /// <summary>
+    /// 多个参数的Button点击事件
+    /// </summary>
+    /// <param name="btn"></param>
+    /// <param name="cb"></param>
+    /// <param name="args"></param>
+    public static void BtnOnClick<T0,T1,T2>(this Button btn, UnityAction<T0,T1,T2> cb, T0 agr0, T1 agr1,T2 arg2)
+    {
+        btn.onClick.AddListener(() =>
+        {
+            cb?.Invoke(agr0, agr1, arg2);
+        });
+    }
+    /// <summary>
+    /// 多个参数的Button点击事件
+    /// </summary>
+    /// <param name="btn"></param>
+    /// <param name="cb"></param>
+    /// <param name="args"></param>
+    public static void BtnOnClick<T0,T1,T2,T3>(this Button btn, UnityAction<T0,T1,T2,T3> cb, T0 agr0, T1 agr1,T2 arg2,T3 agr3)
+    {
+        btn.onClick.AddListener(() =>
+        {
+            cb?.Invoke(agr0, agr1, arg2, agr3);
         });
     }
     #endregion

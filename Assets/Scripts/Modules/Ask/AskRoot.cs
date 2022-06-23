@@ -10,8 +10,8 @@ namespace Ask
         public AskWindow askWindow;
         public AskRoot()
         {
-            AddEventMsgParams<string, Action, Action>("ShowAskWindow", ShowAskWindow);
-            AddEventMsgParams<string, float>("ShowTips", ShowTips);
+            AddEventMsg<string, Action, Action>("ShowAskWindow", ShowAskWindow);
+            AddEventMsg<string, float>("ShowTips", ShowTips);
         }
         public void Begin()
         {

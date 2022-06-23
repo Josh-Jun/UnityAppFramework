@@ -11,22 +11,22 @@ public class EventBase
     }
 
     /// <summary>添加事件-带参数</summary>
-    public void AddEventMsgParams<T>(string str, Action<T> cb, bool isRemove = true)
+    public void AddEventMsg<T>(string str, Action<T> cb, bool isRemove = true)
     {
         EventDispatcher.AddEventListener(str, cb, isRemove);
     }
     /// <summary>添加事件-带参数</summary>
-    public void AddEventMsgParams<T0,T1>(string str, Action<T0,T1> cb, bool isRemove = true)
+    public void AddEventMsg<T0,T1>(string str, Action<T0,T1> cb, bool isRemove = true)
     {
         EventDispatcher.AddEventListener(str, cb, isRemove);
     }
     /// <summary>添加事件-带参数</summary>
-    public void AddEventMsgParams<T0,T1,T2>(string str, Action<T0,T1,T2> cb, bool isRemove = true)
+    public void AddEventMsg<T0,T1,T2>(string str, Action<T0,T1,T2> cb, bool isRemove = true)
     {
         EventDispatcher.AddEventListener(str, cb, isRemove);
     }
     /// <summary>添加事件-带参数</summary>
-    public void AddEventMsgParams<T0,T1,T2,T3>(string str, Action<T0,T1,T2,T3> cb, bool isRemove = true)
+    public void AddEventMsg<T0,T1,T2,T3>(string str, Action<T0,T1,T2,T3> cb, bool isRemove = true)
     {
         EventDispatcher.AddEventListener(str, cb, isRemove);
     }
@@ -34,22 +34,22 @@ public class EventBase
 
     #region 发送事件消息
     /// <summary>发送事件消息-带参数</summary>
-    public void SendEventMsgParams<T>(string msg, T args)
+    public void SendEventMsg<T>(string msg, T args)
     {
         EventDispatcher.TriggerEvent(msg, args);
     }
     /// <summary>发送事件消息-带参数</summary>
-    public void SendEventMsgParams<T0,T1>(string msg, T0 arg0,T1 arg1)
+    public void SendEventMsg<T0,T1>(string msg, T0 arg0,T1 arg1)
     {
         EventDispatcher.TriggerEvent(msg, arg0, arg1);
     }
     /// <summary>发送事件消息-带参数</summary>
-    public void SendEventMsgParams<T0,T1,T2>(string msg, T0 arg0,T1 arg1,T2 arg2)
+    public void SendEventMsg<T0,T1,T2>(string msg, T0 arg0,T1 arg1,T2 arg2)
     {
         EventDispatcher.TriggerEvent(msg, arg0, arg1, arg2);
     }
     /// <summary>发送事件消息-带参数</summary>
-    public void SendEventMsgParams<T0,T1,T2,T3>(string msg, T0 arg0,T1 arg1,T2 arg2,T3 arg3)
+    public void SendEventMsg<T0,T1,T2,T3>(string msg, T0 arg0,T1 arg1,T2 arg2,T3 arg3)
     {
         EventDispatcher.TriggerEvent(msg, arg0, arg1, arg2, arg3);
     }

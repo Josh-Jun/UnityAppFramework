@@ -38,10 +38,10 @@ namespace Test
         protected override void RegisterEvent()
         {
             base.RegisterEvent();
-            btn.BtnOnClick((object[] objs) => { });
+            btn.BtnOnClick(() => { });
             btn.onClick.AddListener(() => { SendEventMsg("BtnEvent"); });
             btn_take_photo.onClick.AddListener(() => { SendEventMsg("BtnTakePhotoEvent"); });
-            btn_params.onClick.AddListener(() => { SendEventMsgParams("BtnParamsEvent", "触发带参数事件"); });
+            btn_params.onClick.AddListener(() => { SendEventMsg("BtnParamsEvent", "触发带参数事件"); });
             btn_quit.onClick.AddListener(() => { SendEventMsg("BtnQuitEvent"); });
         }
 

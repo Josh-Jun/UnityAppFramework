@@ -135,7 +135,7 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
         }
         else
         {
-            SendEventMsgParams(eventName, objs);
+            SendEventMsg(eventName, objs);
         }
     }
 

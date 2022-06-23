@@ -14,7 +14,7 @@ namespace Test
             //添加事件系统，不带参数
             AddEventMsg("BtnEvent", ButtonEvent);
             //添加事件系统，带参数
-            AddEventMsgParams<string>("BtnParamsEvent", ButtonParamsEvent);
+            AddEventMsg<string>("BtnParamsEvent", ButtonParamsEvent);
 
             AddEventMsg("BtnTakePhotoEvent", TakePhoto);
             AddEventMsg("BtnQuitEvent", ButtonQuitEvent);
@@ -40,12 +40,12 @@ namespace Test
         private void ButtonQuitEvent()
         {
             //Ask.AskRoot.Instance.ShowAskWindow("确定退出程序？", () => { PlatformManager.Instance.QuitUnityPlayer(); });
-            SendEventMsgParams<string, Action, Action>("ShowAskWindow", "确定退出程序？", () => { PlatformManager.Instance.QuitUnityPlayer(); }, null);
+            SendEventMsg<string, Action, Action>("ShowAskWindow", "确定退出程序？", () => { PlatformManager.Instance.QuitUnityPlayer(); }, null);
         }
         private void ButtonEvent()
         {
             testWin.SetText("触发不带参数事件");
-            SendEventMsgParams("ShowTips","触发不带参数事件",1.2f);
+            SendEventMsg("ShowTips","触发不带参数事件",1.2f);
             // Root.GetRootScript<Ask.AskRoot>().ShowTips("123");
         }
         private void ButtonParamsEvent(string value)
