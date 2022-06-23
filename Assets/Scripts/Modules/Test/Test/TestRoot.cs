@@ -30,7 +30,7 @@ namespace Test
         }
         private void TakePhoto()
         {
-            PictureManager.TakePhoto(testWin.renderCamera, PlatformManager.Instance.GetDataPath("Screenshots"), new Vector2(1920, 1080), (Texture2D texture, string fileName) =>
+            PictureManager.TakePhoto(testWin.renderCamera, PlatformManager.Instance.GetDataPath("Screenshots"), (Texture2D texture, string fileName) =>
             {
                 PlatformManager.Instance.SavePhoto("Screenshots", fileName);
                 testWin.SetRawImage(texture);

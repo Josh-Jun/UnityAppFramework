@@ -72,7 +72,7 @@ public static class PictureManager
     public static void TakePhoto(string path, Vector2 size, Action<Texture2D, string> callback = null)
     {
         Texture2D texture = new Texture2D((int)size.x, (int)size.y, TextureFormat.RGB24, false);
-        texture.ReadPixels(new Rect(Screen.width / 2 - size.x / 2, Screen.height / 2 - size.y / 2, size.x, size.y), 0, 0, false);
+        texture.ReadPixels(new Rect(0, 0, size.x, size.y), 0, 0, false);
         texture.Apply();
         var img = texture.EncodeToPNG();
         if (!FileManager.FolderExist(path))//创建生成目录，如果不存在则创建目录  
@@ -91,9 +91,9 @@ public static class PictureManager
     /// <param name="path"></param>
     /// <param name="size"></param>
     /// <param name="callback"></param>
-    public static void TakePhoto(Camera camera, string path, Vector2 size, Action<Texture2D, string> callback = null)
+    public static void TakePhoto(Camera camera, string path, Action<Texture2D, string> callback = null)
     {
-        Texture2D texture = CaptureCamera(camera, new Rect(Screen.width / 2 - size.x / 2, Screen.height / 2 - size.y / 2, size.x, size.y));
+        Texture2D texture = CaptureCamera(camera, new Rect(Screen.width / 2 - camera.pixelWidth / 2, Screen.height / 2 - camera.pixelHeight / 2, camera.pixelWidth, camera.pixelHeight));
         var img = texture.EncodeToPNG();
         if (!FileManager.FolderExist(path))//创建生成目录，如果不存在则创建目录  
         {
