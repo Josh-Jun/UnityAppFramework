@@ -508,16 +508,14 @@ public static class Developer
             }
             else
             {
-                string _namespace = obj.GetType().Namespace;
-                string fullName = string.IsNullOrEmpty(_namespace) ? go.name : string.Format("{0}.{1}", _namespace, go.name);
-                Type type = Assembly.GetExecutingAssembly().GetType(fullName);
+                Type type = Assembly.GetExecutingAssembly().GetType(typeof(T).FullName);
                 if (type != null)
                 {
                     t = (T)go.AddComponent(type);
                 }
                 else
                 {
-                    Debug.LogError($"{fullName}:脚本已存在,");
+                    Debug.LogError($"{typeof(T).FullName}:脚本已存在,");
                 }
             }
             EventDispatcher.TriggerEvent(go.name, state);
@@ -536,9 +534,7 @@ public static class Developer
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
-            string _namespace = obj.GetType().Namespace;
-            string fullName = string.IsNullOrEmpty(_namespace) ? go.name : string.Format("{0}.{1}", _namespace, go.name);
-            Type type = Assembly.GetExecutingAssembly().GetType(fullName);
+            Type type = Assembly.GetExecutingAssembly().GetType(typeof(T).FullName);
             T t = (T)go.AddComponent(type);
             EventDispatcher.TriggerEvent(go.name, state);
             GoRoot.Instance.AddWindow<T>(t as WindowBase);
@@ -568,16 +564,14 @@ public static class Developer
             }
             else
             {
-                string _namespace = obj.GetType().Namespace;
-                string fullName = string.IsNullOrEmpty(_namespace) ? go.name : string.Format("{0}.{1}", _namespace, go.name);
-                Type type = Assembly.GetExecutingAssembly().GetType(fullName);
+                Type type = Assembly.GetExecutingAssembly().GetType(typeof(T).FullName);
                 if (type != null)
                 {
                     t = (T)go.AddComponent(type);
                 }
                 else
                 {
-                    Debug.LogError($"{fullName}:脚本已存在,");
+                    Debug.LogError($"{typeof(T).FullName}:脚本已存在,");
                 }
             }
             EventDispatcher.TriggerEvent(go.name, state);
@@ -596,9 +590,7 @@ public static class Developer
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
-            string _namespace = obj.GetType().Namespace;
-            string fullName = string.IsNullOrEmpty(_namespace) ? go.name : string.Format("{0}.{1}", _namespace, go.name);
-            Type type = Assembly.GetExecutingAssembly().GetType(fullName);
+            Type type = Assembly.GetExecutingAssembly().GetType(typeof(T).FullName);
             T t = (T)go.AddComponent(type);
             EventDispatcher.TriggerEvent(go.name, state);
             GoRoot.Instance.AddWindow<T>(t as WindowBase);

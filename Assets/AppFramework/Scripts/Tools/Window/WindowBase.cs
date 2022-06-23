@@ -26,9 +26,7 @@ public class WindowBase : EventBaseMono
     protected virtual void RegisterEvent()
     {
         //显隐
-        AddEventMsgParams(name, (object[] args) => {
-            SetWindowActive((bool)args[0]);
-        });
+        AddEventMsgParams<bool>(name, SetWindowActive);
     }
 
     /// <summary>打开窗口</summary>

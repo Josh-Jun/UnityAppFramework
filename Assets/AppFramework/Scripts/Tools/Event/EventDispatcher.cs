@@ -19,6 +19,15 @@ namespace EventController {
         public static void AddEventListener<T>(string eventType,Action<T> handler,bool isDesignateRemove = true) {
             m_eventController.AddEventListener(eventType,handler,isDesignateRemove);
         }
+        public static void AddEventListener<T0,T1>(string eventType,Action<T0,T1> handler,bool isDesignateRemove = true) {
+            m_eventController.AddEventListener(eventType,handler,isDesignateRemove);
+        }
+        public static void AddEventListener<T0,T1,T2>(string eventType,Action<T0,T1,T2> handler,bool isDesignateRemove = true) {
+            m_eventController.AddEventListener(eventType,handler,isDesignateRemove);
+        }
+        public static void AddEventListener<T0,T1,T2,T3>(string eventType,Action<T0,T1,T2,T3> handler,bool isDesignateRemove = true) {
+            m_eventController.AddEventListener(eventType,handler,isDesignateRemove);
+        }
         #endregion
 
         #region 触发事件
@@ -30,8 +39,27 @@ namespace EventController {
             }
         }
 
-        public static void TriggerEvent(string eventType,params object[] args) {
-            var isTrigger = m_eventController.DispatchEvent(eventType, args);
+        public static void TriggerEvent<T>(string eventType,T arg) {
+            var isTrigger = m_eventController.DispatchEvent<T>(eventType, arg);
+            if (!isTrigger) {
+                Debug.Log($"{eventType}事件未注册");
+            }
+        }
+        
+        public static void TriggerEvent<T0,T1>(string eventType,T0 args0, T1 arg1) {
+            var isTrigger = m_eventController.DispatchEvent<T0,T1>(eventType, args0, arg1);
+            if (!isTrigger) {
+                Debug.Log($"{eventType}事件未注册");
+            }
+        }
+        public static void TriggerEvent<T0,T1,T2>(string eventType,T0 args0, T1 arg1, T2 arg2) {
+            var isTrigger = m_eventController.DispatchEvent<T0,T1,T2>(eventType, args0, arg1, arg2);
+            if (!isTrigger) {
+                Debug.Log($"{eventType}事件未注册");
+            }
+        }
+        public static void TriggerEvent<T0,T1,T2,T3>(string eventType,T0 args0, T1 arg1, T2 arg2, T3 arg3) {
+            var isTrigger = m_eventController.DispatchEvent<T0,T1,T2,T3>(eventType, args0, arg1, arg2, arg3);
             if (!isTrigger) {
                 Debug.Log($"{eventType}事件未注册");
             }
@@ -57,6 +85,15 @@ namespace EventController {
         }
 
         public static bool RemoveEventListener<T>(string eventType,Action<T> handler) {
+            return m_eventController.RemoveEventListener(eventType,handler);
+        }
+        public static bool RemoveEventListener<T0,T1>(string eventType,Action<T0,T1> handler) {
+            return m_eventController.RemoveEventListener(eventType,handler);
+        }
+        public static bool RemoveEventListener<T0,T1,T2>(string eventType,Action<T0,T1,T2> handler) {
+            return m_eventController.RemoveEventListener(eventType,handler);
+        }
+        public static bool RemoveEventListener<T0,T1,T2,T3>(string eventType,Action<T0,T1,T2,T3> handler) {
             return m_eventController.RemoveEventListener(eventType,handler);
         }
         #endregion

@@ -26,6 +26,15 @@ namespace EventController {
         public bool AddEventListener<T>(string eventType,Action<T> handler,bool isDesignateRemove,EventDispatcherMode eventDispatcherMode = EventDispatcherMode.DEFAULT) {
             return OnListenerAdding(eventType,handler,isDesignateRemove,eventDispatcherMode);
         }
+        public bool AddEventListener<T0,T1>(string eventType,Action<T0,T1> handler,bool isDesignateRemove,EventDispatcherMode eventDispatcherMode = EventDispatcherMode.DEFAULT) {
+            return OnListenerAdding(eventType,handler,isDesignateRemove,eventDispatcherMode);
+        }
+        public bool AddEventListener<T0,T1,T2>(string eventType,Action<T0,T1,T2> handler,bool isDesignateRemove,EventDispatcherMode eventDispatcherMode = EventDispatcherMode.DEFAULT) {
+            return OnListenerAdding(eventType,handler,isDesignateRemove,eventDispatcherMode);
+        }
+        public bool AddEventListener<T0,T1,T2,T3>(string eventType,Action<T0,T1,T2,T3> handler,bool isDesignateRemove,EventDispatcherMode eventDispatcherMode = EventDispatcherMode.DEFAULT) {
+            return OnListenerAdding(eventType,handler,isDesignateRemove,eventDispatcherMode);
+        }
         //内部实现
         private bool OnListenerAdding(string eventType,Delegate handler,bool isDesignateRemove,EventDispatcherMode eventDispatcherMode) {
             //返回值，是否插入成功
@@ -135,7 +144,7 @@ namespace EventController {
             return isSuccess;
         }
         //触发某个事件
-        public bool DispatchEvent<T>(string eventType,T arg1) {
+        public bool DispatchEvent<T>(string eventType,T arg) {
             //返回值
             bool isSuccess = false;
             List<Delegate> handlerList = new List<Delegate>();
@@ -144,7 +153,67 @@ namespace EventController {
                     foreach(Delegate temp in handlerList) {
                         Action<T> action = temp as Action<T>;
                         try {
-                            action(arg1);
+                            action(arg);
+                        } catch(Exception e) {
+                            Debug.LogError(e);
+                        }
+                    }
+                    isSuccess = true;
+                }
+            }
+            return isSuccess;
+        }
+        //触发某个事件
+        public bool DispatchEvent<T0,T1>(string eventType,T0 arg0,T1 arg1) {
+            //返回值
+            bool isSuccess = false;
+            List<Delegate> handlerList = new List<Delegate>();
+            if(OnDispatchEvent(eventType,ref handlerList)) {
+                if(handlerList != null) {
+                    foreach(Delegate temp in handlerList) {
+                        Action<T0,T1> action = temp as Action<T0,T1>;
+                        try {
+                            action(arg0,arg1);
+                        } catch(Exception e) {
+                            Debug.LogError(e);
+                        }
+                    }
+                    isSuccess = true;
+                }
+            }
+            return isSuccess;
+        }
+        //触发某个事件
+        public bool DispatchEvent<T0,T1,T2>(string eventType,T0 arg0,T1 arg1,T2 arg2) {
+            //返回值
+            bool isSuccess = false;
+            List<Delegate> handlerList = new List<Delegate>();
+            if(OnDispatchEvent(eventType,ref handlerList)) {
+                if(handlerList != null) {
+                    foreach(Delegate temp in handlerList) {
+                        Action<T0,T1,T2> action = temp as Action<T0,T1,T2>;
+                        try {
+                            action(arg0,arg1,arg2);
+                        } catch(Exception e) {
+                            Debug.LogError(e);
+                        }
+                    }
+                    isSuccess = true;
+                }
+            }
+            return isSuccess;
+        }
+        //触发某个事件
+        public bool DispatchEvent<T0,T1,T2,T3>(string eventType,T0 arg0,T1 arg1,T2 arg2,T3 arg3) {
+            //返回值
+            bool isSuccess = false;
+            List<Delegate> handlerList = new List<Delegate>();
+            if(OnDispatchEvent(eventType,ref handlerList)) {
+                if(handlerList != null) {
+                    foreach(Delegate temp in handlerList) {
+                        Action<T0,T1,T2,T3> action = temp as Action<T0,T1,T2,T3>;
+                        try {
+                            action(arg0,arg1,arg2,arg3);
                         } catch(Exception e) {
                             Debug.LogError(e);
                         }

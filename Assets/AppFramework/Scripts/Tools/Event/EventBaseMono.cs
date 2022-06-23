@@ -8,25 +8,51 @@ public class EventBaseMono : MonoBehaviour
     /// <summary>添加事件-不带参数</summary>
     public void AddEventMsg(string str, Action cb, bool isRemove = true)
     {
-        EventDispatcher.AddEventListener(str, () => {
-            cb?.Invoke();
-        }, isRemove);
+        EventDispatcher.AddEventListener(str, cb, isRemove);
     }
 
     /// <summary>添加事件-带参数</summary>
-    public void AddEventMsgParams(string str, Action<object[]> cb1, bool isRemove = true)
+    public void AddEventMsgParams<T>(string str, Action<T> cb, bool isRemove = true)
     {
-        EventDispatcher.AddEventListener(str, (object[] obj) => {
-            cb1?.Invoke(obj);
-        }, isRemove);
+        EventDispatcher.AddEventListener(str, cb, isRemove);
+    }
+    /// <summary>添加事件-带参数</summary>
+    public void AddEventMsgParams<T0,T1>(string str, Action<T0,T1> cb, bool isRemove = true)
+    {
+        EventDispatcher.AddEventListener(str, cb, isRemove);
+    }
+    /// <summary>添加事件-带参数</summary>
+    public void AddEventMsgParams<T0,T1,T2>(string str, Action<T0,T1,T2> cb, bool isRemove = true)
+    {
+        EventDispatcher.AddEventListener(str, cb, isRemove);
+    }
+    /// <summary>添加事件-带参数</summary>
+    public void AddEventMsgParams<T0,T1,T2,T3>(string str, Action<T0,T1,T2,T3> cb, bool isRemove = true)
+    {
+        EventDispatcher.AddEventListener(str, cb, isRemove);
     }
     #endregion
 
     #region 发送事件消息
     /// <summary>发送事件消息-带参数</summary>
-    public void SendEventMsgParams(string msg, params object[] args)
+    public void SendEventMsgParams<T>(string msg, T args)
     {
         EventDispatcher.TriggerEvent(msg, args);
+    }
+    /// <summary>发送事件消息-带参数</summary>
+    public void SendEventMsgParams<T0,T1>(string msg, T0 arg0,T1 arg1)
+    {
+        EventDispatcher.TriggerEvent(msg, arg0, arg1);
+    }
+    /// <summary>发送事件消息-带参数</summary>
+    public void SendEventMsgParams<T0,T1,T2>(string msg, T0 arg0,T1 arg1,T2 arg2)
+    {
+        EventDispatcher.TriggerEvent(msg, arg0, arg1, arg2);
+    }
+    /// <summary>发送事件消息-带参数</summary>
+    public void SendEventMsgParams<T0,T1,T2,T3>(string msg, T0 arg0,T1 arg1,T2 arg2,T3 arg3)
+    {
+        EventDispatcher.TriggerEvent(msg, arg0, arg1, arg2, arg3);
     }
     /// <summary>发送事件消息-不带参数</summary>
     public void SendEventMsg(string msg)
@@ -61,13 +87,43 @@ public class EventBaseMono : MonoBehaviour
     }
 
     /// <summary>移除指定事件-带参数</summary>
-    public void RemoveEventParams(string msg, Action<object[]> cb)
+    public void RemoveEventParams<T>(string msg, Action<T> cb)
+    {
+        EventDispatcher.RemoveEventListener(msg, cb);
+    }
+    /// <summary>移除指定事件-带参数</summary>
+    public void RemoveEventParams<T0,T1>(string msg, Action<T0,T1> cb)
+    {
+        EventDispatcher.RemoveEventListener(msg, cb);
+    }
+    /// <summary>移除指定事件-带参数</summary>
+    public void RemoveEventParams<T0,T1,T2>(string msg, Action<T0,T1,T2> cb)
+    {
+        EventDispatcher.RemoveEventListener(msg, cb);
+    }
+    /// <summary>移除指定事件-带参数</summary>
+    public void RemoveEventParams<T0,T1,T2,T3>(string msg, Action<T0,T1,T2,T3> cb)
     {
         EventDispatcher.RemoveEventListener(msg, cb);
     }
 
     /// <summary>判断是否有该监听-带参数</summary>
-    public bool HasEventParams(string msg, Action<object[]> cb)
+    public bool HasEventParams<T>(string msg, Action<T> cb)
+    {
+        return EventDispatcher.HasEventListener(msg, cb);
+    }
+    /// <summary>判断是否有该监听-带参数</summary>
+    public bool HasEventParams<T0,T1>(string msg, Action<T0,T1> cb)
+    {
+        return EventDispatcher.HasEventListener(msg, cb);
+    }
+    /// <summary>判断是否有该监听-带参数</summary>
+    public bool HasEventParams<T0,T1,T2>(string msg, Action<T0,T1,T2> cb)
+    {
+        return EventDispatcher.HasEventListener(msg, cb);
+    }
+    /// <summary>判断是否有该监听-带参数</summary>
+    public bool HasEventParams<T0,T1,T2,T3>(string msg, Action<T0,T1,T2,T3> cb)
     {
         return EventDispatcher.HasEventListener(msg, cb);
     }
