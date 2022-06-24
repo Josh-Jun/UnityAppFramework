@@ -60,7 +60,7 @@ public class AssetsManager : SingletonMono<AssetsManager>
     public T LoadUIWindow<T>(string path, bool state = false) where T : Component
     {
         var go = LoadAsset<GameObject>(path);
-        if (go != null) return null;
+        if (go == null) return null;
         go = Instantiate(go, GoRoot.Instance.UIRectTransform);
         go.transform.localEulerAngles = Vector3.zero;
         go.transform.localScale = Vector3.one;
@@ -91,7 +91,7 @@ public class AssetsManager : SingletonMono<AssetsManager>
     public T LoadLocalUIWindow<T>(string path, bool state = false) where T : Component
     {
         var go = Resources.Load<GameObject>(path);
-        if (go != null) return null;
+        if (go == null) return null;
         go = Instantiate(go, GoRoot.Instance.UIRectTransform);
         go.transform.localEulerAngles = Vector3.zero;
         go.transform.localScale = Vector3.one;
@@ -141,7 +141,7 @@ public class AssetsManager : SingletonMono<AssetsManager>
     public T LoadLocalGoWindow<T>(string path, bool state = false) where T : Component
     {
         var go = Resources.Load<GameObject>(path);
-        if (go != null) return null;
+        if (go == null) return null;
         go = Instantiate(go, GoRoot.Instance.GoTransform);
         go.transform.localEulerAngles = Vector3.zero;
         go.transform.localScale = Vector3.one;
