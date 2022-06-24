@@ -60,53 +60,47 @@ public class AssetsManager : SingletonMono<AssetsManager>
     public T LoadUIWindow<T>(string path, bool state = false) where T : Component
     {
         var go = LoadAsset<GameObject>(path);
-        if (go != null)
+        if (go != null) return null;
+        go = Instantiate(go, GoRoot.Instance.UIRectTransform);
+        go.transform.localEulerAngles = Vector3.zero;
+        go.transform.localScale = Vector3.one;
+        go.name = go.name.Replace("(Clone)", "");
+        T t = null;
+        if (Root.AppConfig.RunXLua)
         {
-            go = Instantiate(go, GoRoot.Instance.UIRectTransform);
-            go.transform.localEulerAngles = Vector3.zero;
-            go.transform.localScale = Vector3.one;
-            go.name = go.name.Replace("(Clone)", "");
-            T t = null;
-            if (Root.AppConfig.RunXLua)
+            var luaPath = $"{path.Split('/')[0]}/{go.name}";
+            t = go.TryGetComponent<XLuaWindow>().Init(luaPath) as T;
+        }
+        else
+        {
+            var type = Assembly.GetExecutingAssembly().GetType(typeof(T).FullName);
+            if (type != null)
             {
-                var luaPath = $"{path.Split('/')[0]}/{go.name}";
-                t = go.TryGetComponent<XLuaWindow>().Init(luaPath) as T;
+                t = (T)go.AddComponent(type);
             }
             else
             {
-                var type = Assembly.GetExecutingAssembly().GetType(typeof(T).FullName);
-                if (type != null)
-                {
-                    t = (T)go.AddComponent(type);
-                }
-                else
-                {
-                    Debug.LogError($"{typeof(T).FullName}:脚本已存在,");
-                }
+                Debug.LogError($"{typeof(T).FullName}:脚本已存在,");
             }
-            EventDispatcher.TriggerEvent(go.name, state);
-            GoRoot.Instance.AddWindow<T>(t as WindowBase);
-            return t;
         }
-        return null;
+        EventDispatcher.TriggerEvent(go.name, state);
+        GoRoot.Instance.AddWindow<T>(t as WindowBase);
+        return t;
     }
     /// <summary> 加载本地窗口 </summary>
     public T LoadLocalUIWindow<T>(string path, bool state = false) where T : Component
     {
         var go = Resources.Load<GameObject>(path);
-        if (go != null)
-        {
-            go = Instantiate(go, GoRoot.Instance.UIRectTransform);
-            go.transform.localEulerAngles = Vector3.zero;
-            go.transform.localScale = Vector3.one;
-            go.name = go.name.Replace("(Clone)", "");
-            var type = Assembly.GetExecutingAssembly().GetType(typeof(T).FullName);
-            var t = (T)go.AddComponent(type);
-            EventDispatcher.TriggerEvent(go.name, state);
-            GoRoot.Instance.AddWindow<T>(t as WindowBase);
-            return t;
-        }
-        return null;
+        if (go != null) return null;
+        go = Instantiate(go, GoRoot.Instance.UIRectTransform);
+        go.transform.localEulerAngles = Vector3.zero;
+        go.transform.localScale = Vector3.one;
+        go.name = go.name.Replace("(Clone)", "");
+        var type = Assembly.GetExecutingAssembly().GetType(typeof(T).FullName);
+        var t = (T)go.AddComponent(type);
+        EventDispatcher.TriggerEvent(go.name, state);
+        GoRoot.Instance.AddWindow<T>(t as WindowBase);
+        return t;
     }
     /// <summary> 
     /// 加载窗口 添加T(Component)类型脚本
@@ -116,53 +110,47 @@ public class AssetsManager : SingletonMono<AssetsManager>
     public T LoadGoWindow<T>(string path, bool state = false) where T : Component
     {
         var go = LoadAsset<GameObject>(path);
-        if (go != null)
+        if (go == null) return null;
+        go = Instantiate(go, GoRoot.Instance.GoTransform);
+        go.transform.localEulerAngles = Vector3.zero;
+        go.transform.localScale = Vector3.one;
+        go.name = go.name.Replace("(Clone)", "");
+        T t = null;
+        if (Root.AppConfig.RunXLua)
         {
-            go = Instantiate(go, GoRoot.Instance.GoTransform);
-            go.transform.localEulerAngles = Vector3.zero;
-            go.transform.localScale = Vector3.one;
-            go.name = go.name.Replace("(Clone)", "");
-            T t = null;
-            if (Root.AppConfig.RunXLua)
+            var luaPath = $"{path.Split('/')[0]}/{go.name}";
+            t = go.TryGetComponent<XLuaWindow>().Init(luaPath) as T;
+        }
+        else
+        {
+            var type = Assembly.GetExecutingAssembly().GetType(typeof(T).FullName);
+            if (type != null)
             {
-                var luaPath = $"{path.Split('/')[0]}/{go.name}";
-                t = go.TryGetComponent<XLuaWindow>().Init(luaPath) as T;
+                t = (T)go.AddComponent(type);
             }
             else
             {
-                var type = Assembly.GetExecutingAssembly().GetType(typeof(T).FullName);
-                if (type != null)
-                {
-                    t = (T)go.AddComponent(type);
-                }
-                else
-                {
-                    Debug.LogError($"{typeof(T).FullName}:脚本已存在,");
-                }
+                Debug.LogError($"{typeof(T).FullName}:脚本已存在,");
             }
-            EventDispatcher.TriggerEvent(go.name, state);
-            GoRoot.Instance.AddWindow<T>(t as WindowBase);
-            return t;
         }
-        return null;
+        EventDispatcher.TriggerEvent(go.name, state);
+        GoRoot.Instance.AddWindow<T>(t as WindowBase);
+        return t;
     }
     /// <summary> 加载本地窗口 </summary>
     public T LoadLocalGoWindow<T>(string path, bool state = false) where T : Component
     {
-        GameObject go = Resources.Load<GameObject>(path);
-        if (go != null)
-        {
-            go = UnityEngine.Object.Instantiate(go, GoRoot.Instance.GoTransform);
-            go.transform.localEulerAngles = Vector3.zero;
-            go.transform.localScale = Vector3.one;
-            go.name = go.name.Replace("(Clone)", "");
-            var type = Assembly.GetExecutingAssembly().GetType(typeof(T).FullName);
-            var t = (T)go.AddComponent(type);
-            EventDispatcher.TriggerEvent(go.name, state);
-            GoRoot.Instance.AddWindow<T>(t as WindowBase);
-            return t;
-        }
-        return null;
+        var go = Resources.Load<GameObject>(path);
+        if (go != null) return null;
+        go = Instantiate(go, GoRoot.Instance.GoTransform);
+        go.transform.localEulerAngles = Vector3.zero;
+        go.transform.localScale = Vector3.one;
+        go.name = go.name.Replace("(Clone)", "");
+        var type = Assembly.GetExecutingAssembly().GetType(typeof(T).FullName);
+        var t = (T)go.AddComponent(type);
+        EventDispatcher.TriggerEvent(go.name, state);
+        GoRoot.Instance.AddWindow<T>(t as WindowBase);
+        return t;
     }
     #endregion
     
