@@ -23,7 +23,7 @@ namespace Test
         {
             //加载窗体
             string prefab_TestPath = "Test/Assets/Windows/TestWindow";
-            testWin = this.LoadUIWindow<TestWindow>(prefab_TestPath, true);
+            testWin = AssetsManager.Instance.LoadUIWindow<TestWindow>(prefab_TestPath, true);
 
             mobile = new RenderTexture(1920, 1080, 32);
             testWin.SetMobileCamera(mobile);

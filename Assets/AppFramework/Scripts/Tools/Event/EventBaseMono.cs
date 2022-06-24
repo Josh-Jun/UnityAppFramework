@@ -87,43 +87,43 @@ public class EventBaseMono : MonoBehaviour
     }
 
     /// <summary>移除指定事件-带参数</summary>
-    public void RemoveEventParams<T>(string msg, Action<T> cb)
+    public void RemoveEvent<T>(string msg, Action<T> cb)
     {
         EventDispatcher.RemoveEventListener(msg, cb);
     }
     /// <summary>移除指定事件-带参数</summary>
-    public void RemoveEventParams<T0,T1>(string msg, Action<T0,T1> cb)
+    public void RemoveEvent<T0,T1>(string msg, Action<T0,T1> cb)
     {
         EventDispatcher.RemoveEventListener(msg, cb);
     }
     /// <summary>移除指定事件-带参数</summary>
-    public void RemoveEventParams<T0,T1,T2>(string msg, Action<T0,T1,T2> cb)
+    public void RemoveEvent<T0,T1,T2>(string msg, Action<T0,T1,T2> cb)
     {
         EventDispatcher.RemoveEventListener(msg, cb);
     }
     /// <summary>移除指定事件-带参数</summary>
-    public void RemoveEventParams<T0,T1,T2,T3>(string msg, Action<T0,T1,T2,T3> cb)
+    public void RemoveEvent<T0,T1,T2,T3>(string msg, Action<T0,T1,T2,T3> cb)
     {
         EventDispatcher.RemoveEventListener(msg, cb);
     }
 
     /// <summary>判断是否有该监听-带参数</summary>
-    public bool HasEventParams<T>(string msg, Action<T> cb)
+    public bool HasEvent<T>(string msg, Action<T> cb)
     {
         return EventDispatcher.HasEventListener(msg, cb);
     }
     /// <summary>判断是否有该监听-带参数</summary>
-    public bool HasEventParams<T0,T1>(string msg, Action<T0,T1> cb)
+    public bool HasEvent<T0,T1>(string msg, Action<T0,T1> cb)
     {
         return EventDispatcher.HasEventListener(msg, cb);
     }
     /// <summary>判断是否有该监听-带参数</summary>
-    public bool HasEventParams<T0,T1,T2>(string msg, Action<T0,T1,T2> cb)
+    public bool HasEvent<T0,T1,T2>(string msg, Action<T0,T1,T2> cb)
     {
         return EventDispatcher.HasEventListener(msg, cb);
     }
     /// <summary>判断是否有该监听-带参数</summary>
-    public bool HasEventParams<T0,T1,T2,T3>(string msg, Action<T0,T1,T2,T3> cb)
+    public bool HasEvent<T0,T1,T2,T3>(string msg, Action<T0,T1,T2,T3> cb)
     {
         return EventDispatcher.HasEventListener(msg, cb);
     }

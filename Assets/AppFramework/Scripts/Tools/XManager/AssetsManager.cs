@@ -1,8 +1,9 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 using EventController;
 using System;
+using System.Reflection;
 using UnityEngine.SceneManagement;
+using XLuaFrame;
 
 public class AssetsManager : SingletonMono<AssetsManager>
 {
@@ -10,6 +11,7 @@ public class AssetsManager : SingletonMono<AssetsManager>
     {
         transform.SetParent(App.app.transform);
     }
+    
     #region 移动游戏对象到场景
     public void MoveGameObjectToScene(GameObject go, string sceneName)
     {
@@ -49,6 +51,121 @@ public class AssetsManager : SingletonMono<AssetsManager>
     }
     #endregion
 
+    #region 加载窗口
+    /// <summary> 
+    /// 加载窗口 添加T(Component)类型脚本
+    /// path = 窗口路径，不包含AssetsFolder
+    /// state 初始化窗口是否显示
+    /// </summary>
+    public T LoadUIWindow<T>(string path, bool state = false) where T : Component
+    {
+        var go = LoadAsset<GameObject>(path);
+        if (go != null)
+        {
+            go = Instantiate(go, GoRoot.Instance.UIRectTransform);
+            go.transform.localEulerAngles = Vector3.zero;
+            go.transform.localScale = Vector3.one;
+            go.name = go.name.Replace("(Clone)", "");
+            T t = null;
+            if (Root.AppConfig.RunXLua)
+            {
+                var luaPath = $"{path.Split('/')[0]}/{go.name}";
+                t = go.TryGetComponent<XLuaWindow>().Init(luaPath) as T;
+            }
+            else
+            {
+                var type = Assembly.GetExecutingAssembly().GetType(typeof(T).FullName);
+                if (type != null)
+                {
+                    t = (T)go.AddComponent(type);
+                }
+                else
+                {
+                    Debug.LogError($"{typeof(T).FullName}:脚本已存在,");
+                }
+            }
+            EventDispatcher.TriggerEvent(go.name, state);
+            GoRoot.Instance.AddWindow<T>(t as WindowBase);
+            return t;
+        }
+        return null;
+    }
+    /// <summary> 加载本地窗口 </summary>
+    public T LoadLocalUIWindow<T>(string path, bool state = false) where T : Component
+    {
+        var go = Resources.Load<GameObject>(path);
+        if (go != null)
+        {
+            go = Instantiate(go, GoRoot.Instance.UIRectTransform);
+            go.transform.localEulerAngles = Vector3.zero;
+            go.transform.localScale = Vector3.one;
+            go.name = go.name.Replace("(Clone)", "");
+            var type = Assembly.GetExecutingAssembly().GetType(typeof(T).FullName);
+            var t = (T)go.AddComponent(type);
+            EventDispatcher.TriggerEvent(go.name, state);
+            GoRoot.Instance.AddWindow<T>(t as WindowBase);
+            return t;
+        }
+        return null;
+    }
+    /// <summary> 
+    /// 加载窗口 添加T(Component)类型脚本
+    /// path = 窗口路径，不包含AssetsFolder
+    /// state 初始化窗口是否显示
+    /// </summary>
+    public T LoadGoWindow<T>(string path, bool state = false) where T : Component
+    {
+        var go = LoadAsset<GameObject>(path);
+        if (go != null)
+        {
+            go = Instantiate(go, GoRoot.Instance.GoTransform);
+            go.transform.localEulerAngles = Vector3.zero;
+            go.transform.localScale = Vector3.one;
+            go.name = go.name.Replace("(Clone)", "");
+            T t = null;
+            if (Root.AppConfig.RunXLua)
+            {
+                var luaPath = $"{path.Split('/')[0]}/{go.name}";
+                t = go.TryGetComponent<XLuaWindow>().Init(luaPath) as T;
+            }
+            else
+            {
+                var type = Assembly.GetExecutingAssembly().GetType(typeof(T).FullName);
+                if (type != null)
+                {
+                    t = (T)go.AddComponent(type);
+                }
+                else
+                {
+                    Debug.LogError($"{typeof(T).FullName}:脚本已存在,");
+                }
+            }
+            EventDispatcher.TriggerEvent(go.name, state);
+            GoRoot.Instance.AddWindow<T>(t as WindowBase);
+            return t;
+        }
+        return null;
+    }
+    /// <summary> 加载本地窗口 </summary>
+    public T LoadLocalGoWindow<T>(string path, bool state = false) where T : Component
+    {
+        GameObject go = Resources.Load<GameObject>(path);
+        if (go != null)
+        {
+            go = UnityEngine.Object.Instantiate(go, GoRoot.Instance.GoTransform);
+            go.transform.localEulerAngles = Vector3.zero;
+            go.transform.localScale = Vector3.one;
+            go.name = go.name.Replace("(Clone)", "");
+            var type = Assembly.GetExecutingAssembly().GetType(typeof(T).FullName);
+            var t = (T)go.AddComponent(type);
+            EventDispatcher.TriggerEvent(go.name, state);
+            GoRoot.Instance.AddWindow<T>(t as WindowBase);
+            return t;
+        }
+        return null;
+    }
+    #endregion
+    
     #region 加载资源
     /// <summary> 
     /// 加载ab包中的资源，返回T

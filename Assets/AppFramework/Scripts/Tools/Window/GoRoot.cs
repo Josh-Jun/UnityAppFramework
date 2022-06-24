@@ -78,11 +78,11 @@ public class GoRoot : SingletonMono<GoRoot>
     #region Public Function
     public void Init3DUIRoot(Camera camera3d = null)
     {
-        Camera camera = camera3d == null ? Camera.main : camera3d;
+        if(camera3d == null) return;
         UICanvas.renderMode = RenderMode.WorldSpace;
         UIRectTransform.localScale = Vector3.one * 0.0025f;
         UIRectTransform.sizeDelta = new Vector2(1920, 1080);
-        UICanvas.worldCamera = camera;
+        UICanvas.worldCamera = GetComponent<Camera>();
         UICanvasScaler.referencePixelsPerUnit = 100;
         UICanvas.TryGetComponent<TrackedDeviceGraphicRaycaster>();
     }
