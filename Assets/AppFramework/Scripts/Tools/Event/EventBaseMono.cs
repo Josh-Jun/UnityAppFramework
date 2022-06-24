@@ -12,22 +12,22 @@ public class EventBaseMono : MonoBehaviour
     }
 
     /// <summary>添加事件-带参数</summary>
-    public void AddEventMsgParams<T>(string str, Action<T> cb, bool isRemove = true)
+    public void AddEventMsg<T>(string str, Action<T> cb, bool isRemove = true)
     {
         EventDispatcher.AddEventListener(str, cb, isRemove);
     }
     /// <summary>添加事件-带参数</summary>
-    public void AddEventMsgParams<T0,T1>(string str, Action<T0,T1> cb, bool isRemove = true)
+    public void AddEventMsg<T0,T1>(string str, Action<T0,T1> cb, bool isRemove = true)
     {
         EventDispatcher.AddEventListener(str, cb, isRemove);
     }
     /// <summary>添加事件-带参数</summary>
-    public void AddEventMsgParams<T0,T1,T2>(string str, Action<T0,T1,T2> cb, bool isRemove = true)
+    public void AddEventMsg<T0,T1,T2>(string str, Action<T0,T1,T2> cb, bool isRemove = true)
     {
         EventDispatcher.AddEventListener(str, cb, isRemove);
     }
     /// <summary>添加事件-带参数</summary>
-    public void AddEventMsgParams<T0,T1,T2,T3>(string str, Action<T0,T1,T2,T3> cb, bool isRemove = true)
+    public void AddEventMsg<T0,T1,T2,T3>(string str, Action<T0,T1,T2,T3> cb, bool isRemove = true)
     {
         EventDispatcher.AddEventListener(str, cb, isRemove);
     }
