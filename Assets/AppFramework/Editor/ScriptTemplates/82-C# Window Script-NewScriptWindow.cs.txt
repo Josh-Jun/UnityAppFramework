@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NameSpace
+namespace #NAMESPACE#
 {
     public class #SCRIPTNAME# : WindowBase
     {

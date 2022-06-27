@@ -350,6 +350,10 @@ namespace Update
 
         }
         #endregion
+        public void AppFocus(bool focus)
+        {
+            
+        }
         public void End()
         {
 

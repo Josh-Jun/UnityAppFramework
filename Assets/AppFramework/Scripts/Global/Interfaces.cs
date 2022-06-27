@@ -2,6 +2,7 @@
 public interface IRoot
 {
     void Begin();
+    void AppFocus(bool focus);
     void End();
 }
 /// <summary>单例池接口</summary>

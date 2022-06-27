@@ -21,6 +21,14 @@ public class App : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    /// <summary>
+    /// 当玩家获取或失去焦点的时候发送给所有游戏对象.
+    /// </summary>
+    /// <param name="focus">是否获取焦点</param>
+    private void OnApplicationFocus(bool focus)
+    {
+        Root.AppFocus(focus);
+    }
     private void OnDestroy()
     {
         //结束接口实现

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using XLuaFrame;
 using System.Collections;
+using UnityEngine.Events;
 using UnityEngine.XR.Management;
 
 public class Root
@@ -21,6 +22,7 @@ public class Root
     private static Dictionary<string, IRoot> iRootPairs = new Dictionary<string, IRoot>();
 
     public static LoadingScene LoadingScene { private set; get; }
+
     public static void Init()
     {
         AppConfig = Resources.Load<AppConfig>(path_AppConfig);
@@ -166,6 +168,19 @@ public class Root
             return null;
         }
         return iRootPairs[scriptName] as T;
+    }
+
+    public static void AppFocus(bool isFocus)
+    {
+        UpdateRoot?.AppFocus(isFocus);
+        AskRoot?.AppFocus(isFocus);
+        for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
+        {
+            if (iRootPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
+            {
+                iRootPairs[appScriptConfig.RootScript[i].ScriptName].AppFocus(isFocus);
+            }
+        }
     }
     public static void End()
     {

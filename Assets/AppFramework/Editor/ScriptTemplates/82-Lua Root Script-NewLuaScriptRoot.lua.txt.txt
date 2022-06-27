@@ -6,6 +6,9 @@ end
 function Begin()
     
 end
+function AppFocus(focus)
+    
+end
 function End()
     
 end

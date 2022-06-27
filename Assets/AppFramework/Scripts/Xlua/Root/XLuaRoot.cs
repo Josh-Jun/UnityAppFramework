@@ -7,6 +7,7 @@ namespace XLuaFrame
     public class XLuaRoot : SingletonEvent<XLuaRoot>, IRoot
     {
         private readonly Dictionary<int, Action> LuaCallbackPairs = new Dictionary<int, Action>();//生命周期回调字典
+        private Action<bool> AppFocusCallback;
         private LuaTable scriptEnv;
         public XLuaRoot Init(string path)
         {
@@ -45,8 +46,13 @@ namespace XLuaFrame
                 string enumName = Enum.GetName(typeof(RootLifeCycle), item);
                 LuaCallbackPairs.Add(item, scriptEnv.Get<Action>(enumName));
             }
+            AppFocusCallback = scriptEnv.Get<Action<bool>>("AppFocus");
         }
 
+        public void AppFocus(bool focus)
+        {
+            AppFocusCallback?.Invoke(focus);
+        }
         public void End()
         {
             LuaCallbackPairs[(int)RootLifeCycle.End]?.Invoke();

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NameSpace
+namespace #NAMESPACE#
 {
     public class #SCRIPTNAME# : SingletonEvent<#SCRIPTNAME#>, IRoot
     {
@@ -13,6 +13,10 @@ namespace NameSpace
         public void Begin()
         {
 			#NOTRIM#
+        }
+        public void AppFocus(bool focus)
+        {
+            #NOTRIM#
         }
         public void End()
         {

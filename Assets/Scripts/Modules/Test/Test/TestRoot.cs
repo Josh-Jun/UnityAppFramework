@@ -53,6 +53,10 @@ namespace Test
             testWin.SetText(value);
         }
 
+        public void AppFocus(bool focus)
+        {
+            
+        }
         public void End()
         {
 
