@@ -18,6 +18,10 @@ namespace Loading
             string prefab_LoadingPath = "Loading/Assets/Windows/LoadingWindow";
             loadingWin = AssetsManager.Instance.LoadUIWindow<LoadingWindow>(prefab_LoadingPath, true);
         }
+        public void AppPause(bool pause)
+        {
+            
+        }
         public void AppFocus(bool focus)
         {
             

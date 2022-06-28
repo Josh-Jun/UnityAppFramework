@@ -53,9 +53,13 @@ namespace Test
             testWin.SetText(value);
         }
 
+        public void AppPause(bool pause)
+        {
+            Debug.Log("AppPause = " + pause);
+        }
         public void AppFocus(bool focus)
         {
-            
+            Debug.Log("AppFocus = " + focus);
         }
         public void End()
         {

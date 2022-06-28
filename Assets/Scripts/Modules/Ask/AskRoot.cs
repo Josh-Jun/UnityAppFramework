@@ -32,6 +32,10 @@ namespace Ask
             askWindow.SetTips(content, time);
             askWindow.SetAsLastSibling();
         }
+        public void AppPause(bool pause)
+        {
+            
+        }
         public void AppFocus(bool focus)
         {
             

@@ -6,19 +6,19 @@ namespace XLuaFrame
 {
     public class XLuaRoot : SingletonEvent<XLuaRoot>, IRoot
     {
-        private readonly Dictionary<int, Action> LuaCallbackPairs = new Dictionary<int, Action>();//生命周期回调字典
-        private Action<bool> AppFocusCallback;
+        private Dictionary<int, Action> RootCallbackPairs = new Dictionary<int, Action>();//生命周期回调字典
+        private Dictionary<int, Action<bool>> RootBoolCallbackPairs = new Dictionary<int, Action<bool>>();
         private LuaTable scriptEnv;
         public XLuaRoot Init(string path)
         {
             string luaFileContent = XLuaManager.Instance.LoadLua(path);
             InitLuaEnv(luaFileContent);
-            LuaCallbackPairs[(int)RootLifeCycle.Init]?.Invoke();
+            RootCallbackPairs[(int)RootLifeCycle.Init]?.Invoke();
             return this;
         }
         public void Begin()
         {
-            LuaCallbackPairs[(int)RootLifeCycle.Begin]?.Invoke();
+            RootCallbackPairs[(int)RootLifeCycle.Begin]?.Invoke();
         }
         /// <summary>初始化Lua代码</summary>
         private void InitLuaEnv(string luaFileContent)
@@ -43,20 +43,29 @@ namespace XLuaFrame
             //怎样完成这一步呢？就是获取luatable对象，配置lua虚拟机，配置虚拟机环境，绑定c#代码，最后执行lua语句
             foreach (int item in Enum.GetValues(typeof(RootLifeCycle)))
             {
-                string enumName = Enum.GetName(typeof(RootLifeCycle), item);
-                LuaCallbackPairs.Add(item, scriptEnv.Get<Action>(enumName));
+                var enumName = Enum.GetName(typeof(RootLifeCycle), item);
+                RootCallbackPairs.Add(item, scriptEnv.Get<Action>(enumName));
             }
-            AppFocusCallback = scriptEnv.Get<Action<bool>>("AppFocus");
+
+            foreach (int item in Enum.GetValues(typeof(RootLifeCycleBool)))
+            {
+                var enumName = Enum.GetName(typeof(RootLifeCycleBool), item);
+                RootBoolCallbackPairs.Add(item, scriptEnv.Get<Action<bool>>(enumName));
+            }
         }
 
+        public void AppPause(bool pause)
+        {
+            RootBoolCallbackPairs[(int)RootLifeCycleBool.AppPause]?.Invoke(pause);
+        }
         public void AppFocus(bool focus)
         {
-            AppFocusCallback?.Invoke(focus);
+            RootBoolCallbackPairs[(int)RootLifeCycleBool.AppFocus]?.Invoke(focus);
         }
         public void End()
         {
-            LuaCallbackPairs[(int)RootLifeCycle.End]?.Invoke();
-            LuaCallbackPairs.Clear();
+            RootCallbackPairs[(int)RootLifeCycle.End]?.Invoke();
+            RootCallbackPairs.Clear();
             scriptEnv.Dispose();
         }
     }

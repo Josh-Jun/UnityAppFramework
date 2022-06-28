@@ -24,6 +24,12 @@ namespace XLuaFrame
         Begin,
         End,
     }
+    /// <summary> Root生命周期</summary>
+    public enum RootLifeCycleBool
+    {
+        AppPause,
+        AppFocus,
+    }
     /// <summary> 所有lua行为仅共享一个luaenv </summary>
     public class XLuaManager : SingletonMono<XLuaManager>
     {

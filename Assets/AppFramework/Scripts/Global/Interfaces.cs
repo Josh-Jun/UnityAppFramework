@@ -2,6 +2,7 @@
 public interface IRoot
 {
     void Begin();
+    void AppPause(bool pause);
     void AppFocus(bool focus);
     void End();
 }

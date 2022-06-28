@@ -14,6 +14,10 @@ namespace #NAMESPACE#
         {
 			#NOTRIM#
         }
+        public void AppPause(bool pause)
+        {
+            #NOTRIM#
+        }
         public void AppFocus(bool focus)
         {
             #NOTRIM#

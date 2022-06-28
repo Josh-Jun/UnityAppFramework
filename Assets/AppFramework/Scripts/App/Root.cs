@@ -170,6 +170,18 @@ public class Root
         return iRootPairs[scriptName] as T;
     }
 
+    public static void AppPause(bool isPause)
+    {
+        UpdateRoot?.AppPause(isPause);
+        AskRoot?.AppPause(isPause);
+        for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
+        {
+            if (iRootPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
+            {
+                iRootPairs[appScriptConfig.RootScript[i].ScriptName].AppPause(isPause);
+            }
+        }
+    }
     public static void AppFocus(bool isFocus)
     {
         UpdateRoot?.AppFocus(isFocus);
