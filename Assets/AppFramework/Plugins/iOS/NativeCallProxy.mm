@@ -38,10 +38,8 @@ extern "C" {
 	{
 		NSString *strReadAddr = [NSString stringWithUTF8String:readAddr];
 		UIImage *img = [UIImage imageWithContentsOfFile:strReadAddr];
-		NSLog([NSString stringWithFormat:@"w:%f, h:%f", img.size.width, img.size.height]);
 		PhotoManager *instance = [PhotoManager alloc];
-		UIImageWriteToSavedPhotosAlbum(img, instance,
-									@selector(imageSaved:didFinishSavingWithError:contextInfo:), nil);
+		UIImageWriteToSavedPhotosAlbum(img, instance, @selector(imageSaved:didFinishSavingWithError:contextInfo:), nil);
 	}
 }
 

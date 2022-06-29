@@ -12,6 +12,8 @@ namespace Platform
         private static extern string getAppData(string key);
         [DllImport("__Internal")]
         private static extern void showHostMainWindow(string msg);
+        [DllImport("__Internal")]
+        private static extern void savePhoto(string path);
 #endif
 
         public override bool IsEditor { get; } = false;
@@ -19,12 +21,13 @@ namespace Platform
         public override string PlatformName { get; } = "ios";
         public override string GetDataPath(string folder)
         {
-            return string.Format("{0}/{1}", Application.persistentDataPath, folder);
+            return $"{Application.persistentDataPath}/{folder}";
         }
         public override void SavePhoto(string folder, string fileName)
         {
+            string path = $"{Application.persistentDataPath}/{folder}/{fileName}";
 #if UNITY_IPHONE
-            
+            savePhoto(path);
 #endif
         }
         public override string GetAppData(string key)
