@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class LanTcpManager : SingletonMono<LanTcpManager>
+public class LanTcpManager : SingletonEvent<LanTcpManager>
 {
     private static readonly string lockNetTcp = "lockNetTcp";//加锁
 
@@ -13,9 +13,11 @@ public class LanTcpManager : SingletonMono<LanTcpManager>
 
     private SocketTcp<SessionTcp> client; //Client Socket连接
     private Queue<SocketMsg> msgQueue = new Queue<SocketMsg>();//消息队列(Client)
+    private int TIME_ID = -1;
     /// <summary>服务端网络初始化</summary>
     public void InitServerNet(string ip, int port, Action<bool> cb = null)
     {
+        TIME_ID = TimerManager.Instance.StartTimer(Update);
         server = new SocketTcp<SessionTcp>();
         #region 网络日志
         //日志是否开启、日志的回调函数(内容，级别) 覆盖unity日志系统 查看网络错误
@@ -84,7 +86,7 @@ public class LanTcpManager : SingletonMono<LanTcpManager>
         #endregion
         client.StartAsClient_IP(ip, port, cb);//开启客户端
     }
-    private void Update()
+    private void Update(float time)
     {
         #region Server
         if (msgPackageQueue.Count > 0)
@@ -445,11 +447,6 @@ public class LanTcpManager : SingletonMono<LanTcpManager>
     /// <summary>关闭Tcp</summary>
     public void Close()
     {
-        Destroy(this);
-    }
-
-    private void OnDestroy()
-    {
         if (client != null && client.session != null)
         {
             client.session.Clear();
@@ -462,5 +459,6 @@ public class LanTcpManager : SingletonMono<LanTcpManager>
             server.Close();
             server = null;
         }
+        TimerManager.Instance.EndTimer(TIME_ID);
     }
 }

@@ -2,16 +2,16 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// Socket
+/// Socket局域网
 /// </summary>
-public partial class NetcomManager : SingletonEvent<NetcomManager>
+public partial class NetcomManager : SingletonMonoEvent<NetcomManager>
 {
     #region Tcp
     #region Server
     /// <summary> 开启Tcp服务端 </summary>
     public void StartLanTcpServer(string ip, Action<bool> cb = null)
     {
-        LanTcpManager.Instance.InitServerNet(ip, Port, cb);
+        LanTcpManager.Instance.InitServerNet(ip, SocketPort, cb);
     }
     /// <summary> 给所有客户端发送消息 </summary>
     public void ServerSendToClientMsg_All(string eventName, params object[] objs)
@@ -70,7 +70,7 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
     /// <summary> 开启Tcp客户端 </summary>
     public void StartLanTcpClient(string ip, Action<bool> cb = null)
     {
-        LanTcpManager.Instance.InitServerNet(ip, Port, cb);
+        LanTcpManager.Instance.InitServerNet(ip, SocketPort, cb);
     }
     /// <summary> 给服务端发送消息 </summary>
     public void ClientSendToServerMsg(string eventName, params object[] objs)
@@ -176,14 +176,14 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
     #region Server
     public void StartLanUdpServer(Action<bool> cb = null)
     {
-        LanUdpManager.Instance.InitServerNet(Port, cb);
+        LanUdpManager.Instance.InitServerNet(SocketPort, cb);
     }
     #endregion
 
     #region Client
     public void StartLanUdpClient(Action<bool> cb = null)
     {
-        LanUdpManager.Instance.InitClientNet(Port, cb);
+        LanUdpManager.Instance.InitClientNet(SocketPort, cb);
     }
     #endregion
     public void SendMsg(string msg)

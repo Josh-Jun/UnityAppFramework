@@ -20,7 +20,7 @@ public class Root
 
     private static Dictionary<string, List<string>> sceneScriptsPairs = new Dictionary<string, List<string>>();
     private static Dictionary<string, IRoot> iRootPairs = new Dictionary<string, IRoot>();
-    private static List<IRoot> runtimeRoots = new List<IRoot>();
+    private static List<IRoot> RuntimeRoots = new List<IRoot>();
 
     public static LoadingScene LoadingScene { private set; get; }
 
@@ -66,6 +66,7 @@ public class Root
     private static void InitManager()
     {
         AssetBundleManager.Instance.InitManager();
+        NetcomManager.Instance.InitManager();
         AssetsManager.Instance.InitManager();
         AudioManager.Instance.InitManager();
         AVProManager.Instance.InitManager();
@@ -78,20 +79,20 @@ public class Root
         appScriptConfig = XmlSerializeManager.ProtoDeSerialize<AppScriptConfig>(config.bytes);
         for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
         {
-            IRoot iRoot;
-            //判断是否存在XLua脚本，如果存在，执行XLua代码，不存在执行C#代码
-            if (AppConfig.RunXLua && XLuaManager.Instance.IsLuaFileExist(appScriptConfig.RootScript[i].LuaScriptPath))
-            {
-                XLuaRoot root = new XLuaRoot();
-                root.Init(appScriptConfig.RootScript[i].LuaScriptPath);
-                iRoot = root;
-            }
-            else
-            {
-                iRoot = GetRoot(appScriptConfig.RootScript[i].ScriptName);
-            }
             if (!iRootPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
             {
+                IRoot iRoot;
+                //判断是否存在XLua脚本，如果存在，执行XLua代码，不存在执行C#代码
+                if (AppConfig.RunXLua && XLuaManager.Instance.IsLuaFileExist(appScriptConfig.RootScript[i].LuaScriptPath))
+                {
+                    XLuaRoot root = new XLuaRoot();
+                    root.Init(appScriptConfig.RootScript[i].LuaScriptPath);
+                    iRoot = root;
+                }
+                else
+                {
+                    iRoot = GetRoot(appScriptConfig.RootScript[i].ScriptName);
+                }
                 if (iRoot != null)
                 {
                     iRootPairs.Add(appScriptConfig.RootScript[i].ScriptName, iRoot);
@@ -113,7 +114,6 @@ public class Root
             }
         }
         AskRoot = GetRoot("Ask.AskRoot");
-        AskRoot.Begin();
         if (!iRootPairs.ContainsKey("Ask.AskRoot"))
         {
             iRootPairs.Add("Ask.AskRoot", AskRoot);
@@ -122,6 +122,7 @@ public class Root
     }
     public static void LoadScene(string sceneName, bool isLoading = false, Action callback = null)
     {
+        InitRootEnd();
         if (isLoading)
         {
             LoadingScene = new LoadingScene(sceneName, callback);
@@ -141,13 +142,8 @@ public class Root
 
     public static void InitRootBegin(string sceneName, Action callback = null)
     {
-        for (int i = 0; i < runtimeRoots.Count; i++)
-        {
-            runtimeRoots[i].End();
-        }
-        runtimeRoots.Clear();
         AskRoot.Begin();
-        runtimeRoots.Add(AskRoot);
+        RuntimeRoots.Add(AskRoot);
         if (sceneScriptsPairs.ContainsKey(sceneName))
         {
             for (int i = 0; i < sceneScriptsPairs[sceneName].Count; i++)
@@ -155,12 +151,22 @@ public class Root
                 if (iRootPairs.ContainsKey(sceneScriptsPairs[sceneName][i]))
                 {
                     iRootPairs[sceneScriptsPairs[sceneName][i]].Begin();
-                    runtimeRoots.Add(iRootPairs[sceneScriptsPairs[sceneName][i]]);
+                    RuntimeRoots.Add(iRootPairs[sceneScriptsPairs[sceneName][i]]);
                 }
             }
         }
         callback?.Invoke();
     }
+
+    private static void InitRootEnd()
+    {
+        for (int i = 0; i < RuntimeRoots.Count; i++)
+        {
+            RuntimeRoots[i].End();
+        }
+        RuntimeRoots.Clear();
+    }
+
     private static IRoot GetRoot(string fullName)
     {
         Type type = Type.GetType(fullName);

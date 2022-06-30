@@ -6,10 +6,9 @@ using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
 
-public class WanTcpManager : SingletonMonoEvent<WanTcpManager>
+public class WanTcpManager : SingletonEvent<WanTcpManager>
 {
     private Socket socketTcp = null;
-    public int backlog = 100;
     private int overtime = 5000;
 
     private Action<bool> serverCallBack;
@@ -19,55 +18,14 @@ public class WanTcpManager : SingletonMonoEvent<WanTcpManager>
     private Queue<byte[]> msgQueue = new Queue<byte[]>();//消息队列
     private static readonly string lockNetTcp = "lockNetTcp";//加锁
 
+    private int TIME_ID = -1;
     public delegate void BytesValueDelegate(byte[] value);
     public event BytesValueDelegate HandOutMsg;
 
-    // Start is called before the first frame update
-    public void Awake()
-    {
-        socketTcp = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-    }
-    #region Server
-    public void StartAsServer(string ip, int port, Action<bool> cb = null)
-    {
-        try
-        {
-            serverCallBack = cb;
-            socketTcp.Bind(new IPEndPoint(IPAddress.Parse(ip), port));
-            socketTcp.Listen(backlog);
-            socketTcp.BeginAccept(ClientConnectCallBack, socketTcp);
-            Debug.Log("Tcp服务端开启成功！正在等待连接......");
-            serverCallBack?.Invoke(true);
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError("Tcp服务端开启失败：" + ex.Message);
-            serverCallBack?.Invoke(false);
-        }
-    }
-
-    private void ClientConnectCallBack(IAsyncResult ar)
-    {
-        try
-        {
-            Socket socket = socketTcp.EndAccept(ar);
-            StartReceiveMsg(socket, delegate
-            {
-                Debug.Log("客户端断开连接......");
-            });
-            Debug.Log("Tcp连接客户端成功！正在接收数据......");
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError("Tcp服务器关闭:" + ex.Message);
-            serverCallBack?.Invoke(false);
-        }
-        socketTcp.BeginAccept(ClientConnectCallBack, socketTcp);
-    }
-    #endregion
-    #region Client
     public void StartAsClient(string ip, int port, Action<bool> cb = null)
     {
+        TIME_ID = TimerManager.Instance.StartTimer(Update);
+        socketTcp = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         try
         {
             clientCallBack = cb;
@@ -105,7 +63,6 @@ public class WanTcpManager : SingletonMonoEvent<WanTcpManager>
             clientCallBack?.Invoke(false);
         }
     }
-    #endregion
     private void StartReceiveMsg(Socket socket, Action closeCallBack = null)
     {
         try
@@ -197,7 +154,7 @@ public class WanTcpManager : SingletonMonoEvent<WanTcpManager>
         }
     }
     // Update is called once per frame
-    public void Update()
+    public void Update(float time)
     {
         if (msgQueue.Count > 0)
         {
@@ -270,6 +227,7 @@ public class WanTcpManager : SingletonMonoEvent<WanTcpManager>
                 }
                 socketTcp.Close();
             }
+            TimerManager.Instance.EndTimer(TIME_ID);
             return true;
         }
         catch (Exception arg)

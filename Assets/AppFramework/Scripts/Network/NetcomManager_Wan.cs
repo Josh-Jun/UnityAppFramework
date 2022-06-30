@@ -3,14 +3,14 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// Socket
+/// Socketå¹¿åŸŸç½‘
 /// </summary>
-public partial class NetcomManager : SingletonEvent<NetcomManager>
+public partial class NetcomManager : SingletonMonoEvent<NetcomManager>
 {
     #region TCP
     public void StartWanTcpClient(string ip, Action<byte[]> cb)
     {
-        WanTcpManager.Instance.StartAsClient(ip, Port, (bool isConnect) => { });
+        WanTcpManager.Instance.StartAsClient(ip, SocketPort, (bool isConnect) => { });
         WanTcpManager.Instance.HandOutMsg += (byte[] bytes) => { cb?.Invoke(bytes); };
     }
     public void SendWanTcpMsg(byte[] bytes)
@@ -22,7 +22,7 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
         WanTcpManager.Instance.Close();
     }
     /// <summary>
-    /// ĞòÁĞ»¯
+    /// åºåˆ—åŒ–
     /// </summary>
     /// <param name="message"></param>
     /// <returns></returns>
@@ -31,7 +31,7 @@ public partial class NetcomManager : SingletonEvent<NetcomManager>
         return message.ToByteArray();
     }
     /// <summary>
-    /// ·´ĞòÁĞ»¯
+    /// ååºåˆ—åŒ–
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="packct"></param>

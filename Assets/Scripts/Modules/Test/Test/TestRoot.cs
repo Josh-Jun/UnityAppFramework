@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using RenderHeads.Media.AVProVideo;
+using TableData;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Video;
 
 namespace Test
 {
@@ -32,6 +36,39 @@ namespace Test
         public void End()
         {
             
+        }
+
+        public void Test()
+        {
+            string audio_path = "";
+            AudioClip audio = AssetsManager.Instance.LoadAsset<AudioClip>(audio_path);
+            AudioManager.Instance.PlayBackgroundAudio(audio);//背景音乐，循环播放
+            AudioManager.Instance.PlayEffectAudio(audio);//特效音乐，播放一次，可叠加播放
+            
+            string vidio_path = "";
+            VideoClip video = AssetsManager.Instance.LoadAsset<VideoClip>(vidio_path);
+            VideoManager.Instance.PlayVideo(null,video);//播放视频
+            VideoManager.Instance.PlayVideo(null,"视频地址", () => { });//播放视频
+
+            AVProManager.Instance.OpenMedia(MediaPathType.AbsolutePathOrURL, "视频地址");
+            AVProManager.Instance.AddMediaPlayerEvent(MediaPlayerEvent.EventType.FinishedPlaying,() => { });//播放完成事件
+
+            TableManager.Instance.GetTable<TestTableData>("");//获取配置表
+
+            int timeid1 = -1;
+            timeid1 = TimerManager.Instance.StartTimer((time) => { });//一直执行 相当于Update
+            TimerManager.Instance.EndTimer(timeid1);
+            int timeid2 = -1;
+            timeid2 = TimerTaskManager.Instance.AddTimeTask(() => { }, 1f, TimeUnit.Second, 1);//1秒后执行一次
+            TimerTaskManager.Instance.DeleteTimeTask(timeid2);
+
+            Animator animator = testWin.TryGetComponent<Animator>();//获取脚本组件，没有就自动添加
+            animator.Play("动画名", () => { });//播放动画
+            animator.PlayBack("动画名", () => { });//倒放动画
+            
+            Image image = testWin.TryGetComponent<Image>();//获取脚本组件，没有就自动添加
+            RawImage rawimage = testWin.TryGetComponent<RawImage>();//获取脚本组件，没有就自动添加
+
         }
         private void TakePhoto()
         {

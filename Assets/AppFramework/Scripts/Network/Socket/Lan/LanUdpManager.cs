@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public class LanUdpManager : SingletonMono<LanUdpManager>
+public class LanUdpManager : SingletonEvent<LanUdpManager>
 {
     private SocketUdp<SessionUdp> server;
     private SocketUdp<SessionUdp> client;
-
+    private int TIME_ID = -1;
     /// <summary> 初始化服务端 </summary>
     public void InitServerNet(int port, Action<bool> cb = null)
     {
+        TIME_ID = TimerManager.Instance.StartTimer(Update);
         server = new SocketUdp<SessionUdp>();
         server.StartAsServer(port, cb);
     }
@@ -32,7 +33,7 @@ public class LanUdpManager : SingletonMono<LanUdpManager>
     private static readonly string lockNetUdp = "lockNetUdp";//加锁
 
     #region 客户端接收消息
-    private void Update()
+    private void Update(float time)
     {
         if (msgQueue.Count > 0)
         {
@@ -62,11 +63,6 @@ public class LanUdpManager : SingletonMono<LanUdpManager>
     /// <summary>退出Udp </summary>
     public void Close()
     {
-        DestroyImmediate(this);
-    }
-
-    private void OnDestroy()
-    {
         if (server != null && server.session != null)
         {
             server.session.SocketQuit();
@@ -79,6 +75,7 @@ public class LanUdpManager : SingletonMono<LanUdpManager>
             client.Close();
             server = null;
         }
+        TimerManager.Instance.EndTimer(TIME_ID);
     }
     #endregion
 }

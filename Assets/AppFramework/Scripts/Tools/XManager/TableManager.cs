@@ -28,7 +28,7 @@ public class TableManager : SingletonMono<TableManager>
     {
         transform.SetParent(App.app.transform);
     }
-    public T GetTable<T>(string tableName) where T : Component
+    public T GetTable<T>(string tableName) where T : class
     {
         return XmlSerializeManager.ProtoDeSerialize<T>(m_TablePairs[tableName]);
     }
