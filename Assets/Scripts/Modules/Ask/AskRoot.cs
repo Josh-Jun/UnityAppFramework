@@ -18,8 +18,13 @@ namespace Ask
             if (askWindow == null)
             {
                 string prefab_AskPath = "Ask/Assets/Windows/AskWindow";
-                askWindow = AssetsManager.Instance.LoadUIWindow<AskWindow>(prefab_AskPath, true);
+                askWindow = AssetsManager.Instance.LoadUIWindow<AskWindow>(prefab_AskPath);
+                askWindow.SetWindowActive();
             }
+        }
+        public void End()
+        {
+            Debug.Log("AskRoot End");
         }
         public void ShowAskWindow(string content, Action confirm_callback = null, Action cancel_callback = null)
         {
@@ -40,7 +45,7 @@ namespace Ask
         {
             
         }
-        public void End()
+        public void AppQuit()
         {
 
         }

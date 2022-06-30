@@ -23,10 +23,15 @@ namespace Test
         {
             //加载窗体
             string prefab_TestPath = "Test/Assets/Windows/TestWindow";
-            testWin = AssetsManager.Instance.LoadUIWindow<TestWindow>(prefab_TestPath, true);
+            testWin = AssetsManager.Instance.LoadUIWindow<TestWindow>(prefab_TestPath);
+            testWin.SetWindowActive();
 
             mobile = new RenderTexture(1920, 1080, 32);
             testWin.SetMobileCamera(mobile);
+        }
+        public void End()
+        {
+            
         }
         private void TakePhoto()
         {
@@ -61,7 +66,7 @@ namespace Test
         {
             Debug.Log("AppFocus = " + focus);
         }
-        public void End()
+        public void AppQuit()
         {
 
         }

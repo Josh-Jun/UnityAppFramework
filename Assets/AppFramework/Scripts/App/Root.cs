@@ -20,6 +20,7 @@ public class Root
 
     private static Dictionary<string, List<string>> sceneScriptsPairs = new Dictionary<string, List<string>>();
     private static Dictionary<string, IRoot> iRootPairs = new Dictionary<string, IRoot>();
+    private static List<IRoot> runtimeRoots = new List<IRoot>();
 
     public static LoadingScene LoadingScene { private set; get; }
 
@@ -140,7 +141,13 @@ public class Root
 
     public static void InitRootBegin(string sceneName, Action callback = null)
     {
+        for (int i = 0; i < runtimeRoots.Count; i++)
+        {
+            runtimeRoots[i].End();
+        }
+        runtimeRoots.Clear();
         AskRoot.Begin();
+        runtimeRoots.Add(AskRoot);
         if (sceneScriptsPairs.ContainsKey(sceneName))
         {
             for (int i = 0; i < sceneScriptsPairs[sceneName].Count; i++)
@@ -148,6 +155,7 @@ public class Root
                 if (iRootPairs.ContainsKey(sceneScriptsPairs[sceneName][i]))
                 {
                     iRootPairs[sceneScriptsPairs[sceneName][i]].Begin();
+                    runtimeRoots.Add(iRootPairs[sceneScriptsPairs[sceneName][i]]);
                 }
             }
         }
@@ -194,15 +202,15 @@ public class Root
             }
         }
     }
-    public static void End()
+    public static void AppQuit()
     {
-        UpdateRoot?.End();
-        AskRoot?.End();
+        UpdateRoot?.AppQuit();
+        AskRoot?.AppQuit();
         for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
         {
             if (iRootPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
             {
-                iRootPairs[appScriptConfig.RootScript[i].ScriptName].End();
+                iRootPairs[appScriptConfig.RootScript[i].ScriptName].AppQuit();
             }
         }
     }

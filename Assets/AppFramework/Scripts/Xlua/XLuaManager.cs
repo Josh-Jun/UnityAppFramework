@@ -23,6 +23,7 @@ namespace XLuaFrame
         Init,
         Begin,
         End,
+        AppQuit,
     }
     /// <summary> Root生命周期</summary>
     public enum RootLifeCycleBool

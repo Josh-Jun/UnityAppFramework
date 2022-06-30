@@ -6,12 +6,15 @@ end
 function Begin()
     
 end
+function End()
+    
+end
 function AppPause(pause)
     
 end
 function AppFocus(focus)
     
 end
-function End()
+function AppQuit()
     
 end

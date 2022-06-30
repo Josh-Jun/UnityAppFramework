@@ -39,7 +39,7 @@ public class App : MonoBehaviour
     }
     private void OnDestroy()
     {
-        //结束接口实现
-        Root.End();
+        //程序退出接口实现
+        Root.AppQuit();
     }
 }

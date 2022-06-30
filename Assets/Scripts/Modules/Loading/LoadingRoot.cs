@@ -16,7 +16,12 @@ namespace Loading
         {
             //加载窗体
             string prefab_LoadingPath = "Loading/Assets/Windows/LoadingWindow";
-            loadingWin = AssetsManager.Instance.LoadUIWindow<LoadingWindow>(prefab_LoadingPath, true);
+            loadingWin = AssetsManager.Instance.LoadUIWindow<LoadingWindow>(prefab_LoadingPath);
+            loadingWin.SetWindowActive();
+        }
+        public void End()
+        {
+            Debug.Log("LoadingRoot End");
         }
         public void AppPause(bool pause)
         {
@@ -26,7 +31,7 @@ namespace Loading
         {
             
         }
-        public void End()
+        public void AppQuit()
         {
 
         }

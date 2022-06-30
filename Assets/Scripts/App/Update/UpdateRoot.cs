@@ -58,6 +58,11 @@ namespace Update
                 }
             });
         }
+
+        public void End()
+        {
+            
+        }
         private void UpdateNow()
         {
             updateWin.SetUpdateTipsActive(false);
@@ -358,7 +363,7 @@ namespace Update
         {
             
         }
-        public void End()
+        public void AppQuit()
         {
 
         }

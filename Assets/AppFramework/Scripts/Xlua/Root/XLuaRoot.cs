@@ -20,6 +20,10 @@ namespace XLuaFrame
         {
             RootCallbackPairs[(int)RootLifeCycle.Begin]?.Invoke();
         }
+        public void End()
+        {
+            RootCallbackPairs[(int)RootLifeCycle.End]?.Invoke();
+        }
         /// <summary>初始化Lua代码</summary>
         private void InitLuaEnv(string luaFileContent)
         {
@@ -62,9 +66,9 @@ namespace XLuaFrame
         {
             RootBoolCallbackPairs[(int)RootLifeCycleBool.AppFocus]?.Invoke(focus);
         }
-        public void End()
+        public void AppQuit()
         {
-            RootCallbackPairs[(int)RootLifeCycle.End]?.Invoke();
+            RootCallbackPairs[(int)RootLifeCycle.AppQuit]?.Invoke();
             RootCallbackPairs.Clear();
             scriptEnv.Dispose();
         }

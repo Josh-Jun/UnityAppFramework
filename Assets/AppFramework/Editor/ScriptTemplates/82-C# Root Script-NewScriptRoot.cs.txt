@@ -14,6 +14,10 @@ namespace #NAMESPACE#
         {
 			#NOTRIM#
         }
+        public void End()
+        {
+			#NOTRIM#
+        }
         public void AppPause(bool pause)
         {
             #NOTRIM#
@@ -22,9 +26,9 @@ namespace #NAMESPACE#
         {
             #NOTRIM#
         }
-        public void End()
+        public void AppQuit()
         {
-			#NOTRIM#
+            #NOTRIM#
         }
     }
 }
