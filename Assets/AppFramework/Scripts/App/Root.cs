@@ -65,8 +65,10 @@ public class Root
     private static void InitManager()
     {
         AssetBundleManager.Instance.InitManager();
-        NetcomManager.Instance.InitManager();
+        TimerTaskManager.Instance.InitManager();
         AssetsManager.Instance.InitManager();
+        NetcomManager.Instance.InitManager();
+        TimerManager.Instance.InitManager();
         AudioManager.Instance.InitManager();
         AVProManager.Instance.InitManager();
         VideoManager.Instance.InitManager();

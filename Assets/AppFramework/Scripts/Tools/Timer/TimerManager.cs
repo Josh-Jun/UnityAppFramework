@@ -7,6 +7,10 @@ public class TimerManager : SingletonMono<TimerManager> {
     private List<TimerData> timerLst = new List<TimerData>();//计时Lst
     private List<TimerData> timerFixedLst = new List<TimerData>();//计时Lst
 
+    public void InitManager()
+    {
+        transform.SetParent(App.app.transform);
+    }
     private void Update() {
         if(timerLst.Count > 0) {
             for(int i = 0 ; i < timerLst.Count ; i++) {

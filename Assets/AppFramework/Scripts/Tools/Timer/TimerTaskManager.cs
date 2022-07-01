@@ -29,6 +29,10 @@ public class TimerTaskManager : SingletonMono<TimerTaskManager>
         });
         #endregion
     }
+    public void InitManager()
+    {
+        transform.SetParent(App.app.transform);
+    }
     private void Update()
     {
         if (timerQueue.Count > 0)
