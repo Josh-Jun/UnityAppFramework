@@ -11,7 +11,7 @@ namespace Update
 {
     public class UpdateRoot : SingletonEvent<UpdateRoot>, IRoot
     {
-        private UpdateWindow updateWin;
+        private UpdateWindow window;
 
         #region Private Var
         private string LocalPath;
@@ -40,17 +40,17 @@ namespace Update
         public void Begin()
         {
             string prefab_UpdatePath = "App/Update/Windows/UpdateWindow";
-            updateWin = AssetsManager.Instance.LoadLocalUIWindow<UpdateWindow>(prefab_UpdatePath);
-            updateWin.SetWindowActive();
+            window = AssetsManager.Instance.LoadLocalUIWindow<UpdateWindow>(prefab_UpdatePath);
+            window.SetWindowActive();
 
-            updateWin.SetTipsText("检查更新中...");
-            updateWin.SetProgressValue(0);
+            window.SetTipsText("检查更新中...");
+            window.SetProgressValue(0);
             StartUpdate((bool isUpdate, string des) =>
             {
                 if (isUpdate)
                 {
-                    updateWin.SetContentText(des);
-                    updateWin.SetUpdateTipsActive(true);
+                    window.SetContentText(des);
+                    window.SetUpdateTipsActive(true);
                 }
                 else
                 {
@@ -65,9 +65,9 @@ namespace Update
         }
         private void UpdateNow()
         {
-            updateWin.SetUpdateTipsActive(false);
-            updateWin.SetProgressBarActive(true);
-            updateWin.SetTipsText("下载中...");
+            window.SetUpdateTipsActive(false);
+            window.SetProgressBarActive(true);
+            window.SetTipsText("下载中...");
             StartDownLoad();
             App.app.StartCoroutine(DownLoading());
 
@@ -87,23 +87,23 @@ namespace Update
                     previousSize = GetLoadedSize();
                     time = 0;
                 }
-                updateWin.SetSpeedText(speed);
-                updateWin.SetProgressText(GetLoadedSize(), LoadTotalSize);
-                updateWin.SetProgressValue(GetProgress);
+                window.SetSpeedText(speed);
+                window.SetProgressText(GetLoadedSize(), LoadTotalSize);
+                window.SetProgressValue(GetProgress);
             }
             //更新下载完成，加载AB包
             LoadAssetBundle();
         }
         private void LoadAssetBundle()
         {
-            updateWin.SetTipsText("正在加载资源...");
-            updateWin.SetProgressBarActive(true);
+            window.SetTipsText("正在加载资源...");
+            window.SetProgressBarActive(true);
             LoadAssetBundle((bool isEnd, string bundleName, float bundleProgress) =>
             {
-                updateWin.SetTipsText(string.Format("正在加载资源:{0}", bundleName));
+                window.SetTipsText(string.Format("正在加载资源:{0}", bundleName));
                 if (isEnd && bundleProgress == 1)
                 {
-                    updateWin.SetProgressBarActive(false);
+                    window.SetProgressBarActive(false);
                     //AB包加载完成
                     TimerTaskManager.Instance.AddFrameTask(() =>
                     {

@@ -7,7 +7,7 @@ namespace Ask
 {
     public class AskRoot : SingletonEvent<AskRoot>, IRoot
     {
-        public AskWindow askWindow;
+        public AskWindow window;
         public AskRoot()
         {
             AddEventMsg<string, Action, Action>("ShowAskWindow", ShowAskWindow);
@@ -15,27 +15,27 @@ namespace Ask
         }
         public void Begin()
         {
-            if (askWindow == null)
+            if (window == null)
             {
                 string prefab_AskPath = "Ask/Assets/Windows/AskWindow";
-                askWindow = AssetsManager.Instance.LoadUIWindow<AskWindow>(prefab_AskPath);
-                askWindow.SetWindowActive();
+                window = AssetsManager.Instance.LoadUIWindow<AskWindow>(prefab_AskPath);
+                window.SetWindowActive();
             }
         }
         public void End()
         {
-            Debug.Log("AskRoot End");
+            window.SetWindowActive(false);
         }
         public void ShowAskWindow(string content, Action confirm_callback = null, Action cancel_callback = null)
         {
-            askWindow.SetWindowInfo(content, confirm_callback, cancel_callback);
-            askWindow.SetAsLastSibling();
+            window.SetWindowInfo(content, confirm_callback, cancel_callback);
+            window.SetAsLastSibling();
         }
 
         public void ShowTips(string content, float time = 2f)
         {
-            askWindow.SetTips(content, time);
-            askWindow.SetAsLastSibling();
+            window.SetTips(content, time);
+            window.SetAsLastSibling();
         }
         public void AppPause(bool pause)
         {

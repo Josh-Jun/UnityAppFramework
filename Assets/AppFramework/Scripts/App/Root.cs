@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using XLuaFrame;
 using System.Collections;
+using Loading;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.XR.Management;
 
 public class Root
 {
     private static IRoot UpdateRoot = null;
-    private static IRoot AskRoot = null;
 
     private const string path_AppScriptConfig = "App/Assets/AppScriptConfig";
     private static AppScriptConfig appScriptConfig;
@@ -21,8 +22,6 @@ public class Root
     private static Dictionary<string, List<string>> sceneScriptsPairs = new Dictionary<string, List<string>>();
     private static Dictionary<string, IRoot> iRootPairs = new Dictionary<string, IRoot>();
     private static List<IRoot> RuntimeRoots = new List<IRoot>();
-
-    public static LoadingScene LoadingScene { private set; get; }
 
     public static void Init()
     {
@@ -113,20 +112,15 @@ public class Root
                 sceneScriptsPairs[appScriptConfig.RootScript[i].SceneName].Add(appScriptConfig.RootScript[i].ScriptName);
             }
         }
-        AskRoot = GetRoot("Ask.AskRoot");
-        if (!iRootPairs.ContainsKey("Ask.AskRoot"))
-        {
-            iRootPairs.Add("Ask.AskRoot", AskRoot);
-        }
-        callback?.Invoke();
+
+        InitRootBegin("Global", callback);
     }
-    public static void LoadScene(string sceneName, bool isLoading = false, Action callback = null)
+    public static void LoadScene(string sceneName, bool isLoading = false, LoadSceneMode mode = LoadSceneMode.Single, Action callback = null)
     {
         InitRootEnd();
         if (isLoading)
         {
-            LoadingScene = new LoadingScene(sceneName, callback);
-            LoadScene("LoadingScene");
+            GetRootScript<LoadingRoot>().Load(sceneName, callback);
         }
         else
         {
@@ -136,14 +130,12 @@ public class Root
                 {
                     InitRootBegin(sceneName, callback);
                 }
-            });
+            }, mode);
         }
     }
 
     public static void InitRootBegin(string sceneName, Action callback = null)
     {
-        AskRoot.Begin();
-        RuntimeRoots.Add(AskRoot);
         if (sceneScriptsPairs.ContainsKey(sceneName))
         {
             for (int i = 0; i < sceneScriptsPairs[sceneName].Count; i++)
@@ -151,6 +143,7 @@ public class Root
                 if (iRootPairs.ContainsKey(sceneScriptsPairs[sceneName][i]))
                 {
                     iRootPairs[sceneScriptsPairs[sceneName][i]].Begin();
+                    if(sceneName.Equals("Global")) continue;
                     RuntimeRoots.Add(iRootPairs[sceneScriptsPairs[sceneName][i]]);
                 }
             }
@@ -187,7 +180,6 @@ public class Root
     public static void AppPause(bool isPause)
     {
         UpdateRoot?.AppPause(isPause);
-        AskRoot?.AppPause(isPause);
         for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
         {
             if (iRootPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
@@ -199,7 +191,6 @@ public class Root
     public static void AppFocus(bool isFocus)
     {
         UpdateRoot?.AppFocus(isFocus);
-        AskRoot?.AppFocus(isFocus);
         for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
         {
             if (iRootPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
@@ -211,7 +202,6 @@ public class Root
     public static void AppQuit()
     {
         UpdateRoot?.AppQuit();
-        AskRoot?.AppQuit();
         for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
         {
             if (iRootPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
@@ -219,15 +209,5 @@ public class Root
                 iRootPairs[appScriptConfig.RootScript[i].ScriptName].AppQuit();
             }
         }
-    }
-}
-public struct LoadingScene
-{
-    public string Name;
-    public Action Callback;
-    public LoadingScene(string name, Action callback)
-    {
-        this.Name = name;
-        this.Callback = callback;
     }
 }

@@ -12,9 +12,10 @@ using UnityEngine.XR.Interaction.Toolkit.UI;
 public class GoRoot : SingletonMono<GoRoot>
 {
     #region Private Variable
-    private GameObject canvasObject;//Canvas游戏对象
-    private GameObject eventSystemObject;//EventSystem游戏对象
-    private GameObject goObj;//3D游戏对象父物体
+    private GameObject CanvasObject;//Canvas游戏对象
+    private GameObject EventSystemObject;//EventSystem游戏对象
+    private GameObject GlobalGameObject;//3D游戏对象父物体(全局)
+    private GameObject TempGameObject;//3D游戏对象父物体(临时)
     
     private static Dictionary<string, WindowBase> windowPairs = new Dictionary<string, WindowBase>();
     private Dictionary<string, Transform> rootPairs = new Dictionary<string, Transform>();
@@ -23,16 +24,29 @@ public class GoRoot : SingletonMono<GoRoot>
 
     #region Public Variable
     /// <summary> Canvas组件 </summary>
-    public Canvas UICanvas { get { return canvasObject.GetComponent<Canvas>(); } private set { } }
+    public Canvas UICanvas { get { return CanvasObject.GetComponent<Canvas>(); } private set { } }
     /// <summary> 获取Canvas根RectTransform </summary>
-    public RectTransform UIRectTransform { get { return canvasObject.GetComponent<RectTransform>(); } private set { } }
+    public RectTransform UIRectTransform { get { return CanvasObject.GetComponent<RectTransform>(); } private set { } }
     /// <summary> 获取CanvasScaler组件 </summary>
-    public CanvasScaler UICanvasScaler { get { return canvasObject.GetComponent<CanvasScaler>(); } private set { } }
+    public CanvasScaler UICanvasScaler { get { return CanvasObject.GetComponent<CanvasScaler>(); } private set { } }
     /// <summary> 获取GraphicRaycaster组件 </summary>
-    public GraphicRaycaster UIGraphicRaycaster { get { return canvasObject.GetComponent<GraphicRaycaster>(); } private set { } }
+    public GraphicRaycaster UIGraphicRaycaster { get { return CanvasObject.GetComponent<GraphicRaycaster>(); } private set { } }
     
-    /// <summary> 获取3D游戏对象根对象 </summary>
-    public Transform GoTransform { get { return goObj.transform; } private set { } }
+    /// <summary> 获取3D游戏对象根对象(全局) </summary>
+    public Transform GlobalGoRoot { get { return GlobalGameObject.transform; } private set { } }
+    /// <summary> 获取3D游戏对象根对象(临时) </summary>
+    public Transform TempGoRoot 
+    {
+        get
+        {
+            if (TempGameObject == null)
+            {
+                TempGameObject = new GameObject("TempGameObjects");
+            }
+            return TempGameObject.transform;
+        } 
+        private set { } 
+    }
     #endregion
 
     /// <summary>
@@ -40,10 +54,12 @@ public class GoRoot : SingletonMono<GoRoot>
     /// </summary>
     void Awake()
     {
+        transform.SetParent(App.app.transform);
+        
         #region UI Canvas
-        canvasObject = new GameObject("UI Canvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
-        canvasObject.transform.SetParent(transform);
-        canvasObject.layer = 5;
+        CanvasObject = new GameObject("UI Canvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
+        CanvasObject.transform.SetParent(transform);
+        CanvasObject.layer = 5;
 
         UICanvas.renderMode = RenderMode.ScreenSpaceOverlay;
         UICanvas.worldCamera = Camera.main;
@@ -53,14 +69,14 @@ public class GoRoot : SingletonMono<GoRoot>
         UICanvasScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Shrink;
         #endregion
         
-        goObj = new GameObject("GameObjects");
-        goObj.transform.SetParent(transform);
+        GlobalGameObject = new GameObject("GlobalGameObjects");
+        GlobalGameObject.transform.SetParent(transform);
 
         #region EventSystem
         if (EventSystem.current == null)
         {
-            eventSystemObject = new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
-            eventSystemObject.transform.SetParent(transform);
+            EventSystemObject = new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
+            EventSystemObject.transform.SetParent(transform);
         }
         #endregion
 
@@ -168,7 +184,7 @@ public class GoRoot : SingletonMono<GoRoot>
     {
         if (!rootPairs.ContainsKey(name)) {
             GameObject go = new GameObject(name);
-            go.transform.SetParent(GoTransform, false);
+            go.transform.SetParent(GlobalGoRoot, false);
             rootPairs.Add(name, go.transform);
             return go.transform;
         } else {

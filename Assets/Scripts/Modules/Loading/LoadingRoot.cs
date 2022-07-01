@@ -7,21 +7,29 @@ namespace Loading
 {
     public class LoadingRoot : SingletonEvent<LoadingRoot>, IRoot
     {
-        private LoadingWindow loadingWin;
+        private LoadingWindow window;
         public LoadingRoot()
         {
 
         }
         public void Begin()
         {
-            //加载窗体
-            string prefab_LoadingPath = "Loading/Assets/Windows/LoadingWindow";
-            loadingWin = AssetsManager.Instance.LoadUIWindow<LoadingWindow>(prefab_LoadingPath);
-            loadingWin.SetWindowActive();
+            if (window == null)
+            {
+                //加载窗体
+                string prefab_LoadingPath = "Loading/Assets/Windows/LoadingWindow";
+                window = AssetsManager.Instance.LoadUIWindow<LoadingWindow>(prefab_LoadingPath);
+            }
+        }
+
+        public void Load(string sceneName, Action callback)
+        {
+            window.SetWindowActive();
+            window.StartCoroutine(window.StartLoadScene(sceneName, callback));
         }
         public void End()
         {
-            Debug.Log("LoadingRoot End");
+            window.SetWindowActive(false);
         }
         public void AppPause(bool pause)
         {

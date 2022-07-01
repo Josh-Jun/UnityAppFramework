@@ -107,11 +107,12 @@ public class AssetsManager : SingletonMono<AssetsManager>
     /// path = 窗口路径，不包含AssetsFolder
     /// state 初始化窗口是否显示
     /// </summary>
-    public T LoadGoWindow<T>(string path, bool state = false) where T : Component
+    public T LoadGoWindow<T>(string path, bool isTemp, bool state = false) where T : Component
     {
         var go = LoadAsset<GameObject>(path);
         if (go == null) return null;
-        go = Instantiate(go, GoRoot.Instance.GoTransform);
+        var parent = isTemp ? GoRoot.Instance.TempGoRoot : GoRoot.Instance.GlobalGoRoot;
+        go = Instantiate(go, parent);
         go.transform.localEulerAngles = Vector3.zero;
         go.transform.localScale = Vector3.one;
         go.name = go.name.Replace("(Clone)", "");
@@ -138,11 +139,12 @@ public class AssetsManager : SingletonMono<AssetsManager>
         return t;
     }
     /// <summary> 加载本地窗口 </summary>
-    public T LoadLocalGoWindow<T>(string path, bool state = false) where T : Component
+    public T LoadLocalGoWindow<T>(string path, bool isTemp, bool state = false) where T : Component
     {
         var go = Resources.Load<GameObject>(path);
         if (go == null) return null;
-        go = Instantiate(go, GoRoot.Instance.GoTransform);
+        var parent = isTemp ? GoRoot.Instance.TempGoRoot : GoRoot.Instance.GlobalGoRoot;
+        go = Instantiate(go, parent);
         go.transform.localEulerAngles = Vector3.zero;
         go.transform.localScale = Vector3.one;
         go.name = go.name.Replace("(Clone)", "");

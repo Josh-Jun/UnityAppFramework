@@ -11,7 +11,7 @@ namespace Test
 {
     public class TestRoot : SingletonEvent<TestRoot>, IRoot
     {
-        private TestWindow testWin;
+        private TestWindow window;
         private RenderTexture mobile;
         public TestRoot()
         {
@@ -27,11 +27,11 @@ namespace Test
         {
             //加载窗体
             string prefab_TestPath = "Test/Assets/Windows/TestWindow";
-            testWin = AssetsManager.Instance.LoadUIWindow<TestWindow>(prefab_TestPath);
-            testWin.SetWindowActive();
+            window = AssetsManager.Instance.LoadUIWindow<TestWindow>(prefab_TestPath);
+            window.SetWindowActive();
 
             mobile = new RenderTexture(1920, 1080, 32);
-            testWin.SetMobileCamera(mobile);
+            window.SetMobileCamera(mobile);
         }
         public void End()
         {
@@ -62,20 +62,20 @@ namespace Test
             timeid2 = TimerTaskManager.Instance.AddTimeTask(() => { }, 1f, TimeUnit.Second, 1);//1秒后执行一次
             TimerTaskManager.Instance.DeleteTimeTask(timeid2);
 
-            Animator animator = testWin.TryGetComponent<Animator>();//获取脚本组件，没有就自动添加
+            Animator animator = window.TryGetComponent<Animator>();//获取脚本组件，没有就自动添加
             animator.Play("动画名", () => { });//播放动画
             animator.PlayBack("动画名", () => { });//倒放动画
             
-            Image image = testWin.TryGetComponent<Image>();//获取脚本组件，没有就自动添加
-            RawImage rawimage = testWin.TryGetComponent<RawImage>();//获取脚本组件，没有就自动添加
+            Image image = window.TryGetComponent<Image>();//获取脚本组件，没有就自动添加
+            RawImage rawimage = window.TryGetComponent<RawImage>();//获取脚本组件，没有就自动添加
 
         }
         private void TakePhoto()
         {
-            PictureManager.TakePhoto(testWin.renderCamera, PlatformManager.Instance.GetDataPath("Screenshots"), (Texture2D texture, string fileName) =>
+            PictureManager.TakePhoto(window.renderCamera, PlatformManager.Instance.GetDataPath("Screenshots"), (Texture2D texture, string fileName) =>
             {
                 PlatformManager.Instance.SavePhoto("Screenshots", fileName);
-                testWin.SetRawImage(texture);
+                window.SetRawImage(texture);
             });
         }
 
@@ -86,13 +86,13 @@ namespace Test
         }
         private void ButtonEvent()
         {
-            testWin.SetText("触发不带参数事件");
+            window.SetText("触发不带参数事件");
             SendEventMsg("ShowTips","触发不带参数事件",1.2f);
             // Root.GetRootScript<Ask.AskRoot>().ShowTips("123");
         }
         private void ButtonParamsEvent(string value)
         {
-            testWin.SetText(value);
+            window.SetText(value);
         }
 
         public void AppPause(bool pause)
