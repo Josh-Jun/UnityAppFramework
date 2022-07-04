@@ -1,0 +1,19 @@
+syntax = "proto3";
+package GamePbData;
+
+// 命令
+enum PbCMD
+{
+	HEART_BEAT =0;
+	HEART_BEAT_RESULT =1;
+}
+// 心跳
+message PbHeartBeat
+{
+}
+// 心跳回调
+message PbHeartBeatResult
+{
+  // long 时间戳
+  sint64 ts = 1;
+}

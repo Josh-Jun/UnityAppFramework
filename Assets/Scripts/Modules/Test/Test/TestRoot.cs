@@ -31,7 +31,7 @@ namespace Test
             window = AssetsManager.Instance.LoadUIWindow<TestWindow>(prefab_TestPath);
             window.SetWindowActive();
 
-            mobile = new RenderTexture(1920, 1080, 32);
+            mobile = new RenderTexture(Screen.width, Screen.height, 32);
             window.SetMobileCamera(mobile);
         }
         public void End()
