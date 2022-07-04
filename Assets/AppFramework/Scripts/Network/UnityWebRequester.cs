@@ -346,7 +346,7 @@ public class UnityWebRequester
             }
             else
             {
-                Debug.LogError($"[Error:Bytes] {uwr.error}");
+                Debug.LogError($"[Error:Bytes] {url} {uwr.error}");
             }
         }
     }
@@ -445,7 +445,7 @@ public class UnityWebRequester
         //List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
         //formData.Add(new MultipartFormDataSection("field1=foo&field2=bar"));
         //formData.Add(new MultipartFormFileSection("my file data", "myfile.txt"));
-        using (uwr = UnityWebRequest.Post(url, lstformData))
+        using (uwr = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPOST))
         {
             foreach (var header in headerPairs)
             {
@@ -454,6 +454,7 @@ public class UnityWebRequester
             string json = LitJson.JsonMapper.ToJson(lstformData);
             byte[] postData = Encoding.UTF8.GetBytes(json);
             uwr.uploadHandler = new UploadHandlerRaw(postData);
+            uwr.downloadHandler = new DownloadHandlerBuffer();
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
             {
@@ -475,13 +476,14 @@ public class UnityWebRequester
     /// <returns></returns>
     public IEnumerator IE_Post(string url, WWWForm formData, Action<string> actionResult)
     {
-        using (uwr = UnityWebRequest.Post(url, formData))
+        using (uwr = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPOST))
         {
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
             uwr.uploadHandler = new UploadHandlerRaw(formData.data);
+            uwr.downloadHandler = new DownloadHandlerBuffer();
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
             {
@@ -503,7 +505,7 @@ public class UnityWebRequester
     /// <returns></returns>
     public IEnumerator IE_Post(string url, string postData, Action<string> actionResult)
     {
-        using (uwr = UnityWebRequest.Post(url, postData))
+        using (uwr = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPOST))
         {
             foreach (var header in headerPairs)
             {
@@ -511,6 +513,7 @@ public class UnityWebRequester
             }
             byte[] bodyRaw = Encoding.UTF8.GetBytes(postData);
             uwr.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            uwr.downloadHandler = new DownloadHandlerBuffer();
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
             {
@@ -532,13 +535,14 @@ public class UnityWebRequester
     /// <returns></returns>
     public IEnumerator IE_Post(string url, byte[] postData, Action<string> actionResult)
     {
-        using (uwr = UnityWebRequest.Post(url, UnityWebRequest.kHttpVerbPOST))
+        using (uwr = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPOST))
         {
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
             uwr.uploadHandler = new UploadHandlerRaw(postData);
+            uwr.downloadHandler = new DownloadHandlerBuffer();
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
             {
@@ -560,7 +564,7 @@ public class UnityWebRequester
     /// <returns></returns>
     public IEnumerator IE_Post(string url, Dictionary<string, string> formFields, Action<string> actionResult)
     {
-        using (uwr = UnityWebRequest.Post(url, formFields))
+        using (uwr = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPOST))
         {
             foreach (var header in headerPairs)
             {
@@ -569,6 +573,7 @@ public class UnityWebRequester
             string json = LitJson.JsonMapper.ToJson(formFields);
             byte[] postData = Encoding.UTF8.GetBytes(json);
             uwr.uploadHandler = new UploadHandlerRaw(postData);
+            uwr.downloadHandler = new DownloadHandlerBuffer();
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
             {
