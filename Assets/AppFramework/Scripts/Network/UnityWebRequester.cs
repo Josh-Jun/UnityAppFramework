@@ -596,12 +596,14 @@ public class UnityWebRequester
     /// <returns></returns>
     public IEnumerator IE_Put(string url, byte[] contentBytes, Action<string> actionResult)
     {
-        using (uwr = UnityWebRequest.Put(url, contentBytes))
+        using (uwr = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPUT))
         {
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
+            uwr.uploadHandler = new UploadHandlerRaw(contentBytes);
+            uwr.downloadHandler = new DownloadHandlerBuffer();
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
             {
@@ -623,12 +625,15 @@ public class UnityWebRequester
     /// <returns></returns>
     public IEnumerator IE_Put(string url, string content, Action<string> actionResult)
     {
-        using (uwr = UnityWebRequest.Put(url, content))
+        using (uwr = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPUT))
         {
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
+            byte[] contentBytes = Encoding.UTF8.GetBytes(content);
+            uwr.uploadHandler = new UploadHandlerRaw(contentBytes);
+            uwr.downloadHandler = new DownloadHandlerBuffer();
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
             {
