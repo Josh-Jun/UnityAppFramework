@@ -31,7 +31,7 @@
       "url": "https://packages.unity.cn"
     },
     "com.unity.burst": {
-      "version": "1.6.5",
+      "version": "1.6.4",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -56,7 +56,7 @@
       "url": "https://packages.unity.cn"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.14",
+      "version": "3.0.15",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -193,7 +193,7 @@
       }
     },
     "com.unity.visualscripting": {
-      "version": "1.7.7",
+      "version": "1.7.8",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -250,7 +250,7 @@
       "url": "https://packages.unity.cn"
     },
     "com.unity.xr.picoxr": {
-      "version": "file:../DiskPackages/PicoXR/UnityXR-2.0.4_B62",
+      "version": "file:../DiskPackages/Pico Unity Integration SDK-2.0.5",
       "depth": 0,
       "source": "local",
       "dependencies": {
