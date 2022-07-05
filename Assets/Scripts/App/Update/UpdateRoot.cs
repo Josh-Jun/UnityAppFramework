@@ -128,7 +128,7 @@ namespace Update
                 //读取本地热更文件
                 DownLoad(XmlLocalVersionPath, (byte[] bytes) =>
                 {
-                    localABConfig = bytes != null ? XmlSerializeManager.ProtoDeSerialize<AssetBundleConfig>(bytes) : null;
+                    localABConfig = bytes != null ? XmlManager.ProtoDeSerialize<AssetBundleConfig>(bytes) : null;
                     //检查版本更新信息
                     CheckUpdate(localABConfig, () =>
                     {
@@ -248,7 +248,7 @@ namespace Update
                 config.GameVersion = serverABConfig.GameVersion;
                 config.Platform = serverABConfig.Platform;
                 config.Scenes = serverABConfig.Scenes;
-                FileManager.CreateFile(XmlLocalVersionPath, XmlSerializeManager.ProtoByteSerialize<AssetBundleConfig>(config));
+                FileManager.CreateFile(XmlLocalVersionPath, XmlManager.ProtoByteSerialize<AssetBundleConfig>(config));
 
                 UpdateConfig();
             }
@@ -306,7 +306,7 @@ namespace Update
             {
                 DownLoad(XmlServerVersionPath, (byte[] bytes) =>
                 {
-                    serverABConfig = XmlSerializeManager.ProtoDeSerialize<AssetBundleConfig>(bytes);
+                    serverABConfig = XmlManager.ProtoDeSerialize<AssetBundleConfig>(bytes);
                     GetABScenePairs(serverABConfig);
                     if (Application.version == serverABConfig.GameVersion)
                     {

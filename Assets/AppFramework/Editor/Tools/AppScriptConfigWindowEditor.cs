@@ -31,7 +31,7 @@ public class AppScriptConfigWindowEditor : EditorWindow
         };
 
         var bytes = Resources.Load<TextAsset>(configPath).bytes;
-        config = XmlSerializeManager.ProtoDeSerialize<AppScriptConfig>(bytes);
+        config = XmlManager.ProtoDeSerialize<AppScriptConfig>(bytes);
         MainSceneName = config.MainSceneName;
 
         SceneNames.Add("Global");

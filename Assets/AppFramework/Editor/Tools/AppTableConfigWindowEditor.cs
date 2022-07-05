@@ -26,7 +26,7 @@ public class AppTableConfigWindowEditor : EditorWindow
         };
 
         var bytes = Resources.Load<TextAsset>(configPath).bytes;
-        config = XmlSerializeManager.ProtoDeSerialize<AppTableConfig>(bytes);
+        config = XmlManager.ProtoDeSerialize<AppTableConfig>(bytes);
     }
     private void OnGUI()
     {

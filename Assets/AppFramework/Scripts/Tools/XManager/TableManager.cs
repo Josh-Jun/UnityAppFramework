@@ -10,7 +10,7 @@ public class TableManager : SingletonMono<TableManager>
     private void Awake()
     {
         TextAsset config = AssetsManager.Instance.LoadAsset<TextAsset>(path_AppTableConfig);
-        appTableConfig = XmlSerializeManager.ProtoDeSerialize<AppTableConfig>(config.bytes);
+        appTableConfig = XmlManager.ProtoDeSerialize<AppTableConfig>(config.bytes);
         for (int i = 0; i < appTableConfig.AppTable.Count; i++)
         {
             var bytes = AssetsManager.Instance.LoadAsset<TextAsset>(appTableConfig.AppTable[i].TablePath).bytes;
@@ -30,6 +30,6 @@ public class TableManager : SingletonMono<TableManager>
     }
     public T GetTable<T>(string tableName) where T : class
     {
-        return XmlSerializeManager.ProtoDeSerialize<T>(m_TablePairs[tableName]);
+        return XmlManager.ProtoDeSerialize<T>(m_TablePairs[tableName]);
     }
 }
