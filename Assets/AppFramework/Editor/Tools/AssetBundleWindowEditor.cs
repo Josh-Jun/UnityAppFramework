@@ -19,7 +19,10 @@ public class AssetBundleWindowEditor : EditorWindow
     private string buildPath;
     private readonly Dictionary<string, Dictionary<string, string>> sceneDic = new Dictionary<string, Dictionary<string, string>>();
     private string des = "请输入本版更新描述";
-
+    
+    public AppConfig AppConfig;//App配置表 
+    private readonly string configPath = "App/AppConfig";
+    
     [MenuItem("Tools/My ToolsWindow/Build AssetBundle", false, 1)]
     public static void OpenWindow()
     {
@@ -34,7 +37,9 @@ public class AssetBundleWindowEditor : EditorWindow
             fontStyle = FontStyle.Bold,
             fontSize = 12
         };
-
+        
+        AppConfig = Resources.Load<AppConfig>(configPath);
+        
         buildPath = "Assets/Resources/AssetsFolder";
         outputPath = Application.dataPath.Replace("Assets", "AssetBundle");
     }
@@ -48,7 +53,8 @@ public class AssetBundleWindowEditor : EditorWindow
         EditorGUILayout.Space();
         if (GUILayout.Button("1.Set AssetBundle Labels(自动做标记)"))
         {
-            EditorApplication.delayCall += SetAssetBundleLabels;
+            RemoveAllAssetBundleLabels();
+            SetAssetBundleLabels();
         }
         EditorGUILayout.Space();
         GUILayout.BeginVertical();
@@ -120,12 +126,22 @@ public class AssetBundleWindowEditor : EditorWindow
     }
 
     #region 自动做标记
+
+    void RemoveAllAssetBundleLabels()
+    {
+        var names = AssetDatabase.GetAllAssetBundleNames();
+        foreach (string name in names)
+        {
+            AssetDatabase.GetAssetPathsFromAssetBundle(name).Select(AssetImporter.GetAtPath).ToList().ForEach(x => x.assetBundleName = string.Empty);
+        }
+        //AssetDatabase.Refresh();
+    }
     //[MenuItem("AssetBundle/Set AssetBundle Labels(自动做标记)")]
     void SetAssetBundleLabels()
     {
         // 移除没用到的包名
         AssetDatabase.RemoveUnusedAssetBundleNames();
-
+        
         string assetDirectory = Application.dataPath.Replace("Assets", "") + buildPath;
 
         DirectoryInfo directoryInfo = new DirectoryInfo(assetDirectory);
@@ -160,6 +176,7 @@ public class AssetBundleWindowEditor : EditorWindow
                     sceneDic.Add(tempDirectoryInfo.Name, namePathDic);
             }
         }
+        AssetDatabase.Refresh();
         Debug.Log("AssetBundle Labels设置成功!");
     }
 
@@ -172,25 +189,28 @@ public class AssetBundleWindowEditor : EditorWindow
     {
         if (!fileSystemInfo.Exists)
             Debug.LogError(fileSystemInfo.FullName + "不存在！");
-
+        string name = AppConfig.TargetPackage == TargetPackage.Mobile ? "Pico" : "Mobile";
         DirectoryInfo directoryInfo = fileSystemInfo as DirectoryInfo;
         // 获取所有文件系统[包括文件夹和文件]
         FileSystemInfo[] fileSystemInfos = directoryInfo.GetFileSystemInfos();
         foreach (FileSystemInfo tempfileSystemInfo in fileSystemInfos)
         {
-            FileInfo fileInfo = tempfileSystemInfo as FileInfo;
-            if (fileInfo == null)
+            if(tempfileSystemInfo.Name != name)
             {
-                // 代表强转失败 ,不是文件 , 是文件夹
-                // 4. 如果访问的是文件夹 ， 再继续访问里面的所有文件系统，直到找到文件 (递归思想)；
-                // 再调用本方法 
-                OnSceneFileSystemInfo(tempfileSystemInfo, sceneName, namePathDic);
-            }
-            else
-            {
-                // 代表强转成功了 , 是文件 ;
-                // 5. 找到文件 ， 就要修改它的 AssetBundle Labels ;
-                SetLabels(fileInfo, sceneName, namePathDic);
+                FileInfo fileInfo = tempfileSystemInfo as FileInfo;
+                if (fileInfo == null)
+                {
+                    // 代表强转失败 ,不是文件 , 是文件夹
+                    // 4. 如果访问的是文件夹 ， 再继续访问里面的所有文件系统，直到找到文件 (递归思想)；
+                    // 再调用本方法 
+                    OnSceneFileSystemInfo(tempfileSystemInfo, sceneName, namePathDic);
+                }
+                else
+                {
+                    // 代表强转成功了 , 是文件 ;
+                    // 5. 找到文件 ， 就要修改它的 AssetBundle Labels ;
+                    SetLabels(fileInfo, sceneName, namePathDic);
+                }
             }
         }
     }
@@ -203,14 +223,14 @@ public class AssetBundleWindowEditor : EditorWindow
         if (fileInfo.Extension == ".meta")
             return;
         string bundleName = GetBundleName(fileInfo, sceneName);
-        //Debug.Log("包名为 :" + bundleName );
+        // Debug.Log("包名为 :" + bundleName );
 
         // D:\Unity_forWork\Unity_Project\AssetBundle02_Senior\Assets\AssetsFolder\Scene1\Character\NB\Player4.prefab
         // 获取Assetsy以及之后的目录
         int assetIndex = fileInfo.FullName.IndexOf("Assets");
         string assetPath = fileInfo.FullName.Substring(assetIndex);
-        //Debug.Log(assetPath); // Assets\AssetsFolder\Scene1\Character\NB\Player4.prefab
-
+        // Debug.Log(assetPath); // Assets\AssetsFolder\Scene1\Character\NB\Player4.prefab
+        string platformNmae = AppConfig.TargetPackage == TargetPackage.Mobile?"Pico":"Mobile";
         // 6.用 AssetImporter 类 ， 修改名称和后缀 ；
         AssetImporter assetImporter = AssetImporter.GetAtPath(assetPath); // GetAtPath方法是获取Assets文件和之后的目录
         assetImporter.assetBundleName = bundleName.ToLower();
@@ -218,7 +238,7 @@ public class AssetBundleWindowEditor : EditorWindow
             assetImporter.assetBundleVariant = "sc";
         else
             assetImporter.assetBundleVariant = "ab";
-
+        
         // 添加到字典里 
         string folderName = "";
         if (bundleName.Contains("/"))

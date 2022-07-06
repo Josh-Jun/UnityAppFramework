@@ -27,7 +27,7 @@ namespace Test
         public void Begin()
         {
             //加载窗体
-            string prefab_TestPath = "Test/Assets/Windows/TestWindow";
+            string prefab_TestPath = $"Test/Assets/{Root.AppConfig.TargetPackage}/Windows/TestWindow";
             window = AssetsManager.Instance.LoadUIWindow<TestWindow>(prefab_TestPath);
             window.SetWindowActive();
 

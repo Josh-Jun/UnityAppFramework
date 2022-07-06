@@ -13,10 +13,10 @@ public class AddScriptTemplatesEditor : UnityEditor.AssetModificationProcessor
     public static void OnWillCreateAsset(string newFileMeta)
     {
         var newFilePath = newFileMeta.Replace(".meta", "");
-        var realPath = Application.dataPath.Replace("Assets", "") + newFilePath;
-        var scriptContent = File.ReadAllText(realPath);
         if (Path.GetExtension(newFilePath) == ".txt" || Path.GetExtension(newFilePath) == ".cs")
         {
+            var realPath = Application.dataPath.Replace("Assets", "") + newFilePath;
+            var scriptContent = File.ReadAllText(realPath);
             // 这里实现自定义的一些规则
             // scriptContent = scriptContent.Replace("#SCRIPTNAME#", Path.GetFileNameWithoutExtension(newFilePath));
             var namespaces = Path.GetFileNameWithoutExtension(newFilePath);
