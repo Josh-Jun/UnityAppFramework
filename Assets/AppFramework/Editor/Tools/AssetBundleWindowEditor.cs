@@ -122,6 +122,14 @@ public class AssetBundleWindowEditor : EditorWindow
         {
             DeleteAssetBundle();
         }
+        
+        // remove labels
+        EditorGUILayout.Space();
+        if (GUILayout.Button("5.RemoveAllAssetBundleLabels(一键清除AB包标记)"))
+        {
+            RemoveAllAssetBundleLabels();
+            AssetDatabase.Refresh();
+        }
         GUILayout.EndVertical();
     }
 
