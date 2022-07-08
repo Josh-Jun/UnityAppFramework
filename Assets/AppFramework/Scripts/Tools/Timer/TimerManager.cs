@@ -52,33 +52,48 @@ public class TimerManager : SingletonMono<TimerManager> {
     }
 
     /// <summary>暂停计时</summary>
-    public void PauseTimer(int id, bool isFixed = false) {
-        List<TimerData> data = isFixed ? timerFixedLst : timerLst;
-        for (int i = 0 ; i < data.Count ; i++) {
-            if(data[i].id == id) {
-                data[i].isTime = false;
+    public void PauseTimer(int id) {
+        for (int i = 0 ; i < timerFixedLst.Count ; i++) {
+            if(timerFixedLst[i].id == id) {
+                timerFixedLst[i].isTime = false;
+                break;
+            }
+        }
+        for (int i = 0 ; i < timerLst.Count ; i++) {
+            if(timerLst[i].id == id) {
+                timerLst[i].isTime = false;
                 break;
             }
         }
     }
 
     /// <summary>继续计时</summary>
-    public void ContinueTimer(int id, bool isFixed = false){
-        List<TimerData> data = isFixed ? timerFixedLst : timerLst;
-        for (int i = 0 ; i < data.Count ; i++) {
-            if(data[i].id == id) {
-                data[i].isTime = true;
+    public void ContinueTimer(int id){
+        for (int i = 0 ; i < timerFixedLst.Count ; i++) {
+            if(timerFixedLst[i].id == id) {
+                timerFixedLst[i].isTime = true;
+                break;
+            }
+        }
+        for (int i = 0 ; i < timerLst.Count ; i++) {
+            if(timerLst[i].id == id) {
+                timerLst[i].isTime = true;
                 break;
             }
         }
     }
 
     /// <summary>结束计时</summary>
-    public void EndTimer(int id, bool isFixed = false) {
-        List<TimerData> data = isFixed ? timerFixedLst : timerLst;
-        for (int i = 0 ; i < data.Count ; i++) {
-            if(data[i].id == id) {
-                data.Remove(data[i]);
+    public void EndTimer(int id) {
+        for (int i = 0 ; i < timerFixedLst.Count ; i++) {
+            if(timerFixedLst[i].id == id) {
+                timerFixedLst.Remove(timerFixedLst[i]);
+                break;
+            }
+        }
+        for (int i = 0 ; i < timerLst.Count ; i++) {
+            if(timerLst[i].id == id) {
+                timerLst.Remove(timerLst[i]);
                 break;
             }
         }
