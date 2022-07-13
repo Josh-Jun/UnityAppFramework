@@ -21,14 +21,10 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
 
     private string mainfestPath;
     
-    private void Awake()
+    public override void InitManager(Transform parent)
     {
+        base.InitManager(parent);
         mainfestPath = PlatformManager.Instance.GetDataPath(PlatformManager.Instance.Name);
-    }
-
-    public void InitManager()
-    {
-        transform.SetParent(App.app.transform);
     }
 
     public void SetAbScenePairs(string sceneNane, Dictionary<string, string> folderPairs)

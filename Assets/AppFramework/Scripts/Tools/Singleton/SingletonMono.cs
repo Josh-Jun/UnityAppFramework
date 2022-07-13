@@ -27,4 +27,8 @@ public class SingletonMono<T> : MonoBehaviour where T : MonoBehaviour
             }
         }
     }
+    public virtual void InitManager(Transform parent)
+    {
+        transform.SetParent(parent);
+    } 
 }

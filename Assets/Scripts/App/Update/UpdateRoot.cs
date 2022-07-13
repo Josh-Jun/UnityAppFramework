@@ -105,10 +105,7 @@ namespace Update
                 {
                     window.SetProgressBarActive(false);
                     //AB包加载完成
-                    TimerTaskManager.Instance.AddFrameTask(() =>
-                    {
-                        Root.StartApp();
-                    }, 1);
+                    Root.StartApp();
                 }
             });
         }

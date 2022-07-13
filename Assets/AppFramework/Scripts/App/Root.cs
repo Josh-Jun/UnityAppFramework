@@ -17,7 +17,7 @@ public class Root
     private static AppScriptConfig appScriptConfig;
 
     private const string path_AppConfig = "App/AppConfig";
-    public static AppConfig AppConfig;//App配置表 
+    public static AppConfig AppConfig; //App配置表 
 
     private static Dictionary<string, List<string>> sceneScriptsPairs = new Dictionary<string, List<string>>();
     private static Dictionary<string, IRoot> iRootPairs = new Dictionary<string, IRoot>();
@@ -33,12 +33,12 @@ public class Root
         //设置程序帧率
         Application.targetFrameRate = AppConfig.AppFrameRate;
 
-        OutputCfgInfo();
-
+        InitManager(App.app.transform);
+        OutputAppInfo();
         BeginCheckUpdate();
     }
 
-    private static void OutputCfgInfo()
+    private static void OutputAppInfo()
     {
         string info_server = AppConfig.IsProServer ? "生产环境" : "测试环境";
         Debug.Log("配置信息:");
@@ -58,22 +58,29 @@ public class Root
             StartApp();
         }
     }
+
     public static void StartApp()
     {
-        InitRootScripts(() => { LoadScene(appScriptConfig.MainSceneName, true); InitManager(); });
+        InitRootScripts(() =>
+        {
+            LoadScene(appScriptConfig.MainSceneName, true);
+            TableManager.Instance.InitConfig();
+        });
     }
-    private static void InitManager()
+
+    private static void InitManager(Transform parent)
     {
-        AssetBundleManager.Instance.InitManager();
-        TimerTaskManager.Instance.InitManager();
-        AssetsManager.Instance.InitManager();
-        NetcomManager.Instance.InitManager();
-        TimerManager.Instance.InitManager();
-        AudioManager.Instance.InitManager();
-        AVProManager.Instance.InitManager();
-        VideoManager.Instance.InitManager();
-        TableManager.Instance.InitManager();
+        AssetBundleManager.Instance.InitManager(parent);
+        TimerTaskManager.Instance.InitManager(parent);
+        AssetsManager.Instance.InitManager(parent);
+        NetcomManager.Instance.InitManager(parent);
+        TimerManager.Instance.InitManager(parent);
+        AudioManager.Instance.InitManager(parent);
+        AVProManager.Instance.InitManager(parent);
+        VideoManager.Instance.InitManager(parent);
+        TableManager.Instance.InitManager(parent);
     }
+
     private static void InitRootScripts(Action callback = null)
     {
         TextAsset config = AssetsManager.Instance.LoadAsset<TextAsset>(path_AppScriptConfig);
@@ -84,7 +91,8 @@ public class Root
             {
                 IRoot iRoot;
                 //判断是否存在XLua脚本，如果存在，执行XLua代码，不存在执行C#代码
-                if (AppConfig.RunXLua && XLuaManager.Instance.IsLuaFileExist(appScriptConfig.RootScript[i].LuaScriptPath))
+                if (AppConfig.RunXLua &&
+                    XLuaManager.Instance.IsLuaFileExist(appScriptConfig.RootScript[i].LuaScriptPath))
                 {
                     XLuaRoot root = new XLuaRoot();
                     root.Init(appScriptConfig.RootScript[i].LuaScriptPath);
@@ -94,6 +102,7 @@ public class Root
                 {
                     iRoot = GetRoot(appScriptConfig.RootScript[i].ScriptName);
                 }
+
                 if (iRoot != null)
                 {
                     iRootPairs.Add(appScriptConfig.RootScript[i].ScriptName, iRoot);
@@ -103,6 +112,7 @@ public class Root
                     Debug.LogError($"Root脚本为空 脚本名称:{appScriptConfig.RootScript[i].ScriptName}");
                 }
             }
+
             if (!sceneScriptsPairs.ContainsKey(appScriptConfig.RootScript[i].SceneName))
             {
                 List<string> scripts = new List<string>();
@@ -111,13 +121,16 @@ public class Root
             }
             else
             {
-                sceneScriptsPairs[appScriptConfig.RootScript[i].SceneName].Add(appScriptConfig.RootScript[i].ScriptName);
+                sceneScriptsPairs[appScriptConfig.RootScript[i].SceneName]
+                    .Add(appScriptConfig.RootScript[i].ScriptName);
             }
         }
 
         InitRootBegin("Global", callback);
     }
-    public static void LoadScene(string sceneName, bool isLoading = false, LoadSceneMode mode = LoadSceneMode.Single, Action callback = null)
+
+    public static void LoadScene(string sceneName, bool isLoading = false, LoadSceneMode mode = LoadSceneMode.Single,
+        Action callback = null)
     {
         InitRootEnd();
         if (isLoading)
@@ -145,11 +158,12 @@ public class Root
                 if (iRootPairs.ContainsKey(sceneScriptsPairs[sceneName][i]))
                 {
                     iRootPairs[sceneScriptsPairs[sceneName][i]].Begin();
-                    if(sceneName.Equals("Global")) continue;
+                    if (sceneName.Equals("Global")) continue;
                     RuntimeRoots.Add(iRootPairs[sceneScriptsPairs[sceneName][i]]);
                 }
             }
         }
+
         callback?.Invoke();
     }
 
@@ -159,6 +173,7 @@ public class Root
         {
             RuntimeRoots[i].End();
         }
+
         RuntimeRoots.Clear();
     }
 
@@ -168,6 +183,7 @@ public class Root
         object obj = Activator.CreateInstance(type);
         return obj as IRoot;
     }
+
     public static T GetRootScript<T>() where T : class
     {
         var type = typeof(T);
@@ -176,6 +192,7 @@ public class Root
         {
             return null;
         }
+
         return iRootPairs[scriptName] as T;
     }
 
@@ -190,6 +207,7 @@ public class Root
             }
         }
     }
+
     public static void AppFocus(bool isFocus)
     {
         UpdateRoot?.AppFocus(isFocus);
@@ -201,6 +219,7 @@ public class Root
             }
         }
     }
+
     public static void AppQuit()
     {
         UpdateRoot?.AppQuit();

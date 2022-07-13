@@ -7,7 +7,13 @@ public class TimerTaskManager : SingletonMono<TimerTaskManager>
     private TimerTask timer;//计时器
     private static readonly string lockTask = "lockTask";//任务锁
     private Queue<TaskPack> timerQueue = new Queue<TaskPack>();//定时任务队列
-    public void Awake()
+    public override void InitManager(Transform parent)
+    {
+        base.InitManager(parent);
+        InitTimer();
+    }
+
+    private void InitTimer()
     {
         timer = new TimerTask(50);//1秒=1000毫秒 50毫秒调用1次
         #region 注册Handle后,子线程中执行完后,可在主线程中执行回调
@@ -28,10 +34,6 @@ public class TimerTaskManager : SingletonMono<TimerTaskManager>
             }
         });
         #endregion
-    }
-    public void InitManager()
-    {
-        transform.SetParent(App.app.transform);
     }
     private void Update()
     {

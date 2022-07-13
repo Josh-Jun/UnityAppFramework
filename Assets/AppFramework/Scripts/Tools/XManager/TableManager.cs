@@ -7,7 +7,11 @@ public class TableManager : SingletonMono<TableManager>
     private const string path_AppTableConfig = "App/Assets/AppTableConfig";
     private Dictionary<string, byte[]> m_TablePairs = new Dictionary<string, byte[]>();
     private AppTableConfig appTableConfig;
-    private void Awake()
+    public override void InitManager(Transform parent)
+    {
+        base.InitManager(parent);
+    }
+    public void InitConfig()
     {
         TextAsset config = AssetsManager.Instance.LoadAsset<TextAsset>(path_AppTableConfig);
         appTableConfig = XmlManager.ProtoDeSerialize<AppTableConfig>(config.bytes);
@@ -23,10 +27,6 @@ public class TableManager : SingletonMono<TableManager>
                 m_TablePairs.Add(appTableConfig.AppTable[i].TableName, bytes);
             }
         }
-    }
-    public void InitManager()
-    {
-        transform.SetParent(App.app.transform);
     }
     public T GetTable<T>(string tableName) where T : class
     {

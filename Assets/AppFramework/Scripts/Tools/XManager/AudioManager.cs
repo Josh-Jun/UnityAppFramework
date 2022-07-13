@@ -7,14 +7,11 @@ public class AudioManager : SingletonMono<AudioManager>
     private AudioSource backgroundAudio;
     private AudioSource effectAudio;
 
-    private void Awake()
+    public override void InitManager(Transform parent)
     {
+        base.InitManager(parent);
         backgroundAudio = CreateAudioSource();
         effectAudio = CreateAudioSource();
-    }
-    public void InitManager()
-    {
-        transform.SetParent(App.app.transform);
     }
     private AudioSource CreateAudioSource(bool playOnAwake = false)
     {

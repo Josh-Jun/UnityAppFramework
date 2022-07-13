@@ -10,14 +10,12 @@ public class VideoManager : SingletonMono<VideoManager>
 {
     private RenderTexture movie;
     public VideoPlayer VideoPlayer { get; private set; }
-    private void Awake()
+    
+    public override void InitManager(Transform parent)
     {
+        base.InitManager(parent);
         VideoPlayer = this.TryGetComponent<VideoPlayer>();
         VideoPlayer.sendFrameReadyEvents = true;
-    }
-    public void InitManager()
-    {
-        transform.SetParent(App.app.transform);
     }
     /// <summary>在RawImage上播放视频，URL</summary>
     public void PlayVideo(RawImage rawImage, string url, Action cb = null, int width = 0, int height = 0)

@@ -63,8 +63,8 @@ public partial class NetcomManager : SingletonMonoEvent<NetcomManager>
             }
         }
     }
-    public void InitManager()
+    public override void InitManager(Transform parent)
     {
-        transform.SetParent(App.app.transform);
+        base.InitManager(parent);
     }
 }

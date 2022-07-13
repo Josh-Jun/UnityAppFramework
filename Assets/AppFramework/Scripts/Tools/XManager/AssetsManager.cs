@@ -7,9 +7,9 @@ using XLuaFrame;
 
 public class AssetsManager : SingletonMono<AssetsManager>
 {
-    public void InitManager()
+    public override void InitManager(Transform parent)
     {
-        transform.SetParent(App.app.transform);
+        base.InitManager(parent);
     }
     
     #region 移动游戏对象到场景

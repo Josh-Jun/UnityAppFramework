@@ -27,4 +27,8 @@ public class SingletonMonoEvent<T> : EventBaseMono where T : SingletonMonoEvent<
             }
         }
     }
+    public virtual void InitManager(Transform parent)
+    {
+        transform.SetParent(parent);
+    } 
 }

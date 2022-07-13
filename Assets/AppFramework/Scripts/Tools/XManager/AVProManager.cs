@@ -95,8 +95,9 @@ public class AVProManager : SingletonMono<AVProManager>
         Entrys.Add(entry);
     }
     #endregion
-    private void Awake()
+    public override void InitManager(Transform parent)
     {
+        base.InitManager(parent);
         _mediaPlayer = gameObject.TryGetComponent<MediaPlayer>();
         gameObject.TryGetComponent<AudioSource>();
         gameObject.TryGetComponent<AudioOutput>().Player = MediaPlayer;
@@ -104,10 +105,6 @@ public class AVProManager : SingletonMono<AVProManager>
         MediaPlayer.AutoStart = false;
         MediaPlayer.Loop = false;
         MediaPlayer.Events.AddListener(OnMediaPlayerEvent);
-    }
-    public void InitManager()
-    {
-        transform.SetParent(App.app.transform);
     }
     /// <summary> 打开视频 </summary>
     public bool OpenMedia(MediaPath path, bool autoPlay = true)
