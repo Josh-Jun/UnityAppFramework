@@ -2,10 +2,31 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
-public class CopyFolderKeepAssetsUsingEditor
+public class MenuToolsEditor
 {
+    [MenuItem("Tools/Play")]
+    private static void OpenAndRunScene()
+    {
+        string path = "Assets/AppFramework/Scenes/App.unity";
+        string SceneName = Path.GetFileNameWithoutExtension(path);
+        bool IsCurScene = EditorSceneManager.GetActiveScene().name.Equals(SceneName);//是否为当前场景
+        if (!Application.isPlaying)
+        {
+            if (!IsCurScene)
+            {
+                EditorSceneManager.OpenScene(path);
+            }
+            EditorApplication.isPlaying = true;
+        }
+        else
+        {
+            EditorApplication.isPlaying = false;
+        }
+    }
+    
     [MenuItem("Assets/复制文件夹(复制依赖关系) %#D", false, 0)]
     static public void CopyFolderKeepAssetsUsing()
     {
