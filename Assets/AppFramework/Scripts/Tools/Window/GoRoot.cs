@@ -41,7 +41,7 @@ public class GoRoot : SingletonMono<GoRoot>
         {
             if (TempGameObject == null)
             {
-                TempGameObject = new GameObject("TempGameObjects");
+                TempGameObject = new GameObject("TempGoRoot");
             }
             return TempGameObject.transform;
         } 
@@ -69,7 +69,7 @@ public class GoRoot : SingletonMono<GoRoot>
         UICanvasScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Shrink;
         #endregion
         
-        GlobalGameObject = new GameObject("GlobalGameObjects");
+        GlobalGameObject = new GameObject("GlobalGoRoot");
         GlobalGameObject.transform.SetParent(transform);
 
         #region EventSystem

@@ -33,7 +33,7 @@ public class Root
         //设置程序帧率
         Application.targetFrameRate = AppConfig.AppFrameRate;
 
-        InitManager(App.app.transform);
+        InitManager();
         OutputAppInfo();
         BeginCheckUpdate();
     }
@@ -68,8 +68,12 @@ public class Root
         });
     }
 
-    private static void InitManager(Transform parent)
+    private static void InitManager()
     {
+        GameObject go = new GameObject("Manager");
+        Transform parent = go.transform;
+        parent.SetParent(App.app.transform);
+        
         AssetBundleManager.Instance.InitManager(parent);
         TimerTaskManager.Instance.InitManager(parent);
         AssetsManager.Instance.InitManager(parent);
