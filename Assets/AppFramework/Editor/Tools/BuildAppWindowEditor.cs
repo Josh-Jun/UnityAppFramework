@@ -17,7 +17,7 @@ public class BuildAppWindowEditor : EditorWindow
     public AppConfig AppConfig;//App配置表 
     private readonly string configPath = "App/AppConfig";
     private bool DevelopmentBuild = true;
-    private bool IsProServer = true;
+    private bool IsTestServer = true;
     private bool IsHotfix = false;
     private bool IsLoadAB = false;
     private bool RunXLuaScripts = false;
@@ -46,7 +46,7 @@ public class BuildAppWindowEditor : EditorWindow
         if (AppConfig != null)
         {
             DevelopmentBuild = AppConfig.IsDebug;
-            IsProServer = AppConfig.IsProServer;
+            IsTestServer = AppConfig.IsTestServer;
             IsHotfix = AppConfig.IsHotfix;
             IsLoadAB = AppConfig.IsLoadAB;
             RunXLuaScripts = AppConfig.RunXLua;
@@ -72,9 +72,9 @@ public class BuildAppWindowEditor : EditorWindow
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.BeginHorizontal();
-        GUILayout.Label(new GUIContent("Is Pro Server"));
+        GUILayout.Label(new GUIContent("Is Test Server"));
         GUILayout.FlexibleSpace();
-        IsProServer = EditorGUILayout.Toggle(IsProServer, GUILayout.MaxWidth(75));
+        IsTestServer = EditorGUILayout.Toggle(IsTestServer, GUILayout.MaxWidth(75));
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.BeginHorizontal();
@@ -116,9 +116,9 @@ public class BuildAppWindowEditor : EditorWindow
             EditorGUILayout.EndHorizontal();
         }
         
-        if (GUILayout.Button("Update"))
+        if (GUILayout.Button("Apply"))
         {
-            UpdateConfig();
+            ApplyConfig();
         }
 
         outputPath = EditorGUILayout.TextField("Output Path", outputPath);
@@ -133,17 +133,17 @@ public class BuildAppWindowEditor : EditorWindow
 
         if (GUILayout.Button("Build"))
         {
-            UpdateConfig();
+            ApplyConfig();
             BuildApp();
         }
     }
-    public void UpdateConfig()
+    public void ApplyConfig()
     {
         EditorUserBuildSettings.development = DevelopmentBuild;
         AppConfig.IsDebug = DevelopmentBuild;
         AppConfig.IsHotfix = IsHotfix;
         AppConfig.IsLoadAB = IsLoadAB;
-        AppConfig.IsProServer = IsProServer;
+        AppConfig.IsTestServer = IsTestServer;
         AppConfig.RunXLua = RunXLuaScripts;
         AppConfig.AppFrameRate = AppFrameRate;
         AppConfig.TargetPackage = ApkTarget;

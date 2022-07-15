@@ -20,7 +20,7 @@ public partial class NetcomManager : SingletonMonoEvent<NetcomManager>
         private set { }
         get
         {
-            string server = Root.AppConfig.IsProServer ? "" : "";//测试服务器:生产服务器
+            string server = Root.AppConfig.IsTestServer ? "" : "";//测试服务器:生产服务器
             return server;
         }
     }
@@ -32,7 +32,7 @@ public partial class NetcomManager : SingletonMonoEvent<NetcomManager>
         private set { }
         get
         {
-            string server = Root.AppConfig.IsProServer ? "" : "";//测试服务器:生产服务器
+            string server = Root.AppConfig.IsTestServer ? "" : "";//测试服务器:生产服务器
             return server;
         }
     }
@@ -44,7 +44,7 @@ public partial class NetcomManager : SingletonMonoEvent<NetcomManager>
         private set { }
         get
         {
-            int port = Root.AppConfig.IsProServer ? 17888 : 8080;//测试服务器:生产服务器
+            int port = Root.AppConfig.IsTestServer ? 17888 : 8080;//测试服务器:生产服务器
             return port;
         }
     }

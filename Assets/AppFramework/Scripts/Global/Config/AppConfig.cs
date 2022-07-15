@@ -10,8 +10,8 @@ public class AppConfig : ScriptableObject
 
     [Tooltip("App调试模式")]
     public bool IsDebug;
-    [Tooltip("App服务器是否生产服")]
-    public bool IsProServer;
+    [Tooltip("App服务器是否测试服")]
+    public bool IsTestServer;
     [Tooltip("App是否热更")]
     public bool IsHotfix;
     [Tooltip("App是否加载AB包")]

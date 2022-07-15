@@ -40,7 +40,7 @@ public class Root
 
     private static void OutputAppInfo()
     {
-        string info_server = AppConfig.IsProServer ? "生产环境" : "测试环境";
+        string info_server = AppConfig.IsTestServer ? "测试环境" : "生产环境";
         Debug.Log("配置信息:");
         Debug.Log($"当前服务器:{info_server}");
     }

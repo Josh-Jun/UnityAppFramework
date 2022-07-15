@@ -45,7 +45,7 @@ public class AppTableConfigWindowEditor : EditorWindow
                 config.AppTable[i].TableName = EditorGUILayout.TextField(config.AppTable[i].TableName);
                 GUILayout.Label("2.TablePath");
                 config.AppTable[i].TablePath = EditorGUILayout.TextField(config.AppTable[i].TablePath);
-                if (GUILayout.Button("Remove", titleStyle))
+                if (GUILayout.Button("", new GUIStyle("OL Minus")))
                 {
                     if (config.AppTable.Count > 1)
                     {
@@ -57,23 +57,24 @@ public class AppTableConfigWindowEditor : EditorWindow
                         Debug.Log("不能删除最后一个Table");
                     }
                 }
+                //OL Minus OL Plus
+                if (GUILayout.Button("", new GUIStyle("OL Plus")))
+                {
+                    AppTable appTable = new AppTable
+                    {
+                        TableName = "TestTableData",
+                        TablePath = "Table/Test/TestTableData",
+                    };
+                    Add(appTable);
+                    config.AppTable.Add(appTable);
+                }
                 EditorGUILayout.EndHorizontal();
             }
         }
         EditorGUILayout.Space();
-        if (GUILayout.Button("Add New Table"))
+        if (GUILayout.Button("Apply"))
         {
-            AppTable appTable = new AppTable
-            {
-                TableName = "TestTableData",
-                TablePath = "Table/Test/TestTableData",
-            };
-            Add(appTable);
-            config.AppTable.Add(appTable);
-        }
-        if (GUILayout.Button("UpdateConfig"))
-        {
-            UpdateConfig();
+            ApplyConfig();
         }
         EditorGUILayout.EndVertical();
     }
@@ -99,7 +100,7 @@ public class AppTableConfigWindowEditor : EditorWindow
         node.ParentNode.RemoveChild(node);
         xmlDocument.Save(path);
     }
-    public void UpdateConfig()
+    public void ApplyConfig()
     {
         string path = string.Format(@"{0}/Resources/{1}.xml", Application.dataPath, configPath);
         XmlDocument xmlDocument = new XmlDocument();

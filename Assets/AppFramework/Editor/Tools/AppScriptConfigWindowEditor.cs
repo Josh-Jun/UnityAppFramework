@@ -58,9 +58,9 @@ public class AppScriptConfigWindowEditor : EditorWindow
         
         EditorGUILayout.BeginVertical();
 
-        EditorGUILayout.BeginHorizontal(titleStyle);
-        GUILayout.Label(new GUIContent("MainSceneName"), titleStyle);
-        level = EditorGUILayout.Popup(level, SceneNames.ToArray());
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label(new GUIContent("MainSceneName"), GUILayout.MaxWidth(100));
+        level = EditorGUILayout.Popup(level, SceneNames.ToArray(), GUILayout.MaxWidth(150));
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.Space();
@@ -71,12 +71,12 @@ public class AppScriptConfigWindowEditor : EditorWindow
                 EditorGUILayout.BeginHorizontal(titleStyle);
                 GUILayout.Label(new GUIContent("RootScript"), titleStyle);
                 GUILayout.Label("1.SceneName");
-                levels[i] = EditorGUILayout.Popup(levels[i],SceneNames.ToArray());
+                levels[i] = EditorGUILayout.Popup(levels[i],SceneNames.ToArray(), GUILayout.MaxWidth(180));
                 GUILayout.Label("2.ScriptName");
                 config.RootScript[i].ScriptName = EditorGUILayout.TextField(config.RootScript[i].ScriptName);
                 GUILayout.Label("3.LuaScriptPath");
                 config.RootScript[i].LuaScriptPath = EditorGUILayout.TextField(config.RootScript[i].LuaScriptPath);
-                if (GUILayout.Button("Remove", titleStyle))
+                if (GUILayout.Button("", new GUIStyle("OL Minus")))
                 {
                     if (config.RootScript.Count > 1)
                     {
@@ -89,24 +89,25 @@ public class AppScriptConfigWindowEditor : EditorWindow
                         Debug.Log("不能删除最后一个RootScript");
                     }
                 }
+                //OL Minus OL Plus
+                if (GUILayout.Button("", new GUIStyle("OL Plus")))
+                {
+                    RootScript rootScript = new RootScript
+                    {
+                        SceneName = "TestScene",
+                        ScriptName = "Test.TestRoot",
+                        LuaScriptPath = "Test/TestRoot",
+                    };
+                    int index = SceneNames.IndexOf("TestScene");
+                    Add(rootScript);
+                    config.RootScript.Add(rootScript);
+                    levels.Add(index);
+                }
                 EditorGUILayout.EndHorizontal();
             }
         }
         EditorGUILayout.Space();
-        if (GUILayout.Button("Add New Root Script"))
-        {
-            RootScript rootScript = new RootScript
-            {
-                SceneName = "TestScene",
-                ScriptName = "Test.TestRoot",
-                LuaScriptPath = "Test/TestRoot",
-            };
-            int index = SceneNames.IndexOf("TestScene");
-            Add(rootScript);
-            config.RootScript.Add(rootScript);
-            levels.Add(index);
-        }
-        if (GUILayout.Button("UpdateConfig"))
+        if (GUILayout.Button("Apply"))
         {
             UpdateConfig();
         }
