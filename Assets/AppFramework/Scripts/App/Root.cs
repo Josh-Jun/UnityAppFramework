@@ -203,11 +203,14 @@ public class Root
     public static void AppPause(bool isPause)
     {
         UpdateRoot?.AppPause(isPause);
-        for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
+        if (appScriptConfig != null)
         {
-            if (iRootPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
+            for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
             {
-                iRootPairs[appScriptConfig.RootScript[i].ScriptName].AppPause(isPause);
+                if (iRootPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
+                {
+                    iRootPairs[appScriptConfig.RootScript[i].ScriptName].AppPause(isPause);
+                }
             }
         }
     }
@@ -215,11 +218,14 @@ public class Root
     public static void AppFocus(bool isFocus)
     {
         UpdateRoot?.AppFocus(isFocus);
-        for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
+        if (appScriptConfig != null)
         {
-            if (iRootPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
+            for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
             {
-                iRootPairs[appScriptConfig.RootScript[i].ScriptName].AppFocus(isFocus);
+                if (iRootPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
+                {
+                    iRootPairs[appScriptConfig.RootScript[i].ScriptName].AppFocus(isFocus);
+                }
             }
         }
     }
@@ -227,11 +233,14 @@ public class Root
     public static void AppQuit()
     {
         UpdateRoot?.AppQuit();
-        for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
+        if (appScriptConfig != null)
         {
-            if (iRootPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
+            for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
             {
-                iRootPairs[appScriptConfig.RootScript[i].ScriptName].AppQuit();
+                if (iRootPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
+                {
+                    iRootPairs[appScriptConfig.RootScript[i].ScriptName].AppQuit();
+                }
             }
         }
     }
