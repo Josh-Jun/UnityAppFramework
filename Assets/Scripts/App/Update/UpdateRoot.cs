@@ -77,13 +77,14 @@ namespace Update
             float time = 0;
             float previousSize = 0;
             float speed = 0;
-            while (GetProgress != 1)
+            float delta = 3f;
+            while (GetProgress != delta)
             {
                 yield return new WaitForEndOfFrame();
                 time += Time.deltaTime;
                 if (time >= 1f)
                 {
-                    speed = (GetLoadedSize() - previousSize);
+                    speed = (GetLoadedSize() - previousSize) / delta;
                     previousSize = GetLoadedSize();
                     time = 0;
                 }
@@ -104,6 +105,7 @@ namespace Update
                 if (isEnd && bundleProgress == 1)
                 {
                     window.SetProgressBarActive(false);
+                    window.SetWindowActive(false);
                     //AB包加载完成
                     Root.StartApp();
                 }
@@ -254,9 +256,7 @@ namespace Update
 
         private void UpdateConfig(Folder folder = null)
         {
-            XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.Load(XmlLocalVersionPath);
-
+            XmlDocument xmlDocument = XmlManager.Load(XmlLocalVersionPath);
             var scene = xmlDocument.GetElementsByTagName("Scenes");
             for (int i = 0; i < scene.Count; i++)
             {
@@ -277,8 +277,7 @@ namespace Update
                     }
                 }
             }
-
-            xmlDocument.Save(XmlLocalVersionPath);
+            XmlManager.Save(xmlDocument, XmlLocalVersionPath);
         }
 
         /// <summary> 下载 </summary>

@@ -1,4 +1,4 @@
-package com.genimous.linjing;
+package com.debug.tools;
 
 import android.app.Activity;
 import android.content.Context;

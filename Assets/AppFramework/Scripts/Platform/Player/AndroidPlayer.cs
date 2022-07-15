@@ -8,7 +8,7 @@ namespace Platform
     public class AndroidPlayer : PlatformManager
     {
         private const string AppMainPackage = "com.unity3d.player.UnityPlayer";
-        private const string AppToolsPackage = "com.genimous.linjing.UnityTools";
+        private const string AppToolsPackage = "com.debug.tools.UnityTools";
         public AndroidPlayer()
         {
             JavaObject(AppToolsPackage).CallStatic("init", MainJavaObject());
@@ -21,7 +21,7 @@ namespace Platform
         } 
         public override string GetDataPath(string folder)
         {
-            return $"{Application.persistentDataPath}/{folder}";
+            return $"file://{Application.persistentDataPath}/{folder}";
         }
         public override void SavePhoto(string folder, string fileName)
         {

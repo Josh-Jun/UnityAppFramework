@@ -118,4 +118,18 @@ public class XmlManager
         }
         return obj;
     }
+
+    public static XmlDocument Load(string xml_path)
+    {
+        string path = xml_path.Replace("file://", "");
+        XmlDocument xmlDocument = new XmlDocument();
+        xmlDocument.Load(path);
+        return xmlDocument;
+    }
+
+    public static void Save(XmlDocument xmlDocument, string xml_path)
+    {
+        string path = xml_path.Replace("file://", "");
+        xmlDocument.Save(path);
+    }
 }

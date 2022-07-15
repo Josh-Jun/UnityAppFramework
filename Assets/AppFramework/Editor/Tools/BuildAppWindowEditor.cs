@@ -229,13 +229,12 @@ public class BuildAppWindowEditor : EditorWindow
 
         Debug.Log(string.Format("GenericBuild Success Path = {0}", BuildPath));
     }
-    static string[] GetBuildScenes()
+    string[] GetBuildScenes()
     {
         List<string> names = new List<string>();
         foreach (EditorBuildSettingsScene e in EditorBuildSettings.scenes)
         {
-            if (e == null)
-                continue;
+            if (e == null) continue;
             if (e.enabled)
                 names.Add(e.path);
         }
