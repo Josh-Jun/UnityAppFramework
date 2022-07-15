@@ -17,6 +17,6 @@ MonoBehaviour:
   IsHotfix: 1
   IsLoadAB: 1
   RunXLua: 0
-  AppFrameRate: 30
+  AppFrameRate: 60
   TargetPackage: 0
   NativeApp: 0
