@@ -6,25 +6,26 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 
 [InitializeOnLoad]
-public class SceneToolsEditor : Editor
+public class SceneToolsEditor
 {
-    void OnEnable()
+    static SceneToolsEditor()
     {
         SceneView.duringSceneGui += SceneGUI;
     }
 
-    void OnDisable()
-    {
-        SceneView.duringSceneGui -= SceneGUI;
-    }
-    Rect windowRect = new Rect(10, 10, 64, 64);
-    void SceneGUI(SceneView view)
+    static Rect windowRect = new Rect(10, 10, 64, 64);
+    static void SceneGUI(SceneView view)
     {
         Handles.BeginGUI();
         windowRect = GUILayout.Window(0, windowRect, DoMyWindow, "Tools");
         Handles.EndGUI();
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            Debug.Log("R");
+            windowRect = new Rect(10, 10, 64, 64);
+        }
     }
-    void DoMyWindow(int windowID)
+    static void DoMyWindow(int windowID)
     {
         if (GUILayout.Button("Open App Scene"))
         {
