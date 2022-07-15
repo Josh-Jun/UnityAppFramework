@@ -139,6 +139,10 @@ public class BuildAppWindowEditor : EditorWindow
     }
     public void ApplyConfig()
     {
+        // PlayerSettings.Android.keystorePass = "";
+        // PlayerSettings.Android.keyaliasName = "";
+        // PlayerSettings.Android.keyaliasPass = "";
+        
         EditorUserBuildSettings.development = DevelopmentBuild;
         AppConfig.IsDebug = DevelopmentBuild;
         AppConfig.IsHotfix = IsHotfix;
