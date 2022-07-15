@@ -75,19 +75,12 @@ namespace Update
         private IEnumerator DownLoading()
         {
             float time = 0;
-            float previousSize = 0;
             float speed = 0;
-            float delta = 3f;
-            while (GetProgress != delta)
+            while (GetProgress != 1f)
             {
                 yield return new WaitForEndOfFrame();
                 time += Time.deltaTime;
-                if (time >= 1f)
-                {
-                    speed = (GetLoadedSize() - previousSize) / delta;
-                    previousSize = GetLoadedSize();
-                    time = 0;
-                }
+                speed = GetLoadedSize() / time;
                 window.SetSpeedText(speed);
                 window.SetProgressText(GetLoadedSize(), LoadTotalSize);
                 window.SetProgressValue(GetProgress);
