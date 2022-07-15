@@ -17,15 +17,10 @@ public class SceneToolsEditor
     static void SceneGUI(SceneView view)
     {
         Handles.BeginGUI();
-        windowRect = GUILayout.Window(0, windowRect, DoMyWindow, "Tools");
+        windowRect = GUILayout.Window(0, windowRect, DoWindowEvent, "Tools");
         Handles.EndGUI();
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            Debug.Log("R");
-            windowRect = new Rect(10, 10, 64, 64);
-        }
     }
-    static void DoMyWindow(int windowID)
+    static void DoWindowEvent(int windowId)
     {
         if (GUILayout.Button("Open App Scene"))
         {
