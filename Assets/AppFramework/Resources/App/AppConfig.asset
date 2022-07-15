@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsDebug: 1
   IsTestServer: 1
-  IsHotfix: 0
-  IsLoadAB: 0
+  IsHotfix: 1
+  IsLoadAB: 1
   RunXLua: 0
   AppFrameRate: 30
   TargetPackage: 0
