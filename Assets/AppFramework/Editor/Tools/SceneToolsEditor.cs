@@ -23,11 +23,11 @@ public class SceneToolsEditor
     }
 
     static Rect windowRect = new Rect(10, 10, 64, 64);
-
+    //sv_iconselector_selection
     static void SceneGUI(SceneView view)
     {
         Handles.BeginGUI();
-        windowRect = GUILayout.Window(0, windowRect, DoWindowEvent, "Tools");
+        windowRect = GUILayout.Window(0, windowRect, DoWindowEvent, "Tools", new GUIStyle("sv_iconselector_selection"));
         Handles.EndGUI();
     }
 
@@ -52,6 +52,11 @@ public class SceneToolsEditor
         if (GUILayout.Button("Play&Pause"))
         {
             EditorApplication.isPlaying = !EditorApplication.isPlaying;
+        }
+        
+        if (GUILayout.Button("Refurbish"))
+        {
+            SceneView.RepaintAll();
         }
 
         EditorGUILayout.EndVertical();
