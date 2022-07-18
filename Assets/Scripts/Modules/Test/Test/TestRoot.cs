@@ -34,6 +34,14 @@ namespace Test
             mobile = new RenderTexture(Screen.width, Screen.height, 32);
             window.SetMobileCamera(mobile);
         }
+
+        private void SetLightingmapData()
+        {
+            string lightingmap_ButterflyPath = "Butterfly/Assets/Lightingmap/Butterfly";
+            LightingmapData lightingmap = AssetsManager.Instance.LoadAsset<LightingmapData>(lightingmap_ButterflyPath);
+            window.SetLightingmapData(lightingmap);
+        }
+
         public void End()
         {
             

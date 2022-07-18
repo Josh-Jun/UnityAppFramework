@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using DG.Tweening;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -8,9 +9,11 @@ using UnityEngine;
 [InitializeOnLoad]
 public class SceneToolsEditor
 {
+    private static bool Auto;
     static SceneToolsEditor()
     {
         SceneView.duringSceneGui += SceneGUI;
+        EditorApplication.playModeStateChanged += EditorApplication_playModeStateChanged;
     }
 
     static Rect windowRect = new Rect(10, 10, 64, 64);
@@ -22,14 +25,26 @@ public class SceneToolsEditor
     }
     static void DoWindowEvent(int windowId)
     {
-        if (GUILayout.Button("Open App Scene"))
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label(new GUIContent("Auto Open Scene"));
+        Auto = EditorGUILayout.Toggle(Auto);
+        EditorGUILayout.EndHorizontal();
+        
+        EditorGUILayout.BeginVertical();
+        if (!Auto)
         {
-            OpenScene();
+            if (GUILayout.Button("Open App Scene"))
+            {
+                OpenScene();
+            }
         }
+        
         if (GUILayout.Button("Play&Pause"))
         {
             EditorApplication.isPlaying = !EditorApplication.isPlaying;
         }
+        EditorGUILayout.EndVertical();
+        
         GUI.DragWindow();
     }
     public static void OpenScene()
@@ -43,6 +58,25 @@ public class SceneToolsEditor
             {
                 EditorSceneManager.OpenScene(path);
             }
+        }
+    }
+    private static void EditorApplication_playModeStateChanged(PlayModeStateChange obj)
+    {
+        switch (obj)
+        {
+            case PlayModeStateChange.EnteredEditMode://停止播放事件监听后被监听
+                // Debug.Log("如果编辑器应用程序处于编辑模式而之前处于播放模式，则在编辑器应用程序的下一次更新期间发生。");
+                break;
+            case PlayModeStateChange.ExitingEditMode://编辑转播放时监听(播放之前)
+                // Debug.Log("在退出编辑模式时，在编辑器处于播放模式之前发生。");
+                if (Auto) { OpenScene(); }
+                break;
+            case PlayModeStateChange.EnteredPlayMode://播放时立即监听
+                // Debug.Log("如果编辑器应用程序处于播放模式而之前处于编辑模式，则在编辑器应用程序的下一次更新期间发生。");
+                break;
+            case PlayModeStateChange.ExitingPlayMode://停止播放立即监听
+                // Debug.Log("在退出播放模式时，在编辑器处于编辑模式之前发生。");
+                break;
         }
     }
 }
