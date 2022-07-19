@@ -305,7 +305,7 @@ public class AssetBundleWindowEditor : EditorWindow
             FileManager.CreateFolder(outPath);
         }
 
-        if (BuildPipeline.BuildAssetBundles(outPath, BuildAssetBundleOptions.None, buildTarget))
+        if (BuildPipeline.BuildAssetBundles(outPath, BuildAssetBundleOptions.ChunkBasedCompression, buildTarget))
         {
 
             AssetDatabase.Refresh();

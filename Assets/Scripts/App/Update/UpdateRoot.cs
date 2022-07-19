@@ -95,6 +95,7 @@ namespace Update
             LoadAssetBundle((bool isEnd, string bundleName, float bundleProgress) =>
             {
                 window.SetTipsText(string.Format("正在加载资源:{0}", bundleName));
+                window.SetProgressValue(bundleProgress);
                 if (isEnd && bundleProgress == 1)
                 {
                     window.SetProgressBarActive(false);
