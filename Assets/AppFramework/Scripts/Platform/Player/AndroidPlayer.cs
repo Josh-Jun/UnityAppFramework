@@ -9,9 +9,11 @@ namespace Platform
     {
         private const string AppMainPackage = "com.unity3d.player.UnityPlayer";
         private const string AppToolsPackage = "com.debug.tools.AndroidHelper";
-        public AndroidPlayer()
+        private AndroidJavaObject MainJavaObject
         {
-            JavaObject(AppToolsPackage).CallStatic("init", MainJavaObject());
+            get {
+                return JavaObject(AppMainPackage).GetStatic<AndroidJavaObject>("currentActivity");
+            }
         }
         public override bool IsEditor { get; } = false;
         public override string Name { get; } = "Android";
@@ -19,6 +21,10 @@ namespace Platform
         {
             get { return Root.AppConfig.TargetPackage == TargetPackage.Mobile ? "android" : Root.AppConfig.TargetPackage.ToString().ToLower(); }
         } 
+        public AndroidPlayer()
+        {
+            JavaObject(AppToolsPackage).CallStatic("init", MainJavaObject);
+        }
         public override string GetDataPath(string folder)
         {
             return $"file://{Application.persistentDataPath}/{folder}";
@@ -50,10 +56,6 @@ namespace Platform
 #if UNITY_ANDROID
         JavaObject(AppToolsPackage).CallStatic("quitUnityActivity");
 #endif
-        }
-        private AndroidJavaObject MainJavaObject()
-        {
-            return JavaObject(AppMainPackage).GetStatic<AndroidJavaObject>("currentActivity");
         }
         private AndroidJavaObject JavaObject(string packageName)
         {
