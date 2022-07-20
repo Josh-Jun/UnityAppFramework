@@ -38,7 +38,8 @@ public abstract class PlatformManager
     public abstract string Name { get; }
     public abstract string PlatformName { get; }
     public abstract string GetDataPath(string folder);
-    public abstract void SavePhoto(string folder, string fileName);
+    public abstract void InstallApp(string apppath);
+    public abstract void SavePhoto(string imagePath);
     public abstract string GetAppData(string key);
     public abstract void QuitUnityPlayer();
 }

@@ -75,13 +75,13 @@ public static class PictureManager
         texture.ReadPixels(new Rect(0, 0, size.x, size.y), 0, 0, false);
         texture.Apply();
         var img = texture.EncodeToPNG();
+        string imageName = string.Format("Image{0}.png", Utils.GetTimeStamp);
+        string file = string.Format("{0}/{1}", path, imageName);
         if (!FileManager.FolderExist(path))//创建生成目录，如果不存在则创建目录  
         {
             FileManager.CreateFolder(path);
         }
-        string imageName = string.Format("Image{0}.png", Utils.GetTimeStamp);
-        string file = string.Format("{0}/{1}", path, imageName);
-        File.WriteAllBytes(file, img);
+        FileManager.CreateFile(file, img);
         callback?.Invoke(texture, imageName);
     }
     /// <summary>
@@ -95,13 +95,13 @@ public static class PictureManager
     {
         Texture2D texture = CaptureCamera(camera, new Rect(Screen.width / 2 - camera.pixelWidth / 2, Screen.height / 2 - camera.pixelHeight / 2, camera.pixelWidth, camera.pixelHeight));
         var img = texture.EncodeToPNG();
+        string imageName = string.Format("Image{0}.png", Utils.GetTimeStamp);
+        string file = string.Format("{0}/{1}", path, imageName);
         if (!FileManager.FolderExist(path))//创建生成目录，如果不存在则创建目录  
         {
             FileManager.CreateFolder(path);
         }
-        string imageName = string.Format("Image{0}.png", Utils.GetTimeStamp);
-        string file = string.Format("{0}/{1}", path, imageName);
-        File.WriteAllBytes(file, img);
+        FileManager.CreateFile(file, img);
         callback?.Invoke(texture, imageName);
     }
     /// <summary>  

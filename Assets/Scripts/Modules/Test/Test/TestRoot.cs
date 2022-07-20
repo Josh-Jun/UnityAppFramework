@@ -95,7 +95,7 @@ namespace Test
         {
             PictureManager.TakePhoto(window.renderCamera, PlatformManager.Instance.GetDataPath("Screenshots"), (Texture2D texture, string fileName) =>
             {
-                PlatformManager.Instance.SavePhoto("Screenshots", fileName);
+                PlatformManager.Instance.SavePhoto(PlatformManager.Instance.GetDataPath("Screenshots/") + fileName);
                 window.SetRawImage(texture);
             });
         }
@@ -114,6 +114,28 @@ namespace Test
         private void ButtonParamsEvent(string value)
         {
             window.SetText(value);
+            int id = -1;
+            if (FileManager.FileExist(PlatformManager.Instance.GetDataPath("App/") + "meta.apk"))
+            {
+                PlatformManager.Instance.InstallApp(PlatformManager.Instance.GetDataPath("App/") + "meta.apk");
+            }
+            else
+            {
+                UnityWebRequester requester = new UnityWebRequester(App.app);
+                requester.GetBytes("https://meta-oss.genimous.com/vr-ota/App/meta.apk", (bytes) =>
+                {
+                    FileManager.CreateFile(PlatformManager.Instance.GetDataPath("App/") + "meta.apk",bytes);
+                    PlatformManager.Instance.InstallApp(PlatformManager.Instance.GetDataPath("App/") + "meta.apk");
+                });
+                id = TimerManager.Instance.StartTimer((time) =>
+                {
+                    window.SetText(requester.DownloadedProgress.ToString("F2"));
+                    if (requester.IsDown)
+                    {
+                        TimerManager.Instance.EndTimer(id);
+                    }
+                });
+            }
         }
 
         public void AppPause(bool pause)

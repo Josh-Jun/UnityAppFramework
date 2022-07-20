@@ -13,9 +13,13 @@ namespace Platform
         {
             return $"file://{Application.dataPath.Replace("Assets", "")}{folder}";
         }
-        public override void SavePhoto(string folder, string fileName)
+        public override void SavePhoto(string imagePath)
         {
             Debug.Log("SavePhoto");
+        }
+        public override void InstallApp(string apppath)
+        {
+            
         }
         public override void QuitUnityPlayer()
         {

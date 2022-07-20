@@ -23,11 +23,16 @@ namespace Platform
         {
             return $"{Application.persistentDataPath}/{folder}";
         }
-        public override void SavePhoto(string folder, string fileName)
+        public override void SavePhoto(string imagePath)
         {
-            string path = $"{Application.persistentDataPath}/{folder}/{fileName}";
 #if UNITY_IPHONE
-            savePhoto(path);
+            savePhoto(imagePath);
+#endif
+        }
+        public override void InstallApp(string apppath)
+        {
+#if UNITY_IPHONE
+            
 #endif
         }
         public override string GetAppData(string key)
