@@ -1,5 +1,4 @@
-﻿using DG.Tweening.Plugins.Core.PathCore;
-using Platform;
+﻿using Platform;
 using UnityEngine;
 public abstract class PlatformManager
 {
@@ -38,7 +37,7 @@ public abstract class PlatformManager
     public abstract string Name { get; }
     public abstract string PlatformName { get; }
     public abstract string GetDataPath(string folder);
-    public abstract void InstallApp(string apppath);
+    public abstract void InstallApp(string appPath);
     public abstract void SavePhoto(string imagePath);
     public abstract string GetAppData(string key);
     public abstract void QuitUnityPlayer();

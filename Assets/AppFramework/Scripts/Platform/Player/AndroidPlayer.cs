@@ -23,9 +23,9 @@ namespace Platform
         {
             return $"file://{Application.persistentDataPath}/{folder}";
         }
-        public override void InstallApp(string apppath)
+        public override void InstallApp(string appPath)
         {
-            string path = apppath.Replace("file://", "");
+            string path = appPath.Replace("file://", "");
 #if UNITY_ANDROID
             JavaObject(AppToolsPackage).CallStatic("installApp", path);
 #endif

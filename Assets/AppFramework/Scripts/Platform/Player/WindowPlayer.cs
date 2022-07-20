@@ -17,7 +17,7 @@ namespace Platform
         {
             Debug.Log("SavePhoto");
         }
-        public override void InstallApp(string apppath)
+        public override void InstallApp(string appPath)
         {
             
         }

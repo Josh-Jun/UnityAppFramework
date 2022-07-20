@@ -29,7 +29,7 @@ namespace Platform
             savePhoto(imagePath);
 #endif
         }
-        public override void InstallApp(string apppath)
+        public override void InstallApp(string appPath)
         {
 #if UNITY_IPHONE
             
