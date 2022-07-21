@@ -7,6 +7,7 @@ using EventController;
 using System.Reflection;
 using XLuaFrame;
 using System;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.XR.Interaction.Toolkit.UI;
 
 public class GoRoot : SingletonMono<GoRoot>
