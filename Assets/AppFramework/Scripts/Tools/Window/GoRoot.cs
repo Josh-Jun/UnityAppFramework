@@ -75,7 +75,8 @@ public class GoRoot : SingletonMono<GoRoot>
         #region EventSystem
         if (EventSystem.current == null)
         {
-            EventSystemObject = new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
+            Type t = Root.AppConfig.TargetPackage == TargetPackage.Mobile ? typeof(InputSystemUIInputModule) : typeof(XRUIInputModule);
+            EventSystemObject = new GameObject("EventSystem", typeof(EventSystem), t);
             EventSystemObject.transform.SetParent(transform);
         }
         #endregion
