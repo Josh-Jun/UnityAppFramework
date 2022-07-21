@@ -46,7 +46,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
             if (assetbundle == null)
             {
                 UnityWebRequester requester = new UnityWebRequester(App.app);
-                requester.GetAssetBundle($"{mainfestPath}/{PlatformManager.Instance.Name}", (AssetBundle ab) =>
+                requester.GetAssetBundle($"file://{mainfestPath}/{PlatformManager.Instance.Name}", (AssetBundle ab) =>
                 {
                     assetbundle = ab;
                     mainfest = assetbundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
@@ -103,7 +103,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
             int index = i;
             //根据依赖包名称进行加载
             UnityWebRequester requester = new UnityWebRequester(App.app);
-            requester.GetAssetBundle($"{mainfestPath}/{AllABPath[index]}", (AssetBundle ab) =>
+            requester.GetAssetBundle($"file://{mainfestPath}/{AllABPath[index]}", (AssetBundle ab) =>
             {
                 if (!AssetBundlesCache.ContainsKey(AllABPath[index]))
                 {
@@ -129,7 +129,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         if (assetbundle == null)
         {
             //根据各个平台下的基础路径和主包名加载主包
-            assetbundle = AssetBundle.LoadFromFile($"{mainfestPath}/{PlatformManager.Instance.Name}");
+            assetbundle = AssetBundle.LoadFromFile($"file://{mainfestPath}/{PlatformManager.Instance.Name}");
             //获取主包下的AssetBundleManifest资源文件（存有依赖信息）
             mainfest = assetbundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
         }
@@ -143,7 +143,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
             if (!AssetBundlesCache.ContainsKey(dependencies[i]))
             {
                 //根据依赖包名称进行加载
-                ab = AssetBundle.LoadFromFile($"{mainfestPath}/{dependencies[i]}");
+                ab = AssetBundle.LoadFromFile($"file://{mainfestPath}/{dependencies[i]}");
                 //注意添加进缓存 防止重复加载AB包
                 AssetBundlesCache.Add(dependencies[i], ab);
             }
@@ -153,7 +153,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         if (AssetBundlesCache.ContainsKey(bundleName)) return AssetBundlesCache[bundleName];
         else
         {
-            ab = AssetBundle.LoadFromFile($"{mainfestPath}/{bundleName}");
+            ab = AssetBundle.LoadFromFile($"file://{mainfestPath}/{bundleName}");
             AssetBundlesCache.Add(bundleName, ab);
             return ab;
         }

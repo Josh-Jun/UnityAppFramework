@@ -29,6 +29,7 @@ public class AndroidHelper extends UnityPlayerActivity {
     private static Context mContext = null;
     private static Activity mainActivity = null;
 
+    // 初始化
     public static void init(Context context) {
         if (mContext == null) {
             mContext = context;
@@ -42,9 +43,8 @@ public class AndroidHelper extends UnityPlayerActivity {
     public static String getAppData(String key) {
         return mainActivity.getIntent().getStringExtra(key);
     }
-    //退出UnityActivity
+    // 退出UnityActivity
     public static void quitUnityActivity() { mainActivity.finish(); }
-
     // 保存图片到相册
     public static void savePhoto(String imagePath) {
         mainActivity.runOnUiThread(new Runnable() {
@@ -91,22 +91,18 @@ public class AndroidHelper extends UnityPlayerActivity {
             }
         });
     }
-    public static void installApp(String appPath)
-    {
-        try
-        {
+    // 安装apk
+    public static void installApp(String appFullPath) {
+        try {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            File apkFile = new File(appPath);
+            File apkFile = new File(appFullPath);
             Uri uri = null;
-            if (Build.VERSION.SDK_INT >= 24)
-            {
+            if (Build.VERSION.SDK_INT >= 24) {
                 uri = FileProvider.getUriForFile(mContext, "com.debug.tools.fileProvider", apkFile);
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            }
-            else
-            {
+            } else {
                 uri = Uri.fromFile(apkFile);
             }
 
@@ -115,15 +111,12 @@ public class AndroidHelper extends UnityPlayerActivity {
             //查询所有符合 intent 跳转目标应用类型的应用，注意此方法必须放置在 setDataAndType 方法之后
             List<ResolveInfo> resolveLists = mContext.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
             // 然后全部授权
-            for (ResolveInfo resolveInfo : resolveLists)
-            {
+            for (ResolveInfo resolveInfo : resolveLists) {
                 String packageName = resolveInfo.activityInfo.packageName;
                 mContext.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             }
             mContext.startActivity(intent);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

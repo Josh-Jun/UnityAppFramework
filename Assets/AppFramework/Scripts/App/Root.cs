@@ -73,7 +73,7 @@ public class Root
         GameObject go = new GameObject("Manager");
         Transform parent = go.transform;
         parent.SetParent(App.app.transform);
-        
+
         AssetBundleManager.Instance.InitManager(parent);
         TimerTaskManager.Instance.InitManager(parent);
         AssetsManager.Instance.InitManager(parent);

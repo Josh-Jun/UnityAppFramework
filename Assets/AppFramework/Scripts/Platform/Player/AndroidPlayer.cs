@@ -27,20 +27,18 @@ namespace Platform
         }
         public override string GetDataPath(string folder)
         {
-            return $"file://{Application.persistentDataPath}/{folder}";
+            return $"{Application.persistentDataPath}/{folder}";
         }
         public override void InstallApp(string appPath)
         {
-            string path = appPath.Replace("file://", "");
 #if UNITY_ANDROID
-            JavaObject(AppToolsPackage).CallStatic("installApp", path);
+            JavaObject(AppToolsPackage).CallStatic("installApp", appPath);
 #endif
         }
         public override void SavePhoto(string imagePath)
         {
-            string path = imagePath.Replace("file://", "");
 #if UNITY_ANDROID
-            JavaObject(AppToolsPackage).CallStatic("savePhoto", path);
+            JavaObject(AppToolsPackage).CallStatic("savePhoto", imagePath);
 #endif
         }
         public override string GetAppData(string key)

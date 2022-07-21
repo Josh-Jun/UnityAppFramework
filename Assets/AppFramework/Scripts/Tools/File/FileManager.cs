@@ -10,12 +10,11 @@ public class FileManager
     /// <summary> 创建文件 </summary>
     public static void CreateFile(string targetPath, byte[] bytes)
     {
-        string path = targetPath.Replace("file://","");
         try
         {
-            CreateDirectory(path);
-            DeleteFile(path);
-            FileInfo file = new FileInfo(path);
+            CreateDirectory(targetPath);
+            DeleteFile(targetPath);
+            FileInfo file = new FileInfo(targetPath);
             Stream stream = file.Create();
             stream.Write(bytes, 0, bytes.Length);
             stream.Close();
@@ -23,35 +22,33 @@ public class FileManager
         }
         catch
         {
-            Debug.LogError(string.Format("<color=#0000FF> 创建文件-文件夹路径错误:{0}</color>", path));
+            Debug.LogError(string.Format("<color=#0000FF> 创建文件-文件夹路径错误:{0}</color>", targetPath));
         }
     }
 
     /// <summary> 创建文件 </summary>
     public static void CreateFile(string targetPath)
     {
-        string path = targetPath.Replace("file://","");
         try
         {
-            CreateDirectory(path);
-            DeleteFile(path);
-            FileInfo file = new FileInfo(path);
+            CreateDirectory(targetPath);
+            DeleteFile(targetPath);
+            FileInfo file = new FileInfo(targetPath);
             Stream stream = file.Create();
             stream.Close();
             stream.Dispose();
         }
         catch
         {
-            Debug.LogError(string.Format("<color=#0000FF> 创建文件-文件夹路径错误:{0}</color>", path));
+            Debug.LogError(string.Format("<color=#0000FF> 创建文件-文件夹路径错误:{0}</color>", targetPath));
         }
     }
     /// <summary> 创建目录,创建到路径最后一级的文件夹 </summary>
     public static void CreateDirectory(string targetPath)
     {
-        string path = targetPath.Replace("file://","");
         try
         {
-            string dirName = Path.GetDirectoryName(path);
+            string dirName = Path.GetDirectoryName(targetPath);
             if (!Directory.Exists(dirName))
             {
                 Directory.CreateDirectory(dirName);
@@ -59,51 +56,48 @@ public class FileManager
         }
         catch
         {
-            Debug.LogError(string.Format("<color=#0000FF> 创建目录-文件夹路径错误:{0}</color>", path));
+            Debug.LogError(string.Format("<color=#0000FF> 创建目录-文件夹路径错误:{0}</color>", targetPath));
         }
     }
 
     /// <summary> 创建文件夹 </summary>
     public static void CreateFolder(string targetPath)
     {
-        string path = targetPath.Replace("file://","");
         try
         {
-            if (!Directory.Exists(path))
+            if (!Directory.Exists(targetPath))
             {
-                Directory.CreateDirectory(path);
+                Directory.CreateDirectory(targetPath);
             }
         }
         catch
         {
-            Debug.LogError(string.Format("<color=#0000FF>创建文件夹-文件夹路径错误:{0}</color>", path));
+            Debug.LogError(string.Format("<color=#0000FF>创建文件夹-文件夹路径错误:{0}</color>", targetPath));
         }
     }
 
     /// <summary> 删除文件 </summary>
     public static void DeleteFile(string targetPath)
     {
-        string path = targetPath.Replace("file://","");
         try
         {
-            if (File.Exists(path))
+            if (File.Exists(targetPath))
             {
-                File.Delete(path);
+                File.Delete(targetPath);
             }
         }
         catch
         {
-            Debug.LogError(string.Format("<color=#0000FF>删除文件-文件夹路径错误:{0}</color>", path));
+            Debug.LogError(string.Format("<color=#0000FF>删除文件-文件夹路径错误:{0}</color>", targetPath));
         }
     }
 
     /// <summary> 删除文件夹下所有文件 </summary>
     public static void DeleteFolderAllFile(string targetPath)
     {
-        string path = targetPath.Replace("file://","");
         try
         {
-            DirectoryInfo folder = new DirectoryInfo(path);
+            DirectoryInfo folder = new DirectoryInfo(targetPath);
             FileSystemInfo[] files = folder.GetFileSystemInfos();
             int length = files.Length;
             for (int i = 0; i < length; i++)
@@ -122,46 +116,43 @@ public class FileManager
         }
         catch
         {
-            Debug.LogError(string.Format("<color=#0000FF> 删除文件夹下所有文件-文件夹路径错误:{0}</color>", path));
+            Debug.LogError(string.Format("<color=#0000FF> 删除文件夹下所有文件-文件夹路径错误:{0}</color>", targetPath));
         }
     }
 
     /// <summary> 删除文件夹下所有文件 </summary>
     public static void DeleteFolder(string targetPath)
     {
-        string path = targetPath.Replace("file://","");
         try
         {
             // 1、首先判断文件或者文件路径是否存在
-            if (File.Exists(path))
+            if (File.Exists(targetPath))
             {
                 // 2、根据路径字符串判断是文件还是文件夹
-                FileAttributes attr = File.GetAttributes(path);
+                FileAttributes attr = File.GetAttributes(targetPath);
                 // 3、根据具体类型进行删除
                 if (attr == FileAttributes.Directory)
                 {
                     // 3.1、删除文件夹
-                    Directory.Delete(path, true);
+                    Directory.Delete(targetPath, true);
                 }
             }
         }
         catch
         {
-            Debug.LogError(string.Format("<color=#0000FF> 删除文件夹下所有文件-文件夹路径错误:{0}</color>", path));
+            Debug.LogError(string.Format("<color=#0000FF> 删除文件夹下所有文件-文件夹路径错误:{0}</color>", targetPath));
         }
     }
 
     /// <summary> 文件是否存在 </summary>
     public static bool FileExist(string targetPath)
     {
-        string path = targetPath.Replace("file://","");
-        return File.Exists(path);
+        return File.Exists(targetPath);
     }
 
     /// <summary> 文件夹是否存在 </summary>
     public static bool FolderExist(string targetPath)
     {
-        string path = targetPath.Replace("file://","");
-        return Directory.Exists(path);
+        return Directory.Exists(targetPath);
     }
 }

@@ -121,15 +121,13 @@ public class XmlManager
 
     public static XmlDocument Load(string xml_path)
     {
-        string path = xml_path.Replace("file://", "");
         XmlDocument xmlDocument = new XmlDocument();
-        xmlDocument.Load(path);
+        xmlDocument.Load(xml_path);
         return xmlDocument;
     }
 
     public static void Save(XmlDocument xmlDocument, string xml_path)
     {
-        string path = xml_path.Replace("file://", "");
-        xmlDocument.Save(path);
+        xmlDocument.Save(xml_path);
     }
 }

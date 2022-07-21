@@ -119,7 +119,7 @@ namespace Update
             if (FileManager.FileExist(XmlLocalVersionPath))
             {
                 //读取本地热更文件
-                DownLoad(XmlLocalVersionPath, (byte[] bytes) =>
+                DownLoad($"file://{XmlLocalVersionPath}", (byte[] bytes) =>
                 {
                     localABConfig = bytes != null ? XmlManager.ProtoDeSerialize<AssetBundleConfig>(bytes) : null;
                     //检查版本更新信息
