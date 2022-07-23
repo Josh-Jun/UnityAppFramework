@@ -1,8 +1,10 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Test
@@ -18,6 +20,7 @@ namespace Test
         private RectTransform mobileImageRoot;
         private Transform selfStick;
         private Camera mobileCamera;
+        private GifPlayer gifPlayer;
         public Camera renderCamera { private set; get; }
         protected override void InitWindow()
         {
@@ -32,6 +35,7 @@ namespace Test
             mobileCamera = this.FindComponent<Camera>("MobileCamera");
             renderCamera = mobileCamera.FindComponent<Camera>("RenderCamera");
             selfStick = this.FindComponent<Transform>("SelfStick");
+            gifPlayer = this.FindComponent<GifPlayer>("GifImage");
             btn.transform.DORotate(new Vector3(0, 0, 90), 5).SetEase(Ease.Linear);
         }
 
@@ -76,6 +80,13 @@ namespace Test
         public void SetText(string value)
         {
             text.text = value;
+        }
+
+        public void PlayGif()
+        {
+            gifPlayer.FileName = "GifPlayerExampes/GIFPlayerExampe1.gif";
+            gifPlayer.Init();
+            gifPlayer.Play();
         }
     }
 }

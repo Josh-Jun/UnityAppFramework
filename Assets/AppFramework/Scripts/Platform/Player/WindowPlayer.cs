@@ -7,7 +7,7 @@ namespace Platform
     public class WindowPlayer : PlatformManager
     {
         public override bool IsEditor { get; } = false;
-        public override string Name { get; } = "Windows";
+        public override string Name { get; } = "StandaloneWindows";
         public override string PlatformName { get; } = "window";
         public override string GetDataPath(string folder)
         {

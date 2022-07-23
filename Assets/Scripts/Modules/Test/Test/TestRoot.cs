@@ -33,12 +33,13 @@ namespace Test
 
             mobile = new RenderTexture(Screen.width, Screen.height, 32);
             window.SetMobileCamera(mobile);
+            window.PlayGif();
         }
 
         private void SetLightingmapData()
         {
-            string lightingmap_ButterflyPath = "Butterfly/Assets/Lightingmap/Butterfly";
-            LightingmapData lightingmap = AssetsManager.Instance.LoadAsset<LightingmapData>(lightingmap_ButterflyPath);
+            string lightingmap_TestPath = "Test/Assets/Lightingmap/Test";
+            LightingmapData lightingmap = AssetsManager.Instance.LoadAsset<LightingmapData>(lightingmap_TestPath);
             window.SetLightingmapData(lightingmap);
         }
 
@@ -140,11 +141,11 @@ namespace Test
 
         public void AppPause(bool pause)
         {
-            Debug.Log("AppPause = " + pause);
+            
         }
         public void AppFocus(bool focus)
         {
-            Debug.Log("AppFocus = " + focus);
+            
         }
         public void AppQuit()
         {

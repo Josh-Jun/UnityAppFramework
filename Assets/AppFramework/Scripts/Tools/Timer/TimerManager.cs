@@ -41,8 +41,8 @@ public class TimerManager : SingletonMono<TimerManager>
                 TimerData timeData = timerFixedLst[i];
                 if (timeData.isTime)
                 {
-                    timeData.addTime += Time.deltaTime;
-                    timeData.cb(timeData.addTime);
+                    timeData.addTime++;
+                    timeData.cb(timeData.addTime/50f);
                 }
             }
         }

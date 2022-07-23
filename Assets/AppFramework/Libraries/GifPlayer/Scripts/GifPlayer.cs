@@ -460,7 +460,7 @@ public class GifPlayer : MonoBehaviour
         {
             var target = (Image)_targetComponent;
             var newSprite = Sprite.Create(GifTexture, new Rect(0.0f, 0.0f, GifTexture.width, GifTexture.height),
-                new Vector2(0.5f, 0.5f));
+                new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect);
             target.sprite = newSprite;
             return;
         }

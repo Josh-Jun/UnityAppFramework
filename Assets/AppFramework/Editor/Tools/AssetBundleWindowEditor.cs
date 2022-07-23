@@ -49,16 +49,11 @@ public class AssetBundleWindowEditor : EditorWindow
 
         GUILayout.Label(new GUIContent("Build AssetBundle"), titleStyle);
 
-        // AssetBundle Labels.
-        EditorGUILayout.Space();
-        if (GUILayout.Button("1.Set AssetBundle Labels(自动做标记)"))
-        {
-            RemoveAllAssetBundleLabels();
-            SetAssetBundleLabels();
-        }
-        EditorGUILayout.Space();
         GUILayout.BeginVertical();
 
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+        
         // build target.
         buildTarget = (BuildTarget)EditorGUILayout.EnumPopup("Build Target", buildTarget);
         EditorGUILayout.Space();
@@ -101,6 +96,14 @@ public class AssetBundleWindowEditor : EditorWindow
         EditorGUILayout.Space();
         des = EditorGUILayout.TextField("Update Des", des);
         
+        // AssetBundle Labels.
+        EditorGUILayout.Space();
+        if (GUILayout.Button("1.SetAssetBundleLabels(自动做标记)"))
+        {
+            RemoveAllAssetBundleLabels();
+            SetAssetBundleLabels();
+        }
+        EditorGUILayout.Space();
 
         // build.
         EditorGUILayout.Space();
@@ -129,6 +132,18 @@ public class AssetBundleWindowEditor : EditorWindow
         {
             RemoveAllAssetBundleLabels();
             AssetDatabase.Refresh();
+        }
+        
+        
+        // remove labels
+        EditorGUILayout.Space();
+        if (GUILayout.Button("6.AutoBuildAssetBundle(一键自动打包)"))
+        {
+            RemoveAllAssetBundleLabels();
+            SetAssetBundleLabels();
+            DeleteAssetBundle();
+            BuildAllAssetBundles();
+            CreateFile();
         }
         GUILayout.EndVertical();
     }
@@ -298,8 +313,7 @@ public class AssetBundleWindowEditor : EditorWindow
     //[MenuItem("AssetBundle/BuildAllAssetBundle(一键打包)")]
     void BuildAllAssetBundles()
     {
-        string target = buildTarget == BuildTarget.StandaloneWindows ? "Windows" : buildTarget.ToString();
-        string outPath = string.Format("{0}/{1}", outputPath, target);
+        string outPath = string.Format("{0}/{1}", outputPath, buildTarget);
         if (!FileManager.FolderExist(outPath))
         {
             FileManager.CreateFolder(outPath);
@@ -318,8 +332,7 @@ public class AssetBundleWindowEditor : EditorWindow
     //[MenuItem("AssetBundle/DeleteAllAssetBundle(一键删除)")]
     private void DeleteAssetBundle()
     {
-        string target = buildTarget == BuildTarget.StandaloneWindows ? "Windows" : buildTarget.ToString();
-        string outPath = string.Format("{0}/{1}", outputPath, target);
+        string outPath = string.Format("{0}/{1}", outputPath, buildTarget);
         if (!FileManager.FolderExist(outPath))
         {
             return;
@@ -334,9 +347,7 @@ public class AssetBundleWindowEditor : EditorWindow
     //[MenuItem("AssetBundle/CreateMD5File(生成MD5文件)")]
     private void CreateFile()
     {
-        // outPath = E:/Shuai/AssetBundle/Assets/StreamingAssets/Windows
-        string target = buildTarget == BuildTarget.StandaloneWindows ? "Windows" : buildTarget.ToString();
-        string outPath = string.Format("{0}/{1}", outputPath, target);
+        string outPath = string.Format("{0}/{1}", outputPath, buildTarget);
         string filePath = outPath + "/AssetBundleConfig.xml";
         if (File.Exists(filePath))
             File.Delete(filePath);
@@ -346,7 +357,7 @@ public class AssetBundleWindowEditor : EditorWindow
         xmlDocument.AppendChild(xmlDeclaration);
         var root = xmlDocument.CreateElement("AssetBundleConfig");
         root.SetAttribute("GameVersion", Application.version);
-        root.SetAttribute("Platform", target);
+        root.SetAttribute("Platform", buildTarget.ToString());
         root.SetAttribute("Des", des);
         foreach (var scene in sceneDic)
         {
@@ -409,7 +420,6 @@ public class AssetBundleWindowEditor : EditorWindow
     {
         if (fileSystemInfo.Extension == ".meta")
             return;
-
         DirectoryInfo directoryInfo = fileSystemInfo as DirectoryInfo;
         FileSystemInfo[] fileSystemInfoArr = directoryInfo.GetFileSystemInfos();
 

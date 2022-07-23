@@ -39,7 +39,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         }
     }
 
-    public void LoadAssetBundle(Action<string, float> loadProgress = null)
+    public void LoadAllAssetBundle(Action<string, float> loadProgress = null)
     {
         if (PlatformManager.Instance.IsEditor)
         {
