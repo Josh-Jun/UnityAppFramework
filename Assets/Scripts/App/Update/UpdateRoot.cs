@@ -90,7 +90,6 @@ namespace Update
             float speed = 0;
             while (GetProgress != 1)
             {
-                yield return new WaitForEndOfFrame();
                 time += Time.deltaTime;
                 if (time >= 1f)
                 {
@@ -98,8 +97,8 @@ namespace Update
                     previousSize = GetLoadedSize;
                     time = 0;
                 }
-
                 speed = speed > 0 ? speed : 0;
+                yield return new WaitForEndOfFrame();
                 window.SetSpeedText(speed);
                 window.SetProgressText(GetLoadedSize, LoadTotalSize);
                 window.SetProgressValue(GetProgress);
@@ -107,6 +106,7 @@ namespace Update
 
             window.SetProgressText(LoadTotalSize, LoadTotalSize);
             window.SetProgressValue(GetProgress);
+            yield return new WaitForEndOfFrame();
             //更新下载完成，加载AB包
             LoadAssetBundle();
         }
@@ -256,6 +256,7 @@ namespace Update
                     //下载完成后修改本地版本文件
                     UpdateLocalConfig(requester.Key);
                     requester.Value.Destory();
+                    unityWebRequesterPairs[requester.Key] = null;
                     alreadySize += requester.Key.Size;
                 });
             }
