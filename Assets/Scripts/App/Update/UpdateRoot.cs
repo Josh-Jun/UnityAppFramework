@@ -14,6 +14,7 @@ namespace Update
         private UpdateWindow window;
 
         #region Private Var
+
         private string LocalPath;
         private string XmlLocalVersionPath;
 
@@ -21,23 +22,32 @@ namespace Update
         private string XmlServerVersionPath;
 
         private List<Folder> downloadFolders = new List<Folder>();
-        private Dictionary<Folder, UnityWebRequester> unityWebRequesterPairs = new Dictionary<Folder, UnityWebRequester>();
+
+        private Dictionary<Folder, UnityWebRequester> unityWebRequesterPairs =
+            new Dictionary<Folder, UnityWebRequester>();
+
         private AssetBundleConfig localABConfig;
         private AssetBundleConfig serverABConfig;
+
         #endregion
 
         #region Public Var
+
         public float LoadTotalSize { private set; get; } = 0; // 需要加载资源的总大小 KB
+
         /// <summary> 获取下载进度 </summary>
         public float GetProgress
         {
             get { return GetLoadedSize / LoadTotalSize; }
         }
+
         #endregion
+
         public UpdateRoot()
         {
             AddEventMsg("UpdateNow", () => { UpdateNow(); });
         }
+
         public void Begin()
         {
             string prefab_UpdatePath = "App/Update/Windows/UpdateWindow";
@@ -62,8 +72,8 @@ namespace Update
 
         public void End()
         {
-            
         }
+
         private void UpdateNow()
         {
             window.SetUpdateTipsActive(false);
@@ -72,6 +82,7 @@ namespace Update
             StartDownLoad();
             window.StartCoroutine(DownLoading());
         }
+
         private IEnumerator DownLoading()
         {
             float time = 0;
@@ -87,6 +98,7 @@ namespace Update
                     previousSize = GetLoadedSize;
                     time = 0;
                 }
+
                 speed = speed > 0 ? speed : 0;
                 window.SetSpeedText(speed);
                 window.SetProgressText(GetLoadedSize, LoadTotalSize);
@@ -98,6 +110,7 @@ namespace Update
             //更新下载完成，加载AB包
             LoadAssetBundle();
         }
+
         private void LoadAssetBundle()
         {
             window.SetTipsText("正在加载资源...");
@@ -117,6 +130,7 @@ namespace Update
         }
 
         #region Public Function
+
         /// <summary> 开始热更新 </summary>
         private void StartUpdate(Action<bool, string> UpdateCallBack)
         {
@@ -135,13 +149,15 @@ namespace Update
                         ? XmlManager.ProtoDeSerialize<AssetBundleConfig>(bytes)
                         : null;
                     //检查版本更新信息
-                    CheckUpdate(localABConfig, () => { UpdateCallBack?.Invoke(downloadFolders.Count > 0, serverABConfig.Des); });
+                    CheckUpdate(localABConfig,
+                        () => { UpdateCallBack?.Invoke(downloadFolders.Count > 0, serverABConfig.Des); });
                 });
             }
             else
             {
                 //检查版本更新信息
-                CheckUpdate(localABConfig, () => { UpdateCallBack?.Invoke(downloadFolders.Count > 0, serverABConfig.Des); });
+                CheckUpdate(localABConfig,
+                    () => { UpdateCallBack?.Invoke(downloadFolders.Count > 0, serverABConfig.Des); });
             }
         }
 
@@ -162,23 +178,27 @@ namespace Update
                 });
             });
         }
+
         private float alreadySize = 0;
+
         /// <summary> 获取当前下载大小(M) </summary>
         private float GetLoadedSize
         {
             get
             {
-                float alreadyAlreadySize = 0;
+                float currentAlreadySize = 0;
                 foreach (var pairs in unityWebRequesterPairs)
                 {
                     if (pairs.Value != null)
                     {
-                        alreadyAlreadySize += pairs.Value.DownloadedProgress * pairs.Key.Size;
+                        currentAlreadySize += pairs.Value.DownloadedProgress * pairs.Key.Size;
                     }
                 }
-                return (alreadySize + alreadyAlreadySize) / 1024f;
+
+                return (alreadySize + currentAlreadySize) / 1024f;
             }
         }
+
         /// <summary> 加载AB包 </summary>
         private void LoadAssetBundle(Action<bool, string, float> LoadCallBack)
         {
@@ -190,9 +210,11 @@ namespace Update
                 {
                     loadProgress++;
                 }
+
                 LoadCallBack?.Invoke(totalProgress == loadProgress, bundleName, progress);
             });
         }
+
         /// <summary> 清理本地AB包和版本XML文件 </summary>
         private void DeleteLocalVersionXml()
         {
@@ -202,9 +224,11 @@ namespace Update
                 FileManager.DeleteFolder(LocalPath);
             }
         }
+
         #endregion
 
         #region Private Function
+
         private void DownLoadAssetBundle()
         {
             unityWebRequesterPairs.Clear();
@@ -223,7 +247,7 @@ namespace Update
                     FileManager.CreateFile(LocalPath + folder.BundleName + ".manifest", _manifest_data);
                 });
             }
-            
+
             foreach (var requester in unityWebRequesterPairs)
             {
                 requester.Value.GetBytes(ServerUrl + requester.Key.BundleName, (byte[] data) =>
@@ -232,11 +256,11 @@ namespace Update
                     //下载完成后修改本地版本文件
                     UpdateLocalConfig(requester.Key);
                     requester.Value.Destory();
-                    unityWebRequesterPairs.Remove(requester.Key);
                     alreadySize += requester.Key.Size;
                 });
             }
         }
+
         private void UpdateLocalConfig(Folder folder)
         {
             if (!FileManager.FileExist(XmlLocalVersionPath))
@@ -249,6 +273,7 @@ namespace Update
 
                 UpdateConfig();
             }
+
             UpdateConfig(folder);
         }
 
@@ -277,6 +302,7 @@ namespace Update
                     }
                 }
             }
+
             xmlDocument.Save(XmlLocalVersionPath.Replace("file://", ""));
         }
 
@@ -290,6 +316,7 @@ namespace Update
                 requester.Destory();
             });
         }
+
         /// <summary> 检查更新 </summary>
         private void CheckUpdate(AssetBundleConfig localABConfig, Action cb = null)
         {
@@ -304,6 +331,7 @@ namespace Update
                 {
                     serverABConfig = XmlManager.ProtoDeSerialize<AssetBundleConfig>(bytes);
                     GetABScenePairs(serverABConfig);
+                    Debug.Log($"大版本比较 v{Application.version}/v{serverABConfig.GameVersion}");
                     if (Application.version == serverABConfig.GameVersion)
                     {
                         //无大版本更新，校验本地ab包
@@ -317,9 +345,11 @@ namespace Update
                                 }
                                 else
                                 {
-                                    if (localABConfig.Scenes[i].Folders[j].BundleName == serverABConfig.Scenes[i].Folders[j].BundleName)
+                                    if (localABConfig.Scenes[i].Folders[j].BundleName ==
+                                        serverABConfig.Scenes[i].Folders[j].BundleName)
                                     {
-                                        if (localABConfig.Scenes[i].Folders[j].MD5 != serverABConfig.Scenes[i].Folders[j].MD5)
+                                        if (localABConfig.Scenes[i].Folders[j].MD5 !=
+                                            serverABConfig.Scenes[i].Folders[j].MD5)
                                         {
                                             downloadFolders.Add(serverABConfig.Scenes[i].Folders[j]);
                                         }
@@ -339,6 +369,7 @@ namespace Update
                 });
             }
         }
+
         /// <summary> 获取文件夹名和包名 </summary>
         private void GetABScenePairs(AssetBundleConfig config)
         {
@@ -353,21 +384,23 @@ namespace Update
                         folderPairs.Add(folder.FolderName, folder.BundleName);
                     }
                 }
+
                 AssetBundleManager.Instance.SetAbScenePairs(scene.SceneName, folderPairs);
             }
         }
+
         #endregion
+
         public void AppPause(bool pause)
         {
-            
         }
+
         public void AppFocus(bool focus)
         {
-            
         }
+
         public void AppQuit()
         {
-            
         }
     }
 }

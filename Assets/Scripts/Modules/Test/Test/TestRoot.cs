@@ -112,10 +112,10 @@ namespace Test
             SendEventMsg("ShowTips","触发不带参数事件",1.2f);
             // Root.GetRootScript<Ask.AskRoot>().ShowTips("123");
         }
+        int id = -1;
         private void ButtonParamsEvent(string value)
         {
             window.SetText(value);
-            int id = -1;
             if (FileManager.FileExist(PlatformManager.Instance.GetDataPath("App/") + "meta.apk"))
             {
                 PlatformManager.Instance.InstallApp(PlatformManager.Instance.GetDataPath("App/") + "meta.apk");
@@ -125,16 +125,14 @@ namespace Test
                 UnityWebRequester requester = new UnityWebRequester(App.app);
                 requester.GetBytes("https://meta-oss.genimous.com/vr-ota/App/meta.apk", (bytes) =>
                 {
-                    FileManager.CreateFile(PlatformManager.Instance.GetDataPath("App/") + "meta.apk",bytes);
+                    FileManager.CreateFile(PlatformManager.Instance.GetDataPath("App/").Replace("file://", "") + "meta.apk", bytes);
                     PlatformManager.Instance.InstallApp(PlatformManager.Instance.GetDataPath("App/") + "meta.apk");
+                    TimerManager.Instance.EndTimer(id);
+                    requester.Destory();
                 });
                 id = TimerManager.Instance.StartTimer((time) =>
                 {
                     window.SetText(requester.DownloadedProgress.ToString("F2"));
-                    if (requester.IsDown)
-                    {
-                        TimerManager.Instance.EndTimer(id);
-                    }
                 });
             }
         }
