@@ -20,8 +20,7 @@ public partial class NetcomManager : SingletonMonoEvent<NetcomManager>
         private set { }
         get
         {
-            string server = Root.AppConfig.IsTestServer ? "" : "";//测试服务器:生产服务器
-            return server;
+            return Root.AppConfig.IsTestServer ? "" : "";//测试服务器:生产服务器
         }
     }
     /// <summary>
@@ -32,8 +31,7 @@ public partial class NetcomManager : SingletonMonoEvent<NetcomManager>
         private set { }
         get
         {
-            string server = Root.AppConfig.IsTestServer ? "" : "";//测试服务器:生产服务器
-            return server;
+            return Root.AppConfig.IsTestServer ? "" : "";//测试服务器:生产服务器
         }
     }
     /// <summary>
@@ -44,8 +42,7 @@ public partial class NetcomManager : SingletonMonoEvent<NetcomManager>
         private set { }
         get
         {
-            int port = Root.AppConfig.IsTestServer ? 17888 : 8080;//测试服务器:生产服务器
-            return port;
+            return Root.AppConfig.IsTestServer ? 17888 : 8080;//测试服务器:生产服务器
         }
     }
     public static string ABUrl
@@ -53,14 +50,9 @@ public partial class NetcomManager : SingletonMonoEvent<NetcomManager>
         private set { }
         get
         {
-            if (PlatformManager.Instance.IsEditor)
-            {
-                return Path.Combine(Application.dataPath.Replace("Assets", ""), "AssetBundle/");//本地AB包地址
-            }
-            else
-            {
-                return string.Format(@"{0}/{1}/", HttpAddress, "wp-content/uploads/AssetBundle/");//服务器AB包地址
-            }
+            string test_url = Path.Combine(Application.dataPath.Replace("Assets", ""), "AssetBundle/");//本地AB包地址
+            string pro_url = "https://meta-oss.genimous.com/vr-ota/AssetBundle/";//服务器AB包地址
+            return Root.AppConfig.IsTestServer ? test_url : pro_url;
         }
     }
     public override void InitManager(Transform parent)
