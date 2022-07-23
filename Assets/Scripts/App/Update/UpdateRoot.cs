@@ -81,7 +81,7 @@ namespace Update
             {
                 yield return new WaitForEndOfFrame();
                 time += Time.deltaTime;
-                if (time >= 10f)
+                if (time >= 1f)
                 {
                     speed = (GetLoadedSize - previousSize);
                     previousSize = GetLoadedSize;
