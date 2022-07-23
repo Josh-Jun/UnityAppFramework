@@ -34,6 +34,12 @@ public class MenuToolsEditor : UnityEditor.AssetModificationProcessor
         }
     }
 
+    [MenuItem("Edit/打开Windows沙盒路径 %#O", false, 0)]
+    public static void OpenFolder()
+    {
+        System.Diagnostics.Process.Start("explorer.exe", $"file://{Application.persistentDataPath}");
+    }
+
     [MenuItem("Assets/复制文件夹(复制依赖关系) %#D", false, 0)]
     public static void CopyFolderKeepAssetsUsing()
     {
