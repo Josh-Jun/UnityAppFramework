@@ -22,23 +22,31 @@ namespace Update
         private string XmlServerVersionPath;
 
         private List<Folder> downloadFolders = new List<Folder>();
+        private List<Folder> alreadlyFolders = new List<Folder>();
+        private List<Folder> allDownloadFolders = new List<Folder>();
 
-        private Dictionary<Folder, UnityWebRequester> unityWebRequesterPairs =
-            new Dictionary<Folder, UnityWebRequester>();
+        private Dictionary<Folder, UnityWebRequester> unityWebRequesterPairs = new Dictionary<Folder, UnityWebRequester>();
 
         private AssetBundleConfig localABConfig;
         private AssetBundleConfig serverABConfig;
+        private bool Downloading = false;
+        private float TotalSize = 0; // 资源的总大小 MB
+        private float AlreadlyLoadSize = 0; // 已经下载资源的总大小 KB
 
-        #endregion
-
-        #region Public Var
-
-        public float LoadTotalSize { private set; get; } = 0; // 需要加载资源的总大小 KB
+        private float alreadySize = 0;
+        /// <summary> 获取下载大小(M) </summary>
+        private float GetLoadedSize
+        {
+            get
+            {
+                return (AlreadlyLoadSize + alreadySize) / 1024f;
+            }
+        }
 
         /// <summary> 获取下载进度 </summary>
-        public float GetProgress
+        private float GetProgress
         {
-            get { return GetLoadedSize / LoadTotalSize; }
+            get { return GetLoadedSize / TotalSize; }
         }
 
         #endregion
@@ -88,8 +96,9 @@ namespace Update
             float time = 0;
             float previousSize = 0;
             float speed = 0;
-            while (GetProgress != 1)
+            while (Downloading)
             {
+                yield return new WaitForEndOfFrame();
                 time += Time.deltaTime;
                 if (time >= 1f)
                 {
@@ -97,14 +106,14 @@ namespace Update
                     previousSize = GetLoadedSize;
                     time = 0;
                 }
+
                 speed = speed > 0 ? speed : 0;
-                yield return new WaitForEndOfFrame();
                 window.SetSpeedText(speed);
-                window.SetProgressText(GetLoadedSize, LoadTotalSize);
+                window.SetProgressText(GetLoadedSize, TotalSize);
                 window.SetProgressValue(GetProgress);
             }
 
-            window.SetProgressText(LoadTotalSize, LoadTotalSize);
+            window.SetProgressText(TotalSize, TotalSize);
             window.SetProgressValue(GetProgress);
             yield return new WaitForEndOfFrame();
             //更新下载完成，加载AB包
@@ -143,21 +152,19 @@ namespace Update
             if (FileManager.FileExist(XmlLocalVersionPath))
             {
                 //读取本地热更文件
-                DownLoad(XmlLocalVersionPath, (byte[] bytes) =>
+                DownLoad($"file://{XmlLocalVersionPath}", (byte[] bytes) =>
                 {
                     localABConfig = bytes != null
                         ? XmlManager.ProtoDeSerialize<AssetBundleConfig>(bytes)
                         : null;
                     //检查版本更新信息
-                    CheckUpdate(localABConfig,
-                        () => { UpdateCallBack?.Invoke(downloadFolders.Count > 0, serverABConfig.Des); });
+                    CheckUpdate(localABConfig, () => { UpdateCallBack?.Invoke(downloadFolders.Count > 0, serverABConfig.Des); });
                 });
             }
             else
             {
                 //检查版本更新信息
-                CheckUpdate(localABConfig,
-                    () => { UpdateCallBack?.Invoke(downloadFolders.Count > 0, serverABConfig.Des); });
+                CheckUpdate(localABConfig, () => { UpdateCallBack?.Invoke(downloadFolders.Count > 0, serverABConfig.Des); });
             }
         }
 
@@ -174,29 +181,9 @@ namespace Update
                 {
                     //将ab文件写入本地
                     FileManager.CreateFile(LocalPath + PlatformManager.Instance.Name, ab_data);
-                    DownLoadAssetBundle();
+                    window.StartCoroutine(DownLoadAssetBundle());
                 });
             });
-        }
-
-        private float alreadySize = 0;
-
-        /// <summary> 获取当前下载大小(M) </summary>
-        private float GetLoadedSize
-        {
-            get
-            {
-                float currentAlreadySize = 0;
-                foreach (var pairs in unityWebRequesterPairs)
-                {
-                    if (pairs.Value != null)
-                    {
-                        currentAlreadySize += pairs.Value.DownloadedProgress * pairs.Key.Size;
-                    }
-                }
-
-                return (alreadySize + currentAlreadySize) / 1024f;
-            }
         }
 
         /// <summary> 加载AB包 </summary>
@@ -229,7 +216,9 @@ namespace Update
 
         #region Private Function
 
-        private void DownLoadAssetBundle()
+        private bool Finished = true;
+
+        private IEnumerator DownLoadAssetBundle()
         {
             unityWebRequesterPairs.Clear();
             for (int i = 0; i < downloadFolders.Count; i++)
@@ -248,18 +237,31 @@ namespace Update
                 });
             }
 
+            Downloading = true;
+            yield return new WaitForEndOfFrame();
             foreach (var requester in unityWebRequesterPairs)
             {
-                requester.Value.GetBytes(ServerUrl + requester.Key.BundleName, (byte[] data) =>
+                yield return new WaitUntil(() => Finished);
+                Finished = false;
+                requester.Value.DownloadFile(ServerUrl + requester.Key.BundleName, LocalPath + requester.Key.BundleName, (progress) =>
                 {
-                    FileManager.CreateFile(LocalPath + requester.Key.BundleName, data);
-                    //下载完成后修改本地版本文件
-                    UpdateLocalConfig(requester.Key);
-                    requester.Value.Destory();
-                    unityWebRequesterPairs[requester.Key] = null;
-                    alreadySize += requester.Key.Size;
+                    alreadySize = requester.Key.Size * progress;
+                    if (progress >= 1)
+                    {
+                        if (!Finished)
+                        {
+                            //下载完成后修改本地版本文件
+                            UpdateLocalConfig(requester.Key);
+                            alreadySize = 0;
+                            AlreadlyLoadSize += requester.Key.Size;
+                            requester.Value.Destory();
+                            Finished = true;
+                        }
+                    }
                 });
             }
+            yield return new WaitForEndOfFrame();
+            Downloading = false;
         }
 
         private void UpdateLocalConfig(Folder folder)
@@ -281,7 +283,7 @@ namespace Update
         private void UpdateConfig(Folder folder = null)
         {
             XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.Load(XmlLocalVersionPath.Replace("file://", ""));
+            xmlDocument.Load(XmlLocalVersionPath);
 
             var scene = xmlDocument.GetElementsByTagName("Scenes");
             for (int i = 0; i < scene.Count; i++)
@@ -304,7 +306,7 @@ namespace Update
                 }
             }
 
-            xmlDocument.Save(XmlLocalVersionPath.Replace("file://", ""));
+            xmlDocument.Save(XmlLocalVersionPath);
         }
 
         /// <summary> 下载 </summary>
@@ -346,20 +348,25 @@ namespace Update
                                 }
                                 else
                                 {
-                                    if (localABConfig.Scenes[i].Folders[j].BundleName ==
-                                        serverABConfig.Scenes[i].Folders[j].BundleName)
+                                    if (localABConfig.Scenes[i].Folders[j].BundleName == serverABConfig.Scenes[i].Folders[j].BundleName)
                                     {
-                                        if (localABConfig.Scenes[i].Folders[j].MD5 !=
-                                            serverABConfig.Scenes[i].Folders[j].MD5)
+                                        if (localABConfig.Scenes[i].Folders[j].MD5 != serverABConfig.Scenes[i].Folders[j].MD5)
                                         {
                                             downloadFolders.Add(serverABConfig.Scenes[i].Folders[j]);
                                         }
+                                        else
+                                        {
+                                            alreadlyFolders.Add(serverABConfig.Scenes[i].Folders[j]);
+                                        }
                                     }
                                 }
+
+                                allDownloadFolders.Add(serverABConfig.Scenes[i].Folders[j]);
                             }
                         }
 
-                        LoadTotalSize = downloadFolders.Sum(s => s.Size) / 1024f;
+                        TotalSize = allDownloadFolders.Sum(s => s.Size) / 1024f;
+                        AlreadlyLoadSize = alreadlyFolders.Sum(s => s.Size);
                         cb?.Invoke();
                     }
                     else

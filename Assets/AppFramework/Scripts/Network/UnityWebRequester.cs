@@ -90,56 +90,37 @@ public class UnityWebRequester
     public IEnumerator IE_DownloadFile(string url, string filePath, Action<float> callBack)
     {
         //获取要下载的文件的总大小
-        var headRequest = UnityWebRequest.Head(url);
-        yield return headRequest.SendWebRequest();
-        var totalLength = long.Parse(headRequest.GetResponseHeader("Content-Length"));
+        var headRequester = UnityWebRequest.Head(url);
+        yield return headRequester.SendWebRequest();
+        var totalLength = ulong.Parse(headRequester.GetResponseHeader("Content-Length"));
+        headRequester.Dispose();
         //如果文件未下载，创建文件下载路径
         var dirPath = Path.GetDirectoryName(filePath);
         if (!Directory.Exists(dirPath))
         {
             Directory.CreateDirectory(dirPath);
         }
-        //开始下载
-        FileStream fileStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write);
-        //获取文件现在的长度
-        var fileLength = fileStream.Length;
         //创建网络请求
-        var request = UnityWebRequest.Get(url);
-        if (fileLength > 0)
-        {
-            //设置开始下载文件从什么位置开始
-            request.SetRequestHeader("Range", "bytes=" + fileLength + "-");//这句很重要
-            fileStream.Seek(fileLength, SeekOrigin.Begin);//将该文件的指针移动到当前长度，即继续存储
-        }
+        var bodyRequester = UnityWebRequest.Get(url);
+        bodyRequester.downloadHandler = new DownloadHandlerFile(filePath, true);
+
+        FileInfo file = new FileInfo(filePath);
+        var fileLength = (ulong)file.Length;
+        //设置开始下载文件从什么位置开始
+        bodyRequester.SetRequestHeader("Range", $"bytes={fileLength}-");//这句很重要
         float progress;//文件下载进度
         if (fileLength < totalLength)
         {
-            request.SendWebRequest();
-            var index = 0;
-            while (!request.isDone)
+            bodyRequester.SendWebRequest();
+            while (!bodyRequester.isDone)
             {
-                yield return new WaitForEndOfFrame();
-                var buffer = request.downloadHandler.data;
-                //将实时下载得到的数据存储到文件中
-                if (buffer != null)
-                {
-                    var length = buffer.Length - index;
-                    fileStream.Write(buffer, index, length);
-                    index += length;
-                    fileLength += length;
-                    //文件下载进度
-                    progress = fileLength / (float)totalLength;
-                    callBack?.Invoke(progress);
-                }
+                progress = (float)(bodyRequester.downloadedBytes + fileLength) / (float)totalLength;
+                callBack?.Invoke(progress);
+                yield return null;
             }
         }
-        else
-        {
-            progress = 1;
-            callBack?.Invoke(progress);
-        }
-        fileStream.Close();
-        fileStream.Dispose();
+        callBack?.Invoke(1);
+        bodyRequester.Dispose();
     }
 
     /// <summary>

@@ -34,8 +34,28 @@ namespace Test
             mobile = new RenderTexture(Screen.width, Screen.height, 32);
             window.SetMobileCamera(mobile);
             window.PlayGif();
+
+            window.StartCoroutine(wait());
+            TimerManager.Instance.StartTimer((time) =>
+            {
+                if (Input.GetKeyDown(KeyCode.A))
+                {
+                    isGo = true;
+                }
+            });
         }
 
+        private bool isGo = false;
+        IEnumerator wait()
+        {
+            yield return new WaitForEndOfFrame();
+            for (int i = 0; i < 10; i++)
+            {
+                yield return new WaitUntil(() => isGo);
+                Debug.Log(i);
+                isGo = false;
+            }
+        }
         private void SetLightingmapData()
         {
             string lightingmap_TestPath = "Test/Assets/Lightingmap/Test";
@@ -123,16 +143,22 @@ namespace Test
             else
             {
                 UnityWebRequester requester = new UnityWebRequester(App.app);
-                requester.GetBytes("https://meta-oss.genimous.com/vr-ota/App/meta.apk", (bytes) =>
+                // requester.GetBytes("https://meta-oss.genimous.com/vr-ota/App/meta.apk", (bytes) =>
+                // {
+                //     FileManager.CreateFile(PlatformManager.Instance.GetDataPath("App/").Replace("file://", "") + "meta.apk", bytes);
+                //     PlatformManager.Instance.InstallApp(PlatformManager.Instance.GetDataPath("App/") + "meta.apk");
+                //     TimerManager.Instance.EndTimer(id);
+                //     requester.Destory();
+                // });
+                // id = TimerManager.Instance.StartTimer((time) =>
+                // {
+                //     window.SetText(requester.DownloadedProgress.ToString("F2"));
+                // });
+                requester.DownloadFile("https://meta-oss.genimous.com/vr-ota/App/meta.apk", 
+                    PlatformManager.Instance.GetDataPath("App/meta.apk").Replace("file://", ""),
+                (progress) =>
                 {
-                    FileManager.CreateFile(PlatformManager.Instance.GetDataPath("App/").Replace("file://", "") + "meta.apk", bytes);
-                    PlatformManager.Instance.InstallApp(PlatformManager.Instance.GetDataPath("App/") + "meta.apk");
-                    TimerManager.Instance.EndTimer(id);
-                    requester.Destory();
-                });
-                id = TimerManager.Instance.StartTimer((time) =>
-                {
-                    window.SetText(requester.DownloadedProgress.ToString("F2"));
+                    window.SetText(progress.ToString("F2"));
                 });
             }
         }
