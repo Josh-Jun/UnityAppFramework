@@ -139,10 +139,6 @@ public class BuildAppWindowEditor : EditorWindow
     }
     public void ApplyConfig()
     {
-        // PlayerSettings.Android.keystorePass = "";
-        // PlayerSettings.Android.keyaliasName = "";
-        // PlayerSettings.Android.keyaliasPass = "";
-        
         EditorUserBuildSettings.development = DevelopmentBuild;
         AppConfig.IsDebug = DevelopmentBuild;
         AppConfig.IsHotfix = IsHotfix;
@@ -156,6 +152,12 @@ public class BuildAppWindowEditor : EditorWindow
 
         if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android)
         {
+            // PlayerSettings.Android.keystorePass = "";
+            // PlayerSettings.Android.keyaliasName = "";
+            // PlayerSettings.Android.keyaliasPass = "";
+            
+            PlayerSettings.Android.minSdkVersion =ApkTarget == TargetPackage.Pico ? AndroidSdkVersions.AndroidApiLevel26 : AndroidSdkVersions.AndroidApiLevel23;
+            
             EditorUserBuildSettings.exportAsGoogleAndroidProject = NativeApp;
             
             XRGeneralSettings androidXRSettings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(BuildTargetGroup.Android);

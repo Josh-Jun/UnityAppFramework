@@ -835,7 +835,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 0}
   rayShapeFilter: 1
-  segements: 20
+  segements: 8
   round: 1
 --- !u!114 &9163574835305963154
 MonoBehaviour:

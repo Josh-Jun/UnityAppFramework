@@ -17,7 +17,7 @@ namespace UnityEngine.UI
         public bool rayShapeFilter = true;
         [Tooltip("圆角顶点个数")]
         [Range(1, 100)]
-        public int segements = 20;
+        public int segements = 8;
         [Tooltip("圆角大小")]
         [Range(0, 1)]
         public float round = 1f;

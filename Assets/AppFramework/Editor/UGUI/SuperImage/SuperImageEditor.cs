@@ -36,6 +36,7 @@ public class SuperImageEditor : Editor
         go.AddComponent<RectTransform>();
         go.AddComponent<CanvasRenderer>();
         go.AddComponent<SuperImage>();
+        go.layer = 5;
         Selection.activeGameObject = go;
     }
     // Update is called once per frame
