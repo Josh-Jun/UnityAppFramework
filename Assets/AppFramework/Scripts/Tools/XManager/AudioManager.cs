@@ -64,7 +64,7 @@ public class AudioManager : SingletonMono<AudioManager>
             _audio.clip = clip;
             _audio.Play();
         }
-        StartCoroutine(AudioPlayFinished(_audio.clip.length, callback));
+        StartCoroutine(AudioPlayFinished(clip.length, callback));
     }
     private IEnumerator AudioPlayFinished(float time, UnityAction callback)
     {

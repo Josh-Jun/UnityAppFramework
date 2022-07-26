@@ -29,17 +29,16 @@ namespace Update
 
         private AssetBundleConfig localABConfig;
         private AssetBundleConfig serverABConfig;
-        private bool Downloading = false;
+        
         private float TotalSize = 0; // 资源的总大小 MB
-        private float AlreadlyLoadSize = 0; // 已经下载资源的总大小 KB
-
+        private bool Downloading = false;
         private float alreadySize = 0;
         /// <summary> 获取下载大小(M) </summary>
         private float GetLoadedSize
         {
             get
             {
-                return (AlreadlyLoadSize + alreadySize) / 1024f;
+                return (alreadlyFolders.Sum(s => s.Size) + alreadySize) / 1024f;
             }
         }
 
@@ -87,12 +86,12 @@ namespace Update
             window.SetUpdateTipsActive(false);
             window.SetProgressBarActive(true);
             window.SetTipsText("下载中...");
-            StartDownLoad();
             window.StartCoroutine(DownLoading());
         }
 
         private IEnumerator DownLoading()
         {
+            StartDownLoad();
             float time = 0;
             float previousSize = 0;
             float speed = 0;
@@ -171,6 +170,7 @@ namespace Update
         /// <summary> 下载AB包 </summary>
         private void StartDownLoad()
         {
+            Downloading = true;
             //下载总manifest文件
             DownLoad(ServerUrl + PlatformManager.Instance.Name + ".manifest", (byte[] manifest_data) =>
             {
@@ -237,7 +237,6 @@ namespace Update
                 });
             }
 
-            Downloading = true;
             yield return new WaitForEndOfFrame();
             foreach (var requester in unityWebRequesterPairs)
             {
@@ -253,8 +252,10 @@ namespace Update
                             //下载完成后修改本地版本文件
                             UpdateLocalConfig(requester.Key);
                             alreadySize = 0;
-                            AlreadlyLoadSize += requester.Key.Size;
-                            requester.Value.Destory();
+                            if (!alreadlyFolders.Contains(requester.Key))
+                            {
+                                alreadlyFolders.Add(requester.Key);
+                            }
                             Finished = true;
                         }
                     }
@@ -366,7 +367,6 @@ namespace Update
                         }
 
                         TotalSize = allDownloadFolders.Sum(s => s.Size) / 1024f;
-                        AlreadlyLoadSize = alreadlyFolders.Sum(s => s.Size);
                         cb?.Invoke();
                     }
                     else

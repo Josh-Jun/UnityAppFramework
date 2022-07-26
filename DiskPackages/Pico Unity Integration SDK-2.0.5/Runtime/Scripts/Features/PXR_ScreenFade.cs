@@ -10,6 +10,7 @@ material is strictly forbidden unless prior written permission is obtained from
 Pico Technology Co., Ltd. 
 *******************************************************************************/
 
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -108,6 +109,14 @@ namespace Unity.XR.PXR
                 Destroy(fadeMeshFilter);
         }
 
+        private Action ScreenFadeFinished = null;
+        public void StartScreenFade(float startAlpha, float endAlpha, Action callback = null)
+        {
+            ScreenFadeFinished = callback;
+            SetCurrentAlpha(startAlpha);
+            StartCoroutine(ScreenFade(startAlpha, endAlpha));
+        }
+        
         public void SetCurrentAlpha(float alpha)
         {
             currentAlpha = alpha;
@@ -124,6 +133,7 @@ namespace Unity.XR.PXR
                 SetMaterialAlpha();
                 yield return new WaitForEndOfFrame();
             }
+            ScreenFadeFinished?.Invoke();
         }
 
         private void SetMaterialAlpha()

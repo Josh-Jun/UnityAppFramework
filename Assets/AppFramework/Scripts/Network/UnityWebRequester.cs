@@ -16,7 +16,7 @@ public class UnityWebRequester
         this.mono = mono;
     }
     /// <summary> 是否下载完 </summary>
-    public bool IsDown
+    public bool IsDone
     {
         get
         {
@@ -90,37 +90,40 @@ public class UnityWebRequester
     public IEnumerator IE_DownloadFile(string url, string filePath, Action<float> callBack)
     {
         //获取要下载的文件的总大小
-        var headRequester = UnityWebRequest.Head(url);
-        yield return headRequester.SendWebRequest();
-        var totalLength = ulong.Parse(headRequester.GetResponseHeader("Content-Length"));
-        headRequester.Dispose();
-        //如果文件未下载，创建文件下载路径
-        var dirPath = Path.GetDirectoryName(filePath);
-        if (!Directory.Exists(dirPath))
+        var head = UnityWebRequest.Head(url);
+        yield return head.SendWebRequest();
+        if (!string.IsNullOrEmpty(head.error))
         {
-            Directory.CreateDirectory(dirPath);
+            Debug.LogError($"[Error:Download Head] {head.error}");
+            yield break;
         }
+        ulong totalLength = ulong.Parse(head.GetResponseHeader("Content-Length"));
+        head.Dispose();
         //创建网络请求
-        var bodyRequester = UnityWebRequest.Get(url);
-        bodyRequester.downloadHandler = new DownloadHandlerFile(filePath, true);
+        UnityWebRequest body = UnityWebRequest.Get(url);
+        body.downloadHandler = new DownloadHandlerFile(filePath, true);
 
         FileInfo file = new FileInfo(filePath);
         var fileLength = (ulong)file.Length;
         //设置开始下载文件从什么位置开始
-        bodyRequester.SetRequestHeader("Range", $"bytes={fileLength}-");//这句很重要
+        body.SetRequestHeader("Range", $"bytes={fileLength}-");//这句很重要
         float progress;//文件下载进度
         if (fileLength < totalLength)
         {
-            bodyRequester.SendWebRequest();
-            while (!bodyRequester.isDone)
+            body.SendWebRequest();
+            if (!string.IsNullOrEmpty(body.error))
             {
-                progress = (float)(bodyRequester.downloadedBytes + fileLength) / (float)totalLength;
+                Debug.LogError($"[Error:Download Body] {body.error}");
+            }
+            while (!body.isDone)
+            {
+                progress = (float)(body.downloadedBytes + fileLength) / (float)totalLength;
                 callBack?.Invoke(progress);
-                yield return null;
+                yield return new WaitForEndOfFrame();
             }
         }
+        body.Dispose();
         callBack?.Invoke(1);
-        bodyRequester.Dispose();
     }
 
     /// <summary>

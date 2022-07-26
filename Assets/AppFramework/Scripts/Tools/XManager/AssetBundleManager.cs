@@ -111,7 +111,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
                     AssetBundlesCache.Add(AllABPath[index], ab);
                 }
             });
-            while (!requester.IsDown)
+            while (!requester.IsDone)
             {
                 float progress = requester.DownloadedProgress;
                 loadProgress?.Invoke(AllABPath[index], progress);
