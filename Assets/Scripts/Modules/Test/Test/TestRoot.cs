@@ -14,6 +14,7 @@ namespace Test
     {
         private TestWindow window;
         private RenderTexture mobile;
+
         public TestRoot()
         {
             //添加事件系统，不带参数
@@ -24,6 +25,7 @@ namespace Test
             AddEventMsg("BtnTakePhotoEvent", TakePhoto);
             AddEventMsg("BtnQuitEvent", ButtonQuitEvent);
         }
+
         public void Begin()
         {
             //加载窗体
@@ -34,28 +36,8 @@ namespace Test
             mobile = new RenderTexture(Screen.width, Screen.height, 32);
             window.SetMobileCamera(mobile);
             window.PlayGif();
-
-            window.StartCoroutine(wait());
-            TimerManager.Instance.StartTimer((time) =>
-            {
-                if (Input.GetKeyDown(KeyCode.A))
-                {
-                    isGo = true;
-                }
-            });
         }
 
-        private bool isGo = false;
-        IEnumerator wait()
-        {
-            yield return new WaitForEndOfFrame();
-            for (int i = 0; i < 10; i++)
-            {
-                yield return new WaitUntil(() => isGo);
-                Debug.Log(i);
-                isGo = false;
-            }
-        }
         private void SetLightingmapData()
         {
             string lightingmap_TestPath = "Test/Assets/Lightingmap/Test";
@@ -65,39 +47,38 @@ namespace Test
 
         public void End()
         {
-            
         }
-        
+
         public void Test()
         {
             //音频播放
             string audio_path = "";
             AudioClip audio = AssetsManager.Instance.LoadAsset<AudioClip>(audio_path);
-            AudioManager.Instance.PlayBackgroundAudio(audio);//背景音乐，循环播放
-            AudioManager.Instance.PlayEffectAudio(audio);//特效音乐，播放一次，可叠加播放
+            AudioManager.Instance.PlayBackgroundAudio(audio); //背景音乐，循环播放
+            AudioManager.Instance.PlayEffectAudio(audio); //特效音乐，播放一次，可叠加播放
             //视频播放（unity自带视频播放器）
             string vidio_path = "";
             VideoClip video = AssetsManager.Instance.LoadAsset<VideoClip>(vidio_path);
-            VideoManager.Instance.PlayVideo(null,video);//播放视频
-            VideoManager.Instance.PlayVideo(null,"视频地址", () => { });//播放视频
+            VideoManager.Instance.PlayVideo(null, video); //播放视频
+            VideoManager.Instance.PlayVideo(null, "视频地址", () => { }); //播放视频
             //AVPro视频播放
             AVProManager.Instance.OpenMedia(MediaPathType.AbsolutePathOrURL, "视频地址");
-            AVProManager.Instance.AddMediaPlayerEvent(MediaPlayerEvent.EventType.FinishedPlaying,() => { });//播放完成事件
+            AVProManager.Instance.AddMediaPlayerEvent(MediaPlayerEvent.EventType.FinishedPlaying, () => { }); //播放完成事件
             //获取配置表
-            TableManager.Instance.GetTable<TestTableData>("");//获取配置表
+            TableManager.Instance.GetTable<TestTableData>(""); //获取配置表
             //时间任务
             int timeid1 = -1;
-            timeid1 = TimerManager.Instance.StartTimer((time) => { });//一直执行 相当于Update
+            timeid1 = TimerManager.Instance.StartTimer((time) => { }); //一直执行 相当于Update
             TimerManager.Instance.EndTimer(timeid1);
             int timeid2 = -1;
-            timeid2 = TimerTaskManager.Instance.AddTimeTask(() => { }, 1f, TimeUnit.Second, 1);//1秒后执行一次
+            timeid2 = TimerTaskManager.Instance.AddTimeTask(() => { }, 1f, TimeUnit.Second, 1); //1秒后执行一次
             TimerTaskManager.Instance.DeleteTimeTask(timeid2);
             //Animator动画播放
-            Animator animator = window.TryGetComponent<Animator>();//获取脚本组件，没有就自动添加
-            animator.Play("动画名", () => { });//播放动画
-            animator.PlayBack("动画名", () => { });//倒放动画
+            Animator animator = window.TryGetComponent<Animator>(); //获取脚本组件，没有就自动添加
+            animator.Play("动画名", () => { }); //播放动画
+            animator.PlayBack("动画名", () => { }); //倒放动画
             //序列帧动画
-            Image image = window.TryGetComponent<Image>();//获取脚本组件，没有就自动添加
+            Image image = window.TryGetComponent<Image>(); //获取脚本组件，没有就自动添加
             image.PlayFrames(new List<Sprite>());
             //gameobject对象和脚本显隐
             window.SetGameObjectActive();
@@ -110,70 +91,80 @@ namespace Test
             window.AddEventTrigger(EventTriggerType.PointerClick, (arg) => { });
             //平台管理类,不同平台对应的原生方法和属性
             PlatformManager.Instance.GetDataPath("");
-
         }
+
         private void TakePhoto()
         {
-            PictureManager.TakePhoto(window.renderCamera, PlatformManager.Instance.GetDataPath("Screenshots"), (Texture2D texture, string fileName) =>
-            {
-                PlatformManager.Instance.SavePhoto(PlatformManager.Instance.GetDataPath("Screenshots/") + fileName);
-                window.SetRawImage(texture);
-            });
+            PictureManager.TakePhoto(window.renderCamera, PlatformManager.Instance.GetDataPath("Screenshots"),
+                (Texture2D texture, string fileName) =>
+                {
+                    PlatformManager.Instance.SavePhoto(PlatformManager.Instance.GetDataPath("Screenshots/") + fileName);
+                    window.SetRawImage(texture);
+                });
         }
 
         private void ButtonQuitEvent()
         {
             //Ask.AskRoot.Instance.ShowAskWindow("确定退出程序？", () => { PlatformManager.Instance.QuitUnityPlayer(); });
-            SendEventMsg<string, Action, Action>("ShowAskWindow", "确定退出程序？", () => { PlatformManager.Instance.QuitUnityPlayer(); }, null);
+            SendEventMsg<string, Action, Action>("ShowAskWindow", "确定退出程序？",
+                () => { PlatformManager.Instance.QuitUnityPlayer(); }, null);
         }
+
         private void ButtonEvent()
         {
             window.SetText("触发不带参数事件");
-            SendEventMsg("ShowTips","触发不带参数事件",1.2f);
+            SendEventMsg("ShowTips", "触发不带参数事件", 1.2f);
             // Root.GetRootScript<Ask.AskRoot>().ShowTips("123");
         }
+
         int id = -1;
+
         private void ButtonParamsEvent(string value)
         {
             window.SetText(value);
-            if (FileManager.FileExist(PlatformManager.Instance.GetDataPath("App/") + "meta.apk"))
+            string filePath = PlatformManager.Instance.GetDataPath("App/meta.apk");
+            UnityWebRequester requester = new UnityWebRequester(App.app);
+            
+            // if (FileManager.FileExist(filePath))
+            // {
+            //     PlatformManager.Instance.InstallApp(filePath);
+            //     requester = null;
+            // }
+            // else
+            // {
+            //     requester.GetBytes("https://meta-oss.genimous.com/vr-ota/App/meta.apk", (bytes) =>
+            //     {
+            //         FileManager.CreateFile(filePath, bytes);
+            //         PlatformManager.Instance.InstallApp(filePath);
+            //         TimerManager.Instance.EndTimer(id);
+            //         requester.Destory();
+            //     });
+            //     id = TimerManager.Instance.StartTimer((time) =>
+            //     {
+            //         window.SetText(requester.DownloadedProgress.ToString("F2"));
+            //     });
+            // }
+
+            requester.DownloadFile("https://meta-oss.genimous.com/vr-ota/App/meta.apk", filePath, (progress) =>
             {
-                PlatformManager.Instance.InstallApp(PlatformManager.Instance.GetDataPath("App/") + "meta.apk");
-            }
-            else
-            {
-                UnityWebRequester requester = new UnityWebRequester(App.app);
-                // requester.GetBytes("https://meta-oss.genimous.com/vr-ota/App/meta.apk", (bytes) =>
-                // {
-                //     FileManager.CreateFile(PlatformManager.Instance.GetDataPath("App/").Replace("file://", "") + "meta.apk", bytes);
-                //     PlatformManager.Instance.InstallApp(PlatformManager.Instance.GetDataPath("App/") + "meta.apk");
-                //     TimerManager.Instance.EndTimer(id);
-                //     requester.Destory();
-                // });
-                // id = TimerManager.Instance.StartTimer((time) =>
-                // {
-                //     window.SetText(requester.DownloadedProgress.ToString("F2"));
-                // });
-                requester.DownloadFile("https://meta-oss.genimous.com/vr-ota/App/meta.apk", 
-                    PlatformManager.Instance.GetDataPath("App/meta.apk").Replace("file://", ""),
-                (progress) =>
+                window.SetText(progress.ToString("F2"));
+                if (progress >= 1)
                 {
-                    window.SetText(progress.ToString("F2"));
-                });
-            }
+                    PlatformManager.Instance.InstallApp(filePath);
+                }
+            });
         }
 
         public void AppPause(bool pause)
         {
-            
         }
+
         public void AppFocus(bool focus)
         {
-            
         }
+
         public void AppQuit()
         {
-
         }
     }
 }

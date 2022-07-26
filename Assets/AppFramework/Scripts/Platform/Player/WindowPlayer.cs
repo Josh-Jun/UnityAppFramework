@@ -11,7 +11,7 @@ namespace Platform
         public override string PlatformName { get; } = "window";
         public override string GetDataPath(string folder)
         {
-            return $"file://{Application.dataPath.Replace("Assets", "")}{folder}";
+            return $"{Application.dataPath.Replace("Assets", "")}{folder}";
         }
         public override void SavePhoto(string imagePath)
         {

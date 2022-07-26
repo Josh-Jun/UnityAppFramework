@@ -13,7 +13,7 @@ namespace Platform
         public override string PlatformName { get; } = "android";
         public override string GetDataPath(string folder)
         {
-            return $"file://{Application.persistentDataPath}/{folder}";
+            return $"{Application.persistentDataPath}/{folder}";
         }
         public override void SavePhoto(string imagePath)
         {
