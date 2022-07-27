@@ -196,6 +196,17 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         return mainfest.GetAllDependencies(bundleName);
     }
 
+    public void UnloadCacheAssetBundles()
+    {
+        foreach (var pair in AssetBundlesCache)
+        {
+            if (pair.Value != null)
+            {
+                pair.Value.Unload(false);
+            }
+        }
+        AssetBundlesCache.Clear();
+    }
     /// <summary>
     /// 单个包卸载
     /// </summary>

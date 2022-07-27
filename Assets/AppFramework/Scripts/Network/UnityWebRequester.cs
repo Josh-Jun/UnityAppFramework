@@ -290,16 +290,18 @@ public class UnityWebRequester
     /// <returns></returns>
     public IEnumerator IE_Get(string url, Action<string> actionResult)
     {
-        using (uwr = UnityWebRequest.Get(url))
+        using (uwr = new UnityWebRequest(url, UnityWebRequest.kHttpVerbGET))
         {
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
+            DownloadHandler downloadHandler = new DownloadHandlerBuffer();
+            uwr.downloadHandler = downloadHandler;
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
             {
-                actionResult?.Invoke(uwr.downloadHandler.text);
+                actionResult?.Invoke(downloadHandler.text);
             }
             else
             {
@@ -317,16 +319,18 @@ public class UnityWebRequester
     /// <returns></returns>
     public IEnumerator IE_GetBytes(string url, Action<byte[]> actionResult)
     {
-        using (uwr = UnityWebRequest.Get(url))
+        using (uwr = new UnityWebRequest(url, UnityWebRequest.kHttpVerbGET))
         {
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
+            DownloadHandlerBuffer downloadHandlerBuffer = new DownloadHandlerBuffer();
+            uwr.downloadHandler = downloadHandlerBuffer;
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
             {
-                actionResult?.Invoke(uwr.downloadHandler.data);
+                actionResult?.Invoke(downloadHandlerBuffer.data);
             }
             else
             {
@@ -343,16 +347,18 @@ public class UnityWebRequester
     /// <returns></returns>
     public IEnumerator IE_GetTexture(string url, Action<Texture2D> actionResult)
     {
-        using (uwr = UnityWebRequestTexture.GetTexture(url))
+        using (uwr = new UnityWebRequest(url, UnityWebRequest.kHttpVerbGET))
         {
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
+            DownloadHandlerTexture downloadHandlerTexture = new DownloadHandlerTexture();
+            uwr.downloadHandler = downloadHandlerTexture;
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
             {
-                actionResult?.Invoke(DownloadHandlerTexture.GetContent(uwr));
+                actionResult?.Invoke(downloadHandlerTexture.texture);
             }
             else
             {
@@ -370,16 +376,18 @@ public class UnityWebRequester
     /// <returns></returns>
     public IEnumerator IE_GetAssetBundle(string url, Action<AssetBundle> actionResult)
     {
-        using (uwr = UnityWebRequestAssetBundle.GetAssetBundle(url))
+        using (uwr = new UnityWebRequest(url, UnityWebRequest.kHttpVerbGET))
         {
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
+            DownloadHandlerAssetBundle downloadHandlerAssetBundle  = new DownloadHandlerAssetBundle(uwr.url, 0);
+            uwr.downloadHandler = downloadHandlerAssetBundle ;
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
             {
-                actionResult?.Invoke(DownloadHandlerAssetBundle.GetContent(uwr));
+                actionResult?.Invoke(downloadHandlerAssetBundle.assetBundle);
             }
             else
             {
@@ -398,16 +406,18 @@ public class UnityWebRequester
     /// <returns></returns>
     public IEnumerator IE_GetAudioClip(string url, Action<AudioClip> actionResult, AudioType audioType = AudioType.WAV)
     {
-        using (uwr = UnityWebRequestMultimedia.GetAudioClip(url, audioType))
+        using (uwr = new UnityWebRequest(url, UnityWebRequest.kHttpVerbGET))
         {
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
+            DownloadHandlerAudioClip downloadHandlerAudioClip = new DownloadHandlerAudioClip(uwr.url, audioType);
+            uwr.downloadHandler = downloadHandlerAudioClip;
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
             {
-                actionResult?.Invoke(DownloadHandlerAudioClip.GetContent(uwr));
+                actionResult?.Invoke(downloadHandlerAudioClip.audioClip);
             }
             else
             {

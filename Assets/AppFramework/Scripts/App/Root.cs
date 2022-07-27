@@ -147,6 +147,7 @@ public class Root
             {
                 if (async.isDone && async.progress == 1)
                 {
+                    AssetBundleManager.Instance.UnloadCacheAssetBundles();
                     InitRootBegin(sceneName, callback);
                 }
             }, mode);

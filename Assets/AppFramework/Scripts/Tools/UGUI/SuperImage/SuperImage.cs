@@ -28,11 +28,10 @@ namespace UnityEngine.UI
             outterVertices.Clear();
 
             Vector4 uv = overrideSprite != null ? DataUtility.GetOuterUV(overrideSprite) : Vector4.zero;
-
-            Rect pixelAdjustedRect = GetPixelAdjustedRect();
-            float w = pixelAdjustedRect.width;
-            float h = pixelAdjustedRect.height;
-
+            float w = rectTransform.rect.width;
+            float h = rectTransform.rect.height;
+            //圆心顶点UI坐标 默认轴心点(0.5,0.5) 默认坐标(0,0)
+            Vector2 originPos = new Vector2((0.5f - rectTransform.pivot.x) * w, (0.5f - rectTransform.pivot.y) * h);
             float ASPECT_X = w > h ? h / w : 1;
             float ASPECT_Y = h > w ? w / h : 1;
             #region 圆角矩形
@@ -53,9 +52,9 @@ namespace UnityEngine.UI
                     uivertex.uv0 = new Vector2(uv.x + (round * ASPECT_X / 2) * (uv.z - uv.x) * (1 - Mathf.Sin(Mathf.PI / (180f / (i * 90 / segements)))), uv.y + (round * ASPECT_Y / 2) * (uv.w - uv.y) * (1 - Mathf.Cos(Mathf.PI / (180f / (i * 90 / segements)))));
                     u = new Vector2((round * ASPECT_X / 2) * (1 - Mathf.Sin(Mathf.PI / (180f / (i * 90 / segements)))), (round * ASPECT_Y / 2) * (1 - Mathf.Cos(Mathf.PI / (180f / (i * 90 / segements)))));
                 }
-                uivertex.position = new Vector3(w * u.x - w / 2, h * u.y - h / 2);
+                uivertex.position = new Vector2((w * u.x - w / 2), (h * u.y - h / 2))+originPos;
                 vh.AddVert(uivertex);
-                outterVertices.Add(new Vector3(w * u.x - w / 2, h * u.y - h / 2));
+                outterVertices.Add(uivertex.position);
             }
             #endregion
 
@@ -75,9 +74,9 @@ namespace UnityEngine.UI
                     uivertex.uv0 = new Vector2(uv.x + (uv.z - uv.x) * (round * ASPECT_X / 2) * (1 - Mathf.Cos(Mathf.PI / (180f / (i * 90 / segements)))), uv.y + (uv.w - uv.y) * ((1 - round * ASPECT_Y / 2) + (round * ASPECT_Y / 2) * Mathf.Sin(Mathf.PI / (180f / (i * 90 / segements)))));
                     u = new Vector2((round * ASPECT_X / 2) * (1 - Mathf.Cos(Mathf.PI / (180f / (i * 90 / segements)))), (1 - round * ASPECT_Y / 2) + (round * ASPECT_Y / 2) * Mathf.Sin(Mathf.PI / (180f / (i * 90 / segements))));
                 }
-                uivertex.position = new Vector3(w * u.x - w / 2, h * u.y - h / 2);
+                uivertex.position = new Vector2((w * u.x - w / 2), (h * u.y - h / 2))+originPos;
                 vh.AddVert(uivertex);
-                outterVertices.Add(new Vector3(w * u.x - w / 2, h * u.y - h / 2));
+                outterVertices.Add(uivertex.position);
             }
             #endregion
 
@@ -97,9 +96,9 @@ namespace UnityEngine.UI
                     uivertex.uv0 = new Vector2(uv.x + (uv.z - uv.x) * ((1 - round * ASPECT_X / 2) + (round * ASPECT_X / 2) * Mathf.Sin(Mathf.PI / (180f / (i * 90 / segements)))), uv.y + (uv.w - uv.y) * ((1 - round * ASPECT_Y / 2) + (round * ASPECT_Y / 2) * Mathf.Cos(Mathf.PI / (180f / (i * 90 / segements)))));
                     u = new Vector2((1 - round * ASPECT_X / 2) + (round * ASPECT_X / 2) * Mathf.Sin(Mathf.PI / (180f / (i * 90 / segements))), (1 - round * ASPECT_Y / 2) + (round * ASPECT_Y / 2) * Mathf.Cos(Mathf.PI / (180f / (i * 90 / segements))));
                 }
-                uivertex.position = new Vector3(w * u.x - w / 2, h * u.y - h / 2);
+                uivertex.position = new Vector2((w * u.x - w / 2), (h * u.y - h / 2))+originPos;
                 vh.AddVert(uivertex);
-                outterVertices.Add(new Vector3(w * u.x - w / 2, h * u.y - h / 2));
+                outterVertices.Add(uivertex.position);
             }
             #endregion
 
@@ -119,9 +118,9 @@ namespace UnityEngine.UI
                     uivertex.uv0 = new Vector2(uv.x + (uv.z - uv.x) * ((1 - round * ASPECT_X / 2) + (round * ASPECT_X / 2) * Mathf.Cos(Mathf.PI / (180f / (i * 90 / segements)))), uv.y + (uv.w - uv.y) * ((round * ASPECT_Y / 2) - (round * ASPECT_Y / 2) * Mathf.Sin(Mathf.PI / (180f / (i * 90 / segements)))));
                     u = new Vector2((1 - round * ASPECT_X / 2) + (round * ASPECT_X / 2) * Mathf.Cos(Mathf.PI / (180f / (i * 90 / segements))), (round * ASPECT_Y / 2) - (round * ASPECT_Y / 2) * Mathf.Sin(Mathf.PI / (180f / (i * 90 / segements))));
                 }
-                uivertex.position = new Vector3(w * u.x - w / 2, h * u.y - h / 2);
+                uivertex.position = new Vector2((w * u.x - w / 2), (h * u.y - h / 2))+originPos;
                 vh.AddVert(uivertex);
-                outterVertices.Add(new Vector3(w * u.x - w / 2, h * u.y - h / 2));
+                outterVertices.Add(uivertex.position);
             }
             #endregion
 
