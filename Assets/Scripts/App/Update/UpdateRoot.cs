@@ -283,8 +283,7 @@ namespace Update
 
         private void UpdateConfig(Folder folder = null)
         {
-            XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.Load(XmlLocalVersionPath);
+            XmlDocument xmlDocument = XmlManager.Load(XmlLocalVersionPath);
 
             var scene = xmlDocument.GetElementsByTagName("Scenes");
             for (int i = 0; i < scene.Count; i++)
@@ -307,7 +306,7 @@ namespace Update
                 }
             }
 
-            xmlDocument.Save(XmlLocalVersionPath);
+            XmlManager.Save(xmlDocument, XmlLocalVersionPath);
         }
 
         /// <summary> 下载 </summary>
