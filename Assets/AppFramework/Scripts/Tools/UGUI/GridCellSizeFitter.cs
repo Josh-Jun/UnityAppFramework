@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GridLayourCellSizeFitter : MonoBehaviour
+public class GridCellSizeFitter : MonoBehaviour
 {
     private GridLayoutGroup self;
     private void Awake()
@@ -28,13 +28,19 @@ public class GridLayourCellSizeFitter : MonoBehaviour
     }
 }
 #if UNITY_EDITOR
-[CustomEditor(typeof(GridLayourCellSizeFitter))]
-public class GridLayourCellSizeFitterEditor : Editor
+[CustomEditor(typeof(GridCellSizeFitter))]
+[InitializeOnLoad]
+public class GridCellSizeFitterEditor : Editor
 {
-    private GridLayourCellSizeFitter fitter;
+    private GridCellSizeFitter fitter;
     void OnEnable()
     {
-        fitter = (GridLayourCellSizeFitter)(target);
+        fitter = (GridCellSizeFitter)(target);
+        EditorApplication.update += Update;
+    }
+
+    void Update()
+    {
         fitter.Init();
     }
 }

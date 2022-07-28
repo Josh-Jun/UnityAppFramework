@@ -34,10 +34,6 @@ public class PicoXRManager : SingletonMonoEvent<PicoXRManager>
     {
         SetBaseController(false);
         SetTeleportController(false);
-        AddTrackedEvent(TrackedEventType.TriggerDownEvent, (XRNode node, GameObject target) =>
-        {
-            target.GetComponent<MeshRenderer>().material.color = Color.red;
-        });
         //SetTeleportEnable(false);
     }
     public void SetBaseController(bool enable)
@@ -109,6 +105,9 @@ public class PicoXRManager : SingletonMonoEvent<PicoXRManager>
     }
     private GameObject leftTarget;
     private GameObject rightTarget;
+    
+    private bool leftMenu, rightMenu, leftGrip, rightGrip, leftTrigger, rightTrigger, leftJoystick, rightJoystick, leftXA,rightXA,leftYB, rightYB;
+    private bool leftMenuDown, rightMenuDown, leftGripDown, rightGripDown, leftTriggerDown, rightTriggerDown, leftJoystickDown, rightJoystickDown, leftXADown,rightXADown,leftYBDown, rightYBDown;
     public void Update()
     {
         #region RaycastTarget
@@ -124,146 +123,194 @@ public class PicoXRManager : SingletonMonoEvent<PicoXRManager>
         }
         #endregion
         #region Trigger
-        if (InputDevices.GetDeviceAtXRNode(XRNode.LeftHand).TryGetFeatureValue(CommonUsages.triggerButton, out bool leftTriggerDown))
+        if (InputDevices.GetDeviceAtXRNode(XRNode.LeftHand).TryGetFeatureValue(CommonUsages.triggerButton, out leftTriggerDown))
         {
-            if (leftTriggerDown)
+            if (leftTrigger != leftTriggerDown)
             {
-                Execute(TrackedEventType.TriggerDownEvent, XRNode.LeftHand, leftTarget);
-            }
-            else
-            {
-                Execute(TrackedEventType.TriggerUpEvent, XRNode.LeftHand, leftTarget);
+                leftTrigger = leftTriggerDown;
+                if (leftTriggerDown)
+                {
+                    Execute(TrackedEventType.TriggerDownEvent, XRNode.LeftHand, leftTarget);
+                }
+                else
+                {
+                    Execute(TrackedEventType.TriggerUpEvent, XRNode.LeftHand, leftTarget);
+                }
             }
         }
-        if (InputDevices.GetDeviceAtXRNode(XRNode.RightHand).TryGetFeatureValue(CommonUsages.triggerButton, out bool rightTriggerDown))
+        if (InputDevices.GetDeviceAtXRNode(XRNode.RightHand).TryGetFeatureValue(CommonUsages.triggerButton, out rightTriggerDown))
         {
-            if (rightTriggerDown)
+            if (rightTrigger != rightTriggerDown)
             {
-                Execute(TrackedEventType.TriggerDownEvent, XRNode.RightHand, rightTarget);
-            }
-            else
-            {
-                Execute(TrackedEventType.TriggerUpEvent, XRNode.RightHand, rightTarget);
+                rightTrigger = rightTriggerDown;
+                if (rightTriggerDown)
+                {
+                    Execute(TrackedEventType.TriggerDownEvent, XRNode.RightHand, rightTarget);
+                }
+                else
+                {
+                    Execute(TrackedEventType.TriggerUpEvent, XRNode.RightHand, rightTarget);
+                }
             }
         }
         #endregion
         #region Menu
-        if (InputDevices.GetDeviceAtXRNode(XRNode.LeftHand).TryGetFeatureValue(CommonUsages.menuButton, out bool leftMenuDown))
+        if (InputDevices.GetDeviceAtXRNode(XRNode.LeftHand).TryGetFeatureValue(CommonUsages.menuButton, out leftMenuDown))
         {
-            if (leftMenuDown)
+            if (leftMenu != leftMenuDown)
             {
-                Execute(TrackedEventType.MenuDownEvent, XRNode.LeftHand, leftTarget);
-            }
-            else
-            {
-                Execute(TrackedEventType.MenuUpEvent, XRNode.LeftHand, leftTarget);
+                leftMenu = leftMenuDown;
+                if (leftMenuDown)
+                {
+                    Execute(TrackedEventType.MenuDownEvent, XRNode.LeftHand, leftTarget);
+                }
+                else
+                {
+                    Execute(TrackedEventType.MenuUpEvent, XRNode.LeftHand, leftTarget);
+                }
             }
         }
-        if (InputDevices.GetDeviceAtXRNode(XRNode.RightHand).TryGetFeatureValue(CommonUsages.menuButton, out bool rightMenuDown))
+        if (InputDevices.GetDeviceAtXRNode(XRNode.RightHand).TryGetFeatureValue(CommonUsages.menuButton, out rightMenuDown))
         {
-            if (rightMenuDown)
+            if (rightMenu != rightMenuDown)
             {
-                Execute(TrackedEventType.MenuDownEvent, XRNode.RightHand, rightTarget);
-            }
-            else
-            {
-                Execute(TrackedEventType.MenuUpEvent, XRNode.RightHand, rightTarget);
+                rightMenu = rightMenuDown;
+                if (rightMenuDown)
+                {
+                    Execute(TrackedEventType.MenuDownEvent, XRNode.RightHand, rightTarget);
+                }
+                else
+                {
+                    Execute(TrackedEventType.MenuUpEvent, XRNode.RightHand, rightTarget);
+                }
             }
         }
         #endregion
         #region Grip
-        if (InputDevices.GetDeviceAtXRNode(XRNode.LeftHand).TryGetFeatureValue(CommonUsages.gripButton, out bool leftGripDown))
+        if (InputDevices.GetDeviceAtXRNode(XRNode.LeftHand).TryGetFeatureValue(CommonUsages.gripButton, out leftGripDown))
         {
-            if (leftGripDown)
+            if (leftGrip != leftGripDown)
             {
-                Execute(TrackedEventType.GripDownEvent, XRNode.LeftHand, leftTarget);
-            }
-            else
-            {
-                Execute(TrackedEventType.GripUpEvent, XRNode.LeftHand, leftTarget);
+                leftGrip = leftGripDown;
+                if (leftGripDown)
+                {
+                    Execute(TrackedEventType.GripDownEvent, XRNode.LeftHand, leftTarget);
+                }
+                else
+                {
+                    Execute(TrackedEventType.GripUpEvent, XRNode.LeftHand, leftTarget);
+                }
             }
         }
-        if (InputDevices.GetDeviceAtXRNode(XRNode.RightHand).TryGetFeatureValue(CommonUsages.gripButton, out bool rightGripDown))
+        if (InputDevices.GetDeviceAtXRNode(XRNode.RightHand).TryGetFeatureValue(CommonUsages.gripButton, out rightGripDown))
         {
-            if (rightGripDown)
+            if (rightGrip != rightGripDown)
             {
-                Execute(TrackedEventType.GripDownEvent, XRNode.RightHand, rightTarget);
-            }
-            else
-            {
-                Execute(TrackedEventType.GripUpEvent, XRNode.RightHand, rightTarget);
+                rightGrip = rightGripDown;
+                if (rightGripDown)
+                {
+                    Execute(TrackedEventType.GripDownEvent, XRNode.RightHand, rightTarget);
+                }
+                else
+                {
+                    Execute(TrackedEventType.GripUpEvent, XRNode.RightHand, rightTarget);
+                }
             }
         }
         #endregion
         #region Joystick
-        if (InputDevices.GetDeviceAtXRNode(XRNode.LeftHand).TryGetFeatureValue(CommonUsages.primary2DAxisClick, out bool leftJoystickDown))
+        if (InputDevices.GetDeviceAtXRNode(XRNode.LeftHand).TryGetFeatureValue(CommonUsages.primary2DAxisClick, out leftJoystickDown))
         {
-            if (leftJoystickDown)
+            if (leftJoystick != leftJoystickDown)
             {
-                Execute(TrackedEventType.JoystickDownEvent, XRNode.LeftHand, leftTarget);
-            }
-            else
-            {
-                Execute(TrackedEventType.JoystickUpEvent, XRNode.LeftHand, leftTarget);
+                leftJoystick = leftJoystickDown;
+                if (leftJoystickDown)
+                {
+                    Execute(TrackedEventType.JoystickDownEvent, XRNode.LeftHand, leftTarget);
+                }
+                else
+                {
+                    Execute(TrackedEventType.JoystickUpEvent, XRNode.LeftHand, leftTarget);
+                }
             }
         }
-        if (InputDevices.GetDeviceAtXRNode(XRNode.RightHand).TryGetFeatureValue(CommonUsages.primary2DAxisClick, out bool rightJoystickDown))
+        if (InputDevices.GetDeviceAtXRNode(XRNode.RightHand).TryGetFeatureValue(CommonUsages.primary2DAxisClick, out rightJoystickDown))
         {
-            if (rightJoystickDown)
+            if (rightJoystick != rightJoystickDown)
             {
-                Execute(TrackedEventType.JoystickDownEvent, XRNode.RightHand, rightTarget);
-            }
-            else
-            {
-                Execute(TrackedEventType.JoystickUpEvent, XRNode.RightHand, rightTarget);
+                rightJoystick = rightJoystickDown;
+                if (rightJoystickDown)
+                {
+                    Execute(TrackedEventType.JoystickDownEvent, XRNode.RightHand, rightTarget);
+                }
+                else
+                {
+                    Execute(TrackedEventType.JoystickUpEvent, XRNode.RightHand, rightTarget);
+                }
             }
         }
         #endregion
         #region X/A
-        if (InputDevices.GetDeviceAtXRNode(XRNode.LeftHand).TryGetFeatureValue(CommonUsages.primaryButton, out bool leftXADown))
+        if (InputDevices.GetDeviceAtXRNode(XRNode.LeftHand).TryGetFeatureValue(CommonUsages.primaryButton, out leftXADown))
         {
-            if (leftXADown)
+            if (leftXA != leftXADown)
             {
-                Execute(TrackedEventType.XADownEvent, XRNode.LeftHand, leftTarget);
-            }
-            else
-            {
-                Execute(TrackedEventType.XAUpEvent, XRNode.LeftHand, leftTarget);
+                leftXA = leftXADown;
+                if (leftXADown)
+                {
+                    Execute(TrackedEventType.XADownEvent, XRNode.LeftHand, leftTarget);
+                }
+                else
+                {
+                    Execute(TrackedEventType.XAUpEvent, XRNode.LeftHand, leftTarget);
+                }
             }
         }
-        if (InputDevices.GetDeviceAtXRNode(XRNode.RightHand).TryGetFeatureValue(CommonUsages.primaryButton, out bool rightXADown))
+        if (InputDevices.GetDeviceAtXRNode(XRNode.RightHand).TryGetFeatureValue(CommonUsages.primaryButton, out rightXADown))
         {
-            if (rightXADown)
+            if (rightXA != rightXADown)
             {
-                Execute(TrackedEventType.XADownEvent, XRNode.RightHand, rightTarget);
-            }
-            else
-            {
-                Execute(TrackedEventType.XAUpEvent, XRNode.RightHand, rightTarget);
+                rightXA = rightXADown;
+                if (rightXADown)
+                {
+                    Execute(TrackedEventType.XADownEvent, XRNode.RightHand, rightTarget);
+                }
+                else
+                {
+                    Execute(TrackedEventType.XAUpEvent, XRNode.RightHand, rightTarget);
+                }
             }
         }
         #endregion
         #region Y/B
-        if (InputDevices.GetDeviceAtXRNode(XRNode.LeftHand).TryGetFeatureValue(CommonUsages.secondaryButton, out bool leftYBDown))
+        if (InputDevices.GetDeviceAtXRNode(XRNode.LeftHand).TryGetFeatureValue(CommonUsages.secondaryButton, out leftYBDown))
         {
-            if (leftYBDown)
+            if (leftYB != leftYBDown)
             {
-                Execute(TrackedEventType.YBDownEvent, XRNode.LeftHand, leftTarget);
-            }
-            else
-            {
-                Execute(TrackedEventType.YBUpEvent, XRNode.LeftHand, leftTarget);
+                leftYB = leftYBDown;
+                if (leftYBDown)
+                {
+                    Execute(TrackedEventType.YBDownEvent, XRNode.LeftHand, leftTarget);
+                }
+                else
+                {
+                    Execute(TrackedEventType.YBUpEvent, XRNode.LeftHand, leftTarget);
+                }
             }
         }
-        if (InputDevices.GetDeviceAtXRNode(XRNode.RightHand).TryGetFeatureValue(CommonUsages.secondaryButton, out bool rightYBDown))
+        if (InputDevices.GetDeviceAtXRNode(XRNode.RightHand).TryGetFeatureValue(CommonUsages.secondaryButton, out rightYBDown))
         {
-            if (rightYBDown)
+            if (rightYB != rightYBDown)
             {
-                Execute(TrackedEventType.YBDownEvent, XRNode.RightHand, rightTarget);
-            }
-            else
-            {
-                Execute(TrackedEventType.YBUpEvent, XRNode.RightHand, rightTarget);
+                rightYB = rightYBDown;
+                if (rightYBDown)
+                {
+                    Execute(TrackedEventType.YBDownEvent, XRNode.RightHand, rightTarget);
+                }
+                else
+                {
+                    Execute(TrackedEventType.YBUpEvent, XRNode.RightHand, rightTarget);
+                }
             }
         }
         #endregion

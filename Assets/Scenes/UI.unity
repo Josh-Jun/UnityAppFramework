@@ -1807,7 +1807,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: +
+  m_Text: ~
 --- !u!222 &918109632
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1930,7 +1930,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 250, y: 125}
+  m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &937933126
 MonoBehaviour:
@@ -1998,8 +1998,8 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 0}
   rayShapeFilter: 1
-  segements: 8
-  round: 0.64
+  segements: 2
+  round: 1
 --- !u!222 &937933128
 CanvasRenderer:
   m_ObjectHideFlags: 0
