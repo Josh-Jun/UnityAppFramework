@@ -4,6 +4,14 @@ public enum TargetPackage
     Mobile = 0,
     Pico = 1,
 }
+
+/// <summary>更新类型</summary>
+public enum UpdateMold
+{
+    None = 0,
+    Hotfix = 1,
+    App = 2,
+}
 /// <summary>PicoVR手柄事件类型</summary>
 public enum TrackedEventType
 {

@@ -42,6 +42,9 @@ namespace Data
 
         [XmlAttribute]
         public string BundleName;//包名
+        
+        [XmlAttribute]
+        public string Tag; //是否需要断点续传  0-不需要  1-需要
 
         [XmlAttribute]
         public string MD5; //MD5

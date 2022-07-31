@@ -145,7 +145,7 @@ namespace Test
             //     });
             // }
 
-            requester.DownloadFile("https://meta-oss.genimous.com/vr-ota/App/meta.apk", filePath, (progress) =>
+            requester.DownloadFile("https://meta-oss.genimous.com/vr-ota/App/meta.apk", filePath, (size, progress) =>
             {
                 window.SetText(progress.ToString("F2"));
                 if (progress >= 1)

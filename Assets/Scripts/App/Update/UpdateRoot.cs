@@ -21,31 +21,39 @@ namespace Update
         private string ServerUrl;
         private string XmlServerVersionPath;
 
+        private string appUrl;
+        private string appPath;
+        
+        private Dictionary<string, Folder> localFoders = new Dictionary<string, Folder>();
+        private Dictionary<string, Folder> serverFolders = new Dictionary<string, Folder>();
+        
         private List<Folder> downloadFolders = new List<Folder>();
         private List<Folder> alreadlyFolders = new List<Folder>();
-        private List<Folder> allDownloadFolders = new List<Folder>();
-
-        private Dictionary<Folder, UnityWebRequester> unityWebRequesterPairs = new Dictionary<Folder, UnityWebRequester>();
-
+        
         private AssetBundleConfig localABConfig;
         private AssetBundleConfig serverABConfig;
         
         private float TotalSize = 0; // 资源的总大小 MB
-        private bool Downloading = false;
-        private float alreadySize = 0;
+        private float alreadyDownloadSize = 0;
+        private float downloadingSize;
+
+        private UpdateMold UpdateMold = UpdateMold.None;
         /// <summary> 获取下载大小(M) </summary>
         private float GetLoadedSize
         {
             get
             {
-                return (alreadlyFolders.Sum(s => s.Size) + alreadySize) / 1024f;
+                return (alreadyDownloadSize + downloadingSize) / 1024f;
             }
         }
 
         /// <summary> 获取下载进度 </summary>
         private float GetProgress
         {
-            get { return GetLoadedSize / TotalSize; }
+            get
+            {
+                return GetLoadedSize / TotalSize;
+            }
         }
 
         #endregion
@@ -57,22 +65,37 @@ namespace Update
 
         public void Begin()
         {
+            LocalPath = PlatformManager.Instance.GetDataPath(PlatformManager.Instance.Name) + "/";
+            ServerUrl = NetcomManager.ABUrl + PlatformManager.Instance.Name + "/";
+
+            XmlLocalVersionPath = LocalPath + "AssetBundleConfig.xml";
+            XmlServerVersionPath = ServerUrl + "AssetBundleConfig.xml";
+
+            appUrl = NetcomManager.AppUrl + "meta.apk";
+            appPath = PlatformManager.Instance.GetDataPath("App/meta.apk");
+            
             string prefab_UpdatePath = "App/Update/Windows/UpdateWindow";
             window = AssetsManager.Instance.LoadLocalUIWindow<UpdateWindow>(prefab_UpdatePath);
             window.SetWindowActive();
 
             window.SetTipsText("检查更新中...");
             window.SetProgressValue(0);
-            StartUpdate((bool isUpdate, string des) =>
+            StartUpdate((UpdateMold mold, string des) =>
             {
-                if (isUpdate)
+                UpdateMold = mold;
+                switch (mold)
                 {
-                    window.SetContentText(des);
-                    window.SetUpdateTipsActive(true);
-                }
-                else
-                {
-                    LoadAssetBundle();
+                    case UpdateMold.Hotfix:
+                        window.SetContentText(des);
+                        window.SetUpdateTipsActive(true);
+                        break;
+                    case UpdateMold.App:
+                        window.SetContentText($"发现新版本应用:v{serverABConfig.GameVersion}");
+                        window.SetUpdateTipsActive(true);
+                        break;
+                    case UpdateMold.None:
+                        LoadAssetBundle();
+                        break;
                 }
             });
         }
@@ -91,32 +114,75 @@ namespace Update
 
         private IEnumerator DownLoading()
         {
-            StartDownLoad();
             float time = 0;
             float previousSize = 0;
             float speed = 0;
-            while (Downloading)
+            switch (UpdateMold)
             {
-                yield return new WaitForEndOfFrame();
-                time += Time.deltaTime;
-                if (time >= 1f)
-                {
-                    speed = (GetLoadedSize - previousSize);
-                    previousSize = GetLoadedSize;
-                    time = 0;
-                }
+                case UpdateMold.Hotfix:
+                    StartDownLoad();
+                    while (GetProgress < 1)
+                    {
+                        yield return new WaitForEndOfFrame();
+                        time += Time.deltaTime;
+                        if (time >= 1f)
+                        {
+                            speed = (GetLoadedSize - previousSize);
+                            previousSize = GetLoadedSize;
+                            time = 0;
+                        }
 
-                speed = speed > 0 ? speed : 0;
-                window.SetSpeedText(speed);
-                window.SetProgressText(GetLoadedSize, TotalSize);
-                window.SetProgressValue(GetProgress);
+                        speed = speed > 0 ? speed : 0;
+                        window.SetSpeedText(speed);
+                        window.SetProgressText(GetLoadedSize, TotalSize);
+                        window.SetProgressValue(GetProgress);
+                    }
+                    yield return new WaitForEndOfFrame();
+                    break;
+                case UpdateMold.App:
+                    if (!PlayerPrefs.HasKey("APP_DOWNLOADING"))
+                    {
+                        if (FileManager.FileExist(appPath))
+                        {
+                            FileManager.DeleteFile(appPath);
+                        }
+                        PlayerPrefs.SetString("APP_DOWNLOADING", DateTime.Now.ToString());
+                    }
+                    UnityWebRequester requester = new UnityWebRequester(window);
+                    requester.DownloadFile(appUrl, appPath, (size, progress) =>
+                    {
+                        float total = size / 1024f / 1024f;
+                        float downloading = progress * total;
+                        time += Time.deltaTime;
+                        if (time >= 1f)
+                        {
+                            speed = (downloading - previousSize);
+                            previousSize = downloading;
+                            time = 0;
+                        }
+                        
+                        speed = speed > 0 ? speed : 0;
+                        window.SetSpeedText(speed);
+                        window.SetProgressText(downloading, total);
+                        window.SetProgressValue(progress);
+                        if (progress == 1)
+                        {
+                            if (PlayerPrefs.HasKey("APP_DOWNLOADING"))
+                            {
+                                PlayerPrefs.DeleteKey("APP_DOWNLOADING");
+                            }
+                            PlatformManager.Instance.InstallApp(appPath);
+                        }
+                    });
+                    break;
+                case UpdateMold.None:
+                    break;
             }
-
             window.SetProgressText(TotalSize, TotalSize);
             window.SetProgressValue(GetProgress);
             yield return new WaitForEndOfFrame();
             //更新下载完成，加载AB包
-            LoadAssetBundle();
+            // LoadAssetBundle();
         }
 
         private void LoadAssetBundle()
@@ -140,14 +206,8 @@ namespace Update
         #region Public Function
 
         /// <summary> 开始热更新 </summary>
-        private void StartUpdate(Action<bool, string> UpdateCallBack)
+        private void StartUpdate(Action<UpdateMold, string> UpdateCallBack)
         {
-            LocalPath = PlatformManager.Instance.GetDataPath(PlatformManager.Instance.Name) + "/";
-            ServerUrl = NetcomManager.ABUrl + PlatformManager.Instance.Name + "/";
-
-            XmlLocalVersionPath = LocalPath + "AssetBundleConfig.xml";
-            XmlServerVersionPath = ServerUrl + "AssetBundleConfig.xml";
-
             if (FileManager.FileExist(XmlLocalVersionPath))
             {
                 //读取本地热更文件
@@ -157,20 +217,19 @@ namespace Update
                         ? XmlManager.ProtoDeSerialize<AssetBundleConfig>(bytes)
                         : null;
                     //检查版本更新信息
-                    CheckUpdate(localABConfig, () => { UpdateCallBack?.Invoke(downloadFolders.Count > 0, serverABConfig.Des); });
+                    CheckUpdate(localABConfig, (mold) => { UpdateCallBack?.Invoke(mold, serverABConfig.Des); });
                 });
             }
             else
             {
                 //检查版本更新信息
-                CheckUpdate(localABConfig, () => { UpdateCallBack?.Invoke(downloadFolders.Count > 0, serverABConfig.Des); });
+                CheckUpdate(localABConfig, (mold) => { UpdateCallBack?.Invoke(mold, serverABConfig.Des); });
             }
         }
 
         /// <summary> 下载AB包 </summary>
         private void StartDownLoad()
         {
-            Downloading = true;
             //下载总manifest文件
             DownLoad(ServerUrl + PlatformManager.Instance.Name + ".manifest", (byte[] manifest_data) =>
             {
@@ -201,17 +260,6 @@ namespace Update
                 LoadCallBack?.Invoke(totalProgress == loadProgress, bundleName, progress);
             });
         }
-
-        /// <summary> 清理本地AB包和版本XML文件 </summary>
-        private void DeleteLocalVersionXml()
-        {
-            if (FileManager.FileExist(XmlLocalVersionPath))
-            {
-                FileManager.DeleteFile(XmlLocalVersionPath);
-                FileManager.DeleteFolder(LocalPath);
-            }
-        }
-
         #endregion
 
         #region Private Function
@@ -220,69 +268,70 @@ namespace Update
 
         private IEnumerator DownLoadAssetBundle()
         {
-            unityWebRequesterPairs.Clear();
             for (int i = 0; i < downloadFolders.Count; i++)
             {
                 var folder = downloadFolders[i];
-                //添加到下载列表
-                if (unityWebRequesterPairs.ContainsKey(folder))
-                    continue;
-                UnityWebRequester requester = new UnityWebRequester(window);
-                unityWebRequesterPairs.Add(folder, requester);
+
+                if (localFoders.Count > 0)
+                {
+                    if (localFoders.ContainsKey(folder.BundleName))
+                    {
+                        if (localFoders[folder.BundleName].Tag == "0")
+                        {
+                            if (FileManager.FileExist(LocalPath + folder.BundleName))
+                            {
+                                FileManager.DeleteFile(LocalPath + folder.BundleName);
+                            }
+                        }
+                    }
+                }
+                yield return new WaitForEndOfFrame();
                 //下载manifest文件
                 DownLoad(ServerUrl + folder.BundleName + ".manifest", (byte[] _manifest_data) =>
                 {
+                    if (FileManager.FileExist(LocalPath + folder.BundleName + ".manifest"))
+                    {
+                        FileManager.DeleteFile(LocalPath + folder.BundleName + ".manifest");
+                    }
                     //将manifest文件写入本地
                     FileManager.CreateFile(LocalPath + folder.BundleName + ".manifest", _manifest_data);
                 });
             }
 
             yield return new WaitForEndOfFrame();
-            foreach (var requester in unityWebRequesterPairs)
+            foreach (var folder in downloadFolders)
             {
                 yield return new WaitUntil(() => Finished);
+                folder.Tag = "1";
+                UpdateLocalConfigTag(folder);
                 Finished = false;
-                requester.Value.DownloadFile(ServerUrl + requester.Key.BundleName, LocalPath + requester.Key.BundleName, (progress) =>
+                UnityWebRequester requester = new UnityWebRequester(window);
+                requester.DownloadFile(ServerUrl + folder.BundleName, LocalPath + folder.BundleName, (size, progress) =>
                 {
-                    alreadySize = requester.Key.Size * progress;
+                    downloadingSize = folder.Size * progress;
                     if (progress >= 1)
                     {
                         if (!Finished)
                         {
+                            folder.Tag = "0";
+                            UpdateLocalConfigTag(folder);
                             //下载完成后修改本地版本文件
-                            UpdateLocalConfig(requester.Key);
-                            alreadySize = 0;
-                            if (!alreadlyFolders.Contains(requester.Key))
-                            {
-                                alreadlyFolders.Add(requester.Key);
-                            }
+                            UpdateLocalConfigMD5(folder);
+                            downloadingSize = 0;
+                            alreadyDownloadSize += folder.Size;
                             Finished = true;
                         }
                     }
                 });
+                
             }
-            yield return new WaitForEndOfFrame();
-            Downloading = false;
+            yield return new WaitForSeconds(1f);
         }
 
-        private void UpdateLocalConfig(Folder folder)
+        private void UpdateLocalConfigMD5(Folder folder)
         {
-            if (!FileManager.FileExist(XmlLocalVersionPath))
-            {
-                AssetBundleConfig config = new AssetBundleConfig();
-                config.GameVersion = serverABConfig.GameVersion;
-                config.Platform = serverABConfig.Platform;
-                config.Scenes = serverABConfig.Scenes;
-                FileManager.CreateFile(XmlLocalVersionPath, XmlManager.ProtoByteSerialize<AssetBundleConfig>(config));
+            InitLocalConfig();
 
-                UpdateConfig();
-            }
-
-            UpdateConfig(folder);
-        }
-
-        private void UpdateConfig(Folder folder = null)
-        {
             XmlDocument xmlDocument = XmlManager.Load(XmlLocalVersionPath);
 
             var scene = xmlDocument.GetElementsByTagName("Scenes");
@@ -299,16 +348,62 @@ namespace Update
                             folders[j].Attributes["Size"].Value = folder.Size.ToString();
                         }
                     }
-                    else
+                }
+            }
+            XmlManager.Save(xmlDocument, XmlLocalVersionPath);
+        }
+
+        private void UpdateLocalConfigTag(Folder folder)
+        {
+            InitLocalConfig();
+            
+            XmlDocument xmlDocument = XmlManager.Load(XmlLocalVersionPath);
+
+            var scene = xmlDocument.GetElementsByTagName("Scenes");
+            for (int i = 0; i < scene.Count; i++)
+            {
+                var folders = scene[i].ChildNodes;
+                for (int j = 0; j < folders.Count; j++)
+                {
+                    if (folder != null)
                     {
-                        folders[j].Attributes["MD5"].Value = "";
+                        if (folder.BundleName == folders[j].Attributes["BundleName"].Value)
+                        {
+                            folders[j].Attributes["Tag"].Value = folder.Tag;
+                        }
                     }
                 }
             }
 
             XmlManager.Save(xmlDocument, XmlLocalVersionPath);
         }
+        private void InitLocalConfig()
+        {
+            if (!FileManager.FileExist(XmlLocalVersionPath))
+            {
+                AssetBundleConfig config = new AssetBundleConfig();
+                config.GameVersion = serverABConfig.GameVersion;
+                config.Platform = serverABConfig.Platform;
+                config.Scenes = serverABConfig.Scenes;
+                FileManager.CreateFile(XmlLocalVersionPath, XmlManager.ProtoByteSerialize<AssetBundleConfig>(config));
+                
+                XmlDocument xmlDocument = XmlManager.Load(XmlLocalVersionPath);
 
+                var scene = xmlDocument.GetElementsByTagName("Scenes");
+                for (int i = 0; i < scene.Count; i++)
+                {
+                    var folders = scene[i].ChildNodes;
+                    for (int j = 0; j < folders.Count; j++)
+                    {
+                        folders[j].Attributes["Tag"].Value = "0";
+                        folders[j].Attributes["MD5"].Value = "";
+                        folders[j].Attributes["Size"].Value = "";
+                    }
+                }
+
+                XmlManager.Save(xmlDocument, XmlLocalVersionPath);
+            }
+        }
         /// <summary> 下载 </summary>
         private void DownLoad(string url, Action<byte[]> action)
         {
@@ -321,7 +416,7 @@ namespace Update
         }
 
         /// <summary> 检查更新 </summary>
-        private void CheckUpdate(AssetBundleConfig localABConfig, Action cb = null)
+        private void CheckUpdate(AssetBundleConfig localABConfig, Action<UpdateMold> cb = null)
         {
             if (Application.internetReachability == NetworkReachability.NotReachable)
             {
@@ -333,52 +428,81 @@ namespace Update
                 DownLoad(XmlServerVersionPath, (byte[] bytes) =>
                 {
                     serverABConfig = XmlManager.ProtoDeSerialize<AssetBundleConfig>(bytes);
-                    GetABScenePairs(serverABConfig);
+                    SetABScenePairs(serverABConfig);
                     Debug.Log($"大版本比较 v{Application.version}/v{serverABConfig.GameVersion}");
                     if (Application.version == serverABConfig.GameVersion)
                     {
-                        //无大版本更新，校验本地ab包
-                        for (int i = 0; i < serverABConfig.Scenes.Count; i++)
+                        serverFolders = GetFolders(serverABConfig);
+                        if (localABConfig != null)
                         {
-                            for (int j = 0; j < serverABConfig.Scenes[i].Folders.Count; j++)
+                            localFoders = GetFolders(localABConfig);
+                            foreach (var serverfolder in serverFolders)
                             {
-                                if (localABConfig == null)
+                                foreach (var localFoder in localFoders)
                                 {
-                                    downloadFolders.Add(serverABConfig.Scenes[i].Folders[j]);
-                                }
-                                else
-                                {
-                                    if (localABConfig.Scenes[i].Folders[j].BundleName == serverABConfig.Scenes[i].Folders[j].BundleName)
+                                    if (serverfolder.Key == localFoder.Key)
                                     {
-                                        if (localABConfig.Scenes[i].Folders[j].MD5 != serverABConfig.Scenes[i].Folders[j].MD5)
+                                        if (serverfolder.Value.MD5 != localFoder.Value.MD5)
                                         {
-                                            downloadFolders.Add(serverABConfig.Scenes[i].Folders[j]);
+                                            downloadFolders.Add(serverfolder.Value);
                                         }
                                         else
                                         {
-                                            alreadlyFolders.Add(serverABConfig.Scenes[i].Folders[j]);
+                                            alreadlyFolders.Add(serverfolder.Value);
                                         }
                                     }
                                 }
 
-                                allDownloadFolders.Add(serverABConfig.Scenes[i].Folders[j]);
+                                if (!localFoders.ContainsKey(serverfolder.Key))
+                                {
+                                    downloadFolders.Add(serverfolder.Value);
+                                }
                             }
                         }
-
-                        TotalSize = allDownloadFolders.Sum(s => s.Size) / 1024f;
-                        cb?.Invoke();
+                        else
+                        {
+                            foreach (var serverfolder in serverFolders)
+                            {
+                                downloadFolders.Add(serverfolder.Value);
+                            }
+                        }
+                        alreadyDownloadSize = alreadlyFolders.Sum(s => s.Size);
+                        TotalSize = serverFolders.Sum(s => s.Value.Size) / 1024f;
+                        UpdateMold mold = downloadFolders.Count > 0 ? UpdateMold.Hotfix : UpdateMold.None;
+                        cb?.Invoke(mold);
                     }
                     else
                     {
+                        if (FileManager.FolderExist(LocalPath))
+                        {
+                            FileManager.DeleteFolderAllFile(LocalPath);
+                        }
                         //大版本更新,下载新程序覆盖安装
                         Debug.Log("大版本更新,下载新程序覆盖安装");
+                        cb?.Invoke(UpdateMold.App);
                     }
                 });
             }
         }
 
+        private Dictionary<string, Folder> GetFolders(AssetBundleConfig config)
+        {
+            Dictionary<string, Folder> folders = new Dictionary<string, Folder>();
+            for (int i = 0; i < config.Scenes.Count; i++)
+            {
+                for (int j = 0; j < config.Scenes[i].Folders.Count; j++)
+                {
+                    if (!folders.ContainsKey(config.Scenes[i].Folders[j].BundleName))
+                    {
+                        folders.Add(config.Scenes[i].Folders[j].BundleName, config.Scenes[i].Folders[j]);
+                    }
+                }
+            }
+            return folders;
+        }
+
         /// <summary> 获取文件夹名和包名 </summary>
-        private void GetABScenePairs(AssetBundleConfig config)
+        private void SetABScenePairs(AssetBundleConfig config)
         {
             //获取文件夹名和包名，用来给AssetbundleSceneManager里的folderDic赋值
             foreach (var scene in config.Scenes)

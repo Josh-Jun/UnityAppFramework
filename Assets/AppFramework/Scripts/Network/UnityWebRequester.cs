@@ -76,7 +76,7 @@ public class UnityWebRequester
     /// <param name="url"></param>
     /// <param name="filePath"></param>
     /// <param name="callBack"></param>
-    public void DownloadFile(string url, string filePath, Action<float> callBack)
+    public void DownloadFile(string url, string filePath, Action<float, float> callBack)
     {
         mono.StartCoroutine(IE_DownloadFile(url, filePath, callBack));
     }
@@ -87,7 +87,7 @@ public class UnityWebRequester
     /// <param name="filePath"></param>
     /// <param name="callBack"></param>
     /// <returns></returns>
-    public IEnumerator IE_DownloadFile(string url, string filePath, Action<float> callBack)
+    public IEnumerator IE_DownloadFile(string url, string filePath, Action<float, float> callBack)
     {
         //获取要下载的文件的总大小
         var head = UnityWebRequest.Head(url);
@@ -118,12 +118,12 @@ public class UnityWebRequester
             while (!body.isDone)
             {
                 progress = (float)(body.downloadedBytes + fileLength) / (float)totalLength;
-                callBack?.Invoke(progress);
+                callBack?.Invoke(totalLength, progress);
                 yield return new WaitForEndOfFrame();
             }
         }
         body.Dispose();
-        callBack?.Invoke(1);
+        callBack?.Invoke(totalLength, 1);
     }
 
     /// <summary>

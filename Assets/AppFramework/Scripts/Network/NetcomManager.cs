@@ -51,7 +51,17 @@ public partial class NetcomManager : SingletonMonoEvent<NetcomManager>
         get
         {
             string test_url = Path.Combine(Application.dataPath.Replace("Assets", ""), "AssetBundle/");//本地AB包地址
-            string pro_url = "https://meta-oss.genimous.com/vr-ota/AssetBundle/";//服务器AB包地址
+            string pro_url = "https://meta-oss.genimous.com/vr-ota/dev_test/";//服务器AB包地址
+            return Root.AppConfig.IsTestServer ? test_url : pro_url;
+        }
+    }
+    public static string AppUrl
+    {
+        private set { }
+        get
+        {
+            string test_url = Path.Combine(Application.dataPath.Replace("Assets", ""), "App/");//本地AB包地址
+            string pro_url = "https://meta-oss.genimous.com/vr-ota/App/";//服务器AB包地址
             return Root.AppConfig.IsTestServer ? test_url : pro_url;
         }
     }
