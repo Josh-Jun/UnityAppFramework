@@ -24,7 +24,7 @@ namespace Update
         private string appUrl;
         private string appPath;
         
-        private Dictionary<string, Folder> localFoders = new Dictionary<string, Folder>();
+        private Dictionary<string, Folder> localFolders = new Dictionary<string, Folder>();
         private Dictionary<string, Folder> serverFolders = new Dictionary<string, Folder>();
         
         private List<Folder> downloadFolders = new List<Folder>();
@@ -272,11 +272,11 @@ namespace Update
             {
                 var folder = downloadFolders[i];
 
-                if (localFoders.Count > 0)
+                if (localFolders.Count > 0)
                 {
-                    if (localFoders.ContainsKey(folder.BundleName))
+                    if (localFolders.ContainsKey(folder.BundleName))
                     {
-                        if (localFoders[folder.BundleName].Tag == "0")
+                        if (localFolders[folder.BundleName].Tag == "0")
                         {
                             if (FileManager.FileExist(LocalPath + folder.BundleName))
                             {
@@ -325,7 +325,7 @@ namespace Update
                 });
                 
             }
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.2f);
         }
 
         private void UpdateLocalConfigMD5(Folder folder)
@@ -435,10 +435,10 @@ namespace Update
                         serverFolders = GetFolders(serverABConfig);
                         if (localABConfig != null)
                         {
-                            localFoders = GetFolders(localABConfig);
+                            localFolders = GetFolders(localABConfig);
                             foreach (var serverfolder in serverFolders)
                             {
-                                foreach (var localFoder in localFoders)
+                                foreach (var localFoder in localFolders)
                                 {
                                     if (serverfolder.Key == localFoder.Key)
                                     {
@@ -453,7 +453,7 @@ namespace Update
                                     }
                                 }
 
-                                if (!localFoders.ContainsKey(serverfolder.Key))
+                                if (!localFolders.ContainsKey(serverfolder.Key))
                                 {
                                     downloadFolders.Add(serverfolder.Value);
                                 }
