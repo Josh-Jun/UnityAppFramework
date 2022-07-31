@@ -52,7 +52,16 @@ public class AssetBundleWindowEditor : EditorWindow
         GUILayout.BeginVertical();
 
         EditorGUILayout.Space();
+        // onekey build
         EditorGUILayout.Space();
+        if (GUILayout.Button("AutoBuildAssetBundle(一键自动打包)"))
+        {
+            RemoveAllAssetBundleLabels();
+            SetAssetBundleLabels();
+            DeleteAssetBundle();
+            BuildAllAssetBundles();
+            CreateFile();
+        }
         
         // build target.
         buildTarget = (BuildTarget)EditorGUILayout.EnumPopup("Build Target", buildTarget);
@@ -96,55 +105,40 @@ public class AssetBundleWindowEditor : EditorWindow
         EditorGUILayout.Space();
         des = EditorGUILayout.TextField("Update Des", des);
         
-        // AssetBundle Labels.
-        EditorGUILayout.Space();
-        if (GUILayout.Button("1.SetAssetBundleLabels(自动做标记)"))
-        {
-            RemoveAllAssetBundleLabels();
-            SetAssetBundleLabels();
-        }
-        EditorGUILayout.Space();
-
-        // build.
-        EditorGUILayout.Space();
-        if (GUILayout.Button("2.BuildAllAssetBundle(一键打包)"))
-        {
-            BuildAllAssetBundles();
-        }
-
-        // MD5 file.
-        EditorGUILayout.Space();
-        if (GUILayout.Button("3.CreateMD5File(生成MD5文件)"))
-        {
-            CreateFile();
-        }
-
         // delete.
         EditorGUILayout.Space();
-        if (GUILayout.Button("4.DeleteAllAssetBundle(一键删除)"))
+        if (GUILayout.Button("1.DeleteAllAssetBundle(一键删除)"))
         {
             DeleteAssetBundle();
         }
-        
         // remove labels
         EditorGUILayout.Space();
-        if (GUILayout.Button("5.RemoveAllAssetBundleLabels(一键清除AB包标记)"))
+        if (GUILayout.Button("2.RemoveAllAssetBundleLabels(一键清除AB包标记)"))
         {
             RemoveAllAssetBundleLabels();
             AssetDatabase.Refresh();
         }
-        
-        
-        // remove labels
+        // AssetBundle Labels.
         EditorGUILayout.Space();
-        if (GUILayout.Button("6.AutoBuildAssetBundle(一键自动打包)"))
+        if (GUILayout.Button("3.SetAssetBundleLabels(自动做标记)"))
         {
             RemoveAllAssetBundleLabels();
             SetAssetBundleLabels();
-            DeleteAssetBundle();
+        }
+        EditorGUILayout.Space();
+        // build.
+        EditorGUILayout.Space();
+        if (GUILayout.Button("4.BuildAllAssetBundle(一键打包)"))
+        {
             BuildAllAssetBundles();
+        }
+        // MD5 file.
+        EditorGUILayout.Space();
+        if (GUILayout.Button("5.CreateMD5File(生成MD5文件)"))
+        {
             CreateFile();
         }
+        
         GUILayout.EndVertical();
     }
 

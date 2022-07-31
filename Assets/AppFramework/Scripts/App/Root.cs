@@ -133,9 +133,9 @@ public class Root
         InitRootBegin("Global", callback);
     }
 
-    public static void LoadScene(string sceneName, bool isLoading = false, LoadSceneMode mode = LoadSceneMode.Single,
-        Action callback = null)
+    public static void LoadScene(string sceneName, bool isLoading = false, LoadSceneMode mode = LoadSceneMode.Single, Action callback = null)
     {
+        AssetBundleManager.Instance.UnloadCacheAssetBundles();
         InitRootEnd();
         if (isLoading)
         {
@@ -147,7 +147,6 @@ public class Root
             {
                 if (async.isDone && async.progress == 1)
                 {
-                    AssetBundleManager.Instance.UnloadCacheAssetBundles();
                     InitRootBegin(sceneName, callback);
                 }
             }, mode);
