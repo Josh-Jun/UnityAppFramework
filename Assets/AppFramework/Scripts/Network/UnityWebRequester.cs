@@ -122,8 +122,8 @@ public class UnityWebRequester
                 yield return new WaitForEndOfFrame();
             }
         }
-        body.Dispose();
         callBack?.Invoke(totalLength, 1);
+        body.Dispose();
     }
 
     /// <summary>

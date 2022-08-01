@@ -164,7 +164,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         string bundleName = ABScenePairs[sceneName][folderName];
         AssetBundle ab = PlatformManager.Instance.IsEditor
             ? AssetBundlesCache[bundleName]
-            : LoadAssetBundle(assetsName);
+            : LoadAssetBundle(bundleName);
         return ab.LoadAsset<T>(assetsName);
     }
 
@@ -173,7 +173,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         string bundleName = ABScenePairs[sceneName][folderName];
         AssetBundle ab = PlatformManager.Instance.IsEditor
             ? AssetBundlesCache[bundleName]
-            : LoadAssetBundle(assetsName);
+            : LoadAssetBundle(bundleName);
         return ab.LoadAsset(assetsName);
     }
 
@@ -182,7 +182,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         string bundleName = ABScenePairs[sceneName][folderName];
         AssetBundle ab = PlatformManager.Instance.IsEditor
             ? AssetBundlesCache[bundleName]
-            : LoadAssetBundle(assetsName);
+            : LoadAssetBundle(bundleName);
         return ab.LoadAsset(assetsName, type);
     }
 

@@ -135,7 +135,6 @@ public class Root
 
     public static void LoadScene(string sceneName, bool isLoading = false, LoadSceneMode mode = LoadSceneMode.Single, Action callback = null)
     {
-        AssetBundleManager.Instance.UnloadCacheAssetBundles();
         InitRootEnd();
         if (isLoading)
         {

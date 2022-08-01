@@ -83,6 +83,7 @@ namespace Update
             StartUpdate((UpdateMold mold, string des) =>
             {
                 UpdateMold = mold;
+                Debug.Log($"更新结果:{mold}");
                 switch (mold)
                 {
                     case UpdateMold.Hotfix:
@@ -138,6 +139,11 @@ namespace Update
                         window.SetProgressValue(GetProgress);
                     }
                     yield return new WaitForEndOfFrame();
+                    window.SetProgressText(TotalSize, TotalSize);
+                    window.SetProgressValue(GetProgress);
+                    yield return new WaitForSeconds(0.2f);
+                    //更新下载完成，加载AB包
+                    LoadAssetBundle();
                     break;
                 case UpdateMold.App:
                     if (!PlayerPrefs.HasKey("APP_DOWNLOADING"))
@@ -178,15 +184,11 @@ namespace Update
                 case UpdateMold.None:
                     break;
             }
-            window.SetProgressText(TotalSize, TotalSize);
-            window.SetProgressValue(GetProgress);
-            yield return new WaitForEndOfFrame();
-            //更新下载完成，加载AB包
-            // LoadAssetBundle();
         }
 
         private void LoadAssetBundle()
         {
+            Debug.Log("开始加载AB包");
             window.SetTipsText("正在加载资源...");
             window.SetProgressBarActive(true);
             LoadAssetBundle((bool isEnd, string bundleName, float bundleProgress) =>
@@ -195,10 +197,10 @@ namespace Update
                 window.SetProgressValue(bundleProgress);
                 if (isEnd && bundleProgress == 1)
                 {
+                    Debug.Log("AB包加载完成");
                     window.SetProgressBarActive(false);
                     window.SetWindowActive(false);
-                    //AB包加载完成
-                    TimerTaskManager.Instance.AddFrameTask(() => { Root.StartApp(); }, 1);
+                    Root.StartApp();
                 }
             });
         }
@@ -283,6 +285,16 @@ namespace Update
                                 FileManager.DeleteFile(LocalPath + folder.BundleName);
                             }
                         }
+                        else if (localFolders[folder.BundleName].Tag == "1")
+                        {
+                            if (localFolders[folder.BundleName].MD5 != folder.MD5)
+                            {
+                                if (FileManager.FileExist(LocalPath + folder.BundleName))
+                                {
+                                    FileManager.DeleteFile(LocalPath + folder.BundleName);
+                                }
+                            }
+                        }
                     }
                 }
                 yield return new WaitForEndOfFrame();
@@ -301,9 +313,11 @@ namespace Update
             yield return new WaitForEndOfFrame();
             foreach (var folder in downloadFolders)
             {
+                yield return new WaitForEndOfFrame();
                 yield return new WaitUntil(() => Finished);
                 folder.Tag = "1";
                 UpdateLocalConfigTag(folder);
+                UpdateLocalConfigMD5(folder);
                 Finished = false;
                 UnityWebRequester requester = new UnityWebRequester(window);
                 requester.DownloadFile(ServerUrl + folder.BundleName, LocalPath + folder.BundleName, (size, progress) =>
@@ -315,17 +329,13 @@ namespace Update
                         {
                             folder.Tag = "0";
                             UpdateLocalConfigTag(folder);
-                            //下载完成后修改本地版本文件
-                            UpdateLocalConfigMD5(folder);
                             downloadingSize = 0;
                             alreadyDownloadSize += folder.Size;
                             Finished = true;
                         }
                     }
                 });
-                
             }
-            yield return new WaitForSeconds(0.2f);
         }
 
         private void UpdateLocalConfigMD5(Folder folder)
@@ -397,7 +407,7 @@ namespace Update
                     {
                         folders[j].Attributes["Tag"].Value = "0";
                         folders[j].Attributes["MD5"].Value = "";
-                        folders[j].Attributes["Size"].Value = "";
+                        folders[j].Attributes["Size"].Value = "0";
                     }
                 }
 

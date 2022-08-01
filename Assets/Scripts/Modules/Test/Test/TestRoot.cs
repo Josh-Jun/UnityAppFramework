@@ -124,7 +124,7 @@ namespace Test
             window.SetText(value);
             string filePath = PlatformManager.Instance.GetDataPath("App/meta.apk");
             UnityWebRequester requester = new UnityWebRequester(App.app);
-            
+
             // if (FileManager.FileExist(filePath))
             // {
             //     PlatformManager.Instance.InstallApp(filePath);

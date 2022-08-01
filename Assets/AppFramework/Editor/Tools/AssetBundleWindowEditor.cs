@@ -61,6 +61,7 @@ public class AssetBundleWindowEditor : EditorWindow
             DeleteAssetBundle();
             BuildAllAssetBundles();
             CreateFile();
+            GUIUtility.ExitGUI();
         }
         
         // build target.
@@ -83,6 +84,7 @@ public class AssetBundleWindowEditor : EditorWindow
                     newPath = newPath.Remove(0, gamePath.Length + 1);
                 buildPath = newPath;
             }
+            GUIUtility.ExitGUI();
         }
         GUILayout.EndHorizontal();
 
@@ -98,6 +100,7 @@ public class AssetBundleWindowEditor : EditorWindow
             {
                 outputPath = newPath;
             }
+            GUIUtility.ExitGUI();
         }
         GUILayout.EndHorizontal();
 
@@ -110,20 +113,21 @@ public class AssetBundleWindowEditor : EditorWindow
         if (GUILayout.Button("1.DeleteAllAssetBundle(一键删除)"))
         {
             DeleteAssetBundle();
+            GUIUtility.ExitGUI();
         }
         // remove labels
         EditorGUILayout.Space();
         if (GUILayout.Button("2.RemoveAllAssetBundleLabels(一键清除AB包标记)"))
         {
             RemoveAllAssetBundleLabels();
-            AssetDatabase.Refresh();
+            GUIUtility.ExitGUI();
         }
         // AssetBundle Labels.
         EditorGUILayout.Space();
         if (GUILayout.Button("3.SetAssetBundleLabels(自动做标记)"))
         {
-            RemoveAllAssetBundleLabels();
             SetAssetBundleLabels();
+            GUIUtility.ExitGUI();
         }
         EditorGUILayout.Space();
         // build.
@@ -131,12 +135,14 @@ public class AssetBundleWindowEditor : EditorWindow
         if (GUILayout.Button("4.BuildAllAssetBundle(一键打包)"))
         {
             BuildAllAssetBundles();
+            GUIUtility.ExitGUI();
         }
         // MD5 file.
         EditorGUILayout.Space();
         if (GUILayout.Button("5.CreateMD5File(生成MD5文件)"))
         {
             CreateFile();
+            GUIUtility.ExitGUI();
         }
         
         GUILayout.EndVertical();
