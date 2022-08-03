@@ -206,6 +206,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
             }
         }
         AssetBundlesCache.Clear();
+        Resources.UnloadUnusedAssets();
     }
     /// <summary>
     /// 单个包卸载

@@ -139,29 +139,6 @@ public class GoRoot : SingletonMono<GoRoot>
         return list.Count > layer;
     }
 
-    /// <summary> 添加空的UI子物体(Image,RawImage,Text) </summary>
-    public T AddChild<T>(GameObject parent) where T : Component
-    {
-        RectTransform rectParent = parent ? parent.TryGetComponent<RectTransform>() : UIRectTransform;
-        GameObject go = new GameObject(typeof(T).ToString().Split('.').Last(), typeof(RectTransform), typeof(CanvasRenderer));
-        RectTransform rectTransform = go.TryGetComponent<RectTransform>();
-        rectTransform.SetParent(rectParent, false);
-        T t = go.TryGetComponent<T>();
-        return t;
-    }
-
-    /// <summary> 添加预制体，返回GameObject </summary>
-    public GameObject AddChild(GameObject prefab, GameObject parent)
-    {
-        GameObject go = AddChild(prefab,parent.transform);
-        return go;
-    }
-    /// <summary> 添加预制体，返回GameObject </summary>
-    public GameObject AddChild(GameObject prefab, Transform parent)
-    {
-        GameObject go = Instantiate(prefab, parent);
-        return go;
-    }
     public void AddWindow<T>(WindowBase window)
     {
         var type = typeof(T);

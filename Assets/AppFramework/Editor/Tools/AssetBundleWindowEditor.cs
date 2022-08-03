@@ -372,7 +372,7 @@ public class AssetBundleWindowEditor : EditorWindow
                 xmlFolder.SetAttribute("BundleName", folder.Value);
                 xmlFolder.SetAttribute("Tag", "0");
                 xmlFolder.SetAttribute("MD5", GetFileMD5(file.FullName));
-                xmlFolder.SetAttribute("Size", (file.Length / 1024f).ToString());
+                xmlFolder.SetAttribute("Size", $"{file.Length}");
 
                 xmlScene.AppendChild(xmlFolder);
             }

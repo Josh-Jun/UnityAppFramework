@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using EventController;
 using System;
+using System.Linq;
 using System.Reflection;
 using UnityEngine.SceneManagement;
 using XLuaFrame;
@@ -51,6 +52,33 @@ public class AssetsManager : SingletonMono<AssetsManager>
     }
     #endregion
 
+    #region 加载资源到场景
+    /// <summary> 添加空的UI子物体(Image,RawImage,Text) </summary>
+    public T AddChild<T>(GameObject parent) where T : Component
+    {
+        GameObject go = new GameObject(typeof(T).ToString().Split('.').Last(), typeof(RectTransform), typeof(CanvasRenderer));
+        RectTransform rectParent = parent.transform as RectTransform;
+        RectTransform rectTransform = go.TryGetComponent<RectTransform>();
+        rectTransform.SetParent(rectParent, false);
+        T t = go.TryGetComponent<T>();
+        return t;
+    }
+
+    /// <summary> 添加预制体，返回GameObject </summary>
+    public GameObject AddChild(string path, GameObject parent = null)
+    {
+        GameObject go = AddChild(path, parent.transform);
+        return go;
+    }
+    /// <summary> 添加预制体，返回GameObject </summary>
+    public GameObject AddChild(string path, Transform parent = null)
+    {
+        GameObject prefab = LoadAsset<GameObject>(path);
+        GameObject go = Instantiate(prefab, parent);
+        return go;
+    }
+    #endregion
+    
     #region 加载窗口
     /// <summary> 
     /// 加载窗口 添加T(Component)类型脚本

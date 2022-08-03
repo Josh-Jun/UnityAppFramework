@@ -9,7 +9,7 @@ namespace Update
     public class UpdateWindow : WindowBase
     {
         private RectTransform progressBarPanel;
-        private Image image_Progress;
+        private Slider slider_Progress;
         private Text text_Tips;
         private Text text_Speed;
         private Text text_Progress;
@@ -23,7 +23,7 @@ namespace Update
             base.InitWindow();
 
             progressBarPanel = this.FindComponent<RectTransform>("ProgressBarPanel");
-            image_Progress = this.FindComponent<Image>("ProgressBarPanel/Progress");
+            slider_Progress = this.FindComponent<Slider>("ProgressBarPanel/ProgressSlider");
             text_Tips = this.FindComponent<Text>("ProgressBarPanel/TipsText");
             text_Speed = this.FindComponent<Text>("ProgressBarPanel/SpeedText");
             text_Progress = this.FindComponent<Text>("ProgressBarPanel/ProgressText");
@@ -73,7 +73,7 @@ namespace Update
         }
         public void SetProgressValue(float value)
         {
-            image_Progress.fillAmount = value;
+            slider_Progress.value = value;
         }
         public void SetUpdateTipsActive(bool active)
         {

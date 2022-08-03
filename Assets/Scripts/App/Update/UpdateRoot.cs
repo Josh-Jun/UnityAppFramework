@@ -33,9 +33,9 @@ namespace Update
         private AssetBundleConfig localABConfig;
         private AssetBundleConfig serverABConfig;
         
-        private float TotalSize = 0; // 资源的总大小 MB
-        private float alreadyDownloadSize = 0;
-        private float downloadingSize;
+        private float TotalSize = 0; // 资源的总大小 b
+        private long alreadyDownloadSize = 0;
+        private long downloadingSize;
 
         private UpdateMold UpdateMold = UpdateMold.None;
         /// <summary> 获取下载大小(M) </summary>
@@ -43,7 +43,7 @@ namespace Update
         {
             get
             {
-                return (alreadyDownloadSize + downloadingSize) / 1024f;
+                return (alreadyDownloadSize + downloadingSize) / 1024f / 1024f;
             }
         }
 
@@ -137,6 +137,7 @@ namespace Update
                         window.SetSpeedText(speed);
                         window.SetProgressText(GetLoadedSize, TotalSize);
                         window.SetProgressValue(GetProgress);
+                        Debug.Log("----------"+GetProgress);
                     }
                     yield return new WaitForEndOfFrame();
                     window.SetProgressText(TotalSize, TotalSize);
@@ -200,7 +201,7 @@ namespace Update
                     Debug.Log("AB包加载完成");
                     window.SetProgressBarActive(false);
                     window.SetWindowActive(false);
-                    Root.StartApp();
+                    TimerTaskManager.Instance.AddTimeTask(() => { Root.StartApp(); }, 1);
                 }
             });
         }
@@ -322,7 +323,7 @@ namespace Update
                 UnityWebRequester requester = new UnityWebRequester(window);
                 requester.DownloadFile(ServerUrl + folder.BundleName, LocalPath + folder.BundleName, (size, progress) =>
                 {
-                    downloadingSize = folder.Size * progress;
+                    downloadingSize = (long)(Convert.ToInt64(folder.Size) * progress);
                     if (progress >= 1)
                     {
                         if (!Finished)
@@ -330,12 +331,13 @@ namespace Update
                             folder.Tag = "0";
                             UpdateLocalConfigTag(folder);
                             downloadingSize = 0;
-                            alreadyDownloadSize += folder.Size;
+                            alreadyDownloadSize += Convert.ToInt64(folder.Size);
                             Finished = true;
                         }
                     }
                 });
             }
+            yield return new WaitForEndOfFrame();
         }
 
         private void UpdateLocalConfigMD5(Folder folder)
@@ -476,8 +478,8 @@ namespace Update
                                 downloadFolders.Add(serverfolder.Value);
                             }
                         }
-                        alreadyDownloadSize = alreadlyFolders.Sum(s => s.Size);
-                        TotalSize = serverFolders.Sum(s => s.Value.Size) / 1024f;
+                        alreadyDownloadSize = GetSize(alreadlyFolders);
+                        TotalSize = GetSize(serverFolders.Values.ToList()) / 1024f / 1024f;
                         UpdateMold mold = downloadFolders.Count > 0 ? UpdateMold.Hotfix : UpdateMold.None;
                         cb?.Invoke(mold);
                     }
@@ -493,6 +495,17 @@ namespace Update
                     }
                 });
             }
+        }
+
+        private long GetSize(List<Folder> Folders)
+        {
+            long sum = 0;
+            for (int i = 0; i < Folders.Count; i++)
+            {
+                long s = Convert.ToInt64(Folders[i].Size);
+                sum += s;
+            }
+            return sum;
         }
 
         private Dictionary<string, Folder> GetFolders(AssetBundleConfig config)

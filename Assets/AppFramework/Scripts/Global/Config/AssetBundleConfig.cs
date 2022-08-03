@@ -50,6 +50,6 @@ namespace Data
         public string MD5; //MD5
 
         [XmlAttribute]
-        public float Size;//资源大小
+        public string Size;//资源大小
     }
 }

@@ -52,7 +52,10 @@ public class PicoXRManager : SingletonMonoEvent<PicoXRManager>
         locomotionSystem.GetComponent<ActionBasedSnapTurnProvider>().enabled = enable;
         locomotionSystem.GetComponent<ActionBasedContinuousMoveProvider>().enabled = enable;
     }
-
+    public void SetBaseOrigin(GameObject go)
+    {
+        transform.Find("XR Origin").GetComponent<Unity.XR.CoreUtils.XROrigin>().Origin = go;
+    }
     public void CameraScreenFade(bool isFade, float time, Action callback = null)
     {
         PXR_ScreenFade screenFade = MainCamera.GetComponent<PXR_ScreenFade>();
