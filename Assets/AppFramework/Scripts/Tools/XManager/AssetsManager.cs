@@ -25,15 +25,27 @@ public class AssetsManager : SingletonMono<AssetsManager>
     #endregion
 
     #region 加载场景
+    /// <summary> 
+    /// 加载场景
+    /// path = sceneName/folderName/assetName
+    /// scnenName 打包资源的第一层文件夹名称
+    /// folderName 打包资源的第二层文件夹名称
+    /// assetName 场景名称
+    /// </summary>
     public void LoadSceneAsync(string sceneName, Action<AsyncOperation> cb = null, LoadSceneMode mode = LoadSceneMode.Single)
     {
-        if (!string.IsNullOrEmpty(sceneName))
+        string[] names = sceneName.Split('/');//names[0], names[1], names[names.Length - 1]
+        if (Root.AppConfig.IsLoadAB)
         {
-            AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName, mode);
+            AssetBundle ab = AssetBundleManager.Instance.LoadAssetBundle(names[0], names[1]);
+        }
+        if (!string.IsNullOrEmpty(names[names.Length - 1]))
+        {
+            AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(names[names.Length - 1], mode);
             cb?.Invoke(asyncOperation);
             asyncOperation.completed += (AsyncOperation ao) =>
             {
-                Scene scene = SceneManager.GetSceneByName(sceneName);
+                Scene scene = SceneManager.GetSceneByName(names[names.Length - 1]);
                 SceneManager.SetActiveScene(scene);
                 cb?.Invoke(asyncOperation);
             };

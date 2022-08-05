@@ -238,7 +238,16 @@ public class BuildAppWindowEditor : EditorWindow
         {
             if (e == null) continue;
             if (e.enabled)
+            {
+                if (IsHotfix && IsLoadAB)
+                {
+                    if (names.Count > 0)
+                    {
+                        break;
+                    }
+                }
                 names.Add(e.path);
+            }
         }
         return names.ToArray();
     }

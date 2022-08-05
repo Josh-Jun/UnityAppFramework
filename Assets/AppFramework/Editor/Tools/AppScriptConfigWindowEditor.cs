@@ -37,7 +37,14 @@ public class AppScriptConfigWindowEditor : EditorWindow
         SceneNames.Add("Global");
         for (var i = 0; i < GetBuildScenes().Length; i++)
         {
-            var scene = Path.GetFileNameWithoutExtension(GetBuildScenes()[i]);
+            var dic = Path.GetDirectoryName(GetBuildScenes()[i]);
+            var name = Path.GetFileNameWithoutExtension(GetBuildScenes()[i]);
+            var fullName = Path.Combine(dic, name).Replace(@"\","/");
+            var scene = "";
+            if (i > 0)
+            {
+                scene = fullName.Replace("Assets/Resources/AssetsFolder/", "");
+            }
             SceneNames.Add(scene);
         }
 
@@ -164,10 +171,8 @@ public class AppScriptConfigWindowEditor : EditorWindow
         List<string> names = new List<string>();
         foreach (EditorBuildSettingsScene e in EditorBuildSettings.scenes)
         {
-            if (e == null)
-                continue;
-            if (e.enabled)
-                names.Add(e.path);
+            if (e == null) continue;
+            names.Add(e.path);
         }
         return names.ToArray();
     }

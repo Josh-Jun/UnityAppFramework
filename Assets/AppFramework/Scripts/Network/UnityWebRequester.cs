@@ -76,7 +76,7 @@ public class UnityWebRequester
     /// <param name="url"></param>
     /// <param name="filePath"></param>
     /// <param name="callBack"></param>
-    public void DownloadFile(string url, string filePath, Action<float, float> callBack)
+    public void DownloadFile(string url, string filePath, Action<long, float> callBack)
     {
         mono.StartCoroutine(IE_DownloadFile(url, filePath, callBack));
     }
@@ -87,24 +87,25 @@ public class UnityWebRequester
     /// <param name="filePath"></param>
     /// <param name="callBack"></param>
     /// <returns></returns>
-    public IEnumerator IE_DownloadFile(string url, string filePath, Action<float, float> callBack)
+    public IEnumerator IE_DownloadFile(string url, string filePath, Action<long, float> callBack)
     {
         //获取要下载的文件的总大小
         var head = UnityWebRequest.Head(url);
         yield return head.SendWebRequest();
         if (!string.IsNullOrEmpty(head.error))
         {
+            callBack?.Invoke(-1, 0);
             Debug.LogError($"[Error:Download Head] {head.error}");
             yield break;
         }
-        ulong totalLength = ulong.Parse(head.GetResponseHeader("Content-Length"));
+        long totalLength = Convert.ToInt64(head.GetResponseHeader("Content-Length"));
         head.Dispose();
         //创建网络请求
         UnityWebRequest body = UnityWebRequest.Get(url);
         body.downloadHandler = new DownloadHandlerFile(filePath, true);
 
         FileInfo file = new FileInfo(filePath);
-        var fileLength = (ulong)file.Length;
+        var fileLength = file.Length;
         //设置开始下载文件从什么位置开始
         body.SetRequestHeader("Range", $"bytes={fileLength}-");//这句很重要
         float progress;//文件下载进度
@@ -117,7 +118,7 @@ public class UnityWebRequester
             }
             while (!body.isDone)
             {
-                progress = (float)(body.downloadedBytes + fileLength) / (float)totalLength;
+                progress = (float)((long)body.downloadedBytes + fileLength) / (float)totalLength;
                 callBack?.Invoke(totalLength, progress);
                 yield return new WaitForEndOfFrame();
             }

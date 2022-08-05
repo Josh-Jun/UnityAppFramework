@@ -63,7 +63,7 @@ public class Root
     {
         InitRootScripts(() =>
         {
-            LoadScene(appScriptConfig.MainSceneName, true);
+            LoadScene(appScriptConfig.MainSceneName);
             TableManager.Instance.InitConfig();
         });
     }

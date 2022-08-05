@@ -22,7 +22,7 @@ public class SceneToolsEditor
         }
     }
 
-    static Rect windowRect = new Rect(128, 32, 64, 64);
+    static Rect windowRect = new Rect(10, 32, 64, 64);
 
     //sv_iconselector_selection
     static void SceneGUI(SceneView view)

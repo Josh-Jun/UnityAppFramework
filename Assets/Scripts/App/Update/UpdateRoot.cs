@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using Ask;
 using UnityEngine;
 
 namespace Update
@@ -33,7 +34,7 @@ namespace Update
         private AssetBundleConfig localABConfig;
         private AssetBundleConfig serverABConfig;
         
-        private float TotalSize = 0; // 资源的总大小 b
+        private float TotalSize = 0; // 资源的总大小 MB
         private long alreadyDownloadSize = 0;
         private long downloadingSize;
 
@@ -60,7 +61,7 @@ namespace Update
 
         public UpdateRoot()
         {
-            AddEventMsg("UpdateNow", () => { UpdateNow(); });
+            AddEventMsg("UpdateNow", () => { UpdateNow(); });//
         }
 
         public void Begin()
@@ -137,12 +138,10 @@ namespace Update
                         window.SetSpeedText(speed);
                         window.SetProgressText(GetLoadedSize, TotalSize);
                         window.SetProgressValue(GetProgress);
-                        Debug.Log("----------"+GetProgress);
                     }
-                    yield return new WaitForEndOfFrame();
                     window.SetProgressText(TotalSize, TotalSize);
                     window.SetProgressValue(GetProgress);
-                    yield return new WaitForSeconds(0.2f);
+                    yield return new WaitForEndOfFrame();
                     //更新下载完成，加载AB包
                     LoadAssetBundle();
                     break;
@@ -238,13 +237,16 @@ namespace Update
             {
                 //将manifest文件写入本地
                 FileManager.CreateFile(LocalPath + PlatformManager.Instance.Name + ".manifest", manifest_data);
-                //下载总AB包
-                DownLoad(ServerUrl + PlatformManager.Instance.Name, (byte[] ab_data) =>
+                //将ab文件写入本地
+                if (downloadAssetBundle == null)
                 {
-                    //将ab文件写入本地
-                    FileManager.CreateFile(LocalPath + PlatformManager.Instance.Name, ab_data);
-                    window.StartCoroutine(DownLoadAssetBundle());
-                });
+                    downloadAssetBundle = window.StartCoroutine(DownLoadAssetBundle());
+                }
+                //下载总AB包
+                // DownLoad(ServerUrl + PlatformManager.Instance.Name, (byte[] ab_data) =>
+                // {
+                //     FileManager.CreateFile(LocalPath + PlatformManager.Instance.Name, ab_data);
+                // });
             });
         }
 
@@ -268,7 +270,8 @@ namespace Update
         #region Private Function
 
         private bool Finished = true;
-
+        private int loadCount = 0;
+        private Coroutine downloadAssetBundle = null;
         private IEnumerator DownLoadAssetBundle()
         {
             for (int i = 0; i < downloadFolders.Count; i++)
@@ -299,16 +302,16 @@ namespace Update
                     }
                 }
                 yield return new WaitForEndOfFrame();
-                //下载manifest文件
-                DownLoad(ServerUrl + folder.BundleName + ".manifest", (byte[] _manifest_data) =>
-                {
-                    if (FileManager.FileExist(LocalPath + folder.BundleName + ".manifest"))
-                    {
-                        FileManager.DeleteFile(LocalPath + folder.BundleName + ".manifest");
-                    }
-                    //将manifest文件写入本地
-                    FileManager.CreateFile(LocalPath + folder.BundleName + ".manifest", _manifest_data);
-                });
+                // //下载manifest文件
+                // DownLoad(ServerUrl + folder.BundleName + ".manifest", (byte[] _manifest_data) =>
+                // {
+                //     if (FileManager.FileExist(LocalPath + folder.BundleName + ".manifest"))
+                //     {
+                //         FileManager.DeleteFile(LocalPath + folder.BundleName + ".manifest");
+                //     }
+                //     //将manifest文件写入本地
+                //     FileManager.CreateFile(LocalPath + folder.BundleName + ".manifest", _manifest_data);
+                // });
             }
 
             yield return new WaitForEndOfFrame();
@@ -323,7 +326,26 @@ namespace Update
                 UnityWebRequester requester = new UnityWebRequester(window);
                 requester.DownloadFile(ServerUrl + folder.BundleName, LocalPath + folder.BundleName, (size, progress) =>
                 {
-                    downloadingSize = (long)(Convert.ToInt64(folder.Size) * progress);
+                    if (size < 0)
+                    {
+                        if (loadCount < 3)
+                        {
+                            loadCount++;
+                            if (downloadAssetBundle != null)
+                            {
+                                window.StopCoroutine(downloadAssetBundle);
+                                downloadAssetBundle = null;
+                            }
+                            downloadAssetBundle = window.StartCoroutine(DownLoadAssetBundle());
+                        }
+                        else
+                        {
+                            AskRoot.Instance.ShowAskWindow("网络请求失败,请稍后重试", 
+                                () => { PlatformManager.Instance.QuitUnityPlayer(); },
+                                () => { PlatformManager.Instance.QuitUnityPlayer(); });
+                        }
+                    }
+                    downloadingSize = (long)(size * progress);
                     if (progress >= 1)
                     {
                         if (!Finished)
@@ -485,10 +507,10 @@ namespace Update
                     }
                     else
                     {
-                        if (FileManager.FolderExist(LocalPath))
-                        {
-                            FileManager.DeleteFolderAllFile(LocalPath);
-                        }
+                        // if (FileManager.FolderExist(LocalPath))
+                        // {
+                        //     FileManager.DeleteFolderAllFile(LocalPath);
+                        // }
                         //大版本更新,下载新程序覆盖安装
                         Debug.Log("大版本更新,下载新程序覆盖安装");
                         cb?.Invoke(UpdateMold.App);

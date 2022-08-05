@@ -5,7 +5,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
 using UnityEditor;
-using UnityEditor.Sprites;
+using UnityEditor.Build.Content;
+using UnityEditor.Build.Pipeline;
 using UnityEngine;
 /// <summary>
 /// AssetBundle编辑
@@ -268,6 +269,7 @@ public class AssetBundleWindowEditor : EditorWindow
             folderName = bundleName.Split('/')[1]; // key
         else
             folderName = bundleName;
+        // string bundlePath = assetImporter.assetBundleName; // value
         string bundlePath = assetImporter.assetBundleName + "." + assetImporter.assetBundleVariant; // value
         if (!namePathDic.ContainsKey(folderName))
             namePathDic.Add(folderName, bundlePath);
@@ -318,13 +320,36 @@ public class AssetBundleWindowEditor : EditorWindow
         {
             FileManager.CreateFolder(outPath);
         }
-
+        
         if (BuildPipeline.BuildAssetBundles(outPath, BuildAssetBundleOptions.ChunkBasedCompression, buildTarget))
         {
-
             AssetDatabase.Refresh();
             Debug.Log("AssetBundle 打包成功! " + outPath);
         }
+        // if (BuildAssetBundles(outPath, false, true, buildTarget))
+        // {
+        //     AssetDatabase.Refresh();
+        //     EditorUtility.RevealInFinder(outPath);
+        //     Debug.Log("AssetBundle 打包成功! " + outPath);
+        // }
+    }
+    private bool BuildAssetBundles(string outputPath, bool forceRebuild, bool useChunkBasedCompression, BuildTarget buildTarget)
+    {
+        var options = BuildAssetBundleOptions.None;
+        if (useChunkBasedCompression)
+            options |= BuildAssetBundleOptions.ChunkBasedCompression;
+
+        if (forceRebuild)
+            options |= BuildAssetBundleOptions.ForceRebuildAssetBundle;
+
+        // Get the set of bundle to build
+        var bundles = ContentBuildInterface.GenerateAssetBundleBuilds();
+        // Update the addressableNames to load by the file name without extension
+        for (var i = 0; i < bundles.Length; i++)
+            bundles[i].addressableNames = bundles[i].assetNames.Select(Path.GetFileNameWithoutExtension).ToArray();
+
+        var manifest = CompatibilityBuildPipeline.BuildAssetBundles(outputPath, bundles, options, buildTarget);
+        return manifest != null;
     }
     #endregion
 
