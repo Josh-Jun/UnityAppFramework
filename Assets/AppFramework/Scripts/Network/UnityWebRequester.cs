@@ -29,13 +29,13 @@ public class UnityWebRequester
         private set { }
     }
     /// <summary> 获取当前下载大小(KB) </summary>
-    public float DownloadedLength
+    public long DownloadedLength
     {
         get
         {
             if (uwr != null)
             {
-                return uwr.downloadedBytes / 1024f;
+                return (long)uwr.downloadedBytes;
             }
             return 0;
         }
