@@ -386,9 +386,9 @@ namespace Update
                 UnityWebRequester requester = new UnityWebRequester(window);
                 requester.GetBytes(ServerUrl + folder.BundleName, (bytes) =>
                 {
+                    UpdateLocalConfigMD5(folder);
                     FileManager.CreateFile(LocalPath + folder.BundleName, bytes);
                     TimerManager.Instance.EndTimer(timeId);
-                    UpdateLocalConfigTag(folder);
                     downloadingSize = 0;
                     alreadyDownloadSize += Convert.ToInt64(folder.Size);
                     Finished = true;
