@@ -358,7 +358,7 @@ namespace Update
                 yield return new WaitForEndOfFrame();
                 yield return new WaitUntil(() => Finished);
 
-                #region MyRegion
+                #region 断点续传
                 // folder.Tag = "1";
                 // UpdateLocalConfigTag(folder);
                 // UpdateLocalConfigMD5(folder);

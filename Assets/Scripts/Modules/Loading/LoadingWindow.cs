@@ -37,10 +37,15 @@ namespace Loading
         public IEnumerator StartLoadScene(string sceneName, Action callback)
         {
             loadingSlider.value = 0f;
+            string[] names = sceneName.Split('/');//names[0], names[1], names[names.Length - 1]
+            if (Root.AppConfig.IsLoadAB)
+            {
+                AssetBundle ab = AssetBundleManager.Instance.LoadAssetBundle(names[0], names[1]);
+            }
             yield return new WaitForEndOfFrame();
             int displayProgress = 0;
             int toProgress;
-            async = SceneManager.LoadSceneAsync(sceneName);
+            async = SceneManager.LoadSceneAsync(names[names.Length - 1]);
             async.allowSceneActivation = false;
             while (async.progress < 0.9f)
             {
