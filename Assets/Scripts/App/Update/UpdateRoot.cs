@@ -146,6 +146,7 @@ namespace Update
                     LoadAssetBundle();
                     break;
                 case UpdateMold.App:
+                    #region 断点续传
                     // if (!PlayerPrefs.HasKey("APP_DOWNLOADING"))
                     // {
                     //     if (FileManager.FileExist(appPath))
@@ -180,16 +181,22 @@ namespace Update
                     //         PlatformManager.Instance.InstallApp(appPath);
                     //     }
                     // });
+                    #endregion
+                    #region 正常下载
+                    if (FileManager.FileExist(appPath))
+                    {
+                        FileManager.DeleteFile(appPath);
+                    }
                     UnityWebRequester requester = new UnityWebRequester(window);
                     requester.GetBytes(appUrl, (bytes) =>
                     {
                         FileManager.CreateFile(appPath, bytes);
+                        TimerManager.Instance.EndTimer(timeId);
                         PlatformManager.Instance.InstallApp(appPath);
                     });
-                    while (!requester.IsDone)
+                    timeId = TimerManager.Instance.StartTimer((t) =>
                     {
-                        yield return new WaitForEndOfFrame();
-                        float size = requester.DownloadedLength / 1024f / 1024f;
+                        var size = requester.DownloadedLength / 1024f / 1024f;
                         time += Time.deltaTime;
                         if (time >= 1f)
                         {
@@ -201,7 +208,8 @@ namespace Update
                         window.SetSpeedText(speed);
                         window.SetProgressText(size, size / requester.DownloadedProgress);
                         window.SetProgressValue(requester.DownloadedProgress);
-                    }
+                    });
+                    #endregion
                     break;
                 case UpdateMold.None:
                     break;
@@ -264,10 +272,7 @@ namespace Update
                 {
                     //将ab文件写入本地
                     FileManager.CreateFile(LocalPath + PlatformManager.Instance.Name, ab_data);
-                    if (downloadAssetBundle == null)
-                    {
-                        downloadAssetBundle = window.StartCoroutine(DownLoadAssetBundle());
-                    }
+                    window.StartCoroutine(DownLoadAssetBundle());
                 });
             });
         }
@@ -292,8 +297,7 @@ namespace Update
         #region Private Function
 
         private bool Finished = true;
-        private int loadCount = 0;
-        private Coroutine downloadAssetBundle = null;
+        private int timeId = -1;
         private IEnumerator DownLoadAssetBundle()
         {
             for (int i = 0; i < downloadFolders.Count; i++)
@@ -304,6 +308,7 @@ namespace Update
                 {
                     if (localFolders.ContainsKey(folder.BundleName))
                     {
+                        #region 断点续传
                         // if (localFolders[folder.BundleName].Tag == "0")
                         // {
                         //     if (FileManager.FileExist(LocalPath + folder.BundleName))
@@ -321,6 +326,9 @@ namespace Update
                         //         }
                         //     }
                         // }
+                        #endregion
+
+                        #region 正常下载
                         if (localFolders[folder.BundleName].MD5 != folder.MD5)
                         {
                             if (FileManager.FileExist(LocalPath + folder.BundleName))
@@ -328,6 +336,7 @@ namespace Update
                                 FileManager.DeleteFile(LocalPath + folder.BundleName);
                             }
                         }
+                        #endregion
                     }
                 }
                 yield return new WaitForEndOfFrame();
@@ -346,7 +355,10 @@ namespace Update
             yield return new WaitForEndOfFrame();
             foreach (var folder in downloadFolders)
             {
+                yield return new WaitForEndOfFrame();
                 yield return new WaitUntil(() => Finished);
+
+                #region MyRegion
                 // folder.Tag = "1";
                 // UpdateLocalConfigTag(folder);
                 // UpdateLocalConfigMD5(folder);
@@ -354,25 +366,6 @@ namespace Update
                 // UnityWebRequester requester = new UnityWebRequester(window);
                 // requester.DownloadFile(ServerUrl + folder.BundleName, LocalPath + folder.BundleName, (size, progress) =>
                 // {
-                //     if (size < 0)
-                //     {
-                //         if (loadCount < 3)
-                //         {
-                //             loadCount++;
-                //             if (downloadAssetBundle != null)
-                //             {
-                //                 window.StopCoroutine(downloadAssetBundle);
-                //                 downloadAssetBundle = null;
-                //             }
-                //             downloadAssetBundle = window.StartCoroutine(DownLoadAssetBundle());
-                //         }
-                //         else
-                //         {
-                //             AskRoot.Instance.ShowAskWindow("网络请求失败,请稍后重试", 
-                //                 () => { PlatformManager.Instance.QuitUnityPlayer(); },
-                //                 () => { PlatformManager.Instance.QuitUnityPlayer(); });
-                //         }
-                //     }
                 //     downloadingSize = (long)(size * progress);
                 //     if (progress >= 1)
                 //     {
@@ -386,22 +379,25 @@ namespace Update
                 //         }
                 //     }
                 // });
+                #endregion
+                
+                #region 正常下载
                 Finished = false;
                 UnityWebRequester requester = new UnityWebRequester(window);
                 requester.GetBytes(ServerUrl + folder.BundleName, (bytes) =>
                 {
                     FileManager.CreateFile(LocalPath + folder.BundleName, bytes);
+                    TimerManager.Instance.EndTimer(timeId);
+                    UpdateLocalConfigTag(folder);
+                    downloadingSize = 0;
+                    alreadyDownloadSize += Convert.ToInt64(folder.Size);
+                    Finished = true;
                 });
-                while (!requester.IsDone)
+                timeId = TimerManager.Instance.StartTimer((time) =>
                 {
-                    yield return new WaitForEndOfFrame();
-                    downloadingSize = (long)(Convert.ToInt64(folder.Size) * requester.DownloadedProgress);
-                }
-                yield return new WaitForEndOfFrame();
-                UpdateLocalConfigTag(folder);
-                downloadingSize = 0;
-                alreadyDownloadSize += Convert.ToInt64(folder.Size);
-                Finished = true;
+                    downloadingSize = requester.DownloadedLength;
+                });
+                #endregion
             }
             yield return new WaitForEndOfFrame();
         }
@@ -423,7 +419,6 @@ namespace Update
                         if (folder.BundleName == folders[j].Attributes["BundleName"].Value)
                         {
                             folders[j].Attributes["MD5"].Value = folder.MD5;
-                            folders[j].Attributes["Size"].Value = folder.Size.ToString();
                         }
                     }
                 }
@@ -475,7 +470,6 @@ namespace Update
                     {
                         folders[j].Attributes["Tag"].Value = "0";
                         folders[j].Attributes["MD5"].Value = "";
-                        folders[j].Attributes["Size"].Value = "0";
                     }
                 }
 

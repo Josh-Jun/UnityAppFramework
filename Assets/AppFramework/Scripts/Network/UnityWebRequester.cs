@@ -28,7 +28,7 @@ public class UnityWebRequester
         }
         private set { }
     }
-    /// <summary> 获取当前下载大小(KB) </summary>
+    /// <summary> 获取当前下载大小(b) </summary>
     public long DownloadedLength
     {
         get
@@ -297,7 +297,7 @@ public class UnityWebRequester
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
-            DownloadHandler downloadHandler = new DownloadHandlerBuffer();
+            DownloadHandlerBuffer downloadHandler = new DownloadHandlerBuffer();
             uwr.downloadHandler = downloadHandler;
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
