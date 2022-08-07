@@ -269,6 +269,10 @@ public class AssetBundleWindowEditor : EditorWindow
             folderName = bundleName.Split('/')[1]; // key
         else
             folderName = bundleName;
+        if (folderName == "Scene" && assetImporter.assetBundleVariant == "ab")
+        {
+            folderName = "SceneAssets";
+        }
         // string bundlePath = assetImporter.assetBundleName; // value
         string bundlePath = assetImporter.assetBundleName + "." + assetImporter.assetBundleVariant; // value
         if (!namePathDic.ContainsKey(folderName))
