@@ -11,7 +11,6 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         new Dictionary<string, Dictionary<string, string>>();
 
     private Dictionary<string, AssetBundle> AssetBundlesCache = new Dictionary<string, AssetBundle>();
-    private List<string> AllABPath = new List<string>();
 
     /// <summary>
     /// Manifest 文件
@@ -28,7 +27,14 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
     public override void InitManager(Transform parent)
     {
         base.InitManager(parent);
-        mainfestPath = PlatformManager.Instance.GetDataPath(PlatformManager.Instance.Name);
+        if (PlatformManager.Instance.IsEditor)
+        {
+            mainfestPath = PlatformManager.Instance.GetDataPath(PlatformManager.Instance.Name);
+        }
+        else
+        {
+            mainfestPath = $"file://{PlatformManager.Instance.GetDataPath(PlatformManager.Instance.Name)}";
+        }
     }
 
     public void SetAbScenePairs(string sceneNane, Dictionary<string, string> folderPairs)
@@ -39,89 +45,6 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         }
     }
 
-    public void LoadAllAssetBundle(Action<string, float> loadProgress = null)
-    {
-        if (PlatformManager.Instance.IsEditor)
-        {
-            if (assetbundle == null)
-            {
-                UnityWebRequester requester = new UnityWebRequester(App.app);
-                requester.GetAssetBundle($"file://{mainfestPath}/{PlatformManager.Instance.Name}", (AssetBundle ab) =>
-                {
-                    assetbundle = ab;
-                    mainfest = assetbundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
-                    GetAssetBundlePath(loadProgress);
-                    requester.Destory();
-                });
-                return;
-            }
-
-            GetAssetBundlePath(loadProgress);
-        }
-        else
-        {
-            for (int i = 0; i < ABScenePairs.Values.Sum(f => f.Count); i++)
-            {
-                loadProgress?.Invoke("Loading...", 1);
-            }
-        }
-    }
-
-    public void GetAssetBundlePath(Action<string, float> loadProgress = null)
-    {
-        foreach (var scene in ABScenePairs)
-        {
-            foreach (var folder in scene.Value)
-            {
-                string[] dependencies = GetDependence(folder.Value);
-                //循环加载所有依赖包
-                for (int i = 0; i < dependencies.Length; i++)
-                {
-                    int index = i;
-                    //如果不在缓存则加入
-                    if (!AllABPath.Contains(dependencies[index]))
-                    {
-                        AllABPath.Add(dependencies[index]);
-                    }
-                }
-
-                if (!AllABPath.Contains(folder.Value))
-                {
-                    AllABPath.Add(folder.Value);
-                }
-            }
-        }
-
-        StartCoroutine(Load(loadProgress));
-    }
-
-    private IEnumerator Load(Action<string, float> loadProgress = null)
-    {
-        yield return new WaitForEndOfFrame();
-        for (int i = 0; i < AllABPath.Count; i++)
-        {
-            int index = i;
-            //根据依赖包名称进行加载
-            UnityWebRequester requester = new UnityWebRequester(App.app);
-            requester.GetAssetBundle($"file://{mainfestPath}/{AllABPath[index]}", (AssetBundle ab) =>
-            {
-                if (!AssetBundlesCache.ContainsKey(AllABPath[index]))
-                {
-                    //注意添加进缓存 防止重复加载AB包
-                    AssetBundlesCache.Add(AllABPath[index], ab);
-                }
-            });
-            while (!requester.IsDone)
-            {
-                float progress = requester.DownloadedProgress;
-                loadProgress?.Invoke(AllABPath[index], progress);
-            }
-
-            yield return new WaitForEndOfFrame();
-            loadProgress?.Invoke(AllABPath[index], 1);
-        }
-    }
-
     public AssetBundle LoadAssetBundle(string bundleName)
     {
         AssetBundle ab;
@@ -129,7 +52,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         if (assetbundle == null)
         {
             //根据各个平台下的基础路径和主包名加载主包
-            assetbundle = AssetBundle.LoadFromFile($"file://{mainfestPath}/{PlatformManager.Instance.Name}");
+            assetbundle = AssetBundle.LoadFromFile($"{mainfestPath}/{PlatformManager.Instance.Name}");
             //获取主包下的AssetBundleManifest资源文件（存有依赖信息）
             mainfest = assetbundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
         }
@@ -143,7 +66,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
             if (!AssetBundlesCache.ContainsKey(dependencies[i]))
             {
                 //根据依赖包名称进行加载
-                ab = AssetBundle.LoadFromFile($"file://{mainfestPath}/{dependencies[i]}");
+                ab = AssetBundle.LoadFromFile($"{mainfestPath}/{dependencies[i]}");
                 //注意添加进缓存 防止重复加载AB包
                 AssetBundlesCache.Add(dependencies[i], ab);
             }
@@ -153,7 +76,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         if (AssetBundlesCache.ContainsKey(bundleName)) return AssetBundlesCache[bundleName];
         else
         {
-            ab = AssetBundle.LoadFromFile($"file://{mainfestPath}/{bundleName}");
+            ab = AssetBundle.LoadFromFile($"{mainfestPath}/{bundleName}");
             AssetBundlesCache.Add(bundleName, ab);
             return ab;
         }
@@ -166,7 +89,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         if (assetbundle == null)
         {
             //根据各个平台下的基础路径和主包名加载主包
-            assetbundle = AssetBundle.LoadFromFile($"file://{mainfestPath}/{PlatformManager.Instance.Name}");
+            assetbundle = AssetBundle.LoadFromFile($"{mainfestPath}/{PlatformManager.Instance.Name}");
             //获取主包下的AssetBundleManifest资源文件（存有依赖信息）
             mainfest = assetbundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
         }
@@ -180,7 +103,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
             if (!AssetBundlesCache.ContainsKey(dependencies[i]))
             {
                 //根据依赖包名称进行加载
-                ab = AssetBundle.LoadFromFile($"file://{mainfestPath}/{dependencies[i]}");
+                ab = AssetBundle.LoadFromFile($"{mainfestPath}/{dependencies[i]}");
                 //注意添加进缓存 防止重复加载AB包
                 AssetBundlesCache.Add(dependencies[i], ab);
             }
@@ -190,7 +113,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
         if (AssetBundlesCache.ContainsKey(bundleName)) return AssetBundlesCache[bundleName];
         else
         {
-            ab = AssetBundle.LoadFromFile($"file://{mainfestPath}/{bundleName}");
+            ab = AssetBundle.LoadFromFile($"{mainfestPath}/{bundleName}");
             AssetBundlesCache.Add(bundleName, ab);
             return ab;
         }
@@ -199,27 +122,21 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
     public T LoadAsset<T>(string sceneName, string folderName, string assetsName) where T : UnityEngine.Object
     {
         string bundleName = ABScenePairs[sceneName][folderName];
-        AssetBundle ab = PlatformManager.Instance.IsEditor
-            ? AssetBundlesCache[bundleName]
-            : LoadAssetBundle(bundleName);
+        AssetBundle ab = LoadAssetBundle(bundleName);
         return ab.LoadAsset<T>(assetsName);
     }
 
     public UnityEngine.Object LoadAsset(string sceneName, string folderName, string assetsName)
     {
         string bundleName = ABScenePairs[sceneName][folderName];
-        AssetBundle ab = PlatformManager.Instance.IsEditor
-            ? AssetBundlesCache[bundleName]
-            : LoadAssetBundle(bundleName);
+        AssetBundle ab = LoadAssetBundle(bundleName);
         return ab.LoadAsset(assetsName);
     }
 
     public UnityEngine.Object LoadAsset(string sceneName, string folderName, string assetsName, System.Type type)
     {
         string bundleName = ABScenePairs[sceneName][folderName];
-        AssetBundle ab = PlatformManager.Instance.IsEditor
-            ? AssetBundlesCache[bundleName]
-            : LoadAssetBundle(bundleName);
+        AssetBundle ab = LoadAssetBundle(bundleName);
         return ab.LoadAsset(assetsName, type);
     }
 

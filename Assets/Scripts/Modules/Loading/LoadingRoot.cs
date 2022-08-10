@@ -22,10 +22,19 @@ namespace Loading
             }
         }
 
-        public void Load(string sceneName, Action callback)
+        public void Loading(float progress, Action callback)
         {
-            window.SetWindowActive();
-            window.StartCoroutine(window.StartLoadScene(sceneName, callback));
+            if (!window.GetWindowActive())
+            {
+                window.SetWindowActive(true);
+                window.SetAsLastSibling();
+            }
+            window.SetLoadingSliderValue(progress);
+            if (progress >= 1)
+            {
+                window.SetWindowActive(false);
+                callback?.Invoke();
+            }
         }
         public void End()
         {

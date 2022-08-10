@@ -63,7 +63,7 @@ public class Root
     {
         InitRootScripts(() =>
         {
-            LoadScene(appScriptConfig.MainSceneName);
+            LoadScene(appScriptConfig.MainSceneName, true);
             TableManager.Instance.InitConfig();
         });
     }
@@ -138,16 +138,19 @@ public class Root
         InitRootEnd();
         if (isLoading)
         {
-            GetRootScript<LoadingRoot>().Load(sceneName, callback);
+            AssetsManager.Instance.LoadingSceneAsync(sceneName, (progress) =>
+            {
+                GetRootScript<LoadingRoot>().Loading(progress, () =>
+                {
+                    InitRootBegin(sceneName, callback);
+                });
+            });
         }
         else
         {
-            AssetsManager.Instance.LoadSceneAsync(sceneName, (AsyncOperation async) =>
+            AssetsManager.Instance.LoadSceneAsync(sceneName, () =>
             {
-                if (async.isDone && async.progress == 1)
-                {
-                    InitRootBegin(sceneName, callback);
-                }
+                InitRootBegin(sceneName, callback);
             }, mode);
         }
     }

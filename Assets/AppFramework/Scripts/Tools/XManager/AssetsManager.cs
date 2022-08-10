@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using EventController;
 using System;
+using System.Collections;
 using System.Linq;
 using System.Reflection;
 using UnityEngine.SceneManagement;
@@ -32,7 +33,7 @@ public class AssetsManager : SingletonMono<AssetsManager>
     /// folderName 打包资源的第二层文件夹名称
     /// assetName 场景名称
     /// </summary>
-    public void LoadSceneAsync(string sceneName, Action<AsyncOperation> cb = null, LoadSceneMode mode = LoadSceneMode.Single)
+    public void LoadSceneAsync(string sceneName, Action cb = null, LoadSceneMode mode = LoadSceneMode.Single)
     {
         string[] names = sceneName.Split('/');//names[0], names[1], names[names.Length - 1]
         if (Root.AppConfig.IsLoadAB)
@@ -42,14 +43,68 @@ public class AssetsManager : SingletonMono<AssetsManager>
         if (!string.IsNullOrEmpty(names[names.Length - 1]))
         {
             AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(names[names.Length - 1], mode);
-            cb?.Invoke(asyncOperation);
             asyncOperation.completed += (AsyncOperation ao) =>
             {
                 Scene scene = SceneManager.GetSceneByName(names[names.Length - 1]);
                 SceneManager.SetActiveScene(scene);
-                cb?.Invoke(asyncOperation);
+                cb?.Invoke();
             };
         }
+    }
+    
+    public void LoadingSceneAsync(string sceneName, Action<float> cb = null, LoadSceneMode mode = LoadSceneMode.Single)
+    {
+        string[] names = sceneName.Split('/');//names[0], names[1], names[names.Length - 1]
+        if (Root.AppConfig.IsLoadAB)
+        {
+            AssetBundle ab = AssetBundleManager.Instance.LoadAssetBundle(names[0], names[1]);
+        }
+        if (!string.IsNullOrEmpty(names[names.Length - 1]))
+        {
+            StartCoroutine(Loading(names[names.Length - 1], mode, (progress) =>
+            {
+                cb?.Invoke(progress);
+            }));
+        }
+    }
+
+    private IEnumerator Loading(string name, LoadSceneMode mode, Action<float> callback)
+    {
+        yield return new WaitForEndOfFrame();
+        AsyncOperation async = SceneManager.LoadSceneAsync(name, mode);
+        async.allowSceneActivation = false;
+        int displayProgress = 0;
+        int toProgress;
+        float LoadingProgress = 0;
+        while (async.progress < 0.9f)
+        {
+            toProgress = (int)async.progress * 100;
+            while (displayProgress < toProgress)
+            {
+                ++displayProgress;
+                LoadingProgress = displayProgress / 100f;
+                callback?.Invoke(LoadingProgress);
+                yield return new WaitForEndOfFrame();
+            }
+            yield return new WaitForEndOfFrame();
+        }
+
+        toProgress = 100;
+        while (displayProgress < toProgress)
+        {
+            ++displayProgress;
+            LoadingProgress = displayProgress / 100f;
+            callback?.Invoke(LoadingProgress);
+            yield return new WaitForEndOfFrame();
+        }
+        yield return new WaitUntil(() => LoadingProgress == 1);
+        async.allowSceneActivation = true;
+        async.completed += (AsyncOperation ao) =>
+        {
+            Scene scene = SceneManager.GetSceneByName(name);
+            SceneManager.SetActiveScene(scene);
+            callback?.Invoke(1);
+        };
     }
     public void UnLoadSceneAsync(string sceneName, Action<float> cb = null)
     {

@@ -96,7 +96,8 @@ namespace Update
                         window.SetUpdateTipsActive(true);
                         break;
                     case UpdateMold.None:
-                        LoadAssetBundle();
+                        window.SetWindowActive(false);
+                        Root.StartApp();
                         break;
                 }
             });
@@ -142,8 +143,9 @@ namespace Update
                     window.SetProgressText(TotalSize, TotalSize);
                     window.SetProgressValue(GetProgress);
                     yield return new WaitForEndOfFrame();
-                    //更新下载完成，加载AB包
-                    LoadAssetBundle();
+                    //更新下载完成，开始运行App
+                    window.SetWindowActive(false);
+                    Root.StartApp();
                     break;
                 case UpdateMold.App:
                     #region 断点续传
@@ -216,25 +218,6 @@ namespace Update
             }
         }
 
-        private void LoadAssetBundle()
-        {
-            Debug.Log("开始加载AB包");
-            window.SetTipsText("正在加载资源...");
-            window.SetProgressBarActive(true);
-            LoadAssetBundle((bool isEnd, string bundleName, float bundleProgress) =>
-            {
-                window.SetTipsText(string.Format("正在加载资源:{0}", bundleName));
-                window.SetProgressValue(bundleProgress);
-                if (isEnd && bundleProgress == 1)
-                {
-                    Debug.Log("AB包加载完成");
-                    window.SetProgressBarActive(false);
-                    window.SetWindowActive(false);
-                    TimerTaskManager.Instance.AddTimeTask(() => { Root.StartApp(); }, 1);
-                }
-            });
-        }
-
         #region Public Function
 
         /// <summary> 开始热更新 </summary>
@@ -274,22 +257,6 @@ namespace Update
                     FileManager.CreateFile(LocalPath + PlatformManager.Instance.Name, ab_data);
                     window.StartCoroutine(DownLoadAssetBundle());
                 });
-            });
-        }
-
-        /// <summary> 加载AB包 </summary>
-        private void LoadAssetBundle(Action<bool, string, float> LoadCallBack)
-        {
-            int totalProgress = AssetBundleManager.Instance.ABScenePairs.Values.Sum(f => f.Count);
-            int loadProgress = 0;
-            AssetBundleManager.Instance.LoadAllAssetBundle((bundleName, progress) =>
-            {
-                if (progress == 1)
-                {
-                    loadProgress++;
-                }
-
-                LoadCallBack?.Invoke(totalProgress == loadProgress, bundleName, progress);
             });
         }
         #endregion
