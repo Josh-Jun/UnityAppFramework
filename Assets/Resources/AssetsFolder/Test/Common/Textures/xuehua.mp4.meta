@@ -14,5 +14,5 @@ VideoClipImporter:
   importAudio: 1
   targetSettings: {}
   userData: 
-  assetBundleName: test/assets
+  assetBundleName: test/common
   assetBundleVariant: ab

@@ -140,9 +140,10 @@ namespace Update
                         window.SetProgressText(GetLoadedSize, TotalSize);
                         window.SetProgressValue(GetProgress);
                     }
+                    yield return new WaitForEndOfFrame();
                     window.SetProgressText(TotalSize, TotalSize);
                     window.SetProgressValue(GetProgress);
-                    yield return new WaitForEndOfFrame();
+                    yield return new WaitForSeconds(0.2f);
                     //更新下载完成，开始运行App
                     window.SetWindowActive(false);
                     Root.StartApp();

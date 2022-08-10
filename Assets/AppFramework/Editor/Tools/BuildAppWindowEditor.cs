@@ -147,6 +147,7 @@ public class BuildAppWindowEditor : EditorWindow
         AppConfig.RunXLua = RunXLuaScripts;
         AppConfig.AppFrameRate = AppFrameRate;
         AppConfig.TargetPackage = ApkTarget;
+        AppConfig.NativeApp = NativeApp;
 
         EditorUtility.SetDirty(AppConfig);
 

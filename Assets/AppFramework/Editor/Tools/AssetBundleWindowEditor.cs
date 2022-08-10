@@ -254,7 +254,6 @@ public class AssetBundleWindowEditor : EditorWindow
         int assetIndex = fileInfo.FullName.IndexOf("Assets");
         string assetPath = fileInfo.FullName.Substring(assetIndex);
         // Debug.Log(assetPath); // Assets\AssetsFolder\Scene1\Character\NB\Player4.prefab
-        string platformNmae = AppConfig.TargetPackage == TargetPackage.Mobile?"Pico":"Mobile";
         // 6.用 AssetImporter 类 ， 修改名称和后缀 ；
         AssetImporter assetImporter = AssetImporter.GetAtPath(assetPath); // GetAtPath方法是获取Assets文件和之后的目录
         assetImporter.assetBundleName = bundleName.ToLower();
@@ -337,7 +336,7 @@ public class AssetBundleWindowEditor : EditorWindow
         //     Debug.Log("AssetBundle 打包成功! " + outPath);
         // }
     }
-    private bool BuildAssetBundles(string outputPath, bool forceRebuild, bool useChunkBasedCompression, BuildTarget buildTarget)
+    private bool SariptableBuildAssetBundles(string outputPath, bool forceRebuild, bool useChunkBasedCompression, BuildTarget buildTarget)
     {
         var options = BuildAssetBundleOptions.None;
         if (useChunkBasedCompression)
@@ -353,6 +352,11 @@ public class AssetBundleWindowEditor : EditorWindow
             bundles[i].addressableNames = bundles[i].assetNames.Select(Path.GetFileNameWithoutExtension).ToArray();
 
         var manifest = CompatibilityBuildPipeline.BuildAssetBundles(outputPath, bundles, options, buildTarget);
+        if (manifest != null)
+        {
+            //
+            AssetDatabase.CreateAsset(manifest, $"{buildPath}/{buildTarget.ToString()}");
+        }
         return manifest != null;
     }
     #endregion

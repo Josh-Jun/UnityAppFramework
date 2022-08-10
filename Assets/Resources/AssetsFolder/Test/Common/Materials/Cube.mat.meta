@@ -1,8 +1,8 @@
 fileFormatVersion: 2
-guid: c4613619f948b43409d8581937d8e118
+guid: ae38ae066aba99e43ab8381a050f825c
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 2100000
   userData: 
-  assetBundleName: test/assets
+  assetBundleName: test/common
   assetBundleVariant: ab

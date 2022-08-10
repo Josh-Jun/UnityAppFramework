@@ -1,8 +1,8 @@
 fileFormatVersion: 2
-guid: ae38ae066aba99e43ab8381a050f825c
+guid: 58498ffa999a42f48b0ffaa70d75c49b
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 112000000
   userData: 
-  assetBundleName: test/assets
+  assetBundleName: scenes/test
   assetBundleVariant: ab
