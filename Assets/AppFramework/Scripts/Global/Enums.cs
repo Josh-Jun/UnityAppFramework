@@ -20,16 +20,40 @@ public enum UpdateMold
 /// <summary>PicoVR手柄事件类型</summary>
 public enum TrackedEventType
 {
-    MenuDownEvent = 0,      //菜单按钮按下
-    MenuUpEvent = 1,        //菜单按钮抬起
-    TriggerDownEvent = 2,   //扳机按钮按下
-    TriggerUpEvent = 3,     //扳机按钮抬起
-    GripDownEvent = 4,      //侧边按钮按下
-    GripUpEvent = 5,        //侧边按钮抬起
-    JoystickDownEvent = 6,  //摇杆按钮按下
-    JoystickUpEvent = 7,    //摇杆按钮抬起
-    XADownEvent = 8,        //XA按钮按下
-    XAUpEvent = 9,          //XA按钮抬起
-    YBDownEvent = 10,       //YB按钮按下
-    YBUpEvent = 11,         //YB按钮抬起
+    LeftMenuDownEvent = 0,
+    LeftMenuUpEvent = 1,
+    LeftMenuingEvent = 2,
+    RightMenuDownEvent = 3,
+    RightMenuUpEvent = 4,
+    RightMenuingEvent = 5,
+    LeftTriggerDownEvent = 6,
+    LeftTriggerUpEvent = 7,
+    LeftTriggeringEvent = 8,
+    RightTriggerDownEvent = 9,
+    RightTriggerUpEvent = 10,
+    RightTriggeringEvent = 11,
+    LeftGripDownEvent = 12,
+    LeftGripUpEvent = 13,
+    LeftGripingEvent = 14,
+    RightGripDownEvent = 15,
+    RightGripUpEvent = 16,
+    RightGripingEvent = 17,
+    LeftJoystickDownEvent = 18,
+    LeftJoystickUpEvent = 19,
+    LeftJoystickingEvent = 20,
+    RightJoystickDownEvent = 21,
+    RightJoystickUpEvent = 22,
+    RightJoystickingEvent = 23,
+    LeftXADownEvent = 24,
+    LeftXAUpEvent = 25,
+    LeftXAingEvent = 26,
+    RightXADownEvent = 27,
+    RightXAUpEvent = 28,
+    RightXAingEvent = 29,
+    LeftYBDownEvent = 30,
+    LeftYBUpEvent = 31,
+    LeftYBingEvent = 32,
+    RightYBDownEvent = 33,
+    RightYBUpEvent = 34,
+    RightYBingEvent = 35,
 }

@@ -70,18 +70,18 @@ public class PicoXRManager : SingletonMonoEvent<PicoXRManager>
     }
 
     #region HandControllerTrackedEvent
-    public void AddTrackedEvent(TrackedEventType eventID, UnityAction<XRNode, GameObject> trackedEvent)
+    public void AddTrackedEvent(TrackedEventType eventID, UnityAction<RaycastHit> trackedEvent)
     {
         Entry entry = new Entry { eventID = eventID };
         entry.callback.AddListener(trackedEvent);
         Entrys.Add(entry);
     }
     [Serializable]
-    public class TrackedEvent : UnityEvent<XRNode, GameObject> { }
+    public class TrackedEvent : UnityEvent<RaycastHit> { }
     [Serializable]
     public class Entry
     {
-        public TrackedEventType eventID = TrackedEventType.MenuDownEvent;
+        public TrackedEventType eventID = TrackedEventType.LeftMenuDownEvent;
         public TrackedEvent callback = new TrackedEvent();
     }
 
@@ -97,32 +97,31 @@ public class PicoXRManager : SingletonMonoEvent<PicoXRManager>
         }
         set { m_Delegates = value; }
     }
-    private void Execute(TrackedEventType id, XRNode node, GameObject target)
+    private void Execute(TrackedEventType id, RaycastHit rayHit)
     {
         for (int i = 0, imax = Entrys.Count; i < imax; ++i)
         {
             var ent = Entrys[i];
             if (ent.eventID == id && ent.callback != null)
-                ent.callback.Invoke(node, target);
+                ent.callback.Invoke(rayHit);
         }
     }
-    private GameObject leftTarget;
-    private GameObject rightTarget;
+    private RaycastHit leftRaycastHit;
+    private RaycastHit rightRaycastHit;
     
     private bool leftMenu, rightMenu, leftGrip, rightGrip, leftTrigger, rightTrigger, leftJoystick, rightJoystick, leftXA,rightXA,leftYB, rightYB;
     private bool leftMenuDown, rightMenuDown, leftGripDown, rightGripDown, leftTriggerDown, rightTriggerDown, leftJoystickDown, rightJoystickDown, leftXADown,rightXADown,leftYBDown, rightYBDown;
+    private bool leftMenuing, rightMenuing, leftGriping, rightGriping, leftTriggering, rightTriggering, leftJoysticking, rightJoysticking, leftXAing, rightXAing, leftYBing, rightYBing;
     public void Update()
     {
         #region RaycastTarget
         if (leftXRRayInteractor != null)
         {
-            leftXRRayInteractor.TryGetCurrent3DRaycastHit(out RaycastHit leftRayHit);
-            leftTarget = leftRayHit.collider ? leftRayHit.collider.gameObject : null;
+            leftXRRayInteractor.TryGetCurrent3DRaycastHit(out leftRaycastHit);
         }
         if (rightXRRayInteractor != null)
         {
-            rightXRRayInteractor.TryGetCurrent3DRaycastHit(out RaycastHit rightRayHit);
-            rightTarget = rightRayHit.collider ? rightRayHit.collider.gameObject : null;
+            rightXRRayInteractor.TryGetCurrent3DRaycastHit(out rightRaycastHit);
         }
         #endregion
         #region Trigger
@@ -133,13 +132,20 @@ public class PicoXRManager : SingletonMonoEvent<PicoXRManager>
                 leftTrigger = leftTriggerDown;
                 if (leftTriggerDown)
                 {
-                    Execute(TrackedEventType.TriggerDownEvent, XRNode.LeftHand, leftTarget);
+                    leftTriggering = true;
+                    Execute(TrackedEventType.LeftTriggerDownEvent, leftRaycastHit);
                 }
                 else
                 {
-                    Execute(TrackedEventType.TriggerUpEvent, XRNode.LeftHand, leftTarget);
+                    leftTriggering = false;
+                    Execute(TrackedEventType.LeftTriggerUpEvent, leftRaycastHit);
                 }
             }
+            if (leftTriggering)
+            {
+                Execute(TrackedEventType.LeftTriggeringEvent, leftRaycastHit);
+            }
+
         }
         if (InputDevices.GetDeviceAtXRNode(XRNode.RightHand).TryGetFeatureValue(CommonUsages.triggerButton, out rightTriggerDown))
         {
@@ -148,12 +154,18 @@ public class PicoXRManager : SingletonMonoEvent<PicoXRManager>
                 rightTrigger = rightTriggerDown;
                 if (rightTriggerDown)
                 {
-                    Execute(TrackedEventType.TriggerDownEvent, XRNode.RightHand, rightTarget);
+                    rightTriggering = true;
+                    Execute(TrackedEventType.RightTriggerDownEvent, rightRaycastHit);
                 }
                 else
                 {
-                    Execute(TrackedEventType.TriggerUpEvent, XRNode.RightHand, rightTarget);
+                    rightTriggering = false;
+                    Execute(TrackedEventType.RightTriggerUpEvent, rightRaycastHit);
                 }
+            }
+            if (rightTriggering)
+            {
+                Execute(TrackedEventType.RightTriggeringEvent, rightRaycastHit);
             }
         }
         #endregion
@@ -165,12 +177,18 @@ public class PicoXRManager : SingletonMonoEvent<PicoXRManager>
                 leftMenu = leftMenuDown;
                 if (leftMenuDown)
                 {
-                    Execute(TrackedEventType.MenuDownEvent, XRNode.LeftHand, leftTarget);
+                    leftMenuing = true;
+                    Execute(TrackedEventType.LeftMenuDownEvent, leftRaycastHit);
                 }
                 else
                 {
-                    Execute(TrackedEventType.MenuUpEvent, XRNode.LeftHand, leftTarget);
+                    leftMenuing = false;
+                    Execute(TrackedEventType.LeftMenuUpEvent, leftRaycastHit);
                 }
+            }
+            if (leftMenuing)
+            {
+                Execute(TrackedEventType.LeftMenuingEvent, leftRaycastHit);
             }
         }
         if (InputDevices.GetDeviceAtXRNode(XRNode.RightHand).TryGetFeatureValue(CommonUsages.menuButton, out rightMenuDown))
@@ -180,12 +198,18 @@ public class PicoXRManager : SingletonMonoEvent<PicoXRManager>
                 rightMenu = rightMenuDown;
                 if (rightMenuDown)
                 {
-                    Execute(TrackedEventType.MenuDownEvent, XRNode.RightHand, rightTarget);
+                    rightMenuing = true;
+                    Execute(TrackedEventType.RightMenuDownEvent, rightRaycastHit);
                 }
                 else
                 {
-                    Execute(TrackedEventType.MenuUpEvent, XRNode.RightHand, rightTarget);
+                    rightMenuing = false;
+                    Execute(TrackedEventType.LeftMenuUpEvent, rightRaycastHit);
                 }
+            }
+            if (rightMenuing)
+            {
+                Execute(TrackedEventType.LeftMenuingEvent, rightRaycastHit);
             }
         }
         #endregion
@@ -197,12 +221,18 @@ public class PicoXRManager : SingletonMonoEvent<PicoXRManager>
                 leftGrip = leftGripDown;
                 if (leftGripDown)
                 {
-                    Execute(TrackedEventType.GripDownEvent, XRNode.LeftHand, leftTarget);
+                    leftGriping = true;
+                    Execute(TrackedEventType.LeftGripDownEvent, leftRaycastHit);
                 }
                 else
                 {
-                    Execute(TrackedEventType.GripUpEvent, XRNode.LeftHand, leftTarget);
+                    leftGriping = false;
+                    Execute(TrackedEventType.LeftGripUpEvent, leftRaycastHit);
                 }
+            }
+            if (leftGriping)
+            {
+                Execute(TrackedEventType.LeftGripingEvent, leftRaycastHit);
             }
         }
         if (InputDevices.GetDeviceAtXRNode(XRNode.RightHand).TryGetFeatureValue(CommonUsages.gripButton, out rightGripDown))
@@ -212,12 +242,18 @@ public class PicoXRManager : SingletonMonoEvent<PicoXRManager>
                 rightGrip = rightGripDown;
                 if (rightGripDown)
                 {
-                    Execute(TrackedEventType.GripDownEvent, XRNode.RightHand, rightTarget);
+                    rightGriping = true;
+                    Execute(TrackedEventType.RightGripDownEvent, rightRaycastHit);
                 }
                 else
                 {
-                    Execute(TrackedEventType.GripUpEvent, XRNode.RightHand, rightTarget);
+                    rightGriping = false;
+                    Execute(TrackedEventType.RightGripUpEvent, rightRaycastHit);
                 }
+            }
+            if (rightGriping)
+            {
+                Execute(TrackedEventType.RightGripingEvent, rightRaycastHit);
             }
         }
         #endregion
@@ -229,12 +265,18 @@ public class PicoXRManager : SingletonMonoEvent<PicoXRManager>
                 leftJoystick = leftJoystickDown;
                 if (leftJoystickDown)
                 {
-                    Execute(TrackedEventType.JoystickDownEvent, XRNode.LeftHand, leftTarget);
+                    leftJoysticking = true;
+                    Execute(TrackedEventType.LeftJoystickDownEvent, leftRaycastHit);
                 }
                 else
                 {
-                    Execute(TrackedEventType.JoystickUpEvent, XRNode.LeftHand, leftTarget);
+                    leftJoysticking = false;
+                    Execute(TrackedEventType.LeftJoystickUpEvent, leftRaycastHit);
                 }
+            }
+            if (leftJoysticking)
+            {
+                Execute(TrackedEventType.LeftJoystickingEvent, leftRaycastHit);
             }
         }
         if (InputDevices.GetDeviceAtXRNode(XRNode.RightHand).TryGetFeatureValue(CommonUsages.primary2DAxisClick, out rightJoystickDown))
@@ -244,12 +286,18 @@ public class PicoXRManager : SingletonMonoEvent<PicoXRManager>
                 rightJoystick = rightJoystickDown;
                 if (rightJoystickDown)
                 {
-                    Execute(TrackedEventType.JoystickDownEvent, XRNode.RightHand, rightTarget);
+                    rightJoysticking = true;
+                    Execute(TrackedEventType.RightJoystickDownEvent, rightRaycastHit);
                 }
                 else
                 {
-                    Execute(TrackedEventType.JoystickUpEvent, XRNode.RightHand, rightTarget);
+                    rightJoysticking = false;
+                    Execute(TrackedEventType.RightJoystickUpEvent, rightRaycastHit);
                 }
+            }
+            if (rightJoysticking)
+            {
+                Execute(TrackedEventType.RightJoystickingEvent, rightRaycastHit);
             }
         }
         #endregion
@@ -261,12 +309,18 @@ public class PicoXRManager : SingletonMonoEvent<PicoXRManager>
                 leftXA = leftXADown;
                 if (leftXADown)
                 {
-                    Execute(TrackedEventType.XADownEvent, XRNode.LeftHand, leftTarget);
+                    leftXAing = true;
+                    Execute(TrackedEventType.LeftXADownEvent, leftRaycastHit);
                 }
                 else
                 {
-                    Execute(TrackedEventType.XAUpEvent, XRNode.LeftHand, leftTarget);
+                    leftXAing = false;
+                    Execute(TrackedEventType.LeftXAUpEvent, leftRaycastHit);
                 }
+            }
+            if (leftXAing)
+            {
+                Execute(TrackedEventType.LeftXAingEvent, leftRaycastHit);
             }
         }
         if (InputDevices.GetDeviceAtXRNode(XRNode.RightHand).TryGetFeatureValue(CommonUsages.primaryButton, out rightXADown))
@@ -276,12 +330,18 @@ public class PicoXRManager : SingletonMonoEvent<PicoXRManager>
                 rightXA = rightXADown;
                 if (rightXADown)
                 {
-                    Execute(TrackedEventType.XADownEvent, XRNode.RightHand, rightTarget);
+                    rightXAing = true;
+                    Execute(TrackedEventType.RightXADownEvent, rightRaycastHit);
                 }
                 else
                 {
-                    Execute(TrackedEventType.XAUpEvent, XRNode.RightHand, rightTarget);
+                    rightXAing = false;
+                    Execute(TrackedEventType.RightXAUpEvent, rightRaycastHit);
                 }
+            }
+            if (rightXAing)
+            {
+                Execute(TrackedEventType.RightXAingEvent, rightRaycastHit);
             }
         }
         #endregion
@@ -293,12 +353,18 @@ public class PicoXRManager : SingletonMonoEvent<PicoXRManager>
                 leftYB = leftYBDown;
                 if (leftYBDown)
                 {
-                    Execute(TrackedEventType.YBDownEvent, XRNode.LeftHand, leftTarget);
+                    leftYBing = true;
+                    Execute(TrackedEventType.LeftYBDownEvent, leftRaycastHit);
                 }
                 else
                 {
-                    Execute(TrackedEventType.YBUpEvent, XRNode.LeftHand, leftTarget);
+                    leftYBing = false;
+                    Execute(TrackedEventType.LeftYBUpEvent, leftRaycastHit);
                 }
+            }
+            if (leftYBing)
+            {
+                Execute(TrackedEventType.LeftYBingEvent, leftRaycastHit);
             }
         }
         if (InputDevices.GetDeviceAtXRNode(XRNode.RightHand).TryGetFeatureValue(CommonUsages.secondaryButton, out rightYBDown))
@@ -308,12 +374,18 @@ public class PicoXRManager : SingletonMonoEvent<PicoXRManager>
                 rightYB = rightYBDown;
                 if (rightYBDown)
                 {
-                    Execute(TrackedEventType.YBDownEvent, XRNode.RightHand, rightTarget);
+                    rightYBing = true;
+                    Execute(TrackedEventType.RightYBDownEvent, rightRaycastHit);
                 }
                 else
                 {
-                    Execute(TrackedEventType.YBUpEvent, XRNode.RightHand, rightTarget);
+                    rightYBing = false;
+                    Execute(TrackedEventType.RightYBUpEvent, rightRaycastHit);
                 }
+            }
+            if (rightYBing)
+            {
+                Execute(TrackedEventType.RightYBingEvent, rightRaycastHit);
             }
         }
         #endregion
