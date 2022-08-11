@@ -24,4 +24,6 @@ public class AppConfig : ScriptableObject
     public TargetPackage TargetPackage;
     [Tooltip("App原生")]
     public bool NativeApp;
+    [Tooltip("AB包打包加载方式")]
+    public ABPipeline ABPipeline;
 }

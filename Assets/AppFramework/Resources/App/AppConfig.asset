@@ -20,3 +20,4 @@ MonoBehaviour:
   AppFrameRate: 60
   TargetPackage: 0
   NativeApp: 0
+  ABPipeline: 1

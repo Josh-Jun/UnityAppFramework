@@ -251,13 +251,20 @@ namespace Update
             {
                 //将manifest文件写入本地
                 FileManager.CreateFile(LocalPath + PlatformManager.Instance.Name + ".manifest", manifest_data);
-                //下载总AB包
-                DownLoad(ServerUrl + PlatformManager.Instance.Name, (byte[] ab_data) =>
+                if (Root.AppConfig.ABPipeline == ABPipeline.Default)
                 {
-                    //将ab文件写入本地
-                    FileManager.CreateFile(LocalPath + PlatformManager.Instance.Name, ab_data);
+                     //下载总AB包
+                     DownLoad(ServerUrl + PlatformManager.Instance.Name, (byte[] ab_data) =>
+                     {
+                        //将ab文件写入本地
+                        FileManager.CreateFile(LocalPath + PlatformManager.Instance.Name, ab_data);
+                        window.StartCoroutine(DownLoadAssetBundle());
+                     });
+                }
+                else if(Root.AppConfig.ABPipeline == ABPipeline.Scriptable)
+                {
                     window.StartCoroutine(DownLoadAssetBundle());
-                });
+                }
             });
         }
         #endregion
@@ -308,16 +315,19 @@ namespace Update
                     }
                 }
                 yield return new WaitForEndOfFrame();
-                //下载manifest文件
-                DownLoad(ServerUrl + folder.BundleName + ".manifest", (byte[] _manifest_data) =>
+                if (Root.AppConfig.ABPipeline == ABPipeline.Default)
                 {
-                    if (FileManager.FileExist(LocalPath + folder.BundleName + ".manifest"))
+                    //下载manifest文件
+                    DownLoad(ServerUrl + folder.BundleName + ".manifest", (byte[] _manifest_data) =>
                     {
-                        FileManager.DeleteFile(LocalPath + folder.BundleName + ".manifest");
-                    }
-                    //将manifest文件写入本地
-                    FileManager.CreateFile(LocalPath + folder.BundleName + ".manifest", _manifest_data);
-                });
+                        if (FileManager.FileExist(LocalPath + folder.BundleName + ".manifest"))
+                        {
+                            FileManager.DeleteFile(LocalPath + folder.BundleName + ".manifest");
+                        }
+                        //将manifest文件写入本地
+                        FileManager.CreateFile(LocalPath + folder.BundleName + ".manifest", _manifest_data);
+                    });
+                }
             }
 
             yield return new WaitForEndOfFrame();
@@ -376,10 +386,10 @@ namespace Update
 
             XmlDocument xmlDocument = XmlManager.Load(XmlLocalVersionPath);
 
-            var scene = xmlDocument.GetElementsByTagName("Scenes");
-            for (int i = 0; i < scene.Count; i++)
+            var modules = xmlDocument.GetElementsByTagName("Modules");
+            for (int i = 0; i < modules.Count; i++)
             {
-                var folders = scene[i].ChildNodes;
+                var folders = modules[i].ChildNodes;
                 for (int j = 0; j < folders.Count; j++)
                 {
                     if (folder != null)
@@ -400,10 +410,10 @@ namespace Update
             
             XmlDocument xmlDocument = XmlManager.Load(XmlLocalVersionPath);
 
-            var scene = xmlDocument.GetElementsByTagName("Scenes");
-            for (int i = 0; i < scene.Count; i++)
+            var modules = xmlDocument.GetElementsByTagName("Modules");
+            for (int i = 0; i < modules.Count; i++)
             {
-                var folders = scene[i].ChildNodes;
+                var folders = modules[i].ChildNodes;
                 for (int j = 0; j < folders.Count; j++)
                 {
                     if (folder != null)
@@ -425,15 +435,15 @@ namespace Update
                 AssetBundleConfig config = new AssetBundleConfig();
                 config.GameVersion = serverABConfig.GameVersion;
                 config.Platform = serverABConfig.Platform;
-                config.Scenes = serverABConfig.Scenes;
+                config.Modules = serverABConfig.Modules;
                 FileManager.CreateFile(XmlLocalVersionPath, XmlManager.ProtoByteSerialize<AssetBundleConfig>(config));
                 
                 XmlDocument xmlDocument = XmlManager.Load(XmlLocalVersionPath);
 
-                var scene = xmlDocument.GetElementsByTagName("Scenes");
-                for (int i = 0; i < scene.Count; i++)
+                var modules = xmlDocument.GetElementsByTagName("Modules");
+                for (int i = 0; i < modules.Count; i++)
                 {
-                    var folders = scene[i].ChildNodes;
+                    var folders = modules[i].ChildNodes;
                     for (int j = 0; j < folders.Count; j++)
                     {
                         folders[j].Attributes["Tag"].Value = "0";
@@ -539,13 +549,13 @@ namespace Update
         private Dictionary<string, Folder> GetFolders(AssetBundleConfig config)
         {
             Dictionary<string, Folder> folders = new Dictionary<string, Folder>();
-            for (int i = 0; i < config.Scenes.Count; i++)
+            for (int i = 0; i < config.Modules.Count; i++)
             {
-                for (int j = 0; j < config.Scenes[i].Folders.Count; j++)
+                for (int j = 0; j < config.Modules[i].Folders.Count; j++)
                 {
-                    if (!folders.ContainsKey(config.Scenes[i].Folders[j].BundleName))
+                    if (!folders.ContainsKey(config.Modules[i].Folders[j].BundleName))
                     {
-                        folders.Add(config.Scenes[i].Folders[j].BundleName, config.Scenes[i].Folders[j]);
+                        folders.Add(config.Modules[i].Folders[j].BundleName, config.Modules[i].Folders[j]);
                     }
                 }
             }
@@ -556,10 +566,10 @@ namespace Update
         private void SetABScenePairs(AssetBundleConfig config)
         {
             //获取文件夹名和包名，用来给AssetbundleSceneManager里的folderDic赋值
-            foreach (var scene in config.Scenes)
+            foreach (var module in config.Modules)
             {
                 Dictionary<string, string> folderPairs = new Dictionary<string, string>();
-                foreach (var folder in scene.Folders)
+                foreach (var folder in module.Folders)
                 {
                     if (!folderPairs.ContainsKey(folder.FolderName))
                     {
@@ -567,7 +577,7 @@ namespace Update
                     }
                 }
 
-                AssetBundleManager.Instance.SetAbScenePairs(scene.SceneName, folderPairs);
+                AssetBundleManager.Instance.SetAbModulePairs(module.ModuleName, folderPairs);
             }
         }
 

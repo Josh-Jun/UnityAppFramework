@@ -24,6 +24,7 @@ public class BuildAppWindowEditor : EditorWindow
     private int AppFrameRate = 30;
     private TargetPackage ApkTarget = TargetPackage.Mobile;
     private bool NativeApp = false;
+    private ABPipeline Pipeline = ABPipeline.Default;
     private string outputPath;
 
     [MenuItem("Tools/My ToolsWindow/Build App", false, 0)]
@@ -53,6 +54,7 @@ public class BuildAppWindowEditor : EditorWindow
             AppFrameRate = AppConfig.AppFrameRate;
             ApkTarget = AppConfig.TargetPackage;
             NativeApp = AppConfig.NativeApp;
+            Pipeline = AppConfig.ABPipeline;
         }
         else
         {
@@ -116,6 +118,12 @@ public class BuildAppWindowEditor : EditorWindow
             EditorGUILayout.EndHorizontal();
         }
         
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label(new GUIContent("AB Build Pipeline"));
+        GUILayout.FlexibleSpace();
+        Pipeline = (ABPipeline)EditorGUILayout.EnumPopup(Pipeline, GUILayout.MaxWidth(75));
+        EditorGUILayout.EndHorizontal();
+        
         if (GUILayout.Button("Apply"))
         {
             ApplyConfig();
@@ -148,6 +156,7 @@ public class BuildAppWindowEditor : EditorWindow
         AppConfig.AppFrameRate = AppFrameRate;
         AppConfig.TargetPackage = ApkTarget;
         AppConfig.NativeApp = NativeApp;
+        AppConfig.ABPipeline = Pipeline;
 
         EditorUtility.SetDirty(AppConfig);
 

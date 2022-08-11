@@ -18,14 +18,14 @@ namespace Data
         public string Des;//热更描述
 
         [XmlElement]
-        public List<Scene> Scenes;//AB包场景
+        public List<Module> Modules;//AB包场景
     }
 
     [System.Serializable]
-    public class Scene
+    public class Module
     {
         [XmlAttribute]
-        public string SceneName;//AB包场景名
+        public string ModuleName;//AB包场景名
 
         [XmlElement]
         public List<Folder> Folders; //文件夹

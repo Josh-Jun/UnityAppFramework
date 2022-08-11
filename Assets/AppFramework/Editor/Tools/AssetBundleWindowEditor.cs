@@ -248,7 +248,7 @@ public class AssetBundleWindowEditor : EditorWindow
             return;
         string bundleName = GetBundleName(fileInfo, sceneName);
         // Debug.Log("包名为 :" + bundleName );
-
+        
         // D:\Unity_forWork\Unity_Project\AssetBundle02_Senior\Assets\AssetsFolder\Scene1\Character\NB\Player4.prefab
         // 获取Assetsy以及之后的目录
         int assetIndex = fileInfo.FullName.IndexOf("Assets");
@@ -257,10 +257,10 @@ public class AssetBundleWindowEditor : EditorWindow
         // 6.用 AssetImporter 类 ， 修改名称和后缀 ；
         AssetImporter assetImporter = AssetImporter.GetAtPath(assetPath); // GetAtPath方法是获取Assets文件和之后的目录
         assetImporter.assetBundleName = bundleName.ToLower();
-        if (fileInfo.Extension == ".unity")
-            assetImporter.assetBundleVariant = "sc";
-        else
-            assetImporter.assetBundleVariant = "ab";
+        // if (fileInfo.Extension == ".unity")
+        //     assetImporter.assetBundleVariant = "sc";
+        // else
+        //     assetImporter.assetBundleVariant = "ab";
         
         // 添加到字典里 
         string folderName = "";
@@ -268,12 +268,8 @@ public class AssetBundleWindowEditor : EditorWindow
             folderName = bundleName.Split('/')[1]; // key
         else
             folderName = bundleName;
-        if (folderName == "Scene" && assetImporter.assetBundleVariant == "ab")
-        {
-            folderName = "SceneAssets";
-        }
         // string bundlePath = assetImporter.assetBundleName; // value
-        string bundlePath = assetImporter.assetBundleName + "." + assetImporter.assetBundleVariant; // value
+        string bundlePath = assetImporter.assetBundleName /*+ "." + assetImporter.assetBundleVariant*/; // value
         if (!namePathDic.ContainsKey(folderName))
             namePathDic.Add(folderName, bundlePath);
     }
@@ -284,6 +280,7 @@ public class AssetBundleWindowEditor : EditorWindow
     /// <param name="sceneName"></param>
     private string GetBundleName(FileInfo fileInfo, string sceneName)
     {
+        var bundleName = "";
         // windows 全路径 \ 
         string windowsPath = fileInfo.FullName;
         // D:\Unity_forWork\Unity_Project\AssetBundle02_Senior\Assets\AssetsFolder\Scene1\Character\NB\Player4.prefab
@@ -303,18 +300,32 @@ public class AssetBundleWindowEditor : EditorWindow
             // 后续还有路径, 包含子目录[取第一个/后的名字]
             // Character/NB/Player4.prefab
             string tempPath = bundlePath.Split('/')[0];
-            return sceneName + "/" + tempPath;
+            bundleName = sceneName + "/" + tempPath;
         }
         else
         {
             // 如果是场景
             // Scene1.unity
-            return sceneName;
+            bundleName = sceneName;
         }
+
+        if (sceneName == "Scenes")
+        {
+            if (fileInfo.Extension == ".unity")
+            {
+                bundleName += "Scene";
+            }
+            else
+            {
+                bundleName += "Asset";
+            }
+        }
+        return bundleName;
     }
     #endregion
 
     #region 打包
+    
     //[MenuItem("AssetBundle/BuildAllAssetBundle(一键打包)")]
     void BuildAllAssetBundles()
     {
@@ -323,18 +334,25 @@ public class AssetBundleWindowEditor : EditorWindow
         {
             FileManager.CreateFolder(outPath);
         }
-        
-        if (BuildPipeline.BuildAssetBundles(outPath, BuildAssetBundleOptions.ChunkBasedCompression, buildTarget))
+
+        if (AppConfig.ABPipeline == ABPipeline.Default)
         {
-            AssetDatabase.Refresh();
-            Debug.Log("AssetBundle 打包成功! " + outPath);
+            if (BuildPipeline.BuildAssetBundles(outPath, BuildAssetBundleOptions.ChunkBasedCompression, buildTarget))
+            {
+                AssetDatabase.Refresh();
+                EditorUtility.RevealInFinder(outPath);
+                Debug.Log("AssetBundle 打包成功! " + outPath);
+            }
         }
-        // if (BuildAssetBundles(outPath, false, true, buildTarget))
-        // {
-        //     AssetDatabase.Refresh();
-        //     EditorUtility.RevealInFinder(outPath);
-        //     Debug.Log("AssetBundle 打包成功! " + outPath);
-        // }
+        else
+        {
+            if (SariptableBuildAssetBundles(outPath, false, true, buildTarget))
+            {
+                AssetDatabase.Refresh();
+                EditorUtility.RevealInFinder(outPath);
+                Debug.Log("AssetBundle 打包成功! " + outPath);
+            }
+        }
     }
     private bool SariptableBuildAssetBundles(string outputPath, bool forceRebuild, bool useChunkBasedCompression, BuildTarget buildTarget)
     {
@@ -352,11 +370,6 @@ public class AssetBundleWindowEditor : EditorWindow
             bundles[i].addressableNames = bundles[i].assetNames.Select(Path.GetFileNameWithoutExtension).ToArray();
 
         var manifest = CompatibilityBuildPipeline.BuildAssetBundles(outputPath, bundles, options, buildTarget);
-        if (manifest != null)
-        {
-            //
-            AssetDatabase.CreateAsset(manifest, $"{buildPath}/{buildTarget.ToString()}");
-        }
         return manifest != null;
     }
     #endregion
@@ -394,8 +407,8 @@ public class AssetBundleWindowEditor : EditorWindow
         root.SetAttribute("Des", des);
         foreach (var scene in sceneDic)
         {
-            var xmlScene = xmlDocument.CreateElement("Scenes");
-            xmlScene.SetAttribute("SceneName", scene.Key);
+            var xmlScene = xmlDocument.CreateElement("Modules");
+            xmlScene.SetAttribute("ModuleName", scene.Key);
             //root.AppendChild(xmlScene);
             foreach (var folder in scene.Value)
             {

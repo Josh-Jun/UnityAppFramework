@@ -4,7 +4,12 @@ public enum TargetPackage
     Mobile = 0,
     Pico = 1,
 }
-
+/// <summary>AB包打包加载方式</summary>
+public enum ABPipeline
+{
+    Default = 0,
+    Scriptable = 1,
+}
 /// <summary>更新类型</summary>
 public enum UpdateMold
 {

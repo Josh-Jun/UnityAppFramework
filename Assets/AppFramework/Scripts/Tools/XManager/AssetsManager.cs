@@ -28,8 +28,8 @@ public class AssetsManager : SingletonMono<AssetsManager>
     #region 加载场景
     /// <summary> 
     /// 加载场景
-    /// path = sceneName/folderName/assetName
-    /// scnenName 打包资源的第一层文件夹名称
+    /// path = moduleName/folderName/assetName
+    /// moduleName 打包资源的第一层文件夹名称
     /// folderName 打包资源的第二层文件夹名称
     /// assetName 场景名称
     /// </summary>
@@ -38,7 +38,7 @@ public class AssetsManager : SingletonMono<AssetsManager>
         string[] names = sceneName.Split('/');//names[0], names[1], names[names.Length - 1]
         if (Root.AppConfig.IsLoadAB)
         {
-            AssetBundle ab = AssetBundleManager.Instance.LoadAssetBundle(names[0], names[1]);
+            AssetBundle ab = AssetBundleManager.Instance.LoadAssetBundle(names[0], $"{names[1]}Scene");
         }
         if (!string.IsNullOrEmpty(names[names.Length - 1]))
         {
@@ -57,7 +57,7 @@ public class AssetsManager : SingletonMono<AssetsManager>
         string[] names = sceneName.Split('/');//names[0], names[1], names[names.Length - 1]
         if (Root.AppConfig.IsLoadAB)
         {
-            AssetBundle ab = AssetBundleManager.Instance.LoadAssetBundle(names[0], names[1]);
+            AssetBundle ab = AssetBundleManager.Instance.LoadAssetBundle(names[0], $"{names[1]}Scene");
         }
         if (!string.IsNullOrEmpty(names[names.Length - 1]))
         {
@@ -254,8 +254,8 @@ public class AssetsManager : SingletonMono<AssetsManager>
     #region 加载资源
     /// <summary> 
     /// 加载ab包中的资源，返回T
-    /// path = sceneName/folderName/assetName
-    /// scnenName 打包资源的第一层文件夹名称
+    /// path = moduleName/folderName/assetName
+    /// moduleName 打包资源的第一层文件夹名称
     /// folderName 打包资源的第二层文件夹名称
     /// assetName 资源名称
     /// </summary>
