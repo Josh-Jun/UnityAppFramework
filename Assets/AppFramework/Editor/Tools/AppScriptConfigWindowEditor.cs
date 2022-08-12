@@ -14,7 +14,7 @@ public class AppScriptConfigWindowEditor : EditorWindow
     private int level = 0;
     private List<string> SceneNames = new List<string>();
     private List<int> levels = new List<int>();
-    private static readonly string configPath = "AssetsFolder/App/Assets/AppScriptConfig";
+    private static readonly string configPath = "AssetsFolder/App/Config/AppScriptConfig";
     [MenuItem("Tools/My ToolsWindow/Set AppScriptConfig", false, 2)]
     public static void OpenWindow()
     {

@@ -79,20 +79,4 @@ public class WindowBase : EventBaseMono
     {
         transform.SetSiblingIndex(index);
     }
-    public void SetLightingmapData(LightingmapData lightingmap)
-    {
-        Renderer[] renderers = gameObject.GetComponentsInChildren<Renderer>();
-
-        if (renderers != null && renderers.Length > 0)
-        {
-            for (int i = 0; i < renderers.Length; i++)
-            {
-                if (renderers[i] != null)
-                {
-                    renderers[i].lightmapIndex = lightingmap.lightingmapInfos[i].lightmapIndex;
-                    renderers[i].lightmapScaleOffset = lightingmap.lightingmapInfos[i].lightmapScaleOffset;
-                }
-            }
-        }
-    }
 }

@@ -38,13 +38,6 @@ namespace Test
             window.PlayGif();
         }
 
-        private void SetLightingmapData()
-        {
-            string lightingmap_TestPath = "Test/Assets/Lightingmap/Test";
-            LightingmapData lightingmap = AssetsManager.Instance.LoadAsset<LightingmapData>(lightingmap_TestPath);
-            window.SetLightingmapData(lightingmap);
-        }
-
         public void End()
         {
         }

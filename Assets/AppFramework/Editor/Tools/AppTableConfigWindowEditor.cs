@@ -9,7 +9,7 @@ public class AppTableConfigWindowEditor : EditorWindow
 {
     private GUIStyle titleStyle;
     private AppTableConfig config;
-    private string configPath = "AssetsFolder/App/Assets/AppTableConfig";
+    private string configPath = "AssetsFolder/App/Config/AppTableConfig";
     [MenuItem("Tools/My ToolsWindow/Set AppTableConfig", false, 2)]
     public static void OpenWindow()
     {
