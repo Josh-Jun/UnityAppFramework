@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TableManager : SingletonMono<TableManager>
 {
-    private const string path_AppTableConfig = "App/Assets/AppTableConfig";
+    private const string path_AppTableConfig = "App/Config/AppTableConfig";
     private Dictionary<string, byte[]> m_TablePairs = new Dictionary<string, byte[]>();
     private AppTableConfig appTableConfig;
     public override void InitManager(Transform parent)

@@ -13,7 +13,7 @@ public class Root
 {
     private static IRoot UpdateRoot = null;
 
-    private const string path_AppScriptConfig = "App/Assets/AppScriptConfig";
+    private const string path_AppScriptConfig = "App/Config/AppScriptConfig";
     private static AppScriptConfig appScriptConfig;
 
     private const string path_AppConfig = "App/AppConfig";
