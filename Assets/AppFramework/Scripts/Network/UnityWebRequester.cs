@@ -14,6 +14,7 @@ public class UnityWebRequester
     public UnityWebRequester(MonoBehaviour mono)
     {
         this.mono = mono;
+        uwr = new UnityWebRequest();
     }
     /// <summary> 是否下载完 </summary>
     public bool IsDone
@@ -291,8 +292,10 @@ public class UnityWebRequester
     /// <returns></returns>
     public IEnumerator IE_Get(string url, Action<string> actionResult)
     {
-        using (uwr = new UnityWebRequest(url, UnityWebRequest.kHttpVerbGET))
+        using (uwr)
         {
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbGET;
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
@@ -320,8 +323,10 @@ public class UnityWebRequester
     /// <returns></returns>
     public IEnumerator IE_GetBytes(string url, Action<byte[]> actionResult)
     {
-        using (uwr = new UnityWebRequest(url, UnityWebRequest.kHttpVerbGET))
+        using (uwr)
         {
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbGET;
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
@@ -348,8 +353,10 @@ public class UnityWebRequester
     /// <returns></returns>
     public IEnumerator IE_GetTexture(string url, Action<Texture2D> actionResult)
     {
-        using (uwr = new UnityWebRequest(url, UnityWebRequest.kHttpVerbGET))
+        using (uwr)
         {
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbGET;
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
@@ -377,8 +384,10 @@ public class UnityWebRequester
     /// <returns></returns>
     public IEnumerator IE_GetAssetBundle(string url, Action<AssetBundle> actionResult)
     {
-        using (uwr = new UnityWebRequest(url, UnityWebRequest.kHttpVerbGET))
+        using (uwr)
         {
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbGET;
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
@@ -407,8 +416,10 @@ public class UnityWebRequester
     /// <returns></returns>
     public IEnumerator IE_GetAudioClip(string url, Action<AudioClip> actionResult, AudioType audioType = AudioType.WAV)
     {
-        using (uwr = new UnityWebRequest(url, UnityWebRequest.kHttpVerbGET))
+        using (uwr)
         {
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbGET;
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
@@ -440,8 +451,10 @@ public class UnityWebRequester
         //List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
         //formData.Add(new MultipartFormDataSection("field1=foo&field2=bar"));
         //formData.Add(new MultipartFormFileSection("my file data", "myfile.txt"));
-        using (uwr = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPOST))
+        using (uwr)
         {
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbPOST;
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
@@ -471,8 +484,10 @@ public class UnityWebRequester
     /// <returns></returns>
     public IEnumerator IE_Post(string url, WWWForm formData, Action<string> actionResult)
     {
-        using (uwr = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPOST))
+        using (uwr)
         {
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbPOST;
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
@@ -500,8 +515,10 @@ public class UnityWebRequester
     /// <returns></returns>
     public IEnumerator IE_Post(string url, string postData, Action<string> actionResult)
     {
-        using (uwr = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPOST))
+        using (uwr)
         {
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbPOST;
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
@@ -530,8 +547,10 @@ public class UnityWebRequester
     /// <returns></returns>
     public IEnumerator IE_Post(string url, byte[] postData, Action<string> actionResult)
     {
-        using (uwr = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPOST))
+        using (uwr)
         {
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbPOST;
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
@@ -559,8 +578,10 @@ public class UnityWebRequester
     /// <returns></returns>
     public IEnumerator IE_Post(string url, Dictionary<string, string> formFields, Action<string> actionResult)
     {
-        using (uwr = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPOST))
+        using (uwr)
         {
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbPOST;
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
@@ -591,8 +612,10 @@ public class UnityWebRequester
     /// <returns></returns>
     public IEnumerator IE_Put(string url, byte[] contentBytes, Action<string> actionResult)
     {
-        using (uwr = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPUT))
+        using (uwr)
         {
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbPUT;
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
@@ -620,8 +643,10 @@ public class UnityWebRequester
     /// <returns></returns>
     public IEnumerator IE_Put(string url, string content, Action<string> actionResult)
     {
-        using (uwr = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPUT))
+        using (uwr)
         {
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbPUT;
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
