@@ -480,7 +480,7 @@ namespace Update
                     serverABConfig = XmlManager.ProtoDeSerialize<AssetBundleConfig>(bytes);
                     SetABScenePairs(serverABConfig);
                     Debug.Log($"大版本比较 v{Application.version}/v{serverABConfig.GameVersion}");
-                    if (Application.version == serverABConfig.GameVersion)
+                    if (!CheckVersion(serverABConfig.GameVersion))
                     {
                         serverFolders = GetFolders(serverABConfig);
                         if (localABConfig != null)
@@ -534,7 +534,28 @@ namespace Update
                 });
             }
         }
-
+        
+        private bool CheckVersion(string version)
+        {
+            bool isUpdateApp = false;
+            string[] local = Application.version.Split('.');
+            string[] server = version.Split('.');
+            if (local.Length == server.Length)
+            {
+                for (int i = 0; i < local.Length; i++)
+                {
+                    int num_local = int.Parse(local[i]);
+                    int num_server = int.Parse(server[i]);
+                    Debug.Log($"{num_local}-{num_server}");
+                    if (num_server > num_local)
+                    {
+                        isUpdateApp = true;
+                        break;
+                    }
+                }
+            }
+            return isUpdateApp;
+        }
         private long GetSize(List<Folder> Folders)
         {
             long sum = 0;
