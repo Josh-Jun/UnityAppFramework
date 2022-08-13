@@ -25,7 +25,7 @@ public class MenuToolsEditor : UnityEditor.AssetModificationProcessor
             var namespaces = Path.GetFileNameWithoutExtension(newFilePath);
             for (int i = 0; i < temps.Length; i++)
             {
-                namespaces.Replace(temps[i], "");
+                namespaces = namespaces.Replace(temps[i], "");
             }
 
             scriptContent = scriptContent.Replace("#NAMESPACE#", namespaces);
