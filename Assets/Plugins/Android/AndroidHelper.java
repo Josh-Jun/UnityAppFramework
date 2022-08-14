@@ -9,9 +9,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.telephony.PhoneStateListener;
+import android.telephony.SignalStrength;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -29,6 +34,9 @@ public class AndroidHelper extends UnityPlayerActivity {
     private static Context mContext = null;
     private static Activity mainActivity = null;
 
+    private static int mSignalLevel = 0;
+    private static Toast mToast;
+
     // 初始化
     public static void init(Context context) {
         if (mContext == null) {
@@ -43,8 +51,10 @@ public class AndroidHelper extends UnityPlayerActivity {
     public static String getAppData(String key) {
         return mainActivity.getIntent().getStringExtra(key);
     }
+
     // 退出UnityActivity
     public static void quitUnityActivity() { mainActivity.finish(); }
+
     // 保存图片到相册
     public static void savePhoto(String imagePath) {
         mainActivity.runOnUiThread(new Runnable() {
@@ -91,6 +101,7 @@ public class AndroidHelper extends UnityPlayerActivity {
             }
         });
     }
+
     // 安装apk
     public static void installApp(String appFullPath) {
         try {
@@ -119,5 +130,55 @@ public class AndroidHelper extends UnityPlayerActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /*获取wifi信号强度
+      wifiinfo.getRssi()；获取RSSI，RSSI就是接受信号强度指示。
+      这里得到信号强度就靠wifiinfo.getRssi()这个方法。
+      得到的值是一个0到-100的区间值，是一个int型数据，其中0到-50表示信号最好，
+      -50到-70表示信号偏差，小于-70表示最差，
+      有可能连接不上或者掉线，一般Wifi已断则值为-200。*/
+    public static int getWiFiSignal() {
+        // Wifi的连接速度及信号强度：
+        int level = 0;
+        int strength = 0;
+        WifiManager wifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+        WifiInfo info = wifiManager.getConnectionInfo();
+        if (info.getBSSID() != null) {
+            // 链接信号强度
+            strength = WifiManager.calculateSignalLevel(info.getRssi(), 5);
+        }
+        if (strength > -100 && strength < -70) {
+            level = 1;
+        } else if (strength > -70 && strength < -50) {
+            level = 2;
+        } else if (strength > -50) {
+            level = 3;
+        }
+        return level;
+    }
+
+    //获取移动网络信号 0-4
+    public static int getMonetSignal() {
+        TelephonyManager mTelephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+        if (mTelephonyManager != null) {
+            mTelephonyManager.listen(new PhoneStateListener() {
+                @Override
+                public void onSignalStrengthsChanged(SignalStrength signalStrength) {
+                    super.onSignalStrengthsChanged(signalStrength);
+                    mSignalLevel = signalStrength.getLevel();
+                }
+            }, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+        }
+        return mSignalLevel;
+    }
+
+    //Toast弹窗
+    public static void showTips(final String str) {
+        if (mToast != null) {
+            mToast.cancel();
+        }
+        mToast = Toast.makeText(mContext, str, Toast.LENGTH_SHORT);
+        mToast.show();
     }
 }

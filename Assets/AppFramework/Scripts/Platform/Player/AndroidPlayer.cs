@@ -25,6 +25,18 @@ namespace Platform
         {
             JavaObject(AppToolsPackage).CallStatic("init", MainJavaObject);
         }
+        public override int GetNetSignal()
+        {
+            if (Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork)
+            {
+                return JavaObject(AppToolsPackage).CallStatic<int>("getMonetSignal");
+            }
+            else if (Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork)
+            {
+                return JavaObject(AppToolsPackage).CallStatic<int>("getWiFiSignal");
+            }
+            return 0;
+        }
         public override string GetDataPath(string folder)
         {
             return $"{Application.persistentDataPath}/{folder}";

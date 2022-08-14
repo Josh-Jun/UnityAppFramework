@@ -36,6 +36,7 @@ public abstract class PlatformManager
     public abstract bool IsEditor { get; }
     public abstract string Name { get; }
     public abstract string PlatformName { get; }
+    public abstract int GetNetSignal();
     public abstract string GetDataPath(string folder);
     public abstract void InstallApp(string appPath);
     public abstract void SavePhoto(string imagePath);

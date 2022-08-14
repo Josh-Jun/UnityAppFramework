@@ -11,6 +11,10 @@ namespace Platform
         public override bool IsEditor { get; } = true;
         public override string Name { get; } = "Android";
         public override string PlatformName { get; } = "android";
+        public override int GetNetSignal()
+        {
+            return 0;
+        }
         public override string GetDataPath(string folder)
         {
             return $"{Application.persistentDataPath}/{folder}";
