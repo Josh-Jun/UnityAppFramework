@@ -35,6 +35,10 @@ public class PicoXRManager : SingletonMonoEvent<PicoXRManager>
         SetBaseController(false);
         SetTeleportController(false);
         //SetTeleportEnable(false);
+#if UNITY_EDITOR
+        LeftController.SetActive(false);
+        RightController.SetActive(false);
+#endif
     }
     public void SetBaseController(bool enable)
     {
@@ -72,10 +76,39 @@ public class PicoXRManager : SingletonMonoEvent<PicoXRManager>
     #region HandControllerTrackedEvent
     public void AddTrackedEvent(TrackedEventType eventID, UnityAction<RaycastHit> trackedEvent)
     {
-        Entry entry = new Entry { eventID = eventID };
+        Entry entry = Entrys.Find(s => s.eventID == eventID);
+        if (entry == null)
+        {
+            entry = new Entry { eventID = eventID };
+        }
         entry.callback.AddListener(trackedEvent);
         Entrys.Add(entry);
     }
+    public void RemoveTrackedEvent(TrackedEventType eventID, UnityAction<RaycastHit> trackedEvent)
+    {
+        Entry entry = Entrys.Find(s => s.eventID == eventID);
+        if (entry != null)
+        {
+            entry.callback.RemoveListener(trackedEvent);
+        }
+    }
+    public void RemoveTrackedEvent(TrackedEventType eventID, bool isClear = false)
+    {
+        Entry entry = Entrys.Find(s => s.eventID == eventID);
+        if (entry != null)
+        {
+            entry.callback.RemoveAllListeners();
+            if (isClear)
+            {
+                Entrys.Remove(entry);
+            }
+        }
+    }
+    public void RemoveAllTrackedEvent()
+    {
+        Entrys.Clear();
+    }
+    
     [Serializable]
     public class TrackedEvent : UnityEvent<RaycastHit> { }
     [Serializable]

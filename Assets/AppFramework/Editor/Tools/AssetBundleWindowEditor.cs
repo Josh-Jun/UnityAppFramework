@@ -24,6 +24,9 @@ public class AssetBundleWindowEditor : EditorWindow
     public AppConfig AppConfig;//App配置表 
     private readonly string configPath = "App/AppConfig";
     
+    Vector2 scrollPosition;
+    private string m_TmpBuildPath = "";
+    
     [MenuItem("Tools/My ToolsWindow/Build AssetBundle", false, 1)]
     public static void OpenWindow()
     {
@@ -88,6 +91,46 @@ public class AssetBundleWindowEditor : EditorWindow
             GUIUtility.ExitGUI();
         }
         GUILayout.EndHorizontal();
+
+        //子目录
+        #region 子目录
+        GetFolders_Layer1();
+        EditorGUILayout.BeginHorizontal();
+        scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.MaxHeight(200),GUILayout.MaxWidth(220));//注意：scrollPosition 必须要有，不然会拖动不了
+        {
+            for (int i = 0; i < m_DataList.Count; i++)
+            {
+                EditorGUILayout.BeginHorizontal();
+                m_ExportList[i] = EditorGUILayout.Toggle(m_ExportList[i], GUILayout.MaxWidth(32));
+                GUILayout.Label(m_DataList[i]);
+                EditorGUILayout.EndHorizontal();
+            }
+        }
+        GUILayout.EndScrollView();
+        GUILayout.Space(20);
+
+        EditorGUILayout.BeginVertical();
+        int selectCount = 0;
+        for (int i = 0; i < m_ExportList.Count; i++)
+        {
+            if (m_ExportList[i])
+                selectCount++;
+        }
+        GUILayout.Label($"打包: {selectCount} / {m_ExportList.Count}");
+
+        if (GUILayout.Button("全选", GUILayout.MaxWidth(60)))
+        {
+            for (int i = 0; i < m_ExportList.Count; i++)
+                m_ExportList[i] = true;
+        }
+        if (GUILayout.Button("全不选", GUILayout.MaxWidth(60)))
+        {
+            for (int i = 0; i < m_ExportList.Count; i++)
+                m_ExportList[i] = false;
+        }
+        EditorGUILayout.EndVertical();
+        EditorGUILayout.EndHorizontal();
+        #endregion
 
         // output path.
         outputPath = EditorGUILayout.TextField("Output Path", outputPath);
@@ -163,6 +206,8 @@ public class AssetBundleWindowEditor : EditorWindow
     //[MenuItem("AssetBundle/Set AssetBundle Labels(自动做标记)")]
     void SetAssetBundleLabels()
     {
+        Init_SelectFolderDic();
+        
         // 移除没用到的包名
         AssetDatabase.RemoveUnusedAssetBundleNames();
         
@@ -191,11 +236,11 @@ public class AssetBundleWindowEditor : EditorWindow
                 //  3. 遍历场景文件夹里的所有文件系统             
                 int index = sceneDirectory.LastIndexOf('/');
                 string sceneName = sceneDirectory.Substring(index + 1);
-
-                OnSceneFileSystemInfo(sceneDirectoryInfo, sceneName, namePathDic);
-
+                
+                if (m_SelectFolderDic.ContainsKey(sceneName))
+                    OnSceneFileSystemInfo(sceneDirectoryInfo, sceneName, namePathDic);
+                
                 //OnWriteConfig(sceneName, namePathDic);
-
                 if (!sceneDic.ContainsKey(tempDirectoryInfo.Name))
                     sceneDic.Add(tempDirectoryInfo.Name, namePathDic);
             }
@@ -508,4 +553,41 @@ public class AssetBundleWindowEditor : EditorWindow
         return sb.ToString();
     }
     #endregion
+    
+    /*
+     string strAS = Application.dataPath + "/Resources/AssetsFolder";
+            foreach (string path in Directory.GetDirectories(strAS))
+            {
+                Debug.LogWarning("AS: "+path);
+            }
+     */
+    static List<bool> m_ExportList = new List<bool>();
+    static List<string> m_DataList = new List<string>();
+    private Dictionary<string, bool> m_SelectFolderDic = new Dictionary<string, bool>();
+    private void Init_SelectFolderDic()
+    {
+        m_SelectFolderDic.Clear();
+        for(int i=0; i<m_ExportList.Count; i++)
+        {
+            if (m_ExportList[i] && !m_SelectFolderDic.ContainsKey(m_DataList[i]))
+                m_SelectFolderDic.Add(m_DataList[i], true);
+        }
+    }
+
+    private  void GetFolders_Layer1()
+    {
+        if (m_TmpBuildPath == "" || m_TmpBuildPath != buildPath)
+        {
+            m_TmpBuildPath = buildPath;
+            string targetFolder = Application.dataPath.Replace("Assets", m_TmpBuildPath+"\\");
+
+            m_DataList.Clear();
+            m_ExportList.Clear();
+            foreach (string path in Directory.GetDirectories(targetFolder))
+            {
+                m_DataList.Add(path.Replace(targetFolder, ""));
+                m_ExportList.Add(true);
+            }
+        }
+    }
 }
