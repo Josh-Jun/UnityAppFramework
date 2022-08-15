@@ -74,6 +74,7 @@ public class Root
         Transform parent = go.transform;
         parent.SetParent(App.app.transform);
 
+        PlatformMsgReceiver.Instance.InitManager(parent);
         AssetBundleManager.Instance.InitManager(parent);
         TimerTaskManager.Instance.InitManager(parent);
         AssetsManager.Instance.InitManager(parent);

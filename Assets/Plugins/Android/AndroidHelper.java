@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
+import com.unity3d.player.UnityPlayer;
 import com.unity3d.player.UnityPlayerActivity;
 
 import java.io.File;
@@ -36,6 +37,8 @@ public class AndroidHelper extends UnityPlayerActivity {
 
     private static int mSignalLevel = 0;
     private static Toast mToast;
+    
+    private static String GoName = "PlatformMsgReceiver";
 
     // 初始化
     public static void init(Context context) {
@@ -180,5 +183,10 @@ public class AndroidHelper extends UnityPlayerActivity {
         }
         mToast = Toast.makeText(mContext, str, Toast.LENGTH_SHORT);
         mToast.show();
+    }
+    
+    //发送消息给Unity
+    private static void SendMsg(String methodName, String parameter) {
+        UnityPlayer.UnitySendMessage(GoName, methodName, parameter);
     }
 }
