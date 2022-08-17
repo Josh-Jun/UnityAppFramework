@@ -100,7 +100,7 @@ public class GoRoot : SingletonMono<GoRoot>
         UICanvas.renderMode = RenderMode.WorldSpace;
         UIRectTransform.localScale = Vector3.one * 0.0025f;
         UIRectTransform.sizeDelta = new Vector2(1920, 1080);
-        UICanvas.worldCamera = GetComponent<Camera>();
+        UICanvas.worldCamera = camera3d;
         UICanvasScaler.referencePixelsPerUnit = 100;
         UICanvas.TryGetComponent<TrackedDeviceGraphicRaycaster>();
     }

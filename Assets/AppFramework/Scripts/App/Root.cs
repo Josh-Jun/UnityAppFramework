@@ -33,11 +33,19 @@ public class Root
         //设置程序帧率
         Application.targetFrameRate = AppConfig.AppFrameRate;
 
+        InitCamera();
         InitManager();
         OutputAppInfo();
         BeginCheckUpdate();
     }
-
+    /// <summary> 初始化App场景相机，热更新在这个场景执行 </summary>
+    private static void InitCamera()
+    {
+        string name = AppConfig.TargetPackage == TargetPackage.Pico ? "PicoXRManager" : "Main Camera";
+        GameObject go = Resources.Load<GameObject>($"App/Camera/{name}");
+        GameObject camera = GameObject.Instantiate(go);
+        camera.name = name;
+    }
     private static void OutputAppInfo()
     {
         string info_server = AppConfig.IsTestServer ? "测试环境" : "生产环境";
