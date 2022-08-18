@@ -25,8 +25,7 @@ public class AppTableConfigWindowEditor : EditorWindow
             fontSize = 12,
         };
 
-        var bytes = Resources.Load<TextAsset>(configPath).bytes;
-        config = XmlManager.ProtoDeSerialize<AppTableConfig>(bytes);
+        config = Resources.Load<AppTableConfig>(configPath);
     }
     private void OnGUI()
     {
@@ -49,7 +48,6 @@ public class AppTableConfigWindowEditor : EditorWindow
                 {
                     if (config.AppTable.Count > 1)
                     {
-                        Remove(i);
                         config.AppTable.RemoveAt(i);
                     }
                     else
@@ -65,7 +63,6 @@ public class AppTableConfigWindowEditor : EditorWindow
                         TableName = "TestTableData",
                         TablePath = "Table/Test/TestTableData",
                     };
-                    Add(appTable);
                     config.AppTable.Add(appTable);
                 }
                 EditorGUILayout.EndHorizontal();
@@ -78,47 +75,9 @@ public class AppTableConfigWindowEditor : EditorWindow
         }
         EditorGUILayout.EndVertical();
     }
-    public void Add(AppTable appTable)
-    {
-        string path = string.Format(@"{0}/Resources/{1}.xml", Application.dataPath, configPath);
-        XmlDocument xmlDocument = new XmlDocument();
-        xmlDocument.Load(path);
-        var root = xmlDocument.DocumentElement;
-        var script = xmlDocument.CreateElement("AppTable");
-        script.SetAttribute("TableName", appTable.TableName);
-        script.InnerText = appTable.TablePath;
-        root.AppendChild(script);
-        xmlDocument.Save(path);
-    }
-    public void Remove(int id)
-    {
-        string path = string.Format(@"{0}/Resources/{1}.xml", Application.dataPath, configPath);
-        XmlDocument xmlDocument = new XmlDocument();
-        xmlDocument.Load(path);
-        var nodes = xmlDocument.GetElementsByTagName("AppTable");
-        XmlNode node = nodes[id];
-        node.ParentNode.RemoveChild(node);
-        xmlDocument.Save(path);
-    }
     public void ApplyConfig()
     {
-        string path = string.Format(@"{0}/Resources/{1}.xml", Application.dataPath, configPath);
-        XmlDocument xmlDocument = new XmlDocument();
-        xmlDocument.Load(path);
-        var nodes = xmlDocument.GetElementsByTagName("AppTable");
-        for (int i = 0; i < nodes.Count; i++)
-        {
-            XmlNode node = nodes[i];
-            for (int j = 0; j < config.AppTable.Count; j++)
-            {
-                if(i == j)
-                {
-                    node.Attributes["TableName"].Value = config.AppTable[j].TableName;
-                    node.InnerText = config.AppTable[j].TablePath;
-                }
-            }
-        }
-        xmlDocument.Save(path);
+        EditorUtility.SetDirty(config);
         AssetDatabase.Refresh();
     }
 }

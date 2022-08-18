@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using UnityEngine;
 
+[CreateAssetMenu(fileName = "AppTableConfig", menuName = "App/AppTableConfig")]
 [Serializable]
-public class AppTableConfig
+public class AppTableConfig : ScriptableObject
 {
-    [XmlElement]
+    [Header("App Table Config")]
+    [Tooltip("Table列表")]
     public List<AppTable> AppTable;
 }
 
 [Serializable]
 public class AppTable
 {
-    [XmlAttribute]
+    [Tooltip("Table名称")]
     public string TableName;
-    [XmlText]
+    [Tooltip("Table路径")]
     public string TablePath;
 }

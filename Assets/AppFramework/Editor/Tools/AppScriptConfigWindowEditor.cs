@@ -30,8 +30,7 @@ public class AppScriptConfigWindowEditor : EditorWindow
             fontSize = 12,
         };
 
-        var bytes = Resources.Load<TextAsset>(configPath).bytes;
-        config = XmlManager.ProtoDeSerialize<AppScriptConfig>(bytes);
+        config = Resources.Load<AppScriptConfig>(configPath);
         MainSceneName = config.MainSceneName;
 
         SceneNames.Add("Global");
@@ -68,6 +67,7 @@ public class AppScriptConfigWindowEditor : EditorWindow
         EditorGUILayout.BeginHorizontal();
         GUILayout.Label(new GUIContent("MainSceneName"), GUILayout.MaxWidth(100));
         level = EditorGUILayout.Popup(level, SceneNames.ToArray(), GUILayout.MaxWidth(150));
+        config.MainSceneName = SceneNames[level];
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.Space();
@@ -79,6 +79,7 @@ public class AppScriptConfigWindowEditor : EditorWindow
                 GUILayout.Label(new GUIContent("RootScript"), titleStyle);
                 GUILayout.Label("1.SceneName");
                 levels[i] = EditorGUILayout.Popup(levels[i],SceneNames.ToArray(), GUILayout.MaxWidth(180));
+                config.RootScript[i].SceneName = SceneNames[levels[i]];
                 GUILayout.Label("2.ScriptName");
                 config.RootScript[i].ScriptName = EditorGUILayout.TextField(config.RootScript[i].ScriptName);
                 GUILayout.Label("3.LuaScriptPath");
@@ -87,7 +88,6 @@ public class AppScriptConfigWindowEditor : EditorWindow
                 {
                     if (config.RootScript.Count > 1)
                     {
-                        Remove(i);
                         config.RootScript.RemoveAt(i);
                         levels.RemoveAt(i);
                     }
@@ -101,12 +101,11 @@ public class AppScriptConfigWindowEditor : EditorWindow
                 {
                     RootScript rootScript = new RootScript
                     {
-                        SceneName = "TestScene",
+                        SceneName = SceneNames[levels[levels.Count -1]],
                         ScriptName = "Test.TestRoot",
                         LuaScriptPath = "Test/TestRoot",
                     };
-                    int index = SceneNames.IndexOf("TestScene");
-                    Add(rootScript);
+                    int index = SceneNames.IndexOf(rootScript.SceneName);
                     config.RootScript.Add(rootScript);
                     levels.Add(index);
                 }
@@ -120,50 +119,13 @@ public class AppScriptConfigWindowEditor : EditorWindow
         }
         EditorGUILayout.EndVertical();
     }
-    public void Add(RootScript rootScript)
-    {
-        string path = string.Format(@"{0}/Resources/{1}.xml", Application.dataPath, configPath);
-        XmlDocument xmlDocument = new XmlDocument();
-        xmlDocument.Load(path);
-        var root = xmlDocument.DocumentElement;
-        var script = xmlDocument.CreateElement("RootScript");
-        script.SetAttribute("SceneName", rootScript.SceneName);
-        script.SetAttribute("ScriptName", rootScript.ScriptName);
-        script.InnerText = rootScript.LuaScriptPath;
-        root.AppendChild(script);
-        xmlDocument.Save(path);
-    }
-    public void Remove(int id)
-    {
-        string path = string.Format(@"{0}/Resources/{1}.xml", Application.dataPath, configPath);
-        XmlDocument xmlDocument = new XmlDocument();
-        xmlDocument.Load(path);
-        var nodes = xmlDocument.GetElementsByTagName("RootScript");
-        XmlNode node = nodes[id];
-        node.ParentNode.RemoveChild(node);
-        xmlDocument.Save(path);
-    }
     public void UpdateConfig()
     {
-        string path = string.Format(@"{0}/Resources/{1}.xml", Application.dataPath, configPath);
-        XmlDocument xmlDocument = new XmlDocument();
-        xmlDocument.Load(path);
-        xmlDocument.DocumentElement.SetAttribute("MainSceneName", SceneNames[level]);
-        var nodes = xmlDocument.GetElementsByTagName("RootScript");
-        for (int i = 0; i < nodes.Count; i++)
+        foreach (int id in levels)
         {
-            XmlNode node = nodes[i];
-            for (int j = 0; j < config.RootScript.Count; j++)
-            {
-                if (i == j)
-                {
-                    node.Attributes["SceneName"].Value = SceneNames[levels[j]];
-                    node.Attributes["ScriptName"].Value = config.RootScript[j].ScriptName;
-                    node.InnerText = config.RootScript[j].LuaScriptPath;
-                }
-            }
+            config.RootScript[id].SceneName = SceneNames[id];
         }
-        xmlDocument.Save(path);
+        EditorUtility.SetDirty(config);
         AssetDatabase.Refresh();
     }
     private string[] GetBuildScenes()

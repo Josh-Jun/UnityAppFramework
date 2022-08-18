@@ -96,8 +96,7 @@ public class Root
 
     private static void InitRootScripts(Action callback = null)
     {
-        TextAsset config = AssetsManager.Instance.LoadAsset<TextAsset>(path_AppScriptConfig);
-        appScriptConfig = XmlManager.ProtoDeSerialize<AppScriptConfig>(config.bytes);
+        appScriptConfig = AssetsManager.Instance.LoadAsset<AppScriptConfig>(path_AppScriptConfig);
         for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
         {
             if (!iRootPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))

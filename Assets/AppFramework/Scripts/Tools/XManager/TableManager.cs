@@ -13,8 +13,7 @@ public class TableManager : SingletonMono<TableManager>
     }
     public void InitConfig()
     {
-        TextAsset config = AssetsManager.Instance.LoadAsset<TextAsset>(path_AppTableConfig);
-        appTableConfig = XmlManager.ProtoDeSerialize<AppTableConfig>(config.bytes);
+        appTableConfig = AssetsManager.Instance.LoadAsset<AppTableConfig>(path_AppTableConfig);
         for (int i = 0; i < appTableConfig.AppTable.Count; i++)
         {
             var bytes = AssetsManager.Instance.LoadAsset<TextAsset>(appTableConfig.AppTable[i].TablePath).bytes;
