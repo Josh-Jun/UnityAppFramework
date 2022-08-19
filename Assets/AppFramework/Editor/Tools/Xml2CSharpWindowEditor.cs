@@ -30,7 +30,7 @@ public class Xml2CSharpWindowEditor : EditorWindow
             fontSize = 12
         };
 
-        xmlPath = "Resources/AssetsFolder/Table";
+        xmlPath = "Resources/AssetsFolder/Table/Xml";
         outPutPath = "Scripts/Table";
     }
     private void OnGUI()

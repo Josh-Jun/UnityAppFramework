@@ -17,6 +17,13 @@ public enum UpdateMold
     Hotfix = 1,
     App = 2,
 }
+/// <summary>配置表类型</summary>
+public enum TableMold
+{
+    Scriptable = 0,
+    Json = 1,
+    Xml = 2,
+}
 /// <summary>PicoVR手柄事件类型</summary>
 public enum TrackedEventType
 {
