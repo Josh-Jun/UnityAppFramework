@@ -3,3 +3,4 @@ UI窗口的管理层级等
 SRDebugger Options调试功能拓展
 UnityWebRequest 提前new
 本地ab包加载流程
+数据表添加ScriptableObject类型
