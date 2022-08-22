@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "AppTableConfig", menuName = "App/AppTableConfig")]
 [Serializable]
@@ -17,6 +18,6 @@ public class AppTable
 {
     [Tooltip("Table名称")]
     public string TableName;
-    [Tooltip("Table路径")]
-    public string TablePath;
+    [Tooltip("Table类型")]
+    public TableMold TableMold;
 }

@@ -40,10 +40,10 @@ public class AppTableConfigWindowEditor : EditorWindow
             {
                 EditorGUILayout.BeginHorizontal(titleStyle);
                 GUILayout.Label(new GUIContent("AppTable"), titleStyle);
-                GUILayout.Label("1.TableName");
+                GUILayout.Label("1.TableMold");
+                config.AppTable[i].TableMold = (TableMold)EditorGUILayout.EnumPopup(config.AppTable[i].TableMold, GUILayout.MaxWidth(75));
+                GUILayout.Label("2.TableName");
                 config.AppTable[i].TableName = EditorGUILayout.TextField(config.AppTable[i].TableName);
-                GUILayout.Label("2.TablePath");
-                config.AppTable[i].TablePath = EditorGUILayout.TextField(config.AppTable[i].TablePath);
                 if (GUILayout.Button("", new GUIStyle("OL Minus")))
                 {
                     if (config.AppTable.Count > 1)
@@ -61,7 +61,7 @@ public class AppTableConfigWindowEditor : EditorWindow
                     AppTable appTable = new AppTable
                     {
                         TableName = "TestTableData",
-                        TablePath = "Table/Xml/TestTableData",
+                        TableMold = TableMold.Json,
                     };
                     config.AppTable.Add(appTable);
                 }

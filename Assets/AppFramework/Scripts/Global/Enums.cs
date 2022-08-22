@@ -20,9 +20,8 @@ public enum UpdateMold
 /// <summary>配置表类型</summary>
 public enum TableMold
 {
-    Scriptable = 0,
-    Json = 1,
-    Xml = 2,
+    Json = 0,
+    Xml = 1,
 }
 /// <summary>PicoVR手柄事件类型</summary>
 public enum TrackedEventType

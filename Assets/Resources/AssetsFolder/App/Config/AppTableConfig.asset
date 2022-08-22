@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AppTable:
   - TableName: TestTableData
-    TablePath: Table/Test/TestTableData
+    TableMold: 1

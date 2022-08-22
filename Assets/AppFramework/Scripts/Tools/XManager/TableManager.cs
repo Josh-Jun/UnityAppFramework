@@ -16,7 +16,8 @@ public class TableManager : SingletonMono<TableManager>
         appTableConfig = AssetsManager.Instance.LoadAsset<AppTableConfig>(path_AppTableConfig);
         for (int i = 0; i < appTableConfig.AppTable.Count; i++)
         {
-            var bytes = AssetsManager.Instance.LoadAsset<TextAsset>(appTableConfig.AppTable[i].TablePath).bytes;
+            string path = $"Table/{appTableConfig.AppTable[i].TableMold}/{appTableConfig.AppTable[i].TableName}";
+            var bytes = AssetsManager.Instance.LoadAsset<TextAsset>(path).bytes;
             if (m_TablePairs.ContainsKey(appTableConfig.AppTable[i].TableName))
             {
                 m_TablePairs[appTableConfig.AppTable[i].TableName] = bytes;
