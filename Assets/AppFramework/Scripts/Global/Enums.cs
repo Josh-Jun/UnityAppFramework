@@ -22,6 +22,7 @@ public enum TableMold
 {
     Json = 0,
     Xml = 1,
+    Thrift = 2
 }
 /// <summary>PicoVR手柄事件类型</summary>
 public enum TrackedEventType

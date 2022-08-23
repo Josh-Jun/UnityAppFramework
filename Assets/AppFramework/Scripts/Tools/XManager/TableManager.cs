@@ -1,11 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using ThriftTable;
 using UnityEngine;
 
 public class TableManager : SingletonMono<TableManager>
 {
     private const string path_AppTableConfig = "App/Config/AppTableConfig";
-    private Dictionary<string, byte[]> m_TablePairs = new Dictionary<string, byte[]>();
+    private Dictionary<string, Table> m_TablePairs = new Dictionary<string, Table>();
     private AppTableConfig appTableConfig;
     public override void InitManager(Transform parent)
     {
@@ -16,20 +18,60 @@ public class TableManager : SingletonMono<TableManager>
         appTableConfig = AssetsManager.Instance.LoadAsset<AppTableConfig>(path_AppTableConfig);
         for (int i = 0; i < appTableConfig.AppTable.Count; i++)
         {
-            string path = $"Table/{appTableConfig.AppTable[i].TableMold}/{appTableConfig.AppTable[i].TableName}";
+            var path = $"Table/{appTableConfig.AppTable[i].TableMold}/{appTableConfig.AppTable[i].TableName}";
+            var text = AssetsManager.Instance.LoadAsset<TextAsset>(path).text;
             var bytes = AssetsManager.Instance.LoadAsset<TextAsset>(path).bytes;
+            Table table = new Table(text, bytes, path, appTableConfig.AppTable[i].TableMold);
             if (m_TablePairs.ContainsKey(appTableConfig.AppTable[i].TableName))
             {
-                m_TablePairs[appTableConfig.AppTable[i].TableName] = bytes;
+                m_TablePairs[appTableConfig.AppTable[i].TableName] = table;
             }
             else
             {
-                m_TablePairs.Add(appTableConfig.AppTable[i].TableName, bytes);
+                m_TablePairs.Add(appTableConfig.AppTable[i].TableName, table);
+            }
+        }
+        for (var en = ThriftTableHolder.ETXT_NAME._Min + 1; en < ThriftTableHolder.ETXT_NAME._Max; en++)
+        {
+            if (m_TablePairs.ContainsKey(en.ToString()))
+            {
+                ThriftTableHolder.m_TableDic[en].ParseData(m_TablePairs[en.ToString()].bytes);
             }
         }
     }
     public T GetTable<T>(string tableName) where T : class
     {
-        return XmlManager.ProtoDeSerialize<T>(m_TablePairs[tableName]);
+        var table = m_TablePairs[tableName];
+        switch (table.mold)
+        {
+            case TableMold.Xml:
+                return XmlManager.ProtoDeSerialize<T>(table.bytes);
+                break;
+            case TableMold.Json:
+                return LitJson.JsonMapper.ToObject<T>(table.text);
+                break;
+            case TableMold.Thrift:
+                ThriftTableHolder.ETXT_NAME en = (ThriftTableHolder.ETXT_NAME)Enum.Parse(typeof(ThriftTableHolder.ETXT_NAME), tableName);
+                return ThriftTableHolder.GetTable(en) as T;
+                break;
+            
+        }
+        return null;
+    }
+}
+
+public class Table
+{
+    public string text;
+    public byte[] bytes;
+    public string path;
+    public TableMold mold;
+
+    public Table(string text, byte[] bytes, string path, TableMold mold)
+    {
+        this.text = text;
+        this.bytes = bytes;
+        this.path = path;
+        this.mold = mold;
     }
 }

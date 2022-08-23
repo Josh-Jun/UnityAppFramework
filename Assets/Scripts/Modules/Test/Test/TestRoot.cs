@@ -36,6 +36,7 @@ namespace Test
             // mobile = new RenderTexture(Screen.width, Screen.height, 32);
             // window.SetMobileCamera(mobile);
             window.PlayGif();
+            Debug.Log(TableManager.Instance.GetTable<TestConfigTable>("TestConfig").Data.Count);
         }
 
         public void End()

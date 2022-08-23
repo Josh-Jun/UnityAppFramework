@@ -15,3 +15,5 @@ MonoBehaviour:
   AppTable:
   - TableName: TestTableData
     TableMold: 1
+  - TableName: TestConfig
+    TableMold: 2

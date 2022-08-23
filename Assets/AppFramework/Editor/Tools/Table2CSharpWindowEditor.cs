@@ -57,8 +57,7 @@ public class Table2CSharpWindowEditor : EditorWindow
         tablePath = $"Resources/AssetsFolder/Table/{TableMold}";
 
         EditorGUILayout.BeginHorizontal();
-        scrollPosition =
-            GUILayout.BeginScrollView(scrollPosition, GUILayout.MaxHeight(128)); //注意：scrollPosition 必须要有，不然会拖动不了
+        scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.MaxHeight(128));
         {
             GetFiles();
             for (int i = 0; i < m_DataList.Count; i++)
@@ -94,7 +93,6 @@ public class Table2CSharpWindowEditor : EditorWindow
                         CreateClass(fileInfos[i]);
                     }
                 }
-
                 break;
             case TableMold.Json:
                 for (int i = 0; i < fileInfos.Count; i++)
@@ -104,7 +102,6 @@ public class Table2CSharpWindowEditor : EditorWindow
                         CreateClass(fileInfos[i].Name);
                     }
                 }
-
                 break;
         }
     }
