@@ -18,7 +18,7 @@ public class AssetBundleWindowEditor : EditorWindow
     private BuildTarget buildTarget = BuildTarget.Android;
     private string outputPath;
     private string buildPath;
-    private readonly Dictionary<string, Dictionary<string, string>> sceneDic = new Dictionary<string, Dictionary<string, string>>();
+    private readonly Dictionary<string, Dictionary<string, string>> moduleDic = new Dictionary<string, Dictionary<string, string>>();
     private string des = "请输入本版更新描述";
     
     public AppConfig AppConfig;//App配置表 
@@ -26,6 +26,8 @@ public class AssetBundleWindowEditor : EditorWindow
     
     Vector2 scrollPosition;
     private string m_TmpBuildPath = "";
+
+    private bool isLocalAsset = false;
     
     [MenuItem("Tools/My ToolsWindow/Build AssetBundle", false, 1)]
     public static void OpenWindow()
@@ -49,8 +51,11 @@ public class AssetBundleWindowEditor : EditorWindow
     }
     private void OnGUI()
     {
+        buildPath = isLocalAsset ? buildPath.Replace("AssetsFolder", "App") : buildPath.Replace("App", "AssetsFolder");
+        outputPath = isLocalAsset ? $"{Application.streamingAssetsPath}/AssetBundle" : Application.dataPath.Replace("Assets", "AssetBundle");
+        
         EditorGUILayout.Space();
-
+        
         GUILayout.Label(new GUIContent("Build AssetBundle"), titleStyle);
 
         GUILayout.BeginVertical();
@@ -60,6 +65,7 @@ public class AssetBundleWindowEditor : EditorWindow
         EditorGUILayout.Space();
         if (GUILayout.Button("AutoBuildAssetBundle(一键自动打包)"))
         {
+            moduleDic.Clear();
             RemoveAllAssetBundleLabels();
             SetAssetBundleLabels();
             DeleteAssetBundle();
@@ -70,7 +76,9 @@ public class AssetBundleWindowEditor : EditorWindow
         
         // build target.
         buildTarget = (BuildTarget)EditorGUILayout.EnumPopup("Build Target", buildTarget);
-        EditorGUILayout.Space();
+        
+        //
+        isLocalAsset = EditorGUILayout.Toggle("Is Local Asset", isLocalAsset);
 
         // build path.
         buildPath = EditorGUILayout.TextField("Build Path", buildPath);
@@ -241,8 +249,8 @@ public class AssetBundleWindowEditor : EditorWindow
                     OnSceneFileSystemInfo(sceneDirectoryInfo, sceneName, namePathDic);
                 
                 //OnWriteConfig(sceneName, namePathDic);
-                if (!sceneDic.ContainsKey(tempDirectoryInfo.Name))
-                    sceneDic.Add(tempDirectoryInfo.Name, namePathDic);
+                if (!moduleDic.ContainsKey(tempDirectoryInfo.Name))
+                    moduleDic.Add(tempDirectoryInfo.Name, namePathDic);
             }
         }
         AssetDatabase.Refresh();
@@ -450,7 +458,7 @@ public class AssetBundleWindowEditor : EditorWindow
         root.SetAttribute("GameVersion", Application.version);
         root.SetAttribute("Platform", buildTarget.ToString());
         root.SetAttribute("Des", des);
-        foreach (var scene in sceneDic)
+        foreach (var scene in moduleDic)
         {
             var xmlScene = xmlDocument.CreateElement("Modules");
             xmlScene.SetAttribute("ModuleName", scene.Key);
@@ -462,6 +470,7 @@ public class AssetBundleWindowEditor : EditorWindow
                 xmlFolder.SetAttribute("FolderName", folder.Key);
                 xmlFolder.SetAttribute("BundleName", folder.Value);
                 xmlFolder.SetAttribute("Tag", "0");
+                xmlFolder.SetAttribute("ABMold", isLocalAsset ? "1" : "0");
                 xmlFolder.SetAttribute("MD5", GetFileMD5(file.FullName));
                 xmlFolder.SetAttribute("Size", $"{file.Length}");
 

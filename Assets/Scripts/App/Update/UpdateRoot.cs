@@ -75,31 +75,34 @@ namespace Update
             appUrl = NetcomManager.AppUrl + "meta.apk";
             appPath = PlatformManager.Instance.GetDataPath("App/meta.apk");
             
-            string prefab_UpdatePath = "App/Update/Windows/UpdateWindow";
-            window = AssetsManager.Instance.LoadLocalUIWindow<UpdateWindow>(prefab_UpdatePath);
-            window.SetWindowActive();
-
-            window.SetTipsText("检查更新中...");
-            window.SetProgressValue(0);
-            StartUpdate((UpdateMold mold, string des) =>
+            AssetBundleManager.Instance.InitLocalAssetBundleConfig(() =>
             {
-                UpdateMold = mold;
-                Debug.Log($"更新结果:{mold}");
-                switch (mold)
+                string prefab_UpdatePath = "Update/Windows/UpdateWindow";
+                window = AssetsManager.Instance.LoadUIWindow<UpdateWindow>(prefab_UpdatePath);
+                window.SetWindowActive();
+
+                window.SetTipsText("检查更新中...");
+                window.SetProgressValue(0);
+                StartUpdate((UpdateMold mold, string des) =>
                 {
-                    case UpdateMold.Hotfix:
-                        window.SetContentText(des);
-                        window.SetUpdateTipsActive(true);
-                        break;
-                    case UpdateMold.App:
-                        window.SetContentText($"发现新版本应用:v{serverABConfig.GameVersion}");
-                        window.SetUpdateTipsActive(true);
-                        break;
-                    case UpdateMold.None:
-                        window.SetWindowActive(false);
-                        Root.StartApp();
-                        break;
-                }
+                    UpdateMold = mold;
+                    Debug.Log($"更新结果:{mold}");
+                    switch (mold)
+                    {
+                        case UpdateMold.Hotfix:
+                            window.SetContentText(des);
+                            window.SetUpdateTipsActive(true);
+                            break;
+                        case UpdateMold.App:
+                            window.SetContentText($"发现新版本应用:v{serverABConfig.GameVersion}");
+                            window.SetUpdateTipsActive(true);
+                            break;
+                        case UpdateMold.None:
+                            window.SetWindowActive(false);
+                            Root.StartApp();
+                            break;
+                    }
+                });
             });
         }
 
@@ -478,7 +481,7 @@ namespace Update
                 DownLoad(XmlServerVersionPath, (byte[] bytes) =>
                 {
                     serverABConfig = XmlManager.ProtoDeSerialize<AssetBundleConfig>(bytes);
-                    SetABScenePairs(serverABConfig);
+                    SetABModulePairs(serverABConfig);
                     Debug.Log($"大版本比较 v{Application.version}/v{serverABConfig.GameVersion}");
                     if (!CheckVersion(serverABConfig.GameVersion))
                     {
@@ -584,17 +587,17 @@ namespace Update
         }
 
         /// <summary> 获取文件夹名和包名 </summary>
-        private void SetABScenePairs(AssetBundleConfig config)
+        private void SetABModulePairs(AssetBundleConfig config)
         {
             //获取文件夹名和包名，用来给AssetbundleSceneManager里的folderDic赋值
             foreach (var module in config.Modules)
             {
-                Dictionary<string, string> folderPairs = new Dictionary<string, string>();
+                Dictionary<string, Folder> folderPairs = new Dictionary<string, Folder>();
                 foreach (var folder in module.Folders)
                 {
                     if (!folderPairs.ContainsKey(folder.FolderName))
                     {
-                        folderPairs.Add(folder.FolderName, folder.BundleName);
+                        folderPairs.Add(folder.FolderName, folder);
                     }
                 }
 

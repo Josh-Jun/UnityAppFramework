@@ -36,7 +36,7 @@ public class AssetsManager : SingletonMono<AssetsManager>
     public void LoadSceneAsync(string sceneName, Action cb = null, LoadSceneMode mode = LoadSceneMode.Single)
     {
         string[] names = sceneName.Split('/');//names[0], names[1], names[names.Length - 1]
-        if (Root.AppConfig.IsLoadAB)
+        if (Root.AppConfig.IsHotfix)
         {
             AssetBundle ab = AssetBundleManager.Instance.LoadAssetBundle(names[0], $"{names[1]}Scene");
         }
@@ -55,7 +55,7 @@ public class AssetsManager : SingletonMono<AssetsManager>
     public void LoadingSceneAsync(string sceneName, Action<float> cb = null, LoadSceneMode mode = LoadSceneMode.Single)
     {
         string[] names = sceneName.Split('/');//names[0], names[1], names[names.Length - 1]
-        if (Root.AppConfig.IsLoadAB)
+        if (Root.AppConfig.IsHotfix)
         {
             AssetBundle ab = AssetBundleManager.Instance.LoadAssetBundle(names[0], $"{names[1]}Scene");
         }
@@ -182,21 +182,6 @@ public class AssetsManager : SingletonMono<AssetsManager>
         GoRoot.Instance.AddWindow<T>(t as WindowBase);
         return t;
     }
-    /// <summary> 加载本地窗口 </summary>
-    public T LoadLocalUIWindow<T>(string path, bool state = false) where T : Component
-    {
-        var go = Resources.Load<GameObject>(path);
-        if (go == null) return null;
-        go = Instantiate(go, GoRoot.Instance.UIRectTransform);
-        go.transform.localEulerAngles = Vector3.zero;
-        go.transform.localScale = Vector3.one;
-        go.name = go.name.Replace("(Clone)", "");
-        var type = Assembly.GetExecutingAssembly().GetType(typeof(T).FullName);
-        var t = (T)go.AddComponent(type);
-        EventDispatcher.TriggerEvent(go.name, state);
-        GoRoot.Instance.AddWindow<T>(t as WindowBase);
-        return t;
-    }
     /// <summary> 
     /// 加载窗口 添加T(Component)类型脚本
     /// path = 窗口路径，不包含AssetsFolder
@@ -233,22 +218,6 @@ public class AssetsManager : SingletonMono<AssetsManager>
         GoRoot.Instance.AddWindow<T>(t as WindowBase);
         return t;
     }
-    /// <summary> 加载本地窗口 </summary>
-    public T LoadLocalGoWindow<T>(string path, bool isTemp, bool state = false) where T : Component
-    {
-        var go = Resources.Load<GameObject>(path);
-        if (go == null) return null;
-        var parent = isTemp ? GoRoot.Instance.TempGoRoot : GoRoot.Instance.GlobalGoRoot;
-        go = Instantiate(go, parent);
-        go.transform.localEulerAngles = Vector3.zero;
-        go.transform.localScale = Vector3.one;
-        go.name = go.name.Replace("(Clone)", "");
-        var type = Assembly.GetExecutingAssembly().GetType(typeof(T).FullName);
-        var t = (T)go.AddComponent(type);
-        EventDispatcher.TriggerEvent(go.name, state);
-        GoRoot.Instance.AddWindow<T>(t as WindowBase);
-        return t;
-    }
     #endregion
     
     #region 加载资源
@@ -261,7 +230,7 @@ public class AssetsManager : SingletonMono<AssetsManager>
     /// </summary>
     public T LoadAsset<T>(string path) where T : UnityEngine.Object
     {
-        if (Root.AppConfig.IsLoadAB)
+        if (Root.AppConfig.IsHotfix)
         {
             string[] names = path.Split('/');
             return AssetBundleManager.Instance.LoadAsset<T>(names[0], names[1], names[names.Length - 1]);

@@ -19,7 +19,6 @@ public class BuildAppWindowEditor : EditorWindow
     private bool DevelopmentBuild = true;
     private bool IsTestServer = true;
     private bool IsHotfix = false;
-    private bool IsLoadAB = false;
     private bool RunXLuaScripts = false;
     private int AppFrameRate = 30;
     private TargetPackage ApkTarget = TargetPackage.Mobile;
@@ -49,7 +48,6 @@ public class BuildAppWindowEditor : EditorWindow
             DevelopmentBuild = AppConfig.IsDebug;
             IsTestServer = AppConfig.IsTestServer;
             IsHotfix = AppConfig.IsHotfix;
-            IsLoadAB = AppConfig.IsLoadAB;
             RunXLuaScripts = AppConfig.RunXLua;
             AppFrameRate = AppConfig.AppFrameRate;
             ApkTarget = AppConfig.TargetPackage;
@@ -83,12 +81,6 @@ public class BuildAppWindowEditor : EditorWindow
         GUILayout.Label(new GUIContent("Is Hotfix"));
         GUILayout.FlexibleSpace();
         IsHotfix = EditorGUILayout.Toggle(IsHotfix, GUILayout.MaxWidth(75));
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.BeginHorizontal();
-        GUILayout.Label(new GUIContent("Is LoadAB"));
-        GUILayout.FlexibleSpace();
-        IsLoadAB = EditorGUILayout.Toggle(IsLoadAB, GUILayout.MaxWidth(75));
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.BeginHorizontal();
@@ -150,7 +142,6 @@ public class BuildAppWindowEditor : EditorWindow
         EditorUserBuildSettings.development = DevelopmentBuild;
         AppConfig.IsDebug = DevelopmentBuild;
         AppConfig.IsHotfix = IsHotfix;
-        AppConfig.IsLoadAB = IsLoadAB;
         AppConfig.IsTestServer = IsTestServer;
         AppConfig.RunXLua = RunXLuaScripts;
         AppConfig.AppFrameRate = AppFrameRate;
@@ -202,13 +193,16 @@ public class BuildAppWindowEditor : EditorWindow
         AssetDatabase.Refresh();
     }
     private string assetPath = "Assets/Resources/AssetsFolder";
+    private string localAssetPath = "Assets/Resources/App";
     private void BuildApp()
     {
         string newPath = "";
-        if (IsHotfix && IsLoadAB)
+        string newLocalPath = "";
+        if (IsHotfix)
         {
             //移动到根目录
             newPath = MoveAssetsToRoot(assetPath);
+            newLocalPath = MoveAssetsToRoot(localAssetPath);
         }
         string _str = ApkTarget == TargetPackage.Mobile ? "meta-app" : "meta-vr";
         string version = PlayerSettings.bundleVersion;
@@ -231,10 +225,11 @@ public class BuildAppWindowEditor : EditorWindow
         string BuildPath = string.Format("{0}/{1}", outputPath, outName);
         BuildPipeline.BuildPlayer(GetBuildScenes(), BuildPath, EditorUserBuildSettings.activeBuildTarget, BuildOptions.None);
 
-        if (IsHotfix && IsLoadAB)
+        if (IsHotfix)
         {
             //移动回原始目录
             MoveAssetsToOriginPath(newPath, assetPath);
+            MoveAssetsToOriginPath(newLocalPath, localAssetPath);
         }
 
         EditorUtility.RevealInFinder(BuildPath);
@@ -249,7 +244,7 @@ public class BuildAppWindowEditor : EditorWindow
             if (e == null) continue;
             if (e.enabled)
             {
-                if (IsHotfix && IsLoadAB)
+                if (IsHotfix)
                 {
                     if (names.Count > 0)
                     {
@@ -272,10 +267,11 @@ public class BuildAppWindowEditor : EditorWindow
     {
         path = AbsolutePathToRelativePath(path);
         string floderName = path.Split('/').Last();
-        EditorUtility.DisplayProgressBar("正在移动资源", "", 0);
+        EditorUtility.DisplayCancelableProgressBar("正在移动资源", "", 0);
         //移动资源
         string newPath = string.Format("Assets/{0}", floderName);
         AssetDatabase.MoveAsset(path, newPath);
+        EditorUtility.ClearProgressBar();
         return RelativePathToAbsolutePath(newPath);
     }
 
@@ -288,7 +284,7 @@ public class BuildAppWindowEditor : EditorWindow
     {
         currentPath = AbsolutePathToRelativePath(currentPath);
         originPath = AbsolutePathToRelativePath(originPath);
-        EditorUtility.DisplayProgressBar("正在移动资源", "", 0);
+        EditorUtility.DisplayCancelableProgressBar("正在移动资源", "", 0);
         AssetDatabase.MoveAsset(currentPath, originPath);
         AssetDatabase.Refresh();
         EditorUtility.ClearProgressBar();

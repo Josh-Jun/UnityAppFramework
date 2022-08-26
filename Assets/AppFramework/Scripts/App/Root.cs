@@ -55,7 +55,7 @@ public class Root
 
     private static void BeginCheckUpdate()
     {
-        if (AppConfig.IsHotfix && AppConfig.IsLoadAB)
+        if (AppConfig.IsHotfix)
         {
             //初始化热更脚本
             UpdateRoot = GetRoot("Update.UpdateRoot");

@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<AssetBundleConfig GameVersion="1.0" Platform="Android" Des="请输入本版更新描述">
+  <Modules ModuleName="Update">
+    <Folders FolderName="Textures" BundleName="update/textures" Tag="0" ABMold="1" MD5="fa838e86e740686dd3ea753c8b5acbd3" Size="4126" />
+    <Folders FolderName="Windows" BundleName="update/windows" Tag="0" ABMold="1" MD5="086179ae4cc1dd657017477d76704216" Size="15620" />
+  </Modules>
+</AssetBundleConfig>

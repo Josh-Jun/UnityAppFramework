@@ -1,0 +1,13 @@
+ManifestFileVersion: 1
+CompatibilityAssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: update/textures
+      Hash: 5f0edb140f98037d90136f8698d99e3e
+      CRC: 842487747
+      Dependencies: {}
+    Info_1:
+      Name: update/windows
+      Hash: cfe4d53c38fe647ff52f17848af41750
+      CRC: 3224129087
+      Dependencies: {}

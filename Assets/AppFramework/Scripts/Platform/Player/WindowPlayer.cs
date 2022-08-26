@@ -17,6 +17,10 @@ namespace Platform
         {
             return $"{Application.dataPath.Replace("Assets", "")}{folder}";
         }
+        public override string GetAssetsPath(string folder)
+        {
+            return $"{Application.streamingAssetsPath}/{folder}";
+        }
         public override void SavePhoto(string imagePath)
         {
             Debug.Log("SavePhoto");
