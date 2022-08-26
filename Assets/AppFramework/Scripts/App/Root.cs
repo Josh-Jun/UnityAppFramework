@@ -148,7 +148,7 @@ public class Root
         {
             AssetsManager.Instance.LoadingSceneAsync(sceneName, (progress) =>
             {
-                GetRootScript<LoadingRoot>().Loading(progress, () =>
+                LoadingRoot.Instance.Loading(progress, () =>
                 {
                     InitRootBegin(sceneName, callback);
                 });
@@ -171,6 +171,7 @@ public class Root
             {
                 if (iRootPairs.ContainsKey(sceneScriptsPairs[sceneName][i]))
                 {
+                    Debug.Log(sceneScriptsPairs[sceneName][i]);
                     iRootPairs[sceneScriptsPairs[sceneName][i]].Begin();
                     if (sceneName.Equals("Global")) continue;
                     RuntimeRoots.Add(iRootPairs[sceneScriptsPairs[sceneName][i]]);

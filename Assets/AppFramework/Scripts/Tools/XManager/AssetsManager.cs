@@ -103,7 +103,6 @@ public class AssetsManager : SingletonMono<AssetsManager>
         {
             Scene scene = SceneManager.GetSceneByName(name);
             SceneManager.SetActiveScene(scene);
-            callback?.Invoke(1);
         };
     }
     public void UnLoadSceneAsync(string sceneName, Action<float> cb = null)
