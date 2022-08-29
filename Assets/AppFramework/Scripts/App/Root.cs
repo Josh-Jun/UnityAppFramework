@@ -13,10 +13,8 @@ public class Root
 {
     private static IRoot UpdateRoot = null;
 
-    private const string path_AppScriptConfig = "App/Config/AppScriptConfig";
     private static AppScriptConfig appScriptConfig;
 
-    private const string path_AppConfig = "App/AppConfig";
     public static AppConfig AppConfig; //App配置表 
 
     private static Dictionary<string, List<string>> sceneScriptsPairs = new Dictionary<string, List<string>>();
@@ -25,7 +23,7 @@ public class Root
 
     public static void Init()
     {
-        AppConfig = Resources.Load<AppConfig>(path_AppConfig);
+        AppConfig = Resources.Load<AppConfig>("App/AppConfig");
         //Debug.Log开关
         Debug.unityLogger.logEnabled = AppConfig.IsDebug;
         //禁止程序休眠
@@ -96,7 +94,7 @@ public class Root
 
     private static void InitRootScripts(Action callback = null)
     {
-        appScriptConfig = AssetsManager.Instance.LoadAsset<AppScriptConfig>(path_AppScriptConfig);
+        appScriptConfig = AssetsManager.Instance.LoadAsset<AppScriptConfig>(AssetsPathConfig.AppScriptConfig);
         for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
         {
             if (!iRootPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
@@ -171,7 +169,6 @@ public class Root
             {
                 if (iRootPairs.ContainsKey(sceneScriptsPairs[sceneName][i]))
                 {
-                    Debug.Log(sceneScriptsPairs[sceneName][i]);
                     iRootPairs[sceneScriptsPairs[sceneName][i]].Begin();
                     if (sceneName.Equals("Global")) continue;
                     RuntimeRoots.Add(iRootPairs[sceneScriptsPairs[sceneName][i]]);

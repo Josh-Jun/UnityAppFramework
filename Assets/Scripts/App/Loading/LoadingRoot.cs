@@ -17,8 +17,7 @@ namespace Loading
             if (window == null)
             {
                 //加载窗体
-                string prefab_LoadingPath = "App/Loading/Windows/LoadingWindow";
-                window = AssetsManager.Instance.LoadUIWindow<LoadingWindow>(prefab_LoadingPath);
+                window = AssetsManager.Instance.LoadUIWindow<LoadingWindow>(AssetsPathConfig.LoadingWindow);
             }
         }
 

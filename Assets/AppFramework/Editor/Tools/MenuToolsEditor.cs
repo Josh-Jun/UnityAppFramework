@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -38,6 +39,67 @@ public class MenuToolsEditor : UnityEditor.AssetModificationProcessor
     public static void OpenFolder()
     {
         System.Diagnostics.Process.Start("explorer.exe", $"file://{Application.persistentDataPath}");
+    }
+
+    [MenuItem("Assets/CreateAssetsPath", false, 0)]
+    public static void CreateAssetsPath()
+    {
+        List<FileInfo> app_files = GetFiles("App");
+        List<FileInfo> asset_files = GetFiles("AssetsFolder");
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.AppendLine("public class AssetsPathConfig");
+        stringBuilder.AppendLine("{");
+        for (int i = 0; i < app_files.Count; i++)
+        {
+            var name = app_files[i].Name.Split('.')[0];
+            if(stringBuilder.ToString().Contains(name)) continue;
+            var value = app_files[i].FullName.Substring(app_files[i].FullName.IndexOf("App")).Replace('\\', '/').Split('.')[0].Replace("App/","");
+            if (app_files[i].FullName.Contains("Pico") || app_files[i].FullName.Contains("Mobile"))
+            {
+                value = value.Replace("Mobile", "{0}").Replace("Pico", "{0}");
+            }
+            stringBuilder.AppendLine($"    public const string {name} = \"{value}\";");
+        }
+        for (int i = 0; i < asset_files.Count; i++)
+        {
+            var name = asset_files[i].Name.Split('.')[0];
+            if(stringBuilder.ToString().Contains(name)) continue;
+            var value = asset_files[i].FullName.Substring(asset_files[i].FullName.IndexOf("AssetsFolder")).Replace('\\', '/').Split('.')[0].Replace("AssetsFolder/","");
+            if (asset_files[i].FullName.Contains("Pico") || asset_files[i].FullName.Contains("Mobile"))
+            {
+                value = value.Replace("Mobile", "{0}").Replace("Pico", "{0}");
+            }
+            stringBuilder.AppendLine($"    public const string {name} = \"{value}\";");
+        }
+        stringBuilder.AppendLine("}");
+        string output = string.Format("{0}/Scripts/App/AssetsPathConfig.cs", Application.dataPath);
+        FileStream fs1 = new FileStream(output, FileMode.Create, FileAccess.Write);
+        StreamWriter sw = new StreamWriter(fs1);
+        sw.WriteLine(stringBuilder.ToString()); //开始写入值
+        sw.Close();
+        fs1.Close();
+
+        AssetDatabase.Refresh();
+    }
+
+    private static List<FileInfo> GetFiles(string folder)
+    {
+        var path = $"{Application.dataPath}/Resources/{folder}";
+        List<FileInfo> fileInfos = new List<FileInfo>();
+        if (Directory.Exists(path)) 
+        {  
+            DirectoryInfo direction = new DirectoryInfo(path);  
+            FileInfo[] files = direction.GetFiles("*",SearchOption.AllDirectories);
+            for(int i=0;i<files.Length;i++)
+            {
+                if (files[i].Name.EndsWith(".meta")) continue;//剔除.meta文件
+                if (files[i].Name.Contains("lua")) continue;//剔除lua文件
+                if (files[i].FullName.Contains("Scenes") && !files[i].Name.EndsWith(".unity")) continue;//剔除场景以外的文件
+                fileInfos.Add(files[i]);
+                Debug.Log(files[i].FullName);
+            }  
+        }
+        return fileInfos;
     }
 
     [MenuItem("Assets/复制文件夹(复制依赖关系) %#D", false, 0)]

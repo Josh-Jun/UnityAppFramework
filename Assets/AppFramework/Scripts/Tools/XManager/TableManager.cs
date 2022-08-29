@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class TableManager : SingletonMono<TableManager>
 {
-    private const string path_AppTableConfig = "App/Config/AppTableConfig";
     private Dictionary<string, Table> m_TablePairs = new Dictionary<string, Table>();
     private AppTableConfig appTableConfig;
     public override void InitManager(Transform parent)
@@ -15,7 +14,7 @@ public class TableManager : SingletonMono<TableManager>
     }
     public void InitConfig()
     {
-        appTableConfig = AssetsManager.Instance.LoadAsset<AppTableConfig>(path_AppTableConfig);
+        appTableConfig = AssetsManager.Instance.LoadAsset<AppTableConfig>(AssetsPathConfig.AppTableConfig);
         for (int i = 0; i < appTableConfig.AppTable.Count; i++)
         {
             var path = $"Table/{appTableConfig.AppTable[i].TableMold}/{appTableConfig.AppTable[i].TableName}";

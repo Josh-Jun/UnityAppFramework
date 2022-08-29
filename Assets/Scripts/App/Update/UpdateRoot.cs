@@ -77,8 +77,7 @@ namespace Update
             
             AssetBundleManager.Instance.InitLocalAssetBundleConfig(() =>
             {
-                string prefab_UpdatePath = "Update/Windows/UpdateWindow";
-                window = AssetsManager.Instance.LoadUIWindow<UpdateWindow>(prefab_UpdatePath);
+                window = AssetsManager.Instance.LoadUIWindow<UpdateWindow>(AssetsPathConfig.UpdateWindow);
                 window.SetWindowActive();
 
                 window.SetTipsText("检查更新中...");

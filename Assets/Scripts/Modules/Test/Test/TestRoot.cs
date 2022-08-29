@@ -29,7 +29,7 @@ namespace Test
         public void Begin()
         {
             //加载窗体
-            string prefab_TestPath = $"Test/{Root.AppConfig.TargetPackage}/Windows/TestWindow";
+            string prefab_TestPath = string.Format(AssetsPathConfig.TestWindow, Root.AppConfig.TargetPackage);
             window = AssetsManager.Instance.LoadUIWindow<TestWindow>(prefab_TestPath);
             window.SetWindowActive();
 
