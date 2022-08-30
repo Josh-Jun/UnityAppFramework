@@ -73,7 +73,7 @@ public partial class NetcomManager : SingletonMonoEvent<NetcomManager>
         private set { }
         get
         {
-            if (uwrQueue.Count < 1)
+            if (uwrQueue.Count <= 1)
             {
                 InitQueue();
             }
