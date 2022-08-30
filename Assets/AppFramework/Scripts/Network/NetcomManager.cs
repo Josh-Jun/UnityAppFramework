@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using UnityEngine;
 using System.Net.NetworkInformation;
@@ -65,8 +66,32 @@ public partial class NetcomManager : SingletonMonoEvent<NetcomManager>
             return Root.AppConfig.IsTestServer ? test_url : pro_url;
         }
     }
+
+    private Queue<UnityWebRequester> uwrQueue = new Queue<UnityWebRequester>();
+    public UnityWebRequester Uwr
+    {
+        private set { }
+        get
+        {
+            if (uwrQueue.Count < 1)
+            {
+                InitQueue();
+            }
+            return uwrQueue.Dequeue();
+        }
+    }
     public override void InitManager(Transform parent)
     {
         base.InitManager(parent);
+        InitQueue(50);
+    }
+
+    public void InitQueue(int count = 20)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            UnityWebRequester uwr = new UnityWebRequester(this);
+            uwrQueue.Enqueue(uwr);
+        }
     }
 }
