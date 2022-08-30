@@ -32,7 +32,7 @@ public class WindowBase : EventBaseMono
     /// <summary>打开窗口</summary>
     protected virtual void OpenWindow()
     {
-
+        SetAsLastSibling();
     }
 
     /// <summary>关闭窗口</summary>

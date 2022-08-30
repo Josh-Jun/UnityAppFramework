@@ -26,7 +26,6 @@ namespace Loading
             if (!window.GetWindowActive())
             {
                 window.SetWindowActive(true);
-                window.SetAsLastSibling();
             }
             window.SetLoadingSliderValue(progress);
             if (progress >= 1)

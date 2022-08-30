@@ -18,7 +18,6 @@ namespace Ask
             if (window == null)
             {
                 window = AssetsManager.Instance.LoadUIWindow<AskWindow>(AssetsPathConfig.AskWindow);
-                window.SetWindowActive();
             }
         }
         public void End()
@@ -27,14 +26,14 @@ namespace Ask
         }
         public void ShowAskWindow(string content, Action confirm_callback = null, Action cancel_callback = null)
         {
+            window.SetWindowActive();
             window.SetWindowInfo(content, confirm_callback, cancel_callback);
-            window.SetAsLastSibling();
         }
 
         public void ShowTips(string content, float time = 2f)
         {
+            window.SetWindowActive();
             window.SetTips(content, time);
-            window.SetAsLastSibling();
         }
         public void AppPause(bool pause)
         {
