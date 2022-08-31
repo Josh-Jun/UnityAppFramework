@@ -8,12 +8,13 @@ public class AssetsPathConfig
     public const string AppTableConfig = "App/Config/AppTableConfig";
     public const string LoadingWindow = "App/Loading/Windows/LoadingWindow";
     public const string TestScene = "Scenes/Test/TestScene";
+    public const string TestJson = "Table/Json/TestJson";
     public const string TestConfig = "Table/Thrift/TestConfig";
     public const string TestTableData = "Table/Xml/TestTableData";
     public const string Cube = "Test/Common/Materials/Cube";
     public const string Quad = "Test/Common/Materials/Quad";
     public const string logo = "Test/Common/Textures/logo";
-    public const string test = "Test/Common/Textures/test";
+    public const string test_bg = "Test/Common/Textures/test_bg";
     public const string xuehua = "Test/Common/Textures/xuehua";
     public const string TestWindow = "Test/{0}/Windows/TestWindow";
 }
