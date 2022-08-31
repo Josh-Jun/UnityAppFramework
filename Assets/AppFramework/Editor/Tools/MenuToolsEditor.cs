@@ -44,34 +44,13 @@ public class MenuToolsEditor : UnityEditor.AssetModificationProcessor
     [MenuItem("Assets/CreateAssetsPath", false, 0)]
     public static void CreateAssetsPath()
     {
-        List<FileInfo> app_files = GetFiles("App");
-        List<FileInfo> asset_files = GetFiles("AssetsFolder");
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.AppendLine("public class AssetsPathConfig");
         stringBuilder.AppendLine("{");
-        for (int i = 0; i < app_files.Count; i++)
-        {
-            var name = app_files[i].Name.Split('.')[0];
-            if(stringBuilder.ToString().Contains(name)) continue;
-            var value = app_files[i].FullName.Substring(app_files[i].FullName.IndexOf("App")).Replace('\\', '/').Split('.')[0].Replace("App/","");
-            if (app_files[i].FullName.Contains("Pico") || app_files[i].FullName.Contains("Mobile"))
-            {
-                value = value.Replace("Mobile", "{0}").Replace("Pico", "{0}");
-            }
-            stringBuilder.AppendLine($"    public const string {name} = \"{value}\";");
-        }
-        for (int i = 0; i < asset_files.Count; i++)
-        {
-            var name = asset_files[i].Name.Split('.')[0];
-            if(stringBuilder.ToString().Contains(name)) continue;
-            var value = asset_files[i].FullName.Substring(asset_files[i].FullName.IndexOf("AssetsFolder")).Replace('\\', '/').Split('.')[0].Replace("AssetsFolder/","");
-            if (asset_files[i].FullName.Contains("Pico") || asset_files[i].FullName.Contains("Mobile"))
-            {
-                value = value.Replace("Mobile", "{0}").Replace("Pico", "{0}");
-            }
-            stringBuilder.AppendLine($"    public const string {name} = \"{value}\";");
-        }
-        stringBuilder.AppendLine("}");
+        stringBuilder.Append(GetAllPath("App"));
+        stringBuilder.Append(GetAllPath("AssetsFolder"));
+        stringBuilder.Append("}");
+        
         string output = string.Format("{0}/Scripts/App/AssetsPathConfig.cs", Application.dataPath);
         FileStream fs1 = new FileStream(output, FileMode.Create, FileAccess.Write);
         StreamWriter sw = new StreamWriter(fs1);
@@ -80,6 +59,26 @@ public class MenuToolsEditor : UnityEditor.AssetModificationProcessor
         fs1.Close();
 
         AssetDatabase.Refresh();
+    }
+
+    private static string GetAllPath(string folder)
+    {
+        StringBuilder sb = new StringBuilder();
+        List<FileInfo> files = GetFiles(folder);
+        
+        for (int i = 0; i < files.Count; i++)
+        {
+            var name = files[i].Name.Split('.')[0];
+            if(sb.ToString().Contains(name)) continue;
+            var value = files[i].FullName.Substring(files[i].FullName.IndexOf(folder)).Replace('\\', '/').Split('.')[0].Replace($"{folder}/","");
+            if (files[i].FullName.Contains("Pico") || files[i].FullName.Contains("Mobile"))
+            {
+                value = value.Replace("Mobile", "{0}").Replace("Pico", "{0}");
+            }
+            sb.AppendLine($"    public const string {name} = \"{value}\";");
+        }
+        
+        return sb.ToString();
     }
 
     private static List<FileInfo> GetFiles(string folder)

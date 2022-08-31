@@ -18,4 +18,3 @@ public class AssetsPathConfig
     public const string xuehua = "Test/Common/Textures/xuehua";
     public const string TestWindow = "Test/{0}/Windows/TestWindow";
 }
-
