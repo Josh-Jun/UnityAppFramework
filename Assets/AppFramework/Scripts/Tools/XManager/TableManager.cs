@@ -41,21 +41,22 @@ public class TableManager : SingletonMono<TableManager>
     public T GetTable<T>(string tableName) where T : class
     {
         var table = m_TablePairs[tableName];
+        T t = null;
         switch (table.mold)
         {
             case TableMold.Xml:
-                return XmlManager.ProtoDeSerialize<T>(table.bytes);
+                t = XmlManager.ProtoDeSerialize<T>(table.bytes);
                 break;
             case TableMold.Json:
-                return LitJson.JsonMapper.ToObject<T>(table.text);
+                t = LitJson.JsonMapper.ToObject<T>(table.text);
                 break;
             case TableMold.Thrift:
                 ThriftTableHolder.ETXT_NAME en = (ThriftTableHolder.ETXT_NAME)Enum.Parse(typeof(ThriftTableHolder.ETXT_NAME), tableName);
-                return ThriftTableHolder.GetTable(en) as T;
+                t = ThriftTableHolder.GetTable(en) as T;
                 break;
             
         }
-        return null;
+        return t;
     }
 }
 

@@ -103,6 +103,7 @@ public static class Developer
     /// <param name="enable"></param>
     public static void SetGameObjectActive(this GameObject go, bool enable = true)
     {
+        if (go == null) { Debug.LogError($"GameObject({go.name}) is null!!!"); return; }
         go.SetActive(enable);
     }
     /// <summary>
@@ -112,6 +113,7 @@ public static class Developer
     /// <param name="enable"></param>
     public static void SetGameObjectActive(this Component com, bool enable = true)
     {
+        if(com == null){ Debug.LogError($"Component({com}) is null!!!"); return; }
         com.gameObject.SetActive(enable);
     }
     /// <summary>
@@ -122,6 +124,7 @@ public static class Developer
     /// <param name="enable"></param>
     public static void SetComponentEnable<T>(this GameObject go, bool enable = true) where T : Behaviour
     {
+        if(go == null){ Debug.LogError($"GameObject({go.name}) is null!!!"); return; }
         T t = go.GetComponent<T>();
         if (t != null)
         {
@@ -140,6 +143,7 @@ public static class Developer
     /// <param name="enable"></param>
     public static void SetComponentEnable<T>(this Component com, bool enable = true) where T : Behaviour
     {
+        if(com == null){ Debug.LogError($"Component({com}) is null!!!"); return; }
         T t = com.gameObject.GetComponent<T>();
         if (t != null)
         {
@@ -161,6 +165,7 @@ public static class Developer
     /// <returns></returns>
     public static T TryGetComponent<T>(this GameObject go) where T : Component
     {
+        if(go == null){ Debug.LogError($"GameObject({go.name}) is null!!!"); return null; }
         T t = go.GetComponent<T>();
         if (t == null)
         {
@@ -176,6 +181,7 @@ public static class Developer
     /// <returns></returns>
     public static T TryGetComponent<T>(this Component com) where T : Component
     {
+        if(com == null){ Debug.LogError($"Component({com}) is null!!!"); return null; }
         T t = com.GetComponent<T>();
         if (t == null)
         {
@@ -193,6 +199,7 @@ public static class Developer
     /// <param name="cb"></param>
     public static void OnClick(this GameObject go, UnityAction cb)
     {
+        if(go == null){ Debug.LogError($"GameObject({go.name}) is null!!!"); return; }
         EventListener.EventListener.Get(go).onClick = (obj) =>
         {
             cb?.Invoke();
@@ -206,6 +213,7 @@ public static class Developer
     /// <param name="arg"></param>
     public static void OnClick<T>(this GameObject go, UnityAction<T> cb, T arg)
     {
+        if(go == null){ Debug.LogError($"GameObject({go.name}) is null!!!"); return; }
         EventListener.EventListener.Get(go).onClick = (obj) =>
         {
             cb?.Invoke(arg);
@@ -220,6 +228,7 @@ public static class Developer
     /// <param name="arg1"></param>
     public static void OnClick<T0,T1>(this GameObject go, UnityAction<T0,T1> cb, T0 arg0,T1 arg1)
     {
+        if(go == null){ Debug.LogError($"GameObject({go.name}) is null!!!"); return; }
         EventListener.EventListener.Get(go).onClick = (obj) =>
         {
             cb?.Invoke(arg0,arg1);
@@ -235,6 +244,7 @@ public static class Developer
     /// <param name="arg2"></param>
     public static void OnClick<T0,T1,T2>(this GameObject go, UnityAction<T0,T1,T2> cb, T0 arg0,T1 arg1,T2 arg2)
     {
+        if(go == null){ Debug.LogError($"GameObject({go.name}) is null!!!"); return; }
         EventListener.EventListener.Get(go).onClick = (obj) =>
         {
             cb?.Invoke(arg0,arg1,arg2);
@@ -251,6 +261,7 @@ public static class Developer
     /// <param name="arg3"></param>
     public static void OnClick<T0,T1,T2,T3>(this GameObject go, UnityAction<T0,T1,T2,T3> cb, T0 arg0,T1 arg1,T2 arg2,T3 arg3)
     {
+        if(go == null){ Debug.LogError($"GameObject({go.name}) is null!!!"); return; }
         EventListener.EventListener.Get(go).onClick = (obj) =>
         {
             cb?.Invoke(arg0,arg1,arg2,arg3);
@@ -263,6 +274,7 @@ public static class Developer
     /// <param name="cb"></param>
     public static void OnClick(this Component com, UnityAction cb)
     {
+        if(com == null){ Debug.LogError($"Component({com}) is null!!!"); return; }
         EventListener.EventListener.Get(com).onClick = (obj) =>
         {
             cb?.Invoke();
@@ -276,6 +288,7 @@ public static class Developer
     /// <param name="arg"></param>
     public static void OnClick<T>(this Component com, UnityAction<T> cb, T arg)
     {
+        if(com == null){ Debug.LogError($"Component({com}) is null!!!"); return; }
         EventListener.EventListener.Get(com).onClick = (obj) =>
         {
             cb?.Invoke(arg);
@@ -290,6 +303,7 @@ public static class Developer
     /// <param name="arg1"></param>
     public static void OnClick<T0,T1>(this Component com, UnityAction<T0,T1> cb, T0 arg0,T1 arg1)
     {
+        if(com == null){ Debug.LogError($"Component({com}) is null!!!"); return; }
         EventListener.EventListener.Get(com).onClick = (obj) =>
         {
             cb?.Invoke(arg0,arg1);
@@ -305,6 +319,7 @@ public static class Developer
     /// <param name="arg2"></param>
     public static void OnClick<T0,T1,T2>(this Component com, UnityAction<T0,T1,T2> cb, T0 arg0,T1 arg1,T2 arg2)
     {
+        if(com == null){ Debug.LogError($"Component({com}) is null!!!"); return; }
         EventListener.EventListener.Get(com).onClick = (obj) =>
         {
             cb?.Invoke(arg0,arg1,arg2);
@@ -321,6 +336,7 @@ public static class Developer
     /// <param name="arg3"></param>
     public static void OnClick<T0,T1,T2,T3>(this Component com, UnityAction<T0,T1,T2,T3> cb, T0 arg0,T1 arg1,T2 arg2,T3 arg3)
     {
+        if(com == null){ Debug.LogError($"Component({com}) is null!!!"); return; }
         EventListener.EventListener.Get(com).onClick = (obj) =>
         {
             cb?.Invoke(arg0,arg1,arg2,arg3);
@@ -333,6 +349,7 @@ public static class Developer
     /// <param name="cb"></param>
     public static void BtnOnClick(this Button btn, UnityAction cb)
     {
+        if(btn == null){ Debug.LogError($"Button({btn}) is null!!!"); return; }
         btn.onClick.AddListener(cb);
     }
     /// <summary>
@@ -343,6 +360,7 @@ public static class Developer
     /// <param name="arg"></param>
     public static void BtnOnClick<T>(this Button btn, UnityAction<T> cb, T arg)
     {
+        if(btn == null){ Debug.LogError($"Button({btn}) is null!!!"); return; }
         btn.onClick.AddListener(() =>
         {
             cb?.Invoke(arg);
@@ -357,6 +375,7 @@ public static class Developer
     /// <param name="arg1"></param>
     public static void BtnOnClick<T0,T1>(this Button btn, UnityAction<T0,T1> cb, T0 arg0, T1 arg1)
     {
+        if(btn == null){ Debug.LogError($"Button({btn}) is null!!!"); return; }
         btn.onClick.AddListener(() =>
         {
             cb?.Invoke(arg0, arg1);
@@ -372,6 +391,7 @@ public static class Developer
     /// <param name="arg2"></param>
     public static void BtnOnClick<T0,T1,T2>(this Button btn, UnityAction<T0,T1,T2> cb, T0 arg0, T1 arg1,T2 arg2)
     {
+        if(btn == null){ Debug.LogError($"Button({btn}) is null!!!"); return; }
         btn.onClick.AddListener(() =>
         {
             cb?.Invoke(arg0, arg1, arg2);
@@ -388,6 +408,7 @@ public static class Developer
     /// <param name="arg3"></param>
     public static void BtnOnClick<T0,T1,T2,T3>(this Button btn, UnityAction<T0,T1,T2,T3> cb, T0 arg0, T1 arg1,T2 arg2,T3 arg3)
     {
+        if(btn == null){ Debug.LogError($"Button({btn}) is null!!!"); return; }
         btn.onClick.AddListener(() =>
         {
             cb?.Invoke(arg0, arg1, arg2, arg3);
@@ -404,6 +425,7 @@ public static class Developer
     /// <param name="ua"></param>
     public static void AddEventTrigger(this GameObject obj, EventTriggerType eventType, UnityAction<BaseEventData> ua)
     {
+        if(obj == null){ Debug.LogError($"GameObject({obj.name}) is null!!!"); return; }
         EventTrigger eventTrigger = obj.TryGetComponent<EventTrigger>();
         eventTrigger.triggers = new List<EventTrigger.Entry>();
 
@@ -420,6 +442,7 @@ public static class Developer
     /// <param name="obj"></param>
     public static void RemoveEventTrigger(this GameObject obj)
     {
+        if(obj == null){ Debug.LogError($"GameObject({obj.name}) is null!!!"); return; }
         EventTrigger eventTrigger = obj.TryGetComponent<EventTrigger>();
         eventTrigger.triggers.Clear();
         UnityEngine.Object.Destroy(eventTrigger);
@@ -433,6 +456,7 @@ public static class Developer
     /// <param name="ua"></param>
     public static void AddEventTrigger(this Component com, EventTriggerType eventType, UnityAction<BaseEventData> ua)
     {
+        if(com == null){ Debug.LogError($"GameObject({com}) is null!!!"); return; }
         EventTrigger eventTrigger = com.TryGetComponent<EventTrigger>();
         eventTrigger.triggers = new List<EventTrigger.Entry>();
 
@@ -449,6 +473,7 @@ public static class Developer
     /// <param name="com"></param>
     public static void RemoveEventTrigger(this Component com)
     {
+        if(com == null){ Debug.LogError($"GameObject({com}) is null!!!"); return; }
         EventTrigger eventTrigger = com.TryGetComponent<EventTrigger>();
         eventTrigger.triggers.Clear();
         UnityEngine.Object.Destroy(eventTrigger);
@@ -464,6 +489,7 @@ public static class Developer
     /// <returns></returns>
     public static GameObject FindGameObject(this GameObject go, string path)
     {
+        if(go == null){ Debug.LogError($"GameObject({go.name}) is null!!!"); return null; }
         return go.transform.Find(path).gameObject;
     }
 
@@ -475,6 +501,7 @@ public static class Developer
     /// <returns></returns>
     public static GameObject FindGameObject(this Component com, string path)
     {
+        if(com == null){ Debug.LogError($"Component({com}) is null!!!"); return null; }
         return com.transform.Find(path).gameObject;
     }
 
@@ -487,6 +514,7 @@ public static class Developer
     /// <returns></returns>
     public static Component FindComponent(this GameObject go, string path)
     {
+        if(go == null){ Debug.LogError($"GameObject({go.name}) is null!!!"); return null; }
         return go.transform.Find(path).GetComponent<Component>();
     }
 
@@ -499,6 +527,7 @@ public static class Developer
     /// <returns></returns>
     public static Component FindComponent(this Component com, string path)
     {
+        if(com == null){ Debug.LogError($"Component({com}) is null!!!"); return null; }
         return com.transform.Find(path).GetComponent<Component>();
     }
     /// <summary>
@@ -510,6 +539,7 @@ public static class Developer
     /// <returns></returns>
     public static T FindComponent<T>(this GameObject go, string path) where T : Component
     {
+        if(go == null){ Debug.LogError($"GameObject({go.name}) is null!!!"); return null; }
         return go.transform.Find(path).GetComponent<T>();
     }
 
@@ -522,6 +552,7 @@ public static class Developer
     /// <returns></returns>
     public static T FindComponent<T>(this Component com, string path) where T : Component
     {
+        if(com == null){ Debug.LogError($"Component({com}) is null!!!"); return null; }
         return com.transform.Find(path).GetComponent<T>();
     }
 
@@ -533,6 +564,7 @@ public static class Developer
     /// <returns></returns>
     public static GameObject FindDeepGameObject(this GameObject gomeObject, string childName)
     {
+        if(gomeObject == null){ Debug.LogError($"GameObject({gomeObject.name}) is null!!!"); return null; }
         Transform transform = gomeObject.transform.Find(childName);
         if (transform == null)
         {
@@ -554,6 +586,7 @@ public static class Developer
     /// <returns></returns>
     public static GameObject FindDeepGameObject(this Component com, string childName)
     {
+        if(com == null){ Debug.LogError($"Component({com}) is null!!!"); return null; }
         Transform transform = com.transform.Find(childName);
         if (transform == null)
         {
@@ -575,6 +608,7 @@ public static class Developer
     /// <returns></returns>
     public static Component FindDeepComponent(this GameObject gomeObject, string childName)
     {
+        if(gomeObject == null){ Debug.LogError($"GameObject({gomeObject.name}) is null!!!"); return null; }
         Transform transform = gomeObject.transform.Find(childName);
         if (transform == null)
         {
@@ -596,6 +630,7 @@ public static class Developer
     /// <returns></returns>
     public static Component FindDeepComponet(this Component com, string childName)
     {
+        if(com == null){ Debug.LogError($"Component({com}) is null!!!"); return null; }
         Transform transform = com.transform.Find(childName);
         if (transform == null)
         {
@@ -616,6 +651,7 @@ public static class Developer
     /// <returns></returns>
     public static T FindDeepComponent<T>(this GameObject gomeObject, string childName) where T : Component
     {
+        if(gomeObject == null){ Debug.LogError($"GameObject({gomeObject.name}) is null!!!"); return null; }
         Transform transform = gomeObject.transform.Find(childName);
         if (transform == null)
         {
@@ -637,6 +673,7 @@ public static class Developer
     /// <returns></returns>
     public static T FindDeepComponet<T>(this Component com, string childName) where T : Component
     {
+        if(com == null){ Debug.LogError($"Component({com}) is null!!!"); return null; }
         Transform transform = com.transform.Find(childName);
         if (transform == null)
         {

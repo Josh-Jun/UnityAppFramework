@@ -111,14 +111,15 @@ namespace Test
             // Root.GetRootScript<Ask.AskRoot>().ShowTips("123");
         }
 
-        int id = -1;
+        
 
         private void ButtonParamsEvent(string value)
         {
             window.SetText(value);
             string filePath = PlatformManager.Instance.GetDataPath("App/meta.apk");
             UnityWebRequester requester = new UnityWebRequester(App.app);
-
+            
+            //int id = -1;
             // if (FileManager.FileExist(filePath))
             // {
             //     PlatformManager.Instance.InstallApp(filePath);
