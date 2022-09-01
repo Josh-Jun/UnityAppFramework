@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using ThriftTable;
 using UnityEngine;
 
@@ -48,7 +49,8 @@ public class TableManager : SingletonMono<TableManager>
                 t = XmlManager.ProtoDeSerialize<T>(table.bytes);
                 break;
             case TableMold.Json:
-                t = LitJson.JsonMapper.ToObject<T>(table.text);
+                t = JsonConvert.DeserializeObject<T>(table.text);
+                //t = LitJson.JsonMapper.ToObject<T>(table.text);
                 break;
             case TableMold.Thrift:
                 ThriftTableHolder.ETXT_NAME en = (ThriftTableHolder.ETXT_NAME)Enum.Parse(typeof(ThriftTableHolder.ETXT_NAME), tableName);

@@ -13,7 +13,7 @@ namespace TableData
         public int id {get;set;}
         public int attackTime {get;set;}
         public int attack {get;set;}
-        public int fireRate {get;set;}
+        public float fireRate {get;set;}
         public int life {get;set;}
         public int speed {get;set;}
         public int trajectoryID {get;set;}
@@ -23,7 +23,7 @@ namespace TableData
         public int id {get;set;}
         public int attackTime {get;set;}
         public int attack {get;set;}
-        public int fireRate {get;set;}
+        public float fireRate {get;set;}
         public int life {get;set;}
         public int speed {get;set;}
         public int trajectoryID {get;set;}
@@ -33,7 +33,7 @@ namespace TableData
         public int id {get;set;}
         public int attackTime {get;set;}
         public int attack {get;set;}
-        public int fireRate {get;set;}
+        public float fireRate {get;set;}
         public int life {get;set;}
         public int speed {get;set;}
         public int trajectoryID {get;set;}
