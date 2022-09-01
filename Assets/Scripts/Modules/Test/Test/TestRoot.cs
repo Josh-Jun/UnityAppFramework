@@ -37,6 +37,7 @@ namespace Test
             // window.SetMobileCamera(mobile);
             window.PlayGif();
             Debug.Log(TableManager.Instance.GetTable<TestConfigTable>("TestConfig").Data.Count);
+            Debug.Log(TableManager.Instance.GetTable<TestJson>("TestJson").Boss.Count);
         }
 
         public void End()
