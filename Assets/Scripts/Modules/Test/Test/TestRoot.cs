@@ -36,7 +36,7 @@ namespace Test
             // mobile = new RenderTexture(Screen.width, Screen.height, 32);
             // window.SetMobileCamera(mobile);
             window.PlayGif();
-            Debug.Log(TableManager.Instance.GetTable<TestConfigTable>("TestConfig").Data.Count);
+            Debug.Log(TableManager.Instance.GetTable<TestThriftTable>("TestThrift").Data.Count);
             Debug.Log(TableManager.Instance.GetTable<TestJson>("TestJson").Boss.Count);
         }
 
@@ -60,7 +60,7 @@ namespace Test
             AVProManager.Instance.OpenMedia(MediaPathType.AbsolutePathOrURL, "视频地址");
             AVProManager.Instance.AddMediaPlayerEvent(MediaPlayerEvent.EventType.FinishedPlaying, () => { }); //播放完成事件
             //获取配置表
-            TableManager.Instance.GetTable<TestTableData>(""); //获取配置表
+            TableManager.Instance.GetTable<TestXml>(""); //获取配置表
             //时间任务
             int timeid1 = -1;
             timeid1 = TimerManager.Instance.StartTimer((time) => { }); //一直执行 相当于Update

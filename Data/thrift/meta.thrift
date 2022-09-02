@@ -8,7 +8,7 @@
 //	string: A text string encoded using UTF-8 encoding
 //	-----------------------------
 
-struct TestConfig
+struct TestThrift
 {
 	1 : required i32 id;
 	2 : optional string skuNo;
@@ -19,7 +19,7 @@ struct TestConfig
 	7 : optional i32 isdestroy;
 }
 
-struct TestConfigTable
+struct TestThriftTable
 {
-	1 : required list<TestConfig> data;
+	1 : required list<TestThrift> data;
 }

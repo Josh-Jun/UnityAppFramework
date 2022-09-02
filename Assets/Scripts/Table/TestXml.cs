@@ -4,8 +4,8 @@ using System.Xml.Serialization;
 namespace TableData
 {
 	[Serializable]
-	[XmlRoot("TestTableData")]
-	public class TestTableData
+	[XmlRoot("TestXml")]
+	public class TestXml
 	{
 		[XmlElement("TestTable")]
 		public List<TestTable> TestTable { get; set; }

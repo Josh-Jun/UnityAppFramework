@@ -17,3 +17,5 @@ MonoBehaviour:
     TableMold: 1
   - TableName: TestConfig
     TableMold: 2
+  - TableName: TestJson
+    TableMold: 0

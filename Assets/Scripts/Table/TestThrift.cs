@@ -17,7 +17,7 @@ using System.Runtime.Serialization;
 #if !SILVERLIGHT
 [Serializable]
 #endif
-public partial class TestConfig : TBase
+public partial class TestThrift : TBase
 {
   private string _skuNo;
   private int _lanter_type;
@@ -120,9 +120,9 @@ public partial class TestConfig : TBase
     public bool isdestroy;
   }
 
-  public TestConfig() { }
+  public TestThrift() { }
 
-  public TestConfig(int id) : this()
+  public TestThrift(int id) : this()
   {
     this.Id = id;
   }
@@ -245,7 +245,7 @@ public partial class TestConfig : TBase
     oprot.IncrementRecursionDepth();
     try
     {
-      TStruct struc = new TStruct("TestConfig");
+      TStruct struc = new TStruct("TestThrift");
       oprot.WriteStructBegin(struc);
       TField field = new TField();
 
@@ -335,14 +335,14 @@ public partial class TestConfig : TBase
 #if !SILVERLIGHT
 [Serializable]
 #endif
-public partial class TestConfigTable : TBase
+public partial class TestThriftTable : TBase
 {
 
-  public List<TestConfig> Data { get; set; }
+  public List<TestThrift> Data { get; set; }
 
-  public TestConfigTable() { }
+  public TestThriftTable() { }
 
-  public TestConfigTable(List<TestConfig> data) : this()
+  public TestThriftTable(List<TestThrift> data) : this()
   {
     this.Data = data;
   }
@@ -367,12 +367,12 @@ public partial class TestConfigTable : TBase
           case 1:
           if (field.Type == TType.List)
           {
-            Data = new List<TestConfig>();
+            Data = new List<TestThrift>();
             TList _list0 = iprot.ReadListBegin();
             for( int _i1 = 0; _i1 < _list0.Count; ++_i1)
             {
-              TestConfig _elem2;
-              _elem2 = new TestConfig();
+              TestThrift _elem2;
+              _elem2 = new TestThrift();
               _elem2.Read(iprot);
               Data.Add(_elem2);
             }
@@ -408,7 +408,7 @@ public partial class TestConfigTable : TBase
     oprot.IncrementRecursionDepth();
     try
     {
-      TStruct struc = new TStruct("TestConfigTable");
+      TStruct struc = new TStruct("TestThriftTable");
       oprot.WriteStructBegin(struc);
       TField field = new TField();
 
@@ -420,7 +420,7 @@ public partial class TestConfigTable : TBase
       oprot.WriteFieldBegin(field);
       {
         oprot.WriteListBegin(new TList(TType.Struct, Data.Count));
-        foreach (TestConfig _iter10 in Data)
+        foreach (TestThrift _iter10 in Data)
         {
           _iter10.Write(oprot);
         }

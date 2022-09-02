@@ -18,12 +18,12 @@ namespace ThriftTable
         public Thrift.Protocol.TBase m_Data;
         abstract public void ParseData( byte[] bytes );
     }
-    public class TestConfigData :  AbstractDataBase
+    public class TestThriftData :  AbstractDataBase
     {
-        public new  TestConfigTable m_Data;
+        public new  TestThriftTable m_Data;
         public override void ParseData(byte[] bytes)
         {
-            m_Data = new TestConfigTable();
+            m_Data = new TestThriftTable();
             ThriftSerialize.DeSerialize(m_Data, bytes);
         }
     }
@@ -32,19 +32,19 @@ namespace ThriftTable
         public enum ETXT_NAME
         {
             _Min,
-            TestConfig,
+            TestThrift,
             _Max,
         }
         public static Dictionary<ETXT_NAME, AbstractDataBase> m_TableDic = new Dictionary<ETXT_NAME, AbstractDataBase>()
         {
-            { ETXT_NAME.TestConfig, new TestConfigData() },
+            { ETXT_NAME.TestThrift, new TestThriftData() },
         };
         public static Thrift.Protocol.TBase GetTable(ETXT_NAME en)
         {
             switch (en)
             {
-                case ETXT_NAME.TestConfig:
-                  return ((TestConfigData)m_TableDic[en]).m_Data;
+                case ETXT_NAME.TestThrift:
+                  return ((TestThriftData)m_TableDic[en]).m_Data;
                 default:  return null;
             }
         }
