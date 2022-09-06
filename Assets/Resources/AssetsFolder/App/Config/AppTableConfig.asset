@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: AppTableConfig
   m_EditorClassIdentifier: 
   AppTable:
-  - TableName: TestTableData
+  - TableName: TestXml
     TableMold: 1
-  - TableName: TestConfig
+  - TableName: TestThrift
     TableMold: 2
   - TableName: TestJson
     TableMold: 0
