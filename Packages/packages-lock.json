@@ -247,6 +247,19 @@
       },
       "url": "https://packages.unity.cn"
     },
+    "com.unity.xr.picotools": {
+      "version": "https://github.com/Josh-Jun/PicoTools.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.xr.picoxr": "2.0.5",
+        "com.unity.xr.management": "3.2.16",
+        "com.unity.ugui": "1.0.0",
+        "com.unity.subsystemregistration": "1.0.6",
+        "com.unity.xr.interaction.toolkit": "0.9.4-preview"
+      },
+      "hash": "a0cf6deea09501736d3d353c73548fb6cc16c928"
+    },
     "com.unity.xr.picoxr": {
       "version": "file:../DiskPackages/Pico Unity Integration SDK-2.0.5",
       "depth": 0,
