@@ -258,12 +258,12 @@
         "com.unity.subsystemregistration": "1.0.6",
         "com.unity.xr.interaction.toolkit": "0.9.4-preview"
       },
-      "hash": "d9388d25906eef58197b7e622431a527f121a3cd"
+      "hash": "7c0d1e3e7907df6c5c809535fe1c4722ba821e7a"
     },
     "com.unity.xr.picoxr": {
-      "version": "file:../DiskPackages/Pico Unity Integration SDK-2.0.5",
+      "version": "file:Pico Unity Integration SDK-2.0.5",
       "depth": 0,
-      "source": "local",
+      "source": "embedded",
       "dependencies": {
         "com.unity.xr.management": "3.2.16",
         "com.unity.ugui": "1.0.0",

@@ -2,7 +2,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
-using Pico.Tools;
+// using Pico.Tools;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Events;
@@ -68,15 +68,15 @@ namespace Test
 
         public void SetMobileCamera(RenderTexture renderTexture)
         {
-            mobileCamera.targetTexture = renderTexture;
-            mobileImageRoot.FindComponent<RawImage>("MobileImage").texture = renderTexture;
-            mobileCamera.TryGetComponent<ParentConstraint>().AddSource(new ConstraintSource { sourceTransform = PicoXRManager.Instance.RightController.transform, weight = 1 });
-            mobileCamera.TryGetComponent<ParentConstraint>().SetTranslationOffset(0, new Vector3(0f, 0.1f, 5f));
-            mobileCamera.TryGetComponent<ParentConstraint>().SetRotationOffset(0, new Vector3(0f, 180f, 0f));
-            selfStick.TryGetComponent<ParentConstraint>().AddSource(new ConstraintSource { sourceTransform = PicoXRManager.Instance.RightController.transform, weight = 1 });
-            selfStick.TryGetComponent<ParentConstraint>().SetTranslationOffset(0, Vector3.zero);
-            selfStick.Find("Cube/Quad").GetComponent<MeshRenderer>().sharedMaterial.mainTexture = renderTexture;
-            mobileImageRoot.TryGetComponent<ParentConstraint>().AddSource(new ConstraintSource { sourceTransform = PicoXRManager.Instance.MainCamera.transform, weight = 1 });
+            // mobileCamera.targetTexture = renderTexture;
+            // mobileImageRoot.FindComponent<RawImage>("MobileImage").texture = renderTexture;
+            // mobileCamera.TryGetComponent<ParentConstraint>().AddSource(new ConstraintSource { sourceTransform = PicoXRManager.Instance.RightController.transform, weight = 1 });
+            // mobileCamera.TryGetComponent<ParentConstraint>().SetTranslationOffset(0, new Vector3(0f, 0.1f, 5f));
+            // mobileCamera.TryGetComponent<ParentConstraint>().SetRotationOffset(0, new Vector3(0f, 180f, 0f));
+            // selfStick.TryGetComponent<ParentConstraint>().AddSource(new ConstraintSource { sourceTransform = PicoXRManager.Instance.RightController.transform, weight = 1 });
+            // selfStick.TryGetComponent<ParentConstraint>().SetTranslationOffset(0, Vector3.zero);
+            // selfStick.Find("Cube/Quad").GetComponent<MeshRenderer>().sharedMaterial.mainTexture = renderTexture;
+            // mobileImageRoot.TryGetComponent<ParentConstraint>().AddSource(new ConstraintSource { sourceTransform = PicoXRManager.Instance.MainCamera.transform, weight = 1 });
         }
         public void SetText(string value)
         {
