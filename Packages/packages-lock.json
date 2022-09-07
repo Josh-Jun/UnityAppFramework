@@ -258,7 +258,7 @@
         "com.unity.subsystemregistration": "1.0.6",
         "com.unity.xr.interaction.toolkit": "0.9.4-preview"
       },
-      "hash": "a0cf6deea09501736d3d353c73548fb6cc16c928"
+      "hash": "d9388d25906eef58197b7e622431a527f121a3cd"
     },
     "com.unity.xr.picoxr": {
       "version": "file:../DiskPackages/Pico Unity Integration SDK-2.0.5",
