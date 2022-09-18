@@ -411,6 +411,9 @@ public class UIVideoPlayer : SingletonMono<UIVideoPlayer>
     {
         isReady = false;
         _audioVolume = VideoPlayer.GetDirectAudioVolume(0);
+        var rect = _videoDisplay.GetComponent<RectTransform>();
+        var vec = (transform as RectTransform).sizeDelta;
+        rect.sizeDelta = PictureManager.AdaptSize(vec, new Vector2(player.width, player.height));
     }
 
     // 准备完成事件调用
