@@ -245,6 +245,7 @@ public class UIVideoPlayer : SingletonMono<UIVideoPlayer>
         if (VideoPlayer == null) return;
 
         UpdateControlsVisibility();
+        UpdateAudioFading();
 
 #if (!ENABLE_INPUT_SYSTEM || ENABLE_LEGACY_INPUT_MANAGER)
         if (_timelineTip != null)
@@ -378,6 +379,8 @@ public class UIVideoPlayer : SingletonMono<UIVideoPlayer>
             _volumeMaterial.SetFloat(_propMute.Id, t);
             _volumeMaterial.SetFloat(_propVolume.Id, _audioVolume);
         }
+        // Update volume slider
+        UpdateVolumeSlider();
 
         // Update time/duration text display
         if (_textTimeDuration)
@@ -428,6 +431,34 @@ public class UIVideoPlayer : SingletonMono<UIVideoPlayer>
         isReady = true;
     }
 
+    void UpdateAudioFading()
+    {
+        // Increment fade timer
+        if (_audioFadeTime < AudioFadeDuration)
+        {
+            _audioFadeTime = Mathf.Clamp(_audioFadeTime + Time.deltaTime, 0f, AudioFadeDuration);
+        }
+
+        // Trigger pause when audio faded down
+        if (_audioFadeTime >= AudioFadeDuration)
+        {
+            if (!_isAudioFadingUpToPlay)
+            {
+                Pause(skipFeedback:true);
+            }
+        }
+
+        // Apply audio fade value
+        if (VideoPlayer != null && VideoPlayer.isPlaying)
+        {
+            _audioFade = Mathf.Clamp01(_audioFadeTime / AudioFadeDuration);
+            if (!_isAudioFadingUpToPlay)
+            {
+                _audioFade = (1f - _audioFade);
+            }
+            ApplyAudioVolume();
+        }
+    }
     public void ChangeAudioVolume(float delta)
     {
         if (VideoPlayer != null)
