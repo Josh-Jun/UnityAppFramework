@@ -266,7 +266,7 @@
       "url": "https://packages.unity.cn"
     },
     "com.unity.xr.picotools": {
-      "version": "https://github.com/Josh-Jun/UPM.git#picotools",
+      "version": "https://github.com/Josh-Jun/UPM.git#picotools/1.0.0",
       "depth": 0,
       "source": "git",
       "dependencies": {
