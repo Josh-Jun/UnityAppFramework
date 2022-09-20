@@ -31,11 +31,11 @@ namespace Unity.XR.PXR
                 if (!Directory.Exists(path))
                 {
                     UnityEditor.AssetDatabase.CreateFolder("Assets", "Resources");
-                    UnityEditor.AssetDatabase.CreateAsset(projectConfig, "Assets/Resources/PXR_ProjectSetting.asset");
+                    UnityEditor.AssetDatabase.CreateAsset(projectConfig, "Assets/Resources/PXR/PXR_ProjectSetting.asset");
                 }
                 else
                 {
-                    UnityEditor.AssetDatabase.CreateAsset(projectConfig, "Assets/Resources/PXR_ProjectSetting.asset");
+                    UnityEditor.AssetDatabase.CreateAsset(projectConfig, "Assets/Resources/PXR/PXR_ProjectSetting.asset");
                 }
             }
 #endif

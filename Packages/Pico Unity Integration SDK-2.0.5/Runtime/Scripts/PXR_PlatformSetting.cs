@@ -55,7 +55,7 @@ namespace Unity.XR.PXR
                         if (instance == null)
                         {
                             instance = CreateInstance<PXR_PlatformSetting>();
-                            UnityEditor.AssetDatabase.CreateAsset(instance, "Assets/Resources/PXR_PlatformSetting.asset");
+                            UnityEditor.AssetDatabase.CreateAsset(instance, "Assets/Resources/PXR/PXR_PlatformSetting.asset");
                         }
 
                     }
@@ -63,7 +63,7 @@ namespace Unity.XR.PXR
                         if (instance == null)
                         {
                             instance = CreateInstance<PXR_PlatformSetting>();
-                            UnityEditor.AssetDatabase.CreateAsset(instance, "Assets/Resources/PXR_PlatformSetting.asset");
+                            UnityEditor.AssetDatabase.CreateAsset(instance, "Assets/Resources/PXR/PXR_PlatformSetting.asset");
                         }
                     }
                         

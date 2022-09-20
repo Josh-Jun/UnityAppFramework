@@ -20,7 +20,7 @@ using UnityEngine;
 public class PXR_SDKSettingEditor : EditorWindow
 {
     public static PXR_SDKSettingEditor window;
-    public static string assetPath = "Assets/Resources/";
+    public static string assetPath = "Assets/Resources/PXR/";
     GUIContent myTitleContent = new GUIContent();
     static Language language = Language.English;
 
