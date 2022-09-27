@@ -16,33 +16,36 @@ public class TimerManager : SingletonMono<TimerManager>
         base.InitManager(parent);
     }
 
+    private TimerData timeData;
     private void Update()
     {
         if (timerLst.Count > 0)
         {
             for (int i = 0; i < timerLst.Count; i++)
             {
-                TimerData timeData = timerLst[i];
+                timeData = timerLst[i];
                 if (timeData.isTime)
                 {
-                    timeData.addTime += Time.deltaTime;
+                    timeData.addTime = Time.time - timeData.tagTime;
                     timeData.cb(timeData.addTime);
                 }
             }
         }
     }
 
+    private TimerData fixedTimerData;
     private void FixedUpdate()
     {
         if (timerFixedLst.Count > 0)
         {
             for (int i = 0; i < timerFixedLst.Count; i++)
             {
-                TimerData timeData = timerFixedLst[i];
-                if (timeData.isTime)
+                fixedTimerData = timerFixedLst[i];
+                if (fixedTimerData.isTime)
                 {
-                    timeData.addTime++;
-                    timeData.cb(timeData.addTime/50f);
+                    int time = (int)(Time.fixedTime*100) - (int)(fixedTimerData.tagTime*100);
+                    fixedTimerData.addTime = time/100f;
+                    fixedTimerData.cb(fixedTimerData.addTime);
                 }
             }
         }
@@ -52,11 +55,13 @@ public class TimerManager : SingletonMono<TimerManager>
     public int StartTimer(Action<float> cb, bool isFixed = false)
     {
         timeId += 1;
+        float tagTime = isFixed ? Time.fixedTime : Time.time;
         TimerData timer = new TimerData
         {
             id = timeId,
             isTime = true,
             addTime = 0,
+            tagTime = tagTime,
             cb = cb,
         };
         if (isFixed)

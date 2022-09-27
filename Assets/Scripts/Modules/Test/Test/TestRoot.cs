@@ -56,6 +56,10 @@ namespace Test
             Debug.Log("-------------------1-------------------");
             await Task.Delay(TimeSpan.FromSeconds(3f));
             Debug.Log("-------------------2-------------------");
+            TimerManager.Instance.StartTimer((time) =>
+            {
+                Debug.Log(time);
+            });
         }
         public void Test()
         {
@@ -133,7 +137,7 @@ namespace Test
             string filePath = PlatformManager.Instance.GetDataPath("App/meta.apk");
             UnityWebRequester requester = new UnityWebRequester();
             
-            //int id = -1;
+            // int id = -1;
             // if (FileManager.FileExist(filePath))
             // {
             //     PlatformManager.Instance.InstallApp(filePath);
