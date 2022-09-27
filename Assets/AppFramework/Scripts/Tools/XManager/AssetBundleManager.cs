@@ -41,7 +41,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
 
     public void InitLocalAssetBundleConfig(Action callbcak = null)
     {
-        UnityWebRequester requester = new UnityWebRequester(this);
+        UnityWebRequester requester = new UnityWebRequester();
         requester.GetBytes($"file://{mainfestAssetsPath}/AssetBundleConfig.xml", (byte[] data) =>
         {
             AssetBundleConfig abc = XmlManager.ProtoDeSerialize<AssetBundleConfig>(data);

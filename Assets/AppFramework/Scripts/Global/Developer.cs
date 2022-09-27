@@ -5,6 +5,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using UnityEngine.Networking;
 using UnityEngine.Rendering;
 
 public static class Developer
@@ -702,6 +705,31 @@ public static class Developer
             current = first.FindLoopSelectable(dir);
         }
         return current;
+    }
+    #endregion
+
+    #region AsyncTask
+    public static TaskAwaiter GetAwaiter(this UnityWebRequestAsyncOperation op)
+    {
+        var tcs = new TaskCompletionSource<object>();
+        op.completed += (obj) =>
+        {
+            tcs.SetResult(null);
+        };
+        return ((Task)tcs.Task).GetAwaiter();
+    }
+    public static TaskAwaiter GetAwaiter<T>(this UnityWebRequestAsyncOperation op) where T : class
+    {
+        var tcs = new TaskCompletionSource<T>();
+        op.completed += (obj) =>
+        {
+            tcs.SetResult(null);
+        };
+        return ((Task)tcs.Task).GetAwaiter();
+    }
+    public static TaskAwaiter GetAwaiter(this TimeSpan timeSpan)
+    {
+        return Task.Delay(timeSpan).GetAwaiter();
     }
     #endregion
 }

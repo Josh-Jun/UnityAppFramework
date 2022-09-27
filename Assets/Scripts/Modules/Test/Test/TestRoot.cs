@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Video;
+using System.Threading.Tasks;
 
 namespace Test
 {
@@ -38,12 +39,24 @@ namespace Test
             window.PlayGif();
             Debug.Log(TableManager.Instance.GetTable<TestThriftTable>("TestThrift").Data.Count);
             Debug.Log(TableManager.Instance.GetTable<TestJson>("TestJson").Boss.Count);
+            RunTest();
         }
 
         public void End()
         {
         }
 
+        public void RunTest()
+        {
+            LogText();
+        }
+
+        public async void LogText()
+        {
+            Debug.Log("-------------------1-------------------");
+            await Task.Delay(TimeSpan.FromSeconds(3f));
+            Debug.Log("-------------------2-------------------");
+        }
         public void Test()
         {
             //音频播放
@@ -118,7 +131,7 @@ namespace Test
         {
             window.SetText(value);
             string filePath = PlatformManager.Instance.GetDataPath("App/meta.apk");
-            UnityWebRequester requester = new UnityWebRequester(App.app);
+            UnityWebRequester requester = new UnityWebRequester();
             
             //int id = -1;
             // if (FileManager.FileExist(filePath))

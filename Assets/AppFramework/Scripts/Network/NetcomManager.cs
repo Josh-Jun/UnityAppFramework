@@ -90,7 +90,7 @@ public partial class NetcomManager : SingletonMonoEvent<NetcomManager>
     {
         for (int i = 0; i < count; i++)
         {
-            UnityWebRequester uwr = new UnityWebRequester(this);
+            UnityWebRequester uwr = new UnityWebRequester();
             uwrQueue.Enqueue(uwr);
         }
     }

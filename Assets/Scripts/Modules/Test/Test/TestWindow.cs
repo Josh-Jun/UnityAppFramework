@@ -23,6 +23,7 @@ namespace Test
         private Camera mobileCamera;
         private GifPlayer gifPlayer;
         public Camera renderCamera { private set; get; }
+
         protected override void InitWindow()
         {
             base.InitWindow();
@@ -53,14 +54,13 @@ namespace Test
         protected override void OpenWindow()
         {
             base.OpenWindow();
-            
         }
 
         protected override void CloseWindow()
         {
             base.CloseWindow();
-
         }
+
         public void SetRawImage(Texture2D texture)
         {
             rawImage.texture = texture;
@@ -78,8 +78,10 @@ namespace Test
             // selfStick.Find("Cube/Quad").GetComponent<MeshRenderer>().sharedMaterial.mainTexture = renderTexture;
             // mobileImageRoot.TryGetComponent<ParentConstraint>().AddSource(new ConstraintSource { sourceTransform = PicoXRManager.Instance.MainCamera.transform, weight = 1 });
         }
+
         public void SetText(string value)
         {
+            if (text == null) return;
             text.text = value;
         }
 

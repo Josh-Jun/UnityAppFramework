@@ -192,7 +192,7 @@ namespace Update
                     {
                         FileManager.DeleteFile(appPath);
                     }
-                    UnityWebRequester requester = new UnityWebRequester(window);
+                    UnityWebRequester requester = new UnityWebRequester();
                     requester.GetBytes(appUrl, (bytes) =>
                     {
                         FileManager.CreateFile(appPath, bytes);
@@ -363,7 +363,7 @@ namespace Update
                 
                 #region 正常下载
                 Finished = false;
-                UnityWebRequester requester = new UnityWebRequester(window);
+                UnityWebRequester requester = new UnityWebRequester();
                 requester.GetBytes(ServerUrl + folder.BundleName, (bytes) =>
                 {
                     FileManager.CreateFile(LocalPath + folder.BundleName, bytes);
@@ -459,7 +459,7 @@ namespace Update
         /// <summary> 下载 </summary>
         private void DownLoad(string url, Action<byte[]> action)
         {
-            UnityWebRequester requester = new UnityWebRequester(window);
+            UnityWebRequester requester = new UnityWebRequester();
             requester.GetBytes(url, (byte[] data) =>
             {
                 action?.Invoke(data);
