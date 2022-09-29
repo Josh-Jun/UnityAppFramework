@@ -367,7 +367,6 @@ namespace Update
                 requester.GetBytes(ServerUrl + folder.BundleName, (bytes) =>
                 {
                     FileManager.CreateFile(LocalPath + folder.BundleName, bytes);
-                    Debug.Log($"{folder.Mold}-{folder.Size}-{folder.Tag}-{folder.BundleName}-{folder.FolderName}-{folder.MD5}-{folder.Mold}");
                     UpdateLocalConfigMD5(folder);
                     TimerManager.Instance.EndTimer(timeId);
                     downloadingSize = 0;
@@ -409,7 +408,6 @@ namespace Update
 
             string json = JsonUtility.ToJson(alreadyConfig, true);
             FileManager.CreateFile(LocalVersionConfigPath,json);
-            Debug.Log(json);
         }
 
         private void UpdateLocalConfigTag(Folder folder)
