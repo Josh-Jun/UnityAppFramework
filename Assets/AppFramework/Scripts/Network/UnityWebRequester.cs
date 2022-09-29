@@ -123,7 +123,7 @@ public class UnityWebRequester
     /// <param name="actionResult">请求发起后处理回调结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    private async void Get(string url, Action<string> callback)
+    public async void Get(string url, Action<string> callback)
     {
         Task<string> task = Get(url);
         await task;
@@ -294,7 +294,7 @@ public class UnityWebRequester
     /// <param name="actionResult">请求发起后处理回调结果的委托</param>
     /// <param name="actionProgress"></param>
     /// <returns></returns>
-    private async Task<string> Get(string url)
+    public async Task<string> Get(string url)
     {
         using (uwr)
         {

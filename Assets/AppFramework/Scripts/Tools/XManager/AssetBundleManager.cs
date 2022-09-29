@@ -42,9 +42,9 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
     public void InitLocalAssetBundleConfig(Action callbcak = null)
     {
         UnityWebRequester requester = new UnityWebRequester();
-        requester.GetBytes($"file://{mainfestAssetsPath}/AssetBundleConfig.xml", (byte[] data) =>
+        requester.Get($"file://{mainfestAssetsPath}/AssetBundleConfig.json", (string data) =>
         {
-            AssetBundleConfig abc = XmlManager.ProtoDeSerialize<AssetBundleConfig>(data);
+            AssetBundleConfig abc = JsonUtility.FromJson<AssetBundleConfig>(data);
             foreach (var module in abc.Modules)
             {
                 Dictionary<string, Folder> folderPairs = new Dictionary<string, Folder>();
@@ -113,7 +113,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
     public AssetBundle LoadAssetBundle(string moduleName, string folderName)
     {
         Folder folder = ABModulePairs[moduleName][folderName];
-        return LoadAssetBundle(folder.BundleName, folder.ABMold == "1");
+        return LoadAssetBundle(folder.BundleName, folder.Mold == "1");
     }
     public T LoadAsset<T>(string moduleName, string folderName, string assetsName) where T : UnityEngine.Object
     {

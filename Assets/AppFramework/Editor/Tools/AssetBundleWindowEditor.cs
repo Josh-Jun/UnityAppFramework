@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
+using Data;
 using UnityEditor;
 using UnityEditor.Build.Content;
 using UnityEditor.Build.Pipeline;
@@ -447,39 +449,40 @@ public class AssetBundleWindowEditor : EditorWindow
     private void CreateFile()
     {
         string outPath = string.Format("{0}/{1}", outputPath, buildTarget);
-        string filePath = outPath + "/AssetBundleConfig.xml";
-        if (File.Exists(filePath))
-            File.Delete(filePath);
+        string filePath = outPath + "/AssetBundleConfig.json";
 
-        XmlDocument xmlDocument = new XmlDocument();
-        XmlDeclaration xmlDeclaration = xmlDocument.CreateXmlDeclaration("1.0", "UTF-8", null);
-        xmlDocument.AppendChild(xmlDeclaration);
-        var root = xmlDocument.CreateElement("AssetBundleConfig");
-        root.SetAttribute("GameVersion", Application.version);
-        root.SetAttribute("Platform", buildTarget.ToString());
-        root.SetAttribute("Des", des);
-        foreach (var scene in moduleDic)
+        AssetBundleConfig config = new AssetBundleConfig();
+        config.GameVersion = Application.version;
+        config.Platform = buildTarget.ToString();
+        config.Des = des;
+        config.Modules = new List<Module>();
+        foreach (var module in moduleDic)
         {
-            var xmlScene = xmlDocument.CreateElement("Modules");
-            xmlScene.SetAttribute("ModuleName", scene.Key);
-            //root.AppendChild(xmlScene);
-            foreach (var folder in scene.Value)
+            Module m = new Module();
+            m.ModuleName = module.Key;
+            m.Folders = new List<Folder>();
+            foreach (var folder in module.Value)
             {
                 FileInfo file = new FileInfo(outPath + "/" + folder.Value);
-                var xmlFolder = xmlDocument.CreateElement("Folders");
-                xmlFolder.SetAttribute("FolderName", folder.Key);
-                xmlFolder.SetAttribute("BundleName", folder.Value);
-                xmlFolder.SetAttribute("Tag", "0");
-                xmlFolder.SetAttribute("ABMold", isLocalAsset ? "1" : "0");
-                xmlFolder.SetAttribute("MD5", GetFileMD5(file.FullName));
-                xmlFolder.SetAttribute("Size", $"{file.Length}");
-
-                xmlScene.AppendChild(xmlFolder);
+                Folder f = new Folder();
+                f.FolderName = folder.Key;
+                f.BundleName = folder.Value;
+                f.Tag = "0";
+                f.Mold = isLocalAsset ? "1" : "0";
+                f.MD5 = GetFileMD5(file.FullName);
+                f.Size = $"{file.Length}";
+                m.Folders.Add(f);
             }
-            root.AppendChild(xmlScene);
+            config.Modules.Add(m);
         }
-        xmlDocument.AppendChild(root);
-        xmlDocument.Save(filePath);
+
+        var json = JsonUtility.ToJson(config, true);
+        if (File.Exists(filePath))
+        {
+            File.Delete(filePath);
+        }
+
+        File.WriteAllText(filePath, json);
 
         AssetDatabase.Refresh();
         Debug.Log("MD5文件生成完毕!");

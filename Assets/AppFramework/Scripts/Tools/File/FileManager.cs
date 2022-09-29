@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using UnityEngine;
 /// <summary>
 /// 功能:文件工具 
@@ -26,6 +27,25 @@ public class FileManager
         }
     }
 
+    /// <summary> 创建文件 </summary>
+    public static void CreateFile(string targetPath, string content)
+    {
+        try
+        {
+            CreateDirectory(targetPath);
+            DeleteFile(targetPath);
+            FileInfo file = new FileInfo(targetPath);
+            Stream stream = file.Create();
+            byte[] bytes = Encoding.UTF8.GetBytes(content);
+            stream.Write(bytes, 0, bytes.Length);
+            stream.Close();
+            stream.Dispose();
+        }
+        catch
+        {
+            Debug.LogError(string.Format("<color=#0000FF> 创建文件-文件夹路径错误:{0}</color>", targetPath));
+        }
+    }
     /// <summary> 创建文件 </summary>
     public static void CreateFile(string targetPath)
     {

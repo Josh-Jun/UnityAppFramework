@@ -1,0 +1,28 @@
+{
+    "GameVersion": "1.0",
+    "Platform": "Android",
+    "Des": "请输入本版更新描述",
+    "Modules": [
+        {
+            "ModuleName": "Update",
+            "Folders": [
+                {
+                    "FolderName": "Textures",
+                    "BundleName": "update/textures",
+                    "Tag": "0",
+                    "Mold": "1",
+                    "MD5": "982a03935311ed362988f012d2184c63",
+                    "Size": "4214"
+                },
+                {
+                    "FolderName": "Windows",
+                    "BundleName": "update/windows",
+                    "Tag": "0",
+                    "Mold": "1",
+                    "MD5": "4a4f3551d8267a0e6cd2bbc90fbfcaac",
+                    "Size": "16441"
+                }
+            ]
+        }
+    ]
+}

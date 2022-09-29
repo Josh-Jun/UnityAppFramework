@@ -17,10 +17,10 @@ namespace Update
         #region Private Var
 
         private string LocalPath;
-        private string XmlLocalVersionPath;
+        private string LocalVersionConfigPath;
 
         private string ServerUrl;
-        private string XmlServerVersionPath;
+        private string ServerVersionConfigPath;
 
         private string appUrl;
         private string appPath;
@@ -69,8 +69,8 @@ namespace Update
             LocalPath = PlatformManager.Instance.GetDataPath(PlatformManager.Instance.Name) + "/";
             ServerUrl = NetcomManager.ABUrl + PlatformManager.Instance.Name + "/";
 
-            XmlLocalVersionPath = LocalPath + "AssetBundleConfig.xml";
-            XmlServerVersionPath = ServerUrl + "AssetBundleConfig.xml";
+            LocalVersionConfigPath = LocalPath + "AssetBundleConfig.json";
+            ServerVersionConfigPath = ServerUrl + "AssetBundleConfig.json";
 
             appUrl = NetcomManager.AppUrl + "meta.apk";
             appPath = PlatformManager.Instance.GetDataPath("App/meta.apk");
@@ -226,13 +226,13 @@ namespace Update
         /// <summary> 开始热更新 </summary>
         private void StartUpdate(Action<UpdateMold, string> UpdateCallBack)
         {
-            if (FileManager.FileExist(XmlLocalVersionPath))
+            if (FileManager.FileExist(LocalVersionConfigPath))
             {
                 //读取本地热更文件
-                DownLoad($"file://{XmlLocalVersionPath}", (byte[] bytes) =>
+                DownLoad($"file://{LocalVersionConfigPath}", (string data) =>
                 {
-                    localABConfig = bytes != null
-                        ? XmlManager.ProtoDeSerialize<AssetBundleConfig>(bytes)
+                    localABConfig = !string.IsNullOrEmpty(data)
+                        ? JsonUtility.FromJson<AssetBundleConfig>(data)
                         : null;
                     //检查版本更新信息
                     CheckUpdate(localABConfig, (mold) => { UpdateCallBack?.Invoke(mold, serverABConfig.Des); });
@@ -280,7 +280,6 @@ namespace Update
             for (int i = 0; i < downloadFolders.Count; i++)
             {
                 var folder = downloadFolders[i];
-
                 if (localFolders.Count > 0)
                 {
                     if (localFolders.ContainsKey(folder.BundleName))
@@ -330,6 +329,7 @@ namespace Update
                         FileManager.CreateFile(LocalPath + folder.BundleName + ".manifest", _manifest_data);
                     });
                 }
+                
             }
 
             yield return new WaitForEndOfFrame();
@@ -337,7 +337,7 @@ namespace Update
             {
                 yield return new WaitForEndOfFrame();
                 yield return new WaitUntil(() => Finished);
-
+                
                 #region 断点续传
                 // folder.Tag = "1";
                 // UpdateLocalConfigTag(folder);
@@ -367,6 +367,7 @@ namespace Update
                 requester.GetBytes(ServerUrl + folder.BundleName, (bytes) =>
                 {
                     FileManager.CreateFile(LocalPath + folder.BundleName, bytes);
+                    Debug.Log($"{folder.Mold}-{folder.Size}-{folder.Tag}-{folder.BundleName}-{folder.FolderName}-{folder.MD5}-{folder.Mold}");
                     UpdateLocalConfigMD5(folder);
                     TimerManager.Instance.EndTimer(timeId);
                     downloadingSize = 0;
@@ -382,78 +383,98 @@ namespace Update
             yield return new WaitForEndOfFrame();
         }
 
+        private AssetBundleConfig alreadyConfig = null;
         private void UpdateLocalConfigMD5(Folder folder)
         {
             InitLocalConfig();
 
-            XmlDocument xmlDocument = XmlManager.Load(XmlLocalVersionPath);
-
-            var modules = xmlDocument.GetElementsByTagName("Modules");
-            for (int i = 0; i < modules.Count; i++)
+            for (int i = 0; i < alreadyConfig.Modules.Count; i++)
             {
-                var folders = modules[i].ChildNodes;
+                var folders = alreadyConfig.Modules[i].Folders;
                 for (int j = 0; j < folders.Count; j++)
                 {
                     if (folder != null)
                     {
-                        if (folder.BundleName == folders[j].Attributes["BundleName"].Value)
+                        if (folder.BundleName == folders[j].BundleName)
                         {
-                            folders[j].Attributes["MD5"].Value = folder.MD5;
+                            folders[j].MD5 = folder.MD5;
                         }
                     }
                 }
             }
-            XmlManager.Save(xmlDocument, XmlLocalVersionPath);
+            if (FileManager.FileExist(LocalVersionConfigPath))
+            {
+                FileManager.DeleteFile(LocalVersionConfigPath);
+            }
+
+            string json = JsonUtility.ToJson(alreadyConfig, true);
+            FileManager.CreateFile(LocalVersionConfigPath,json);
+            Debug.Log(json);
         }
 
         private void UpdateLocalConfigTag(Folder folder)
         {
             InitLocalConfig();
             
-            XmlDocument xmlDocument = XmlManager.Load(XmlLocalVersionPath);
-
-            var modules = xmlDocument.GetElementsByTagName("Modules");
-            for (int i = 0; i < modules.Count; i++)
+            for (int i = 0; i < alreadyConfig.Modules.Count; i++)
             {
-                var folders = modules[i].ChildNodes;
+                var folders = alreadyConfig.Modules[i].Folders;
                 for (int j = 0; j < folders.Count; j++)
                 {
                     if (folder != null)
                     {
-                        if (folder.BundleName == folders[j].Attributes["BundleName"].Value)
+                        if (folder.BundleName == folders[j].BundleName)
                         {
-                            folders[j].Attributes["Tag"].Value = folder.Tag;
+                            folders[j].Tag = folder.Tag;
                         }
                     }
                 }
             }
+            
+            if (FileManager.FileExist(LocalVersionConfigPath))
+            {
+                FileManager.DeleteFile(LocalVersionConfigPath);
+            }
 
-            XmlManager.Save(xmlDocument, XmlLocalVersionPath);
+            string json = JsonUtility.ToJson(alreadyConfig, true);
+            FileManager.CreateFile(LocalVersionConfigPath,json);
         }
         private void InitLocalConfig()
         {
-            if (!FileManager.FileExist(XmlLocalVersionPath))
+            if (alreadyConfig == null)
             {
-                AssetBundleConfig config = new AssetBundleConfig();
-                config.GameVersion = serverABConfig.GameVersion;
-                config.Platform = serverABConfig.Platform;
-                config.Modules = serverABConfig.Modules;
-                FileManager.CreateFile(XmlLocalVersionPath, XmlManager.ProtoByteSerialize<AssetBundleConfig>(config));
-                
-                XmlDocument xmlDocument = XmlManager.Load(XmlLocalVersionPath);
+                alreadyConfig = new AssetBundleConfig();
+                alreadyConfig.GameVersion = serverABConfig.GameVersion;
+                alreadyConfig.Platform = serverABConfig.Platform;
+                alreadyConfig.Des = serverABConfig.Des;
+                alreadyConfig.Modules = new List<Module>();
 
-                var modules = xmlDocument.GetElementsByTagName("Modules");
-                for (int i = 0; i < modules.Count; i++)
+                foreach (var module in serverABConfig.Modules)
                 {
-                    var folders = modules[i].ChildNodes;
-                    for (int j = 0; j < folders.Count; j++)
+                    Module m = new Module();
+                    m.ModuleName = module.ModuleName;
+                    m.Folders = new List<Folder>();
+                    foreach (var folder in module.Folders)
                     {
-                        folders[j].Attributes["Tag"].Value = "0";
-                        folders[j].Attributes["MD5"].Value = "";
+                        Folder f = new Folder();
+                        f.FolderName = folder.FolderName;
+                        f.BundleName = folder.BundleName;
+                        f.Tag = "0";
+                        f.Mold = folder.Mold;
+                        f.MD5 = "";
+                        f.Size = folder.Size;
+                        m.Folders.Add(f);
                     }
+                    alreadyConfig.Modules.Add(m);
+                }
+                
+                if (FileManager.FileExist(LocalVersionConfigPath))
+                {
+                    FileManager.DeleteFile(LocalVersionConfigPath);
                 }
 
-                XmlManager.Save(xmlDocument, XmlLocalVersionPath);
+                string json = JsonUtility.ToJson(alreadyConfig, true);
+                FileManager.CreateFile(LocalVersionConfigPath,json);
             }
         }
         /// <summary> 下载 </summary>
@@ -461,6 +482,16 @@ namespace Update
         {
             UnityWebRequester requester = new UnityWebRequester();
             requester.GetBytes(url, (byte[] data) =>
+            {
+                action?.Invoke(data);
+                requester.Destory();
+            });
+        }
+        /// <summary> 下载 </summary>
+        private void DownLoad(string url, Action<string> action)
+        {
+            UnityWebRequester requester = new UnityWebRequester();
+            requester.Get(url, (string data) =>
             {
                 action?.Invoke(data);
                 requester.Destory();
@@ -477,9 +508,9 @@ namespace Update
             }
             else
             {
-                DownLoad(XmlServerVersionPath, (byte[] bytes) =>
+                DownLoad(ServerVersionConfigPath, (string data) =>
                 {
-                    serverABConfig = XmlManager.ProtoDeSerialize<AssetBundleConfig>(bytes);
+                    serverABConfig = JsonUtility.FromJson<AssetBundleConfig>(data);
                     SetABModulePairs(serverABConfig);
                     Debug.Log($"大版本比较 v{Application.version}/v{serverABConfig.GameVersion}");
                     if (!CheckVersion(serverABConfig.GameVersion))
