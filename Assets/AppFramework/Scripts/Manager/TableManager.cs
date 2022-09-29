@@ -9,9 +9,9 @@ public class TableManager : SingletonMono<TableManager>
 {
     private Dictionary<string, Table> m_TablePairs = new Dictionary<string, Table>();
     private AppTableConfig appTableConfig;
-    public override void InitManager(Transform parent)
+    public override void InitParent(Transform parent)
     {
-        base.InitManager(parent);
+        base.InitParent(parent);
         
         RegiterType();
         RegisterFloat();
@@ -52,7 +52,7 @@ public class TableManager : SingletonMono<TableManager>
         switch (table.mold)
         {
             case TableMold.Xml:
-                t = XmlManager.ProtoDeSerialize<T>(table.bytes);
+                t = XmlTools.ProtoDeSerialize<T>(table.bytes);
                 break;
             case TableMold.Json:
                 t = JsonMapper.ToObject<T>(table.text);

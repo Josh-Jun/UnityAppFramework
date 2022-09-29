@@ -285,7 +285,7 @@ public class MenuToolsEditor : UnityEditor.AssetModificationProcessor
                 contents = contents.Replace("guid: " + oldGuid, "guid: " + newGuid);
             }
             //File.WriteAllText(filePath, contents);
-            FileManager.CreateFile(filePath, System.Text.Encoding.UTF8.GetBytes(contents));
+            FileTools.CreateFile(filePath, System.Text.Encoding.UTF8.GetBytes(contents));
         }
 
         EditorUtility.ClearProgressBar();

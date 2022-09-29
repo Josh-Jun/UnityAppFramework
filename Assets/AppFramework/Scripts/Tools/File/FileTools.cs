@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// 功能:文件工具 
 /// </summary>
-public class FileManager
+public class FileTools
 {
     /// <summary> 创建文件 </summary>
     public static void CreateFile(string targetPath, byte[] bytes)

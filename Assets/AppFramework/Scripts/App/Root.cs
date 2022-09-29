@@ -80,16 +80,16 @@ public class Root
         Transform parent = go.transform;
         parent.SetParent(App.app.transform);
 
-        PlatformMsgReceiver.Instance.InitManager(parent);
-        AssetBundleManager.Instance.InitManager(parent);
-        TimerTaskManager.Instance.InitManager(parent);
-        AssetsManager.Instance.InitManager(parent);
-        NetcomManager.Instance.InitManager(parent);
-        TimerManager.Instance.InitManager(parent);
-        AudioManager.Instance.InitManager(parent);
-        AVProManager.Instance.InitManager(parent);
-        VideoManager.Instance.InitManager(parent);
-        TableManager.Instance.InitManager(parent);
+        PlatformMsgReceiver.Instance.InitParent(parent);
+        AssetBundleManager.Instance.InitParent(parent);
+        AssetsManager.Instance.InitParent(parent);
+        NetcomManager.Instance.InitParent(parent);
+        AudioManager.Instance.InitParent(parent);
+        AVProManager.Instance.InitParent(parent);
+        VideoManager.Instance.InitParent(parent);
+        TableManager.Instance.InitParent(parent);
+        TimerTaskServe.Instance.InitParent(parent);
+        TimerServe.Instance.InitParent(parent);
     }
 
     private static void InitRootScripts(Action callback = null)

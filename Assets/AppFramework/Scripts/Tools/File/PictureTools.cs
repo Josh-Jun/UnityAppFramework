@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// 图片工具类
 /// </summary>
-public static class PictureManager
+public static class PictureTools
 {
     /// <summary> 创建Sprite</summary>
     public static Texture2D CreateTexture(byte[] bytes, int width, int height)
@@ -77,11 +77,11 @@ public static class PictureManager
         var img = texture.EncodeToPNG();
         string imageName = string.Format("Image{0}.png", Utils.GetTimeStamp);
         string file = string.Format("{0}/{1}", path, imageName);
-        if (!FileManager.FolderExist(path))//创建生成目录，如果不存在则创建目录  
+        if (!FileTools.FolderExist(path))//创建生成目录，如果不存在则创建目录  
         {
-            FileManager.CreateFolder(path);
+            FileTools.CreateFolder(path);
         }
-        FileManager.CreateFile(file, img);
+        FileTools.CreateFile(file, img);
         callback?.Invoke(texture, imageName);
     }
     /// <summary>
@@ -97,11 +97,11 @@ public static class PictureManager
         var img = texture.EncodeToPNG();
         string imageName = string.Format("Image{0}.png", Utils.GetTimeStamp);
         string file = string.Format("{0}/{1}", path, imageName);
-        if (!FileManager.FolderExist(path))//创建生成目录，如果不存在则创建目录  
+        if (!FileTools.FolderExist(path))//创建生成目录，如果不存在则创建目录  
         {
-            FileManager.CreateFolder(path);
+            FileTools.CreateFolder(path);
         }
-        FileManager.CreateFile(file, img);
+        FileTools.CreateFile(file, img);
         callback?.Invoke(texture, imageName);
     }
     /// <summary>  

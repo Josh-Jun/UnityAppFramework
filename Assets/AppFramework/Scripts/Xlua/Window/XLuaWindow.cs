@@ -23,7 +23,7 @@ namespace XLuaFrame
         protected override void InitWindow()
         {
             base.InitWindow();
-            TimerTaskManager.Instance.AddFrameTask(() =>{
+            TimerTaskServe.Instance.AddFrameTask(() =>{
                 LuaCallbackPairs[(int)WindowLifeCycle.InitWindow]?.Invoke();
             }, 1);
         }
@@ -31,7 +31,7 @@ namespace XLuaFrame
         protected override void RegisterEvent()
         {
             base.RegisterEvent();
-            TimerTaskManager.Instance.AddFrameTask(() => {
+            TimerTaskServe.Instance.AddFrameTask(() => {
                 LuaCallbackPairs[(int)WindowLifeCycle.RegisterEvent]?.Invoke();
             }, 1);
         }
@@ -39,7 +39,7 @@ namespace XLuaFrame
         protected override void OpenWindow()
         {
             base.OpenWindow();
-            TimerTaskManager.Instance.AddFrameTask(() => {
+            TimerTaskServe.Instance.AddFrameTask(() => {
                 LuaCallbackPairs[(int)WindowLifeCycle.OpenWindow]?.Invoke();
             }, 1);
         }

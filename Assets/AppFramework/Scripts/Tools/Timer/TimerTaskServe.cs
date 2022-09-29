@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>功能:定时服务</summary>
-public class TimerTaskManager : SingletonMono<TimerTaskManager>
+public class TimerTaskServe : SingletonMono<TimerTaskServe>
 {
     private TimerTask timer;//计时器
     private static readonly string lockTask = "lockTask";//任务锁
     private Queue<TaskPack> timerQueue = new Queue<TaskPack>();//定时任务队列
-    public override void InitManager(Transform parent)
+    public override void InitParent(Transform parent)
     {
-        base.InitManager(parent);
+        base.InitParent(parent);
         InitTimer();
     }
 

@@ -80,9 +80,9 @@ public partial class NetcomManager : SingletonMonoEvent<NetcomManager>
             return uwrQueue.Dequeue();
         }
     }
-    public override void InitManager(Transform parent)
+    public override void InitParent(Transform parent)
     {
-        base.InitManager(parent);
+        base.InitParent(parent);
         InitQueue(50);
     }
 

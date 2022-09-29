@@ -188,18 +188,18 @@ namespace Update
                     // });
                     #endregion
                     #region 正常下载
-                    if (FileManager.FileExist(appPath))
+                    if (FileTools.FileExist(appPath))
                     {
-                        FileManager.DeleteFile(appPath);
+                        FileTools.DeleteFile(appPath);
                     }
                     UnityWebRequester requester = new UnityWebRequester();
                     requester.GetBytes(appUrl, (bytes) =>
                     {
-                        FileManager.CreateFile(appPath, bytes);
-                        TimerManager.Instance.EndTimer(timeId);
+                        FileTools.CreateFile(appPath, bytes);
+                        TimerServe.Instance.EndTimer(timeId);
                         PlatformManager.Instance.InstallApp(appPath);
                     });
-                    timeId = TimerManager.Instance.StartTimer((t) =>
+                    timeId = TimerServe.Instance.StartTimer((t) =>
                     {
                         var size = requester.DownloadedLength / 1024f / 1024f;
                         time += Time.deltaTime;
@@ -226,7 +226,7 @@ namespace Update
         /// <summary> 开始热更新 </summary>
         private void StartUpdate(Action<UpdateMold, string> UpdateCallBack)
         {
-            if (FileManager.FileExist(LocalVersionConfigPath))
+            if (FileTools.FileExist(LocalVersionConfigPath))
             {
                 //读取本地热更文件
                 DownLoad($"file://{LocalVersionConfigPath}", (string data) =>
@@ -252,14 +252,14 @@ namespace Update
             DownLoad(ServerUrl + PlatformManager.Instance.Name + ".manifest", (byte[] manifest_data) =>
             {
                 //将manifest文件写入本地
-                FileManager.CreateFile(LocalPath + PlatformManager.Instance.Name + ".manifest", manifest_data);
+                FileTools.CreateFile(LocalPath + PlatformManager.Instance.Name + ".manifest", manifest_data);
                 if (Root.AppConfig.ABPipeline == ABPipeline.Default)
                 {
                      //下载总AB包
                      DownLoad(ServerUrl + PlatformManager.Instance.Name, (byte[] ab_data) =>
                      {
                         //将ab文件写入本地
-                        FileManager.CreateFile(LocalPath + PlatformManager.Instance.Name, ab_data);
+                        FileTools.CreateFile(LocalPath + PlatformManager.Instance.Name, ab_data);
                         window.StartCoroutine(DownLoadAssetBundle());
                      });
                 }
@@ -307,9 +307,9 @@ namespace Update
                         #region 正常下载
                         if (localFolders[folder.BundleName].MD5 != folder.MD5)
                         {
-                            if (FileManager.FileExist(LocalPath + folder.BundleName))
+                            if (FileTools.FileExist(LocalPath + folder.BundleName))
                             {
-                                FileManager.DeleteFile(LocalPath + folder.BundleName);
+                                FileTools.DeleteFile(LocalPath + folder.BundleName);
                             }
                         }
                         #endregion
@@ -321,12 +321,12 @@ namespace Update
                     //下载manifest文件
                     DownLoad(ServerUrl + folder.BundleName + ".manifest", (byte[] _manifest_data) =>
                     {
-                        if (FileManager.FileExist(LocalPath + folder.BundleName + ".manifest"))
+                        if (FileTools.FileExist(LocalPath + folder.BundleName + ".manifest"))
                         {
-                            FileManager.DeleteFile(LocalPath + folder.BundleName + ".manifest");
+                            FileTools.DeleteFile(LocalPath + folder.BundleName + ".manifest");
                         }
                         //将manifest文件写入本地
-                        FileManager.CreateFile(LocalPath + folder.BundleName + ".manifest", _manifest_data);
+                        FileTools.CreateFile(LocalPath + folder.BundleName + ".manifest", _manifest_data);
                     });
                 }
                 
@@ -366,14 +366,14 @@ namespace Update
                 UnityWebRequester requester = new UnityWebRequester();
                 requester.GetBytes(ServerUrl + folder.BundleName, (bytes) =>
                 {
-                    FileManager.CreateFile(LocalPath + folder.BundleName, bytes);
+                    FileTools.CreateFile(LocalPath + folder.BundleName, bytes);
                     UpdateLocalConfigMD5(folder);
-                    TimerManager.Instance.EndTimer(timeId);
+                    TimerServe.Instance.EndTimer(timeId);
                     downloadingSize = 0;
                     alreadyDownloadSize += Convert.ToInt64(folder.Size);
                     Finished = true;
                 });
-                timeId = TimerManager.Instance.StartTimer((time) =>
+                timeId = TimerServe.Instance.StartTimer((time) =>
                 {
                     downloadingSize = requester.DownloadedLength;
                 });
@@ -401,13 +401,13 @@ namespace Update
                     }
                 }
             }
-            if (FileManager.FileExist(LocalVersionConfigPath))
+            if (FileTools.FileExist(LocalVersionConfigPath))
             {
-                FileManager.DeleteFile(LocalVersionConfigPath);
+                FileTools.DeleteFile(LocalVersionConfigPath);
             }
 
             string json = JsonUtility.ToJson(alreadyConfig, true);
-            FileManager.CreateFile(LocalVersionConfigPath,json);
+            FileTools.CreateFile(LocalVersionConfigPath,json);
         }
 
         private void UpdateLocalConfigTag(Folder folder)
@@ -429,13 +429,13 @@ namespace Update
                 }
             }
             
-            if (FileManager.FileExist(LocalVersionConfigPath))
+            if (FileTools.FileExist(LocalVersionConfigPath))
             {
-                FileManager.DeleteFile(LocalVersionConfigPath);
+                FileTools.DeleteFile(LocalVersionConfigPath);
             }
 
             string json = JsonUtility.ToJson(alreadyConfig, true);
-            FileManager.CreateFile(LocalVersionConfigPath,json);
+            FileTools.CreateFile(LocalVersionConfigPath,json);
         }
         private void InitLocalConfig()
         {
@@ -466,13 +466,13 @@ namespace Update
                     alreadyConfig.Modules.Add(m);
                 }
                 
-                if (FileManager.FileExist(LocalVersionConfigPath))
+                if (FileTools.FileExist(LocalVersionConfigPath))
                 {
-                    FileManager.DeleteFile(LocalVersionConfigPath);
+                    FileTools.DeleteFile(LocalVersionConfigPath);
                 }
 
                 string json = JsonUtility.ToJson(alreadyConfig, true);
-                FileManager.CreateFile(LocalVersionConfigPath,json);
+                FileTools.CreateFile(LocalVersionConfigPath,json);
             }
         }
         /// <summary> 下载 </summary>

@@ -25,9 +25,9 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
     private string mainfestDataPath;
     private string mainfestAssetsPath;
 
-    public override void InitManager(Transform parent)
+    public override void InitParent(Transform parent)
     {
-        base.InitManager(parent);
+        base.InitParent(parent);
         if (PlatformManager.Instance.IsEditor)
         {
             mainfestDataPath = PlatformManager.Instance.GetDataPath(PlatformManager.Instance.Name);

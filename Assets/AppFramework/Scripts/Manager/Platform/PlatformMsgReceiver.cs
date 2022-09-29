@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PlatformMsgReceiver : SingletonMonoEvent<PlatformMsgReceiver>
 {
-    public override void InitManager(Transform parent)
+    public override void InitParent(Transform parent)
     {
-        base.InitManager(parent);
+        base.InitParent(parent);
     }
     
 }

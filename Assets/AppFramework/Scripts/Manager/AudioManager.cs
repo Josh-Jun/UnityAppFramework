@@ -7,9 +7,9 @@ public class AudioManager : SingletonMono<AudioManager>
     private AudioSource backgroundAudio;
     private AudioSource effectAudio;
 
-    public override void InitManager(Transform parent)
+    public override void InitParent(Transform parent)
     {
-        base.InitManager(parent);
+        base.InitParent(parent);
         backgroundAudio = CreateAudioSource();
         effectAudio = CreateAudioSource();
     }

@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
 //功能:AES加解密工具
-public class AESManager
+public class AESTools
 {
     #region AES带头 加、解密
     private static string AESHead = "AESEncrypt";

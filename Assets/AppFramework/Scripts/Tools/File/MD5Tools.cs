@@ -7,7 +7,7 @@ using System.Text;
 /// 功能:MD5工具 
 /// </summary>
 [Serializable]
-public class MD5Manager
+public class MD5Tools
 {
     /// <summary> 根据路径获取文件的MD5 </summary>
     public static string File2Md5(string fliePath)

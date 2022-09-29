@@ -11,9 +11,9 @@ public class VideoManager : SingletonMono<VideoManager>
     private RenderTexture movie;
     public VideoPlayer VideoPlayer { get; private set; }
     
-    public override void InitManager(Transform parent)
+    public override void InitParent(Transform parent)
     {
-        base.InitManager(parent);
+        base.InitParent(parent);
         VideoPlayer = this.TryGetComponent<VideoPlayer>();
         VideoPlayer.sendFrameReadyEvents = true;
     }

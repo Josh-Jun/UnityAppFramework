@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>功能:计时器服务</summary>
-public class TimerManager : SingletonMono<TimerManager>
+public class TimerServe : SingletonMono<TimerServe>
 {
     private int timeId = 0; //下标
     private List<TimerData> timerLst = new List<TimerData>(); //计时Lst
@@ -11,9 +11,9 @@ public class TimerManager : SingletonMono<TimerManager>
 
     public float GameTime { private set { } get { return Time.time; } }
 
-    public override void InitManager(Transform parent)
+    public override void InitParent(Transform parent)
     {
-        base.InitManager(parent);
+        base.InitParent(parent);
     }
 
     private TimerData timeData;

@@ -95,9 +95,9 @@ public class AVProManager : SingletonMono<AVProManager>
         Entrys.Add(entry);
     }
     #endregion
-    public override void InitManager(Transform parent)
+    public override void InitParent(Transform parent)
     {
-        base.InitManager(parent);
+        base.InitParent(parent);
         _mediaPlayer = gameObject.TryGetComponent<MediaPlayer>();
         gameObject.TryGetComponent<AudioSource>();
         gameObject.TryGetComponent<AudioOutput>().Player = MediaPlayer;

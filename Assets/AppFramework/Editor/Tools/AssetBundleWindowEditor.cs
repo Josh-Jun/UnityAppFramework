@@ -385,9 +385,9 @@ public class AssetBundleWindowEditor : EditorWindow
     void BuildAllAssetBundles()
     {
         string outPath = string.Format("{0}/{1}", outputPath, buildTarget);
-        if (!FileManager.FolderExist(outPath))
+        if (!FileTools.FolderExist(outPath))
         {
-            FileManager.CreateFolder(outPath);
+            FileTools.CreateFolder(outPath);
         }
 
         if (AppConfig.ABPipeline == ABPipeline.Default)
@@ -434,7 +434,7 @@ public class AssetBundleWindowEditor : EditorWindow
     private void DeleteAssetBundle()
     {
         string outPath = string.Format("{0}/{1}", outputPath, buildTarget);
-        if (!FileManager.FolderExist(outPath))
+        if (!FileTools.FolderExist(outPath))
         {
             return;
         }
