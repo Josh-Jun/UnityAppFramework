@@ -9,7 +9,7 @@ using UnityEngine.UI;
 using UnityEngine.Video;
 using UnityEngine.Video.UI;
 
-public class UIVideoPlayer : SingletonMono<UIVideoPlayer>
+public class UIVideoPlayer : MonoBehaviour
 {
     public VideoPlayer VideoPlayer;
     private RawImage _videoDisplay;
