@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ImeManager : SingletonMono<ImeManager>
+public class ImeManager : MonoBehaviour
 {
     public ImeDelegateBase mDelegate;
     private ImeBase mIme;

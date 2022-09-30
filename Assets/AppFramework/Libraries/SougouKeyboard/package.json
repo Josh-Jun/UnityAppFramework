@@ -1,0 +1,14 @@
+{
+  "name": "com.unity.sougou.keyboard",
+  "displayName": "SougouKeyboard",
+  "version": "1.0.0",
+  "unity": "2019.4",
+  "description": "SougouKeyboard",
+  "keywords": [
+    "sougou",
+    "keyboard"
+  ],
+  "dependencies": {
+    "com.unity.ugui": "1.0.0"
+  }
+}

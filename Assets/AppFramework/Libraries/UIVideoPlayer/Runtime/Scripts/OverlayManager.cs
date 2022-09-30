@@ -5,7 +5,6 @@
 #define AVPRO_PACKAGE_UNITYUI
 #if (UNITY_2019_2_OR_NEWER && AVPRO_PACKAGE_UNITYUI) || (!UNITY_2019_2_OR_NEWER)
 
-using RenderHeads.Media.AVProVideo;
 using UnityEngine;
 using UnityEngine.UI;
 
