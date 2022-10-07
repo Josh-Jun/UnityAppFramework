@@ -71,7 +71,7 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "49372599202c0d84764df69ac79028d0a7a359b1"
+      "hash": "5bac9da572ef9c9e65af368a44c127df28205bc1"
     },
     "com.unity.ide.rider": {
       "version": "3.0.15",
