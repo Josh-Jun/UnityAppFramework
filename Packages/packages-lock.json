@@ -48,12 +48,30 @@
       },
       "url": "https://packages.unity.cn"
     },
+    "com.unity.debug.srdebug": {
+      "version": "https://github.com/Josh-Jun/UPM.git#srdebug/1.11.0",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0"
+      },
+      "hash": "bfe1e0a182368f8acbe55f5e2ad6092b9d056640"
+    },
     "com.unity.ext.nunit": {
       "version": "1.0.6",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.cn"
+    },
+    "com.unity.gif.gifplayer": {
+      "version": "https://github.com/Josh-Jun/UPM.git#gifplayer/1.0.0",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0"
+      },
+      "hash": "49372599202c0d84764df69ac79028d0a7a359b1"
     },
     "com.unity.ide.rider": {
       "version": "3.0.15",
@@ -158,6 +176,15 @@
         "com.unity.searcher": "4.9.1"
       }
     },
+    "com.unity.sougou.vrkeyboard": {
+      "version": "https://github.com/Josh-Jun/UPM.git#sougouvrkeyboard/1.0.0",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0"
+      },
+      "hash": "b27049f3f2fb2946d4be1af3ed70b438c7b70fac"
+    },
     "com.unity.subsystemregistration": {
       "version": "1.1.0",
       "depth": 1,
@@ -208,6 +235,15 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
+    "com.unity.ui.videoplayer": {
+      "version": "https://github.com/Josh-Jun/UPM.git#uivideoplayer/1.0.0",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0"
+      },
+      "hash": "783860fd6cbeb325020cf8c73e52f7a8028b68ff"
+    },
     "com.unity.visualscripting": {
       "version": "1.7.8",
       "depth": 0,
@@ -217,6 +253,15 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.cn"
+    },
+    "com.unity.vodeo.avpro": {
+      "version": "https://github.com/Josh-Jun/UPM.git#avpro/2.5.0",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0"
+      },
+      "hash": "0d2116874678ca07c61488f54c92fe4e2750b839"
     },
     "com.unity.xr.core-utils": {
       "version": "2.0.0",

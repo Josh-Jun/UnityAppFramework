@@ -73,9 +73,6 @@ namespace Test
             VideoClip video = AssetsManager.Instance.LoadAsset<VideoClip>(vidio_path);
             VideoManager.Instance.PlayVideo(null, video); //播放视频
             VideoManager.Instance.PlayVideo(null, "视频地址", () => { }); //播放视频
-            //AVPro视频播放
-            AVProManager.Instance.OpenMedia(MediaPathType.AbsolutePathOrURL, "视频地址");
-            AVProManager.Instance.AddMediaPlayerEvent(MediaPlayerEvent.EventType.FinishedPlaying, () => { }); //播放完成事件
             //获取配置表
             TableManager.Instance.GetTable<TestXml>(""); //获取配置表
             //时间任务

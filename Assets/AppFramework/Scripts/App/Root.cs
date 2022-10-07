@@ -85,7 +85,6 @@ public class Root
         AssetsManager.Instance.InitParent(parent);
         NetcomManager.Instance.InitParent(parent);
         AudioManager.Instance.InitParent(parent);
-        AVProManager.Instance.InitParent(parent);
         VideoManager.Instance.InitParent(parent);
         TableManager.Instance.InitParent(parent);
         TimerTaskServe.Instance.InitParent(parent);
