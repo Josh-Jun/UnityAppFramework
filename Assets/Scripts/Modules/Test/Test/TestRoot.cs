@@ -132,7 +132,7 @@ namespace Test
         {
             window.SetText(value);
             string filePath = PlatformManager.Instance.GetDataPath("App/meta.apk");
-            UnityWebRequester requester = new UnityWebRequester();
+            UnityWebRequester requester = NetcomManager.Uwr;
             
             // int id = -1;
             // if (FileManager.FileExist(filePath))

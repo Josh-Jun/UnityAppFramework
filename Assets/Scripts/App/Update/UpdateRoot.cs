@@ -160,7 +160,7 @@ namespace Update
                     //     }
                     //     PlayerPrefs.SetString("APP_DOWNLOADING", DateTime.Now.ToString());
                     // }
-                    // UnityWebRequester requester = new UnityWebRequester(window);
+                    // UnityWebRequester requester = NetcomManager.Uwr;
                     // requester.DownloadFile(appUrl, appPath, (size, progress) =>
                     // {
                     //     float total = size / 1024f / 1024f;
@@ -192,7 +192,7 @@ namespace Update
                     {
                         FileTools.DeleteFile(appPath);
                     }
-                    UnityWebRequester requester = new UnityWebRequester();
+                    UnityWebRequester requester = NetcomManager.Uwr;
                     requester.GetBytes(appUrl, (bytes) =>
                     {
                         FileTools.CreateFile(appPath, bytes);
@@ -343,7 +343,7 @@ namespace Update
                 // UpdateLocalConfigTag(folder);
                 // UpdateLocalConfigMD5(folder);
                 // Finished = false;
-                // UnityWebRequester requester = new UnityWebRequester(window);
+                // UnityWebRequester requester = NetcomManager.Uwr;
                 // requester.DownloadFile(ServerUrl + folder.BundleName, LocalPath + folder.BundleName, (size, progress) =>
                 // {
                 //     downloadingSize = (long)(size * progress);
@@ -363,7 +363,7 @@ namespace Update
                 
                 #region 正常下载
                 Finished = false;
-                UnityWebRequester requester = new UnityWebRequester();
+                UnityWebRequester requester = NetcomManager.Uwr;
                 requester.GetBytes(ServerUrl + folder.BundleName, (bytes) =>
                 {
                     FileTools.CreateFile(LocalPath + folder.BundleName, bytes);
@@ -478,7 +478,7 @@ namespace Update
         /// <summary> 下载 </summary>
         private void DownLoad(string url, Action<byte[]> action)
         {
-            UnityWebRequester requester = new UnityWebRequester();
+            UnityWebRequester requester = NetcomManager.Uwr;
             requester.GetBytes(url, (byte[] data) =>
             {
                 action?.Invoke(data);
@@ -488,7 +488,7 @@ namespace Update
         /// <summary> 下载 </summary>
         private void DownLoad(string url, Action<string> action)
         {
-            UnityWebRequester requester = new UnityWebRequester();
+            UnityWebRequester requester = NetcomManager.Uwr;
             requester.Get(url, (string data) =>
             {
                 action?.Invoke(data);

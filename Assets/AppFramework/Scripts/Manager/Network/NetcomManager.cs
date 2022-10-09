@@ -67,8 +67,8 @@ public partial class NetcomManager : SingletonMonoEvent<NetcomManager>
         }
     }
 
-    private Queue<UnityWebRequester> uwrQueue = new Queue<UnityWebRequester>();
-    public UnityWebRequester Uwr
+    private static Queue<UnityWebRequester> uwrQueue = new Queue<UnityWebRequester>();
+    public static UnityWebRequester Uwr
     {
         private set { }
         get
@@ -86,7 +86,7 @@ public partial class NetcomManager : SingletonMonoEvent<NetcomManager>
         InitQueue(50);
     }
 
-    public void InitQueue(int count = 20)
+    public static void InitQueue(int count = 20)
     {
         for (int i = 0; i < count; i++)
         {

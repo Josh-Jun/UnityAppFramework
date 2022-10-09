@@ -41,7 +41,7 @@ public class AssetBundleManager : SingletonMono<AssetBundleManager>
 
     public void InitLocalAssetBundleConfig(Action callbcak = null)
     {
-        UnityWebRequester requester = new UnityWebRequester();
+        UnityWebRequester requester = NetcomManager.Uwr;
         requester.Get($"file://{mainfestAssetsPath}/AssetBundleConfig.json", (string data) =>
         {
             AssetBundleConfig abc = JsonUtility.FromJson<AssetBundleConfig>(data);
