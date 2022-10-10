@@ -184,24 +184,6 @@ public class UnityWebRequester
         await task;
         callback?.Invoke(task.Result);
     }
-
-    /// <summary>
-    /// 向服务器提交post请求
-    /// </summary>
-    /// <param name="url">服务器请求目标地址,like "http://www.my-server.com/myform"</param>
-    /// <param name="lstformData">IMultipartFormSection表单参数</param>
-    /// <param name="actionResult">处理返回结果的委托</param>
-    /// <param name="actionProgress"></param>
-    /// <returns></returns>
-    public async void Post(string url, List<IMultipartFormSection> lstformData, Action<string> callback)
-    {
-        //List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
-        //formData.Add(new MultipartFormDataSection("field1=foo&field2=bar"));
-        //formData.Add(new MultipartFormFileSection("my file data", "myfile.txt"));
-        Task<string> task = Post(url, lstformData);
-        await task;
-        callback?.Invoke(task.Result);
-    }
     /// <summary>
     /// 向服务器提交post请求
     /// </summary>
@@ -425,40 +407,6 @@ public class UnityWebRequester
             return downloadHandlerAudioClip.audioClip;
         }
     }
-
-    /// <summary>
-    /// 向服务器提交post请求
-    /// </summary>
-    /// <param name="url">服务器请求目标地址,like "http://www.my-server.com/myform"</param>
-    /// <param name="lstformData">IMultipartFormSection表单参数</param>
-    /// <param name="actionResult">处理返回结果的委托</param>
-    /// <param name="actionProgress"></param>
-    /// <returns></returns>
-    public async Task<string> Post(string url, List<IMultipartFormSection> lstformData)
-    {
-        //List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
-        //formData.Add(new MultipartFormDataSection("field1=foo&field2=bar"));
-        //formData.Add(new MultipartFormFileSection("my file data", "myfile.txt"));
-        using (uwr)
-        {
-            uwr.url = url;
-            uwr.method = UnityWebRequest.kHttpVerbPOST;
-            foreach (var header in headerPairs)
-            {
-                uwr.SetRequestHeader(header.Key, header.Value);
-            }
-            string json = LitJson.JsonMapper.ToJson(lstformData);
-            byte[] postData = Encoding.UTF8.GetBytes(json);
-            uwr.uploadHandler = new UploadHandlerRaw(postData);
-            uwr.downloadHandler = new DownloadHandlerBuffer();
-            await uwr.SendWebRequest();
-            if (uwr.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogError($"[Error:Post IMultipartFormSection] {uwr.error}");
-            }
-            return uwr.downloadHandler.text;
-        }
-    }
     /// <summary>
     /// 向服务器提交post请求
     /// </summary>
@@ -562,9 +510,12 @@ public class UnityWebRequester
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
-            string json = LitJson.JsonMapper.ToJson(formFields);
-            byte[] postData = Encoding.UTF8.GetBytes(json);
-            uwr.uploadHandler = new UploadHandlerRaw(postData);
+            WWWForm form = new WWWForm();
+            foreach (var item in formFields)
+            {
+                form.AddField(item.Key, item.Value);
+            }
+            uwr.uploadHandler = new UploadHandlerRaw(form.data);
             uwr.downloadHandler = new DownloadHandlerBuffer();
             await uwr.SendWebRequest();
             if (uwr.result != UnityWebRequest.Result.Success)
