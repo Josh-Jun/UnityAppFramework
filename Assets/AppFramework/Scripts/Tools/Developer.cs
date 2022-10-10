@@ -38,12 +38,12 @@ public static class Developer
         _animator.StartPlayback();
         _animator.speed = speed;
         _animator.Play(stateName, 0, speed < 0 ? 1 : 0);
-        DEVELOP_ANIMATOR_TIME_ID = TimerServe.Instance.StartTimer((float time) =>
+        DEVELOP_ANIMATOR_TIME_ID = TimerLogicer.Instance.StartTimer((float time) =>
         {
             if (time >= _time)
             {
                 callback?.Invoke();
-                TimerServe.Instance.EndTimer(DEVELOP_ANIMATOR_TIME_ID);
+                TimerLogicer.Instance.EndTimer(DEVELOP_ANIMATOR_TIME_ID);
             }
         });
     }
@@ -66,7 +66,7 @@ public static class Developer
         }
         int index = 0;//可以用来控制起始播放的动画帧索引
         float recordTime = 0;
-        DEVELOP_FRAMES_TIME_ID = TimerServe.Instance.StartTimer((float currentTime) =>
+        DEVELOP_FRAMES_TIME_ID = TimerLogicer.Instance.StartTimer((float currentTime) =>
         {
             if (currentTime - recordTime >= time)
             {
@@ -81,7 +81,7 @@ public static class Developer
                     }
                     else
                     {
-                        TimerServe.Instance.EndTimer(DEVELOP_FRAMES_TIME_ID);
+                        TimerLogicer.Instance.EndTimer(DEVELOP_FRAMES_TIME_ID);
                     }
                 }
                 else

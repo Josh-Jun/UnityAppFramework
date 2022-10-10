@@ -87,8 +87,8 @@ public class Root
         AudioManager.Instance.InitParent(parent);
         VideoManager.Instance.InitParent(parent);
         TableManager.Instance.InitParent(parent);
-        TimerTaskServe.Instance.InitParent(parent);
-        TimerServe.Instance.InitParent(parent);
+        TimerTasker.Instance.InitParent(parent);
+        TimerLogicer.Instance.InitParent(parent);
     }
 
     private static void InitRootScripts(Action callback = null)

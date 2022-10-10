@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>功能:定时服务</summary>
-public class TimerTaskServe : SingletonMono<TimerTaskServe>
+public class TimerTasker : SingletonMono<TimerTasker>
 {
     private TimerTask timer;//计时器
     private static readonly string lockTask = "lockTask";//任务锁

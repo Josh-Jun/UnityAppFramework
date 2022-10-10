@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>功能:计时器服务</summary>
-public class TimerServe : SingletonMono<TimerServe>
+public class TimerLogicer : SingletonMono<TimerLogicer>
 {
     private int timeId = 0; //下标
     private List<TimerData> timerLst = new List<TimerData>(); //计时Lst

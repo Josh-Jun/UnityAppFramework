@@ -56,7 +56,7 @@ namespace Test
             Debug.Log("-------------------1-------------------");
             await Task.Delay(TimeSpan.FromSeconds(3f));
             Debug.Log("-------------------2-------------------");
-            TimerServe.Instance.StartTimer((time) =>
+            TimerLogicer.Instance.StartTimer((time) =>
             {
                 Debug.Log(time);
             });
@@ -77,11 +77,11 @@ namespace Test
             TableManager.Instance.GetTable<TestXml>(""); //获取配置表
             //时间任务
             int timeid1 = -1;
-            timeid1 = TimerServe.Instance.StartTimer((time) => { }); //一直执行 相当于Update
-            TimerServe.Instance.EndTimer(timeid1);
+            timeid1 = TimerLogicer.Instance.StartTimer((time) => { }); //一直执行 相当于Update
+            TimerLogicer.Instance.EndTimer(timeid1);
             int timeid2 = -1;
-            timeid2 = TimerTaskServe.Instance.AddTimeTask(() => { }, 1f, TimeUnit.Second, 1); //1秒后执行一次
-            TimerTaskServe.Instance.DeleteTimeTask(timeid2);
+            timeid2 = TimerTasker.Instance.AddTimeTask(() => { }, 1f, TimeUnit.Second, 1); //1秒后执行一次
+            TimerTasker.Instance.DeleteTimeTask(timeid2);
             //Animator动画播放
             Animator animator = window.TryGetComponent<Animator>(); //获取脚本组件，没有就自动添加
             animator.Play("动画名", () => { }); //播放动画

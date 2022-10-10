@@ -51,7 +51,7 @@ namespace Ask
             if (tipsPanel.activeSelf) return;
             tipsPanel.SetActive(true);
             tipsText.text = tips;
-            TimerTaskServe.Instance.AddTimeTask(() => { SetWindowActive(false); }, time);
+            TimerTasker.Instance.AddTimeTask(() => { SetWindowActive(false); }, time);
         }
         public void SetWindowInfo(string tips, Action confirm_callback = null, Action cancel_callback = null)
         {

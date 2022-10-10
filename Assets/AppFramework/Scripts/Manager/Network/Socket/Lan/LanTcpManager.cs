@@ -17,7 +17,7 @@ public class LanTcpManager : SingletonEvent<LanTcpManager>
     /// <summary>服务端网络初始化</summary>
     public void InitServerNet(string ip, int port, Action<bool> cb = null)
     {
-        TIME_ID = TimerServe.Instance.StartTimer(Update);
+        TIME_ID = TimerLogicer.Instance.StartTimer(Update);
         server = new SocketTcp<SessionTcp>();
         #region 网络日志
         //日志是否开启、日志的回调函数(内容，级别) 覆盖unity日志系统 查看网络错误
@@ -459,6 +459,6 @@ public class LanTcpManager : SingletonEvent<LanTcpManager>
             server.Close();
             server = null;
         }
-        TimerServe.Instance.EndTimer(TIME_ID);
+        TimerLogicer.Instance.EndTimer(TIME_ID);
     }
 }

@@ -24,7 +24,7 @@ public class WanTcpManager : SingletonEvent<WanTcpManager>
 
     public void StartAsClient(string ip, int port, Action<bool> cb = null)
     {
-        TIME_ID = TimerServe.Instance.StartTimer(Update);
+        TIME_ID = TimerLogicer.Instance.StartTimer(Update);
         socketTcp = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         try
         {
@@ -227,7 +227,7 @@ public class WanTcpManager : SingletonEvent<WanTcpManager>
                 }
                 socketTcp.Close();
             }
-            TimerServe.Instance.EndTimer(TIME_ID);
+            TimerLogicer.Instance.EndTimer(TIME_ID);
             return true;
         }
         catch (Exception arg)

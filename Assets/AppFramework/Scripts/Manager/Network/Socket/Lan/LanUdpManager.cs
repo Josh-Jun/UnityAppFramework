@@ -9,7 +9,7 @@ public class LanUdpManager : SingletonEvent<LanUdpManager>
     /// <summary> 初始化服务端 </summary>
     public void InitServerNet(int port, Action<bool> cb = null)
     {
-        TIME_ID = TimerServe.Instance.StartTimer(Update);
+        TIME_ID = TimerLogicer.Instance.StartTimer(Update);
         server = new SocketUdp<SessionUdp>();
         server.StartAsServer(port, cb);
     }
@@ -75,7 +75,7 @@ public class LanUdpManager : SingletonEvent<LanUdpManager>
             client.Close();
             server = null;
         }
-        TimerServe.Instance.EndTimer(TIME_ID);
+        TimerLogicer.Instance.EndTimer(TIME_ID);
     }
     #endregion
 }
