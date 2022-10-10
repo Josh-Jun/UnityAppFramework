@@ -335,6 +335,7 @@ public class Table2CSharpWindowEditor : EditorWindow
         sb.AppendLine("{");
         foreach (var item in classDicts)
         {
+            sb.Append($"    [System.Serializable]" + Environment.NewLine);
             sb.Append($"    public class {item.Key}" + Environment.NewLine);
             sb.Append("    {" + Environment.NewLine);
             sb.Append(item.Value);
@@ -416,7 +417,7 @@ public class Table2CSharpWindowEditor : EditorWindow
                 var valueType = p.Value.Type;
                 if (valueType == JTokenType.Object)
                 {
-                    sb.Append("        public " + p.Name + " " + p.Name + " {get;set;}" + Environment.NewLine);
+                    sb.Append("        public " + p.Name + " " + p.Name + ";" + Environment.NewLine);
                 }
                 else if (valueType == JTokenType.Array)
                 {
@@ -426,19 +427,19 @@ public class Table2CSharpWindowEditor : EditorWindow
                     switch (arr.First().Type)
                     {
                         case JTokenType.Object:
-                            sb.Append($"        public List<{p.Name}> " + p.Name + " {get;set;}" + Environment.NewLine);
+                            sb.Append($"        public List<{p.Name}> " + p.Name + ";" + Environment.NewLine);
                             break;
                         case JTokenType.Integer:
-                            sb.Append($"        public List<int> " + p.Name + " {get;set;}" + Environment.NewLine);
+                            sb.Append($"        public List<int> " + p.Name + ";" + Environment.NewLine);
                             break;
                         case JTokenType.Float:
-                            sb.Append($"        public List<float> " + p.Name + " {get;set;}" + Environment.NewLine);
+                            sb.Append($"        public List<float> " + p.Name + ";" + Environment.NewLine);
                             break;
                         case JTokenType.String:
-                            sb.Append($"        public List<string> " + p.Name + " {get;set;}" + Environment.NewLine);
+                            sb.Append($"        public List<string> " + p.Name + ";" + Environment.NewLine);
                             break;
                         case JTokenType.Boolean:
-                            sb.Append($"        public List<bool> " + p.Name + " {get;set;}" + Environment.NewLine);
+                            sb.Append($"        public List<bool> " + p.Name + ";" + Environment.NewLine);
                             break;
                         default:
                             break;
@@ -449,16 +450,16 @@ public class Table2CSharpWindowEditor : EditorWindow
                     switch (valueType)
                     {
                         case JTokenType.Integer:
-                            sb.Append($"        public int " + p.Name + " {get;set;}" + Environment.NewLine);
+                            sb.Append($"        public int " + p.Name + ";" + Environment.NewLine);
                             break;
                         case JTokenType.Float:
-                            sb.Append($"        public float " + p.Name + " {get;set;}" + Environment.NewLine);
+                            sb.Append($"        public float " + p.Name + ";" + Environment.NewLine);
                             break;
                         case JTokenType.String:
-                            sb.Append($"        public string " + p.Name + " {get;set;}" + Environment.NewLine);
+                            sb.Append($"        public string " + p.Name + ";" + Environment.NewLine);
                             break;
                         case JTokenType.Boolean:
-                            sb.Append($"        public bool " + p.Name + " {get;set;}" + Environment.NewLine);
+                            sb.Append($"        public bool " + p.Name + ";" + Environment.NewLine);
                             break;
                         default:
                             break;

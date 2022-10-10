@@ -164,7 +164,7 @@ GameObject:
   - component: {fileID: 1334741983527881036}
   - component: {fileID: 5754432116505264502}
   - component: {fileID: 3565619268332523551}
-  - component: {fileID: 7921272699904683699}
+  - component: {fileID: 6243845970006937031}
   m_Layer: 5
   m_Name: GifImage
   m_TagString: Untagged
@@ -230,7 +230,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7921272699904683699
+--- !u!114 &6243845970006937031
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -239,12 +239,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1769536759602797684}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 947e03efd23380240a9843320a38e7d2, type: 3}
+  m_Script: {fileID: 11500000, guid: d983279c226e4814691bf9c095738819, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Loop: 1
   AutoPlay: 1
-  FileName: GifPlayerExampes/GIFPlayerExampe1.gif
+  FileName: 
   Path: 0
   CacheFrames: 0
   BufferAllFrames: 0
