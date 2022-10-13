@@ -7,7 +7,6 @@ using System.Collections;
 using Loading;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-using UnityEngine.XR.Management;
 
 public class Root
 {

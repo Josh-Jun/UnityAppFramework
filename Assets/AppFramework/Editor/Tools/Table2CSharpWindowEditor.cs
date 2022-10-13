@@ -331,6 +331,7 @@ public class Table2CSharpWindowEditor : EditorWindow
         StringBuilder sb = new StringBuilder(1024);
         sb.AppendLine("using System;");
         sb.AppendLine("using System.Collections.Generic;");
+        sb.AppendLine("");
         sb.AppendLine("namespace TableData");
         sb.AppendLine("{");
         foreach (var item in classDicts)

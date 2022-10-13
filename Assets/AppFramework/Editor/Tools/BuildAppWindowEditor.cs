@@ -3,13 +3,15 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using UnityEditor;
-using UnityEditor.XR.Management;
 using UnityEditor.XR;
 using UnityEngine;
-using UnityEditor.XR.Management.Metadata;
-using UnityEngine.XR.Management;
 using System;
 using Unity.VisualScripting;
+#if PICO_XR_SETTING
+using UnityEditor.XR.Management;
+using UnityEditor.XR.Management.Metadata;
+using UnityEngine.XR.Management;
+#endif
 
 public class BuildAppWindowEditor : EditorWindow
 {

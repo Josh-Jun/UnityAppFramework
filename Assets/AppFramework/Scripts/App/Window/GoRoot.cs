@@ -8,7 +8,9 @@ using System.Reflection;
 using XLuaFrame;
 using System;
 using UnityEngine.InputSystem.UI;
+#if PICO_XR_SETTING
 using UnityEngine.XR.Interaction.Toolkit.UI;
+#endif
 
 public class GoRoot : SingletonMono<GoRoot>
 {
@@ -76,17 +78,23 @@ public class GoRoot : SingletonMono<GoRoot>
         #region EventSystem
         if (EventSystem.current == null)
         {
-            Type t = Root.AppConfig.TargetPackage == TargetPackage.Mobile ? typeof(InputSystemUIInputModule) : typeof(XRUIInputModule);
+            Type t = null;
+#if PICO_XR_SETTING
+            t = Root.AppConfig.TargetPackage == TargetPackage.Mobile ? typeof(InputSystemUIInputModule) : typeof(XRUIInputModule);
+#endif
+            t = typeof(InputSystemUIInputModule);
             EventSystemObject = new GameObject("EventSystem", typeof(EventSystem), t);
             EventSystemObject.transform.SetParent(transform);
         }
         #endregion
 
+#if PICO_XR_SETTING
         if(Root.AppConfig.TargetPackage == TargetPackage.Pico)
         {
             Init3DUIRoot(Camera.main);
             Reset3DUIRoot();
         }
+#endif
     }
 
     #region Private Function
@@ -94,6 +102,7 @@ public class GoRoot : SingletonMono<GoRoot>
     #endregion
 
     #region Public Function
+#if PICO_XR_SETTING
     public void Init3DUIRoot(Camera camera3d = null)
     {
         if(camera3d == null) return;
@@ -111,6 +120,7 @@ public class GoRoot : SingletonMono<GoRoot>
         UIRectTransform.transform.position = target;
         UIRectTransform.transform.eulerAngles = camera.transform.eulerAngles;
     }
+#endif
     /// <summary> UGUI坐标 mousePosition</summary>
     public Vector2 ScreenPointInRectangle(Vector2 mousePosition)
     {
