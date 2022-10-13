@@ -139,7 +139,6 @@ public class BuildAppWindowEditor : EditorWindow
     }
     public void ApplyConfig()
     {
-        EditorUserBuildSettings.development = DevelopmentBuild;
         AppConfig.IsDebug = DevelopmentBuild;
         AppConfig.IsHotfix = IsHotfix;
         AppConfig.IsTestServer = IsTestServer;
@@ -160,6 +159,7 @@ public class BuildAppWindowEditor : EditorWindow
             PlayerSettings.Android.minSdkVersion =ApkTarget == TargetPackage.Pico ? AndroidSdkVersions.AndroidApiLevel26 : AndroidSdkVersions.AndroidApiLevel23;
             
             EditorUserBuildSettings.exportAsGoogleAndroidProject = NativeApp;
+#if PICO_XR_SETTING
             
             XRGeneralSettings androidXRSettings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(BuildTargetGroup.Android);
 
@@ -189,6 +189,7 @@ public class BuildAppWindowEditor : EditorWindow
                 XRPackageMetadataStore.AssignLoader(androidXRSettings.Manager, loaderTypeName, BuildTargetGroup.Android);
             }
             EditorUtility.SetDirty(androidXRSettings); // Make sure this gets picked up for serialization later.
+#endif
         }
         AssetDatabase.Refresh();
     }
@@ -223,7 +224,13 @@ public class BuildAppWindowEditor : EditorWindow
             Directory.CreateDirectory(outputPath);
         }
         string BuildPath = string.Format("{0}/{1}", outputPath, outName);
-        BuildPipeline.BuildPlayer(GetBuildScenes(), BuildPath, EditorUserBuildSettings.activeBuildTarget, BuildOptions.None);
+        var buildOption = BuildOptions.None;
+        if (DevelopmentBuild)
+        {
+            buildOption |= BuildOptions.Development;
+        }
+        buildOption |= BuildOptions.CompressWithLz4;
+        BuildPipeline.BuildPlayer(GetBuildScenes(), BuildPath, EditorUserBuildSettings.activeBuildTarget, buildOption);
 
         if (IsHotfix)
         {

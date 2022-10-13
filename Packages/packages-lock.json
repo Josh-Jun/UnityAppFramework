@@ -321,7 +321,7 @@
         "com.unity.subsystemregistration": "1.0.6",
         "com.unity.xr.interaction.toolkit": "0.9.4-preview"
       },
-      "hash": "de3880841fe4e5cac0f8eeef1f62e9786fa30699"
+      "hash": "79c91c8e6f8f87a0e1aef5c2368c8154f8661ba9"
     },
     "com.unity.xr.picoxr": {
       "version": "https://github.com/Josh-Jun/UPM.git#picoxr/2.0.7",
