@@ -160,7 +160,7 @@ public class BuildAppWindowEditor : EditorWindow
             
             EditorUserBuildSettings.exportAsGoogleAndroidProject = NativeApp;
 #if PICO_XR_SETTING
-            
+            //此段代码依赖PicoXR的UPM 和 PicoTools的UPM
             XRGeneralSettings androidXRSettings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(BuildTargetGroup.Android);
 
             if (androidXRSettings == null)
