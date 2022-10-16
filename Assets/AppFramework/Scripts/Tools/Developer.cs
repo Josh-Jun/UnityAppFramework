@@ -707,29 +707,4 @@ public static class Developer
         return current;
     }
     #endregion
-
-    #region AsyncTask
-    public static TaskAwaiter GetAwaiter(this UnityWebRequestAsyncOperation op)
-    {
-        var tcs = new TaskCompletionSource<object>();
-        op.completed += (obj) =>
-        {
-            tcs.SetResult(null);
-        };
-        return ((Task)tcs.Task).GetAwaiter();
-    }
-    public static TaskAwaiter GetAwaiter<T>(this UnityWebRequestAsyncOperation op) where T : class
-    {
-        var tcs = new TaskCompletionSource<T>();
-        op.completed += (obj) =>
-        {
-            tcs.SetResult(null);
-        };
-        return ((Task)tcs.Task).GetAwaiter();
-    }
-    public static TaskAwaiter GetAwaiter(this TimeSpan timeSpan)
-    {
-        return Task.Delay(timeSpan).GetAwaiter();
-    }
-    #endregion
 }

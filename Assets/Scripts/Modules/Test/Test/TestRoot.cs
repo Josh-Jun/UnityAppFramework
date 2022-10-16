@@ -134,8 +134,8 @@ namespace Test
             string filePath = PlatformManager.Instance.GetDataPath("App/meta.apk");
             UnityWebRequester requester = NetcomManager.Uwr;
             
-            // int id = -1;
-            // if (FileManager.FileExist(filePath))
+            int id = -1;
+            // if (FileTools.FileExist(filePath))
             // {
             //     PlatformManager.Instance.InstallApp(filePath);
             //     requester = null;
@@ -144,24 +144,30 @@ namespace Test
             // {
             //     requester.GetBytes("https://meta-oss.genimous.com/vr-ota/App/meta.apk", (bytes) =>
             //     {
-            //         FileManager.CreateFile(filePath, bytes);
+            //         FileTools.CreateFile(filePath, bytes);
             //         PlatformManager.Instance.InstallApp(filePath);
-            //         TimerManager.Instance.EndTimer(id);
+            //         TimerLogicer.Instance.EndTimer(id);
             //         requester.Destory();
             //     });
-            //     id = TimerManager.Instance.StartTimer((time) =>
+            //     id = TimerLogicer.Instance.StartTimer((time) =>
             //     {
             //         window.SetText(requester.DownloadedProgress.ToString("F2"));
             //     });
             // }
 
-            requester.DownloadFile("https://meta-oss.genimous.com/vr-ota/App/meta.apk", filePath, (size, progress) =>
+            requester.DownloadFile("https://meta-oss.genimous.com/vr-ota/App/meta.apk", filePath, (totalLength, fileLength) =>
             {
-                window.SetText(progress.ToString("F2"));
-                if (progress >= 1)
+                id = TimerLogicer.Instance.StartTimer((time) =>
                 {
-                    PlatformManager.Instance.InstallApp(filePath);
-                }
+                    float progress = (float)((long)requester.DownloadedLength + fileLength) / (float)totalLength;
+                    window.SetText(progress.ToString("F2"));
+                    if (progress >= 1)
+                    {
+                        PlatformManager.Instance.InstallApp(filePath);
+                        TimerLogicer.Instance.EndTimer(id);
+                        requester.Destory();
+                    }
+                });
             });
         }
 
