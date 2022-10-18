@@ -5,7 +5,6 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
-using System.Threading.Tasks;
 
 public class UnityWebRequester
 {
@@ -79,7 +78,7 @@ public class UnityWebRequester
     /// <param name="filePath"></param>
     /// <param name="callBack"></param>
     /// <returns></returns>
-    public async void DownloadFile(string url, string filePath, Action<long, long> callBack)
+    public void DownloadFile(string url, string filePath, Action<long, long> callBack)
     {
         //获取要下载的文件的总大小
         var head = UnityWebRequest.Head(url);
@@ -234,7 +233,7 @@ public class UnityWebRequester
     /// <param name="actionProgress"></param>
     /// <param name="audioType">音效类型</param>
     /// <returns></returns>
-    public void GetAudioClip(string url, Action<AudioClip> callback, AudioType audioType = AudioType.WAV)
+    public void GetAudioClip(string url, Action<AudioClip> callback, AudioType audioType = AudioType.MPEG)
     {
         using (uwr)
         {
