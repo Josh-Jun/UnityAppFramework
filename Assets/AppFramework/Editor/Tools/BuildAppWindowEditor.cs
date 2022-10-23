@@ -21,7 +21,6 @@ public class BuildAppWindowEditor : EditorWindow
     private bool DevelopmentBuild = true;
     private bool IsTestServer = true;
     private bool IsHotfix = false;
-    private bool RunXLuaScripts = false;
     private int AppFrameRate = 30;
     private TargetPackage ApkTarget = TargetPackage.Mobile;
     private bool NativeApp = false;
@@ -50,7 +49,6 @@ public class BuildAppWindowEditor : EditorWindow
             DevelopmentBuild = AppConfig.IsDebug;
             IsTestServer = AppConfig.IsTestServer;
             IsHotfix = AppConfig.IsHotfix;
-            RunXLuaScripts = AppConfig.RunXLua;
             AppFrameRate = AppConfig.AppFrameRate;
             ApkTarget = AppConfig.TargetPackage;
             NativeApp = AppConfig.NativeApp;
@@ -83,12 +81,6 @@ public class BuildAppWindowEditor : EditorWindow
         GUILayout.Label(new GUIContent("Is Hotfix"));
         GUILayout.FlexibleSpace();
         IsHotfix = EditorGUILayout.Toggle(IsHotfix, GUILayout.MaxWidth(75));
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.BeginHorizontal();
-        GUILayout.Label(new GUIContent("Run XLuaScripts"));
-        GUILayout.FlexibleSpace();
-        RunXLuaScripts = EditorGUILayout.Toggle(RunXLuaScripts, GUILayout.MaxWidth(75));
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.BeginHorizontal();
@@ -144,7 +136,6 @@ public class BuildAppWindowEditor : EditorWindow
         AppConfig.IsDebug = DevelopmentBuild;
         AppConfig.IsHotfix = IsHotfix;
         AppConfig.IsTestServer = IsTestServer;
-        AppConfig.RunXLua = RunXLuaScripts;
         AppConfig.AppFrameRate = AppFrameRate;
         AppConfig.TargetPackage = ApkTarget;
         AppConfig.NativeApp = NativeApp;

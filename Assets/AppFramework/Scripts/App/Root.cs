@@ -2,7 +2,6 @@ using Update;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using XLuaFrame;
 using System.Collections;
 using Loading;
 using UnityEngine.Events;
@@ -10,15 +9,15 @@ using UnityEngine.SceneManagement;
 
 public class Root
 {
-    private static IRoot UpdateRoot = null;
+    private static ILogic _updateLogic = null;
 
     private static AppScriptConfig appScriptConfig;
 
     public static AppConfig AppConfig; //App配置表 
 
     private static Dictionary<string, List<string>> sceneScriptsPairs = new Dictionary<string, List<string>>();
-    private static Dictionary<string, IRoot> iRootPairs = new Dictionary<string, IRoot>();
-    private static List<IRoot> RuntimeRoots = new List<IRoot>();
+    private static Dictionary<string, ILogic> iRootPairs = new Dictionary<string, ILogic>();
+    private static List<ILogic> RuntimeRoots = new List<ILogic>();
 
     public static void Init()
     {
@@ -55,8 +54,8 @@ public class Root
         if (AppConfig.IsHotfix)
         {
             //初始化热更脚本
-            UpdateRoot = GetRoot("Update.UpdateRoot");
-            UpdateRoot.Begin();
+            _updateLogic = GetRoot("Update.UpdateRoot");
+            _updateLogic.Begin();
         }
         else
         {
@@ -97,23 +96,10 @@ public class Root
         {
             if (!iRootPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
             {
-                IRoot iRoot;
-                //判断是否存在XLua脚本，如果存在，执行XLua代码，不存在执行C#代码
-                if (AppConfig.RunXLua &&
-                    XLuaManager.Instance.IsLuaFileExist(appScriptConfig.RootScript[i].LuaScriptPath))
+                ILogic iLogic = GetRoot(appScriptConfig.RootScript[i].ScriptName);
+                if (iLogic != null)
                 {
-                    XLuaRoot root = new XLuaRoot();
-                    root.Init(appScriptConfig.RootScript[i].LuaScriptPath);
-                    iRoot = root;
-                }
-                else
-                {
-                    iRoot = GetRoot(appScriptConfig.RootScript[i].ScriptName);
-                }
-
-                if (iRoot != null)
-                {
-                    iRootPairs.Add(appScriptConfig.RootScript[i].ScriptName, iRoot);
+                    iRootPairs.Add(appScriptConfig.RootScript[i].ScriptName, iLogic);
                 }
                 else
                 {
@@ -144,7 +130,7 @@ public class Root
         {
             AssetsManager.Instance.LoadingSceneAsync(sceneName, (progress) =>
             {
-                LoadingRoot.Instance.Loading(progress, () =>
+                LoadingLogic.Instance.Loading(progress, () =>
                 {
                     InitRootBegin(sceneName, callback);
                 });
@@ -187,11 +173,11 @@ public class Root
         RuntimeRoots.Clear();
     }
 
-    private static IRoot GetRoot(string fullName)
+    private static ILogic GetRoot(string fullName)
     {
         Type type = Type.GetType(fullName);
         object obj = Activator.CreateInstance(type);
-        return obj as IRoot;
+        return obj as ILogic;
     }
 
     public static T GetRootScript<T>() where T : class
@@ -208,7 +194,7 @@ public class Root
 
     public static void AppPause(bool isPause)
     {
-        UpdateRoot?.AppPause(isPause);
+        _updateLogic?.AppPause(isPause);
         if (appScriptConfig != null)
         {
             for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
@@ -223,7 +209,7 @@ public class Root
 
     public static void AppFocus(bool isFocus)
     {
-        UpdateRoot?.AppFocus(isFocus);
+        _updateLogic?.AppFocus(isFocus);
         if (appScriptConfig != null)
         {
             for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
@@ -238,7 +224,7 @@ public class Root
 
     public static void AppQuit()
     {
-        UpdateRoot?.AppQuit();
+        _updateLogic?.AppQuit();
         if (appScriptConfig != null)
         {
             for (int i = 0; i < appScriptConfig.RootScript.Count; i++)

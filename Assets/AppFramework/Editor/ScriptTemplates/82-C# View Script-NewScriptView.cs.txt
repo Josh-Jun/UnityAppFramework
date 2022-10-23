@@ -1,0 +1,34 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace #NAMESPACE#
+{
+    public class #SCRIPTNAME# : ViewBase
+    {
+        protected override void InitView()
+        {
+            base.InitView();
+			#NOTRIM#
+        }
+
+        protected override void RegisterEvent()
+        {
+            base.RegisterEvent();
+			#NOTRIM#
+        }
+
+        protected override void OpenView()
+        {
+            base.OpenWindow();
+			#NOTRIM#
+        }
+
+        protected override void CloseView()
+        {
+            base.CloseWindow();
+			#NOTRIM#
+        }
+    }
+}

@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MainSceneName: Scenes/Test/TestScene
   RootScript:
-  - ScriptName: Ask.AskRoot
-    SceneName: Global
-    LuaScriptPath: Ask/AskRoot
-  - ScriptName: Loading.LoadingRoot
-    SceneName: Global
-    LuaScriptPath: Loading/LoadingRoot
-  - ScriptName: Test.TestRoot
-    SceneName: Scenes/Test/TestScene
-    LuaScriptPath: Test/TestRoot
+  - SceneName: Global
+    ScriptName: Ask.AskLogic
+    LuaScriptPath: 
+  - SceneName: Global
+    ScriptName: Loading.LoadingLogic
+    LuaScriptPath: 
+  - SceneName: Scenes/Test/TestScene
+    ScriptName: Test.TestLogic
+    LuaScriptPath: Test/TestLogic

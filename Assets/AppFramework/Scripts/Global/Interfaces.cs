@@ -1,5 +1,5 @@
 ﻿/// <summary>Root脚本接口</summary>
-public interface IRoot
+public interface ILogic
 {
     void Begin();
     void End();

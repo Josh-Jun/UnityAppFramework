@@ -102,8 +102,8 @@ public class AppScriptConfigWindowEditor : EditorWindow
                     RootScript rootScript = new RootScript
                     {
                         SceneName = SceneNames[levels[levels.Count -1]],
-                        ScriptName = "Test.TestRoot",
-                        LuaScriptPath = "Test/TestRoot",
+                        ScriptName = "Test.TestLogic",
+                        LuaScriptPath = "Test/TestLogic",
                     };
                     int index = SceneNames.IndexOf(rootScript.SceneName);
                     config.RootScript.Add(rootScript);

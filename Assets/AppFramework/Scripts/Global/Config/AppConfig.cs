@@ -14,8 +14,6 @@ public class AppConfig : ScriptableObject
     public bool IsTestServer;
     [Tooltip("App是否热更")]
     public bool IsHotfix;
-    [Tooltip("App运行XLua脚本")]
-    public bool RunXLua;
     [Tooltip("App运行帧频，默认60帧")]
     public int AppFrameRate = 60;
     [Tooltip("App安卓包不同渠道")]

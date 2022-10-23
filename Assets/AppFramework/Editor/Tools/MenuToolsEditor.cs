@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class MenuToolsEditor : UnityEditor.AssetModificationProcessor
 {
-    private static string[] temps = { "Root", "Window" };
+    private static string[] temps = { "Logic", "View" };
 
     /// <summary>  
     /// 此函数在asset被创建完，文件已经生成到磁盘上，但是没有生成.meta文件和import之前被调用  

@@ -15,7 +15,7 @@ MonoBehaviour:
   IsDebug: 1
   IsTestServer: 0
   IsHotfix: 0
-  RunXLua: 0
+  RunXLua: 1
   AppFrameRate: 60
   TargetPackage: 0
   NativeApp: 0
