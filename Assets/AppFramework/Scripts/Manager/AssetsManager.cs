@@ -178,7 +178,7 @@ public class AssetsManager : SingletonMono<AssetsManager>
         }
 
         EventDispatcher.TriggerEvent(go.name, state);
-        GoRoot.Instance.AddWindow<T>(t as ViewBase);
+        GoRoot.Instance.AddView<T>(t as ViewBase);
         return t;
     }
 
@@ -208,7 +208,7 @@ public class AssetsManager : SingletonMono<AssetsManager>
         }
 
         EventDispatcher.TriggerEvent(go.name, state);
-        GoRoot.Instance.AddWindow<T>(t as ViewBase);
+        GoRoot.Instance.AddView<T>(t as ViewBase);
         return t;
     }
 

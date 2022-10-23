@@ -19,7 +19,7 @@ public class GoRoot : SingletonMono<GoRoot>
     private GameObject GlobalGameObject;//3D游戏对象父物体(全局)
     private GameObject TempGameObject;//3D游戏对象父物体(临时)
     
-    private static Dictionary<string, ViewBase> windowPairs = new Dictionary<string, ViewBase>();
+    private static Dictionary<string, ViewBase> viewPairs = new Dictionary<string, ViewBase>();
     private Dictionary<string, Transform> rootPairs = new Dictionary<string, Transform>();
 
     #endregion
@@ -148,24 +148,24 @@ public class GoRoot : SingletonMono<GoRoot>
         return list.Count > layer;
     }
 
-    public void AddWindow<T>(ViewBase view)
+    public void AddView<T>(ViewBase view)
     {
         var type = typeof(T);
         var scriptName = type.Namespace == string.Empty ? type.Name : type.FullName;
-        if (!windowPairs.ContainsKey(scriptName))
+        if (!viewPairs.ContainsKey(scriptName))
         {
-            windowPairs.Add(scriptName, view);
+            viewPairs.Add(scriptName, view);
         }
     }
-    public T GetWindow<T>() where T : class
+    public T GetView<T>() where T : class
     {
         var type = typeof(T);
         var scriptName = type.Namespace == string.Empty ? type.Name : type.FullName;
-        if (!windowPairs.ContainsKey(scriptName))
+        if (!viewPairs.ContainsKey(scriptName))
         {
             return null;
         }
-        return windowPairs[scriptName] as T;
+        return viewPairs[scriptName] as T;
     }
     /// <summary> 添加3D对象预制体，返回GameObject </summary>
     public Transform TryGetEmptyNode(string name)

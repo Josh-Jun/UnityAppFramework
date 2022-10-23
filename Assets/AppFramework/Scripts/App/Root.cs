@@ -16,7 +16,7 @@ public class Root
     public static AppConfig AppConfig; //App配置表 
 
     private static Dictionary<string, List<string>> sceneScriptsPairs = new Dictionary<string, List<string>>();
-    private static Dictionary<string, ILogic> iRootPairs = new Dictionary<string, ILogic>();
+    private static Dictionary<string, ILogic> iLogicPairs = new Dictionary<string, ILogic>();
     private static List<ILogic> RuntimeRoots = new List<ILogic>();
 
     public static void Init()
@@ -54,7 +54,7 @@ public class Root
         if (AppConfig.IsHotfix)
         {
             //初始化热更脚本
-            _updateLogic = GetRoot("Update.UpdateRoot");
+            _updateLogic = GetLogic("Update.UpdateRoot");
             _updateLogic.Begin();
         }
         else
@@ -65,7 +65,7 @@ public class Root
 
     public static void StartApp()
     {
-        InitRootScripts(() =>
+        InitLogicScripts(() =>
         {
             LoadScene(appScriptConfig.MainSceneName, true);
             TableManager.Instance.InitConfig();
@@ -89,17 +89,17 @@ public class Root
         TimerLogicer.Instance.InitParent(parent);
     }
 
-    private static void InitRootScripts(Action callback = null)
+    private static void InitLogicScripts(Action callback = null)
     {
         appScriptConfig = AssetsManager.Instance.LoadAsset<AppScriptConfig>(AssetsPathConfig.AppScriptConfig);
         for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
         {
-            if (!iRootPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
+            if (!iLogicPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
             {
-                ILogic iLogic = GetRoot(appScriptConfig.RootScript[i].ScriptName);
+                ILogic iLogic = GetLogic(appScriptConfig.RootScript[i].ScriptName);
                 if (iLogic != null)
                 {
-                    iRootPairs.Add(appScriptConfig.RootScript[i].ScriptName, iLogic);
+                    iLogicPairs.Add(appScriptConfig.RootScript[i].ScriptName, iLogic);
                 }
                 else
                 {
@@ -120,19 +120,19 @@ public class Root
             }
         }
 
-        InitRootBegin("Global", callback);
+        InitLogicBegin("Global", callback);
     }
 
     public static void LoadScene(string sceneName, bool isLoading = false, LoadSceneMode mode = LoadSceneMode.Single, Action callback = null)
     {
-        InitRootEnd();
+        InitLogicEnd();
         if (isLoading)
         {
             AssetsManager.Instance.LoadingSceneAsync(sceneName, (progress) =>
             {
                 LoadingLogic.Instance.Loading(progress, () =>
                 {
-                    InitRootBegin(sceneName, callback);
+                    InitLogicBegin(sceneName, callback);
                 });
             });
         }
@@ -140,22 +140,22 @@ public class Root
         {
             AssetsManager.Instance.LoadSceneAsync(sceneName, () =>
             {
-                InitRootBegin(sceneName, callback);
+                InitLogicBegin(sceneName, callback);
             }, mode);
         }
     }
 
-    public static void InitRootBegin(string sceneName, Action callback = null)
+    public static void InitLogicBegin(string sceneName, Action callback = null)
     {
         if (sceneScriptsPairs.ContainsKey(sceneName))
         {
             for (int i = 0; i < sceneScriptsPairs[sceneName].Count; i++)
             {
-                if (iRootPairs.ContainsKey(sceneScriptsPairs[sceneName][i]))
+                if (iLogicPairs.ContainsKey(sceneScriptsPairs[sceneName][i]))
                 {
-                    iRootPairs[sceneScriptsPairs[sceneName][i]].Begin();
+                    iLogicPairs[sceneScriptsPairs[sceneName][i]].Begin();
                     if (sceneName.Equals("Global")) continue;
-                    RuntimeRoots.Add(iRootPairs[sceneScriptsPairs[sceneName][i]]);
+                    RuntimeRoots.Add(iLogicPairs[sceneScriptsPairs[sceneName][i]]);
                 }
             }
         }
@@ -163,7 +163,7 @@ public class Root
         callback?.Invoke();
     }
 
-    private static void InitRootEnd()
+    private static void InitLogicEnd()
     {
         for (int i = 0; i < RuntimeRoots.Count; i++)
         {
@@ -173,23 +173,23 @@ public class Root
         RuntimeRoots.Clear();
     }
 
-    private static ILogic GetRoot(string fullName)
+    private static ILogic GetLogic(string fullName)
     {
         Type type = Type.GetType(fullName);
         object obj = Activator.CreateInstance(type);
         return obj as ILogic;
     }
 
-    public static T GetRootScript<T>() where T : class
+    public static T GetLogicScript<T>() where T : class
     {
         var type = typeof(T);
         var scriptName = type.Namespace == string.Empty ? type.Name : type.FullName;
-        if (!iRootPairs.ContainsKey(scriptName))
+        if (!iLogicPairs.ContainsKey(scriptName))
         {
             return null;
         }
 
-        return iRootPairs[scriptName] as T;
+        return iLogicPairs[scriptName] as T;
     }
 
     public static void AppPause(bool isPause)
@@ -199,9 +199,9 @@ public class Root
         {
             for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
             {
-                if (iRootPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
+                if (iLogicPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
                 {
-                    iRootPairs[appScriptConfig.RootScript[i].ScriptName].AppPause(isPause);
+                    iLogicPairs[appScriptConfig.RootScript[i].ScriptName].AppPause(isPause);
                 }
             }
         }
@@ -214,9 +214,9 @@ public class Root
         {
             for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
             {
-                if (iRootPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
+                if (iLogicPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
                 {
-                    iRootPairs[appScriptConfig.RootScript[i].ScriptName].AppFocus(isFocus);
+                    iLogicPairs[appScriptConfig.RootScript[i].ScriptName].AppFocus(isFocus);
                 }
             }
         }
@@ -229,9 +229,9 @@ public class Root
         {
             for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
             {
-                if (iRootPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
+                if (iLogicPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
                 {
-                    iRootPairs[appScriptConfig.RootScript[i].ScriptName].AppQuit();
+                    iLogicPairs[appScriptConfig.RootScript[i].ScriptName].AppQuit();
                 }
             }
         }
