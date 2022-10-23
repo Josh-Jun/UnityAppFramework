@@ -78,12 +78,10 @@ public class AppScriptConfigWindowEditor : EditorWindow
                 EditorGUILayout.BeginHorizontal(titleStyle);
                 GUILayout.Label(new GUIContent("RootScript"), titleStyle);
                 GUILayout.Label("1.SceneName");
-                levels[i] = EditorGUILayout.Popup(levels[i],SceneNames.ToArray(), GUILayout.MaxWidth(180));
+                levels[i] = EditorGUILayout.Popup(levels[i],SceneNames.ToArray());
                 config.RootScript[i].SceneName = SceneNames[levels[i]];
                 GUILayout.Label("2.ScriptName");
                 config.RootScript[i].ScriptName = EditorGUILayout.TextField(config.RootScript[i].ScriptName);
-                GUILayout.Label("3.LuaScriptPath");
-                config.RootScript[i].LuaScriptPath = EditorGUILayout.TextField(config.RootScript[i].LuaScriptPath);
                 if (GUILayout.Button("", new GUIStyle("OL Minus")))
                 {
                     if (config.RootScript.Count > 1)
@@ -103,7 +101,6 @@ public class AppScriptConfigWindowEditor : EditorWindow
                     {
                         SceneName = SceneNames[levels[levels.Count -1]],
                         ScriptName = "Test.TestLogic",
-                        LuaScriptPath = "Test/TestLogic",
                     };
                     int index = SceneNames.IndexOf(rootScript.SceneName);
                     config.RootScript.Add(rootScript);
