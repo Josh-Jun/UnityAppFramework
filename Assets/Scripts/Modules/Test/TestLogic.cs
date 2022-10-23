@@ -114,8 +114,8 @@ namespace Test
 
         private void ButtonQuitEvent()
         {
-            //Ask.AskRoot.Instance.ShowAskWindow("确定退出程序？", () => { PlatformManager.Instance.QuitUnityPlayer(); });
-            SendEventMsg<string, Action, Action>("ShowAskWindow", "确定退出程序？",
+            //Ask.AskRoot.Instance.ShowAskView("确定退出程序？", () => { PlatformManager.Instance.QuitUnityPlayer(); });
+            SendEventMsg<string, Action, Action>("ShowAskView", "确定退出程序？",
                 () => { PlatformManager.Instance.QuitUnityPlayer(); }, null);
         }
 
@@ -123,7 +123,7 @@ namespace Test
         {
             view.SetText("触发不带参数事件");
             SendEventMsg("ShowTips", "触发不带参数事件", 1.2f);
-            // Root.GetRootScript<Ask.AskRoot>().ShowTips("123");
+            // Root.GetLogicScript<Ask.AskLogic>().ShowTips("123");
         }
 
         
