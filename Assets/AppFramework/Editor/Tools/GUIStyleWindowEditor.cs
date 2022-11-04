@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEditor;
  
-namespace SK.Framework
+namespace AppFramework.Editor
 {
     public sealed class GUIStyleWindowEditor : EditorWindow
     {

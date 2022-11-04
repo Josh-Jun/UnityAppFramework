@@ -2,13 +2,15 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using AppFramework.Tools;
+using AppFramework.View;
 // using Pico.Tools;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace Test
+namespace Modules.Test
 {
     public class TestView : ViewBase
     {

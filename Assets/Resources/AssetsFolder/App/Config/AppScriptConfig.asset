@@ -15,11 +15,8 @@ MonoBehaviour:
   MainSceneName: Scenes/Test/TestScene
   RootScript:
   - SceneName: Global
-    ScriptName: Ask.AskLogic
-    LuaScriptPath: 
+    ScriptName: App.Ask.AskLogic
   - SceneName: Global
-    ScriptName: Loading.LoadingLogic
-    LuaScriptPath: 
+    ScriptName: App.Loading.LoadingLogic
   - SceneName: Scenes/Test/TestScene
-    ScriptName: Test.TestLogic
-    LuaScriptPath: Test/TestLogic
+    ScriptName: Modules.Test.TestLogic

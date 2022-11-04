@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using AppFramework.Tools;
+using AppFramework.View;
 using UnityEngine;
 using UnityEngine.UI;
-using Data;
 
-namespace Update
+namespace App.Update
 {
     public class UpdateView : ViewBase
     {

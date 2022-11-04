@@ -1,43 +1,49 @@
-﻿using UnityEngine;
+﻿using AppFramework.Tools;
+using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(InputFieldScaler))]
-public class InputFieldScalerEditor : Editor
+namespace AppFramework.Editor
 {
-    private InputFieldScaler InputFieldScaler;
-    private SerializedObject _target;
-
-    private SerializedProperty fontSize;
-    private SerializedProperty fixedWidth;
-    private SerializedProperty keepInitWidthSize;
-    // Use this for initialization
-    void OnEnable()
+    [CustomEditor(typeof(InputFieldScaler))]
+    public class InputFieldScalerEditor : UnityEditor.Editor
     {
-        InputFieldScaler = (InputFieldScaler)target;
-        _target = new SerializedObject(target);
+        private InputFieldScaler InputFieldScaler;
+        private SerializedObject _target;
 
-        fontSize = _target.FindProperty("fontSize");
-        fixedWidth = _target.FindProperty("fixedWidth");
-        keepInitWidthSize = _target.FindProperty("keepInitWidthSize");
-    }
+        private SerializedProperty fontSize;
+        private SerializedProperty fixedWidth;
 
-    public override void OnInspectorGUI()
-    {
-        base.OnInspectorGUI();
-        Undo.RecordObject(InputFieldScaler, "object change");
-        
-        EditorGUILayout.PropertyField(fontSize);
-        EditorGUILayout.PropertyField(fixedWidth);
-        if (!InputFieldScaler.fixedWidth)
+        private SerializedProperty keepInitWidthSize;
+
+        // Use this for initialization
+        void OnEnable()
         {
-            EditorGUILayout.PropertyField(keepInitWidthSize);
+            InputFieldScaler = (InputFieldScaler)target;
+            _target = new SerializedObject(target);
+
+            fontSize = _target.FindProperty("fontSize");
+            fixedWidth = _target.FindProperty("fixedWidth");
+            keepInitWidthSize = _target.FindProperty("keepInitWidthSize");
         }
 
-        if (GUI.changed)
+        public override void OnInspectorGUI()
         {
-            EditorUtility.SetDirty(target);
-        }
+            base.OnInspectorGUI();
+            Undo.RecordObject(InputFieldScaler, "object change");
 
-        _target.ApplyModifiedProperties();
+            EditorGUILayout.PropertyField(fontSize);
+            EditorGUILayout.PropertyField(fixedWidth);
+            if (!InputFieldScaler.fixedWidth)
+            {
+                EditorGUILayout.PropertyField(keepInitWidthSize);
+            }
+
+            if (GUI.changed)
+            {
+                EditorUtility.SetDirty(target);
+            }
+
+            _target.ApplyModifiedProperties();
+        }
     }
 }

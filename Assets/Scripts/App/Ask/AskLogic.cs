@@ -1,9 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using AppFramework.Data;
+using AppFramework.Interface;
+using AppFramework.Manager;
+using AppFramework.Tools;
 using UnityEngine;
 
-namespace Ask
+namespace App.Ask
 {
     public class AskLogic : SingletonEvent<AskLogic>, ILogic
     {

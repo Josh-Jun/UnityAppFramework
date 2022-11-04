@@ -1,14 +1,18 @@
-﻿using Data;
-using EventController;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
-using Ask;
+using AppFramework.App;
+using AppFramework.Config;
+using AppFramework.Data;
+using AppFramework.Enum;
+using AppFramework.Interface;
+using AppFramework.Manager;
+using AppFramework.Tools;
 using UnityEngine;
 
-namespace Update
+namespace App.Update
 {
     public class UpdateLogic : SingletonEvent<UpdateLogic>, ILogic
     {

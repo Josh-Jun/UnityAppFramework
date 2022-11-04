@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using RenderHeads.Media.AVProVideo;
-using TableData;
+using Table.Data;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Video;
 using System.Threading.Tasks;
+using AppFramework.App;
+using AppFramework.Data;
+using AppFramework.Interface;
+using AppFramework.Manager;
+using AppFramework.Tools;
+using Table.Data;
 
-namespace Test
+namespace Modules.Test
 {
     public class TestLogic : SingletonEvent<TestLogic>, ILogic
     {

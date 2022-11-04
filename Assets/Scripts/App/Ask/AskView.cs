@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using AppFramework.Tools;
+using AppFramework.View;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Ask
+namespace App.Ask
 {
     public class AskView : ViewBase
     {

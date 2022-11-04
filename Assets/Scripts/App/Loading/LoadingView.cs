@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using AppFramework.Tools;
+using AppFramework.View;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Loading
+namespace App.Loading
 {
     public class LoadingView : ViewBase
     {

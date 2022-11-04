@@ -1,9 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using AppFramework.App;
+using AppFramework.Data;
+using AppFramework.Interface;
+using AppFramework.Manager;
+using AppFramework.Tools;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-namespace Loading
+namespace App.Loading
 {
     public class LoadingLogic : SingletonEvent<LoadingLogic>, ILogic
     {
@@ -21,18 +27,17 @@ namespace Loading
             }
         }
 
-        public void Loading(float progress, Action callback)
+        public void LoadScene(string sceneName, bool isLoading = false, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
-            if (!view.GetViewActive())
+            view.SetViewActive(isLoading);
+            Root.LoadScene(sceneName, isLoading, progress =>
             {
-                view.SetViewActive(true);
-            }
-            view.SetLoadingSliderValue(progress);
-            if (progress >= 1)
-            {
-                view.SetViewActive(false);
-                callback?.Invoke();
-            }
+                view.SetLoadingSliderValue(progress);
+                if (progress >= 1)
+                {
+                    view.SetViewActive(false);
+                }
+            }, loadSceneMode);
         }
         public void End()
         {
