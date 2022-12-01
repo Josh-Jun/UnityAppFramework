@@ -38,14 +38,6 @@ namespace AppFramework.Manager
                     m_TablePairs.Add(appTableConfig.AppTable[i].TableName, table);
                 }
             }
-
-            for (var en = ThriftTableHolder.ETXT_NAME._Min + 1; en < ThriftTableHolder.ETXT_NAME._Max; en++)
-            {
-                if (m_TablePairs.ContainsKey(en.ToString()))
-                {
-                    ThriftTableHolder.m_TableDic[en].ParseData(m_TablePairs[en.ToString()].bytes);
-                }
-            }
         }
 
         public T GetTable<T>(string tableName) where T : class
@@ -60,12 +52,6 @@ namespace AppFramework.Manager
                 case TableMold.Json:
                     t = JsonUtility.FromJson<T>(table.text);
                     break;
-                case TableMold.Thrift:
-                    ThriftTableHolder.ETXT_NAME en =
-                        (ThriftTableHolder.ETXT_NAME)System.Enum.Parse(typeof(ThriftTableHolder.ETXT_NAME), tableName);
-                    t = ThriftTableHolder.GetTable(en) as T;
-                    break;
-
             }
 
             return t;

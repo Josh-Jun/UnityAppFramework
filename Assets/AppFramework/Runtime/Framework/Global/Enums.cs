@@ -28,6 +28,5 @@ namespace AppFramework.Enum
     {
         Json = 0,
         Xml = 1,
-        Thrift = 2
     }
 }

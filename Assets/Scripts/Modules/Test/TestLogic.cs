@@ -42,7 +42,6 @@ namespace Modules.Test
             // mobile = new RenderTexture(Screen.width, Screen.height, 32);
             // window.SetMobileCamera(mobile);
             view.PlayGif();
-            Debug.Log(TableManager.Instance.GetTable<TestThriftTable>("TestThrift").Data.Count);
             Debug.Log(TableManager.Instance.GetTable<TestJson>("TestJson").Boss.Count);
             RunTest();
         }
