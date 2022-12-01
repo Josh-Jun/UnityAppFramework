@@ -4,7 +4,7 @@ using System.Text;
 using UnityEngine;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using AppFramework.App;
+using AppFramework.Info;
 using AppFramework.Tools;
 
 namespace AppFramework.Manager
@@ -27,7 +27,7 @@ namespace AppFramework.Manager
             private set { }
             get
             {
-                return Root.AppConfig.IsTestServer ? "" : ""; //测试服务器:生产服务器
+                return AppInfo.IsTestServer ? "" : ""; //测试服务器:生产服务器
             }
         }
 
@@ -39,7 +39,7 @@ namespace AppFramework.Manager
             private set { }
             get
             {
-                return Root.AppConfig.IsTestServer ? "" : ""; //测试服务器:生产服务器
+                return AppInfo.IsTestServer ? "" : ""; //测试服务器:生产服务器
             }
         }
 
@@ -51,7 +51,7 @@ namespace AppFramework.Manager
             private set { }
             get
             {
-                return Root.AppConfig.IsTestServer ? 17888 : 8080; //测试服务器:生产服务器
+                return AppInfo.IsTestServer ? 17888 : 8080; //测试服务器:生产服务器
             }
         }
 
@@ -62,7 +62,7 @@ namespace AppFramework.Manager
             {
                 string test_url = Path.Combine(Application.dataPath.Replace("Assets", ""), "AssetBundle/"); //本地AB包地址
                 string pro_url = "https://meta-oss.genimous.com/vr-ota/dev_test/"; //服务器AB包地址
-                return Root.AppConfig.IsTestServer ? test_url : pro_url;
+                return AppInfo.IsTestServer ? test_url : pro_url;
             }
         }
 
@@ -73,7 +73,7 @@ namespace AppFramework.Manager
             {
                 string test_url = Path.Combine(Application.dataPath.Replace("Assets", ""), "App/"); //本地AB包地址
                 string pro_url = "https://meta-oss.genimous.com/vr-ota/App/"; //服务器AB包地址
-                return Root.AppConfig.IsTestServer ? test_url : pro_url;
+                return AppInfo.IsTestServer ? test_url : pro_url;
             }
         }
 

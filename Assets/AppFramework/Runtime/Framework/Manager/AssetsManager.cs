@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Linq;
 using System.Reflection;
-using AppFramework.App;
+using AppFramework.Info;
 using AppFramework.Tools;
 using AppFramework.View;
 using UnityEngine.SceneManagement;
@@ -42,7 +42,7 @@ namespace AppFramework.Manager
         public void LoadSceneAsync(string sceneName, Action cb = null, LoadSceneMode mode = LoadSceneMode.Single)
         {
             string[] names = sceneName.Split('/'); //names[0], names[1], names[names.Length - 1]
-            if (Root.AppConfig.IsHotfix)
+            if (AppInfo.IsHotfix)
             {
                 AssetBundle ab = AssetBundleManager.Instance.LoadAssetBundle(names[0], $"{names[1]}Scene");
             }
@@ -63,7 +63,7 @@ namespace AppFramework.Manager
             LoadSceneMode mode = LoadSceneMode.Single)
         {
             string[] names = sceneName.Split('/'); //names[0], names[1], names[names.Length - 1]
-            if (Root.AppConfig.IsHotfix)
+            if (AppInfo.IsHotfix)
             {
                 AssetBundle ab = AssetBundleManager.Instance.LoadAssetBundle(names[0], $"{names[1]}Scene");
             }
@@ -172,7 +172,7 @@ namespace AppFramework.Manager
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
             T t = null;
-            var type = Root.Assembly.GetType(typeof(T).FullName);
+            var type = AppInfo.Assembly.GetType(typeof(T).FullName);
             if (type != null)
             {
                 t = (T)go.AddComponent(type);
@@ -202,7 +202,7 @@ namespace AppFramework.Manager
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
             T t = null;
-            var type = Root.Assembly.GetType(typeof(T).FullName);
+            var type = AppInfo.Assembly.GetType(typeof(T).FullName);
             if (type != null)
             {
                 t = (T)go.AddComponent(type);
@@ -230,7 +230,7 @@ namespace AppFramework.Manager
         /// </summary>
         public T LoadAsset<T>(string path) where T : UnityEngine.Object
         {
-            if (Root.AppConfig.IsHotfix)
+            if (AppInfo.IsHotfix)
             {
                 string[] names = path.Split('/');
                 return AssetBundleManager.Instance.LoadAsset<T>(names[0], names[1], names[names.Length - 1]);

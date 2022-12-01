@@ -3,7 +3,7 @@
 /// 程序入口
 /// </summary>
 /// 
-namespace AppFramework.App
+namespace App
 {
     public class App : MonoBehaviour
     {

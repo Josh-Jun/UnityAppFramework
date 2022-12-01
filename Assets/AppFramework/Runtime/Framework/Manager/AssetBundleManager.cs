@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using AppFramework.App;
 using AppFramework.Config;
 using AppFramework.Enum;
+using AppFramework.Info;
 using AppFramework.Network;
 using AppFramework.Tools;
 using UnityEngine;
@@ -85,7 +85,7 @@ namespace AppFramework.Manager
             string mainPath = isLocalAsset ? mainfestAssetsPath : mainfestDataPath;
             AssetBundle ab;
 
-            if (Root.AppConfig.ABPipeline == ABPipeline.Default)
+            if (AppInfo.AbPipeline == ABPipeline.Default)
             {
                 //加载ab包，需一并加载其依赖包。
                 if (assetbundle == null)

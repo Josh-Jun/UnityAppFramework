@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
-using AppFramework.App;
 using AppFramework.Config;
 using AppFramework.Data;
 using AppFramework.Enum;
+using AppFramework.Info;
 using AppFramework.Interface;
 using AppFramework.Manager;
 using AppFramework.Tools;
@@ -257,7 +257,7 @@ namespace App.Update
             {
                 //将manifest文件写入本地
                 FileTools.CreateFile(LocalPath + PlatformManager.Instance.Name + ".manifest", manifest_data);
-                if (Root.AppConfig.ABPipeline == ABPipeline.Default)
+                if (AppInfo.AbPipeline == ABPipeline.Default)
                 {
                      //下载总AB包
                      DownLoad(ServerUrl + PlatformManager.Instance.Name, (byte[] ab_data) =>
@@ -267,7 +267,7 @@ namespace App.Update
                         view.StartCoroutine(DownLoadAssetBundle());
                      });
                 }
-                else if(Root.AppConfig.ABPipeline == ABPipeline.Scriptable)
+                else if(AppInfo.AbPipeline == ABPipeline.Scriptable)
                 {
                     view.StartCoroutine(DownLoadAssetBundle());
                 }
@@ -320,7 +320,7 @@ namespace App.Update
                     }
                 }
                 yield return new WaitForEndOfFrame();
-                if (Root.AppConfig.ABPipeline == ABPipeline.Default)
+                if (AppInfo.AbPipeline == ABPipeline.Default)
                 {
                     //下载manifest文件
                     DownLoad(ServerUrl + folder.BundleName + ".manifest", (byte[] _manifest_data) =>

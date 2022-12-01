@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using AppFramework.App;
 using AppFramework.Enum;
+using AppFramework.Info;
 using UnityEngine;
 
 namespace AppFramework.Manager
@@ -21,7 +21,7 @@ namespace AppFramework.Manager
         public override string Name { get; } = "Android";
         public override string PlatformName
         {
-            get { return Root.AppConfig.TargetPackage == TargetPackage.Mobile ? "android" : Root.AppConfig.TargetPackage.ToString().ToLower(); }
+            get { return AppInfo.TargetPackage == TargetPackage.Mobile ? "android" : AppInfo.TargetPackage.ToString().ToLower(); }
         } 
         public AndroidPlayer()
         {

@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System;
-using AppFramework.App;
 using AppFramework.Enum;
 using AppFramework.Tools;
 using UnityEngine.InputSystem.UI;
 #if PICO_XR_SETTING
+using AppFramework.Info;
 using UnityEngine.XR.Interaction.Toolkit.UI;
 #endif
 
@@ -88,7 +88,7 @@ namespace AppFramework.View
         /// </summary>
         void Awake()
         {
-            transform.SetParent(App.App.app.transform);
+            // transform.SetParent(App.App.app.transform);
 
             #region UI Canvas
 
@@ -115,7 +115,7 @@ namespace AppFramework.View
             {
                 Type t = null;
 #if PICO_XR_SETTING
-                t = Root.AppConfig.TargetPackage == TargetPackage.Mobile
+                t = AppInfo.TargetPackage == TargetPackage.Mobile
                     ? typeof(InputSystemUIInputModule)
                     : typeof(XRUIInputModule);
 #endif
@@ -127,7 +127,7 @@ namespace AppFramework.View
             #endregion
 
 #if PICO_XR_SETTING
-            if (Root.AppConfig.TargetPackage == TargetPackage.Pico)
+            if (AppInfo.TargetPackage == TargetPackage.Pico)
             {
                 Init3DUIRoot(Camera.main);
                 Reset3DUIRoot();

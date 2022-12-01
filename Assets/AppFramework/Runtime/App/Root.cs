@@ -6,13 +6,14 @@ using System.Reflection;
 using AppFramework.Config;
 using AppFramework.Data;
 using AppFramework.Enum;
+using AppFramework.Info;
 using AppFramework.Interface;
 using AppFramework.Manager;
 using AppFramework.Tools;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
-namespace AppFramework.App
+namespace App
 {
     public class Root
     {
@@ -26,7 +27,6 @@ namespace AppFramework.App
         private static Dictionary<string, ILogic> iLogicPairs = new Dictionary<string, ILogic>();
         private static List<ILogic> RuntimeRoots = new List<ILogic>();
 
-        public static Assembly Assembly;
         public static void Init()
         {
             AppConfig = Resources.Load<AppConfig>("App/AppConfig");
@@ -189,11 +189,11 @@ namespace AppFramework.App
 
         private static ILogic GetLogic(string fullName)
         {
-            if (Assembly == null)
+            if (AppInfo.Assembly == null)
             {
-                Assembly = Assembly.Load("App.Main");//加载程序集,返回类型是一个Assembly
+                AppInfo.Assembly = Assembly.Load("App.Main");//加载程序集,返回类型是一个Assembly
             }
-            Type type = Assembly.GetType($"{fullName}");
+            Type type = AppInfo.Assembly.GetType($"{fullName}");
             var obj = Activator.CreateInstance(type); //创建此类型实例
             return obj as ILogic;
         }

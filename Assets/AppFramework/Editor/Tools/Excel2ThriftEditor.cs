@@ -42,7 +42,7 @@ namespace AppFramework.Editor
             m_Parm.csPath = dataPath + "thrift/output/";
             m_Parm.bytePath = dataPath + "thrift/output/";
             m_Parm.epplusLibFile = Application.dataPath + "/AppFramework/Editor/Plugins/EPPlus.dll";
-            m_Parm.thriftLibFile = Application.dataPath + "/AppFramework/Libraries/Thrift/Thrift.dll";
+            m_Parm.thriftLibFile = Application.dataPath + "/AppFramework/Runtime/Libraries/Thrift/Thrift.dll";
 
             m_BytePath = Application.dataPath + "/Resources/AssetsFolder/Table/Thrift/";
             m_TablePath = Application.dataPath + "/Scripts/Table/";

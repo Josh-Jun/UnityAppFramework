@@ -5,7 +5,6 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
-using AppFramework.App;
 using AppFramework.Config;
 using AppFramework.Enum;
 using AppFramework.Tools;

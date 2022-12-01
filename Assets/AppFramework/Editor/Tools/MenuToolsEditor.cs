@@ -48,13 +48,16 @@ namespace AppFramework.Editor
         public static void CreateAssetsPath()
         {
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine("public class AssetsPathConfig");
+            stringBuilder.AppendLine("namespace AppFramework.Data");
             stringBuilder.AppendLine("{");
+            stringBuilder.AppendLine("    public class AssetsPathConfig");
+            stringBuilder.AppendLine("    {");
             stringBuilder.Append(GetAllPath("App"));
             stringBuilder.Append(GetAllPath("AssetsFolder"));
+            stringBuilder.Append("    }");
             stringBuilder.Append("}");
 
-            string output = string.Format("{0}/Scripts/App/AssetsPathConfig.cs", Application.dataPath);
+            string output = string.Format("{0}/AppFramework/Runtime/Scripts/Framework/Tools/AssetsPathConfig.cs", Application.dataPath);
             FileStream fs1 = new FileStream(output, FileMode.Create, FileAccess.Write);
             StreamWriter sw = new StreamWriter(fs1);
             sw.WriteLine(stringBuilder.ToString()); //开始写入值
@@ -81,7 +84,7 @@ namespace AppFramework.Editor
                     value = value.Replace("Mobile", "{0}").Replace("Pico", "{0}");
                 }
 
-                sb.AppendLine($"    public const string {name} = \"{value}\";");
+                sb.AppendLine($"        public const string {name} = \"{value}\";");
             }
 
             return sb.ToString();

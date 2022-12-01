@@ -7,8 +7,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Video;
 using System.Threading.Tasks;
-using AppFramework.App;
 using AppFramework.Data;
+using AppFramework.Info;
 using AppFramework.Interface;
 using AppFramework.Manager;
 using AppFramework.Tools;
@@ -35,7 +35,7 @@ namespace Modules.Test
         public void Begin()
         {
             //加载窗体
-            string prefab_TestPath = string.Format(AssetsPathConfig.TestView, Root.AppConfig.TargetPackage);
+            string prefab_TestPath = string.Format(AssetsPathConfig.TestView, AppInfo.TargetPackage);
             view = AssetsManager.Instance.LoadUIView<TestView>(prefab_TestPath);
             view.SetViewActive();
 

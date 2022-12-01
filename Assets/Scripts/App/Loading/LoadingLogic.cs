@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using AppFramework.App;
 using AppFramework.Data;
 using AppFramework.Interface;
 using AppFramework.Manager;
