@@ -38,7 +38,7 @@ namespace AppFramework.Editor
         private void SetDataAndPath()
         {
             string dataPath = Application.dataPath.Replace("/Assets", "/Data/");
-            m_Parm.thriftFile = dataPath + "thrift/meta.thrift";
+            m_Parm.thriftFile = dataPath + "thrift/GameThriftData.thrift";
             m_Parm.csPath = dataPath + "thrift/output/";
             m_Parm.bytePath = dataPath + "thrift/output/";
             m_Parm.epplusLibFile = Application.dataPath + "/AppFramework/Editor/Plugins/EPPlus.dll";

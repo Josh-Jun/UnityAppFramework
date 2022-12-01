@@ -7,6 +7,7 @@
 //	double: A 64-bit floating point number
 //	string: A text string encoded using UTF-8 encoding
 //	-----------------------------
+namespace netstd Table.Data
 
 struct TestThrift
 {
