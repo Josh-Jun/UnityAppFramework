@@ -5,7 +5,7 @@ namespace AppFramework.Enum
     public enum TargetPackage
     {
         Mobile = 0,
-        Pico = 1,
+        XR = 1,
     }
 
     /// <summary>AB包打包加载方式</summary>

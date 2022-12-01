@@ -127,7 +127,7 @@ namespace AppFramework.View
             #endregion
 
 #if PICO_XR_SETTING
-            if (AppInfo.AppConfig.TargetPackage == TargetPackage.Pico)
+            if (AppInfo.AppConfig.TargetPackage == TargetPackage.XR)
             {
                 Init3DUIRoot(Camera.main);
                 Reset3DUIRoot();

@@ -45,7 +45,7 @@ namespace App
         /// <summary> 初始化App场景相机，热更新在这个场景执行 </summary>
         private static void InitCamera()
         {
-            string name = AppInfo.AppConfig.TargetPackage == TargetPackage.Pico ? "PicoXRManager" : "Main Camera";
+            string name = AppInfo.AppConfig.TargetPackage == TargetPackage.XR ? "PicoXRManager" : "Main Camera";
             GameObject go = Resources.Load<GameObject>($"App/Camera/{name}");
             GameObject camera = GameObject.Instantiate(go);
             camera.name = name;

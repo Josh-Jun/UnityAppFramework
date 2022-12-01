@@ -157,7 +157,7 @@ namespace AppFramework.Editor
                 // PlayerSettings.Android.keyaliasName = "";
                 // PlayerSettings.Android.keyaliasPass = "";
 
-                PlayerSettings.Android.minSdkVersion = ApkTarget == TargetPackage.Pico
+                PlayerSettings.Android.minSdkVersion = ApkTarget == TargetPackage.XR
                     ? AndroidSdkVersions.AndroidApiLevel26
                     : AndroidSdkVersions.AndroidApiLevel23;
 
@@ -186,7 +186,7 @@ namespace AppFramework.Editor
                 }
 
                 androidXRSettings.InitManagerOnStart = false;
-                if (ApkTarget == TargetPackage.Pico)
+                if (ApkTarget == TargetPackage.XR)
                 {
                     androidXRSettings.InitManagerOnStart = true;
                     //启用
