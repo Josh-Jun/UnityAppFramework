@@ -85,7 +85,7 @@ namespace AppFramework.Manager
             string mainPath = isLocalAsset ? mainfestAssetsPath : mainfestDataPath;
             AssetBundle ab;
 
-            if (AppInfo.AbPipeline == ABPipeline.Default)
+            if (AppInfo.AppConfig.ABPipeline == ABPipeline.Default)
             {
                 //加载ab包，需一并加载其依赖包。
                 if (assetbundle == null)

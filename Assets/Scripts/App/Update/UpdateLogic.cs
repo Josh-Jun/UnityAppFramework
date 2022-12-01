@@ -257,7 +257,7 @@ namespace App.Update
             {
                 //将manifest文件写入本地
                 FileTools.CreateFile(LocalPath + PlatformManager.Instance.Name + ".manifest", manifest_data);
-                if (AppInfo.AbPipeline == ABPipeline.Default)
+                if (AppInfo.AppConfig.ABPipeline == ABPipeline.Default)
                 {
                      //下载总AB包
                      DownLoad(ServerUrl + PlatformManager.Instance.Name, (byte[] ab_data) =>
@@ -267,7 +267,7 @@ namespace App.Update
                         view.StartCoroutine(DownLoadAssetBundle());
                      });
                 }
-                else if(AppInfo.AbPipeline == ABPipeline.Scriptable)
+                else if(AppInfo.AppConfig.ABPipeline == ABPipeline.Scriptable)
                 {
                     view.StartCoroutine(DownLoadAssetBundle());
                 }
@@ -320,7 +320,7 @@ namespace App.Update
                     }
                 }
                 yield return new WaitForEndOfFrame();
-                if (AppInfo.AbPipeline == ABPipeline.Default)
+                if (AppInfo.AppConfig.ABPipeline == ABPipeline.Default)
                 {
                     //下载manifest文件
                     DownLoad(ServerUrl + folder.BundleName + ".manifest", (byte[] _manifest_data) =>

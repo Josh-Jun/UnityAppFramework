@@ -88,7 +88,7 @@ namespace AppFramework.View
         /// </summary>
         void Awake()
         {
-            // transform.SetParent(App.App.app.transform);
+            transform.SetParent(App.App.app.transform);
 
             #region UI Canvas
 
@@ -115,7 +115,7 @@ namespace AppFramework.View
             {
                 Type t = null;
 #if PICO_XR_SETTING
-                t = AppInfo.TargetPackage == TargetPackage.Mobile
+                t = AppInfo.AppConfig.TargetPackage == TargetPackage.Mobile
                     ? typeof(InputSystemUIInputModule)
                     : typeof(XRUIInputModule);
 #endif
@@ -127,7 +127,7 @@ namespace AppFramework.View
             #endregion
 
 #if PICO_XR_SETTING
-            if (AppInfo.TargetPackage == TargetPackage.Pico)
+            if (AppInfo.AppConfig.TargetPackage == TargetPackage.Pico)
             {
                 Init3DUIRoot(Camera.main);
                 Reset3DUIRoot();

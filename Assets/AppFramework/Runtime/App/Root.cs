@@ -21,21 +21,20 @@ namespace App
 
         private static AppScriptConfig appScriptConfig;
 
-        public static AppConfig AppConfig; //App配置表 
-
         private static Dictionary<string, List<string>> sceneScriptsPairs = new Dictionary<string, List<string>>();
         private static Dictionary<string, ILogic> iLogicPairs = new Dictionary<string, ILogic>();
         private static List<ILogic> RuntimeRoots = new List<ILogic>();
 
         public static void Init()
         {
-            AppConfig = Resources.Load<AppConfig>("App/AppConfig");
+            AppInfo.AppConfig = Resources.Load<AppConfig>("App/AppConfig");
+            
             //Debug.Log开关
-            Debug.unityLogger.logEnabled = AppConfig.IsDebug;
+            Debug.unityLogger.logEnabled = AppInfo.AppConfig.IsDebug;
             //禁止程序休眠
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
             //设置程序帧率
-            Application.targetFrameRate = AppConfig.AppFrameRate;
+            Application.targetFrameRate = AppInfo.AppConfig.AppFrameRate;
 
             InitCamera();
             InitManager();
@@ -46,7 +45,7 @@ namespace App
         /// <summary> 初始化App场景相机，热更新在这个场景执行 </summary>
         private static void InitCamera()
         {
-            string name = AppConfig.TargetPackage == TargetPackage.Pico ? "PicoXRManager" : "Main Camera";
+            string name = AppInfo.AppConfig.TargetPackage == TargetPackage.Pico ? "PicoXRManager" : "Main Camera";
             GameObject go = Resources.Load<GameObject>($"App/Camera/{name}");
             GameObject camera = GameObject.Instantiate(go);
             camera.name = name;
@@ -54,14 +53,14 @@ namespace App
 
         private static void OutputAppInfo()
         {
-            string info_server = AppConfig.IsTestServer ? "测试环境" : "生产环境";
+            string info_server = AppInfo.AppConfig.IsTestServer ? "测试环境" : "生产环境";
             Debug.Log("配置信息:");
             Debug.Log($"当前服务器:{info_server}");
         }
 
         private static void BeginCheckUpdate()
         {
-            if (AppConfig.IsHotfix)
+            if (AppInfo.AppConfig.IsHotfix)
             {
                 //初始化热更脚本
                 _updateLogic = GetLogic("App.Update.UpdateRoot");
@@ -191,7 +190,7 @@ namespace App
         {
             if (AppInfo.Assembly == null)
             {
-                AppInfo.Assembly = Assembly.Load("App.Main");//加载程序集,返回类型是一个Assembly
+                AppInfo.Assembly = Assembly.Load("App.Module");//加载程序集,返回类型是一个Assembly
             }
             Type type = AppInfo.Assembly.GetType($"{fullName}");
             var obj = Activator.CreateInstance(type); //创建此类型实例

@@ -35,7 +35,7 @@ namespace Modules.Test
         public void Begin()
         {
             //加载窗体
-            string prefab_TestPath = string.Format(AssetsPathConfig.TestView, AppInfo.TargetPackage);
+            string prefab_TestPath = string.Format(AssetsPathConfig.TestView, AppInfo.AppConfig.TargetPackage);
             view = AssetsManager.Instance.LoadUIView<TestView>(prefab_TestPath);
             view.SetViewActive();
 
