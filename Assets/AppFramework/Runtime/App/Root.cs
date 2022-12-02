@@ -63,7 +63,7 @@ namespace App
             if (AppInfo.AppConfig.IsHotfix)
             {
                 //初始化热更脚本
-                _updateLogic = GetLogic("App.Update.UpdateRoot");
+                _updateLogic = GetLogic("App.Update.UpdateRoot", "App.Main");
                 _updateLogic.Begin();
             }
             else
@@ -186,11 +186,11 @@ namespace App
             RuntimeRoots.Clear();
         }
 
-        private static ILogic GetLogic(string fullName)
+        private static ILogic GetLogic(string fullName, string assemblyString = "App.Module")
         {
             if (AppInfo.Assembly == null)
             {
-                AppInfo.Assembly = Assembly.Load("App.Module");//加载程序集,返回类型是一个Assembly
+                AppInfo.Assembly = Assembly.Load(assemblyString);//加载程序集,返回类型是一个Assembly
             }
             Type type = AppInfo.Assembly.GetType($"{fullName}");
             var obj = Activator.CreateInstance(type); //创建此类型实例
