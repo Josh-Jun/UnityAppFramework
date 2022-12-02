@@ -7,7 +7,7 @@ CompatibilityAssetBundleManifest:
       CRC: 2881927332
       Dependencies: {}
     Info_1:
-      Name: update/windows
-      Hash: b3fa9e9a9143d6f5019783b5d7dbf578
-      CRC: 3042873525
+      Name: update/views
+      Hash: 992e761b36f766818e4f15215960d8d6
+      CRC: 2688864826
       Dependencies: {}

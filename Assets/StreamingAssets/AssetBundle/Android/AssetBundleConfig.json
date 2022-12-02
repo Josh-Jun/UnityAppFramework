@@ -15,12 +15,12 @@
                     "Size": "4214"
                 },
                 {
-                    "FolderName": "Windows",
-                    "BundleName": "update/windows",
+                    "FolderName": "Views",
+                    "BundleName": "update/views",
                     "Tag": "0",
                     "Mold": "1",
-                    "MD5": "4a4f3551d8267a0e6cd2bbc90fbfcaac",
-                    "Size": "16441"
+                    "MD5": "d0e8f95d850a3bb5440a24ba90b05b61",
+                    "Size": "16437"
                 }
             ]
         }
