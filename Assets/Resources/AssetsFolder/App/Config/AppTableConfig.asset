@@ -15,7 +15,5 @@ MonoBehaviour:
   AppTable:
   - TableName: TestXml
     TableMold: 1
-  - TableName: TestThrift
-    TableMold: 2
   - TableName: TestJson
     TableMold: 0
