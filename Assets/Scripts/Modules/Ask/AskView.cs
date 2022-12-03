@@ -6,7 +6,7 @@ using AppFramework.View;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace App.Ask
+namespace Modules.Ask
 {
     public class AskView : ViewBase
     {

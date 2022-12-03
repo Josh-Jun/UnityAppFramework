@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using App;
 using AppFramework.Data;
 using AppFramework.Interface;
 using AppFramework.Manager;
@@ -8,7 +9,7 @@ using AppFramework.Tools;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace App.Loading
+namespace Modules.Loading
 {
     public class LoadingLogic : SingletonEvent<LoadingLogic>, ILogic
     {

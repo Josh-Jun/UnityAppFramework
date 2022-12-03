@@ -36,40 +36,30 @@ namespace App
             //设置程序帧率
             Application.targetFrameRate = AppInfo.AppConfig.AppFrameRate;
 
-            InitCamera();
             InitManager();
             OutputAppInfo();
-            BeginCheckUpdate();
-        }
-
-        /// <summary> 初始化App场景相机，热更新在这个场景执行 </summary>
-        private static void InitCamera()
-        {
-            string name = AppInfo.AppConfig.TargetPackage == TargetPackage.XR ? "PicoXRManager" : "Main Camera";
-            GameObject go = Resources.Load<GameObject>($"App/Camera/{name}");
-            GameObject camera = GameObject.Instantiate(go);
-            camera.name = name;
-        }
-
-        private static void OutputAppInfo()
-        {
-            string info_server = AppInfo.AppConfig.IsTestServer ? "测试环境" : "生产环境";
-            Debug.Log("配置信息:");
-            Debug.Log($"当前服务器:{info_server}");
-        }
-
-        private static void BeginCheckUpdate()
-        {
+            
             if (AppInfo.AppConfig.IsHotfix)
             {
-                //初始化热更脚本
-                _updateLogic = GetLogic("App.Update.UpdateRoot", "App.Main");
-                _updateLogic.Begin();
+                //加载更新场景，初始化热更脚本
+                AsyncOperation asyncOperation = SceneManager.LoadSceneAsync("UpdateScene");
+                asyncOperation.completed += (AsyncOperation ao) =>
+                {
+                    _updateLogic = GetLogic("App.Update.UpdateLogic", "App.Main");
+                    _updateLogic.Begin();
+                };
             }
             else
             {
                 StartApp();
             }
+        }
+        
+        private static void OutputAppInfo()
+        {
+            string info_server = AppInfo.AppConfig.IsTestServer ? "测试环境" : "生产环境";
+            Debug.Log("配置信息:");
+            Debug.Log($"当前服务器:{info_server}");
         }
 
         public static void StartApp()

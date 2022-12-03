@@ -7,7 +7,7 @@ using AppFramework.Manager;
 using AppFramework.Tools;
 using UnityEngine;
 
-namespace App.Ask
+namespace Modules.Ask
 {
     public class AskLogic : SingletonEvent<AskLogic>, ILogic
     {

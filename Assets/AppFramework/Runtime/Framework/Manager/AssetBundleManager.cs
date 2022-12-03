@@ -35,22 +35,16 @@ namespace AppFramework.Manager
         public override void InitParent(Transform parent)
         {
             base.InitParent(parent);
-            if (PlatformManager.Instance.IsEditor)
-            {
-                mainfestDataPath = PlatformManager.Instance.GetDataPath(PlatformManager.Instance.Name);
-            }
-            else
-            {
-                mainfestDataPath = $"file://{PlatformManager.Instance.GetDataPath(PlatformManager.Instance.Name)}";
-            }
 
-            mainfestAssetsPath = PlatformManager.Instance.GetAssetsPath($"AssetBundle/{PlatformManager.Instance.Name}");
+            var head = PlatformManager.Instance.IsEditor ? "" : "file://";
+            mainfestDataPath = $"{head}{PlatformManager.Instance.GetDataPath(PlatformManager.Instance.Name)}";
+            mainfestAssetsPath =$"{head}{PlatformManager.Instance.GetAssetsPath($"AssetBundle/{PlatformManager.Instance.Name}")}";
         }
 
         public void InitLocalAssetBundleConfig(Action callbcak = null)
         {
             UnityWebRequester requester = NetcomManager.Uwr;
-            requester.Get($"file://{mainfestAssetsPath}/AssetBundleConfig.json", (string data) =>
+            requester.Get($"{mainfestAssetsPath}/AssetBundleConfig.json", (string data) =>
             {
                 AssetBundleConfig abc = JsonUtility.FromJson<AssetBundleConfig>(data);
                 foreach (var module in abc.Modules)
@@ -68,7 +62,6 @@ namespace AppFramework.Manager
                 }
 
                 callbcak?.Invoke();
-                requester.Destory();
             });
         }
 

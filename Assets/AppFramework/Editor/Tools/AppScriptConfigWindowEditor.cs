@@ -45,7 +45,7 @@ namespace AppFramework.Editor
                 var name = Path.GetFileNameWithoutExtension(GetBuildScenes()[i]);
                 var fullName = Path.Combine(dic, name).Replace(@"\", "/");
                 var scene = "";
-                if (i > 0)
+                if (i > 1)
                 {
                     scene = fullName.Replace("Assets/Resources/AssetsFolder/", "");
                 }
@@ -107,7 +107,7 @@ namespace AppFramework.Editor
                         RootScript rootScript = new RootScript
                         {
                             SceneName = SceneNames[levels[levels.Count - 1]],
-                            ScriptName = "Test.TestLogic",
+                            ScriptName = "Modules.Test.TestLogic",
                         };
                         int index = SceneNames.IndexOf(rootScript.SceneName);
                         config.RootScript.Add(rootScript);
@@ -131,7 +131,10 @@ namespace AppFramework.Editor
         {
             foreach (int id in levels)
             {
-                config.RootScript[id].SceneName = SceneNames[id];
+                if (id < config.RootScript.Count && id < SceneNames.Count)
+                {
+                    config.RootScript[id].SceneName = SceneNames[id];
+                }
             }
 
             EditorUtility.SetDirty(config);

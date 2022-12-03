@@ -6,7 +6,7 @@ using AppFramework.View;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace App.Loading
+namespace Modules.Loading
 {
     public class LoadingView : ViewBase
     {

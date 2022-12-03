@@ -138,24 +138,26 @@ namespace AppFramework.Tools
         /// <returns></returns>
         public void Get(string url, Action<string> callback)
         {
-            using (uwr)
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbGET;
+            foreach (var header in headerPairs)
             {
-                uwr.url = url;
-                uwr.method = UnityWebRequest.kHttpVerbGET;
-                foreach (var header in headerPairs)
-                {
-                    uwr.SetRequestHeader(header.Key, header.Value);
-                }
+                uwr.SetRequestHeader(header.Key, header.Value);
+            }
 
-                DownloadHandlerBuffer downloadHandler = new DownloadHandlerBuffer();
-                uwr.downloadHandler = downloadHandler;
-                uwrao = uwr.SendWebRequest();
-                uwrao.completed += (ao) => { callback?.Invoke(uwr.downloadHandler.text); };
-                if (uwr.result != UnityWebRequest.Result.Success)
+            uwr.downloadHandler = new DownloadHandlerBuffer();
+            uwrao = uwr.SendWebRequest();
+            uwrao.completed += (ao) =>
+            {
+                if (string.IsNullOrEmpty(uwr.error))
+                {
+                    callback?.Invoke(uwr.downloadHandler.text);
+                }
+                else
                 {
                     Debug.LogError($"[Error:Get String] {uwr.error}");
                 }
-            }
+            };
         }
 
         /// <summary>
@@ -167,24 +169,26 @@ namespace AppFramework.Tools
         /// <returns></returns>
         public void GetBytes(string url, Action<byte[]> callback)
         {
-            using (uwr)
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbGET;
+            foreach (var header in headerPairs)
             {
-                uwr.url = url;
-                uwr.method = UnityWebRequest.kHttpVerbGET;
-                foreach (var header in headerPairs)
-                {
-                    uwr.SetRequestHeader(header.Key, header.Value);
-                }
+                uwr.SetRequestHeader(header.Key, header.Value);
+            }
 
-                DownloadHandlerBuffer downloadHandlerBuffer = new DownloadHandlerBuffer();
-                uwr.downloadHandler = downloadHandlerBuffer;
-                uwrao = uwr.SendWebRequest();
-                uwrao.completed += (ao) => { callback?.Invoke(uwr.downloadHandler.data); };
-                if (uwr.result != UnityWebRequest.Result.Success)
+            uwr.downloadHandler = new DownloadHandlerBuffer();
+            uwrao = uwr.SendWebRequest();
+            uwrao.completed += (ao) =>
+            {
+                if (string.IsNullOrEmpty(uwr.error))
+                {
+                    callback?.Invoke(uwr.downloadHandler.data);
+                }
+                else
                 {
                     Debug.LogError($"[Error:Bytes] {url} {uwr.error}");
                 }
-            }
+            };
         }
 
         /// <summary>
@@ -196,24 +200,27 @@ namespace AppFramework.Tools
         /// <returns></returns>
         public void GetTexture(string url, Action<Texture2D> callback)
         {
-            using (uwr)
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbGET;
+            foreach (var header in headerPairs)
             {
-                uwr.url = url;
-                uwr.method = UnityWebRequest.kHttpVerbGET;
-                foreach (var header in headerPairs)
-                {
-                    uwr.SetRequestHeader(header.Key, header.Value);
-                }
+                uwr.SetRequestHeader(header.Key, header.Value);
+            }
 
-                DownloadHandlerTexture downloadHandlerTexture = new DownloadHandlerTexture();
-                uwr.downloadHandler = downloadHandlerTexture;
-                uwrao = uwr.SendWebRequest();
-                uwrao.completed += (ao) => { callback?.Invoke(downloadHandlerTexture.texture); };
-                if (uwr.result != UnityWebRequest.Result.Success)
+            DownloadHandlerTexture downloadHandlerTexture = new DownloadHandlerTexture();
+            uwr.downloadHandler = new DownloadHandlerTexture();
+            uwrao = uwr.SendWebRequest();
+            uwrao.completed += (ao) =>
+            {
+                if (string.IsNullOrEmpty(uwr.error))
+                {
+                    callback?.Invoke(downloadHandlerTexture.texture);
+                }
+                else
                 {
                     Debug.LogError($"[Error:Texture2D] {uwr.error}");
                 }
-            }
+            };
         }
 
         /// <summary>
@@ -225,24 +232,27 @@ namespace AppFramework.Tools
         /// <returns></returns>
         public void GetAssetBundle(string url, Action<AssetBundle> callback)
         {
-            using (uwr)
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbGET;
+            foreach (var header in headerPairs)
             {
-                uwr.url = url;
-                uwr.method = UnityWebRequest.kHttpVerbGET;
-                foreach (var header in headerPairs)
-                {
-                    uwr.SetRequestHeader(header.Key, header.Value);
-                }
+                uwr.SetRequestHeader(header.Key, header.Value);
+            }
 
-                DownloadHandlerAssetBundle downloadHandlerAssetBundle = new DownloadHandlerAssetBundle(uwr.url, 0);
-                uwr.downloadHandler = downloadHandlerAssetBundle;
-                uwrao = uwr.SendWebRequest();
-                uwrao.completed += (ao) => { callback?.Invoke(downloadHandlerAssetBundle.assetBundle); };
-                if (uwr.result != UnityWebRequest.Result.Success)
+            DownloadHandlerAssetBundle downloadHandlerAssetBundle = new DownloadHandlerAssetBundle(uwr.url, 0);
+            uwr.downloadHandler = downloadHandlerAssetBundle;
+            uwrao = uwr.SendWebRequest();
+            uwrao.completed += (ao) =>
+            {
+                if (string.IsNullOrEmpty(uwr.error))
+                {
+                    callback?.Invoke(downloadHandlerAssetBundle.assetBundle);
+                }
+                else
                 {
                     Debug.LogError($"[Error:AssetBundle] {uwr.error}");
                 }
-            }
+            };
         }
 
         /// <summary>
@@ -255,24 +265,27 @@ namespace AppFramework.Tools
         /// <returns></returns>
         public void GetAudioClip(string url, Action<AudioClip> callback, AudioType audioType = AudioType.MPEG)
         {
-            using (uwr)
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbGET;
+            foreach (var header in headerPairs)
             {
-                uwr.url = url;
-                uwr.method = UnityWebRequest.kHttpVerbGET;
-                foreach (var header in headerPairs)
-                {
-                    uwr.SetRequestHeader(header.Key, header.Value);
-                }
+                uwr.SetRequestHeader(header.Key, header.Value);
+            }
 
-                DownloadHandlerAudioClip downloadHandlerAudioClip = new DownloadHandlerAudioClip(uwr.url, audioType);
-                uwr.downloadHandler = downloadHandlerAudioClip;
-                uwrao = uwr.SendWebRequest();
-                uwrao.completed += (ao) => { callback?.Invoke(downloadHandlerAudioClip.audioClip); };
-                if (uwr.result != UnityWebRequest.Result.Success)
+            DownloadHandlerAudioClip downloadHandlerAudioClip = new DownloadHandlerAudioClip(uwr.url, audioType);
+            uwr.downloadHandler = downloadHandlerAudioClip;
+            uwrao = uwr.SendWebRequest();
+            uwrao.completed += (ao) =>
+            {
+                if (string.IsNullOrEmpty(uwr.error))
+                {
+                    callback?.Invoke(downloadHandlerAudioClip.audioClip);
+                }
+                else
                 {
                     Debug.LogError($"[Error:AudioClip] {uwr.error}");
                 }
-            }
+            };
         }
 
         /// <summary>
@@ -285,24 +298,27 @@ namespace AppFramework.Tools
         /// <returns></returns>
         public void Post(string url, WWWForm formData, Action<string> callback)
         {
-            using (uwr)
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbPOST;
+            foreach (var header in headerPairs)
             {
-                uwr.url = url;
-                uwr.method = UnityWebRequest.kHttpVerbPOST;
-                foreach (var header in headerPairs)
-                {
-                    uwr.SetRequestHeader(header.Key, header.Value);
-                }
+                uwr.SetRequestHeader(header.Key, header.Value);
+            }
 
-                uwr.uploadHandler = new UploadHandlerRaw(formData.data);
-                uwr.downloadHandler = new DownloadHandlerBuffer();
-                uwrao = uwr.SendWebRequest();
-                uwrao.completed += (ao) => { callback?.Invoke(uwr.downloadHandler.text); };
-                if (uwr.result != UnityWebRequest.Result.Success)
+            uwr.uploadHandler = new UploadHandlerRaw(formData.data);
+            uwr.downloadHandler = new DownloadHandlerBuffer();
+            uwrao = uwr.SendWebRequest();
+            uwrao.completed += (ao) =>
+            {
+                if (string.IsNullOrEmpty(uwr.error))
+                {
+                    callback?.Invoke(uwr.downloadHandler.text);
+                }
+                else
                 {
                     Debug.LogError($"[Error:Post WWWForm] {uwr.error}");
                 }
-            }
+            };
         }
 
         /// <summary>
@@ -315,25 +331,28 @@ namespace AppFramework.Tools
         /// <returns></returns>
         public void Post(string url, string postData, Action<string> callback)
         {
-            using (uwr)
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbPOST;
+            foreach (var header in headerPairs)
             {
-                uwr.url = url;
-                uwr.method = UnityWebRequest.kHttpVerbPOST;
-                foreach (var header in headerPairs)
-                {
-                    uwr.SetRequestHeader(header.Key, header.Value);
-                }
+                uwr.SetRequestHeader(header.Key, header.Value);
+            }
 
-                byte[] bodyRaw = Encoding.UTF8.GetBytes(postData);
-                uwr.uploadHandler = new UploadHandlerRaw(bodyRaw);
-                uwr.downloadHandler = new DownloadHandlerBuffer();
-                uwrao = uwr.SendWebRequest();
-                uwrao.completed += (ao) => { callback?.Invoke(uwr.downloadHandler.text); };
-                if (uwr.result != UnityWebRequest.Result.Success)
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(postData);
+            uwr.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            uwr.downloadHandler = new DownloadHandlerBuffer();
+            uwrao = uwr.SendWebRequest();
+            uwrao.completed += (ao) =>
+            {
+                if (string.IsNullOrEmpty(uwr.error))
+                {
+                    callback?.Invoke(uwr.downloadHandler.text);
+                }
+                else
                 {
                     Debug.LogError($"[Error:Post String] {uwr.error}");
                 }
-            }
+            };
         }
 
         /// <summary>
@@ -346,24 +365,27 @@ namespace AppFramework.Tools
         /// <returns></returns>
         public void Post(string url, byte[] postData, Action<string> callback)
         {
-            using (uwr)
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbPOST;
+            foreach (var header in headerPairs)
             {
-                uwr.url = url;
-                uwr.method = UnityWebRequest.kHttpVerbPOST;
-                foreach (var header in headerPairs)
-                {
-                    uwr.SetRequestHeader(header.Key, header.Value);
-                }
+                uwr.SetRequestHeader(header.Key, header.Value);
+            }
 
-                uwr.uploadHandler = new UploadHandlerRaw(postData);
-                uwr.downloadHandler = new DownloadHandlerBuffer();
-                uwrao = uwr.SendWebRequest();
-                uwrao.completed += (ao) => { callback?.Invoke(uwr.downloadHandler.text); };
-                if (uwr.result != UnityWebRequest.Result.Success)
+            uwr.uploadHandler = new UploadHandlerRaw(postData);
+            uwr.downloadHandler = new DownloadHandlerBuffer();
+            uwrao = uwr.SendWebRequest();
+            uwrao.completed += (ao) =>
+            {
+                if (string.IsNullOrEmpty(uwr.error))
+                {
+                    callback?.Invoke(uwr.downloadHandler.text);
+                }
+                else
                 {
                     Debug.LogError($"[Error:Post Bytes] {uwr.error}");
                 }
-            }
+            };
         }
 
         /// <summary>
@@ -376,30 +398,33 @@ namespace AppFramework.Tools
         /// <returns></returns>
         public void Post(string url, Dictionary<string, string> formFields, Action<string> callback)
         {
-            using (uwr)
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbPOST;
+            foreach (var header in headerPairs)
             {
-                uwr.url = url;
-                uwr.method = UnityWebRequest.kHttpVerbPOST;
-                foreach (var header in headerPairs)
-                {
-                    uwr.SetRequestHeader(header.Key, header.Value);
-                }
+                uwr.SetRequestHeader(header.Key, header.Value);
+            }
 
-                WWWForm form = new WWWForm();
-                foreach (var item in formFields)
-                {
-                    form.AddField(item.Key, item.Value);
-                }
+            WWWForm form = new WWWForm();
+            foreach (var item in formFields)
+            {
+                form.AddField(item.Key, item.Value);
+            }
 
-                uwr.uploadHandler = new UploadHandlerRaw(form.data);
-                uwr.downloadHandler = new DownloadHandlerBuffer();
-                uwrao = uwr.SendWebRequest();
-                uwrao.completed += (ao) => { callback?.Invoke(uwr.downloadHandler.text); };
-                if (uwr.result != UnityWebRequest.Result.Success)
+            uwr.uploadHandler = new UploadHandlerRaw(form.data);
+            uwr.downloadHandler = new DownloadHandlerBuffer();
+            uwrao = uwr.SendWebRequest();
+            uwrao.completed += (ao) =>
+            {
+                if (string.IsNullOrEmpty(uwr.error))
+                {
+                    callback?.Invoke(uwr.downloadHandler.text);
+                }
+                else
                 {
                     Debug.LogError($"[Error:Post Dictionary] {uwr.error}");
                 }
-            }
+            };
         }
 
         /// <summary>
@@ -412,24 +437,27 @@ namespace AppFramework.Tools
         /// <returns></returns>
         public void Put(string url, byte[] contentBytes, Action<string> callback)
         {
-            using (uwr)
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbPUT;
+            foreach (var header in headerPairs)
             {
-                uwr.url = url;
-                uwr.method = UnityWebRequest.kHttpVerbPUT;
-                foreach (var header in headerPairs)
-                {
-                    uwr.SetRequestHeader(header.Key, header.Value);
-                }
+                uwr.SetRequestHeader(header.Key, header.Value);
+            }
 
-                uwr.uploadHandler = new UploadHandlerRaw(contentBytes);
-                uwr.downloadHandler = new DownloadHandlerBuffer();
-                uwrao = uwr.SendWebRequest();
-                uwrao.completed += (ao) => { callback?.Invoke(uwr.downloadHandler.text); };
-                if (uwr.result != UnityWebRequest.Result.Success)
+            uwr.uploadHandler = new UploadHandlerRaw(contentBytes);
+            uwr.downloadHandler = new DownloadHandlerBuffer();
+            uwrao = uwr.SendWebRequest();
+            uwrao.completed += (ao) =>
+            {
+                if (string.IsNullOrEmpty(uwr.error))
+                {
+                    callback?.Invoke(uwr.downloadHandler.text);
+                }
+                else
                 {
                     Debug.LogError($"[Error:Put Bytes] {uwr.error}");
                 }
-            }
+            };
         }
 
         /// <summary>
@@ -442,25 +470,28 @@ namespace AppFramework.Tools
         /// <returns></returns>
         public void Put(string url, string content, Action<string> callback)
         {
-            using (uwr)
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbPUT;
+            foreach (var header in headerPairs)
             {
-                uwr.url = url;
-                uwr.method = UnityWebRequest.kHttpVerbPUT;
-                foreach (var header in headerPairs)
-                {
-                    uwr.SetRequestHeader(header.Key, header.Value);
-                }
+                uwr.SetRequestHeader(header.Key, header.Value);
+            }
 
-                byte[] contentBytes = Encoding.UTF8.GetBytes(content);
-                uwr.uploadHandler = new UploadHandlerRaw(contentBytes);
-                uwr.downloadHandler = new DownloadHandlerBuffer();
-                uwrao = uwr.SendWebRequest();
-                uwrao.completed += (ao) => { callback?.Invoke(uwr.downloadHandler.text); };
-                if (uwr.result != UnityWebRequest.Result.Success)
+            byte[] contentBytes = Encoding.UTF8.GetBytes(content);
+            uwr.uploadHandler = new UploadHandlerRaw(contentBytes);
+            uwr.downloadHandler = new DownloadHandlerBuffer();
+            uwrao = uwr.SendWebRequest();
+            uwrao.completed += (ao) =>
+            {
+                if (string.IsNullOrEmpty(uwr.error))
+                {
+                    callback?.Invoke(uwr.downloadHandler.text);
+                }
+                else
                 {
                     Debug.LogError($"[Error:Put String] {uwr.error}");
                 }
-            }
+            };
         }
     }
 }

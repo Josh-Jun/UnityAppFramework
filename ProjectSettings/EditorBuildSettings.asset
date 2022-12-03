@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/AppFramework/Assets/Scenes/App.unity
     guid: 03bbd6c5501e6d14ca4aeeb46b1d8abe
   - enabled: 1
+    path: Assets/Scenes/Update/UpdateScene.unity
+    guid: 5461c776027a725429fc8c47549447ce
+  - enabled: 1
     path: Assets/Resources/AssetsFolder/Scenes/Test/TestScene.unity
     guid: 282ec1f01f77fe24985b55ebfd1cfc97
   m_configObjects:
