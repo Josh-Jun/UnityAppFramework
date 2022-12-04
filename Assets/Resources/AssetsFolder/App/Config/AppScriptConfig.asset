@@ -15,8 +15,8 @@ MonoBehaviour:
   MainSceneName: Scenes/Test/TestScene
   RootScript:
   - SceneName: Global
-    ScriptName: App.Ask.AskLogic
+    ScriptName: Modules.Ask.AskLogic
   - SceneName: Global
-    ScriptName: App.Loading.LoadingLogic
+    ScriptName: Modules.Loading.LoadingLogic
   - SceneName: Scenes/Test/TestScene
     ScriptName: Modules.Test.TestLogic
