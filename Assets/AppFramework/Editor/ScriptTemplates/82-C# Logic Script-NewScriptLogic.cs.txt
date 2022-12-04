@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace #NAMESPACE#
+namespace Modules.#NAMESPACE#
 {
     public class #SCRIPTNAME# : SingletonEvent<#SCRIPTNAME#>, ILogic
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace #NAMESPACE#
+namespace Modules.#NAMESPACE#
 {
     public class #SCRIPTNAME# : ViewBase
     {
