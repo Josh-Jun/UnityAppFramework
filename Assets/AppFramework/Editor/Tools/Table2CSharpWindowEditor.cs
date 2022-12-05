@@ -40,7 +40,7 @@ namespace AppFramework.Editor
             };
 
             tablePath = $"Resources/AssetsFolder/Table/{tableMold}";
-            outPutPath = "AppFramework/Runtime/Scripts/Framework/Manager/Table/Data";
+            outPutPath = "AppFramework/Runtime/Framework/Manager/Table/Data";
             GetFiles();
         }
 

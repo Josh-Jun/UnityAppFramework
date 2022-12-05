@@ -57,7 +57,7 @@ namespace AppFramework.Editor
             stringBuilder.Append("    }");
             stringBuilder.Append("}");
 
-            string output = string.Format("{0}/AppFramework/Runtime/Scripts/Framework/Tools/AssetsPathConfig.cs", Application.dataPath);
+            string output = string.Format("{0}/AppFramework/Runtime/Framework/Tools/AssetsPathConfig.cs", Application.dataPath);
             FileStream fs1 = new FileStream(output, FileMode.Create, FileAccess.Write);
             StreamWriter sw = new StreamWriter(fs1);
             sw.WriteLine(stringBuilder.ToString()); //开始写入值
