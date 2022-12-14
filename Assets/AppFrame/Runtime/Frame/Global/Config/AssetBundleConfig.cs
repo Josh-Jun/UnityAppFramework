@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AppFramework.Config
+namespace AppFrame.Config
 {
     [System.Serializable]
     public class AssetBundleConfig

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
-using AppFramework.Enum;
+using AppFrame.Enum;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace AppFramework.Config
+namespace AppFrame.Config
 {
     [CreateAssetMenu(fileName = "AppTableConfig", menuName = "App/AppTableConfig")]
     [Serializable]

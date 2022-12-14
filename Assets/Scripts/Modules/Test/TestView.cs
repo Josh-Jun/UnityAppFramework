@@ -2,8 +2,8 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
-using AppFramework.Tools;
-using AppFramework.View;
+using AppFrame.Tools;
+using AppFrame.View;
 // using Pico.Tools;
 using UnityEngine;
 using UnityEngine.Animations;

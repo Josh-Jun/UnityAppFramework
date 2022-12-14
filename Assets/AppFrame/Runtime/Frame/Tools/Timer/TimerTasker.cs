@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
     /// <summary>功能:定时服务</summary>
     public class TimerTasker : SingletonMono<TimerTasker>

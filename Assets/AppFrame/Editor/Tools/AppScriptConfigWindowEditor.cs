@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using AppFramework.Config;
+using AppFrame.Config;
 using UnityEditor;
 using UnityEditor.iOS;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace AppFramework.Editor
+namespace AppFrame.Editor
 {
     public class AppScriptConfigWindowEditor : EditorWindow
     {

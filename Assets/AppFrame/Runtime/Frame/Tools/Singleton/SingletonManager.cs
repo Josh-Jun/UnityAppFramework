@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using AppFramework.Interface;
+using AppFrame.Interface;
 
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
     public class SingletonManager : Singleton<SingletonManager>
     {

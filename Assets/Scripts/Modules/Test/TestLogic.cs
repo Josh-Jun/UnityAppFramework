@@ -7,11 +7,11 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Video;
 using System.Threading.Tasks;
-using AppFramework.Data;
-using AppFramework.Info;
-using AppFramework.Interface;
-using AppFramework.Manager;
-using AppFramework.Tools;
+using AppFrame.Data;
+using AppFrame.Info;
+using AppFrame.Interface;
+using AppFrame.Manager;
+using AppFrame.Tools;
 using Table.Data;
 
 namespace Modules.Test

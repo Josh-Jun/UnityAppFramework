@@ -1,7 +1,7 @@
 ﻿
-using AppFramework.Interface;
+using AppFrame.Interface;
 
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
     public class SingletonEvent<T> : EventBase, ISingleton where T : EventBase, ISingleton, new()
     {

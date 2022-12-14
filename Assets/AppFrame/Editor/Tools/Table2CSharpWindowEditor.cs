@@ -5,13 +5,13 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
-using AppFramework.Enum;
+using AppFrame.Enum;
 using UnityEditor;
 using UnityEngine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace AppFramework.Editor
+namespace AppFrame.Editor
 {
     public class Table2CSharpWindowEditor : EditorWindow
     {

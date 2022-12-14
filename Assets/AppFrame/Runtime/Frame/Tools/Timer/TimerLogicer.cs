@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
     /// <summary>功能:计时器服务</summary>
     public class TimerLogicer : SingletonMono<TimerLogicer>
@@ -28,7 +28,7 @@ namespace AppFramework.Tools
         {
             if (timerLst.Count > 0)
             {
-                for (int i = 0; i < timerLst.Count; i++)
+                for (int i = 0, length = timerLst.Count; i < length; i++)
                 {
                     timeData = timerLst[i];
                     if (timeData.isTime)
@@ -46,7 +46,7 @@ namespace AppFramework.Tools
         {
             if (timerFixedLst.Count > 0)
             {
-                for (int i = 0; i < timerFixedLst.Count; i++)
+                for (int i = 0, length = timerFixedLst.Count; i < length; i++)
                 {
                     fixedTimerData = timerFixedLst[i];
                     if (fixedTimerData.isTime)

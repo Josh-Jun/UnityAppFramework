@@ -1,14 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using AppFramework.Config;
-using AppFramework.Data;
-using AppFramework.Enum;
-using AppFramework.Tools;
+using AppFrame.Config;
+using AppFrame.Data;
+using AppFrame.Enum;
+using AppFrame.Tools;
 using Table.Data;
 using UnityEngine;
 
-namespace AppFramework.Manager
+namespace AppFrame.Manager
 {
     public class TableManager : SingletonMono<TableManager>
     {

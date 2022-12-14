@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using AppFramework.Interface;
+using AppFrame.Interface;
 
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
 
     public class SingletonMonoEvent<T> : EventBaseMono where T : SingletonMonoEvent<T>

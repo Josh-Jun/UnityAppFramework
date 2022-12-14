@@ -1,7 +1,7 @@
 ﻿using System.Text;
-using AppFramework.Manager;
+using AppFrame.Manager;
 
-namespace AppFramework.Network.Lan.Tcp
+namespace AppFrame.Network.Lan.Tcp
 {
     /// <summary>功能:网络会话</summary>
     public class SessionTcp : SessionTcpBase

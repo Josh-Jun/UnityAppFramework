@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace AppFramework.Data
+namespace AppFrame.Data
 {
     #region Https
 

@@ -1,4 +1,4 @@
-namespace AppFramework.Data
+namespace AppFrame.Data
 {
     public class AssetsPathConfig
     {

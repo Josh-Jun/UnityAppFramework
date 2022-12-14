@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 
 
-namespace AppFramework.Network.Lan.Tcp
+namespace AppFrame.Network.Lan.Tcp
 {
 	public class SocketTcp<T> where T : SessionTcpBase, new()
 	{

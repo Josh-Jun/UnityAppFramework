@@ -2,10 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using App;
-using AppFramework.Data;
-using AppFramework.Interface;
-using AppFramework.Manager;
-using AppFramework.Tools;
+using AppFrame.Data;
+using AppFrame.Interface;
+using AppFrame.Manager;
+using AppFrame.Tools;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

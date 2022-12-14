@@ -6,8 +6,8 @@ using UnityEditor;
 using UnityEditor.XR;
 using UnityEngine;
 using System;
-using AppFramework.Config;
-using AppFramework.Enum;
+using AppFrame.Config;
+using AppFrame.Enum;
 using Unity.VisualScripting;
 #if PICO_XR_SETTING
 using UnityEditor.XR.Management;
@@ -15,7 +15,7 @@ using UnityEditor.XR.Management.Metadata;
 using UnityEngine.XR.Management;
 #endif
 
-namespace AppFramework.Editor
+namespace AppFrame.Editor
 {
     public class BuildAppWindowEditor : EditorWindow
     {

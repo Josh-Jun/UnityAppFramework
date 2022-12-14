@@ -6,7 +6,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
     public class UnityWebRequester
     {

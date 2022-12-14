@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
     public class EventDispatcher
     {

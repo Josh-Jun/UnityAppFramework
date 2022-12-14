@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Xml;
-using AppFramework.Config;
-using AppFramework.Enum;
+using AppFrame.Config;
+using AppFrame.Enum;
 using UnityEditor;
 using UnityEditor.iOS;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace AppFramework.Editor
+namespace AppFrame.Editor
 {
     public class AppTableConfigWindowEditor : EditorWindow
     {

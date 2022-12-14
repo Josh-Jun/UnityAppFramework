@@ -1,5 +1,5 @@
 
-namespace AppFramework.Enum
+namespace AppFrame.Enum
 {
     /// <summary>安卓包不同渠道</summary>
     public enum TargetPackage

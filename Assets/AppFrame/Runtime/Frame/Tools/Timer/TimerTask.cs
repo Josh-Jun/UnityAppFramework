@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Timers;
 using UnityEngine;
 
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
     /// <summary>功能:计时器</summary>
     public class TimerTask

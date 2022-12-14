@@ -1,5 +1,5 @@
 syntax = "proto3";
-package GamePbData;
+package GameProtoData;
 
 // 命令
 enum PbCMD

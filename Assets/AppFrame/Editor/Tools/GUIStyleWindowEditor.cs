@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEditor;
  
-namespace AppFramework.Editor
+namespace AppFrame.Editor
 {
     public sealed class GUIStyleWindowEditor : EditorWindow
     {

@@ -2,7 +2,7 @@
 using System.Text;
 using System;
 
-namespace AppFramework.Network
+namespace AppFrame.Network
 {
     public class ByteBuffer
     {

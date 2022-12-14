@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// 功能:文件工具 
 /// </summary>
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
     public class FileTools
     {

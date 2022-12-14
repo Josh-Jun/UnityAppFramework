@@ -4,10 +4,10 @@ using System.Text;
 using UnityEngine;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using AppFramework.Info;
-using AppFramework.Tools;
+using AppFrame.Info;
+using AppFrame.Tools;
 
-namespace AppFramework.Manager
+namespace AppFrame.Manager
 {
     public partial class NetcomManager : SingletonMonoEvent<NetcomManager>
     {

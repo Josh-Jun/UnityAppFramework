@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace AppFramework.Manager
+namespace AppFrame.Manager
 {
     public abstract class PlatformManager
     {

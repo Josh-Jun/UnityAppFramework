@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using AppFramework.Network.Lan;
-using AppFramework.Tools;
+using AppFrame.Network.Lan;
+using AppFrame.Tools;
 using UnityEngine;
 
-namespace AppFramework.Network.Wan.Tcp
+namespace AppFrame.Network.Wan.Tcp
 {
     public class WanTcpManager : SingletonEvent<WanTcpManager>
     {

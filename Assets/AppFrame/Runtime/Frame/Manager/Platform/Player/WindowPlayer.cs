@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AppFramework.Manager
+namespace AppFrame.Manager
 {
     public class WindowPlayer : PlatformManager
     {

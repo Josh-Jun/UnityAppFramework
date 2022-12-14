@@ -9,7 +9,7 @@ using pb = global::Google.Protobuf;
 using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
 using scg = global::System.Collections.Generic;
-namespace GamePbData {
+namespace GameProtoData {
 
   /// <summary>Holder for reflection information generated from GameProtoData.proto</summary>
   public static partial class GameProtoDataReflection {
@@ -24,15 +24,15 @@ namespace GamePbData {
     static GameProtoDataReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChNHYW1lUHJvdG9EYXRhLnByb3RvEgpHYW1lUGJEYXRhIg0KC1BiSGVhcnRC",
-            "ZWF0Ih8KEVBiSGVhcnRCZWF0UmVzdWx0EgoKAnRzGAEgASgSKi4KBVBiQ01E",
-            "Eg4KCkhFQVJUX0JFQVQQABIVChFIRUFSVF9CRUFUX1JFU1VMVBABYgZwcm90",
-            "bzM="));
+            "ChNHYW1lUHJvdG9EYXRhLnByb3RvEg1HYW1lUHJvdG9EYXRhIg0KC1BiSGVh",
+            "cnRCZWF0Ih8KEVBiSGVhcnRCZWF0UmVzdWx0EgoKAnRzGAEgASgSKi4KBVBi",
+            "Q01EEg4KCkhFQVJUX0JFQVQQABIVChFIRUFSVF9CRUFUX1JFU1VMVBABYgZw",
+            "cm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GamePbData.PbCMD), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::GamePbData.PbHeartBeat), global::GamePbData.PbHeartBeat.Parser, null, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GamePbData.PbHeartBeatResult), global::GamePbData.PbHeartBeatResult.Parser, new[]{ "Ts" }, null, null, null, null)
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameProtoData.PbCMD), }, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtoData.PbHeartBeat), global::GameProtoData.PbHeartBeat.Parser, null, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProtoData.PbHeartBeatResult), global::GameProtoData.PbHeartBeatResult.Parser, new[]{ "Ts" }, null, null, null, null)
           }));
     }
     #endregion
@@ -67,7 +67,7 @@ namespace GamePbData {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GamePbData.GameProtoDataReflection.Descriptor.MessageTypes[0]; }
+      get { return global::GameProtoData.GameProtoDataReflection.Descriptor.MessageTypes[0]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -222,7 +222,7 @@ namespace GamePbData {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GamePbData.GameProtoDataReflection.Descriptor.MessageTypes[1]; }
+      get { return global::GameProtoData.GameProtoDataReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

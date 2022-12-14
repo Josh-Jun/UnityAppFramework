@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using UnityEngine.Networking;
 using UnityEngine.Rendering;
 
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
     public static class Developer
     {

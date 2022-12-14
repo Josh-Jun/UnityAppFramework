@@ -4,7 +4,7 @@ using System.Text;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
     public static class Utils
     {

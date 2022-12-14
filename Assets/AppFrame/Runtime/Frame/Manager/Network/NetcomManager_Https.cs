@@ -1,13 +1,13 @@
 using Google.Protobuf;
 using System;
 using System.Collections.Generic;
-using AppFramework.Tools;
+using AppFrame.Tools;
 using UnityEngine;
 /// <summary>
 /// Https
 /// </summary>
 
-namespace AppFramework.Manager
+namespace AppFrame.Manager
 {
     public partial class NetcomManager : SingletonMonoEvent<NetcomManager>
     {

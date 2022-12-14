@@ -5,9 +5,9 @@ using UnityEngine.Events;
 using UnityEngine.Video;
 using UnityEngine.UI;
 using System;
-using AppFramework.Tools;
+using AppFrame.Tools;
 
-namespace AppFramework.Manager
+namespace AppFrame.Manager
 {
     public class VideoManager : SingletonMono<VideoManager>
     {

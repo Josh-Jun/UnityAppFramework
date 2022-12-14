@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using AppFramework.Manager;
-using AppFramework.Tools;
+using AppFrame.Manager;
+using AppFrame.Tools;
 
-namespace AppFramework.Network.Lan.Udp
+namespace AppFrame.Network.Lan.Udp
 {
     public class LanUdpManager : SingletonEvent<LanUdpManager>
     {

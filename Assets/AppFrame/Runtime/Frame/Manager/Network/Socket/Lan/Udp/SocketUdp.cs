@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace AppFramework.Network.Lan.Udp
+namespace AppFrame.Network.Lan.Udp
 {
 	public class SocketUdp<T> where T : SessionUdpBase, new()
 	{

@@ -1,13 +1,13 @@
 using Google.Protobuf;
 using System;
 using System.Collections.Generic;
-using AppFramework.Network.Wan.Tcp;
-using AppFramework.Tools;
+using AppFrame.Network.Wan.Tcp;
+using AppFrame.Tools;
 using UnityEngine;
 /// <summary>
 /// Socket广域网
 /// </summary>
-namespace AppFramework.Manager
+namespace AppFrame.Manager
 {
     public partial class NetcomManager : SingletonMonoEvent<NetcomManager>
     {

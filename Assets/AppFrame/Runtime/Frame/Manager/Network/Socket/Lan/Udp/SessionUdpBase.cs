@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-namespace AppFramework.Network.Lan.Udp
+namespace AppFrame.Network.Lan.Udp
 {
 	public class SessionUdpBase
 	{

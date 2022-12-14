@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
     [RequireComponent(typeof(InputField))]
     public class InputFieldScaler : MonoBehaviour, ILayoutElement

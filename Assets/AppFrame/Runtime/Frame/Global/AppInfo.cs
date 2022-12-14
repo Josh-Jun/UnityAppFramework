@@ -1,9 +1,9 @@
 
 using System.Reflection;
-using AppFramework.Config;
-using AppFramework.Enum;
+using AppFrame.Config;
+using AppFrame.Enum;
 
-namespace AppFramework.Info
+namespace AppFrame.Info
 {
     public class AppInfo
     {

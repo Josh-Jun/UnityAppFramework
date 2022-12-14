@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using AppFramework.Tools;
-using AppFramework.View;
+using AppFrame.Tools;
+using AppFrame.View;
 using UnityEngine;
 using UnityEngine.UI;
 

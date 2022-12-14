@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AppFramework.Network.Lan
+namespace AppFrame.Network.Lan
 {
 	[Serializable]
 	public abstract class SocketMsg

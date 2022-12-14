@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
-using AppFramework.Network.Lan;
-using AppFramework.Network.Lan.Tcp;
-using AppFramework.Network.Lan.Udp;
-using AppFramework.Tools;
+using AppFrame.Network.Lan;
+using AppFrame.Network.Lan.Tcp;
+using AppFrame.Network.Lan.Udp;
+using AppFrame.Tools;
 using UnityEngine;
 /// <summary>
 /// Socket局域网
 /// </summary>
-namespace AppFramework.Manager
+namespace AppFrame.Manager
 {
     public partial class NetcomManager : SingletonMonoEvent<NetcomManager>
     {

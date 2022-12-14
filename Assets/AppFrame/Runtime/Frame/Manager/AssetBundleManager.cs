@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using AppFramework.Config;
-using AppFramework.Enum;
-using AppFramework.Info;
-using AppFramework.Network;
-using AppFramework.Tools;
+using AppFrame.Config;
+using AppFrame.Enum;
+using AppFrame.Info;
+using AppFrame.Tools;
+using AppFrame.Network;
 using UnityEngine;
 
-namespace AppFramework.Manager
+namespace AppFrame.Manager
 {
     public class AssetBundleManager : SingletonMono<AssetBundleManager>
     {

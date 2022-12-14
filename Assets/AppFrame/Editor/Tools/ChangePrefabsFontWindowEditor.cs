@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace AppFramework.Editor
+namespace AppFrame.Editor
 {
     public class ChangePrefabsFontWindowEditor : EditorWindow
     {

@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
-using AppFramework.Tools;
+using AppFrame.Tools;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 /// <summary>
 /// UGUI Tab键切换InputField
 /// </summary>
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
     public class InputNavigator : MonoBehaviour, ISelectHandler, IDeselectHandler
     {

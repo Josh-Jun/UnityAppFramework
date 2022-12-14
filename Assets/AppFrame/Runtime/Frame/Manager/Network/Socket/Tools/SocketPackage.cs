@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AppFramework.Network
+namespace AppFrame.Network
 {
 	internal class SocketPackage
 	{

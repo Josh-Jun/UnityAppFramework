@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
     public class EventListener : EventTrigger
     {

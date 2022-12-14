@@ -1,8 +1,8 @@
-﻿using AppFramework.Tools;
+﻿using AppFrame.Tools;
 using UnityEngine;
 using UnityEditor;
 
-namespace AppFramework.Editor
+namespace AppFrame.Editor
 {
     [CustomEditor(typeof(InputFieldScaler))]
     public class InputFieldScalerEditor : UnityEditor.Editor

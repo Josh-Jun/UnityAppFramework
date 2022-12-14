@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
     public class GridCellSizeFitter : MonoBehaviour
     {

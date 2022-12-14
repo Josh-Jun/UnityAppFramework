@@ -1,9 +1,9 @@
 ﻿using System;
-using AppFramework.Enum;
+using AppFrame.Enum;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace AppFramework.Config
+namespace AppFrame.Config
 {
     [CreateAssetMenu(fileName = "AppConfig", menuName = "App/AppConfig")]
     [Serializable]

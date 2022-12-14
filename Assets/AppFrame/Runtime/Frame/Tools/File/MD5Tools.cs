@@ -6,7 +6,7 @@ using System.Text;
 /// <summary> 
 /// 功能:MD5工具 
 /// </summary>
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
     [Serializable]
     public class MD5Tools

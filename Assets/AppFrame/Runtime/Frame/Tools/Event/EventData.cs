@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
     public class EventListenerData
     {

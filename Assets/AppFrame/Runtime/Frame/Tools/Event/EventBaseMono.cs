@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
     /// <summary>功能:事件基类,继承Mono</summary>
     public class EventBaseMono : MonoBehaviour

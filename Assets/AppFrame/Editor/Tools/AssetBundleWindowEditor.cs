@@ -5,9 +5,9 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
-using AppFramework.Config;
-using AppFramework.Enum;
-using AppFramework.Tools;
+using AppFrame.Config;
+using AppFrame.Enum;
+using AppFrame.Tools;
 using UnityEditor;
 using UnityEditor.Build.Content;
 using UnityEditor.Build.Pipeline;
@@ -15,7 +15,7 @@ using UnityEngine;
 /// <summary>
 /// AssetBundle编辑
 /// </summary>
-namespace AppFramework.Editor
+namespace AppFrame.Editor
 {
     public class AssetBundleWindowEditor : EditorWindow
     {

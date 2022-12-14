@@ -5,7 +5,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using UnityEngine;
 /// <summary> 功能：对象与XML  序列化/反序列化 工具 </summary>
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
     public class XmlTools
     {

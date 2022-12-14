@@ -5,15 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System;
-using AppFramework.Enum;
-using AppFramework.Tools;
+using AppFrame.Enum;
+using AppFrame.Info;
+using AppFrame.Tools;
 using UnityEngine.InputSystem.UI;
 #if PICO_XR_SETTING
-using AppFramework.Info;
 using UnityEngine.XR.Interaction.Toolkit.UI;
 #endif
 
-namespace AppFramework.View
+namespace AppFrame.View
 {
     public class GoRoot : SingletonMono<GoRoot>
     {

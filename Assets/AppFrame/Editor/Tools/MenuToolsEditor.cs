@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using AppFramework.Tools;
+using AppFrame.Tools;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-namespace AppFramework.Editor
+namespace AppFrame.Editor
 {
     public class MenuToolsEditor : UnityEditor.AssetModificationProcessor
     {

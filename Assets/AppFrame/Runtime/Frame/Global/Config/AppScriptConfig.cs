@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using UnityEngine;
 
-namespace AppFramework.Config
+namespace AppFrame.Config
 {
     [CreateAssetMenu(fileName = "AppScriptConfig", menuName = "App/AppScriptConfig")]
     [Serializable]

@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
-using AppFramework.Config;
-using AppFramework.Data;
-using AppFramework.Enum;
-using AppFramework.Info;
-using AppFramework.Interface;
-using AppFramework.Manager;
-using AppFramework.Tools;
+using AppFrame.Config;
+using AppFrame.Data;
+using AppFrame.Enum;
+using AppFrame.Info;
+using AppFrame.Interface;
+using AppFrame.Manager;
+using AppFrame.Tools;
 using UnityEngine;
 
 namespace App.Update

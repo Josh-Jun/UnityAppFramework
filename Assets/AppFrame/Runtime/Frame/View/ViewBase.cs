@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using AppFramework.Tools;
+using AppFrame.Tools;
 using UnityEngine;
 
-namespace AppFramework.View
+namespace AppFrame.View
 {
     public class ViewBase : EventBaseMono
     {

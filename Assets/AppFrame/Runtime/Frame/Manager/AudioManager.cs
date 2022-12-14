@@ -1,9 +1,9 @@
 ﻿using System.Collections;
-using AppFramework.Tools;
+using AppFrame.Tools;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace AppFramework.Manager
+namespace AppFrame.Manager
 {
     public class AudioManager : SingletonMono<AudioManager>
     {

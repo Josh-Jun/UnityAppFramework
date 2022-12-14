@@ -6,7 +6,7 @@ using System;
 /// <summary>
 /// UGUI ScrollRect 滑动元素居中
 /// </summary>
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
     public class UICenterOnChild : MonoBehaviour, IBeginDragHandler, IEndDragHandler
     {

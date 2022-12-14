@@ -5,7 +5,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEditor.Experimental.SceneManagement;
 
-namespace AppFramework.Editor
+namespace AppFrame.Editor
 {
     [CustomEditor(typeof(SuperImage), true)]
     public class SuperImageEditor : UnityEditor.Editor

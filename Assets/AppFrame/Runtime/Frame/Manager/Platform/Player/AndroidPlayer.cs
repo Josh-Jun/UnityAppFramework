@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using AppFramework.Enum;
-using AppFramework.Info;
+using AppFrame.Enum;
+using AppFrame.Info;
 using UnityEngine;
 
-namespace AppFramework.Manager
+namespace AppFrame.Manager
 {
     public class AndroidPlayer : PlatformManager
     {

@@ -3,12 +3,12 @@ using System;
 using System.Collections;
 using System.Linq;
 using System.Reflection;
-using AppFramework.Info;
-using AppFramework.Tools;
-using AppFramework.View;
+using AppFrame.Info;
+using AppFrame.Tools;
+using AppFrame.View;
 using UnityEngine.SceneManagement;
 
-namespace AppFramework.Manager
+namespace AppFrame.Manager
 {
     public class AssetsManager : SingletonMono<AssetsManager>
     {

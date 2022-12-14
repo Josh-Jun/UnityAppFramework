@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
     //事件订阅时分发次数
     public enum EventDispatcherMode

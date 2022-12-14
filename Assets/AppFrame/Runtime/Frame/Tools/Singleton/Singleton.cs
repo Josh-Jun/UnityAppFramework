@@ -1,7 +1,7 @@
 ﻿
-using AppFramework.Interface;
+using AppFrame.Interface;
 
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
     public class Singleton<T> : ISingleton where T : class, ISingleton, new()
     {

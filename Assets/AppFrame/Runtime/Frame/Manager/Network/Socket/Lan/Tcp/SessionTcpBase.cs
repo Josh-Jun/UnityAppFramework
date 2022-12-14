@@ -2,7 +2,7 @@
 using System.Net.Sockets;
 using System.Text;
 
-namespace AppFramework.Network.Lan.Tcp
+namespace AppFrame.Network.Lan.Tcp
 {
     public class SessionTcpBase
     {

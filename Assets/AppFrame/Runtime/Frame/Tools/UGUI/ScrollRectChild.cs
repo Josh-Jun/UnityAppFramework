@@ -5,7 +5,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 解决2个层级的ScrollView嵌套但是方向不同的情况
 /// </summary>
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
     public class ScrollRectChild : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
     {

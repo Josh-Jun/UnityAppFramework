@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
     /// <summary>功能:事件基类</summary>
     public class EventBase

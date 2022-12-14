@@ -1,5 +1,5 @@
 ﻿
-namespace AppFramework.Interface
+namespace AppFrame.Interface
 {
     /// <summary>Root脚本接口</summary>
     public interface ILogic

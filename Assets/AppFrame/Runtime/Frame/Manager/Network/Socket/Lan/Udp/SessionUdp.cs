@@ -1,5 +1,5 @@
 ﻿/// <summary>功能:网络会话</summary>
-namespace AppFramework.Network.Lan.Udp
+namespace AppFrame.Network.Lan.Udp
 {
     public class SessionUdp : SessionUdpBase
     {

@@ -1,10 +1,10 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections.Generic;
-using AppFramework.Manager;
-using AppFramework.Tools;
+using AppFrame.Manager;
+using AppFrame.Tools;
 
-namespace AppFramework.Network.Lan.Tcp
+namespace AppFrame.Network.Lan.Tcp
 {
     public class LanTcpManager : SingletonEvent<LanTcpManager>
     {

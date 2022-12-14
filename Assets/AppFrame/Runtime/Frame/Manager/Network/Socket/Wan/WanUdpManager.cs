@@ -6,9 +6,9 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Text;
-using AppFramework.Tools;
+using AppFrame.Tools;
 
-namespace AppFramework.Network.Wan.Udp
+namespace AppFrame.Network.Wan.Udp
 {
 	public class WanUdpManager : SingletonMonoEvent<WanUdpManager>
 	{

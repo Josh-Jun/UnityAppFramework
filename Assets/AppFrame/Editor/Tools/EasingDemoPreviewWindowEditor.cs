@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using DG.Tweening;
 
-namespace AppFramework.Editor
+namespace AppFrame.Editor
 {
     public class EasingDemoPreviewWindowEditor : EditorWindow
     {

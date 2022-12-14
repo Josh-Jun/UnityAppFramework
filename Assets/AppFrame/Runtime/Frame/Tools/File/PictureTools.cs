@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// 图片工具类
 /// </summary>
-namespace AppFramework.Tools
+namespace AppFrame.Tools
 {
     public static class PictureTools
     {
