@@ -1,5 +1,5 @@
 {
-    "name": "App.Framework.Editor",
+    "name": "App.Frame.Editor",
     "rootNamespace": "",
     "references": [
         "GUID:cb199a0485902cd48a80daa5e838d49d",
