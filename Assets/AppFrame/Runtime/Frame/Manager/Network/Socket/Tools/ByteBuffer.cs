@@ -9,6 +9,7 @@ namespace AppFrame.Network
         MemoryStream stream = null;
         BinaryWriter writer = null;
         BinaryReader reader = null;
+        public MemoryStream Stream => stream;
 
         public ByteBuffer()
         {
@@ -54,7 +55,6 @@ namespace AppFrame.Network
 
         public void WriteInt(int v)
         {
-            //  writer.Write((int)v);
             int b = System.Net.IPAddress.HostToNetworkOrder(v);
             byte[] temp = BitConverter.GetBytes(b);
             writer.Write(BitConverter.ToInt32(temp, 0));
@@ -62,15 +62,12 @@ namespace AppFrame.Network
 
         public void WriteShort(short v)
         {
-            //writer.Write((short)v);
             short b = System.Net.IPAddress.HostToNetworkOrder(v);
-            byte[] temp = BitConverter.GetBytes(b);
-            writer.Write(BitConverter.ToInt16(temp, 0));
+            writer.Write(b);
         }
 
         public void WriteUShort(ushort v)
         {
-            // writer.Write((ushort)v);
             byte[] temp = BitConverter.GetBytes(v);
             Array.Reverse(temp);
             writer.Write(BitConverter.ToUInt16(temp, 0));
@@ -78,26 +75,24 @@ namespace AppFrame.Network
 
         public void WriteLong(long v)
         {
-            // writer.Write((long)v);
-            // WriteString(v.ToString());
             long b = System.Net.IPAddress.HostToNetworkOrder(v);
-            byte[] temp = BitConverter.GetBytes(b);
-            writer.Write(BitConverter.ToInt64(temp, 0));
-            ;
+            writer.Write(b);
         }
 
         public void WriteFloat(float v)
         {
             byte[] temp = BitConverter.GetBytes(v);
             Array.Reverse(temp);
-            writer.Write(BitConverter.ToSingle(temp, 0));
+            float b = BitConverter.ToSingle(temp, 0);
+            writer.Write(b);
         }
 
         public void WriteDouble(double v)
         {
             byte[] temp = BitConverter.GetBytes(v);
             Array.Reverse(temp);
-            writer.Write(BitConverter.ToDouble(temp, 0));
+            double b = BitConverter.ToDouble(temp, 0);
+            writer.Write(b);
         }
 
         public void WriteString(string v)
@@ -126,7 +121,7 @@ namespace AppFrame.Network
             {
                 foreach (short v in values)
                 {
-                    writer.Write(v);
+                    WriteShort(v);
                 }
             }
         }
@@ -137,7 +132,7 @@ namespace AppFrame.Network
             {
                 foreach (int v in values)
                 {
-                    writer.Write(v);
+                    WriteInt(v);
                 }
             }
         }
@@ -148,7 +143,7 @@ namespace AppFrame.Network
             {
                 foreach (long v in values)
                 {
-                    writer.Write(v);
+                    WriteLong(v);
                 }
             }
         }
@@ -159,7 +154,7 @@ namespace AppFrame.Network
             {
                 foreach (float v in values)
                 {
-                    writer.Write(v);
+                    WriteFloat(v);
                 }
             }
         }
@@ -170,7 +165,7 @@ namespace AppFrame.Network
             {
                 foreach (double v in values)
                 {
-                    writer.Write(v);
+                    WriteDouble(v);
                 }
             }
         }
@@ -200,15 +195,12 @@ namespace AppFrame.Network
 
         public short ReadShort()
         {
-            //  return (short)reader.ReadInt16();
             short v = (short)reader.ReadInt16();
             return System.Net.IPAddress.NetworkToHostOrder(v); //大小端转换
         }
 
         public ushort ReadUShort()
         {
-            // return (ushort)reader.ReadUInt16();
-
             short v = (short)reader.ReadInt16();
             return (ushort)System.Net.IPAddress.NetworkToHostOrder(v);
         }
@@ -216,8 +208,6 @@ namespace AppFrame.Network
 
         public long ReadLong()
         {
-            // return (long)reader.ReadInt64();
-
             long v = (long)reader.ReadInt64();
             return System.Net.IPAddress.NetworkToHostOrder(v);
         }
@@ -241,7 +231,6 @@ namespace AppFrame.Network
             byte[] buffer = new byte[len];
             buffer = reader.ReadBytes(len);
             return Encoding.UTF8.GetString(buffer);
-            //return Encoding.Default.GetString(buffer); 
         }
 
         public byte[] ReadBytes(int len)
@@ -316,15 +305,50 @@ namespace AppFrame.Network
         }
 
 
+        /// <summary>
+        /// ToArray 底层实现创建新的
+        /// </summary>
+        /// <returns></returns>
         public byte[] ToBytes()
         {
             writer.Flush();
             return stream.ToArray();
         }
 
+        public byte[] GetBuffer()
+        {
+            writer.Flush();
+            return stream.GetBuffer();
+        }
+
         public void Flush()
         {
             writer.Flush();
+        }
+
+
+        public void Reset()
+        {
+            byte[] bytes = stream.GetBuffer();
+            for (var i = 0; i < bytes.Length; i++)
+            {
+                bytes[i] = 0;
+            }
+
+            stream.Position = 0L;
+            stream.SetLength(0);
+        }
+
+        public void ResetLength(int length)
+        {
+            byte[] bytes = stream.GetBuffer();
+            for (var i = 0; i < bytes.Length; i++)
+            {
+                bytes[i] = 0;
+            }
+
+            stream.Position = 0L;
+            stream.SetLength(length);
         }
     }
 }
