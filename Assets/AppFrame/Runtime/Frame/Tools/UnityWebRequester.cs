@@ -300,6 +300,7 @@ namespace AppFrame.Tools
         {
             uwr.url = url;
             uwr.method = UnityWebRequest.kHttpVerbPOST;
+            uwr.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
@@ -333,6 +334,7 @@ namespace AppFrame.Tools
         {
             uwr.url = url;
             uwr.method = UnityWebRequest.kHttpVerbPOST;
+            uwr.SetRequestHeader("Content-Type", "application/json;charset=utf-8");
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
@@ -354,40 +356,6 @@ namespace AppFrame.Tools
                 }
             };
         }
-
-        /// <summary>
-        /// 向服务器提交post请求
-        /// </summary>
-        /// <param name="url">服务器请求目标地址,like "http://www.my-server.com/myform"</param>
-        /// <param name="postData">json字符串byte[]</param>
-        /// <param name="actionResult">处理返回结果的委托</param>
-        /// <param name="actionProgress"></param>
-        /// <returns></returns>
-        public void Post(string url, byte[] postData, Action<string> callback)
-        {
-            uwr.url = url;
-            uwr.method = UnityWebRequest.kHttpVerbPOST;
-            foreach (var header in headerPairs)
-            {
-                uwr.SetRequestHeader(header.Key, header.Value);
-            }
-
-            uwr.uploadHandler = new UploadHandlerRaw(postData);
-            uwr.downloadHandler = new DownloadHandlerBuffer();
-            uwrao = uwr.SendWebRequest();
-            uwrao.completed += (ao) =>
-            {
-                if (string.IsNullOrEmpty(uwr.error))
-                {
-                    callback?.Invoke(uwr.downloadHandler.text);
-                }
-                else
-                {
-                    Debug.LogError($"[Error:Post Bytes] {uwr.error}");
-                }
-            };
-        }
-
         /// <summary>
         /// 向服务器提交post请求
         /// </summary>
@@ -400,6 +368,7 @@ namespace AppFrame.Tools
         {
             uwr.url = url;
             uwr.method = UnityWebRequest.kHttpVerbPOST;
+            uwr.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             foreach (var header in headerPairs)
             {
                 uwr.SetRequestHeader(header.Key, header.Value);
