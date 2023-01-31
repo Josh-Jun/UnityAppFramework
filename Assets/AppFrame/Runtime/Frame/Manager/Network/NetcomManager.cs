@@ -6,6 +6,7 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using AppFrame.Info;
 using AppFrame.Tools;
+using UnityEngine.Networking;
 
 namespace AppFrame.Manager
 {
@@ -77,34 +78,44 @@ namespace AppFrame.Manager
             }
         }
 
-        private static Queue<UnityWebRequester> uwrQueue = new Queue<UnityWebRequester>();
+        public override void InitParent(Transform parent)
+        {
+            base.InitParent(parent);
+            unityWebRequesters = new UnityWebRequester[maxUnityWebRequesterNumber];
+            TimerTasker.Instance.AddTimeTask(CreateUnityWebRequester, 1, TimeUnit.Second, -1);
+        }
 
+        private static UnityWebRequester[] unityWebRequesters;
+        private byte maxUnityWebRequesterNumber = 10;
+        private static int pointer = -1;
+        private void CreateUnityWebRequester()
+        {
+            if (pointer + 1 < maxUnityWebRequesterNumber)
+            {
+                pointer++;
+                UnityWebRequester uwr = new UnityWebRequester();
+                unityWebRequesters[pointer] = uwr;
+            }
+        }
+        
         public static UnityWebRequester Uwr
         {
             private set { }
             get
             {
-                if (uwrQueue.Count <= 1)
+                UnityWebRequester unityWebRequester;
+                if (pointer > -1)
                 {
-                    InitQueue();
+                    unityWebRequester = unityWebRequesters[pointer];
+                    unityWebRequesters[pointer] = null;
+                    pointer--;
+                }
+                else
+                {
+                    unityWebRequester = new UnityWebRequester();
                 }
 
-                return uwrQueue.Dequeue();
-            }
-        }
-
-        public override void InitParent(Transform parent)
-        {
-            base.InitParent(parent);
-            InitQueue(50);
-        }
-
-        public static void InitQueue(int count = 20)
-        {
-            for (int i = 0; i < count; i++)
-            {
-                UnityWebRequester uwr = new UnityWebRequester();
-                uwrQueue.Enqueue(uwr);
+                return unityWebRequester;
             }
         }
     }
