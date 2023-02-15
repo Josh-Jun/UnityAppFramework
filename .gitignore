@@ -76,4 +76,4 @@ crashlytics-build.properties
 /Assets/AppFramework/Libraries/XLua/Gen
 /Assets/AppFramework/Libraries/XLua/Gen.meta
 .vsconfig
-HybridCLRData
+/HybridCLRData
