@@ -172,7 +172,8 @@ namespace AppFrame.Manager
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
             T t = null;
-            var type = AppInfo.Assembly.GetType(typeof(T).FullName);
+            AppInfo.AssemblyPairs.TryGetValue("App.Module", out Assembly assembly);
+            var type = assembly.GetType(typeof(T).FullName);
             if (type != null)
             {
                 t = (T)go.AddComponent(type);
@@ -202,7 +203,8 @@ namespace AppFrame.Manager
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
             T t = null;
-            var type = AppInfo.Assembly.GetType(typeof(T).FullName);
+            AppInfo.AssemblyPairs.TryGetValue("App.Module", out Assembly assembly);
+            var type = assembly.GetType(typeof(T).FullName);
             if (type != null)
             {
                 t = (T)go.AddComponent(type);
