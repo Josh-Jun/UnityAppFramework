@@ -178,11 +178,11 @@ namespace App
 
         private static ILogic GetLogic(string fullName, string assemblyString = "App.Module")
         {
-            if (AppInfo.Assembly == null)
+            if (!AppInfo.AssemblyPairs.ContainsKey(assemblyString))
             {
-                AppInfo.Assembly = Assembly.Load(assemblyString);//加载程序集,返回类型是一个Assembly
+                AppInfo.AssemblyPairs.Add(assemblyString, Assembly.Load(assemblyString));//加载程序集,返回类型是一个Assembly
             }
-            Type type = AppInfo.Assembly.GetType($"{fullName}");
+            Type type = AppInfo.AssemblyPairs[assemblyString].GetType($"{fullName}");
             var obj = Activator.CreateInstance(type); //创建此类型实例
             return obj as ILogic;
         }
