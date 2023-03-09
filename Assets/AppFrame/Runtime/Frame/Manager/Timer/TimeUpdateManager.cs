@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace AppFrame.Tools
 {
-    /// <summary>功能:计时器服务</summary>
-    public class TimerLogicer : SingletonMono<TimerLogicer>
+    /// <summary>功能:计时更新</summary>
+    public class TimeUpdateManager : SingletonMono<TimeUpdateManager>
     {
         private int timeId = 0; //下标
         private List<TimerData> timerLst = new List<TimerData>(); //计时Lst

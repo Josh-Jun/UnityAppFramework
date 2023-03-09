@@ -84,8 +84,8 @@ namespace App
             AudioManager.Instance.InitParent(parent);
             VideoManager.Instance.InitParent(parent);
             TableManager.Instance.InitParent(parent);
-            TimerTasker.Instance.InitParent(parent);
-            TimerLogicer.Instance.InitParent(parent);
+            TimeTaskManager.Instance.InitParent(parent);
+            TimeUpdateManager.Instance.InitParent(parent);
         }
 
         private static void InitLogicScripts(Action callback = null)

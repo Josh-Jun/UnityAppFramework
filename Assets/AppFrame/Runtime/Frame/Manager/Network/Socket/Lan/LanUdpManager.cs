@@ -14,7 +14,7 @@ namespace AppFrame.Network.Lan.Udp
         /// <summary> 初始化服务端 </summary>
         public void InitServerNet(int port, Action<bool> cb = null)
         {
-            TIME_ID = TimerLogicer.Instance.StartTimer(Update);
+            TIME_ID = TimeUpdateManager.Instance.StartTimer(Update);
             server = new SocketUdp<SessionUdp>();
             server.StartAsServer(port, cb);
         }
@@ -89,7 +89,7 @@ namespace AppFrame.Network.Lan.Udp
                 server = null;
             }
 
-            TimerLogicer.Instance.EndTimer(TIME_ID);
+            TimeUpdateManager.Instance.EndTimer(TIME_ID);
         }
 
         #endregion

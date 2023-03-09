@@ -60,7 +60,7 @@ namespace Modules.Test
             Debug.Log("-------------------1-------------------");
             await Task.Delay(TimeSpan.FromSeconds(3f));
             Debug.Log("-------------------2-------------------");
-            TimerLogicer.Instance.StartTimer((time) =>
+            TimeUpdateManager.Instance.StartTimer((time) =>
             {
                 Debug.Log(time);
             });
@@ -81,11 +81,11 @@ namespace Modules.Test
             TableManager.Instance.GetTable<TestXml>(""); //获取配置表
             //时间任务
             int timeid1 = -1;
-            timeid1 = TimerLogicer.Instance.StartTimer((time) => { }); //一直执行 相当于Update
-            TimerLogicer.Instance.EndTimer(timeid1);
+            timeid1 = TimeUpdateManager.Instance.StartTimer((time) => { }); //一直执行 相当于Update
+            TimeUpdateManager.Instance.EndTimer(timeid1);
             int timeid2 = -1;
-            timeid2 = TimerTasker.Instance.AddTimeTask(() => { }, 1f, TimeUnit.Second, 1); //1秒后执行一次
-            TimerTasker.Instance.DeleteTimeTask(timeid2);
+            timeid2 = TimeTaskManager.Instance.AddTimeTask(() => { }, 1f, TimeUnit.Second, 1); //1秒后执行一次
+            TimeTaskManager.Instance.DeleteTimeTask(timeid2);
             //Animator动画播放
             Animator animator = view.TryGetComponent<Animator>(); //获取脚本组件，没有就自动添加
             animator.Play("动画名", () => { }); //播放动画
@@ -161,14 +161,14 @@ namespace Modules.Test
 
             requester.DownloadFile("https://meta-oss.genimous.com/vr-ota/App/meta.apk", filePath, (totalLength, fileLength) =>
             {
-                id = TimerLogicer.Instance.StartTimer((time) =>
+                id = TimeUpdateManager.Instance.StartTimer((time) =>
                 {
                     float progress = (float)((long)requester.DownloadedLength + fileLength) / (float)totalLength;
                     view.SetText(progress.ToString("F2"));
                     if (progress >= 1)
                     {
                         PlatformManager.Instance.InstallApp(filePath);
-                        TimerLogicer.Instance.EndTimer(id);
+                        TimeUpdateManager.Instance.EndTimer(id);
                         requester.Destory();
                     }
                 });

@@ -200,10 +200,10 @@ namespace App.Update
                     requester.GetBytes(appUrl, (bytes) =>
                     {
                         FileTools.CreateFile(appPath, bytes);
-                        TimerLogicer.Instance.EndTimer(timeId);
+                        TimeUpdateManager.Instance.EndTimer(timeId);
                         PlatformManager.Instance.InstallApp(appPath);
                     });
-                    timeId = TimerLogicer.Instance.StartTimer((t) =>
+                    timeId = TimeUpdateManager.Instance.StartTimer((t) =>
                     {
                         var size = requester.DownloadedLength / 1024f / 1024f;
                         time += Time.deltaTime;
@@ -372,12 +372,12 @@ namespace App.Update
                 {
                     FileTools.CreateFile(LocalPath + folder.BundleName, bytes);
                     UpdateLocalConfigMD5(folder);
-                    TimerLogicer.Instance.EndTimer(timeId);
+                    TimeUpdateManager.Instance.EndTimer(timeId);
                     downloadingSize = 0;
                     alreadyDownloadSize += Convert.ToInt64(folder.Size);
                     Finished = true;
                 });
-                timeId = TimerLogicer.Instance.StartTimer((time) =>
+                timeId = TimeUpdateManager.Instance.StartTimer((time) =>
                 {
                     downloadingSize = requester.DownloadedLength;
                 });

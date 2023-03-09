@@ -45,12 +45,12 @@ namespace AppFrame.Tools
             _animator.StartPlayback();
             _animator.speed = speed;
             _animator.Play(stateName, 0, speed < 0 ? 1 : 0);
-            DEVELOP_ANIMATOR_TIME_ID = TimerLogicer.Instance.StartTimer((float time) =>
+            DEVELOP_ANIMATOR_TIME_ID = TimeUpdateManager.Instance.StartTimer((float time) =>
             {
                 if (time >= _time)
                 {
                     callback?.Invoke();
-                    TimerLogicer.Instance.EndTimer(DEVELOP_ANIMATOR_TIME_ID);
+                    TimeUpdateManager.Instance.EndTimer(DEVELOP_ANIMATOR_TIME_ID);
                 }
             });
         }
@@ -78,7 +78,7 @@ namespace AppFrame.Tools
 
             int index = 0; //可以用来控制起始播放的动画帧索引
             float recordTime = 0;
-            DEVELOP_FRAMES_TIME_ID = TimerLogicer.Instance.StartTimer((float currentTime) =>
+            DEVELOP_FRAMES_TIME_ID = TimeUpdateManager.Instance.StartTimer((float currentTime) =>
             {
                 if (currentTime - recordTime >= time)
                 {
@@ -93,7 +93,7 @@ namespace AppFrame.Tools
                         }
                         else
                         {
-                            TimerLogicer.Instance.EndTimer(DEVELOP_FRAMES_TIME_ID);
+                            TimeUpdateManager.Instance.EndTimer(DEVELOP_FRAMES_TIME_ID);
                         }
                     }
                     else

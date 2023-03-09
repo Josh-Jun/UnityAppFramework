@@ -82,7 +82,7 @@ namespace AppFrame.Manager
         {
             base.InitParent(parent);
             unityWebRequesters = new UnityWebRequester[maxUnityWebRequesterNumber];
-            TimerTasker.Instance.AddTimeTask(CreateUnityWebRequester, 1, TimeUnit.Second, -1);
+            TimeTaskManager.Instance.AddTimeTask(CreateUnityWebRequester, 1, TimeUnit.Second, -1);
         }
 
         private static UnityWebRequester[] unityWebRequesters;

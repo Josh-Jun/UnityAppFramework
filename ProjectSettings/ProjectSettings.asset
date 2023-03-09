@@ -762,7 +762,7 @@ PlayerSettings:
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
     : HOTFIX_ENABLE
-    Android: PICO_XR_SETTING
+    Android: 
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

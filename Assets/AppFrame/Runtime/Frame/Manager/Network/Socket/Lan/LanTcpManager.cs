@@ -24,7 +24,7 @@ namespace AppFrame.Network.Lan.Tcp
         /// <summary>服务端网络初始化</summary>
         public void InitServerNet(string ip, int port, Action<bool> cb = null)
         {
-            TIME_ID = TimerLogicer.Instance.StartTimer(Update);
+            TIME_ID = TimeUpdateManager.Instance.StartTimer(Update);
             server = new SocketTcp<SessionTcp>();
 
             #region 网络日志
@@ -507,7 +507,7 @@ namespace AppFrame.Network.Lan.Tcp
                 server = null;
             }
 
-            TimerLogicer.Instance.EndTimer(TIME_ID);
+            TimeUpdateManager.Instance.EndTimer(TIME_ID);
         }
     }
 }

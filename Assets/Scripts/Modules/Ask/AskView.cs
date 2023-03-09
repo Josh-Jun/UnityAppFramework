@@ -53,7 +53,7 @@ namespace Modules.Ask
             if (tipsPanel.activeSelf) return;
             tipsPanel.SetActive(true);
             tipsText.text = tips;
-            TimerTasker.Instance.AddTimeTask(() => { SetViewActive(false); }, time);
+            TimeTaskManager.Instance.AddTimeTask(() => { SetViewActive(false); }, time);
         }
         public void SetViewInfo(string tips, Action confirm_callback = null, Action cancel_callback = null)
         {

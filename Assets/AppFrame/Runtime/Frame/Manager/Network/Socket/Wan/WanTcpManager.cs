@@ -30,7 +30,7 @@ namespace AppFrame.Network.Wan.Tcp
 
         public void StartAsClient(string ip, int port, Action<bool> cb = null)
         {
-            TIME_ID = TimerLogicer.Instance.StartTimer(Update);
+            TIME_ID = TimeUpdateManager.Instance.StartTimer(Update);
             socketTcp = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try
             {
@@ -247,7 +247,7 @@ namespace AppFrame.Network.Wan.Tcp
                     socketTcp.Close();
                 }
 
-                TimerLogicer.Instance.EndTimer(TIME_ID);
+                TimeUpdateManager.Instance.EndTimer(TIME_ID);
                 return true;
             }
             catch (Exception arg)

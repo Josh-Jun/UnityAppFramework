@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace AppFrame.Tools
 {
-    /// <summary>功能:定时服务</summary>
-    public class TimerTasker : SingletonMono<TimerTasker>
+    /// <summary>功能:计时任务</summary>
+    public class TimeTaskManager : SingletonMono<TimeTaskManager>
     {
         private TimerTask timer; //计时器
         private static readonly string lockTask = "lockTask"; //任务锁
