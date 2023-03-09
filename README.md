@@ -5,8 +5,9 @@ Unity 热更框架
 框架内集成了很多工具类，框架根据功能进行模块化开发，解决了多人协作开发解耦合的问题。持续更新中...
 
 #### 使用说明
-
 1.  本框架将逻辑和UI部分分开管理，View脚本继承Mono挂在View预制体上，主要处理UI的显示和变化，Logic脚本主要处理功能逻辑和数据处理。
 2.  资源文件的存放位置有着严格标准(因为里面的好多编辑器工具为了一键操作，路径都是固定写死的)。
 3.  在项目的 Assets / AppFramework / Editor / ScriptTemplates 目录下有脚本模板，放到Unity安装目录，可自定义创建C#脚本。
-4.  右键资源文件夹，可复制带有依赖关系的文件夹。
+
+#### 框架详解
+具体API说明详见[Wiki](https://github.com/Josh-Jun/MyUnityFramework/wiki)
