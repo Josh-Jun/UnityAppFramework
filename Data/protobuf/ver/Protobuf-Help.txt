@@ -1,0 +1,8 @@
+protobuf  
+url:	https://github.com/protocolbuffers/protobuf/releases?page=7
+
+
+ver:	3.9.0 win64 + osx64 
+bin:	生成
+
+默认使用 win64

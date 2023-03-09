@@ -1,0 +1,19 @@
+syntax = "proto3";
+package AppProtoData;
+
+// 命令
+enum MSG_CMD
+{
+	C2S_HEART_BEAT =0;
+	S2C_HEART_BEAT =1;
+}
+// 心跳
+message C2S_HeartBeat
+{
+}
+// 心跳回调
+message S2C_HeartBeat
+{
+  // long 时间戳
+  sint64 ts = 1;
+}
