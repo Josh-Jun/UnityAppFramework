@@ -44,7 +44,7 @@ namespace App
             Root.AppFocus(focus);
         }
 
-        private void OnDestroy()
+        private void OnApplicationQuit()
         {
             //程序退出接口实现
             Root.AppQuit();
