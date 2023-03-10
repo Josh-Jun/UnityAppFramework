@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
+using App;
 using AppFrame.Config;
 using AppFrame.Data;
 using AppFrame.Enum;
@@ -12,7 +12,7 @@ using AppFrame.Manager;
 using AppFrame.Tools;
 using UnityEngine;
 
-namespace App.Update
+namespace Modules.Update
 {
     public class UpdateLogic : SingletonEvent<UpdateLogic>, ILogic
     {
@@ -78,35 +78,42 @@ namespace App.Update
 
             appUrl = NetcomManager.AppUrl + "meta.apk";
             appPath = PlatformManager.Instance.GetDataPath("App/meta.apk");
-            
-            AssetBundleManager.Instance.InitLocalAssetBundleConfig(() =>
-            {
-                view = AssetsManager.Instance.LoadUIView<UpdateView>(AssetsPathConfig.UpdateView);
-                view.SetViewActive();
 
-                view.SetTipsText("检查更新中...");
-                view.SetProgressValue(0);
-                StartUpdate((UpdateMold mold, string des) =>
+            if (AppInfo.AppConfig.IsHotfix)
+            {
+                AssetBundleManager.Instance.InitLocalAssetBundleConfig(() =>
                 {
-                    UpdateMold = mold;
-                    Debug.Log($"更新结果:{mold}");
-                    switch (mold)
+                    view = AssetsManager.Instance.LoadUIView<UpdateView>(AssetsPathConfig.UpdateView);
+                    view.SetViewActive();
+
+                    view.SetTipsText("检查更新中...");
+                    view.SetProgressValue(0);
+                    StartUpdate((UpdateMold mold, string des) =>
                     {
-                        case UpdateMold.Hotfix:
-                            view.SetContentText(des);
-                            view.SetUpdateTipsActive(true);
-                            break;
-                        case UpdateMold.App:
-                            view.SetContentText($"发现新版本应用:v{serverABConfig.GameVersion}");
-                            view.SetUpdateTipsActive(true);
-                            break;
-                        case UpdateMold.None:
-                            view.SetViewActive(false);
-                            Root.StartApp();
-                            break;
-                    }
+                        UpdateMold = mold;
+                        Debug.Log($"更新结果:{mold}");
+                        switch (mold)
+                        {
+                            case UpdateMold.Hotfix:
+                                view.SetContentText(des);
+                                view.SetUpdateTipsActive(true);
+                                break;
+                            case UpdateMold.App:
+                                view.SetContentText($"发现新版本应用:v{serverABConfig.GameVersion}");
+                                view.SetUpdateTipsActive(true);
+                                break;
+                            case UpdateMold.None:
+                                view.SetViewActive(false);
+                                Root.StartApp();
+                                break;
+                        }
+                    });
                 });
-            });
+            }
+            else
+            {
+                Root.StartApp();
+            }
         }
 
         public void End()

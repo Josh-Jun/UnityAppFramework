@@ -35,23 +35,12 @@ namespace App
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
             //设置程序帧率
             Application.targetFrameRate = AppInfo.AppConfig.AppFrameRate;
-
+            //输出App信息
             OutputAppInfo();
-            
-            if (AppInfo.AppConfig.IsHotfix)
-            {
-                //加载更新场景，初始化热更脚本
-                AsyncOperation asyncOperation = SceneManager.LoadSceneAsync("UpdateScene");
-                asyncOperation.completed += (AsyncOperation ao) =>
-                {
-                    _updateLogic = GetLogic("App.Update.UpdateLogic", "App.Module");
-                    _updateLogic.Begin();
-                };
-            }
-            else
-            {
-                StartApp();
-            }
+            //初始化Logic脚本
+            InitLogicScripts();
+            //初始化Global的Logic脚本的Begin方法
+            InitLogicBegin("Global");
         }
         
         private static void OutputAppInfo()
@@ -63,13 +52,9 @@ namespace App
 
         public static void StartApp()
         {
-            InitLogicScripts(() =>
-            {
-                LoadScene(appScriptConfig.MainSceneName, true);
-                TableManager.Instance.InitConfig();
-            });
+            LoadScene(appScriptConfig.MainSceneName, true);
         }
-        private static void InitLogicScripts(Action callback = null)
+        private static void InitLogicScripts()
         {
             appScriptConfig = AssetsManager.Instance.LoadAsset<AppScriptConfig>(AssetsPathConfig.AppScriptConfig);
             for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
@@ -99,8 +84,6 @@ namespace App
                         .Add(appScriptConfig.RootScript[i].ScriptName);
                 }
             }
-
-            InitLogicBegin("Global", callback);
         }
 
         public static void LoadScene(string sceneName, bool isLoading = false, Action<float> loadingEvent = null, LoadSceneMode mode = LoadSceneMode.Single)
