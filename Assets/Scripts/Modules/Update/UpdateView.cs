@@ -1,9 +1,11 @@
-﻿using AppFrame.Tools;
+﻿using System.Collections;
+using System.Collections.Generic;
+using AppFrame.Tools;
 using AppFrame.View;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Modules.Update
+namespace App.Update
 {
     public class UpdateView : ViewBase
     {
