@@ -18,7 +18,6 @@ namespace AppFrame.Manager
         protected override void OnSingletonMonoInit()
         {
             base.OnSingletonMonoInit();
-            InitConfig();
         }
 
         public void InitConfig()
