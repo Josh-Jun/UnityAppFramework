@@ -18,5 +18,7 @@ MonoBehaviour:
     ScriptName: Modules.Ask.AskLogic
   - SceneName: Global
     ScriptName: Modules.Loading.LoadingLogic
+  - SceneName: Global
+    ScriptName: Modules.Update.UpdateLogic
   - SceneName: Scenes/Test/TestScene
     ScriptName: Modules.Test.TestLogic
