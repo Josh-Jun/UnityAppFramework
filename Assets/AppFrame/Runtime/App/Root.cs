@@ -10,6 +10,7 @@ using AppFrame.Info;
 using AppFrame.Interface;
 using AppFrame.Manager;
 using AppFrame.Tools;
+using AppFramework.Data;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
@@ -27,7 +28,7 @@ namespace App
 
         public static void Init()
         {
-            AppInfo.AppConfig = Resources.Load<AppConfig>("App/AppConfig");
+            AppInfo.AppConfig = Resources.Load<AppConfig>("App/Config/AppConfig");
             
             //Debug.Log开关
             Debug.unityLogger.logEnabled = AppInfo.AppConfig.IsDebug;
@@ -56,7 +57,7 @@ namespace App
         }
         private static void InitLogicScripts()
         {
-            appScriptConfig = AssetsManager.Instance.LoadAsset<AppScriptConfig>(AssetsPathConfig.AppScriptConfig);
+            appScriptConfig = Resources.Load<AppScriptConfig>("App/Config/AppScriptConfig");
             for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
             {
                 if (!iLogicPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))

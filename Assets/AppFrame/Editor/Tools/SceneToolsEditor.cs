@@ -61,7 +61,7 @@ namespace AppFrame.Editor
 
         public static void OpenScene()
         {
-            string path = "Assets/AppFrame/Assets/Scenes/App.unity";
+            string path = "Assets/App/Scenes/Launcher.unity";
             string SceneName = Path.GetFileNameWithoutExtension(path);
             bool IsCurScene = EditorSceneManager.GetActiveScene().name.Equals(SceneName); //是否为当前场景
             if (!Application.isPlaying)

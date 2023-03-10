@@ -52,9 +52,8 @@ namespace AppFrame.Editor
             stringBuilder.AppendLine("{");
             stringBuilder.AppendLine("    public class AssetsPathConfig");
             stringBuilder.AppendLine("    {");
-            stringBuilder.Append(GetAllPath("App"));
             stringBuilder.Append(GetAllPath("AssetsFolder"));
-            stringBuilder.Append("    }");
+            stringBuilder.AppendLine("    }");
             stringBuilder.Append("}");
 
             string output = string.Format("{0}/AppFrame/Runtime/Frame/Tools/AssetsPathConfig.cs", Application.dataPath);
