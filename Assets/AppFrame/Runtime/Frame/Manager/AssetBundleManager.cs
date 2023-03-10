@@ -32,9 +32,9 @@ namespace AppFrame.Manager
         private string mainfestDataPath;
         private string mainfestAssetsPath;
 
-        public override void InitParent(Transform parent)
+        protected override void OnSingletonMonoInit()
         {
-            base.InitParent(parent);
+            base.OnSingletonMonoInit();
 
             var head = PlatformManager.Instance.IsEditor ? "" : "file://";
             mainfestDataPath = $"{head}{PlatformManager.Instance.GetDataPath(PlatformManager.Instance.Name)}";

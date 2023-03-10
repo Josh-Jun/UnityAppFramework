@@ -7,9 +7,9 @@ namespace AppFrame.Manager
 {
     public class PlatformMsgReceiver : SingletonMonoEvent<PlatformMsgReceiver>
     {
-        public override void InitParent(Transform parent)
+        protected override void OnSingletonMonoInit()
         {
-            base.InitParent(parent);
+            base.OnSingletonMonoInit();
         }
     }
 }

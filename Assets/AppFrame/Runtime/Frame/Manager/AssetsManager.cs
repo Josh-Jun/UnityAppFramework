@@ -12,9 +12,9 @@ namespace AppFrame.Manager
 {
     public class AssetsManager : SingletonMono<AssetsManager>
     {
-        public override void InitParent(Transform parent)
+        protected override void OnSingletonMonoInit()
         {
-            base.InitParent(parent);
+            base.OnSingletonMonoInit();
         }
 
         #region 移动游戏对象到场景

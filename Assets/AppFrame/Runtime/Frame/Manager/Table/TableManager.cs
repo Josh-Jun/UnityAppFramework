@@ -15,9 +15,9 @@ namespace AppFrame.Manager
         private Dictionary<string, Table> m_TablePairs = new Dictionary<string, Table>();
         private AppTableConfig appTableConfig;
 
-        public override void InitParent(Transform parent)
+        protected override void OnSingletonMonoInit()
         {
-            base.InitParent(parent);
+            base.OnSingletonMonoInit();
         }
 
         public void InitConfig()

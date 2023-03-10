@@ -78,9 +78,9 @@ namespace AppFrame.Manager
             }
         }
 
-        public override void InitParent(Transform parent)
+        protected override void OnSingletonMonoInit()
         {
-            base.InitParent(parent);
+            base.OnSingletonMonoInit();
             unityWebRequesters = new UnityWebRequester[maxUnityWebRequesterNumber];
             TimeTaskManager.Instance.AddTimeTask(CreateUnityWebRequester, 1, TimeUnit.Second, -1);
         }

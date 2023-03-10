@@ -36,7 +36,6 @@ namespace App
             //设置程序帧率
             Application.targetFrameRate = AppInfo.AppConfig.AppFrameRate;
 
-            InitManager();
             OutputAppInfo();
             
             if (AppInfo.AppConfig.IsHotfix)
@@ -45,7 +44,7 @@ namespace App
                 AsyncOperation asyncOperation = SceneManager.LoadSceneAsync("UpdateScene");
                 asyncOperation.completed += (AsyncOperation ao) =>
                 {
-                    _updateLogic = GetLogic("App.Update.UpdateLogic", "App.Main");
+                    _updateLogic = GetLogic("App.Update.UpdateLogic", "App.Module");
                     _updateLogic.Begin();
                 };
             }
@@ -70,24 +69,6 @@ namespace App
                 TableManager.Instance.InitConfig();
             });
         }
-
-        private static void InitManager()
-        {
-            GameObject go = new GameObject("Manager");
-            Transform parent = go.transform;
-            parent.SetParent(App.app.transform);
-
-            PlatformMsgReceiver.Instance.InitParent(parent);
-            AssetBundleManager.Instance.InitParent(parent);
-            AssetsManager.Instance.InitParent(parent);
-            NetcomManager.Instance.InitParent(parent);
-            AudioManager.Instance.InitParent(parent);
-            VideoManager.Instance.InitParent(parent);
-            TableManager.Instance.InitParent(parent);
-            TimeTaskManager.Instance.InitParent(parent);
-            TimeUpdateManager.Instance.InitParent(parent);
-        }
-
         private static void InitLogicScripts(Action callback = null)
         {
             appScriptConfig = AssetsManager.Instance.LoadAsset<AppScriptConfig>(AssetsPathConfig.AppScriptConfig);

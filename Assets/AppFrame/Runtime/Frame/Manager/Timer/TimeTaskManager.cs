@@ -11,9 +11,9 @@ namespace AppFrame.Tools
         private static readonly string lockTask = "lockTask"; //任务锁
         private Queue<TaskPack> timerQueue = new Queue<TaskPack>(); //定时任务队列
 
-        public override void InitParent(Transform parent)
+        protected override void OnSingletonMonoInit()
         {
-            base.InitParent(parent);
+            base.OnSingletonMonoInit();
             InitTimer();
         }
 

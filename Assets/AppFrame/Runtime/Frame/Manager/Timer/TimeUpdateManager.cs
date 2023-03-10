@@ -17,9 +17,9 @@ namespace AppFrame.Tools
             get { return Time.time; }
         }
 
-        public override void InitParent(Transform parent)
+        protected override void OnSingletonMonoInit()
         {
-            base.InitParent(parent);
+            base.OnSingletonMonoInit();
         }
 
         private TimerData timeData;

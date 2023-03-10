@@ -10,9 +10,9 @@ namespace AppFrame.Manager
         private AudioSource backgroundAudio;
         private AudioSource effectAudio;
 
-        public override void InitParent(Transform parent)
+        protected override void OnSingletonMonoInit()
         {
-            base.InitParent(parent);
+            base.OnSingletonMonoInit();
             backgroundAudio = CreateAudioSource();
             effectAudio = CreateAudioSource();
         }

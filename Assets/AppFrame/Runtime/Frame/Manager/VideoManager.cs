@@ -14,9 +14,9 @@ namespace AppFrame.Manager
         private RenderTexture movie;
         public VideoPlayer VideoPlayer { get; private set; }
 
-        public override void InitParent(Transform parent)
+        protected override void OnSingletonMonoInit()
         {
-            base.InitParent(parent);
+            base.OnSingletonMonoInit();
             VideoPlayer = this.TryGetComponent<VideoPlayer>();
             VideoPlayer.sendFrameReadyEvents = true;
         }
