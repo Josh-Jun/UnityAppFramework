@@ -38,13 +38,28 @@ namespace AppFrame.Editor
             }
         }
 
-        [MenuItem("Edit/打开Windows沙盒路径 %#O", false, 0)]
-        public static void OpenFolder()
+        [MenuItem("Tools/OpenFolder/DataPath", false, 0)]
+        public static void OpenDataFolder()
+        {
+            System.Diagnostics.Process.Start("explorer.exe", $"file://{Application.dataPath}");
+        }
+        [MenuItem("Tools/OpenFolder/PersistentDataPath", false, 0)]
+        public static void OpenPersistentDataFolder()
         {
             System.Diagnostics.Process.Start("explorer.exe", $"file://{Application.persistentDataPath}");
         }
+        [MenuItem("Tools/OpenFolder/StreamingAssetsPath", false, 0)]
+        public static void OpenStreamingAssetsFolder()
+        {
+            System.Diagnostics.Process.Start("explorer.exe", $"file://{Application.streamingAssetsPath}");
+        }
+        [MenuItem("Tools/OpenFolder/TemporaryCachePath", false, 0)]
+        public static void OpenTemporaryCacheFolder()
+        {
+            System.Diagnostics.Process.Start("explorer.exe", $"file://{Application.temporaryCachePath}");
+        }
 
-        [MenuItem("Assets/CreateAssetsPath", false, 0)]
+        [MenuItem("Tools/CreateAssetsPath", false, 0)]
         public static void CreateAssetsPath()
         {
             StringBuilder stringBuilder = new StringBuilder();
