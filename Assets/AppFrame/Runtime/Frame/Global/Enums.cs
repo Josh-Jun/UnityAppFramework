@@ -29,4 +29,12 @@ namespace AppFrame.Enum
         Json = 0,
         Xml = 1,
     }
+
+    /// <summary>配置表类型</summary>
+    public enum LoadAssetsMold
+    {
+        Local = 0,
+        StreamingAssets = 1,
+        Remote = 2,
+    }
 }
