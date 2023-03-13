@@ -16,7 +16,6 @@ public class HybridCLRHotfix : MonoBehaviour
     };
     public static List<string> HotfixAssemblyNames { get; } = new List<string>()
     {
-        "Assembly-CSharp.dll",
         "App.Frame.dll",
         "App.Module.dll",
     };

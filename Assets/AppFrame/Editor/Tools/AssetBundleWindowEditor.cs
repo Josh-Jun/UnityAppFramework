@@ -31,7 +31,7 @@ namespace AppFrame.Editor
         private string des = "请输入本版更新描述";
 
         public AppConfig AppConfig; //App配置表 
-        private readonly string configPath = "App/AppConfig";
+        private readonly string configPath = "AppFolder/Assets/Config/AppConfig";
 
         Vector2 scrollPosition;
         private string m_TmpBuildPath = "";
@@ -63,8 +63,8 @@ namespace AppFrame.Editor
         private void OnGUI()
         {
             buildPath = isLocalAsset
-                ? buildPath.Replace("AssetsFolder", "App")
-                : buildPath.Replace("App", "AssetsFolder");
+                ? buildPath.Replace("AssetsFolder", "AppFolder")
+                : buildPath.Replace("AppFolder", "AssetsFolder");
             outputPath = isLocalAsset
                 ? $"{Application.streamingAssetsPath}/AssetBundle"
                 : Application.dataPath.Replace("Assets", "AssetBundle");

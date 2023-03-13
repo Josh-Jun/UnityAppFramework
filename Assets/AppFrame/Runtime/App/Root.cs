@@ -28,7 +28,7 @@ namespace App
 
         public static void Init()
         {
-            AppInfo.AppConfig = Resources.Load<AppConfig>("App/Config/AppConfig");
+            AppInfo.AppConfig = Resources.Load<AppConfig>("AppFolder/Assets/Config/AppConfig");
             
             //Debug.Log开关
             Debug.unityLogger.logEnabled = AppInfo.AppConfig.IsDebug;
@@ -57,7 +57,7 @@ namespace App
         }
         private static void InitLogicScripts()
         {
-            appScriptConfig = Resources.Load<AppScriptConfig>("App/Config/AppScriptConfig");
+            appScriptConfig = Resources.Load<AppScriptConfig>("AppFolder/Assets/Config/AppScriptConfig");
             for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
             {
                 if (!iLogicPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
