@@ -50,13 +50,18 @@ public class ToolkitsWindow : EditorWindow
         leftListView.makeItem = MakeListItem;
         leftListView.bindItem = BindListItem;
         leftListView.onSelectedIndicesChange += OnItemsChosen;
+
+        _button = root.Q<Button>();
     }
 
+    private Button _button;
     private void OnItemsChosen(IEnumerable<int> objs)
     {
         foreach (var index in objs)
         {
             Debug.Log(index);
+            DisplayStyle displayStyle = index == 1 ? DisplayStyle.Flex : DisplayStyle.None;
+            _button.style.display = displayStyle;
         }
     }
 
