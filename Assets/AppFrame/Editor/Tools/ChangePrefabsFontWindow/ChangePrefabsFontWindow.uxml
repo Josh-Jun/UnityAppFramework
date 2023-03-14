@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <uie:ObjectField label="Font" focusable="true" allow-scene-objects="true" name="font" />
+    <ui:TextField picking-mode="Ignore" label="Prefab Path" value="filler text" text="filler text" name="prefab_path">
+        <ui:Button text="Browse" display-tooltip-when-elided="true" name="browse" />
+    </ui:TextField>
+    <ui:Button text="Apply" display-tooltip-when-elided="true" name="apply" />
+</ui:UXML>
