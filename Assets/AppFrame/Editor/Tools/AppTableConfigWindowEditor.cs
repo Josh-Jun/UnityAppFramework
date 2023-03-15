@@ -13,7 +13,7 @@ namespace AppFrame.Editor
     {
         private GUIStyle titleStyle;
         private AppTableConfig config;
-        private string configPath = "AssetsFolder/App/Config/AppTableConfig";
+        private string configPath = "AssetsFolder/Table/Config/AppTableConfig";
 
         [MenuItem("Tools/My ToolsWindow/Set AppTableConfig", false, 2)]
         public static void OpenWindow()

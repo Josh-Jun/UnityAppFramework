@@ -21,7 +21,7 @@ namespace AppFrame.Editor
     {
         private GUIStyle titleStyle;
         public AppConfig AppConfig; //App配置表 
-        private readonly string configPath = "App/AppConfig";
+        private readonly string configPath = "AppFolder/Assets/Config/AppConfig";
         private bool DevelopmentBuild = true;
         private bool IsTestServer = true;
         private bool IsHotfix = false;
