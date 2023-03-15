@@ -17,7 +17,7 @@ namespace AppFrame.Editor
             Menu.SetChecked("Tools/AutoOpenScene", false);
         }
         
-        [MenuItem("Tools/AutoOpenScene")]
+        [MenuItem("Tools/AutoOpenScene", false, 10)]
         public static void AutoOpenScene()
         {
             var Auto = !Menu.GetChecked("Tools/AutoOpenScene");

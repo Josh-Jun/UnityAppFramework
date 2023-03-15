@@ -59,7 +59,7 @@ namespace AppFrame.Editor
             System.Diagnostics.Process.Start("explorer.exe", $"file://{Application.temporaryCachePath}");
         }
 
-        [MenuItem("Tools/CreateAssetsPath", false, 0)]
+        [MenuItem("Tools/CreateAssetsPath", false, 3)]
         public static void CreateAssetsPath()
         {
             StringBuilder stringBuilder = new StringBuilder();

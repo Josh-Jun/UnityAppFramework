@@ -33,7 +33,7 @@ public class ToolkitsWindow : EditorWindow
     private TextField textField;
     #endregion
 
-    [MenuItem("Tools/ToolkitsWindow")]
+    [MenuItem("Tools/ToolkitsWindow", false, 1)]
     public static void ShowExample()
     {
         var icon = EditorGUIUtility.IconContent("Assembly Icon").image;
@@ -74,9 +74,9 @@ public class ToolkitsWindow : EditorWindow
         fontObjectField = root.Q<ObjectField>("object_font");
         fontObjectField.objectType = typeof(Font);
         
-        root.Q<Button>("prefab_path_browse").clicked += Browse;
+        root.Q<Button>("prefab_path_browse").clicked += () => { textField.value = ChangePrefabsFont.Browse(); };
         
-        root.Q<Button>("change_font_apply").clicked += ChangePrefabsFont;
+        root.Q<Button>("change_font_apply").clicked += () => { ChangePrefabsFont.ChangeFont((Font)fontObjectField.value, textField.value); };
         #endregion
         
         infos = root.Q<ScrollView>("infos");
@@ -108,62 +108,6 @@ public class ToolkitsWindow : EditorWindow
         label.style.paddingLeft = 16;
         return label;
     }
-    
-    #region ChangePrefabsFont
-    private void Browse()
-    {
-        var newPath = EditorUtility.OpenFolderPanel("Prefabs Folder", textField.value, string.Empty);
-        if (!string.IsNullOrEmpty(newPath))
-        {
-            var gamePath = System.IO.Path.GetFullPath(".");
-            gamePath = gamePath.Replace("\\", "/");
-            if (newPath.StartsWith(gamePath) && newPath.Length > gamePath.Length)
-                newPath = newPath.Remove(0, gamePath.Length + 1);
-            textField.value = newPath;
-        }
-    }
-    private void ChangePrefabsFont()
-    {
-        var changeFont = (Font)fontObjectField.value;
-        if (changeFont == null)
-        {
-            ShowHelpBox("请选择要更换的字体");
-            return;
-        }
-
-        string[] allPath = AssetDatabase.FindAssets("t:Prefab", new string[] { textField.value });
-        for (int i = 0; i < allPath.Length; i++)
-        {
-            string path = AssetDatabase.GUIDToAssetPath(allPath[i]);
-            var obj = AssetDatabase.LoadAssetAtPath(path, typeof(GameObject)) as GameObject;
-            if (obj != null)
-            {
-                SetAllTextFont(obj.transform);
-            }
-        }
-
-        AssetDatabase.Refresh();
-    }
-
-    private void SetAllTextFont(Transform go)
-    {
-        foreach (Transform item in go)
-        {
-            Text t = item.GetComponent<Text>();
-            if (t != null)
-            {
-                t.font = (Font)fontObjectField.value;
-                EditorUtility.SetDirty(t);
-                AssetDatabase.SaveAssets();
-            }
-            
-            if (item.childCount > 0)
-            {
-                SetAllTextFont(item);
-            }
-        }
-    }
-    #endregion
     
     private void ShowHelpBox(string msg, HelpBoxMessageType type = HelpBoxMessageType.Info)
     {
