@@ -28,11 +28,6 @@ public class ToolkitsWindow : EditorWindow
 
     private ScrollView infos;
 
-    #region ChangePrefabsFont
-    private ObjectField fontObjectField;
-    private TextField textField;
-    #endregion
-
     [MenuItem("Tools/ToolkitsWindow", false, 1)]
     public static void ShowExample()
     {
@@ -69,14 +64,20 @@ public class ToolkitsWindow : EditorWindow
         viewElements[stamp].style.display = DisplayStyle.Flex;
 
         #region ChangePrefabsFont
-        textField = root.Q<TextField>("text_prefab_path");
+        var textField = root.Q<TextField>("text_prefab_path");
         textField.value = "";
-        fontObjectField = root.Q<ObjectField>("object_font");
+        var fontObjectField = root.Q<ObjectField>("object_font");
         fontObjectField.objectType = typeof(Font);
         
-        root.Q<Button>("prefab_path_browse").clicked += () => { textField.value = ChangePrefabsFont.Browse(); };
+        root.Q<Button>("prefab_path_browse").clicked += () =>
+        {
+            textField.value = ChangePrefabsFont.Browse();
+        };
         
-        root.Q<Button>("change_font_apply").clicked += () => { ChangePrefabsFont.ChangeFont((Font)fontObjectField.value, textField.value); };
+        root.Q<Button>("change_font_apply").clicked += () =>
+        {
+            ChangePrefabsFont.ChangeFont((Font)fontObjectField.value, textField.value);
+        };
         #endregion
         
         infos = root.Q<ScrollView>("infos");
