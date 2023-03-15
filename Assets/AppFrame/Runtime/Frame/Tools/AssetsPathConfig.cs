@@ -2,6 +2,9 @@ namespace AppFramework.Data
 {
     public class AssetsPathConfig
     {
+        public const string AppConfig = "Assets/Config/AppConfig";
+        public const string AppScriptConfig = "Assets/Config/AppScriptConfig";
+        public const string AppScene = "Scenes/App/AppScene";
         public const string TestScene = "Scenes/Test/TestScene";
         public const string UpdateScene = "Scenes/Update/UpdateScene";
         public const string AppTableConfig = "Table/Config/AppTableConfig";

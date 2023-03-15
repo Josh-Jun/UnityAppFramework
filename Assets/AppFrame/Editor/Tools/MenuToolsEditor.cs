@@ -67,6 +67,7 @@ namespace AppFrame.Editor
             stringBuilder.AppendLine("{");
             stringBuilder.AppendLine("    public class AssetsPathConfig");
             stringBuilder.AppendLine("    {");
+            stringBuilder.Append(GetAllPath("AppFolder"));
             stringBuilder.Append(GetAllPath("AssetsFolder"));
             stringBuilder.AppendLine("    }");
             stringBuilder.Append("}");
@@ -98,6 +99,7 @@ namespace AppFrame.Editor
                     value = value.Replace("Mobile", "{0}").Replace("Pico", "{0}");
                 }
 
+                if(!value.Contains("/")) continue;
                 sb.AppendLine($"        public const string {name} = \"{value}\";");
             }
 
