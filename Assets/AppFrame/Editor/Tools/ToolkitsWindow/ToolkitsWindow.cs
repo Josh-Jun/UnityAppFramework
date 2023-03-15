@@ -86,6 +86,7 @@ public class ToolkitsWindow : EditorWindow
     {
         foreach (var index in objs)
         {
+            infos.Clear();
             view_title.text = itemsName[index];
             viewElements[stamp].style.display = DisplayStyle.None;
             viewElements[index].style.display = DisplayStyle.Flex;

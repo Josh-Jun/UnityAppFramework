@@ -21,7 +21,7 @@
             <ui:VisualElement name="FindSameFileName" style="flex-grow: 1; display: none;" />
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:VisualElement name="bottom" style="border-top-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); max-height: 200px;">
+    <ui:VisualElement name="bottom" style="border-top-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); max-height: 200px; height: 150px;">
         <ui:ScrollView name="infos" style="max-height: none; border-top-width: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); flex-grow: 1;" />
     </ui:VisualElement>
 </ui:UXML>
