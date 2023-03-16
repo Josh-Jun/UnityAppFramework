@@ -62,7 +62,8 @@ namespace AppFrame.Editor
             var right = root.Q<VisualElement>("right");
             for (int i = 0; i < itemsName.Length; i++)
             {
-                var viewItem = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>($"{basePath}/{itemsName[i]}/{itemsName[i]}.uxml");
+                var viewItem =
+                    AssetDatabase.LoadAssetAtPath<VisualTreeAsset>($"{basePath}/{itemsName[i]}/{itemsName[i]}.uxml");
                 var view = viewItem.CloneTree();
                 view.style.display = DisplayStyle.None;
                 viewElements.Add(view);
@@ -84,37 +85,40 @@ namespace AppFrame.Editor
 
         private void BuildAppFunction()
         {
-            
         }
+
         private void BuildAssetBundleFunction()
         {
-            
         }
+
         private void SetAppScriptConfigFunction()
         {
             var popup_parent = root.Q<VisualElement>("popup_parent");
             var script_scroll_view = root.Q<ScrollView>("script_scroll_view");
             var script_list = SetAppScriptConfig.GetRootScripts();
-            var mainScenePopup = new PopupField<string>("MainSceneName", SetAppScriptConfig.SceneNames, SetAppScriptConfig.level);
+            var mainScenePopup =
+                new PopupField<string>("MainSceneName", SetAppScriptConfig.SceneNames, SetAppScriptConfig.level);
             mainScenePopup.RegisterCallback<ChangeEvent<string>>((evt) =>
             {
                 SetAppScriptConfig.level = SetAppScriptConfig.SceneNames.IndexOf(evt.newValue);
             });
             popup_parent.Add(mainScenePopup);
-            
+
             RefreshScriptView(script_scroll_view);
             root.Q<Button>("btn_script_apply").clicked += SetAppScriptConfig.ApplyConfig;
         }
+
         private void SetAppTableConfigFunction()
         {
             var table_scroll_view = root.Q<ScrollView>("table_scroll_view");
             RefreshTableView(table_scroll_view);
             root.Q<Button>("btn_table_apply").clicked += SetAppTableConfig.ApplyConfig;
         }
+
         private void Table2CSharpFunction()
         {
-            
         }
+
         private void ChangePrefabsFontFunction()
         {
             var textPrefabsField = root.Q<TextField>("text_prefab_path");
@@ -122,27 +126,22 @@ namespace AppFrame.Editor
             var fontObjectField = root.Q<ObjectField>("object_font");
             fontObjectField.objectType = typeof(Font);
 
-            root.Q<Button>("prefab_path_browse").clicked += () =>
-            {
-                textPrefabsField.value = Browse();
-            };
+            root.Q<Button>("prefab_path_browse").clicked += () => { textPrefabsField.value = Browse(); };
 
             root.Q<Button>("change_font_apply").clicked += () =>
             {
                 ChangePrefabsFont.ChangeFont((Font)fontObjectField.value, textPrefabsField.value);
             };
         }
+
         private void FindSameFileNameFunction()
         {
             var objectType = root.Q<EnumField>("object_type");
             objectType.Init(ObjectType.All);
             var textFilesField = root.Q<TextField>("text_files_path");
             textFilesField.value = "";
-            
-            root.Q<Button>("files_path_browse").clicked += () =>
-            {
-                textFilesField.value = Browse();
-            };
+
+            root.Q<Button>("files_path_browse").clicked += () => { textFilesField.value = Browse(); };
 
             root.Q<Button>("btn_find").clicked += () =>
             {
@@ -153,7 +152,7 @@ namespace AppFrame.Editor
         private void RefreshTableView(ScrollView table_scroll_view)
         {
             var table_list = SetAppTableConfig.GetAppTables();
-            
+
             if (table_list.Count > 0)
             {
                 table_scroll_view.Clear();
@@ -178,10 +177,11 @@ namespace AppFrame.Editor
                 }
             }
         }
+
         private void RefreshScriptView(ScrollView table_script_view)
         {
             var script_list = SetAppScriptConfig.GetRootScripts();
-            
+
             if (script_list.Count > 0)
             {
                 table_script_view.Clear();
@@ -190,11 +190,12 @@ namespace AppFrame.Editor
                     int index = i;
                     var scriptItem = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>($"{basePath}/SetAppScriptConfig/script_item.uxml");
                     VisualElement script = scriptItem.CloneTree();
-                    
+
                     var popup_parent = script.Q<VisualElement>("Popup");
-                    var popup = new PopupField<string>("", SetAppScriptConfig.SceneNames, SetAppScriptConfig.SceneNames.IndexOf(script_list[index].SceneName));
+                    var popup = new PopupField<string>("", SetAppScriptConfig.SceneNames,
+                        SetAppScriptConfig.SceneNames.IndexOf(script_list[index].SceneName));
                     popup_parent.Add(popup);
-                    
+
                     script.Q<TextField>("ScriptName").value = script_list[index].ScriptName;
                     script.Q<Button>("btn_script_remove").clicked += () =>
                     {
@@ -243,16 +244,19 @@ namespace AppFrame.Editor
             var helpBox = new HelpBox(msg, HelpBoxMessageType.Info);
             infos.Add(helpBox);
         }
-        
-        public static string Browse()
+
+        public static string Browse(bool isFullPath = false)
         {
             var newPath = EditorUtility.OpenFolderPanel("Prefabs Folder", Application.dataPath, string.Empty);
             if (!string.IsNullOrEmpty(newPath))
             {
-                var gamePath = System.IO.Path.GetFullPath(".");
-                gamePath = gamePath.Replace("\\", "/");
-                if (newPath.StartsWith(gamePath) && newPath.Length > gamePath.Length)
-                    newPath = newPath.Remove(0, gamePath.Length + 1);
+                if (!isFullPath)
+                {
+                    var gamePath = System.IO.Path.GetFullPath(".");
+                    gamePath = gamePath.Replace("\\", "/");
+                    if (newPath.StartsWith(gamePath) && newPath.Length > gamePath.Length)
+                        newPath = newPath.Remove(0, gamePath.Length + 1);
+                }
             }
 
             return newPath;
