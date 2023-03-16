@@ -1,0 +1,3 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="Table2CSharp" style="flex-grow: 1; display: flex; margin-top: 5px;" />
+</ui:UXML>

@@ -27,7 +27,7 @@ namespace AppFrame.Editor
             "FindSameFileName",
         };
 
-        private List<VisualElement> viewElements = new List<VisualElement>();
+        private List<TemplateContainer> viewElements = new List<TemplateContainer>();
         private int stamp = 0;
 
         private static ScrollView infos;
@@ -59,29 +59,39 @@ namespace AppFrame.Editor
             view_title = root.Q<Label>("view_title");
             view_title.text = itemsName[0];
 
+            var right = root.Q<VisualElement>("right");
             for (int i = 0; i < itemsName.Length; i++)
             {
-                var view = root.Q<VisualElement>(itemsName[i]);
+                var viewItem = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>($"{basePath}/{itemsName[i]}/{itemsName[i]}.uxml");
+                var view = viewItem.CloneTree();
                 view.style.display = DisplayStyle.None;
                 viewElements.Add(view);
+                right.Add(view);
             }
 
             viewElements[stamp].style.display = DisplayStyle.Flex;
 
-            #region BuildApp
+            BuildAppFunction();
+            BuildAssetBundleFunction();
+            SetAppScriptConfigFunction();
+            SetAppTableConfigFunction();
+            Table2CSharpFunction();
+            ChangePrefabsFontFunction();
+            FindSameFileNameFunction();
 
+            infos = root.Q<ScrollView>("infos");
+        }
+
+        private void BuildAppFunction()
+        {
             
-
-            #endregion
-
-            #region BuildAssetBundle
-
+        }
+        private void BuildAssetBundleFunction()
+        {
             
-
-            #endregion
-            
-            #region SetAppScriptConfig
-
+        }
+        private void SetAppScriptConfigFunction()
+        {
             var popup_parent = root.Q<VisualElement>("popup_parent");
             var script_scroll_view = root.Q<ScrollView>("script_scroll_view");
             var script_list = SetAppScriptConfig.GetRootScripts();
@@ -94,25 +104,19 @@ namespace AppFrame.Editor
             
             RefreshScriptView(script_scroll_view);
             root.Q<Button>("btn_script_apply").clicked += SetAppScriptConfig.ApplyConfig;
-
-            #endregion
-            
-            #region SetAppTableConfig
-            
+        }
+        private void SetAppTableConfigFunction()
+        {
             var table_scroll_view = root.Q<ScrollView>("table_scroll_view");
             RefreshTableView(table_scroll_view);
             root.Q<Button>("btn_table_apply").clicked += SetAppTableConfig.ApplyConfig;
-
-            #endregion
-
-            #region Table2CSharp
-
+        }
+        private void Table2CSharpFunction()
+        {
             
-
-            #endregion
-            
-            #region ChangePrefabsFont
-
+        }
+        private void ChangePrefabsFontFunction()
+        {
             var textPrefabsField = root.Q<TextField>("text_prefab_path");
             textPrefabsField.value = "";
             var fontObjectField = root.Q<ObjectField>("object_font");
@@ -127,11 +131,9 @@ namespace AppFrame.Editor
             {
                 ChangePrefabsFont.ChangeFont((Font)fontObjectField.value, textPrefabsField.value);
             };
-
-            #endregion
-
-            #region FindSameFileName
-
+        }
+        private void FindSameFileNameFunction()
+        {
             var objectType = root.Q<EnumField>("object_type");
             objectType.Init(ObjectType.All);
             var textFilesField = root.Q<TextField>("text_files_path");
@@ -146,10 +148,6 @@ namespace AppFrame.Editor
             {
                 FindSameFileName.FindSameFile((ObjectType)objectType.value, textFilesField.value);
             };
-            
-            #endregion
-
-            infos = root.Q<ScrollView>("infos");
         }
 
         private void RefreshTableView(ScrollView table_scroll_view)
@@ -162,7 +160,7 @@ namespace AppFrame.Editor
                 for (int i = 0; i < table_list.Count; i++)
                 {
                     int index = i;
-                    var tableItem = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>($"{basePath}/TemplateUXML/table_item.uxml");
+                    var tableItem = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>($"{basePath}/SetAppTableConfig/table_item.uxml");
                     VisualElement table = tableItem.CloneTree();
                     table.Q<EnumField>("TableMold").Init(table_list[index].TableMold);
                     table.Q<TextField>("TableName").value = table_list[index].TableName;
@@ -190,7 +188,7 @@ namespace AppFrame.Editor
                 for (int i = 0; i < script_list.Count; i++)
                 {
                     int index = i;
-                    var scriptItem = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>($"{basePath}/TemplateUXML/script_item.uxml");
+                    var scriptItem = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>($"{basePath}/SetAppScriptConfig/script_item.uxml");
                     VisualElement script = scriptItem.CloneTree();
                     
                     var popup_parent = script.Q<VisualElement>("Popup");
@@ -245,6 +243,7 @@ namespace AppFrame.Editor
             var helpBox = new HelpBox(msg, HelpBoxMessageType.Info);
             infos.Add(helpBox);
         }
+        
         public static string Browse()
         {
             var newPath = EditorUtility.OpenFolderPanel("Prefabs Folder", Application.dataPath, string.Empty);

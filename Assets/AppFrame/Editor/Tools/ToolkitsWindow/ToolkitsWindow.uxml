@@ -5,34 +5,7 @@
     </ui:VisualElement>
     <ui:VisualElement name="middle" style="flex-grow: 1; flex-direction: row;">
         <ui:ListView name="left" virtualization-method="DynamicHeight" show-border="false" reorderable="true" horizontal-scrolling="false" style="flex-grow: 0; width: 200px; border-top-width: 1px; border-right-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); min-height: auto; justify-content: flex-start; align-items: stretch; min-width: auto; font-size: 12px; margin-top: 0; margin-bottom: 0; padding-top: 5px; padding-bottom: 5px;" />
-        <ui:VisualElement name="right" style="flex-grow: 1; border-top-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); display: flex;">
-            <ui:VisualElement name="BuildApp" style="flex-grow: 1; display: none; margin-top: 5px;" />
-            <ui:VisualElement name="BuildAssetBundle" style="flex-grow: 1; display: none; margin-top: 5px;" />
-            <ui:VisualElement name="SetAppScriptConfig" style="flex-grow: 1; display: flex; margin-top: 0;">
-                <ui:VisualElement name="popup_parent" style="flex-direction: row; width: 300px;" />
-                <ui:ScrollView vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" name="script_scroll_view" focusable="true" style="margin-bottom: 0;" />
-                <ui:Button text="Apply" display-tooltip-when-elided="true" name="btn_script_apply" />
-            </ui:VisualElement>
-            <ui:VisualElement name="SetAppTableConfig" style="flex-grow: 0; display: none; margin-top: 5px; flex-direction: column;">
-                <ui:ScrollView vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" name="table_scroll_view" />
-                <ui:Button text="Apply" display-tooltip-when-elided="true" name="btn_table_apply" />
-            </ui:VisualElement>
-            <ui:VisualElement name="Table2CSharp" style="flex-grow: 1; display: none; margin-top: 5px;" />
-            <ui:VisualElement name="ChangePrefabsFont" style="flex-grow: 1; margin-top: 5px; display: none;">
-                <uie:ObjectField label="Font" focusable="true" allow-scene-objects="true" name="object_font" />
-                <ui:TextField picking-mode="Ignore" label="Prefab Path" value="filler text" text="filler text" name="text_prefab_path">
-                    <ui:Button text="Browse" display-tooltip-when-elided="true" name="prefab_path_browse" />
-                </ui:TextField>
-                <ui:Button text="Apply" display-tooltip-when-elided="true" name="change_font_apply" />
-            </ui:VisualElement>
-            <ui:VisualElement name="FindSameFileName" style="flex-grow: 1; display: none; margin-top: 5px;">
-                <uie:EnumField label="ObjectType" value="Center" name="object_type" />
-                <ui:TextField picking-mode="Ignore" label="Files Path" value="filler text" text="filler text" name="text_files_path">
-                    <ui:Button text="Browse" display-tooltip-when-elided="true" name="files_path_browse" />
-                </ui:TextField>
-                <ui:Button text="Find" display-tooltip-when-elided="true" name="btn_find" />
-            </ui:VisualElement>
-        </ui:VisualElement>
+        <ui:VisualElement name="right" style="flex-grow: 1; border-top-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); display: flex;" />
     </ui:VisualElement>
     <ui:VisualElement name="bottom" style="border-top-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); max-height: 200px; height: 150px;">
         <ui:ScrollView name="infos" style="max-height: none; border-top-width: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); flex-grow: 1;" />
