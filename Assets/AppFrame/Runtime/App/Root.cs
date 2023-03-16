@@ -10,7 +10,7 @@ using AppFrame.Info;
 using AppFrame.Interface;
 using AppFrame.Manager;
 using AppFrame.Tools;
-using AppFramework.Data;
+using AppFrame.Data;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 

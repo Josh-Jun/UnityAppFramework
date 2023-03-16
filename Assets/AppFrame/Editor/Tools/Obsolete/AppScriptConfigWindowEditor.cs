@@ -19,7 +19,7 @@ namespace AppFrame.Editor
         private List<int> levels = new List<int>();
         private static readonly string configPath = "AppFolder/Assets/Config/AppScriptConfig";
 
-        [MenuItem("Tools/My ToolsWindow/Set AppScriptConfig", false, 2)]
+        [MenuItem("Tools/My ToolsWindow/Set AppScriptConfig", priority = -1001)]
         public static void OpenWindow()
         {
             AppScriptConfigWindowEditor window = GetWindow<AppScriptConfigWindowEditor>("AppScriptConfigWindow");

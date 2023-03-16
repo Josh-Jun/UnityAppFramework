@@ -63,7 +63,7 @@ namespace AppFrame.Editor
         public static void CreateAssetsPath()
         {
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine("namespace AppFramework.Data");
+            stringBuilder.AppendLine("namespace AppFrame.Data");
             stringBuilder.AppendLine("{");
             stringBuilder.AppendLine("    public class AssetsPathConfig");
             stringBuilder.AppendLine("    {");

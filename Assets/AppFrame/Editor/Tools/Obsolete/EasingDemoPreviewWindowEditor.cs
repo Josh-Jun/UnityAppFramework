@@ -8,7 +8,7 @@ namespace AppFrame.Editor
 {
     public class EasingDemoPreviewWindowEditor : EditorWindow
     {
-        [MenuItem("Tools/My ToolsWindow/Dotween Easing Demo", false, 5)]
+        [MenuItem("Tools/My ToolsWindow/Dotween Easing Demo", priority = -1001)]
         public static void ShowWindow()
         {
             GetWindowWithRect<EasingDemoPreviewWindowEditor>(new Rect(0, 0, 400, 480), false, "Dotween Easing Demo");

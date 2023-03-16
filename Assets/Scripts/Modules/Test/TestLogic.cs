@@ -12,7 +12,6 @@ using AppFrame.Info;
 using AppFrame.Interface;
 using AppFrame.Manager;
 using AppFrame.Tools;
-using AppFramework.Data;
 using Table.Data;
 
 namespace Modules.Test

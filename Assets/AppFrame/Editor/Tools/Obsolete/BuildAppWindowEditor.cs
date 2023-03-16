@@ -31,7 +31,7 @@ namespace AppFrame.Editor
         private ABPipeline Pipeline = ABPipeline.Default;
         private string outputPath;
 
-        [MenuItem("Tools/My ToolsWindow/Build App", false, 0)]
+        [MenuItem("Tools/My ToolsWindow/Build App", priority = -1001)]
         public static void OpenWindow()
         {
             BuildAppWindowEditor appWindow = GetWindow<BuildAppWindowEditor>("Build App");

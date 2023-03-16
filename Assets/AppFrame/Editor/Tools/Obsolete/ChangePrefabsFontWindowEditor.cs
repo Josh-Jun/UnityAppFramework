@@ -19,7 +19,7 @@ namespace AppFrame.Editor
 
         #endregion
 
-        [MenuItem("Tools/My ToolsWindow/ChangePrefabsFont", false, 4)]
+        [MenuItem("Tools/My ToolsWindow/ChangePrefabsFont", priority = -1001)]
         public static void OpenWindow()
         {
             ChangePrefabsFontWindowEditor window = GetWindow<ChangePrefabsFontWindowEditor>("Change Prefabs Font");

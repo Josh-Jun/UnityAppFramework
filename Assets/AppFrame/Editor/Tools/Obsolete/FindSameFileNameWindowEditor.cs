@@ -57,7 +57,7 @@ namespace AppFrame.Editor
 
         #endregion
 
-        [MenuItem("Tools/My ToolsWindow/FindSameFileName", false, 3)]
+        [MenuItem("Tools/My ToolsWindow/FindSameFileName", priority = -1001)]
         public static void OpenWindow()
         {
             FindSameFileNameWindowEditor window = GetWindow<FindSameFileNameWindowEditor>("Find Same File Name");

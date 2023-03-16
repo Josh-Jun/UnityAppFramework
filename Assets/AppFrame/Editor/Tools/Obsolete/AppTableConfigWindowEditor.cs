@@ -15,7 +15,7 @@ namespace AppFrame.Editor
         private AppTableConfig config;
         private string configPath = "AssetsFolder/Table/Config/AppTableConfig";
 
-        [MenuItem("Tools/My ToolsWindow/Set AppTableConfig", false, 2)]
+        [MenuItem("Tools/My ToolsWindow/Set AppTableConfig", priority = -1001)]
         public static void OpenWindow()
         {
             AppTableConfigWindowEditor window = GetWindow<AppTableConfigWindowEditor>("AppTableConfigWindow");

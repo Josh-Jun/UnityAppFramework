@@ -23,7 +23,7 @@ namespace AppFrame.Editor
         private string tablePath = "";
         private string outPutPath = "";
 
-        [MenuItem("Tools/My ToolsWindow/Table to CSharp", false, 4)]
+        [MenuItem("Tools/My ToolsWindow/Table to CSharp", priority = -1001)]
         public static void OpenWindow()
         {
             Table2CSharpWindowEditor window = GetWindow<Table2CSharpWindowEditor>("Table to CSharp");

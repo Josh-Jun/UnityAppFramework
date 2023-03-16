@@ -38,7 +38,7 @@ namespace AppFrame.Editor
 
         private bool isLocalAsset = false;
 
-        [MenuItem("Tools/My ToolsWindow/Build AssetBundle", false, 1)]
+        [MenuItem("Tools/My ToolsWindow/Build AssetBundle", priority = -1001)]
         public static void OpenWindow()
         {
             AssetBundleWindowEditor window = GetWindow<AssetBundleWindowEditor>("BuildAssetBundleWindow");

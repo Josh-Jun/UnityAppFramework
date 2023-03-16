@@ -6,7 +6,6 @@ using AppFrame.Data;
 using AppFrame.Interface;
 using AppFrame.Manager;
 using AppFrame.Tools;
-using AppFramework.Data;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
