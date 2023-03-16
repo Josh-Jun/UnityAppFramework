@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using AppFrame.Enum;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -10,6 +11,7 @@ namespace AppFrame.Editor
 {
     public class ToolkitsWindow : EditorWindow
     {
+        private const string basePath = "Assets/AppFrame/Editor/Tools/ToolkitsWindow";
         private VisualElement root;
         private ListView leftListView;
         private Label view_title;
@@ -44,9 +46,7 @@ namespace AppFrame.Editor
             root = rootVisualElement;
 
             // Import UXML
-            var visualTree =
-                AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(
-                    "Assets/AppFrame/Editor/Tools/ToolkitsWindow/ToolkitsWindow.uxml");
+            var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>($"{basePath}/ToolkitsWindow.uxml");
             visualTree.CloneTree(root);
 
             leftListView = root.Q<ListView>("left");
@@ -68,6 +68,49 @@ namespace AppFrame.Editor
 
             viewElements[stamp].style.display = DisplayStyle.Flex;
 
+            #region BuildApp
+
+            
+
+            #endregion
+
+            #region BuildAssetBundle
+
+            
+
+            #endregion
+            
+            #region SetAppScriptConfig
+
+            var popup_parent = root.Q<VisualElement>("popup_parent");
+            var script_scroll_view = root.Q<ScrollView>("script_scroll_view");
+            var script_list = SetAppScriptConfig.GetRootScripts();
+            var mainScenePopup = new PopupField<string>("MainSceneName", SetAppScriptConfig.SceneNames, SetAppScriptConfig.level);
+            mainScenePopup.RegisterCallback<ChangeEvent<string>>((evt) =>
+            {
+                SetAppScriptConfig.level = SetAppScriptConfig.SceneNames.IndexOf(evt.newValue);
+            });
+            popup_parent.Add(mainScenePopup);
+            
+            RefreshScriptView(script_scroll_view);
+            root.Q<Button>("btn_script_apply").clicked += SetAppScriptConfig.ApplyConfig;
+
+            #endregion
+            
+            #region SetAppTableConfig
+            
+            var table_scroll_view = root.Q<ScrollView>("table_scroll_view");
+            RefreshTableView(table_scroll_view);
+            root.Q<Button>("btn_table_apply").clicked += SetAppTableConfig.ApplyConfig;
+
+            #endregion
+
+            #region Table2CSharp
+
+            
+
+            #endregion
+            
             #region ChangePrefabsFont
 
             var textPrefabsField = root.Q<TextField>("text_prefab_path");
@@ -89,7 +132,7 @@ namespace AppFrame.Editor
 
             #region FindSameFileName
 
-            var objectType = root.Q<EnumField>();
+            var objectType = root.Q<EnumField>("object_type");
             objectType.Init(ObjectType.All);
             var textFilesField = root.Q<TextField>("text_files_path");
             textFilesField.value = "";
@@ -107,6 +150,67 @@ namespace AppFrame.Editor
             #endregion
 
             infos = root.Q<ScrollView>("infos");
+        }
+
+        private void RefreshTableView(ScrollView table_scroll_view)
+        {
+            var table_list = SetAppTableConfig.GetAppTables();
+            
+            if (table_list.Count > 0)
+            {
+                table_scroll_view.Clear();
+                for (int i = 0; i < table_list.Count; i++)
+                {
+                    int index = i;
+                    var tableItem = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>($"{basePath}/TemplateUXML/table_item.uxml");
+                    VisualElement table = tableItem.CloneTree();
+                    table.Q<EnumField>("TableMold").Init(table_list[index].TableMold);
+                    table.Q<TextField>("TableName").value = table_list[index].TableName;
+                    table.Q<Button>("btn_table_remove").clicked += () =>
+                    {
+                        SetAppTableConfig.RemoveTable(index);
+                        RefreshTableView(table_scroll_view);
+                    };
+                    table.Q<Button>("btn_table_add").clicked += () =>
+                    {
+                        SetAppTableConfig.AddTable();
+                        RefreshTableView(table_scroll_view);
+                    };
+                    table_scroll_view.Add(table);
+                }
+            }
+        }
+        private void RefreshScriptView(ScrollView table_script_view)
+        {
+            var script_list = SetAppScriptConfig.GetRootScripts();
+            
+            if (script_list.Count > 0)
+            {
+                table_script_view.Clear();
+                for (int i = 0; i < script_list.Count; i++)
+                {
+                    int index = i;
+                    var scriptItem = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>($"{basePath}/TemplateUXML/script_item.uxml");
+                    VisualElement script = scriptItem.CloneTree();
+                    
+                    var popup_parent = script.Q<VisualElement>("Popup");
+                    var popup = new PopupField<string>("", SetAppScriptConfig.SceneNames, SetAppScriptConfig.SceneNames.IndexOf(script_list[index].SceneName));
+                    popup_parent.Add(popup);
+                    
+                    script.Q<TextField>("ScriptName").value = script_list[index].ScriptName;
+                    script.Q<Button>("btn_script_remove").clicked += () =>
+                    {
+                        SetAppScriptConfig.Remove(index);
+                        RefreshScriptView(table_script_view);
+                    };
+                    script.Q<Button>("btn_script_add").clicked += () =>
+                    {
+                        SetAppScriptConfig.Add();
+                        RefreshScriptView(table_script_view);
+                    };
+                    table_script_view.Add(script);
+                }
+            }
         }
 
         private void OnItemsChosen(IEnumerable<int> objs)
