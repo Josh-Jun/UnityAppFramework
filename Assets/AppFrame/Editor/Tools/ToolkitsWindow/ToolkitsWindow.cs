@@ -126,7 +126,7 @@ namespace AppFrame.Editor
             table_path.value = $"{Application.dataPath.Replace("Assets","")}Data/excel";
             root.Q<Button>("table_path_browse").clicked += () =>
             {
-                table_path.value = Browse(true);
+                table_path.value = EditorTool.Browse(true);
             };
             root.Q<Button>("table_apply").clicked += () =>
             {
@@ -141,7 +141,7 @@ namespace AppFrame.Editor
             var fontObjectField = root.Q<ObjectField>("object_font");
             fontObjectField.objectType = typeof(Font);
 
-            root.Q<Button>("prefab_path_browse").clicked += () => { textPrefabsField.value = Browse(); };
+            root.Q<Button>("prefab_path_browse").clicked += () => { textPrefabsField.value = EditorTool.Browse(); };
 
             root.Q<Button>("change_font_apply").clicked += () =>
             {
@@ -156,7 +156,7 @@ namespace AppFrame.Editor
             var textFilesField = root.Q<TextField>("text_files_path");
             textFilesField.value = "";
 
-            root.Q<Button>("files_path_browse").clicked += () => { textFilesField.value = Browse(); };
+            root.Q<Button>("files_path_browse").clicked += () => { textFilesField.value = EditorTool.Browse(); };
 
             root.Q<Button>("btn_find").clicked += () =>
             {
@@ -168,7 +168,7 @@ namespace AppFrame.Editor
             var unity_install_path = root.Q<TextField>("unity_install_path");
             root.Q<Button>("unity_install_path_browse").clicked += () =>
             {
-                unity_install_path.value = Browse(true);
+                unity_install_path.value = EditorTool.Browse(true);
             };
             root.Q<Button>("btn_copy_template").clicked += () =>
             {
@@ -270,36 +270,6 @@ namespace AppFrame.Editor
         {
             var helpBox = new HelpBox(msg, HelpBoxMessageType.Info);
             infos.Add(helpBox);
-        }
-
-        public static string Browse(bool isFullPath = false)
-        {
-            var newPath = EditorUtility.OpenFolderPanel("Prefabs Folder", Application.dataPath, string.Empty);
-            if (!string.IsNullOrEmpty(newPath))
-            {
-                if (!isFullPath)
-                {
-                    var gamePath = System.IO.Path.GetFullPath(".");
-                    gamePath = gamePath.Replace("\\", "/");
-                    if (newPath.StartsWith(gamePath) && newPath.Length > gamePath.Length)
-                        newPath = newPath.Remove(0, gamePath.Length + 1);
-                }
-            }
-
-            return newPath;
-        }
-        
-        public static void Copy(string from, string to, string extension)
-        {
-            DirectoryInfo directoryInfo = new DirectoryInfo(from);
-            FileInfo[] fileInfos = directoryInfo.GetFiles();
-            foreach (FileInfo fileInfo in fileInfos)
-            {
-                if (fileInfo.Extension.Equals($".{extension}"))
-                {
-                    File.Copy($"{from}/{fileInfo.Name}", $"{to}/{fileInfo.Name}", true);
-                }
-            }
         }
     }
 }
