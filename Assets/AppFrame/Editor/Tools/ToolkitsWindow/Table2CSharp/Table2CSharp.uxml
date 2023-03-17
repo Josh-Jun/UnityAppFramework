@@ -1,3 +1,9 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:VisualElement name="Table2CSharp" style="flex-grow: 1; display: flex; margin-top: 5px;" />
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:VisualElement name="Table2CSharp" style="flex-grow: 1; display: flex; margin-top: 5px; justify-content: flex-start;">
+        <uie:EnumField label="TableMold" value="Json" name="table_mold" />
+        <ui:TextField picking-mode="Ignore" label="TablePath" name="table_path" readonly="false">
+            <ui:Button text="Browse" display-tooltip-when-elided="true" name="table_path_browse" style="margin-right: 0; margin-left: 3px; margin-top: 0; margin-bottom: 0;" />
+        </ui:TextField>
+        <ui:Button text="Apply" display-tooltip-when-elided="true" name="table_apply" />
+    </ui:VisualElement>
 </ui:UXML>

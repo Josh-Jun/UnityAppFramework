@@ -117,6 +117,18 @@ namespace AppFrame.Editor
 
         private void Table2CSharpFunction()
         {
+            var table_mold = root.Q<EnumField>("table_mold");
+            table_mold.Init(TableMold.Json);
+            var table_path = root.Q<TextField>("table_path");
+            table_path.value = $"{Application.dataPath.Replace("Assets","")}Data/excel";
+            root.Q<Button>("table_path_browse").clicked += () =>
+            {
+                table_path.value = Browse(true);
+            };
+            root.Q<Button>("table_apply").clicked += () =>
+            {
+                Table2CSharp.Apply(table_path.value, (TableMold)table_mold.value);
+            };
         }
 
         private void ChangePrefabsFontFunction()

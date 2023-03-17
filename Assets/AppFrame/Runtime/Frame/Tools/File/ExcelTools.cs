@@ -8,7 +8,7 @@ namespace AppFrame.Tools
 {
     public class ExcelTools
     {
-        public static void WriteExcel(string path, List<ExcelPackageData> datas)
+        public static void WriteExcel(string path, List<ExcelPackageData> excelPackages)
         {
             if (File.Exists(path))
             {
@@ -16,14 +16,15 @@ namespace AppFrame.Tools
             }
 
             FileStream fs = new FileStream(path, FileMode.Create);
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (ExcelPackage package = new ExcelPackage(fs))
             {
-                for (int i = 0; i < datas.Count; i++)
+                for (int i = 0; i < excelPackages.Count; i++)
                 {
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(datas[i].sheetName);
-                    for (int j = 0; j < datas[i].datas.Count; j++)
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(excelPackages[i].sheetName);
+                    for (int j = 0; j < excelPackages[i].datas.Count; j++)
                     {
-                        ExcelData data = datas[i].datas[j];
+                        ExcelData data = excelPackages[i].datas[j];
                         worksheet.Cells[data.axes.row, data.axes.col].Value = data.data.ToString();
                     }
                 }
@@ -39,32 +40,32 @@ namespace AppFrame.Tools
                 Debug.LogError($"Not Found Excel: {path}");
             }
 
-            FileStream fs = new FileStream(path, FileMode.Open);
-            List<ExcelPackageData> datas = new List<ExcelPackageData>();
-            using (ExcelPackage package = new ExcelPackage(fs))
+            using FileStream fs = new FileStream(path, FileMode.Open);
+            List<ExcelPackageData> excelPackages = new List<ExcelPackageData>();
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            using ExcelPackage package = new ExcelPackage(fs);
+            for (int i = 0; i < package.Workbook.Worksheets.Count; i++)
             {
-                for (int i = 0; i < package.Workbook.Worksheets.Count; i++)
+                ExcelWorksheet worksheet = package.Workbook.Worksheets[i];
+                if(worksheet.Dimension == null) continue;
+                ExcelPackageData data = new ExcelPackageData();
+                data.sheetName = worksheet.Name;
+                data.datas = new List<ExcelData>();
+                for (int j = worksheet.Dimension.Start.Column, k = worksheet.Dimension.End.Column; j <= k; j++)
                 {
-                    ExcelWorksheet sheet = package.Workbook.Worksheets[i];
-                    ExcelPackageData data = new ExcelPackageData();
-                    data.sheetName = sheet.Name;
-                    for (int j = sheet.Dimension.Start.Column, k = sheet.Dimension.End.Column; j <= k; j++)
+                    for (int m = worksheet.Dimension.Start.Row, n = worksheet.Dimension.End.Row; m <= n; m++)
                     {
-                        for (int m = sheet.Dimension.Start.Row, n = sheet.Dimension.End.Row; m <= n; m++)
-                        {
-                            ExcelData excelData = new ExcelData();
-                            excelData.axes.row = m;
-                            excelData.axes.col = j;
-                            excelData.data = sheet.GetValue(m, j);
-                            data.datas.Add(excelData);
-                        }
+                        ExcelData excelData = new ExcelData();
+                        excelData.axes = new ExcelAxes(m, j);
+                        excelData.data = worksheet.GetValue(m, j);
+                        data.datas.Add(excelData);
                     }
-
-                    datas.Add(data);
                 }
+
+                excelPackages.Add(data);
             }
 
-            return datas;
+            return excelPackages;
         }
     }
 
