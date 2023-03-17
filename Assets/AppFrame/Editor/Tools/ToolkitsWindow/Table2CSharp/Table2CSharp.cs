@@ -106,8 +106,8 @@ namespace AppFrame.Editor
                         stringBuilder.AppendLine($"      \"{data.datas[2,c]}\": {data.datas[r,c]}{str}");
                     }
                 }
-                string _str = r == data.datas.GetLength(0) - 1 ? "" : ",";
-                stringBuilder.AppendLine("    }" + _str);
+                string _str = r == data.datas.GetLength(0) - 1 ? "    }" : "    },";
+                stringBuilder.AppendLine(_str);
             }
 
             stringBuilder.AppendLine("  ]");
