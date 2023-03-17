@@ -52,7 +52,20 @@ namespace Modules.Test
 
         public void RunTest()
         {
-            LogText();
+            //LogText();
+            // var excelPackageDatas = ExcelTools.ReadExcel($"F:/WorkSpace/UnityFramework/MyUnityFramework/Data/excel/test.xlsx");
+            // for (int j = 0; j < excelPackageDatas.Count; j++)
+            // {
+            //     ExcelData excel = excelPackageDatas[j];
+            //     if(excel.sheetName.Contains("#")) continue;
+            //     for (int r = 1; r < excel.datas.GetLength(0); r++)
+            //     {
+            //         for (int c = 1; c < excel.datas.GetLength(1); c++)
+            //         {
+            //             Debug.Log($"{excel.sheetName}=>({r},{c})=>{excel.datas[r,c]}");
+            //         }
+            //     }
+            // }
         }
 
         public async void LogText()

@@ -8,7 +8,7 @@ namespace AppFrame.Tools
 {
     public class ExcelTools
     {
-        public static void WriteExcel(string path, List<ExcelPackageData> excelPackages)
+        public static void WriteExcel(string path, List<ExcelData> excel)
         {
             if (File.Exists(path))
             {
@@ -19,13 +19,15 @@ namespace AppFrame.Tools
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (ExcelPackage package = new ExcelPackage(fs))
             {
-                for (int i = 0; i < excelPackages.Count; i++)
+                for (int i = 0; i < excel.Count; i++)
                 {
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(excelPackages[i].sheetName);
-                    for (int j = 0; j < excelPackages[i].datas.Count; j++)
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(excel[i].sheetName);
+                    for (int r = 1; r < excel[i].datas.GetLength(0); r++)
                     {
-                        ExcelData data = excelPackages[i].datas[j];
-                        worksheet.Cells[data.axes.row, data.axes.col].Value = data.data.ToString();
+                        for (int c = 1; c < excel[i].datas.GetLength(1); c++)
+                        {
+                            worksheet.Cells[r, c].Value = excel[i].datas[r,c];
+                        }
                     }
                 }
 
@@ -33,7 +35,7 @@ namespace AppFrame.Tools
             }
         }
 
-        public static List<ExcelPackageData> ReadExcel(string path)
+        public static List<ExcelData> ReadExcel(string path)
         {
             if (!File.Exists(path))
             {
@@ -41,55 +43,34 @@ namespace AppFrame.Tools
             }
 
             using FileStream fs = new FileStream(path, FileMode.Open);
-            List<ExcelPackageData> excelPackages = new List<ExcelPackageData>();
+            List<ExcelData> excel = new List<ExcelData>();
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using ExcelPackage package = new ExcelPackage(fs);
             for (int i = 0; i < package.Workbook.Worksheets.Count; i++)
             {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets[i];
                 if(worksheet.Dimension == null) continue;
-                ExcelPackageData data = new ExcelPackageData();
+                ExcelData data = new ExcelData();
                 data.sheetName = worksheet.Name;
-                data.datas = new List<ExcelData>();
-                for (int j = worksheet.Dimension.Start.Column, k = worksheet.Dimension.End.Column; j <= k; j++)
+                data.datas = new object[worksheet.Dimension.End.Row+1,worksheet.Dimension.End.Column+1];
+                for (int c = worksheet.Dimension.Start.Column, c1 = worksheet.Dimension.End.Column; c <= c1; c++)
                 {
-                    for (int m = worksheet.Dimension.Start.Row, n = worksheet.Dimension.End.Row; m <= n; m++)
+                    for (int r = worksheet.Dimension.Start.Row, r1 = worksheet.Dimension.End.Row; r <= r1; r++)
                     {
-                        ExcelData excelData = new ExcelData();
-                        excelData.axes = new ExcelAxes(m, j);
-                        excelData.data = worksheet.GetValue(m, j);
-                        data.datas.Add(excelData);
+                        data.datas[r,c] = worksheet.GetValue(r, c);
                     }
                 }
 
-                excelPackages.Add(data);
+                excel.Add(data);
             }
 
-            return excelPackages;
-        }
-    }
-
-    public struct ExcelAxes
-    {
-        public int row;
-        public int col;
-
-        public ExcelAxes(int row, int col)
-        {
-            this.row = row;
-            this.col = col;
+            return excel;
         }
     }
 
     public struct ExcelData
     {
-        public ExcelAxes axes;
-        public object data;
-    }
-
-    public struct ExcelPackageData
-    {
         public string sheetName;
-        public List<ExcelData> datas;
+        public object[,] datas;
     }
 }
