@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using AppFrame.Enum;
 using UnityEditor;
 using UnityEngine;
@@ -25,6 +26,7 @@ namespace AppFrame.Editor
             "Table2CSharp",
             "ChangePrefabsFont",
             "FindSameFileName",
+            "CopyTemplateScripts",
         };
 
         private List<TemplateContainer> viewElements = new List<TemplateContainer>();
@@ -79,6 +81,7 @@ namespace AppFrame.Editor
             Table2CSharpFunction();
             ChangePrefabsFontFunction();
             FindSameFileNameFunction();
+            CopyTemplateScriptsFunction();
 
             infos = root.Q<ScrollView>("infos");
         }
@@ -158,6 +161,18 @@ namespace AppFrame.Editor
             root.Q<Button>("btn_find").clicked += () =>
             {
                 FindSameFileName.FindSameFile((ObjectType)objectType.value, textFilesField.value);
+            };
+        }
+        private void CopyTemplateScriptsFunction()
+        {
+            var unity_install_path = root.Q<TextField>("unity_install_path");
+            root.Q<Button>("unity_install_path_browse").clicked += () =>
+            {
+                unity_install_path.value = Browse(true);
+            };
+            root.Q<Button>("btn_copy_template").clicked += () =>
+            {
+                CopyTemplateScripts.Copy(unity_install_path.value);
             };
         }
 
@@ -272,6 +287,19 @@ namespace AppFrame.Editor
             }
 
             return newPath;
+        }
+        
+        public static void Copy(string from, string to, string extension)
+        {
+            DirectoryInfo directoryInfo = new DirectoryInfo(from);
+            FileInfo[] fileInfos = directoryInfo.GetFiles();
+            foreach (FileInfo fileInfo in fileInfos)
+            {
+                if (fileInfo.Extension.Equals($".{extension}"))
+                {
+                    File.Copy($"{from}/{fileInfo.Name}", $"{to}/{fileInfo.Name}", true);
+                }
+            }
         }
     }
 }

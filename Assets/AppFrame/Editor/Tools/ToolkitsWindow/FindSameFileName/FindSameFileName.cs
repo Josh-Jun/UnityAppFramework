@@ -45,6 +45,11 @@ namespace AppFrame.Editor
         
         public static void FindSameFile(ObjectType objectType, string filesPath)
         {
+            if (string.IsNullOrEmpty(filesPath))
+            {
+                ToolkitsWindow.ShowHelpBox("请选择想要查找的目录");
+                return;
+            }
             string filter = items[(int)objectType];
             string[] allPath = AssetDatabase.FindAssets(filter, new string[] { filesPath });
             for (int i = 0; i < allPath.Length; i++)

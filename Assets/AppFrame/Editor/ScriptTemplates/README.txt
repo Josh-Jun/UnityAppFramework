@@ -1,1 +1,0 @@
-﻿将文件夹内的文件放到Unity安装目录下的 "Editor\Data\Resources\ScriptTemplates"

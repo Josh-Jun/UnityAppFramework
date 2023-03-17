@@ -12,6 +12,11 @@ namespace AppFrame.Editor
         private static List<ExcelPackageData> excelPackageDatas = new List<ExcelPackageData>();
         public static void Apply(string excelPath, TableMold tableMold)
         {
+            if (string.IsNullOrEmpty(excelPath))
+            {
+                ToolkitsWindow.ShowHelpBox("请选择Excel所在目录");
+                return;
+            }
             var fileNames = new List<string>();
             DirectoryInfo directoryInfo = new DirectoryInfo(excelPath);
             FileInfo[] fileInfos = directoryInfo.GetFiles();
