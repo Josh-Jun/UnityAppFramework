@@ -10,7 +10,7 @@ namespace AppFrame.Editor
     {
         public static string Browse(bool isFullPath = false)
         {
-            var newPath = EditorUtility.OpenFolderPanel("Prefabs Folder", Application.dataPath, string.Empty);
+            var newPath = EditorUtility.OpenFolderPanel("Browse Folder", Application.dataPath, string.Empty);
             if (!string.IsNullOrEmpty(newPath))
             {
                 if (!isFullPath)
