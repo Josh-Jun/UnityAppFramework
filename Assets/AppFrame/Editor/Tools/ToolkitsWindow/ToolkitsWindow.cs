@@ -188,6 +188,12 @@ namespace AppFrame.Editor
                     int index = i;
                     var tableItem = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>($"{basePath}/SetAppTableConfig/table_item.uxml");
                     VisualElement table = tableItem.CloneTree();
+                    
+                    table.Q<Button>("btn_table_remove").style.backgroundImage =
+                        new StyleBackground((Texture2D)EditorGUIUtility.IconContent("CollabDeleted Icon").image);
+                    table.Q<Button>("btn_table_add").style.backgroundImage =
+                        new StyleBackground((Texture2D)EditorGUIUtility.IconContent("CollabCreate Icon").image);
+                    
                     table.Q<EnumField>("TableMold").Init(table_list[index].TableMold);
                     table.Q<TextField>("TableName").value = table_list[index].TableName;
                     table.Q<Button>("btn_table_remove").clicked += () =>
@@ -217,6 +223,10 @@ namespace AppFrame.Editor
                     int index = i;
                     var scriptItem = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>($"{basePath}/SetAppScriptConfig/script_item.uxml");
                     VisualElement script = scriptItem.CloneTree();
+                    script.Q<Button>("btn_script_remove").style.backgroundImage =
+                        new StyleBackground((Texture2D)EditorGUIUtility.IconContent("CollabDeleted Icon").image);
+                    script.Q<Button>("btn_script_add").style.backgroundImage =
+                        new StyleBackground((Texture2D)EditorGUIUtility.IconContent("CollabCreate Icon").image);
 
                     var popup_parent = script.Q<VisualElement>("Popup");
                     var popup = new PopupField<string>("", SetAppScriptConfig.SceneNames,
