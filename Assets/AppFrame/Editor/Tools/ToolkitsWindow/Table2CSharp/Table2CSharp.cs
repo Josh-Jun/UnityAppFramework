@@ -39,7 +39,8 @@ namespace AppFrame.Editor
                                 CreateJsonConfig(excel);
                                 break;
                             case TableMold.Xml:
-                                //CreateXmlCSharp(excel);
+                                CreateXmlCSharp(excel);
+                                CreateXmlConfig(excel);
                                 break;
                         }
                     }
@@ -53,7 +54,7 @@ namespace AppFrame.Editor
             stringBuilder.AppendLine("using System;");
             stringBuilder.AppendLine("using System.Collections.Generic;");
             stringBuilder.AppendLine("");
-            stringBuilder.AppendLine("namespace AppFrame.Data");
+            stringBuilder.AppendLine("namespace AppFrame.Data.Json");
             stringBuilder.AppendLine("{");
             stringBuilder.AppendLine($"    [System.Serializable]");
             stringBuilder.AppendLine($"    public class {data.sheetName}Json");
@@ -124,12 +125,73 @@ namespace AppFrame.Editor
             AssetDatabase.Refresh();
         }
 
-        private static void CreateXmlConfig()
+        private static void CreateXmlConfig(ExcelData data)
         {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+            stringBuilder.AppendLine($"<{data.sheetName}Xml>");
+
+            for (int r = 4; r < data.datas.GetLength(0); r++)
+            {
+                stringBuilder.Append($"    <{data.sheetName}");
+                for (int c = 2; c < data.datas.GetLength(1); c++)
+                {
+                    stringBuilder.Append($" {data.datas[2,c]}=\"{data.datas[r,c]}\"");
+                }
+                stringBuilder.AppendLine($"></{data.sheetName}>");
+            }
+
+            stringBuilder.Append($"</{data.sheetName}Xml>");
+
+            string output = string.Format("{0}/Resources/AssetsFolder/Table/Xml/{1}Xml.xml", Application.dataPath, data.sheetName);
+            FileStream fs1 = new FileStream(output, FileMode.Create, FileAccess.Write);
+            StreamWriter sw = new StreamWriter(fs1);
+            sw.WriteLine(stringBuilder.ToString()); //开始写入值
+            sw.Close();
+            fs1.Close();
+
+            AssetDatabase.Refresh();
         }
         
         private static void CreateXmlCSharp(ExcelData data)
         {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine("using System;");
+            stringBuilder.AppendLine("using System.Collections.Generic;");
+            stringBuilder.AppendLine("using System.Xml.Serialization;");
+            stringBuilder.AppendLine("");
+            stringBuilder.AppendLine("namespace AppFrame.Data.Xml");
+            stringBuilder.AppendLine("{");
+            stringBuilder.AppendLine($"    [System.Serializable]");
+            stringBuilder.AppendLine($"    public class {data.sheetName}Xml");
+            stringBuilder.AppendLine("    {");
+
+            stringBuilder.AppendLine($"        [XmlElement(\"{data.sheetName}\")]");
+            stringBuilder.AppendLine($"        public List<{data.sheetName}> {data.sheetName} = new List<{data.sheetName}>();");
+
+            stringBuilder.AppendLine("    }");
+
+            stringBuilder.AppendLine($"    [System.Serializable]");
+            stringBuilder.AppendLine($"    public class {data.sheetName}");
+            stringBuilder.AppendLine("    {");
+
+            for (int c = 2; c < data.datas.GetLength(1); c++)
+            {
+                stringBuilder.AppendLine($"        [XmlAttribute(\"[{data.datas[2,c]}]\")]");
+                stringBuilder.AppendLine($"        public {data.datas[3,c]} {data.datas[2,c]};");
+            }
+
+            stringBuilder.AppendLine("    }");
+            stringBuilder.Append("}");
+
+            string output = string.Format("{0}/AppFrame/Runtime/Frame/Manager/Table/Data/{1}Xml.cs", Application.dataPath, data.sheetName);
+            FileStream fs1 = new FileStream(output, FileMode.Create, FileAccess.Write);
+            StreamWriter sw = new StreamWriter(fs1);
+            sw.WriteLine(stringBuilder.ToString()); //开始写入值
+            sw.Close();
+            fs1.Close();
+
+            AssetDatabase.Refresh();
         }
 
     }
