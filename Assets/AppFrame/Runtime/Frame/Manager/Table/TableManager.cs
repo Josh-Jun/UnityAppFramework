@@ -27,9 +27,8 @@ namespace AppFrame.Manager
             for (int i = 0; i < appTableConfig.AppTable.Count; i++)
             {
                 var path = $"Table/{appTableConfig.AppTable[i].TableMold}/{appTableConfig.AppTable[i].TableName}";
-                var text = AssetsManager.Instance.LoadAsset<TextAsset>(path).text;
-                var bytes = AssetsManager.Instance.LoadAsset<TextAsset>(path).bytes;
-                Table table = new Table(text, bytes, path, appTableConfig.AppTable[i].TableMold);
+                var textAsset = AssetsManager.Instance.LoadAsset<TextAsset>(path);
+                Table table = new Table(textAsset.text, textAsset.bytes, path, appTableConfig.AppTable[i].TableMold);
                 if (m_TablePairs.ContainsKey(appTableConfig.AppTable[i].TableName))
                 {
                     m_TablePairs[appTableConfig.AppTable[i].TableName] = table;
