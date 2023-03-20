@@ -14,10 +14,7 @@ namespace AppFrame.Editor
         
         public static List<AppTable> GetAppTables()
         {
-            if (config == null)
-            {
-                config = Resources.Load<AppTableConfig>(configPath);
-            }
+            config = Resources.Load<AppTableConfig>(configPath);
             return config.AppTable;
         }
         
