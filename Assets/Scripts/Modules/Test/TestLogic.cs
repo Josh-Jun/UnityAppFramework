@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using UnityEngine.Video;
 using System.Threading.Tasks;
 using AppFrame.Data;
+using AppFrame.Data.Xml;
 using AppFrame.Info;
 using AppFrame.Interface;
 using AppFrame.Manager;
@@ -42,7 +43,7 @@ namespace Modules.Test
             // mobile = new RenderTexture(Screen.width, Screen.height, 32);
             // window.SetMobileCamera(mobile);
             view.PlayGif();
-            Debug.Log(TableManager.Instance.GetTable<TestJson>("TestJson").Boss.Count);
+            Debug.Log(TableManager.Instance.GetTable<UserDataXml>("UserDataXml").UserData[0].NickName);
             RunTest();
         }
 

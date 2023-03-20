@@ -195,7 +195,15 @@ namespace AppFrame.Editor
                         new StyleBackground((Texture2D)EditorGUIUtility.IconContent("CollabCreate Icon").image);
                     
                     table.Q<EnumField>("TableMold").Init(table_list[index].TableMold);
+                    table.Q<EnumField>("TableMold").RegisterCallback<ChangeEvent<TableMold>>((ent) =>
+                    {
+                        SetAppTableConfig.SetConfigMoldValue(index, ent.newValue);
+                    });
                     table.Q<TextField>("TableName").value = table_list[index].TableName;
+                    table.Q<TextField>("TableName").RegisterCallback<ChangeEvent<string>>((ent) =>
+                    {
+                        SetAppTableConfig.SetConfigNameValue(index, ent.newValue);
+                    });
                     table.Q<Button>("btn_table_remove").clicked += () =>
                     {
                         SetAppTableConfig.RemoveTable(index);
@@ -231,9 +239,17 @@ namespace AppFrame.Editor
                     var popup_parent = script.Q<VisualElement>("Popup");
                     var popup = new PopupField<string>("", SetAppScriptConfig.SceneNames,
                         SetAppScriptConfig.SceneNames.IndexOf(script_list[index].SceneName));
+                    popup.RegisterCallback<ChangeEvent<string>>((evt) =>
+                    {
+                        SetAppScriptConfig.SetConfigSceneValue(index, evt.newValue);
+                    });
                     popup_parent.Add(popup);
 
                     script.Q<TextField>("ScriptName").value = script_list[index].ScriptName;
+                    script.Q<TextField>("ScriptName").RegisterCallback<ChangeEvent<string>>((evt) =>
+                    {
+                        SetAppScriptConfig.SetConfigScriptValue(index, evt.newValue);
+                    });
                     script.Q<Button>("btn_script_remove").clicked += () =>
                     {
                         SetAppScriptConfig.Remove(index);

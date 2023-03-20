@@ -72,6 +72,15 @@ namespace AppFrame.Editor
             levels.Add(index);
         }
 
+        public static void SetConfigSceneValue(int index, string value)
+        {
+            config.RootScript[index].SceneName = value;
+        }
+        public static void SetConfigScriptValue(int index, string value)
+        {
+            config.RootScript[index].ScriptName = value;
+        }
+
         public static void ApplyConfig()
         {
             foreach (int id in levels)

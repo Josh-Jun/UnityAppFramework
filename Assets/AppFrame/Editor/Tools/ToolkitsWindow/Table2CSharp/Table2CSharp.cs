@@ -177,7 +177,7 @@ namespace AppFrame.Editor
 
             for (int c = 2; c < data.datas.GetLength(1); c++)
             {
-                stringBuilder.AppendLine($"        [XmlAttribute(\"[{data.datas[2,c]}]\")]");
+                stringBuilder.AppendLine($"        [XmlAttribute(\"{data.datas[2,c]}\")]");
                 stringBuilder.AppendLine($"        public {data.datas[3,c]} {data.datas[2,c]};");
             }
 

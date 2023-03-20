@@ -17,3 +17,7 @@ MonoBehaviour:
     TableMold: 1
   - TableName: TestJson
     TableMold: 0
+  - TableName: UserDataJson
+    TableMold: 0
+  - TableName: UserDataXml
+    TableMold: 1

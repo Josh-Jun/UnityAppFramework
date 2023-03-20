@@ -13,15 +13,15 @@ namespace AppFrame.Data.Xml
     [System.Serializable]
     public class UserData
     {
-        [XmlAttribute("[UserId]")]
+        [XmlAttribute("UserId")]
         public int UserId;
-        [XmlAttribute("[PhoneNumber]")]
+        [XmlAttribute("PhoneNumber")]
         public long PhoneNumber;
-        [XmlAttribute("[NickName]")]
+        [XmlAttribute("NickName")]
         public string NickName;
-        [XmlAttribute("[Sex]")]
+        [XmlAttribute("Sex")]
         public int Sex;
-        [XmlAttribute("[Age]")]
+        [XmlAttribute("Age")]
         public int Age;
     }
 }

@@ -42,6 +42,15 @@ namespace AppFrame.Editor
                 ToolkitsWindow.ShowHelpBox("不能删除最后一个Table");
             }
         }
+
+        public static void SetConfigNameValue(int index, string value)
+        {
+            config.AppTable[index].TableName = value;
+        }
+        public static void SetConfigMoldValue(int index, TableMold value)
+        {
+            config.AppTable[index].TableMold = value;
+        }
         
         public static void ApplyConfig()
         {
