@@ -23,19 +23,22 @@ namespace AppFrame.Manager
 
         public void InitConfig()
         {
-            appTableConfig = AssetsManager.Instance.LoadAsset<AppTableConfig>(AssetsPathConfig.AppTableConfig);
-            for (int i = 0; i < appTableConfig.AppTable.Count; i++)
+            if (appTableConfig == null)
             {
-                var path = $"Table/{appTableConfig.AppTable[i].TableMold}/{appTableConfig.AppTable[i].TableName}";
-                var textAsset = AssetsManager.Instance.LoadAsset<TextAsset>(path);
-                Table table = new Table(textAsset.text, textAsset.bytes, path, appTableConfig.AppTable[i].TableMold);
-                if (m_TablePairs.ContainsKey(appTableConfig.AppTable[i].TableName))
+                appTableConfig = AssetsManager.Instance.LoadAsset<AppTableConfig>(AssetsPathConfig.AppTableConfig);
+                for (int i = 0; i < appTableConfig.AppTable.Count; i++)
                 {
-                    m_TablePairs[appTableConfig.AppTable[i].TableName] = table;
-                }
-                else
-                {
-                    m_TablePairs.Add(appTableConfig.AppTable[i].TableName, table);
+                    var path = $"Table/{appTableConfig.AppTable[i].TableMold}/{appTableConfig.AppTable[i].TableName}";
+                    var textAsset = AssetsManager.Instance.LoadAsset<TextAsset>(path);
+                    Table table = new Table(textAsset.text, textAsset.bytes, path, appTableConfig.AppTable[i].TableMold);
+                    if (m_TablePairs.ContainsKey(appTableConfig.AppTable[i].TableName))
+                    {
+                        m_TablePairs[appTableConfig.AppTable[i].TableName] = table;
+                    }
+                    else
+                    {
+                        m_TablePairs.Add(appTableConfig.AppTable[i].TableName, table);
+                    }
                 }
             }
         }

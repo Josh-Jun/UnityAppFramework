@@ -11,5 +11,10 @@ namespace AppFrame.Manager
         {
             base.OnSingletonMonoInit();
         }
+
+        public void Init()
+        {
+            
+        }
     }
 }

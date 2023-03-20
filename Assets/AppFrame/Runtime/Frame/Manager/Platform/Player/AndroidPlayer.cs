@@ -25,6 +25,7 @@ namespace AppFrame.Manager
         } 
         public AndroidPlayer()
         {
+            PlatformMsgReceiver.Instance.Init();
             JavaObject(AppToolsPackage).CallStatic("init", MainJavaObject);
         }
         public override int GetNetSignal()

@@ -19,6 +19,12 @@ namespace AppFrame.Manager
         public override bool IsEditor { get; } = false;
         public override string Name { get; } = "iOS";
         public override string PlatformName { get; } = "ios";
+
+        public IPhonePlayer()
+        {
+            PlatformMsgReceiver.Instance.Init();
+        }
+        
         public override int GetNetSignal()
         {
             return 0;
