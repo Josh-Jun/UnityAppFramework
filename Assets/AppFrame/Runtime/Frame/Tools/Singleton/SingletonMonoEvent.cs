@@ -16,9 +16,8 @@ namespace AppFrame.Tools
                     Transform parent = App.App.app.transform.Find(ParentName);
                     if (parent == null)
                     {
-                        var p = new GameObject(ParentName);
-                        p.transform.SetParent(App.App.app.transform);
-                        parent = p.transform;
+                        parent = new GameObject(ParentName).transform;
+                        parent.SetParent(App.App.app.transform);
                     }
                     if (_Instance == null)
                     {
