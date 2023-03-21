@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-03-21T07:42:12.954Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.44" etag="o_gkvLYxXdDUY4WGY_V9" version="21.0.6" type="github" pages="4">
+<mxfile host="app.diagrams.net" modified="2023-03-21T07:43:19.957Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.44" etag="8sCuiZEGER6qow_MsZBW" version="21.0.6" type="github" pages="4">
   <diagram id="X6ODc-D_6eTIH8ym_X2F" name="框架计划">
     <mxGraphModel dx="1505" dy="829" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="1000" math="0" shadow="0">
       <root>
@@ -229,7 +229,7 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="MU7b80rWOQ6qaikqzLEz-1" value="View" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="MU7b80rWOQ6qaikqzLEz-1" value="UIManager" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="200" y="80" width="120" height="40" as="geometry" />
         </mxCell>
         <mxCell id="MU7b80rWOQ6qaikqzLEz-2" value="开关View" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
