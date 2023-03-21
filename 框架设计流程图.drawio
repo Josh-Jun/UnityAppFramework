@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-03-21T06:40:18.202Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.44" etag="pT15XvpBP1_6dNKkLeeW" version="21.0.6" type="github" pages="4">
+<mxfile host="app.diagrams.net" modified="2023-03-21T07:42:12.954Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.44" etag="o_gkvLYxXdDUY4WGY_V9" version="21.0.6" type="github" pages="4">
   <diagram id="X6ODc-D_6eTIH8ym_X2F" name="框架计划">
     <mxGraphModel dx="1505" dy="829" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="1000" math="0" shadow="0">
       <root>
@@ -13,7 +13,7 @@
         <mxCell id="ednI4CLaODag-LMgTIQw-1" value="编辑器工具UIToolKit重写" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
           <mxGeometry x="240" y="120" width="160" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="ednI4CLaODag-LMgTIQw-2" value="Excel转json和xml工具链" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="ednI4CLaODag-LMgTIQw-2" value="Excel转json和xml工具链" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
           <mxGeometry x="440" y="120" width="160" height="40" as="geometry" />
         </mxCell>
         <mxCell id="BZIp2j6KZihF2YA4_gre-1" value="Wiki重写" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
@@ -261,6 +261,21 @@
         </mxCell>
         <mxCell id="MU7b80rWOQ6qaikqzLEz-11" value="获取View" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="200" y="400" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="MU7b80rWOQ6qaikqzLEz-12" value="是否选中UI" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="480" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="MU7b80rWOQ6qaikqzLEz-13" value="UI坐标转换" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="560" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="MU7b80rWOQ6qaikqzLEz-14" value="位移" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="240" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="MU7b80rWOQ6qaikqzLEz-15" value="缩放" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="320" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="MU7b80rWOQ6qaikqzLEz-16" value="旋转" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="400" width="120" height="40" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
