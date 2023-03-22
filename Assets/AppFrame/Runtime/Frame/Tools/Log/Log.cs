@@ -7,7 +7,7 @@ using UnityEngine;
 public class Log
 {
     public static bool Enabled = true;
-    
+
     private const string Info = "<color=#ffffff>[Info] </color>";
     private const string Warning = "<color=#ffff00>[Warning] </color>";
     private const string Error = "<color=#ff0000>[Error] </color>";
@@ -26,34 +26,37 @@ public class Log
         Debug.Log(cacheStringBuilder.ToString());
     }
 
-    public static void I<T>(string message, ValueTuple<string, T> args1)
+    public static void I<T>(string msg, ValueTuple<string, T> args1)
     {
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Info);
+        cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
         cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args1.Item1, args1.Item2);
         Debug.Log(cacheStringBuilder.ToString());
     }
 
-    public static void I<T1, T2>(string message, ValueTuple<string, T1> args1,
+    public static void I<T1, T2>(string msg, ValueTuple<string, T1> args1,
         ValueTuple<string, T2> args2)
     {
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Info);
+        cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args2.Item1, args2.Item2);
         Debug.Log(cacheStringBuilder.ToString());
     }
 
-    public static void I<T1, T2, T3>(string message, ValueTuple<string, T1> args1,
+    public static void I<T1, T2, T3>(string msg, ValueTuple<string, T1> args1,
         ValueTuple<string, T2> args2, ValueTuple<string, T3> args3)
     {
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Info);
+        cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
@@ -61,12 +64,13 @@ public class Log
         Debug.Log(cacheStringBuilder.ToString());
     }
 
-    public static void I<T1, T2, T3, T4>(string message, ValueTuple<string, T1> args1,
+    public static void I<T1, T2, T3, T4>(string msg, ValueTuple<string, T1> args1,
         ValueTuple<string, T2> args2, ValueTuple<string, T3> args3, ValueTuple<string, T4> args4)
     {
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Info);
+        cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
@@ -75,13 +79,14 @@ public class Log
         Debug.Log(cacheStringBuilder.ToString());
     }
 
-    public static void I<T1, T2, T3, T4, T5>(string message, ValueTuple<string, T1> args1,
+    public static void I<T1, T2, T3, T4, T5>(string msg, ValueTuple<string, T1> args1,
         ValueTuple<string, T2> args2, ValueTuple<string, T3> args3, ValueTuple<string, T4> args4,
         ValueTuple<string, T5> args5)
     {
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Info);
+        cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
@@ -91,13 +96,14 @@ public class Log
         Debug.Log(cacheStringBuilder.ToString());
     }
 
-    public static void I<T1, T2, T3, T4, T5, T6>(string message, ValueTuple<string, T1> args1,
+    public static void I<T1, T2, T3, T4, T5, T6>(string msg, ValueTuple<string, T1> args1,
         ValueTuple<string, T2> args2, ValueTuple<string, T3> args3, ValueTuple<string, T4> args4,
         ValueTuple<string, T5> args5, ValueTuple<string, T6> args6)
     {
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Info);
+        cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
@@ -108,13 +114,14 @@ public class Log
         Debug.Log(cacheStringBuilder.ToString());
     }
 
-    public static void I<T1, T2, T3, T4, T5, T6, T7>(string message, ValueTuple<string, T1> args1,
+    public static void I<T1, T2, T3, T4, T5, T6, T7>(string msg, ValueTuple<string, T1> args1,
         ValueTuple<string, T2> args2, ValueTuple<string, T3> args3, ValueTuple<string, T4> args4,
         ValueTuple<string, T5> args5, ValueTuple<string, T6> args6, ValueTuple<string, T7> args7)
     {
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Info);
+        cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
@@ -126,7 +133,7 @@ public class Log
         Debug.Log(cacheStringBuilder.ToString());
     }
 
-    public static void I<T1, T2, T3, T4, T5, T6, T7, T8>(string message, ValueTuple<string, T1> args1,
+    public static void I<T1, T2, T3, T4, T5, T6, T7, T8>(string msg, ValueTuple<string, T1> args1,
         ValueTuple<string, T2> args2, ValueTuple<string, T3> args3, ValueTuple<string, T4> args4,
         ValueTuple<string, T5> args5, ValueTuple<string, T6> args6, ValueTuple<string, T7> args7,
         ValueTuple<string, T8> args8)
@@ -134,6 +141,7 @@ public class Log
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Info);
+        cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
@@ -147,7 +155,7 @@ public class Log
     }
 
     #endregion
-    
+
     #region Warning
 
     public static void W(object obj)
@@ -160,34 +168,37 @@ public class Log
         Debug.LogWarning(cacheStringBuilder.ToString());
     }
 
-    public static void W<T>(string message, ValueTuple<string, T> args1)
+    public static void W<T>(string msg, ValueTuple<string, T> args1)
     {
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Warning);
+        cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
         cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args1.Item1, args1.Item2);
         Debug.LogWarning(cacheStringBuilder.ToString());
     }
 
-    public static void W<T1, T2>(string message, ValueTuple<string, T1> args1,
+    public static void W<T1, T2>(string msg, ValueTuple<string, T1> args1,
         ValueTuple<string, T2> args2)
     {
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Warning);
+        cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args2.Item1, args2.Item2);
         Debug.LogWarning(cacheStringBuilder.ToString());
     }
 
-    public static void W<T1, T2, T3>(string message, ValueTuple<string, T1> args1,
+    public static void W<T1, T2, T3>(string msg, ValueTuple<string, T1> args1,
         ValueTuple<string, T2> args2, ValueTuple<string, T3> args3)
     {
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Warning);
+        cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
@@ -195,12 +206,13 @@ public class Log
         Debug.LogWarning(cacheStringBuilder.ToString());
     }
 
-    public static void W<T1, T2, T3, T4>(string message, ValueTuple<string, T1> args1,
+    public static void W<T1, T2, T3, T4>(string msg, ValueTuple<string, T1> args1,
         ValueTuple<string, T2> args2, ValueTuple<string, T3> args3, ValueTuple<string, T4> args4)
     {
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Warning);
+        cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
@@ -209,13 +221,14 @@ public class Log
         Debug.LogWarning(cacheStringBuilder.ToString());
     }
 
-    public static void W<T1, T2, T3, T4, T5>(string message, ValueTuple<string, T1> args1,
+    public static void W<T1, T2, T3, T4, T5>(string msg, ValueTuple<string, T1> args1,
         ValueTuple<string, T2> args2, ValueTuple<string, T3> args3, ValueTuple<string, T4> args4,
         ValueTuple<string, T5> args5)
     {
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Warning);
+        cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
@@ -225,13 +238,14 @@ public class Log
         Debug.LogWarning(cacheStringBuilder.ToString());
     }
 
-    public static void W<T1, T2, T3, T4, T5, T6>(string message, ValueTuple<string, T1> args1,
+    public static void W<T1, T2, T3, T4, T5, T6>(string msg, ValueTuple<string, T1> args1,
         ValueTuple<string, T2> args2, ValueTuple<string, T3> args3, ValueTuple<string, T4> args4,
         ValueTuple<string, T5> args5, ValueTuple<string, T6> args6)
     {
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Warning);
+        cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
@@ -242,13 +256,14 @@ public class Log
         Debug.LogWarning(cacheStringBuilder.ToString());
     }
 
-    public static void W<T1, T2, T3, T4, T5, T6, T7>(string message, ValueTuple<string, T1> args1,
+    public static void W<T1, T2, T3, T4, T5, T6, T7>(string msg, ValueTuple<string, T1> args1,
         ValueTuple<string, T2> args2, ValueTuple<string, T3> args3, ValueTuple<string, T4> args4,
         ValueTuple<string, T5> args5, ValueTuple<string, T6> args6, ValueTuple<string, T7> args7)
     {
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Warning);
+        cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
@@ -260,7 +275,7 @@ public class Log
         Debug.LogWarning(cacheStringBuilder.ToString());
     }
 
-    public static void W<T1, T2, T3, T4, T5, T6, T7, T8>(string message, ValueTuple<string, T1> args1,
+    public static void W<T1, T2, T3, T4, T5, T6, T7, T8>(string msg, ValueTuple<string, T1> args1,
         ValueTuple<string, T2> args2, ValueTuple<string, T3> args3, ValueTuple<string, T4> args4,
         ValueTuple<string, T5> args5, ValueTuple<string, T6> args6, ValueTuple<string, T7> args7,
         ValueTuple<string, T8> args8)
@@ -268,6 +283,7 @@ public class Log
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Warning);
+        cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
@@ -281,7 +297,7 @@ public class Log
     }
 
     #endregion
-    
+
     #region Error
 
     public static void E(object obj)
@@ -294,34 +310,37 @@ public class Log
         Debug.LogError(cacheStringBuilder.ToString());
     }
 
-    public static void E<T>(string message, ValueTuple<string, T> args1)
+    public static void E<T>(string msg, ValueTuple<string, T> args1)
     {
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Error);
+        cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
         cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args1.Item1, args1.Item2);
         Debug.LogError(cacheStringBuilder.ToString());
     }
 
-    public static void E<T1, T2>(string message, ValueTuple<string, T1> args1,
+    public static void E<T1, T2>(string msg, ValueTuple<string, T1> args1,
         ValueTuple<string, T2> args2)
     {
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Error);
+        cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args2.Item1, args2.Item2);
         Debug.LogError(cacheStringBuilder.ToString());
     }
 
-    public static void E<T1, T2, T3>(string message, ValueTuple<string, T1> args1,
+    public static void E<T1, T2, T3>(string msg, ValueTuple<string, T1> args1,
         ValueTuple<string, T2> args2, ValueTuple<string, T3> args3)
     {
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Error);
+        cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
@@ -329,12 +348,13 @@ public class Log
         Debug.LogError(cacheStringBuilder.ToString());
     }
 
-    public static void E<T1, T2, T3, T4>(string message, ValueTuple<string, T1> args1,
+    public static void E<T1, T2, T3, T4>(string msg, ValueTuple<string, T1> args1,
         ValueTuple<string, T2> args2, ValueTuple<string, T3> args3, ValueTuple<string, T4> args4)
     {
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Error);
+        cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
@@ -343,13 +363,14 @@ public class Log
         Debug.LogError(cacheStringBuilder.ToString());
     }
 
-    public static void E<T1, T2, T3, T4, T5>(string message, ValueTuple<string, T1> args1,
+    public static void E<T1, T2, T3, T4, T5>(string msg, ValueTuple<string, T1> args1,
         ValueTuple<string, T2> args2, ValueTuple<string, T3> args3, ValueTuple<string, T4> args4,
         ValueTuple<string, T5> args5)
     {
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Error);
+        cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
@@ -359,13 +380,14 @@ public class Log
         Debug.LogError(cacheStringBuilder.ToString());
     }
 
-    public static void E<T1, T2, T3, T4, T5, T6>(string message, ValueTuple<string, T1> args1,
+    public static void E<T1, T2, T3, T4, T5, T6>(string msg, ValueTuple<string, T1> args1,
         ValueTuple<string, T2> args2, ValueTuple<string, T3> args3, ValueTuple<string, T4> args4,
         ValueTuple<string, T5> args5, ValueTuple<string, T6> args6)
     {
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Error);
+        cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
@@ -376,13 +398,14 @@ public class Log
         Debug.LogError(cacheStringBuilder.ToString());
     }
 
-    public static void E<T1, T2, T3, T4, T5, T6, T7>(string message, ValueTuple<string, T1> args1,
+    public static void E<T1, T2, T3, T4, T5, T6, T7>(string msg, ValueTuple<string, T1> args1,
         ValueTuple<string, T2> args2, ValueTuple<string, T3> args3, ValueTuple<string, T4> args4,
         ValueTuple<string, T5> args5, ValueTuple<string, T6> args6, ValueTuple<string, T7> args7)
     {
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Error);
+        cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
@@ -394,7 +417,7 @@ public class Log
         Debug.LogError(cacheStringBuilder.ToString());
     }
 
-    public static void E<T1, T2, T3, T4, T5, T6, T7, T8>(string message, ValueTuple<string, T1> args1,
+    public static void E<T1, T2, T3, T4, T5, T6, T7, T8>(string msg, ValueTuple<string, T1> args1,
         ValueTuple<string, T2> args2, ValueTuple<string, T3> args3, ValueTuple<string, T4> args4,
         ValueTuple<string, T5> args5, ValueTuple<string, T6> args6, ValueTuple<string, T7> args7,
         ValueTuple<string, T8> args8)
@@ -402,6 +425,7 @@ public class Log
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Error);
+        cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
