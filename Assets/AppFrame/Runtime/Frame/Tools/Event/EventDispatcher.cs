@@ -54,7 +54,7 @@ namespace AppFrame.Tools
             var isTrigger = m_eventController.DispatchEvent(eventType);
             if (!isTrigger)
             {
-                Debug.Log($"{eventType}事件未注册");
+                Log.I($"{eventType}事件未注册");
             }
         }
 
@@ -63,7 +63,7 @@ namespace AppFrame.Tools
             var isTrigger = m_eventController.DispatchEvent<T>(eventType, arg);
             if (!isTrigger)
             {
-                Debug.Log($"{eventType}事件未注册");
+                Log.I($"{eventType}事件未注册");
             }
         }
 
@@ -72,7 +72,7 @@ namespace AppFrame.Tools
             var isTrigger = m_eventController.DispatchEvent<T0, T1>(eventType, args0, arg1);
             if (!isTrigger)
             {
-                Debug.Log($"{eventType}事件未注册");
+                Log.I($"{eventType}事件未注册");
             }
         }
 
@@ -81,7 +81,7 @@ namespace AppFrame.Tools
             var isTrigger = m_eventController.DispatchEvent<T0, T1, T2>(eventType, args0, arg1, arg2);
             if (!isTrigger)
             {
-                Debug.Log($"{eventType}事件未注册");
+                Log.I($"{eventType}事件未注册");
             }
         }
 
@@ -90,7 +90,7 @@ namespace AppFrame.Tools
             var isTrigger = m_eventController.DispatchEvent<T0, T1, T2, T3>(eventType, args0, arg1, arg2, arg3);
             if (!isTrigger)
             {
-                Debug.Log($"{eventType}事件未注册");
+                Log.I($"{eventType}事件未注册");
             }
         }
 

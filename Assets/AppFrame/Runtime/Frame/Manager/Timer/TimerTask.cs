@@ -132,7 +132,7 @@ namespace AppFrame.Tools
                     }
                     catch (Exception e)
                     {
-                        Debug.Log(e.ToString());
+                        Log.E(e.ToString());
                     }
 
                     if (timeTask.count == 1)
@@ -325,7 +325,7 @@ namespace AppFrame.Tools
                     }
                     catch (Exception e)
                     {
-                        Debug.Log(e.ToString());
+                        Log.E(e.ToString());
                     }
 
                     if (frameTask.count == 1)

@@ -30,8 +30,8 @@ namespace App
         {
             AppInfo.AppConfig = Resources.Load<AppConfig>("AppFolder/Assets/Config/AppConfig");
             
-            //Debug.Log开关
-            Debug.unityLogger.logEnabled = AppInfo.AppConfig.IsDebug;
+            //Log开关
+            Log.Enabled = AppInfo.AppConfig.IsDebug;
             //禁止程序休眠
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
             //设置程序帧率
@@ -47,8 +47,8 @@ namespace App
         private static void OutputAppInfo()
         {
             string info_server = AppInfo.AppConfig.IsTestServer ? "测试环境" : "生产环境";
-            Debug.Log("配置信息:");
-            Debug.Log($"当前服务器:{info_server}");
+            Log.I("配置信息:");
+            Log.I($"当前服务器:{info_server}");
         }
 
         public static void StartApp()

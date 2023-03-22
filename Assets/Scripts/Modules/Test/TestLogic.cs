@@ -44,7 +44,7 @@ namespace Modules.Test
             // mobile = new RenderTexture(Screen.width, Screen.height, 32);
             // window.SetMobileCamera(mobile);
             view.PlayGif();
-            Debug.Log(TableManager.Instance.GetTable<UserDataJson>("UserDataJson").UserData[0].NickName);
+            Log.I(TableManager.Instance.GetTable<UserDataJson>("UserDataJson").UserData[0].NickName);
             RunTest();
         }
 
@@ -54,7 +54,7 @@ namespace Modules.Test
 
         public void RunTest()
         {
-            //LogText();
+            // LogText();
             // var excelPackageDatas = ExcelTools.ReadExcel($"F:/WorkSpace/UnityFramework/MyUnityFramework/Data/excel/test.xlsx");
             // for (int j = 0; j < excelPackageDatas.Count; j++)
             // {
@@ -68,16 +68,17 @@ namespace Modules.Test
             //         }
             //     }
             // }
+            Log.I("123", ("Test", this));
         }
 
         public async void LogText()
         {
-            Debug.Log("-------------------1-------------------");
+            Log.I("-------------------1-------------------");
             await Task.Delay(TimeSpan.FromSeconds(3f));
-            Debug.Log("-------------------2-------------------");
+            Log.I("-------------------2-------------------");
             TimeUpdateManager.Instance.StartTimer((time) =>
             {
-                Debug.Log(time);
+                Log.I(time);
             });
         }
         public void Test()

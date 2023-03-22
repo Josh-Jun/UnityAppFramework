@@ -18,7 +18,7 @@ namespace AppFrame.Tools
             }
             else
             {
-                Debug.Log($"已具有相同名称的实例:{name}");
+                Log.I($"已具有相同名称的实例:{name}");
             }
         }
 
@@ -44,7 +44,7 @@ namespace AppFrame.Tools
             }
             else
             {
-                Debug.Log($"实例不存在:{name}");
+                Log.E($"实例不存在:{name}");
             }
         }
 
@@ -58,7 +58,7 @@ namespace AppFrame.Tools
             }
             else
             {
-                Debug.Log($"实例不存在:{name}");
+                Log.E($"实例不存在:{name}");
             }
         }
     }

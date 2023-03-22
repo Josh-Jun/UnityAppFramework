@@ -91,7 +91,7 @@ namespace Modules.Update
                     StartUpdate((UpdateMold mold, string des) =>
                     {
                         UpdateMold = mold;
-                        Debug.Log($"更新结果:{mold}");
+                        Log.I($"更新结果:{mold}");
                         switch (mold)
                         {
                             case UpdateMold.Hotfix:
@@ -513,7 +513,7 @@ namespace Modules.Update
             if (Application.internetReachability == NetworkReachability.NotReachable)
             {
                 //提示网络错误，检测网络链接是否正常
-                Debug.Log("网络异常");
+                Log.E("网络异常");
             }
             else
             {
@@ -521,7 +521,7 @@ namespace Modules.Update
                 {
                     serverABConfig = JsonUtility.FromJson<AssetBundleConfig>(data);
                     SetABModulePairs(serverABConfig);
-                    Debug.Log($"大版本比较 v{Application.version}/v{serverABConfig.GameVersion}");
+                    Log.I($"大版本比较 v{Application.version}/v{serverABConfig.GameVersion}");
                     if (!CheckVersion(serverABConfig.GameVersion))
                     {
                         serverFolders = GetFolders(serverABConfig);
@@ -570,7 +570,7 @@ namespace Modules.Update
                         //     FileManager.DeleteFolderAllFile(LocalPath);
                         // }
                         //大版本更新,下载新程序覆盖安装
-                        Debug.Log("大版本更新,下载新程序覆盖安装");
+                        Log.I("大版本更新,下载新程序覆盖安装");
                         cb?.Invoke(UpdateMold.App);
                     }
                 });
@@ -588,7 +588,7 @@ namespace Modules.Update
                 {
                     int num_local = int.Parse(local[i]);
                     int num_server = int.Parse(server[i]);
-                    Debug.Log($"{num_local}-{num_server}");
+                    Log.I($"{num_local}-{num_server}");
                     if (num_server > num_local)
                     {
                         isUpdateApp = true;

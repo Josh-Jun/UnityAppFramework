@@ -25,7 +25,7 @@ namespace AppFrame.Manager
         }
         public override void SavePhoto(string imagePath)
         {
-            Debug.Log("SavePhoto");
+            Log.I("SavePhoto");
         }
         public override void InstallApp(string appPath)
         {
@@ -36,7 +36,7 @@ namespace AppFrame.Manager
 #if UNITY_EDITOR
             EditorApplication.isPlaying = false;
 #endif
-            Debug.Log("Quit Editor");
+            Log.I("Quit Editor");
         }
         public override string GetAppData(string key)
         {

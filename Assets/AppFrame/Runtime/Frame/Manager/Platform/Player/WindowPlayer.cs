@@ -23,7 +23,7 @@ namespace AppFrame.Manager
         }
         public override void SavePhoto(string imagePath)
         {
-            Debug.Log("SavePhoto");
+            Log.I("SavePhoto");
         }
         public override void InstallApp(string appPath)
         {
@@ -31,7 +31,7 @@ namespace AppFrame.Manager
         }
         public override void QuitUnityPlayer()
         {
-            Debug.Log("Quit Window");
+            Log.I("Quit Window");
             Application.Quit();
         }
         public override string GetAppData(string key)

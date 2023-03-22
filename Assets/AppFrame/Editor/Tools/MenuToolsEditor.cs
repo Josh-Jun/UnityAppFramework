@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using AppFrame.Tools;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -11,6 +13,8 @@ namespace AppFrame.Editor
 {
     public class MenuToolsEditor : UnityEditor.AssetModificationProcessor
     {
+        #region 脚本模板导入修改命名空间
+
         private static string[] temps = { "Logic", "View" };
 
         /// <summary>  
@@ -38,21 +42,101 @@ namespace AppFrame.Editor
             }
         }
 
+        #endregion
+
+        #region Debug封装重定位
+
+        private static bool m_hasForceMono = false;
+        private static string LogCS = "Log.cs";
+        // 处理asset打开的callback函数
+        [UnityEditor.Callbacks.OnOpenAssetAttribute(-1)]
+        static bool OnOpenAsset(int instance, int line)
+        {
+            if (m_hasForceMono) return false;
+
+            // 自定义函数，用来获取log中的stacktrace，定义在后面。
+            string stack_trace = GetStackTrace();
+            // 通过stacktrace来定位是否是我们自定义的log，我的log中有特殊文字[SDebug]，很好识别
+            if (!string.IsNullOrEmpty(stack_trace))
+            {
+                // 正则匹配at xxx，在第几行
+                Match matches = Regex.Match(stack_trace, @"\(at (.+)\)", RegexOptions.IgnoreCase);
+                string pathline = "";
+                while (matches.Success)
+                {
+                    pathline = matches.Groups[1].Value;
+
+                    // 找到不是我们自定义log文件的那行，重新整理文件路径，手动打开
+                    if (!pathline.Contains("Log.cs") && !string.IsNullOrEmpty(pathline))
+                    {
+                        int split_index = pathline.LastIndexOf(":");
+                        string path = pathline.Substring(0, split_index);
+                        line = Convert.ToInt32(pathline.Substring(split_index + 1));
+                        m_hasForceMono = true;
+                        //方式一
+                        AssetDatabase.OpenAsset(AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(path), line);
+                        m_hasForceMono = false;
+                        //方式二
+                        //string fullpath = Application.dataPath.Substring(0, Application.dataPath.LastIndexOf("Assets"));
+                        // fullpath = fullpath + path;
+                        //  UnityEditorInternal.InternalEditorUtility.OpenFileAtLineExternal(fullpath.Replace('/', '\\'), line);
+                        return true;
+                    }
+
+                    matches = matches.NextMatch();
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+
+        static string GetStackTrace()
+        {
+            // 找到类UnityEditor.ConsoleWindow
+            var type_console_window = typeof(EditorWindow).Assembly.GetType("UnityEditor.ConsoleWindow");
+            // 找到UnityEditor.ConsoleWindow中的成员ms_ConsoleWindow
+            var filedInfo =
+                type_console_window.GetField("ms_ConsoleWindow", BindingFlags.Static | BindingFlags.NonPublic);
+            // 获取ms_ConsoleWindow的值
+            var ConsoleWindowInstance = filedInfo.GetValue(null);
+            if (ConsoleWindowInstance != null)
+            {
+                if ((object)EditorWindow.focusedWindow == ConsoleWindowInstance)
+                {
+                    // 找到类UnityEditor.ConsoleWindow中的成员m_ActiveText
+                    filedInfo = type_console_window.GetField("m_ActiveText",
+                        BindingFlags.Instance | BindingFlags.NonPublic);
+                    string activeText = filedInfo.GetValue(ConsoleWindowInstance).ToString();
+                    return activeText;
+                }
+            }
+
+            return null;
+        }
+
+        #endregion
+        
         [MenuItem("Tools/OpenFolder/DataPath", false, 0)]
         public static void OpenDataFolder()
         {
             System.Diagnostics.Process.Start("explorer.exe", $"file://{Application.dataPath}");
         }
+
         [MenuItem("Tools/OpenFolder/PersistentDataPath", false, 0)]
         public static void OpenPersistentDataFolder()
         {
             System.Diagnostics.Process.Start("explorer.exe", $"file://{Application.persistentDataPath}");
         }
+
         [MenuItem("Tools/OpenFolder/StreamingAssetsPath", false, 0)]
         public static void OpenStreamingAssetsFolder()
         {
             System.Diagnostics.Process.Start("explorer.exe", $"file://{Application.streamingAssetsPath}");
         }
+
         [MenuItem("Tools/OpenFolder/TemporaryCachePath", false, 0)]
         public static void OpenTemporaryCacheFolder()
         {
@@ -99,7 +183,7 @@ namespace AppFrame.Editor
                     value = value.Replace("Mobile", "{0}").Replace("Pico", "{0}");
                 }
 
-                if(!value.Contains("/")) continue;
+                if (!value.Contains("/")) continue;
                 sb.AppendLine($"        public const string {name} = \"{value}\";");
             }
 

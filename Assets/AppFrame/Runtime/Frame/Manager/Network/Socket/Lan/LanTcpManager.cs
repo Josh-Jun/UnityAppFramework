@@ -41,19 +41,19 @@ namespace AppFrame.Network.Lan.Tcp
                 {
                     case 0: //普通
                         msg = "Log:" + msg;
-                        Debug.Log(msg);
+                        Log.I(msg);
                         break;
                     case 1: //警告
-                        msg = "Warn:" + msg;
-                        Debug.LogWarning(msg);
+                        msg = "Warning:" + msg;
+                        Log.W(msg);
                         break;
                     case 2: //错误
                         msg = "Error:" + msg;
-                        Debug.LogError(msg);
+                        Log.E(msg);
                         break;
                     case 3: //信息
                         msg = "Info:" + msg;
-                        Debug.Log(msg);
+                        Log.I(msg);
                         break;
                 }
             });
@@ -82,19 +82,19 @@ namespace AppFrame.Network.Lan.Tcp
                 {
                     case 0: //普通
                         msg = "Log:" + msg;
-                        Debug.Log(msg);
+                        Log.I(msg);
                         break;
                     case 1: //警告
-                        msg = "Warn:" + msg;
-                        Debug.LogWarning(msg);
+                        msg = "Warning:" + msg;
+                        Log.W(msg);
                         break;
                     case 2: //错误
                         msg = "Error:" + msg;
-                        Debug.LogError(msg);
+                        Log.E(msg);
                         break;
                     case 3: //信息
                         msg = "Info:" + msg;
-                        Debug.Log(msg);
+                        Log.I(msg);
                         break;
                 }
             });

@@ -44,12 +44,12 @@ namespace AppFrame.Network.Wan.Udp
 				ep = iep;
 				thread = new Thread(ReceiveMsg);
 				thread.Start();
-				Debug.Log("Udp服务端开启成功!");
+				Log.I("Udp服务端开启成功!");
 				cb?.Invoke(true);
 			}
 			catch (Exception ex)
 			{
-				Debug.LogError("Udp服务端开启失败! " + ex.Message);
+				Log.E("Udp服务端开启失败! " + ex.Message);
 				cb?.Invoke(false);
 			}
 		}
@@ -67,12 +67,12 @@ namespace AppFrame.Network.Wan.Udp
 				ep = iep;
 				thread = new Thread(ReceiveMsg);
 				thread.Start();
-				Debug.Log("Udp客户端开启成功!");
+				Log.I("Udp客户端开启成功!");
 				cb?.Invoke(true);
 			}
 			catch (Exception ex)
 			{
-				Debug.LogError("Udp客户端开启失败! " + ex.Message);
+				Log.E("Udp客户端开启失败! " + ex.Message);
 				cb?.Invoke(false);
 			}
 		}
@@ -144,7 +144,7 @@ namespace AppFrame.Network.Wan.Udp
 			}
 
 			OnQuitSocket.Invoke();
-			Debug.Log("UDP已关闭...");
+			Log.I("UDP已关闭...");
 		}
 	}
 }

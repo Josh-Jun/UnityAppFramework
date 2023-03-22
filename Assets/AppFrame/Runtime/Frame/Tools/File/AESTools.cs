@@ -35,7 +35,7 @@ namespace AppFrame.Tools
                         string headTag = Encoding.UTF8.GetString(headBuff);
                         if (headTag == AESHead)
                         {
-                            Debug.Log(path + "已经加密过了！");
+                            Log.I(path + "已经加密过了！");
                             return;
                         }
 

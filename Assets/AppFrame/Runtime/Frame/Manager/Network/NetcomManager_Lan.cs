@@ -229,7 +229,7 @@ namespace AppFrame.Manager
 
         public void ReceiveMsg(string msg)
         {
-            Debug.Log(msg);
+            Log.I(msg);
             ReceiveUdpMsg?.Invoke(msg);
         }
 
