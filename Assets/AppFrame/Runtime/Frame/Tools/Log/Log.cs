@@ -12,6 +12,9 @@ public class Log
     private const string Warning = "<color=#ffff00>[Warning] </color>";
     private const string Error = "<color=#ff0000>[Error] </color>";
 
+    private const string FormatStr    = " \"{0}\" : \"{1}\" ,";
+    private const string FormatStrEnd = " \"{0}\" : \"{1}\"";
+
     private static StringBuilder cacheStringBuilder = new StringBuilder(1024);
 
     #region Info
@@ -33,7 +36,7 @@ public class Log
         cacheStringBuilder.Append(Info);
         cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args1.Item1, args1.Item2);
+        cacheStringBuilder.AppendFormat(FormatStrEnd, args1.Item1, args1.Item2);
         Debug.Log(cacheStringBuilder.ToString());
     }
 
@@ -45,8 +48,8 @@ public class Log
         cacheStringBuilder.Append(Info);
         cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args2.Item1, args2.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
+        cacheStringBuilder.AppendFormat(FormatStrEnd, args2.Item1, args2.Item2);
         Debug.Log(cacheStringBuilder.ToString());
     }
 
@@ -58,9 +61,9 @@ public class Log
         cacheStringBuilder.Append(Info);
         cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args3.Item1, args3.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
+        cacheStringBuilder.AppendFormat(FormatStrEnd, args3.Item1, args3.Item2);
         Debug.Log(cacheStringBuilder.ToString());
     }
 
@@ -72,10 +75,10 @@ public class Log
         cacheStringBuilder.Append(Info);
         cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args3.Item1, args3.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args4.Item1, args4.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
+        cacheStringBuilder.AppendFormat(FormatStrEnd, args4.Item1, args4.Item2);
         Debug.Log(cacheStringBuilder.ToString());
     }
 
@@ -88,11 +91,11 @@ public class Log
         cacheStringBuilder.Append(Info);
         cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args3.Item1, args3.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args4.Item1, args4.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args5.Item1, args5.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args4.Item1, args4.Item2);
+        cacheStringBuilder.AppendFormat(FormatStrEnd, args5.Item1, args5.Item2);
         Debug.Log(cacheStringBuilder.ToString());
     }
 
@@ -105,12 +108,12 @@ public class Log
         cacheStringBuilder.Append(Info);
         cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args3.Item1, args3.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args4.Item1, args4.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args5.Item1, args5.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args6.Item1, args6.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args4.Item1, args4.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args5.Item1, args5.Item2);
+        cacheStringBuilder.AppendFormat(FormatStrEnd, args6.Item1, args6.Item2);
         Debug.Log(cacheStringBuilder.ToString());
     }
 
@@ -123,13 +126,13 @@ public class Log
         cacheStringBuilder.Append(Info);
         cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args3.Item1, args3.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args4.Item1, args4.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args5.Item1, args5.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args6.Item1, args6.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args7.Item1, args7.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args4.Item1, args4.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args5.Item1, args5.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args6.Item1, args6.Item2);
+        cacheStringBuilder.AppendFormat(FormatStrEnd, args7.Item1, args7.Item2);
         Debug.Log(cacheStringBuilder.ToString());
     }
 
@@ -143,14 +146,14 @@ public class Log
         cacheStringBuilder.Append(Info);
         cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args3.Item1, args3.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args4.Item1, args4.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args5.Item1, args5.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args6.Item1, args6.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args7.Item1, args7.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args8.Item1, args8.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args4.Item1, args4.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args5.Item1, args5.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args6.Item1, args6.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args7.Item1, args7.Item2);
+        cacheStringBuilder.AppendFormat(FormatStrEnd, args8.Item1, args8.Item2);
         Debug.Log(cacheStringBuilder.ToString());
     }
 
@@ -175,7 +178,7 @@ public class Log
         cacheStringBuilder.Append(Warning);
         cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args1.Item1, args1.Item2);
+        cacheStringBuilder.AppendFormat(FormatStrEnd, args1.Item1, args1.Item2);
         Debug.LogWarning(cacheStringBuilder.ToString());
     }
 
@@ -187,8 +190,8 @@ public class Log
         cacheStringBuilder.Append(Warning);
         cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args2.Item1, args2.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
+        cacheStringBuilder.AppendFormat(FormatStrEnd, args2.Item1, args2.Item2);
         Debug.LogWarning(cacheStringBuilder.ToString());
     }
 
@@ -200,9 +203,9 @@ public class Log
         cacheStringBuilder.Append(Warning);
         cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args3.Item1, args3.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
+        cacheStringBuilder.AppendFormat(FormatStrEnd, args3.Item1, args3.Item2);
         Debug.LogWarning(cacheStringBuilder.ToString());
     }
 
@@ -214,10 +217,10 @@ public class Log
         cacheStringBuilder.Append(Warning);
         cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args3.Item1, args3.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args4.Item1, args4.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
+        cacheStringBuilder.AppendFormat(FormatStrEnd, args4.Item1, args4.Item2);
         Debug.LogWarning(cacheStringBuilder.ToString());
     }
 
@@ -230,11 +233,11 @@ public class Log
         cacheStringBuilder.Append(Warning);
         cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args3.Item1, args3.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args4.Item1, args4.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args5.Item1, args5.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args4.Item1, args4.Item2);
+        cacheStringBuilder.AppendFormat(FormatStrEnd, args5.Item1, args5.Item2);
         Debug.LogWarning(cacheStringBuilder.ToString());
     }
 
@@ -247,12 +250,12 @@ public class Log
         cacheStringBuilder.Append(Warning);
         cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args3.Item1, args3.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args4.Item1, args4.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args5.Item1, args5.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args6.Item1, args6.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args4.Item1, args4.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args5.Item1, args5.Item2);
+        cacheStringBuilder.AppendFormat(FormatStrEnd, args6.Item1, args6.Item2);
         Debug.LogWarning(cacheStringBuilder.ToString());
     }
 
@@ -265,13 +268,13 @@ public class Log
         cacheStringBuilder.Append(Warning);
         cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args3.Item1, args3.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args4.Item1, args4.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args5.Item1, args5.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args6.Item1, args6.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args7.Item1, args7.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args4.Item1, args4.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args5.Item1, args5.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args6.Item1, args6.Item2);
+        cacheStringBuilder.AppendFormat(FormatStrEnd, args7.Item1, args7.Item2);
         Debug.LogWarning(cacheStringBuilder.ToString());
     }
 
@@ -285,14 +288,14 @@ public class Log
         cacheStringBuilder.Append(Warning);
         cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args3.Item1, args3.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args4.Item1, args4.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args5.Item1, args5.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args6.Item1, args6.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args7.Item1, args7.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args8.Item1, args8.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args4.Item1, args4.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args5.Item1, args5.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args6.Item1, args6.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args7.Item1, args7.Item2);
+        cacheStringBuilder.AppendFormat(FormatStrEnd, args8.Item1, args8.Item2);
         Debug.LogWarning(cacheStringBuilder.ToString());
     }
 
@@ -317,7 +320,7 @@ public class Log
         cacheStringBuilder.Append(Error);
         cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args1.Item1, args1.Item2);
+        cacheStringBuilder.AppendFormat(FormatStrEnd, args1.Item1, args1.Item2);
         Debug.LogError(cacheStringBuilder.ToString());
     }
 
@@ -329,8 +332,8 @@ public class Log
         cacheStringBuilder.Append(Error);
         cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args2.Item1, args2.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
+        cacheStringBuilder.AppendFormat(FormatStrEnd, args2.Item1, args2.Item2);
         Debug.LogError(cacheStringBuilder.ToString());
     }
 
@@ -342,9 +345,9 @@ public class Log
         cacheStringBuilder.Append(Error);
         cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args3.Item1, args3.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
+        cacheStringBuilder.AppendFormat(FormatStrEnd, args3.Item1, args3.Item2);
         Debug.LogError(cacheStringBuilder.ToString());
     }
 
@@ -356,10 +359,10 @@ public class Log
         cacheStringBuilder.Append(Error);
         cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args3.Item1, args3.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args4.Item1, args4.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
+        cacheStringBuilder.AppendFormat(FormatStrEnd, args4.Item1, args4.Item2);
         Debug.LogError(cacheStringBuilder.ToString());
     }
 
@@ -372,11 +375,11 @@ public class Log
         cacheStringBuilder.Append(Error);
         cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args3.Item1, args3.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args4.Item1, args4.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args5.Item1, args5.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args4.Item1, args4.Item2);
+        cacheStringBuilder.AppendFormat(FormatStrEnd, args5.Item1, args5.Item2);
         Debug.LogError(cacheStringBuilder.ToString());
     }
 
@@ -389,12 +392,12 @@ public class Log
         cacheStringBuilder.Append(Error);
         cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args3.Item1, args3.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args4.Item1, args4.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args5.Item1, args5.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args6.Item1, args6.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args4.Item1, args4.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args5.Item1, args5.Item2);
+        cacheStringBuilder.AppendFormat(FormatStrEnd, args6.Item1, args6.Item2);
         Debug.LogError(cacheStringBuilder.ToString());
     }
 
@@ -407,13 +410,13 @@ public class Log
         cacheStringBuilder.Append(Error);
         cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args3.Item1, args3.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args4.Item1, args4.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args5.Item1, args5.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args6.Item1, args6.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args7.Item1, args7.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args4.Item1, args4.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args5.Item1, args5.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args6.Item1, args6.Item2);
+        cacheStringBuilder.AppendFormat(FormatStrEnd, args7.Item1, args7.Item2);
         Debug.LogError(cacheStringBuilder.ToString());
     }
 
@@ -427,14 +430,14 @@ public class Log
         cacheStringBuilder.Append(Error);
         cacheStringBuilder.Append(msg);
         cacheStringBuilder.Append(" => ");
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args1.Item1, args1.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args2.Item1, args2.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args3.Item1, args3.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args4.Item1, args4.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args5.Item1, args5.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args6.Item1, args6.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}' ,", args7.Item1, args7.Item2);
-        cacheStringBuilder.AppendFormat(" '{0}':'{1}'", args8.Item1, args8.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args4.Item1, args4.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args5.Item1, args5.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args6.Item1, args6.Item2);
+        cacheStringBuilder.AppendFormat(FormatStr, args7.Item1, args7.Item2);
+        cacheStringBuilder.AppendFormat(FormatStrEnd, args8.Item1, args8.Item2);
         Debug.LogError(cacheStringBuilder.ToString());
     }
 
