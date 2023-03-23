@@ -69,6 +69,9 @@ namespace Modules.Test
             //     }
             // }
             Log.I("123", ("Test", this));
+            string formula= "20*(30-10)";
+            var result = new System.Data.DataTable().Compute(formula, "");
+            Log.I(result);
         }
 
         public async void LogText()

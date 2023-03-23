@@ -12,6 +12,8 @@ public class Log
     private const string Warning = "<color=#ffff00>[Warning] </color>";
     private const string Error = "<color=#ff0000>[Error] </color>";
 
+    private const string Space = " => ";
+
     private const string FormatStr    = " \"{0}\" : \"{1}\" ,";
     private const string FormatStrEnd = " \"{0}\" : \"{1}\"";
 
@@ -24,7 +26,6 @@ public class Log
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Info);
-        cacheStringBuilder.Append(" => ");
         cacheStringBuilder.Append(obj);
         Debug.Log(cacheStringBuilder.ToString());
     }
@@ -35,7 +36,7 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Info);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(" => ");
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStrEnd, args1.Item1, args1.Item2);
         Debug.Log(cacheStringBuilder.ToString());
     }
@@ -47,7 +48,7 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Info);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(" => ");
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(FormatStrEnd, args2.Item1, args2.Item2);
         Debug.Log(cacheStringBuilder.ToString());
@@ -60,7 +61,7 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Info);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(" => ");
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
         cacheStringBuilder.AppendFormat(FormatStrEnd, args3.Item1, args3.Item2);
@@ -74,7 +75,7 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Info);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(" => ");
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
@@ -90,7 +91,7 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Info);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(" => ");
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
@@ -107,7 +108,7 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Info);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(" => ");
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
@@ -125,7 +126,7 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Info);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(" => ");
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
@@ -145,7 +146,7 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Info);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(" => ");
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
@@ -166,7 +167,6 @@ public class Log
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Warning);
-        cacheStringBuilder.Append(" => ");
         cacheStringBuilder.Append(obj);
         Debug.LogWarning(cacheStringBuilder.ToString());
     }
@@ -177,7 +177,7 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Warning);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(" => ");
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStrEnd, args1.Item1, args1.Item2);
         Debug.LogWarning(cacheStringBuilder.ToString());
     }
@@ -189,7 +189,7 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Warning);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(" => ");
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(FormatStrEnd, args2.Item1, args2.Item2);
         Debug.LogWarning(cacheStringBuilder.ToString());
@@ -202,7 +202,7 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Warning);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(" => ");
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
         cacheStringBuilder.AppendFormat(FormatStrEnd, args3.Item1, args3.Item2);
@@ -216,7 +216,7 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Warning);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(" => ");
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
@@ -232,7 +232,7 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Warning);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(" => ");
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
@@ -249,7 +249,7 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Warning);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(" => ");
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
@@ -267,7 +267,7 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Warning);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(" => ");
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
@@ -287,7 +287,7 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Warning);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(" => ");
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
@@ -308,7 +308,6 @@ public class Log
         if (!Enabled) return;
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Error);
-        cacheStringBuilder.Append(" => ");
         cacheStringBuilder.Append(obj);
         Debug.LogError(cacheStringBuilder.ToString());
     }
@@ -319,7 +318,7 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Error);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(" => ");
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStrEnd, args1.Item1, args1.Item2);
         Debug.LogError(cacheStringBuilder.ToString());
     }
@@ -331,7 +330,7 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Error);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(" => ");
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(FormatStrEnd, args2.Item1, args2.Item2);
         Debug.LogError(cacheStringBuilder.ToString());
@@ -344,7 +343,7 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Error);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(" => ");
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
         cacheStringBuilder.AppendFormat(FormatStrEnd, args3.Item1, args3.Item2);
@@ -358,7 +357,7 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Error);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(" => ");
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
@@ -374,7 +373,7 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Error);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(" => ");
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
@@ -391,7 +390,7 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Error);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(" => ");
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
@@ -409,7 +408,7 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Error);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(" => ");
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
@@ -429,7 +428,7 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Error);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(" => ");
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStr, args1.Item1, args1.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args2.Item1, args2.Item2);
         cacheStringBuilder.AppendFormat(FormatStr, args3.Item1, args3.Item2);
