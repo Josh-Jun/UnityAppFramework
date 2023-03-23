@@ -12,15 +12,15 @@ namespace AppFrame.Tools
     {
         private EventSystem system; //eventsystem组件  场景中只能有一个用来检测UI的鼠标或者触摸事件，也可以检测带有UI的event事件的其他GameObject
         private bool isSelect = false; //是否选中InputField
-        public Direction direction = Direction.vertical; //InputField的排列方向  水平或者垂直
+        public Direction direction = Direction.Vertical; //InputField的排列方向  水平或者垂直
 
         /// <summary>
         /// 自定义的排列方向Enum枚举
         /// </summary>
         public enum Direction
         {
-            vertical = 0,
-            horizontal = 1
+            Vertical = 0,
+            Horizontal = 1
         }
 
         void Start()
@@ -38,7 +38,7 @@ namespace AppFrame.Tools
                 int mark = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)
                     ? 1
                     : -1; //判断是否按下Shift键（按下Shift是反向切换InputField光标）
-                Vector3 dir = direction == Direction.horizontal
+                Vector3 dir = direction == Direction.Horizontal
                     ? Vector3.left * mark
                     : Vector3.up * mark; //根据排列方向确定寻找下一个InputField的方向
                 next = GetNextSelectable(current, dir); //根据当前选中的InputField和向量方向，获取下一个InputField
