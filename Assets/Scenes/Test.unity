@@ -1665,7 +1665,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fontSize: 14
-  fixedWidth: 0
+  fixedWidth: 1
   keepInitWidthSize: 1
 --- !u!114 &2053433343
 MonoBehaviour:

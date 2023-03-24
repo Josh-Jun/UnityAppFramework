@@ -5,7 +5,7 @@ using HybridCLR;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class HybridCLRHotfix : MonoBehaviour
+public class Launcher : MonoBehaviour
 {
     public static List<string> AOTMetaAssemblyNames { get; } = new List<string>()
     {
