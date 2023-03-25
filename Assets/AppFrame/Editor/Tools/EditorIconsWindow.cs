@@ -5,12 +5,12 @@ using UnityEditor;
 using System.Collections.Generic;
 using System.Linq;
 
-public class EditorIcons : EditorWindow
+public class EditorIconsWindow : EditorWindow
 {
-    [MenuItem("Tools/Editor Icons %e", priority = -1001)]
+    [MenuItem("Tools/Editor/Editor Icons", priority = -1001)]
     public static void EditorIconsOpen()
     {
-        var w = CreateWindow<EditorIcons>("Editor Icons");
+        var w = CreateWindow<EditorIconsWindow>("Editor Icons");
         w.ShowUtility();
         w.minSize = new Vector2(320, 450);
     }

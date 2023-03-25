@@ -6,12 +6,12 @@ using DG.Tweening;
 
 namespace AppFrame.Editor
 {
-    public class EasingDemoPreviewWindowEditor : EditorWindow
+    public class DotweenEasingWindow : EditorWindow
     {
-        [MenuItem("Tools/My ToolsWindow/Dotween Easing Demo", priority = -1001)]
+        [MenuItem("Tools/Editor/Dotween Easing", priority = -1001)]
         public static void ShowWindow()
         {
-            GetWindowWithRect<EasingDemoPreviewWindowEditor>(new Rect(0, 0, 400, 480), false, "Dotween Easing Demo");
+            GetWindowWithRect<DotweenEasingWindow>(new Rect(0, 0, 400, 480), false, "Dotween Easing");
         }
 
         const int POINT_COUNT = 30;
