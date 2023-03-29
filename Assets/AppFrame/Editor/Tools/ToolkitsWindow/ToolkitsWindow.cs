@@ -89,6 +89,72 @@ namespace AppFrame.Editor
 
         private void BuildAppFunction()
         {
+            BuildApp.Init();
+            var development_build = root.Q<Toggle>("DevelopmentBuild");
+            var is_test_server = root.Q<Toggle>("IsTestServer");
+            var is_hotfix = root.Q<Toggle>("IsHotfix");
+            var app_frame_rate = root.Q<TextField>("AppFrameRate");
+            var build_mold = root.Q<EnumField>("BuildMold");
+            var export_project = root.Q<Toggle>("ExportProject");
+            var ab_build_pipeline = root.Q<EnumField>("ABBuildPipeline");
+            var output_path = root.Q<TextField>("BuildAppOutputPath");
+            
+            development_build.value = BuildApp.DevelopmentBuild;
+            is_test_server.value = BuildApp.IsTestServer;
+            is_hotfix.value = BuildApp.IsHotfix;
+            app_frame_rate.value = BuildApp.AppFrameRate.ToString();
+            build_mold.Init(BuildApp.ApkTarget);
+            export_project.value = BuildApp.NativeApp;
+            ab_build_pipeline.Init(BuildApp.Pipeline);
+            output_path.value = BuildApp.outputPath;
+            
+            development_build.RegisterCallback<ChangeEvent<bool>>((evt) =>
+            {
+                BuildApp.DevelopmentBuild = evt.newValue;
+            });
+            is_test_server.RegisterCallback<ChangeEvent<bool>>((evt) =>
+            {
+                BuildApp.IsTestServer = evt.newValue;
+            });
+            is_hotfix.RegisterCallback<ChangeEvent<bool>>((evt) =>
+            {
+                BuildApp.IsHotfix = evt.newValue;
+            });
+            app_frame_rate.RegisterCallback<ChangeEvent<string>>((evt) =>
+            {
+                BuildApp.AppFrameRate = int.Parse(evt.newValue);
+            });
+            build_mold.RegisterCallback<ChangeEvent<string>>((evt) =>
+            {
+                var mold = (TargetPackage)System.Enum.Parse(typeof(TargetPackage), evt.newValue);
+                export_project.style.display = 
+                    mold == TargetPackage.Mobile ? DisplayStyle.Flex : DisplayStyle.None;
+                BuildApp.ApkTarget = mold;
+            });
+            export_project.RegisterCallback<ChangeEvent<bool>>((evt) =>
+            {
+                BuildApp.NativeApp = evt.newValue;
+            });
+            ab_build_pipeline.RegisterCallback<ChangeEvent<string>>((evt) =>
+            {
+                var mold = (ABPipeline)System.Enum.Parse(typeof(ABPipeline), evt.newValue);
+                BuildApp.Pipeline = mold;
+            });
+            output_path.RegisterCallback<ChangeEvent<string>>((evt) =>
+            {
+                BuildApp.outputPath = evt.newValue;
+            });
+            root.Q<Button>("BuildAppOutputPathBrowse").clicked += () =>
+            {
+                output_path.value = EditorTool.Browse(true);
+                BuildApp.outputPath = output_path.value;
+            };
+            root.Q<Button>("BuildAppApply").clicked += () => { BuildApp.ApplyConfig(); };
+            root.Q<Button>("BuildApp").clicked += () =>
+            {
+                BuildApp.ApplyConfig();
+                BuildApp.Build();
+            };
         }
 
         private void BuildAssetBundleFunction()
@@ -176,25 +242,6 @@ namespace AppFrame.Editor
             };
         }
 
-        private void RefreshAssetBundleList(ScrollView folder_list, Label label_page)
-        {
-            folder_list.Clear();
-            for (int i = 0; i < BuildAssetBundle.m_DataList.Count; i++)
-            {
-                int index = i;
-                Toggle toggle = new Toggle(BuildAssetBundle.m_DataList[index]);
-                toggle.value = BuildAssetBundle.m_ExportList[index];
-                toggle.RegisterCallback<ChangeEvent<bool>>((ent) =>
-                {
-                    BuildAssetBundle.m_ExportList[index] = ent.newValue;
-                    label_page.text = $"打包 : {BuildAssetBundle.SelectCount()} / {BuildAssetBundle.m_ExportList.Count}";
-                });
-                folder_list.Add(toggle);
-            }
-
-            label_page.text = $"打包 : {BuildAssetBundle.SelectCount()} / {BuildAssetBundle.m_ExportList.Count}";
-        }
-
         private void SetAppScriptConfigFunction()
         {
             var popup_parent = root.Q<VisualElement>("popup_parent");
@@ -264,6 +311,7 @@ namespace AppFrame.Editor
                 FindSameFileName.FindSameFile((ObjectType)objectType.value, textFilesField.value);
             };
         }
+        
         private void CopyTemplateScriptsFunction()
         {
             var unity_install_path = root.Q<TextField>("unity_install_path");
@@ -365,6 +413,25 @@ namespace AppFrame.Editor
                     table_script_view.Add(script);
                 }
             }
+        }
+
+        private void RefreshAssetBundleList(ScrollView folder_list, Label label_page)
+        {
+            folder_list.Clear();
+            for (int i = 0; i < BuildAssetBundle.m_DataList.Count; i++)
+            {
+                int index = i;
+                Toggle toggle = new Toggle(BuildAssetBundle.m_DataList[index]);
+                toggle.value = BuildAssetBundle.m_ExportList[index];
+                toggle.RegisterCallback<ChangeEvent<bool>>((ent) =>
+                {
+                    BuildAssetBundle.m_ExportList[index] = ent.newValue;
+                    label_page.text = $"打包 : {BuildAssetBundle.SelectCount()} / {BuildAssetBundle.m_ExportList.Count}";
+                });
+                folder_list.Add(toggle);
+            }
+
+            label_page.text = $"打包 : {BuildAssetBundle.SelectCount()} / {BuildAssetBundle.m_ExportList.Count}";
         }
 
         private void OnItemsChosen(IEnumerable<int> objs)

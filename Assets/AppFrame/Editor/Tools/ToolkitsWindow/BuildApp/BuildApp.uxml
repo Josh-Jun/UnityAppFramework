@@ -9,7 +9,7 @@
         <uie:EnumField label="AB Build Pipeline" value="Center" name="ABBuildPipeline" />
         <ui:Button text="Apply" display-tooltip-when-elided="true" name="BuildAppApply" />
         <ui:TextField picking-mode="Ignore" label="Output Path" name="BuildAppOutputPath">
-            <ui:Button text="Browse" display-tooltip-when-elided="true" style="margin-top: 0;" />
+            <ui:Button text="Browse" display-tooltip-when-elided="true" name="BuildAppOutputPathBrowse" style="margin-top: 0;" />
         </ui:TextField>
         <ui:Button text="Build" display-tooltip-when-elided="true" name="BuildApp" />
     </ui:VisualElement>
