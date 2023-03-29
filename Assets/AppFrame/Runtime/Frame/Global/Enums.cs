@@ -30,11 +30,18 @@ namespace AppFrame.Enum
         Xml = 1,
     }
 
-    /// <summary>配置表类型</summary>
+    /// <summary>资源加载类型</summary>
     public enum LoadAssetsMold
     {
         Local = 0,
         StreamingAssets = 1,
         Remote = 2,
+    }
+    
+    /// <summary>AB包类型</summary>
+    public enum ABMold
+    {
+        Hybrid = 0,
+        Assets = 1,
     }
 }

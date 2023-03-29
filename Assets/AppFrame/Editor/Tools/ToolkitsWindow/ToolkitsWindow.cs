@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using UnityEngine.UI;
 using Button = UnityEngine.UIElements.Button;
+using Toggle = UnityEngine.UIElements.Toggle;
 
 namespace AppFrame.Editor
 {
@@ -92,6 +93,106 @@ namespace AppFrame.Editor
 
         private void BuildAssetBundleFunction()
         {
+            BuildAssetBundle.Init();
+            var build_target = root.Q<EnumField>("BuildTarget");
+            build_target.Init(BuildTarget.Android);
+            
+            var build_path = root.Q<TextField>("BuildPath");
+            build_path.value = "Assets/Resources/AppFolder";
+            root.Q<Button>("BuildPath_Browse").clicked += () =>
+            {
+                build_path.value = EditorTool.Browse();
+                BuildAssetBundle.buildPath = build_path.value;
+            };
+            var output_path = root.Q<TextField>("OutputPath");
+            output_path.value = Application.dataPath.Replace("Assets", "AssetBundle");
+            root.Q<Button>("OutputPath_Browse").clicked += () =>
+            {
+                output_path.value = EditorTool.Browse(true);
+                BuildAssetBundle.outputPath = output_path.value;
+            };
+            var update_des = root.Q<TextField>("UpdateDes");
+            update_des.RegisterCallback<ChangeEvent<string>>((evt) =>
+            {
+                BuildAssetBundle.des = evt.newValue;
+            });
+            
+            var folder_list = root.Q<ScrollView>("FolderList");
+            var label_page = root.Q<Label>("ListText");
+            
+            RefreshAssetBundleList(folder_list, label_page);
+            
+            var ab_mold = root.Q<EnumField>("ABMold");
+            ab_mold.RegisterCallback<ChangeEvent<string>>((evt) =>
+            {
+                var mold = (ABMold)System.Enum.Parse(typeof(ABMold), evt.newValue);
+                BuildAssetBundle.SetBuildPath(mold);
+                build_path.value = BuildAssetBundle.buildPath;
+                RefreshAssetBundleList(folder_list, label_page);
+                root.Q<Button>("BuildAndCopyDll").style.display =
+                    mold == ABMold.Hybrid ? DisplayStyle.Flex : DisplayStyle.None;
+            });
+            ab_mold.Init(ABMold.Hybrid);
+            ab_mold.value = ABMold.Hybrid;
+            
+            root.Q<Button>("All").clicked += () =>
+            {
+                BuildAssetBundle.SelectList(true);
+                RefreshAssetBundleList(folder_list, label_page);
+            };
+            root.Q<Button>("NotAll").clicked += () =>
+            {
+                BuildAssetBundle.SelectList(false);
+                RefreshAssetBundleList(folder_list, label_page);
+            };
+            
+            root.Q<Button>("BuildAndCopyDll").clicked+= () =>
+            {
+                BuildAssetBundle.BuildAndCopyDll((BuildTarget)build_target.value);
+            };
+            root.Q<Button>("AutoBuildAllAssetBuildBundle").clicked+= () =>
+            {
+                BuildAssetBundle.AutoBuildAssetBundle((BuildTarget)build_target.value);
+            };
+            root.Q<Button>("DeleteAllAssetBundle").clicked+= () =>
+            {
+                BuildAssetBundle.DeleteAssetBundle((BuildTarget)build_target.value);
+            };
+            root.Q<Button>("RemoveAllAssetsBundleLabels").clicked+= () =>
+            {
+                BuildAssetBundle.RemoveAllAssetBundleLabels();
+            };
+            root.Q<Button>("SetAllAssetBundleLabels").clicked+= () =>
+            {
+                BuildAssetBundle.SetAssetBundleLabels();
+            };
+            root.Q<Button>("BuildAllAssetBuildBundle").clicked+= () =>
+            {
+                BuildAssetBundle.BuildAllAssetBundles((BuildTarget)build_target.value);
+            };
+            root.Q<Button>("CreateMD5File").clicked+= () =>
+            {
+                BuildAssetBundle.CreateFile((BuildTarget)build_target.value);
+            };
+        }
+
+        private void RefreshAssetBundleList(ScrollView folder_list, Label label_page)
+        {
+            folder_list.Clear();
+            for (int i = 0; i < BuildAssetBundle.m_DataList.Count; i++)
+            {
+                int index = i;
+                Toggle toggle = new Toggle(BuildAssetBundle.m_DataList[index]);
+                toggle.value = BuildAssetBundle.m_ExportList[index];
+                toggle.RegisterCallback<ChangeEvent<bool>>((ent) =>
+                {
+                    BuildAssetBundle.m_ExportList[index] = ent.newValue;
+                    label_page.text = $"打包 : {BuildAssetBundle.SelectCount()} / {BuildAssetBundle.m_ExportList.Count}";
+                });
+                folder_list.Add(toggle);
+            }
+
+            label_page.text = $"打包 : {BuildAssetBundle.SelectCount()} / {BuildAssetBundle.m_ExportList.Count}";
         }
 
         private void SetAppScriptConfigFunction()
@@ -195,9 +296,10 @@ namespace AppFrame.Editor
                         new StyleBackground((Texture2D)EditorGUIUtility.IconContent("CollabCreate Icon").image);
                     
                     table.Q<EnumField>("TableMold").Init(table_list[index].TableMold);
-                    table.Q<EnumField>("TableMold").RegisterCallback<ChangeEvent<TableMold>>((ent) =>
+                    table.Q<EnumField>("TableMold").RegisterCallback<ChangeEvent<string>>((ent) =>
                     {
-                        SetAppTableConfig.SetConfigMoldValue(index, ent.newValue);
+                        var mold = (TableMold)System.Enum.Parse(typeof(TableMold), ent.newValue);
+                        SetAppTableConfig.SetConfigMoldValue(index, mold);
                     });
                     table.Q<TextField>("TableName").value = table_list[index].TableName;
                     table.Q<TextField>("TableName").RegisterCallback<ChangeEvent<string>>((ent) =>

@@ -70,8 +70,8 @@ namespace Modules.Update
 
         public void Begin()
         {
-            LocalPath = PlatformManager.Instance.GetDataPath(PlatformManager.Instance.Name) + "/";
-            ServerUrl = NetcomManager.ABUrl + PlatformManager.Instance.Name + "/";
+            LocalPath = PlatformManager.Instance.GetDataPath(PlatformManager.Instance.Name) + "/Assets/";
+            ServerUrl = NetcomManager.ABUrl + PlatformManager.Instance.Name + "/Assets/";
 
             LocalVersionConfigPath = LocalPath + "AssetBundleConfig.json";
             ServerVersionConfigPath = ServerUrl + "AssetBundleConfig.json";
