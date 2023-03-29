@@ -1,5 +1,5 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-    <ui:VisualElement name="SetAppScriptConfig" style="flex-grow: 1; display: flex; margin-top: 0;">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="SetAppScriptConfig" style="flex-grow: 1; display: flex; margin-top: 1px;">
         <ui:VisualElement name="popup_parent" style="flex-direction: row; width: 300px;" />
         <ui:ScrollView vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" name="script_scroll_view" focusable="true" style="margin-bottom: 0;" />
         <ui:Button text="Apply" display-tooltip-when-elided="true" name="btn_script_apply" />
