@@ -5,30 +5,33 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// }} 
 
 	// {{ AOT generic type
-	//DG.Tweening.Core.DOGetter`1<UnityEngine.Vector2>
+	//DG.Tweening.Core.DOGetter`1<System.Object>
 	//DG.Tweening.Core.DOGetter`1<System.Single>
 	//DG.Tweening.Core.DOGetter`1<UnityEngine.Vector3>
 	//DG.Tweening.Core.DOGetter`1<UnityEngine.Quaternion>
-	//DG.Tweening.Core.DOGetter`1<System.Object>
 	//DG.Tweening.Core.DOGetter`1<UnityEngine.Color>
+	//DG.Tweening.Core.DOGetter`1<UnityEngine.Vector2>
+	//DG.Tweening.Core.DOSetter`1<System.Object>
+	//DG.Tweening.Core.DOSetter`1<UnityEngine.Color>
 	//DG.Tweening.Core.DOSetter`1<System.Single>
 	//DG.Tweening.Core.DOSetter`1<UnityEngine.Vector3>
 	//DG.Tweening.Core.DOSetter`1<UnityEngine.Quaternion>
-	//DG.Tweening.Core.DOSetter`1<System.Object>
 	//DG.Tweening.Core.DOSetter`1<UnityEngine.Vector2>
-	//DG.Tweening.Core.DOSetter`1<UnityEngine.Color>
 	//DG.Tweening.Core.TweenerCore`3<UnityEngine.Quaternion,UnityEngine.Vector3,DG.Tweening.Plugins.Options.QuaternionOptions>
 	//DG.Tweening.Core.TweenerCore`3<UnityEngine.Vector3,System.Object,DG.Tweening.Plugins.Options.PathOptions>
+	//Google.Protobuf.IDeepCloneable`1<System.Object>
+	//Google.Protobuf.IMessage`1<System.Object>
+	//Google.Protobuf.MessageParser`1<System.Object>
+	//System.Action`1<System.Single>
+	//System.Action`1<System.Object>
 	//System.Action`1<System.Int32>
 	//System.Action`1<System.Byte>
 	//System.Action`1<AppFrame.Enum.UpdateMold>
-	//System.Action`1<System.Object>
-	//System.Action`1<System.Single>
-	//System.Action`2<System.Int64,System.Int64>
-	//System.Action`2<AppFrame.Enum.UpdateMold,System.Object>
-	//System.Action`2<System.Object,System.Int32>
 	//System.Action`2<System.Object,System.Object>
+	//System.Action`2<System.Object,System.Int32>
+	//System.Action`2<System.Int64,System.Int64>
 	//System.Action`2<System.Object,System.Single>
+	//System.Action`2<AppFrame.Enum.UpdateMold,System.Object>
 	//System.Action`3<System.Object,System.Object,System.Object>
 	//System.Action`4<DG.Tweening.Plugins.Options.PathOptions,System.Object,UnityEngine.Quaternion,System.Object>
 	//System.Collections.Generic.Dictionary`2<System.Object,System.Object>
@@ -36,17 +39,21 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	//System.Collections.Generic.Dictionary`2/KeyCollection<System.Object,System.Object>
 	//System.Collections.Generic.Dictionary`2/KeyCollection/Enumerator<System.Object,System.Object>
 	//System.Collections.Generic.IEnumerator`1<System.Object>
+	//System.Collections.Generic.IList`1<System.Object>
 	//System.Collections.Generic.KeyValuePair`2<System.Object,System.Object>
-	//System.Collections.Generic.List`1<UnityEngine.Vector3>
-	//System.Collections.Generic.List`1<System.Int32>
 	//System.Collections.Generic.List`1<AppFrame.Tools.ExcelData>
-	//System.Collections.Generic.List`1<AppFrame.Tools.ExcelPackageData>
-	//System.Collections.Generic.List`1<System.Object>
 	//System.Collections.Generic.List`1<UnityEngine.EventSystems.RaycastResult>
+	//System.Collections.Generic.List`1<System.Object>
+	//System.Collections.Generic.List`1<System.Int32>
+	//System.Collections.Generic.List`1<UnityEngine.Vector3>
 	//System.Collections.Generic.List`1/Enumerator<System.Object>
 	//System.Collections.Generic.Queue`1<System.Object>
+	//System.Func`1<System.Object>
 	//System.Func`1<System.Byte>
+	//System.IEquatable`1<System.Object>
 	//System.Nullable`1<UnityEngine.Vector3>
+	//System.Nullable`1<OfficeOpenXml.LicenseContext>
+	//System.ValueTuple`2<System.Object,System.Object>
 	//UnityEngine.Events.UnityAction`1<System.Object>
 	//UnityEngine.Events.UnityEvent`1<System.Object>
 	// }}

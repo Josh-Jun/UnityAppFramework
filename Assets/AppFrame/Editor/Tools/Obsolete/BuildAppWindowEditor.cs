@@ -24,7 +24,7 @@ namespace AppFrame.Editor
         private readonly string configPath = "AppFolder/Assets/Config/AppConfig";
         private bool DevelopmentBuild = true;
         private bool IsTestServer = true;
-        private bool IsHotfix = false;
+        private LoadAssetsMold IsHotfix = LoadAssetsMold.Native;
         private int AppFrameRate = 30;
         private TargetPackage ApkTarget = TargetPackage.Mobile;
         private bool NativeApp = false;
@@ -53,7 +53,7 @@ namespace AppFrame.Editor
             {
                 DevelopmentBuild = AppConfig.IsDebug;
                 IsTestServer = AppConfig.IsTestServer;
-                IsHotfix = AppConfig.IsHotfix;
+                IsHotfix = AppConfig.LoadAssetsMold;
                 AppFrameRate = AppConfig.AppFrameRate;
                 ApkTarget = AppConfig.TargetPackage;
                 NativeApp = AppConfig.NativeApp;
@@ -84,9 +84,9 @@ namespace AppFrame.Editor
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
-            GUILayout.Label(new GUIContent("Is Hotfix"));
+            GUILayout.Label(new GUIContent("Load Assets Mold"));
             GUILayout.FlexibleSpace();
-            IsHotfix = EditorGUILayout.Toggle(IsHotfix, GUILayout.MaxWidth(75));
+            IsHotfix  = (LoadAssetsMold)EditorGUILayout.EnumPopup(IsHotfix, GUILayout.MaxWidth(75));
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
@@ -142,7 +142,7 @@ namespace AppFrame.Editor
         public void ApplyConfig()
         {
             AppConfig.IsDebug = DevelopmentBuild;
-            AppConfig.IsHotfix = IsHotfix;
+            AppConfig.LoadAssetsMold = IsHotfix;
             AppConfig.IsTestServer = IsTestServer;
             AppConfig.AppFrameRate = AppFrameRate;
             AppConfig.TargetPackage = ApkTarget;
@@ -209,7 +209,7 @@ namespace AppFrame.Editor
         {
             string newPath = "";
             string newLocalPath = "";
-            if (IsHotfix)
+            if (IsHotfix != LoadAssetsMold.Native)
             {
                 //移动到根目录
                 newPath = MoveAssetsToRoot(assetPath);
@@ -249,7 +249,7 @@ namespace AppFrame.Editor
             BuildPipeline.BuildPlayer(GetBuildScenes(), BuildPath, EditorUserBuildSettings.activeBuildTarget,
                 buildOption);
 
-            if (IsHotfix)
+            if (IsHotfix != LoadAssetsMold.Native)
             {
                 //移动回原始目录
                 MoveAssetsToOriginPath(newPath, assetPath);
@@ -269,7 +269,7 @@ namespace AppFrame.Editor
                 if (e == null) continue;
                 if (e.enabled)
                 {
-                    if (IsHotfix)
+                    if (IsHotfix != LoadAssetsMold.Native)
                     {
                         if (names.Count > 0)
                         {

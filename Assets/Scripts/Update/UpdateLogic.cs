@@ -79,10 +79,9 @@ namespace Modules.Update
             appUrl = NetcomManager.AppUrl + "meta.apk";
             appPath = PlatformManager.Instance.GetDataPath("App/meta.apk");
 
-            if (AppInfo.AppConfig.IsHotfix)
+            switch (AppInfo.AppConfig.LoadAssetsMold)
             {
-                AssetBundleManager.Instance.InitLocalAssetBundleConfig(() =>
-                {
+                case LoadAssetsMold.Remote:
                     view = AssetsManager.Instance.LoadUIView<UpdateView>(AssetsPathConfig.UpdateView);
                     view.SetViewActive();
 
@@ -108,11 +107,20 @@ namespace Modules.Update
                                 break;
                         }
                     });
-                });
-            }
-            else
-            {
-                Root.StartApp();
+                    break;
+                case LoadAssetsMold.Native:
+                    var localPath = PlatformManager.Instance.GetAssetsPath(PlatformManager.Instance.Name) + "/Assets/";
+                    var configPath = localPath + "AssetBundleConfig.json";
+                    DownLoad(configPath, (string data) =>
+                    {
+                        var config = JsonUtility.FromJson<AssetBundleConfig>(data);
+                        SetABModulePairs(config);
+                        Root.StartApp();
+                    });
+                    break;
+                case LoadAssetsMold.Local:
+                    Root.StartApp();
+                    break;
             }
         }
 

@@ -2,7 +2,7 @@
     <ui:VisualElement name="BuildApp" style="flex-grow: 1; display: flex; margin-top: 5px;">
         <ui:Toggle label="Development Build" name="DevelopmentBuild" />
         <ui:Toggle label="Is Test Server" name="IsTestServer" />
-        <ui:Toggle label="Is Hotfix" name="IsHotfix" />
+        <uie:EnumField label="Load Assets Mold" value="Center" name="LoadAssetsMold" />
         <ui:TextField picking-mode="Ignore" label="App FrameRate" name="AppFrameRate" />
         <uie:EnumField label="Build Mold" value="Center" name="BuildMold" />
         <ui:Toggle label="Export Project" name="ExportProject" />

@@ -33,8 +33,8 @@ namespace AppFrame.Enum
     /// <summary>资源加载类型</summary>
     public enum LoadAssetsMold
     {
-        Local = 0,
-        StreamingAssets = 1,
+        Native = 0,
+        Local = 1,
         Remote = 2,
     }
     

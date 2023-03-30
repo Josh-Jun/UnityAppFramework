@@ -92,7 +92,7 @@ namespace AppFrame.Editor
             BuildApp.Init();
             var development_build = root.Q<Toggle>("DevelopmentBuild");
             var is_test_server = root.Q<Toggle>("IsTestServer");
-            var is_hotfix = root.Q<Toggle>("IsHotfix");
+            var load_assets_mold = root.Q<EnumField>("LoadAssetsMold");
             var app_frame_rate = root.Q<TextField>("AppFrameRate");
             var build_mold = root.Q<EnumField>("BuildMold");
             var export_project = root.Q<Toggle>("ExportProject");
@@ -101,7 +101,7 @@ namespace AppFrame.Editor
             
             development_build.value = BuildApp.DevelopmentBuild;
             is_test_server.value = BuildApp.IsTestServer;
-            is_hotfix.value = BuildApp.IsHotfix;
+            load_assets_mold.Init(BuildApp.LoadAssetsMold);
             app_frame_rate.value = BuildApp.AppFrameRate.ToString();
             build_mold.Init(BuildApp.ApkTarget);
             export_project.value = BuildApp.NativeApp;
@@ -116,9 +116,10 @@ namespace AppFrame.Editor
             {
                 BuildApp.IsTestServer = evt.newValue;
             });
-            is_hotfix.RegisterCallback<ChangeEvent<bool>>((evt) =>
+            load_assets_mold.RegisterCallback<ChangeEvent<string>>((evt) =>
             {
-                BuildApp.IsHotfix = evt.newValue;
+                var mold = (LoadAssetsMold)System.Enum.Parse(typeof(LoadAssetsMold), evt.newValue);
+                BuildApp.LoadAssetsMold = mold;
             });
             app_frame_rate.RegisterCallback<ChangeEvent<string>>((evt) =>
             {

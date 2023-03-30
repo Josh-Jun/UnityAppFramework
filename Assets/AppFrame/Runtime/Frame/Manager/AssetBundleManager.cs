@@ -32,6 +32,8 @@ namespace AppFrame.Manager
         private string mainfestDataPath;
         private string mainfestAssetsPath;
 
+        private string mainfestPath;
+
         protected override void OnSingletonMonoInit()
         {
             base.OnSingletonMonoInit();
@@ -39,32 +41,17 @@ namespace AppFrame.Manager
             var head = PlatformManager.Instance.IsEditor ? "" : "file://";
             mainfestDataPath = $"{head}{PlatformManager.Instance.GetDataPath(PlatformManager.Instance.Name)}/Assets";
             mainfestAssetsPath =$"{head}{PlatformManager.Instance.GetAssetsPath($"AssetBundle/{PlatformManager.Instance.Name}/Assets")}";
-        }
 
-        public void InitLocalAssetBundleConfig(Action callbcak = null)
-        {
-            UnityWebRequester requester = NetcomManager.Uwr;
-            requester.Get($"{mainfestAssetsPath}/AssetBundleConfig.json", (string data) =>
+            switch (AppInfo.AppConfig.LoadAssetsMold)
             {
-                AssetBundleConfig abc = JsonUtility.FromJson<AssetBundleConfig>(data);
-                foreach (var module in abc.Modules)
-                {
-                    Dictionary<string, Folder> folderPairs = new Dictionary<string, Folder>();
-                    foreach (var folder in module.Folders)
-                    {
-                        if (!folderPairs.ContainsKey(folder.FolderName))
-                        {
-                            folderPairs.Add(folder.FolderName, folder);
-                        }
-                    }
-
-                    SetAbModulePairs(module.ModuleName, folderPairs);
-                }
-
-                callbcak?.Invoke();
-            });
+                case LoadAssetsMold.Native:
+                    mainfestPath = mainfestAssetsPath;
+                    break;
+                case LoadAssetsMold.Remote:
+                    mainfestPath = mainfestDataPath;
+                    break;
+            }
         }
-
         public void SetAbModulePairs(string moduleName, Dictionary<string, Folder> folderPairs)
         {
             if (!ABModulePairs.ContainsKey(moduleName))
@@ -73,9 +60,8 @@ namespace AppFrame.Manager
             }
         }
 
-        public AssetBundle LoadAssetBundle(string bundleName, bool isLocalAsset)
+        public AssetBundle LoadAssetBundle(string bundleName)
         {
-            string mainPath = isLocalAsset ? mainfestAssetsPath : mainfestDataPath;
             AssetBundle ab;
 
             if (AppInfo.AppConfig.ABPipeline == ABPipeline.Default)
@@ -84,7 +70,7 @@ namespace AppFrame.Manager
                 if (assetbundle == null)
                 {
                     //根据各个平台下的基础路径和主包名加载主包
-                    assetbundle = AssetBundle.LoadFromFile($"{mainPath}/{PlatformManager.Instance.Name}");
+                    assetbundle = AssetBundle.LoadFromFile($"{mainfestPath}/{PlatformManager.Instance.Name}");
                     //获取主包下的AssetBundleManifest资源文件（存有依赖信息）
                     mainfest = assetbundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
                 }
@@ -98,7 +84,7 @@ namespace AppFrame.Manager
                     if (!AssetBundlesCache.ContainsKey(dependencies[i]))
                     {
                         //根据依赖包名称进行加载
-                        ab = AssetBundle.LoadFromFile($"{mainPath}/{dependencies[i]}");
+                        ab = AssetBundle.LoadFromFile($"{mainfestPath}/{dependencies[i]}");
                         //注意添加进缓存 防止重复加载AB包
                         AssetBundlesCache.Add(dependencies[i], ab);
                     }
@@ -109,7 +95,7 @@ namespace AppFrame.Manager
             if (AssetBundlesCache.ContainsKey(bundleName)) return AssetBundlesCache[bundleName];
             else
             {
-                ab = AssetBundle.LoadFromFile($"{mainPath}/{bundleName}");
+                ab = AssetBundle.LoadFromFile($"{mainfestPath}/{bundleName}");
                 AssetBundlesCache.Add(bundleName, ab);
                 return ab;
             }
@@ -118,7 +104,7 @@ namespace AppFrame.Manager
         public AssetBundle LoadAssetBundle(string moduleName, string folderName)
         {
             Folder folder = ABModulePairs[moduleName][folderName];
-            return LoadAssetBundle(folder.BundleName, folder.Mold == "1");
+            return LoadAssetBundle(folder.BundleName);
         }
 
         public T LoadAsset<T>(string moduleName, string folderName, string assetsName) where T : UnityEngine.Object

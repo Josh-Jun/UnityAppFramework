@@ -21,7 +21,7 @@ namespace AppFrame.Editor
         private static string configPath = "AppFolder/Assets/Config/AppConfig";
         public static bool DevelopmentBuild = true;
         public static bool IsTestServer = true;
-        public static bool IsHotfix = false;
+        public static LoadAssetsMold LoadAssetsMold = LoadAssetsMold.Native;
         public static int AppFrameRate = 30;
         public static TargetPackage ApkTarget = TargetPackage.Mobile;
         public static bool NativeApp = false;
@@ -36,7 +36,7 @@ namespace AppFrame.Editor
             {
                 DevelopmentBuild = AppConfig.IsDebug;
                 IsTestServer = AppConfig.IsTestServer;
-                IsHotfix = AppConfig.IsHotfix;
+                LoadAssetsMold = AppConfig.LoadAssetsMold;
                 AppFrameRate = AppConfig.AppFrameRate;
                 ApkTarget = AppConfig.TargetPackage;
                 NativeApp = AppConfig.NativeApp;
@@ -50,7 +50,7 @@ namespace AppFrame.Editor
         public static void ApplyConfig()
         {
             AppConfig.IsDebug = DevelopmentBuild;
-            AppConfig.IsHotfix = IsHotfix;
+            AppConfig.LoadAssetsMold = LoadAssetsMold;
             AppConfig.IsTestServer = IsTestServer;
             AppConfig.AppFrameRate = AppFrameRate;
             AppConfig.TargetPackage = ApkTarget;
@@ -117,7 +117,7 @@ namespace AppFrame.Editor
         {
             string newAssetsPath = "";
             string newHybridPath = "";
-            if (IsHotfix)
+            if (LoadAssetsMold != LoadAssetsMold.Native)
             {
                 //移动到根目录
                 newAssetsPath = MoveAssetsToRoot(assetsPath);
@@ -157,7 +157,7 @@ namespace AppFrame.Editor
             BuildPipeline.BuildPlayer(GetBuildScenes(), BuildPath, EditorUserBuildSettings.activeBuildTarget,
                 buildOption);
 
-            if (IsHotfix)
+            if (LoadAssetsMold != LoadAssetsMold.Native)
             {
                 //移动回原始目录
                 MoveAssetsToOriginPath(newAssetsPath, assetsPath);
@@ -177,7 +177,7 @@ namespace AppFrame.Editor
                 if (e == null) continue;
                 if (e.enabled)
                 {
-                    if (IsHotfix)
+                    if (LoadAssetsMold != LoadAssetsMold.Native)
                     {
                         if (names.Count > 0)
                         {

@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Linq;
 using System.Reflection;
+using AppFrame.Enum;
 using AppFrame.Info;
 using AppFrame.Tools;
 using AppFrame.View;
@@ -42,7 +43,7 @@ namespace AppFrame.Manager
         public void LoadSceneAsync(string sceneName, Action cb = null, LoadSceneMode mode = LoadSceneMode.Single)
         {
             string[] names = sceneName.Split('/'); //names[0], names[1], names[names.Length - 1]
-            if (AppInfo.AppConfig.IsHotfix)
+            if (AppInfo.AppConfig.LoadAssetsMold != LoadAssetsMold.Native)
             {
                 AssetBundle ab = AssetBundleManager.Instance.LoadAssetBundle(names[0], $"{names[1]}Scene");
             }
@@ -63,7 +64,7 @@ namespace AppFrame.Manager
             LoadSceneMode mode = LoadSceneMode.Single)
         {
             string[] names = sceneName.Split('/'); //names[0], names[1], names[names.Length - 1]
-            if (AppInfo.AppConfig.IsHotfix)
+            if (AppInfo.AppConfig.LoadAssetsMold != LoadAssetsMold.Native)
             {
                 AssetBundle ab = AssetBundleManager.Instance.LoadAssetBundle(names[0], $"{names[1]}Scene");
             }
@@ -232,7 +233,7 @@ namespace AppFrame.Manager
         /// </summary>
         public T LoadAsset<T>(string path) where T : UnityEngine.Object
         {
-            if (AppInfo.AppConfig.IsHotfix)
+            if (AppInfo.AppConfig.LoadAssetsMold != LoadAssetsMold.Native)
             {
                 string[] names = path.Split('/');
                 return AssetBundleManager.Instance.LoadAsset<T>(names[0], names[1], names[names.Length - 1]);
