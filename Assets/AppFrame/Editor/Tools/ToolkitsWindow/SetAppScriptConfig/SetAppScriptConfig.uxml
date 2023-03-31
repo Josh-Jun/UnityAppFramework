@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <ui:VisualElement name="SetAppScriptConfig" style="flex-grow: 1; display: flex; margin-top: 1px;">
-        <ui:DropdownField label="MainSceneName" index="-1" choices="System.Collections.Generic.List`1[System.String]" name="main_scene_name" />
-        <ui:ScrollView vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" name="script_scroll_view" focusable="true" style="margin-bottom: 0;" />
+        <ui:DropdownField label="MainSceneName" index="-1" choices="System.Collections.Generic.List`1[System.String]" name="main_scene_name" style="overflow: visible; display: flex; width: 320px;" />
+        <ui:ScrollView vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" name="script_scroll_view" focusable="true" style="margin-bottom: 0; width: auto;" />
         <ui:Button text="Apply" display-tooltip-when-elided="true" name="btn_script_apply" />
     </ui:VisualElement>
 </ui:UXML>
