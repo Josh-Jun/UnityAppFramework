@@ -33,7 +33,10 @@ namespace AppFrame.Editor
                     scene = fullName.Replace("Assets/Resources/AssetsFolder/", "");
                 }
 
-                SceneNames.Add(scene);
+                if (!SceneNames.Contains(scene))
+                {
+                    SceneNames.Add(scene);
+                }
             }
 
             level = SceneNames.IndexOf(MainSceneName);
