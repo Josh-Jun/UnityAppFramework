@@ -245,16 +245,15 @@ namespace AppFrame.Editor
 
         private void SetAppScriptConfigFunction()
         {
-            var popup_parent = root.Q<VisualElement>("popup_parent");
             var script_scroll_view = root.Q<ScrollView>("script_scroll_view");
             var script_list = SetAppScriptConfig.GetRootScripts();
-            var mainScenePopup =
-                new PopupField<string>("MainSceneName", SetAppScriptConfig.SceneNames, SetAppScriptConfig.level);
-            mainScenePopup.RegisterCallback<ChangeEvent<string>>((evt) =>
+            var main_scene_name = root.Q<DropdownField>("main_scene_name");
+            main_scene_name.choices = SetAppScriptConfig.SceneNames;
+            main_scene_name.value = SetAppScriptConfig.SceneNames[SetAppScriptConfig.level];
+            main_scene_name.RegisterCallback<ChangeEvent<string>>((evt) =>
             {
                 SetAppScriptConfig.level = SetAppScriptConfig.SceneNames.IndexOf(evt.newValue);
             });
-            popup_parent.Add(mainScenePopup);
 
             RefreshScriptView(script_scroll_view);
             root.Q<Button>("btn_script_apply").clicked += SetAppScriptConfig.ApplyConfig;
@@ -387,14 +386,14 @@ namespace AppFrame.Editor
                     script.Q<Button>("btn_script_add").style.backgroundImage =
                         new StyleBackground((Texture2D)EditorGUIUtility.IconContent("CollabCreate Icon").image);
 
-                    var popup_parent = script.Q<VisualElement>("Popup");
-                    var popup = new PopupField<string>("", SetAppScriptConfig.SceneNames,
-                        SetAppScriptConfig.SceneNames.IndexOf(script_list[index].SceneName));
-                    popup.RegisterCallback<ChangeEvent<string>>((evt) =>
+                    
+                    var dropdown = script.Q<DropdownField>("SceneName");
+                    dropdown.choices = SetAppScriptConfig.SceneNames;
+                    dropdown.value = SetAppScriptConfig.SceneNames[SetAppScriptConfig.SceneNames.IndexOf(script_list[index].SceneName)];
+                    dropdown.RegisterCallback<ChangeEvent<string>>((evt) =>
                     {
                         SetAppScriptConfig.SetConfigSceneValue(index, evt.newValue);
                     });
-                    popup_parent.Add(popup);
 
                     script.Q<TextField>("ScriptName").value = script_list[index].ScriptName;
                     script.Q<TextField>("ScriptName").RegisterCallback<ChangeEvent<string>>((evt) =>
