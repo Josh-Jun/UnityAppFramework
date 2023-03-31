@@ -29,7 +29,7 @@ namespace AppFrame.Editor
         public static string des = "请输入本版更新描述";
 
         private static AppConfig AppConfig; //App配置表 
-        private static string configPath = "AppFolder/Assets/Config/AppConfig";
+        private static string configPath = "AppFolder/AppAssets/Config/AppConfig";
 
         private static string m_TmpBuildPath = "";
 
@@ -64,7 +64,6 @@ namespace AppFrame.Editor
             {
                 BuildAndCopyDll(buildTarget);
             }
-            moduleDic.Clear();
             RemoveAllAssetBundleLabels();
             SetAssetBundleLabels();
             DeleteAssetBundle(buildTarget);
@@ -83,7 +82,7 @@ namespace AppFrame.Editor
 
         private static void CopyDLLToSourceData(BuildTarget target)
         {
-            string targetDstDir = $"{Application.dataPath}/Resources/AppFolder/Assets/Dll";
+            string targetDstDir = $"{Application.dataPath}/Resources/AppFolder/AppAssets/Dll";
             CopyAOTAssembliesToSourceData(target, targetDstDir);
             CopyMyAssembliesToSourceData(target, targetDstDir);
         }
@@ -141,6 +140,7 @@ namespace AppFrame.Editor
 
         public static void RemoveAllAssetBundleLabels()
         {
+            moduleDic.Clear();
             var names = AssetDatabase.GetAllAssetBundleNames();
             foreach (string name in names)
             {
@@ -190,6 +190,7 @@ namespace AppFrame.Editor
                     //OnWriteConfig(sceneName, namePathDic);
                     if (!moduleDic.ContainsKey(tempDirectoryInfo.Name))
                         moduleDic.Add(tempDirectoryInfo.Name, namePathDic);
+                    Debug.Log($"{tempDirectoryInfo.Name}-{namePathDic}");
                 }
             }
 

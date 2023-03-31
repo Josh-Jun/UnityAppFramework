@@ -31,7 +31,7 @@ namespace AppFrame.Editor
         private string des = "请输入本版更新描述";
 
         public AppConfig AppConfig; //App配置表 
-        private readonly string configPath = "AppFolder/Assets/Config/AppConfig";
+        private readonly string configPath = "AppFolder/App/Config/AppConfig";
 
         Vector2 scrollPosition;
         private string m_TmpBuildPath = "";

@@ -17,7 +17,7 @@ namespace AppFrame.Editor
         private int level = 0;
         private List<string> SceneNames = new List<string>();
         private List<int> levels = new List<int>();
-        private static readonly string configPath = "AppFolder/Assets/Config/AppScriptConfig";
+        private static readonly string configPath = "AppFolder/App/Config/AppScriptConfig";
 
         [MenuItem("Tools/My ToolsWindow/Set AppScriptConfig", priority = -1001)]
         public static void OpenWindow()

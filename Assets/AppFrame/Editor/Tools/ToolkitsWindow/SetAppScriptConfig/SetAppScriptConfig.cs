@@ -10,7 +10,7 @@ namespace AppFrame.Editor
     public class SetAppScriptConfig
     {
         private static AppScriptConfig config = null;
-        private const string configPath = "AppFolder/Assets/Config/AppScriptConfig";
+        private const string configPath = "AppFolder/AppAssets/Config/AppScriptConfig";
         private static string MainSceneName = "Test";
         public static List<string> SceneNames = new List<string>();
         private static List<int> levels = new List<int>();

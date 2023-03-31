@@ -18,7 +18,7 @@ namespace AppFrame.Editor
     public class BuildApp
     {
         private static AppConfig AppConfig; //App配置表 
-        private static string configPath = "AppFolder/Assets/Config/AppConfig";
+        private static string configPath = "AppFolder/AppAssets/Config/AppConfig";
         public static bool DevelopmentBuild = true;
         public static bool IsTestServer = true;
         public static LoadAssetsMold LoadAssetsMold = LoadAssetsMold.Native;

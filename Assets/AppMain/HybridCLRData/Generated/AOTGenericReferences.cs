@@ -22,11 +22,11 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	//Google.Protobuf.IDeepCloneable`1<System.Object>
 	//Google.Protobuf.IMessage`1<System.Object>
 	//Google.Protobuf.MessageParser`1<System.Object>
-	//System.Action`1<System.Single>
 	//System.Action`1<System.Object>
+	//System.Action`1<AppFrame.Enum.UpdateMold>
 	//System.Action`1<System.Int32>
 	//System.Action`1<System.Byte>
-	//System.Action`1<AppFrame.Enum.UpdateMold>
+	//System.Action`1<System.Single>
 	//System.Action`2<System.Object,System.Object>
 	//System.Action`2<System.Object,System.Int32>
 	//System.Action`2<System.Int64,System.Int64>
