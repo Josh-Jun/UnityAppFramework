@@ -1,8 +1,8 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AppFrame.Config
+namespace Launcher
 {
     [System.Serializable]
     public class AssetBundleConfig

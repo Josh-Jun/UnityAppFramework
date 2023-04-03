@@ -62,7 +62,7 @@ namespace AppFrame.Manager
             get
             {
                 string test_url = Path.Combine(Application.dataPath.Replace("Assets", ""), "AssetBundle/"); //本地AB包地址
-                string pro_url = "https://meta-oss.genimous.com/vr-ota/dev_test/"; //服务器AB包地址
+                string pro_url = "https://meta-oss.genimous.com/vr-ota/dev_test/AssetBundle/"; //服务器AB包地址
                 return AppInfo.AppConfig.IsTestServer ? test_url : pro_url;
             }
         }

@@ -41,25 +41,5 @@ namespace Launcher
                 Debug.Log($"LoadMetadataForAOTAssembly:{aotDllName}. mode:{mode} ret:{err}");
             }
         }
-
-        private void DownLoad(string url, Action<byte[]> callback)
-        {
-            var unityWebRequest = new UnityWebRequest();
-            unityWebRequest.url = url;
-            unityWebRequest.method = UnityWebRequest.kHttpVerbGET;
-            unityWebRequest.downloadHandler = new DownloadHandlerBuffer();
-            var async = unityWebRequest.SendWebRequest();
-            async.completed += (ao) =>
-            {
-                if (string.IsNullOrEmpty(unityWebRequest.error))
-                {
-                    callback?.Invoke(unityWebRequest.downloadHandler.data);
-                }
-                else
-                {
-                    Debug.LogError($"[Error:Bytes] {url} {unityWebRequest.error}");
-                }
-            };
-        }
     }
 }

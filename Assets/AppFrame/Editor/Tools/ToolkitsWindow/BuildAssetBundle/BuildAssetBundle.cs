@@ -13,8 +13,6 @@ using UnityEditor;
 using UnityEditor.Build.Content;
 using UnityEditor.Build.Pipeline;
 using UnityEngine;
-using Application = UnityEngine.Application;
-using Folder = AppFrame.Config.Folder;
 
 namespace AppFrame.Editor
 {
@@ -82,7 +80,7 @@ namespace AppFrame.Editor
 
         private static void CopyDLLToSourceData(BuildTarget target)
         {
-            string targetDstDir = $"{Application.dataPath}/Resources/HybridFolder/AppAssets/Dll";
+            string targetDstDir = $"{Application.dataPath}/Resources/HybridFolder/App/Dll";
             CopyAOTAssembliesToSourceData(target, targetDstDir);
             CopyMyAssembliesToSourceData(target, targetDstDir);
         }
@@ -420,7 +418,7 @@ namespace AppFrame.Editor
                     f.FolderName = folder.Key;
                     f.BundleName = folder.Value;
                     f.Tag = "0";
-                    f.Mold = "0";
+                    f.Mold = ((int)AppConfig.ABPipeline).ToString();
                     f.MD5 = GetFileMD5(file.FullName);
                     f.Size = $"{file.Length}";
                     m.Folders.Add(f);

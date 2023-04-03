@@ -3,17 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using AppFrame.Config;
-using AppFrame.Enum;
-using AppFrame.Info;
-using AppFrame.Tools;
-using AppFrame.Network;
 using UnityEngine;
 
-namespace AppFrame.Manager
+namespace Launcher
 {
-    public class AssetBundleManager : SingletonMono<AssetBundleManager>
+    public class AssetBundleManager : MonoBehaviour
     {
+        private static AssetBundleManager _Instance = null;
+
         public Dictionary<string, Dictionary<string, Folder>> ABModulePairs { get; private set; } =
             new Dictionary<string, Dictionary<string, Folder>>();
 
@@ -34,24 +31,62 @@ namespace AppFrame.Manager
 
         private string mainfestPath;
 
-        protected override void OnSingletonMonoInit()
+        private string PlatformName;
+
+        public static AssetBundleManager Instance
         {
-            base.OnSingletonMonoInit();
-
-            var head = PlatformManager.Instance.IsEditor ? "" : "file://";
-            mainfestDataPath = $"{head}{PlatformManager.Instance.GetDataPath($"AssetBundle/{PlatformManager.Instance.Name}")}/Assets";
-            mainfestAssetsPath =$"{head}{PlatformManager.Instance.GetAssetsPath($"AssetBundle/{PlatformManager.Instance.Name}/Assets")}";
-
-            switch (AppInfo.AppConfig.LoadAssetsMold)
+            get
             {
-                case LoadAssetsMold.Native:
-                    mainfestPath = mainfestAssetsPath;
-                    break;
-                case LoadAssetsMold.Remote:
-                    mainfestPath = mainfestDataPath;
-                    break;
+                lock ("SingletonLock")
+                {
+                    if (_Instance == null)
+                    {
+                        GameObject go = new GameObject(typeof(AssetBundleManager).Name);
+                        _Instance = go.AddComponent<AssetBundleManager>();
+                    }
+
+                    return _Instance;
+                }
             }
         }
+
+        private static bool IsEditor
+        {
+            get
+            {
+                return Application.platform == RuntimePlatform.WindowsEditor ||
+                       Application.platform == RuntimePlatform.OSXEditor;
+            }
+        }
+
+        private void InitManager(bool isRemote, RuntimePlatform platform)
+        {
+            var head = IsEditor ? "" : "file://";
+            switch (Application.platform)
+            {
+                case RuntimePlatform.WindowsPlayer:
+                    PlatformName = "StandaloneWindows";
+                    break;
+                case RuntimePlatform.IPhonePlayer:
+                    PlatformName = "iOS";
+                    break;
+                case RuntimePlatform.Android:
+                    PlatformName = "Android";
+                    break;
+                case RuntimePlatform.WindowsEditor:
+                    PlatformName = "Android";
+                    break;
+                case RuntimePlatform.OSXEditor:
+                    PlatformName = "Android";
+                    break;
+                default:
+                    break;
+            }
+            mainfestDataPath = $"{head}{Application.persistentDataPath}/AssetBundle/{name}/Hybrid";
+            mainfestAssetsPath =$"{head}{Application.streamingAssetsPath}/AssetBundle/{name}/Hybrid";
+            mainfestPath = isRemote ? mainfestDataPath : mainfestAssetsPath;
+        }
+
         public void SetAbModulePairs(string moduleName, Dictionary<string, Folder> folderPairs)
         {
             if (!ABModulePairs.ContainsKey(moduleName))
@@ -60,21 +95,21 @@ namespace AppFrame.Manager
             }
         }
 
-        public AssetBundle LoadAssetBundle(string bundleName)
+        public AssetBundle LoadAssetBundle(string bundleName, int mold)
         {
             AssetBundle ab;
 
-            if (AppInfo.AppConfig.ABPipeline == ABPipeline.Default)
+            if (mold == 0)
             {
                 //加载ab包，需一并加载其依赖包。
                 if (assetbundle == null)
                 {
                     //根据各个平台下的基础路径和主包名加载主包
-                    assetbundle = AssetBundle.LoadFromFile($"{mainfestPath}/{PlatformManager.Instance.Name}");
+                    assetbundle = AssetBundle.LoadFromFile($"{mainfestPath}/{PlatformName}");
                     //获取主包下的AssetBundleManifest资源文件（存有依赖信息）
                     mainfest = assetbundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
                 }
-
+            
                 //根据manifest获取所有依赖包的名称 固定API
                 string[] dependencies = GetDependence(bundleName);
                 //循环加载所有依赖包
@@ -104,7 +139,7 @@ namespace AppFrame.Manager
         public AssetBundle LoadAssetBundle(string moduleName, string folderName)
         {
             Folder folder = ABModulePairs[moduleName][folderName];
-            return LoadAssetBundle(folder.BundleName);
+            return LoadAssetBundle(folder.BundleName, int.Parse(folder.Mold));
         }
 
         public T LoadAsset<T>(string moduleName, string folderName, string assetsName) where T : UnityEngine.Object
