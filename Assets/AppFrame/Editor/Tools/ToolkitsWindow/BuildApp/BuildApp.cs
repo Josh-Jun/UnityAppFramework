@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using AppFrame.Config;
 using AppFrame.Enum;
+using HybridCLR.Editor;
 using UnityEditor;
 using UnityEngine;
 #if PICO_XR_SETTING
@@ -58,6 +59,8 @@ namespace AppFrame.Editor
             AppConfig.ABPipeline = Pipeline;
 
             EditorUtility.SetDirty(AppConfig);
+
+            HybridCLRSettings.Instance.enable = LoadAssetsMold != LoadAssetsMold.Local;
 
             if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android)
             {
