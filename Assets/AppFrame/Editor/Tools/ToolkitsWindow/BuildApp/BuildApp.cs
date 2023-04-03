@@ -18,7 +18,7 @@ namespace AppFrame.Editor
     public class BuildApp
     {
         private static AppConfig AppConfig; //App配置表 
-        private static string configPath = "AppFolder/AppAssets/Config/AppConfig";
+        private static string configPath = "HybridFolder/App/Config/AppConfig";
         public static bool DevelopmentBuild = true;
         public static bool IsTestServer = true;
         public static LoadAssetsMold LoadAssetsMold = LoadAssetsMold.Native;
@@ -111,7 +111,7 @@ namespace AppFrame.Editor
         }
 
         private static string assetsPath = "Assets/Resources/AssetsFolder";
-        private static string hybridPath = "Assets/Resources/AppFolder";
+        private static string hybridPath = "Assets/Resources/HybridFolder";
 
         public static void Build()
         {

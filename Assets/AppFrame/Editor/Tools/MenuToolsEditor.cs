@@ -151,7 +151,7 @@ namespace AppFrame.Editor
             stringBuilder.AppendLine("{");
             stringBuilder.AppendLine("    public class AssetsPathConfig");
             stringBuilder.AppendLine("    {");
-            stringBuilder.Append(GetAllPath("AppFolder"));
+            stringBuilder.Append(GetAllPath("HybridFolder"));
             stringBuilder.Append(GetAllPath("AssetsFolder"));
             stringBuilder.AppendLine("    }");
             stringBuilder.Append("}");

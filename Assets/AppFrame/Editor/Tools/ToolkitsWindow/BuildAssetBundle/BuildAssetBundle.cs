@@ -29,7 +29,7 @@ namespace AppFrame.Editor
         public static string des = "请输入本版更新描述";
 
         private static AppConfig AppConfig; //App配置表 
-        private static string configPath = "AppFolder/AppAssets/Config/AppConfig";
+        private static string configPath = "HybridFolder/App/Config/AppConfig";
 
         private static string m_TmpBuildPath = "";
 
@@ -47,8 +47,8 @@ namespace AppFrame.Editor
         {
             BuildAssetBundle.mold = mold;
             buildPath = mold == ABMold.Hybrid
-                ? buildPath.Replace("AssetsFolder", "AppFolder")
-                : buildPath.Replace("AppFolder", "AssetsFolder");
+                ? buildPath.Replace("AssetsFolder", "HybridFolder")
+                : buildPath.Replace("HybridFolder", "AssetsFolder");
             GetFolders_Layer1();
         }
 
@@ -82,7 +82,7 @@ namespace AppFrame.Editor
 
         private static void CopyDLLToSourceData(BuildTarget target)
         {
-            string targetDstDir = $"{Application.dataPath}/Resources/AppFolder/AppAssets/Dll";
+            string targetDstDir = $"{Application.dataPath}/Resources/HybridFolder/AppAssets/Dll";
             CopyAOTAssembliesToSourceData(target, targetDstDir);
             CopyMyAssembliesToSourceData(target, targetDstDir);
         }
@@ -190,7 +190,6 @@ namespace AppFrame.Editor
                     //OnWriteConfig(sceneName, namePathDic);
                     if (!moduleDic.ContainsKey(tempDirectoryInfo.Name))
                         moduleDic.Add(tempDirectoryInfo.Name, namePathDic);
-                    Debug.Log($"{tempDirectoryInfo.Name}-{namePathDic}");
                 }
             }
 
@@ -243,7 +242,7 @@ namespace AppFrame.Editor
             if (fileInfo.Extension == ".meta")
                 return;
             string bundleName = GetBundleName(fileInfo, sceneName);
-            // Debug.Log("包名为 :" + bundleName );
+            //Debug.Log("包名为 :" + bundleName );
 
             // D:\Unity_forWork\Unity_Project\AssetBundle02_Senior\Assets\AssetsFolder\Scene1\Character\NB\Player4.prefab
             // 获取Assetsy以及之后的目录
@@ -291,7 +290,7 @@ namespace AppFrame.Editor
             // 获取Scene之后的部分 :  Character/NB/Player4.prefab
             int sceneIndex = unityPath.IndexOf(sceneName) + sceneName.Length;
             string bundlePath = unityPath.Substring(sceneIndex + 1);
-
+            
             if (bundlePath.Contains("/"))
             {
                 // 后续还有路径, 包含子目录[取第一个/后的名字]

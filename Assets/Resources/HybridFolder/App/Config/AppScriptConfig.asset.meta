@@ -1,8 +1,8 @@
 fileFormatVersion: 2
-guid: 4a011b8257b6cea4285b5c0fb59b3425
+guid: 23d448c4cc9564447bd823e7d9dd2fbb
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 11400000
   userData: 
-  assetBundleName: appassets/config
+  assetBundleName: app/config
   assetBundleVariant: 

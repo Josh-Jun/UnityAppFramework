@@ -165,7 +165,7 @@ namespace AppFrame.Editor
             build_target.Init(BuildTarget.Android);
             
             var build_path = root.Q<TextField>("BuildPath");
-            build_path.value = "Assets/Resources/AppFolder";
+            build_path.value = "Assets/Resources/HybridFolder";
             root.Q<Button>("BuildPath_Browse").clicked += () =>
             {
                 build_path.value = EditorTool.Browse();
