@@ -1,5 +1,4 @@
 ﻿using System;
-using AppFrame.Enum;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -17,5 +16,27 @@ namespace AppFrame.Config
         [Tooltip("App安卓包不同渠道")] public TargetPackage TargetPackage;
         [Tooltip("App原生")] public bool NativeApp;
         [Tooltip("AB包打包加载方式")] public ABPipeline ABPipeline;
+    }
+    
+    /// <summary>安卓包不同渠道</summary>
+    public enum TargetPackage
+    {
+        Mobile = 0,
+        XR = 1,
+    }
+
+    /// <summary>AB包打包加载方式</summary>
+    public enum ABPipeline
+    {
+        Default = 0,
+        Scriptable = 1,
+    }
+
+    /// <summary>资源加载类型</summary>
+    public enum LoadAssetsMold
+    {
+        Native = 0,//本地资源
+        Local = 1,//本地ab
+        Remote = 2,//远端ab
     }
 }

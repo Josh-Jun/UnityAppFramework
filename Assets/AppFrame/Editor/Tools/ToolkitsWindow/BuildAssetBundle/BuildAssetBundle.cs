@@ -27,7 +27,7 @@ namespace AppFrame.Editor
         public static string des = "请输入本版更新描述";
 
         private static AppConfig AppConfig; //App配置表 
-        private static string configPath = "HybridFolder/App/Config/AppConfig";
+        private static string configPath = "AppConfig";
 
         private static string m_TmpBuildPath = "";
 
@@ -325,7 +325,7 @@ namespace AppFrame.Editor
         //[MenuItem("AssetBundle/BuildAllAssetBundle(一键打包)")]
         public static void BuildAllAssetBundles(BuildTarget buildTarget)
         {
-            string outPath = string.Format("{0}/{1}/{2}", outputPath, buildTarget, mold);
+            string outPath = string.Format("{0}/{1}/{2}", outputPath, mold, buildTarget);
             if (!FileTools.FolderExist(outPath))
             {
                 FileTools.CreateFolder(outPath);
@@ -380,7 +380,7 @@ namespace AppFrame.Editor
         //[MenuItem("AssetBundle/DeleteAllAssetBundle(一键删除)")]
         public static void DeleteAssetBundle(BuildTarget buildTarget)
         {
-            string outPath = string.Format("{0}/{1}/{2}", outputPath, buildTarget, mold);
+            string outPath = string.Format("{0}/{1}/{2}", outputPath, mold, buildTarget);
             if (!FileTools.FolderExist(outPath))
             {
                 return;
@@ -398,7 +398,7 @@ namespace AppFrame.Editor
         //[MenuItem("AssetBundle/CreateMD5File(生成MD5文件)")]
         public static void CreateFile(BuildTarget buildTarget)
         {
-            string outPath = string.Format("{0}/{1}/{2}", outputPath, buildTarget, mold);
+            string outPath = string.Format("{0}/{1}/{2}", outputPath, mold, buildTarget);
             string filePath = outPath + "/AssetBundleConfig.json";
 
             AssetBundleConfig config = new AssetBundleConfig();

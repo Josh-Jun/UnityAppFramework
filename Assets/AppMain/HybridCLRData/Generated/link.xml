@@ -1,5 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <linker>
+  <assembly fullname="App.Main">
+    <type fullname="AppFrame.Config.ABPipeline" preserve="all" />
+    <type fullname="AppFrame.Config.AppConfig" preserve="all" />
+    <type fullname="AppFrame.Config.AppScriptConfig" preserve="all" />
+    <type fullname="AppFrame.Config.LoadAssetsMold" preserve="all" />
+    <type fullname="AppFrame.Config.RootScript" preserve="all" />
+    <type fullname="AppFrame.Config.TargetPackage" preserve="all" />
+    <type fullname="Launcher.Launcher" preserve="all" />
+  </assembly>
   <assembly fullname="DOTween">
     <type fullname="DG.Tweening.AxisConstraint" preserve="all" />
     <type fullname="DG.Tweening.Core.Debugger" preserve="all" />

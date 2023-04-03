@@ -13,6 +13,7 @@ using AppFrame.Tools;
 using AppFrame.Data;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using ULauncher = Launcher.Launcher;
 
 namespace App
 {
@@ -28,7 +29,7 @@ namespace App
 
         public static void Init()
         {
-            AppInfo.AppConfig = Resources.Load<AppConfig>("HybridFolder/AppAssets/Config/AppConfig");
+            AppInfo.AppConfig = ULauncher.AppConfig;
             
             //Log开关
             Log.Enabled = AppInfo.AppConfig.IsDebug;
@@ -57,7 +58,7 @@ namespace App
         }
         private static void InitLogicScripts()
         {
-            appScriptConfig = Resources.Load<AppScriptConfig>("HybridFolder/AppAssets/Config/AppScriptConfig");
+            appScriptConfig = ULauncher.AppScriptConfig;
             for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
             {
                 if (!iLogicPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))

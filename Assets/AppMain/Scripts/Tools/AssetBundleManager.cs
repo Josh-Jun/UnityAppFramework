@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using AppFrame.Config;
 using UnityEngine;
 
 namespace Launcher
@@ -31,7 +32,7 @@ namespace Launcher
 
         private string mainfestPath;
 
-        private string PlatformName;
+        public static string PlatformName;
 
         public static AssetBundleManager Instance
         {
@@ -44,13 +45,12 @@ namespace Launcher
                         GameObject go = new GameObject(typeof(AssetBundleManager).Name);
                         _Instance = go.AddComponent<AssetBundleManager>();
                     }
-
                     return _Instance;
                 }
             }
         }
 
-        private static bool IsEditor
+        public static bool IsEditor
         {
             get
             {
@@ -59,32 +59,22 @@ namespace Launcher
             }
         }
 
-        private void InitManager(bool isRemote, RuntimePlatform platform)
+        public void InitManager()
         {
             var head = IsEditor ? "" : "file://";
-            switch (Application.platform)
+            PlatformName = Launcher.AppConfig.TargetPackage == TargetPackage.Mobile ? "android" : Launcher.AppConfig.TargetPackage.ToString().ToLower();
+            mainfestDataPath = $"{head}{Application.persistentDataPath}/AssetBundle/Hybrid/{name}";
+            mainfestAssetsPath =$"{head}{Application.streamingAssetsPath}/AssetBundle/Hybrid/{name}";
+            
+            switch (Launcher.AppConfig.LoadAssetsMold)
             {
-                case RuntimePlatform.WindowsPlayer:
-                    PlatformName = "StandaloneWindows";
+                case LoadAssetsMold.Native:
+                    mainfestPath = mainfestAssetsPath;
                     break;
-                case RuntimePlatform.IPhonePlayer:
-                    PlatformName = "iOS";
-                    break;
-                case RuntimePlatform.Android:
-                    PlatformName = "Android";
-                    break;
-                case RuntimePlatform.WindowsEditor:
-                    PlatformName = "Android";
-                    break;
-                case RuntimePlatform.OSXEditor:
-                    PlatformName = "Android";
-                    break;
-                default:
+                case LoadAssetsMold.Remote:
+                    mainfestPath = mainfestDataPath;
                     break;
             }
-            mainfestDataPath = $"{head}{Application.persistentDataPath}/AssetBundle/{name}/Hybrid";
-            mainfestAssetsPath =$"{head}{Application.streamingAssetsPath}/AssetBundle/{name}/Hybrid";
-            mainfestPath = isRemote ? mainfestDataPath : mainfestAssetsPath;
         }
 
         public void SetAbModulePairs(string moduleName, Dictionary<string, Folder> folderPairs)

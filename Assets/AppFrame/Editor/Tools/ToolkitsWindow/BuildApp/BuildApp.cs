@@ -19,7 +19,7 @@ namespace AppFrame.Editor
     public class BuildApp
     {
         private static AppConfig AppConfig; //App配置表 
-        private static string configPath = "HybridFolder/App/Config/AppConfig";
+        private static string configPath = "AppConfig";
         public static bool DevelopmentBuild = true;
         public static bool IsTestServer = true;
         public static LoadAssetsMold LoadAssetsMold = LoadAssetsMold.Native;

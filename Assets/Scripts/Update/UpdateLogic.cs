@@ -70,8 +70,8 @@ namespace Modules.Update
 
         public void Begin()
         {
-            LocalPath = PlatformManager.Instance.GetDataPath($"AssetBundle/{PlatformManager.Instance.Name}") + "/Assets/";
-            ServerUrl = NetcomManager.ABUrl + PlatformManager.Instance.Name + "/Assets/";
+            LocalPath = PlatformManager.Instance.GetDataPath($"AssetBundle/Assets/{PlatformManager.Instance.Name}/");
+            ServerUrl = NetcomManager.ABUrl + "/Assets/" + PlatformManager.Instance.Name;
 
             LocalVersionConfigPath = LocalPath + "AssetBundleConfig.json";
             ServerVersionConfigPath = ServerUrl + "AssetBundleConfig.json";
@@ -81,8 +81,21 @@ namespace Modules.Update
 
             switch (AppInfo.AppConfig.LoadAssetsMold)
             {
+                case LoadAssetsMold.Native:
+                    Root.StartApp();
+                    break;
+                case LoadAssetsMold.Local:
+                    var localPath = PlatformManager.Instance.GetAssetsPath(PlatformManager.Instance.Name) + "/Assets/";
+                    var configPath = localPath + "AssetBundleConfig.json";
+                    DownLoad(configPath, (string data) =>
+                    {
+                        var config = JsonUtility.FromJson<AssetBundleConfig>(data);
+                        SetABModulePairs(config);
+                        Root.StartApp();
+                    });
+                    break;
                 case LoadAssetsMold.Remote:
-                    view = AssetsManager.Instance.LoadUIView<UpdateView>(AssetsPathConfig.UpdateView);
+                    view = AssetsManager.Instance.LoadUIView<UpdateView>(Launcher.Launcher.UpdateView);
                     view.SetViewActive();
 
                     view.SetTipsText("检查更新中...");
@@ -103,23 +116,11 @@ namespace Modules.Update
                                 break;
                             case UpdateMold.None:
                                 view.SetViewActive(false);
+                                SetABModulePairs(localABConfig);
                                 Root.StartApp();
                                 break;
                         }
                     });
-                    break;
-                case LoadAssetsMold.Native:
-                    var localPath = PlatformManager.Instance.GetAssetsPath(PlatformManager.Instance.Name) + "/Assets/";
-                    var configPath = localPath + "AssetBundleConfig.json";
-                    DownLoad(configPath, (string data) =>
-                    {
-                        var config = JsonUtility.FromJson<AssetBundleConfig>(data);
-                        SetABModulePairs(config);
-                        Root.StartApp();
-                    });
-                    break;
-                case LoadAssetsMold.Local:
-                    Root.StartApp();
                     break;
             }
         }

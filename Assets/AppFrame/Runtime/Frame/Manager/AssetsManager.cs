@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Linq;
 using System.Reflection;
+using AppFrame.Config;
 using AppFrame.Enum;
 using AppFrame.Info;
 using AppFrame.Tools;
@@ -155,6 +156,19 @@ namespace AppFrame.Manager
             return go;
         }
 
+        /// <summary> 添加预制体，返回GameObject </summary>
+        public GameObject AddChild(GameObject prefab, GameObject parent = null)
+        {
+            GameObject go = AddChild(prefab, parent.transform);
+            return go;
+        }
+
+        /// <summary> 添加预制体，返回GameObject </summary>
+        public GameObject AddChild(GameObject prefab, Transform parent = null)
+        {
+            GameObject go = Instantiate(prefab, parent);
+            return go;
+        }
         #endregion
 
         #region 加载窗口
@@ -194,6 +208,34 @@ namespace AppFrame.Manager
         /// path = 窗口路径，不包含AssetsFolder
         /// state 初始化窗口是否显示
         /// </summary>
+        public T LoadUIView<T>(GameObject go, bool state = false) where T : Component
+        {
+            if (go == null) return null;
+            go = Instantiate(go, GoRoot.Instance.UIRectTransform);
+            go.transform.localEulerAngles = Vector3.zero;
+            go.transform.localScale = Vector3.one;
+            go.name = go.name.Replace("(Clone)", "");
+            T t = null;
+            AppInfo.AssemblyPairs.TryGetValue("App.Module", out Assembly assembly);
+            var type = assembly.GetType(typeof(T).FullName);
+            if (type != null)
+            {
+                t = (T)go.AddComponent(type);
+            }
+            else
+            {
+                Debug.LogError($"{typeof(T).FullName}:脚本不存在,");
+            }
+
+            EventDispatcher.TriggerEvent(go.name, state);
+            GoRoot.Instance.AddView<T>(t as ViewBase);
+            return t;
+        }
+        /// <summary> 
+        /// 加载窗口 添加T(Component)类型脚本
+        /// path = 窗口路径，不包含AssetsFolder
+        /// state 初始化窗口是否显示
+        /// </summary>
         public T LoadGoView<T>(string path, bool isTemp, bool state = false) where T : Component
         {
             var go = LoadAsset<GameObject>(path);
@@ -220,6 +262,35 @@ namespace AppFrame.Manager
             return t;
         }
 
+        /// <summary> 
+        /// 加载窗口 添加T(Component)类型脚本
+        /// path = 窗口路径，不包含AssetsFolder
+        /// state 初始化窗口是否显示
+        /// </summary>
+        public T LoadGoView<T>(GameObject go, bool isTemp, bool state = false) where T : Component
+        {
+            if (go == null) return null;
+            var parent = isTemp ? GoRoot.Instance.TempGoRoot : GoRoot.Instance.GlobalGoRoot;
+            go = Instantiate(go, parent);
+            go.transform.localEulerAngles = Vector3.zero;
+            go.transform.localScale = Vector3.one;
+            go.name = go.name.Replace("(Clone)", "");
+            T t = null;
+            AppInfo.AssemblyPairs.TryGetValue("App.Module", out Assembly assembly);
+            var type = assembly.GetType(typeof(T).FullName);
+            if (type != null)
+            {
+                t = (T)go.AddComponent(type);
+            }
+            else
+            {
+                Debug.LogError($"{typeof(T).FullName}:脚本已存在,");
+            }
+
+            EventDispatcher.TriggerEvent(go.name, state);
+            GoRoot.Instance.AddView<T>(t as ViewBase);
+            return t;
+        }
         #endregion
 
         #region 加载资源
