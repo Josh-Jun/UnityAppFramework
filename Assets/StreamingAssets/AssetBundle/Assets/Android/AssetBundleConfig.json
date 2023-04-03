@@ -1,0 +1,107 @@
+{
+    "GameVersion": "1.0",
+    "Platform": "Android",
+    "Des": "请输入本版更新描述",
+    "Modules": [
+        {
+            "ModuleName": "App",
+            "Folders": [
+                {
+                    "FolderName": "Ask",
+                    "BundleName": "app/ask",
+                    "Tag": "0",
+                    "Mold": "1",
+                    "MD5": "51e3efb38d74217d06b3c370c985743e",
+                    "Size": "10091"
+                },
+                {
+                    "FolderName": "Loading",
+                    "BundleName": "app/loading",
+                    "Tag": "0",
+                    "Mold": "1",
+                    "MD5": "6586d828ab13c5dc204094d6be8b1043",
+                    "Size": "11780"
+                }
+            ]
+        },
+        {
+            "ModuleName": "Scenes",
+            "Folders": [
+                {
+                    "FolderName": "TestAsset",
+                    "BundleName": "scenes/testasset",
+                    "Tag": "0",
+                    "Mold": "1",
+                    "MD5": "c39fa96445707c82b22d0e22b336d944",
+                    "Size": "19179"
+                },
+                {
+                    "FolderName": "TestScene",
+                    "BundleName": "scenes/testscene",
+                    "Tag": "0",
+                    "Mold": "1",
+                    "MD5": "b1b8552ca739e7f02d9149e0a541bc7a",
+                    "Size": "30308"
+                },
+                {
+                    "FolderName": "UpdateScene",
+                    "BundleName": "scenes/updatescene",
+                    "Tag": "0",
+                    "Mold": "1",
+                    "MD5": "13750a81604ac02dba532f6114a192df",
+                    "Size": "28057"
+                }
+            ]
+        },
+        {
+            "ModuleName": "Table",
+            "Folders": [
+                {
+                    "FolderName": "Config",
+                    "BundleName": "table/config",
+                    "Tag": "0",
+                    "Mold": "1",
+                    "MD5": "3d193f6ff4df919a85b9d0c9d7b80d95",
+                    "Size": "1858"
+                },
+                {
+                    "FolderName": "Json",
+                    "BundleName": "table/json",
+                    "Tag": "0",
+                    "Mold": "1",
+                    "MD5": "0c00e6def8450402d6c9a0dc2d490eb8",
+                    "Size": "1878"
+                },
+                {
+                    "FolderName": "Xml",
+                    "BundleName": "table/xml",
+                    "Tag": "0",
+                    "Mold": "1",
+                    "MD5": "659e070ca2ca58c9d7b6cacd7ba329c7",
+                    "Size": "1673"
+                }
+            ]
+        },
+        {
+            "ModuleName": "Test",
+            "Folders": [
+                {
+                    "FolderName": "Common",
+                    "BundleName": "test/common",
+                    "Tag": "0",
+                    "Mold": "1",
+                    "MD5": "120eb7687ab02e6d52aac4ed8e150c92",
+                    "Size": "70310212"
+                },
+                {
+                    "FolderName": "Mobile",
+                    "BundleName": "test/mobile",
+                    "Tag": "0",
+                    "Mold": "1",
+                    "MD5": "d4409a9e6ddebdec4f6184926279e7af",
+                    "Size": "12857"
+                }
+            ]
+        }
+    ]
+}

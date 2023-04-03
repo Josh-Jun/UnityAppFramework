@@ -44,7 +44,7 @@ namespace AppFrame.Manager
 
             switch (AppInfo.AppConfig.LoadAssetsMold)
             {
-                case LoadAssetsMold.Native:
+                case LoadAssetsMold.Local:
                     mainfestPath = mainfestAssetsPath;
                     break;
                 case LoadAssetsMold.Remote:

@@ -85,7 +85,7 @@ namespace Modules.Update
                     Root.StartApp();
                     break;
                 case LoadAssetsMold.Local:
-                    var localPath = PlatformManager.Instance.GetAssetsPath(PlatformManager.Instance.Name) + "/Assets/";
+                    var localPath = PlatformManager.Instance.GetAssetsPath($"AssetBundle/Assets/{PlatformManager.Instance.Name}/");
                     var configPath = localPath + "AssetBundleConfig.json";
                     DownLoad(configPath, (string data) =>
                     {

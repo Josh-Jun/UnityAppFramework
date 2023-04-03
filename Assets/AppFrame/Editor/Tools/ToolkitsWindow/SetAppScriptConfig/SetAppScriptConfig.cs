@@ -28,9 +28,10 @@ namespace AppFrame.Editor
                 var name = Path.GetFileNameWithoutExtension(GetBuildScenes()[i]);
                 var fullName = Path.Combine(dic, name).Replace(@"\", "/");
                 var scene = "";
-                if (i > 1)
+                if (i > 0)
                 {
                     scene = fullName.Replace("Assets/Resources/AssetsFolder/", "");
+                    scene = scene.Replace("Assets/Resources/HybridFolder/", "");
                 }
 
                 if (!SceneNames.Contains(scene))

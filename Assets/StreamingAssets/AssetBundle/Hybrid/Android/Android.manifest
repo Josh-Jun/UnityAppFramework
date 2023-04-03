@@ -1,0 +1,23 @@
+ManifestFileVersion: 1
+CompatibilityAssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: app/config
+      Hash: 8ff0de9e44c90c8cc5a6f05c6aed9e90
+      CRC: 905464483
+      Dependencies: {}
+    Info_1:
+      Name: app/dll
+      Hash: 8975ba5cf7ff0779d51668b0a16b6bd8
+      CRC: 2745891507
+      Dependencies: {}
+    Info_2:
+      Name: app/update
+      Hash: 0ef0bf744fddc6edc44841ac66b96a46
+      CRC: 2642025609
+      Dependencies: {}
+    Info_3:
+      Name: scenes/appscene
+      Hash: 459768ae4a054056ad88ce9645d48b6f
+      CRC: 3419473184
+      Dependencies: {}

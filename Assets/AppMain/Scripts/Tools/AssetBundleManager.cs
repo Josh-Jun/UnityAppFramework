@@ -68,7 +68,7 @@ namespace Launcher
             
             switch (Launcher.AppConfig.LoadAssetsMold)
             {
-                case LoadAssetsMold.Native:
+                case LoadAssetsMold.Local:
                     mainfestPath = mainfestAssetsPath;
                     break;
                 case LoadAssetsMold.Remote:

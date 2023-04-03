@@ -41,8 +41,7 @@ namespace App
             OutputAppInfo();
             //初始化Logic脚本
             InitLogicScripts();
-            //初始化Global的Logic脚本的Begin方法
-            InitLogicBegin("Global");
+            InitLogicBegin("Scenes/App/AppScene");
         }
         
         private static void OutputAppInfo()
@@ -54,6 +53,8 @@ namespace App
 
         public static void StartApp()
         {
+            //初始化Global的Logic脚本的Begin方法
+            InitLogicBegin("Global");
             LoadScene(appScriptConfig.MainSceneName, true);
         }
         private static void InitLogicScripts()

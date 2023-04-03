@@ -1,0 +1,56 @@
+ManifestFileVersion: 1
+CompatibilityAssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: app/ask
+      Hash: b8b9e7468d0a13f54d5837f87e483353
+      CRC: 3158393848
+      Dependencies: {}
+    Info_1:
+      Name: app/loading
+      Hash: c925e132f8f7f11aa4f6ae616c97f5e8
+      CRC: 2286259638
+      Dependencies: {}
+    Info_2:
+      Name: scenes/testasset
+      Hash: f2a3607ee81c0e858c558c6e426a3bbc
+      CRC: 1442484350
+      Dependencies: {}
+    Info_3:
+      Name: scenes/testscene
+      Hash: 26563338e65ce7430eade85099a38799
+      CRC: 1422214171
+      Dependencies: {}
+        Dependency_0: scenes/testasset
+        Dependency_1: test/common
+    Info_4:
+      Name: scenes/updatescene
+      Hash: be6476e2801b6f67194bf72640d75fc6
+      CRC: 3973305962
+      Dependencies: {}
+    Info_5:
+      Name: table/config
+      Hash: 43db949066f687c1b0d4a132902fbd91
+      CRC: 1154831189
+      Dependencies: {}
+    Info_6:
+      Name: table/json
+      Hash: 910ba1d57452353c526e547ea1628f59
+      CRC: 3007123890
+      Dependencies: {}
+    Info_7:
+      Name: table/xml
+      Hash: 88518a94f4d28af0d7b9e4bfdb67de91
+      CRC: 495220376
+      Dependencies: {}
+    Info_8:
+      Name: test/common
+      Hash: bdc6d4c98679b92a37437e21dc189b5e
+      CRC: 3984175893
+      Dependencies: {}
+    Info_9:
+      Name: test/mobile
+      Hash: 55ca4f931026e98dc767bcaa41591c4a
+      CRC: 1685306137
+      Dependencies: {}
+        Dependency_0: test/common
