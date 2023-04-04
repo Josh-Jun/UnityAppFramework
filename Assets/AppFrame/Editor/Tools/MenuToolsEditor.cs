@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using AppFrame.Tools;
 using UnityEditor;
+using UnityEditor.Callbacks;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
@@ -142,7 +143,7 @@ namespace AppFrame.Editor
         {
             System.Diagnostics.Process.Start("explorer.exe", $"file://{Application.temporaryCachePath}");
         }
-
+        [DidReloadScripts]
         [MenuItem("Tools/CreateAssetsPath", false, 3)]
         public static void CreateAssetsPath()
         {
@@ -204,7 +205,6 @@ namespace AppFrame.Editor
                     if (files[i].Name.Contains("lua")) continue; //剔除lua文件
                     if (files[i].FullName.Contains("Scenes") && !files[i].Name.EndsWith(".unity")) continue; //剔除场景以外的文件
                     fileInfos.Add(files[i]);
-                    Debug.Log(files[i].FullName);
                 }
             }
 
