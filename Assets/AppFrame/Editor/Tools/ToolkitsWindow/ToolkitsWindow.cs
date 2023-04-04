@@ -179,6 +179,12 @@ namespace AppFrame.Editor
                 output_path.value = EditorTool.Browse(true);
                 BuildAssetBundle.outputPath = output_path.value;
             };
+            var res_version = root.Q<TextField>("ResVersion");
+            res_version.value = BuildAssetBundle.GetResVersion();
+            res_version.RegisterCallback<ChangeEvent<string>>((evt) =>
+            {
+                BuildAssetBundle.SetResVersion(evt.newValue);
+            });
             var update_des = root.Q<TextField>("UpdateDes");
             update_des.RegisterCallback<ChangeEvent<string>>((evt) =>
             {

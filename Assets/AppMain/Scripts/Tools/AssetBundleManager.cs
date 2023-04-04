@@ -62,9 +62,9 @@ namespace Launcher
         public void InitManager()
         {
             var head = IsEditor ? "" : "file://";
-            PlatformName = Launcher.AppConfig.TargetPackage == TargetPackage.Mobile ? "android" : Launcher.AppConfig.TargetPackage.ToString().ToLower();
-            mainfestDataPath = $"{head}{Application.persistentDataPath}/AssetBundle/Hybrid/{PlatformName}";
-            mainfestAssetsPath =$"{head}{Application.streamingAssetsPath}/AssetBundle/Hybrid/{PlatformName}";
+            PlatformName = Launcher.AppConfig.TargetPackage == TargetPackage.Mobile ? "Android" : Launcher.AppConfig.TargetPackage.ToString();
+            mainfestDataPath = $"{head}{Application.persistentDataPath}/AssetBundle/{PlatformName}/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid";
+            mainfestAssetsPath =$"{head}{Application.streamingAssetsPath}/AssetBundle/{PlatformName}/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid";
             
             switch (Launcher.AppConfig.LoadAssetsMold)
             {

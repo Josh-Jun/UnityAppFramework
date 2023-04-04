@@ -16,6 +16,7 @@ namespace AppFrame.Config
         [Tooltip("App安卓包不同渠道")] public TargetPackage TargetPackage;
         [Tooltip("App原生")] public bool NativeApp;
         [Tooltip("AB包打包加载方式")] public ABPipeline ABPipeline;
+        [Tooltip("AB资源版本")] public string ResVersion;
     }
     
     /// <summary>安卓包不同渠道</summary>

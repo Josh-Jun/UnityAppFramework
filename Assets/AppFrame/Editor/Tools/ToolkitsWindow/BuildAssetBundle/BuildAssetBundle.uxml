@@ -17,6 +17,7 @@
         <ui:TextField picking-mode="Ignore" label="OutputPath" name="OutputPath">
             <ui:Button text="Browse" display-tooltip-when-elided="true" name="OutputPath_Browse" style="margin-left: 3px; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
         </ui:TextField>
+        <ui:TextField picking-mode="Ignore" label="ResVersion" name="ResVersion" />
         <ui:TextField picking-mode="Ignore" label="Update Des" mask-character="qin" text="请输入更新描述" name="UpdateDes" />
         <ui:Button text="BuildAndCopyDll(构建和复制脚本Dll)" display-tooltip-when-elided="true" name="BuildAndCopyDll" />
         <ui:Button text="DeleteAllAssetBundle(一键删除AB包)" display-tooltip-when-elided="true" name="DeleteAllAssetBundle" />

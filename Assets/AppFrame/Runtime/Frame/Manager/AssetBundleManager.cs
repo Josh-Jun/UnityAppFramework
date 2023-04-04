@@ -39,8 +39,8 @@ namespace AppFrame.Manager
             base.OnSingletonMonoInit();
 
             var head = PlatformManager.Instance.IsEditor ? "" : "file://";
-            mainfestDataPath = $"{head}{PlatformManager.Instance.GetDataPath($"AssetBundle/Assets/{PlatformManager.Instance.Name}")}";
-            mainfestAssetsPath =$"{head}{PlatformManager.Instance.GetAssetsPath($"AssetBundle/Assets/{PlatformManager.Instance.Name}")}";
+            mainfestDataPath = $"{head}{PlatformManager.Instance.GetDataPath($"AssetBundle/{PlatformManager.Instance.Name}/{Application.version}/{AppInfo.AppConfig.ResVersion}/Assets")}";
+            mainfestAssetsPath =$"{head}{PlatformManager.Instance.GetAssetsPath($"AssetBundle/{PlatformManager.Instance.Name}/{Application.version}/{AppInfo.AppConfig.ResVersion}/Assets")}";
 
             switch (AppInfo.AppConfig.LoadAssetsMold)
             {

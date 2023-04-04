@@ -56,6 +56,16 @@ namespace AppFrame.Editor
                 m_ExportList[i] = value;
         }
 
+        public static void SetResVersion(string ResVersion)
+        {
+            AppConfig.ResVersion = ResVersion;
+            EditorUtility.SetDirty(AppConfig);
+        }
+        public static string GetResVersion()
+        {
+            return AppConfig.ResVersion;
+        }
+
         public static void AutoBuildAssetBundle(BuildTarget buildTarget)
         {
             if (mold == ABMold.Hybrid)
@@ -325,7 +335,7 @@ namespace AppFrame.Editor
         //[MenuItem("AssetBundle/BuildAllAssetBundle(一键打包)")]
         public static void BuildAllAssetBundles(BuildTarget buildTarget)
         {
-            string outPath = string.Format("{0}/{1}/{2}", outputPath, mold, buildTarget);
+            string outPath = $"{outputPath}/{buildTarget}/{Application.version}/{AppConfig.ResVersion}/{mold}";
             if (!FileTools.FolderExist(outPath))
             {
                 FileTools.CreateFolder(outPath);
@@ -380,7 +390,7 @@ namespace AppFrame.Editor
         //[MenuItem("AssetBundle/DeleteAllAssetBundle(一键删除)")]
         public static void DeleteAssetBundle(BuildTarget buildTarget)
         {
-            string outPath = string.Format("{0}/{1}/{2}", outputPath, mold, buildTarget);
+            string outPath = $"{outputPath}/{buildTarget}/{Application.version}/{AppConfig.ResVersion}/{mold}";
             if (!FileTools.FolderExist(outPath))
             {
                 return;
@@ -398,7 +408,7 @@ namespace AppFrame.Editor
         //[MenuItem("AssetBundle/CreateMD5File(生成MD5文件)")]
         public static void CreateFile(BuildTarget buildTarget)
         {
-            string outPath = string.Format("{0}/{1}/{2}", outputPath, mold, buildTarget);
+            string outPath = $"{outputPath}/{buildTarget}/{Application.version}/{AppConfig.ResVersion}/{mold}";
             string filePath = outPath + "/AssetBundleConfig.json";
 
             AssetBundleConfig config = new AssetBundleConfig();
