@@ -6,6 +6,7 @@ using HybridCLR;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Launcher
 {
@@ -28,8 +29,14 @@ namespace Launcher
         public static AppScriptConfig AppScriptConfig;
         public static AppConfig AppConfig;
         public static GameObject UpdateView;
+        private Slider slider;
+        private Text text;
         private void Awake()
         {
+            slider = transform.Find("Canvas/Slider").GetComponent<Slider>();
+            text = transform.Find("Canvas/Slider/Text").GetComponent<Text>();
+            slider.gameObject.SetActive(false);
+            
             AppConfig = Resources.Load<AppConfig>("AppConfig");
 
             AssetBundleManager.Instance.InitManager();
@@ -45,6 +52,7 @@ namespace Launcher
         {
             if (isHotfix)
             {
+                slider.gameObject.SetActive(true);
                 float time = 0;
                 float previousSize = 0;
                 float speed = 0;
@@ -61,9 +69,13 @@ namespace Launcher
 
                     speed = speed > 0 ? speed : 0;
                     //set progress 0-1
+                    slider.value = HotFix.GetProgress;
+                    text.text = $"{HotFix.GetLoadedSize.ToString("F2")}M/{HotFix.TotalSize.ToString("F2")}M  {speed.ToString("F2")}M/S";
                 }
                 yield return new WaitForEndOfFrame();
                 //set progress 1
+                slider.value = 1;
+                text.text = $"{HotFix.TotalSize.ToString("F2")}M/{HotFix.TotalSize.ToString("F2")}M  {0}M/S";
                 yield return new WaitForSeconds(0.2f);
             }
             //更新下载完成，开始运行App

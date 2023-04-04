@@ -63,8 +63,8 @@ namespace Launcher
         {
             var head = IsEditor ? "" : "file://";
             PlatformName = Launcher.AppConfig.TargetPackage == TargetPackage.Mobile ? "android" : Launcher.AppConfig.TargetPackage.ToString().ToLower();
-            mainfestDataPath = $"{head}{Application.persistentDataPath}/AssetBundle/Hybrid/{name}";
-            mainfestAssetsPath =$"{head}{Application.streamingAssetsPath}/AssetBundle/Hybrid/{name}";
+            mainfestDataPath = $"{head}{Application.persistentDataPath}/AssetBundle/Hybrid/{PlatformName}";
+            mainfestAssetsPath =$"{head}{Application.streamingAssetsPath}/AssetBundle/Hybrid/{PlatformName}";
             
             switch (Launcher.AppConfig.LoadAssetsMold)
             {

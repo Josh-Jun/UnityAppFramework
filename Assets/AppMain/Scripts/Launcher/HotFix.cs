@@ -28,7 +28,7 @@ namespace Launcher
         private static List<Folder> downloadFolders = new List<Folder>();
         private static List<Folder> alreadlyFolders = new List<Folder>();
 
-        private static float TotalSize = 0; // 资源的总大小 MB
+        public static float TotalSize = 0; // 资源的总大小 MB
         private static long alreadyDownloadSize = 0;
         private static long downloadingSize;
 
@@ -54,7 +54,7 @@ namespace Launcher
                     {
                         var config = JsonUtility.FromJson<AssetBundleConfig>(data);
                         SetABModulePairs(config);
-                        callback?.Invoke(false);
+                        callback?.Invoke(true);
                     });
                     break;
                 case LoadAssetsMold.Remote:
