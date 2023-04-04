@@ -8,8 +8,8 @@ CompatibilityAssetBundleManifest:
       Dependencies: {}
     Info_1:
       Name: app/dll
-      Hash: 8975ba5cf7ff0779d51668b0a16b6bd8
-      CRC: 2745891507
+      Hash: 47cb9ce200a077aa5e656a4a273df34a
+      CRC: 854770384
       Dependencies: {}
     Info_2:
       Name: app/update
@@ -18,6 +18,6 @@ CompatibilityAssetBundleManifest:
       Dependencies: {}
     Info_3:
       Name: scenes/appscene
-      Hash: 459768ae4a054056ad88ce9645d48b6f
-      CRC: 3419473184
+      Hash: 30af24bd1dab455e5f2ca6644eeefd76
+      CRC: 2739178096
       Dependencies: {}

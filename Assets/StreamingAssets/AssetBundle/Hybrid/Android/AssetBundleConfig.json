@@ -19,8 +19,8 @@
                     "BundleName": "app/dll",
                     "Tag": "0",
                     "Mold": "1",
-                    "MD5": "a272e8745c05e0fadde7b35d4729c2c9",
-                    "Size": "2074017"
+                    "MD5": "eee329c83ccce649f1e3efc487793a1c",
+                    "Size": "2074020"
                 },
                 {
                     "FolderName": "Update",
@@ -40,8 +40,8 @@
                     "BundleName": "scenes/appscene",
                     "Tag": "0",
                     "Mold": "1",
-                    "MD5": "ccd2395ced10461f662097402a08ccb5",
-                    "Size": "5587"
+                    "MD5": "61e0b76771dde2d94513172090758714",
+                    "Size": "7020"
                 }
             ]
         }
