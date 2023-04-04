@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using AppFrame.Config;
@@ -322,6 +323,7 @@ namespace AppFrame.Editor
         private void CopyTemplateScriptsFunction()
         {
             var unity_install_path = root.Q<TextField>("unity_install_path");
+            unity_install_path.value = AppDomain.CurrentDomain.BaseDirectory;
             root.Q<Button>("unity_install_path_browse").clicked += () =>
             {
                 unity_install_path.value = EditorTool.Browse(true);
