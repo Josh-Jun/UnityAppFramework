@@ -20,7 +20,7 @@ namespace AppFrame.Editor
         {
             config = Resources.Load<AppScriptConfig>(configPath);
             MainSceneName = config.MainSceneName;
-
+            SceneNames.Clear();
             SceneNames.Add("Global");
             for (var i = 0; i < GetBuildScenes().Length; i++)
             {
