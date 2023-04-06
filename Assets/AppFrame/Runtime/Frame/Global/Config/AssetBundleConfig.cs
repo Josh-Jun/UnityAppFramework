@@ -29,8 +29,9 @@ namespace AppFrame.Config
         public string FolderName;//文件夹名
         public string BundleName;//包名
         public string Tag; //是否需要断点续传  0-不需要  1-需要
-        public string Mold; //是否本地包
+        public string Mold; //AB包类型
         public string MD5; //MD5
         public string Size;//资源大小
+        public string[] Dependencies;//依赖关系
     }
 }

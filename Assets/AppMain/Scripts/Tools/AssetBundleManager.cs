@@ -85,33 +85,21 @@ namespace Launcher
             }
         }
 
-        public AssetBundle LoadAssetBundle(string bundleName, int mold)
+        public AssetBundle LoadAssetBundle(string bundleName, string[] Dependencies = null)
         {
             AssetBundle ab;
-
-            if (mold == 0)
-            {
-                //加载ab包，需一并加载其依赖包。
-                if (assetbundle == null)
-                {
-                    //根据各个平台下的基础路径和主包名加载主包
-                    assetbundle = AssetBundle.LoadFromFile($"{mainfestPath}/{PlatformName}");
-                    //获取主包下的AssetBundleManifest资源文件（存有依赖信息）
-                    mainfest = assetbundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
-                }
             
-                //根据manifest获取所有依赖包的名称 固定API
-                string[] dependencies = GetDependence(bundleName);
-                //循环加载所有依赖包
-                for (int i = 0; i < dependencies.Length; i++)
+            if (Dependencies != null)
+            {
+                for (int i = 0; i < Dependencies.Length; i++)
                 {
                     //如果不在缓存则加入
-                    if (!AssetBundlesCache.ContainsKey(dependencies[i]))
+                    if (!AssetBundlesCache.ContainsKey(Dependencies[i]))
                     {
                         //根据依赖包名称进行加载
-                        ab = AssetBundle.LoadFromFile($"{mainfestPath}/{dependencies[i]}");
+                        ab = AssetBundle.LoadFromFile($"{mainfestPath}/{Dependencies[i]}");
                         //注意添加进缓存 防止重复加载AB包
-                        AssetBundlesCache.Add(dependencies[i], ab);
+                        AssetBundlesCache.Add(Dependencies[i], ab);
                     }
                 }
             }
@@ -129,7 +117,7 @@ namespace Launcher
         public AssetBundle LoadAssetBundle(string moduleName, string folderName)
         {
             Folder folder = ABModulePairs[moduleName][folderName];
-            return LoadAssetBundle(folder.BundleName, int.Parse(folder.Mold));
+            return LoadAssetBundle(folder.BundleName, folder.Dependencies);
         }
 
         public T LoadAsset<T>(string moduleName, string folderName, string assetsName) where T : UnityEngine.Object

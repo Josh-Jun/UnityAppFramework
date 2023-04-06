@@ -32,5 +32,6 @@ namespace Launcher
         public string Mold; //是否本地包
         public string MD5; //MD5
         public string Size;//资源大小
+        public string[] Dependencies;//依赖关系
     }
 }

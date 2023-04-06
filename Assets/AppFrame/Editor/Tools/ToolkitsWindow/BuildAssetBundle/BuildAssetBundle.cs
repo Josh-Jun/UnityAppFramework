@@ -13,6 +13,7 @@ using UnityEditor;
 using UnityEditor.Build.Content;
 using UnityEditor.Build.Pipeline;
 using UnityEngine;
+using UnityEngine.Build.Pipeline;
 
 namespace AppFrame.Editor
 {
@@ -331,7 +332,7 @@ namespace AppFrame.Editor
         #endregion
 
         #region 打包
-
+        
         //[MenuItem("AssetBundle/BuildAllAssetBundle(一键打包)")]
         public static void BuildAllAssetBundles(BuildTarget buildTarget)
         {
@@ -343,8 +344,10 @@ namespace AppFrame.Editor
 
             if (AppConfig.ABPipeline == ABPipeline.Default)
             {
-                if (BuildPipeline.BuildAssetBundles(outPath, BuildAssetBundleOptions.ChunkBasedCompression,
-                        buildTarget))
+                AssetBundleManifest = BuildPipeline.BuildAssetBundles(outPath,
+                    BuildAssetBundleOptions.ChunkBasedCompression,
+                    buildTarget);
+                if (AssetBundleManifest)
                 {
                     AssetDatabase.Refresh();
                     EditorUtility.RevealInFinder(outPath);
@@ -353,7 +356,8 @@ namespace AppFrame.Editor
             }
             else
             {
-                if (ScriptableBuildAssetBundles(outPath, false, true, buildTarget))
+                ScriptableAssetBundleManifest = ScriptableBuildAssetBundles(outPath, false, true, buildTarget);
+                if (ScriptableAssetBundleManifest)
                 {
                     AssetDatabase.Refresh();
                     EditorUtility.RevealInFinder(outPath);
@@ -362,7 +366,7 @@ namespace AppFrame.Editor
             }
         }
 
-        public static bool ScriptableBuildAssetBundles(string outputPath, bool forceRebuild,
+        public static CompatibilityAssetBundleManifest ScriptableBuildAssetBundles(string outputPath, bool forceRebuild,
             bool useChunkBasedCompression,
             BuildTarget buildTarget)
         {
@@ -380,7 +384,7 @@ namespace AppFrame.Editor
                 bundles[i].addressableNames = bundles[i].assetNames.Select(Path.GetFileNameWithoutExtension).ToArray();
 
             var manifest = CompatibilityBuildPipeline.BuildAssetBundles(outputPath, bundles, options, buildTarget);
-            return manifest != null;
+            return manifest;
         }
 
         #endregion
@@ -405,6 +409,8 @@ namespace AppFrame.Editor
 
         #region 生成MD5文件
 
+        private static CompatibilityAssetBundleManifest ScriptableAssetBundleManifest = null;
+        private static AssetBundleManifest AssetBundleManifest = null;
         //[MenuItem("AssetBundle/CreateMD5File(生成MD5文件)")]
         public static void CreateFile(BuildTarget buildTarget)
         {
@@ -431,6 +437,9 @@ namespace AppFrame.Editor
                     f.Mold = ((int)AppConfig.ABPipeline).ToString();
                     f.MD5 = GetFileMD5(file.FullName);
                     f.Size = $"{file.Length}";
+                    f.Dependencies = AppConfig.ABPipeline == ABPipeline.Default
+                        ? AssetBundleManifest.GetAllDependencies(folder.Value)
+                        : ScriptableAssetBundleManifest.GetAllDependencies(folder.Value);
                     m.Folders.Add(f);
                 }
 
