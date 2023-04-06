@@ -12,15 +12,17 @@
                     "Tag": "0",
                     "Mold": "1",
                     "MD5": "23fe91a65009b91f62f4fd4d127961fc",
-                    "Size": "1982"
+                    "Size": "1982",
+                    "Dependencies": []
                 },
                 {
                     "FolderName": "Dll",
                     "BundleName": "app/dll",
                     "Tag": "0",
                     "Mold": "1",
-                    "MD5": "a46666e3ab376feb19727f7d6c9ac002",
-                    "Size": "2073764"
+                    "MD5": "d93a66e03fa9ec2345ac76b36fbe8714",
+                    "Size": "2074072",
+                    "Dependencies": []
                 },
                 {
                     "FolderName": "Update",
@@ -28,7 +30,8 @@
                     "Tag": "0",
                     "Mold": "1",
                     "MD5": "3282d8a1003097adce06460ef5b0e084",
-                    "Size": "16710"
+                    "Size": "16710",
+                    "Dependencies": []
                 }
             ]
         },
@@ -41,7 +44,8 @@
                     "Tag": "0",
                     "Mold": "1",
                     "MD5": "61e0b76771dde2d94513172090758714",
-                    "Size": "7020"
+                    "Size": "7020",
+                    "Dependencies": []
                 }
             ]
         }

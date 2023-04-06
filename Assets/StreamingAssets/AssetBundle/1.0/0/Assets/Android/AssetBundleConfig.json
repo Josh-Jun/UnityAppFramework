@@ -12,7 +12,8 @@
                     "Tag": "0",
                     "Mold": "1",
                     "MD5": "51e3efb38d74217d06b3c370c985743e",
-                    "Size": "10091"
+                    "Size": "10091",
+                    "Dependencies": []
                 },
                 {
                     "FolderName": "Loading",
@@ -20,7 +21,8 @@
                     "Tag": "0",
                     "Mold": "1",
                     "MD5": "6586d828ab13c5dc204094d6be8b1043",
-                    "Size": "11780"
+                    "Size": "11780",
+                    "Dependencies": []
                 }
             ]
         },
@@ -33,7 +35,8 @@
                     "Tag": "0",
                     "Mold": "1",
                     "MD5": "c39fa96445707c82b22d0e22b336d944",
-                    "Size": "19179"
+                    "Size": "19179",
+                    "Dependencies": []
                 },
                 {
                     "FolderName": "TestScene",
@@ -41,7 +44,11 @@
                     "Tag": "0",
                     "Mold": "1",
                     "MD5": "b1b8552ca739e7f02d9149e0a541bc7a",
-                    "Size": "30308"
+                    "Size": "30308",
+                    "Dependencies": [
+                        "scenes/testasset",
+                        "test/common"
+                    ]
                 },
                 {
                     "FolderName": "UpdateScene",
@@ -49,7 +56,8 @@
                     "Tag": "0",
                     "Mold": "1",
                     "MD5": "13750a81604ac02dba532f6114a192df",
-                    "Size": "28057"
+                    "Size": "28057",
+                    "Dependencies": []
                 }
             ]
         },
@@ -62,7 +70,8 @@
                     "Tag": "0",
                     "Mold": "1",
                     "MD5": "3d193f6ff4df919a85b9d0c9d7b80d95",
-                    "Size": "1858"
+                    "Size": "1858",
+                    "Dependencies": []
                 },
                 {
                     "FolderName": "Json",
@@ -70,7 +79,8 @@
                     "Tag": "0",
                     "Mold": "1",
                     "MD5": "0c00e6def8450402d6c9a0dc2d490eb8",
-                    "Size": "1878"
+                    "Size": "1878",
+                    "Dependencies": []
                 },
                 {
                     "FolderName": "Xml",
@@ -78,7 +88,8 @@
                     "Tag": "0",
                     "Mold": "1",
                     "MD5": "659e070ca2ca58c9d7b6cacd7ba329c7",
-                    "Size": "1673"
+                    "Size": "1673",
+                    "Dependencies": []
                 }
             ]
         },
@@ -91,7 +102,8 @@
                     "Tag": "0",
                     "Mold": "1",
                     "MD5": "120eb7687ab02e6d52aac4ed8e150c92",
-                    "Size": "70310212"
+                    "Size": "70310212",
+                    "Dependencies": []
                 },
                 {
                     "FolderName": "Mobile",
@@ -99,7 +111,10 @@
                     "Tag": "0",
                     "Mold": "1",
                     "MD5": "d4409a9e6ddebdec4f6184926279e7af",
-                    "Size": "12857"
+                    "Size": "12857",
+                    "Dependencies": [
+                        "test/common"
+                    ]
                 }
             ]
         }

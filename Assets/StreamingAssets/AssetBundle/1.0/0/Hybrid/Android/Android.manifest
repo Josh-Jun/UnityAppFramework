@@ -8,8 +8,8 @@ CompatibilityAssetBundleManifest:
       Dependencies: {}
     Info_1:
       Name: app/dll
-      Hash: 65c2c40e018f986409cc3eea69d3048e
-      CRC: 1582941466
+      Hash: e96d27d146ce2cf449e77dc62e216c42
+      CRC: 1293657190
       Dependencies: {}
     Info_2:
       Name: app/update
