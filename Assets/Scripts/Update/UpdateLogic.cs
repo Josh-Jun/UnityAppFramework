@@ -70,8 +70,8 @@ namespace Modules.Update
 
         public void Begin()
         {
-            LocalPath = PlatformManager.Instance.GetDataPath($"AssetBundle/{PlatformManager.Instance.Name}/{Application.version}/{AppInfo.AppConfig.ResVersion}/Assets/");
-            ServerUrl = NetcomManager.ABUrl + $"{PlatformManager.Instance.Name}/{Application.version}/{AppInfo.AppConfig.ResVersion}/Assets/";
+            LocalPath = PlatformManager.Instance.GetDataPath($"AssetBundle/{Application.version}/{AppInfo.AppConfig.ResVersion}/Assets/{PlatformManager.Instance.Name}/");
+            ServerUrl = NetcomManager.ABUrl + $"{Application.version}/{AppInfo.AppConfig.ResVersion}/Assets/{PlatformManager.Instance.Name}/";
 
             LocalVersionConfigPath = LocalPath + "AssetBundleConfig.json";
             ServerVersionConfigPath = ServerUrl + "AssetBundleConfig.json";
@@ -85,7 +85,7 @@ namespace Modules.Update
                     Root.StartApp();
                     break;
                 case LoadAssetsMold.Local:
-                    var localPath = PlatformManager.Instance.GetAssetsPath($"AssetBundle/{PlatformManager.Instance.Name}/{Application.version}/{AppInfo.AppConfig.ResVersion}/Assets/");
+                    var localPath = PlatformManager.Instance.GetAssetsPath($"AssetBundle/{Application.version}/{AppInfo.AppConfig.ResVersion}/Assets/{PlatformManager.Instance.Name}/");
                     var configPath = localPath + "AssetBundleConfig.json";
                     DownLoad(configPath, (string data) =>
                     {

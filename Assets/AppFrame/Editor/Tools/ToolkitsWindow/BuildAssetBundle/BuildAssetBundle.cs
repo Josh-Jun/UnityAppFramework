@@ -335,7 +335,7 @@ namespace AppFrame.Editor
         //[MenuItem("AssetBundle/BuildAllAssetBundle(一键打包)")]
         public static void BuildAllAssetBundles(BuildTarget buildTarget)
         {
-            string outPath = $"{outputPath}/{buildTarget}/{Application.version}/{AppConfig.ResVersion}/{mold}";
+            string outPath = $"{outputPath}/{Application.version}/{AppConfig.ResVersion}/{mold}/{buildTarget}";
             if (!FileTools.FolderExist(outPath))
             {
                 FileTools.CreateFolder(outPath);
@@ -353,7 +353,7 @@ namespace AppFrame.Editor
             }
             else
             {
-                if (SariptableBuildAssetBundles(outPath, false, true, buildTarget))
+                if (ScriptableBuildAssetBundles(outPath, false, true, buildTarget))
                 {
                     AssetDatabase.Refresh();
                     EditorUtility.RevealInFinder(outPath);
@@ -362,7 +362,7 @@ namespace AppFrame.Editor
             }
         }
 
-        public static bool SariptableBuildAssetBundles(string outputPath, bool forceRebuild,
+        public static bool ScriptableBuildAssetBundles(string outputPath, bool forceRebuild,
             bool useChunkBasedCompression,
             BuildTarget buildTarget)
         {
@@ -390,7 +390,7 @@ namespace AppFrame.Editor
         //[MenuItem("AssetBundle/DeleteAllAssetBundle(一键删除)")]
         public static void DeleteAssetBundle(BuildTarget buildTarget)
         {
-            string outPath = $"{outputPath}/{buildTarget}/{Application.version}/{AppConfig.ResVersion}/{mold}";
+            string outPath = $"{outputPath}/{Application.version}/{AppConfig.ResVersion}/{mold}/{buildTarget}";
             if (!FileTools.FolderExist(outPath))
             {
                 return;
@@ -408,7 +408,7 @@ namespace AppFrame.Editor
         //[MenuItem("AssetBundle/CreateMD5File(生成MD5文件)")]
         public static void CreateFile(BuildTarget buildTarget)
         {
-            string outPath = $"{outputPath}/{buildTarget}/{Application.version}/{AppConfig.ResVersion}/{mold}";
+            string outPath = $"{outputPath}/{Application.version}/{AppConfig.ResVersion}/{mold}/{buildTarget}";
             string filePath = outPath + "/AssetBundleConfig.json";
 
             AssetBundleConfig config = new AssetBundleConfig();

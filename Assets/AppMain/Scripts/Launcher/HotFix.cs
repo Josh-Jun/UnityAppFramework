@@ -36,8 +36,8 @@ namespace Launcher
 
         public static void Init(Action<bool> callback)
         {
-            LocalPath = $"{Application.persistentDataPath}/AssetBundle/{AssetBundleManager.PlatformName}/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid/";
-            ServerUrl = $"{server_url}/AssetBundle/{AssetBundleManager.PlatformName}/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid/";
+            LocalPath = $"{Application.persistentDataPath}/AssetBundle/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid/{AssetBundleManager.PlatformName}/";
+            ServerUrl = $"{server_url}/AssetBundle/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid/{AssetBundleManager.PlatformName}/";
 
             LocalVersionConfigPath = LocalPath + "AssetBundleConfig.json";
             ServerVersionConfigPath = ServerUrl + "AssetBundleConfig.json";
@@ -48,7 +48,7 @@ namespace Launcher
                     callback?.Invoke(false);
                     break;
                 case LoadAssetsMold.Local:
-                    var localPath = $"{Application.streamingAssetsPath}/AssetBundle/{AssetBundleManager.PlatformName}/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid/";
+                    var localPath = $"{Application.streamingAssetsPath}/AssetBundle/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid/{AssetBundleManager.PlatformName}/";
                     var configPath = localPath + "AssetBundleConfig.json";
                     DownLoad(configPath, (string data) =>
                     {
