@@ -68,7 +68,7 @@ namespace AppFrame.Editor
                     pathline = matches.Groups[1].Value;
 
                     // 找到不是我们自定义log文件的那行，重新整理文件路径，手动打开
-                    if (!pathline.Contains("Log.cs") && !string.IsNullOrEmpty(pathline))
+                    if (!pathline.Contains(LogCS) && !string.IsNullOrEmpty(pathline))
                     {
                         int split_index = pathline.LastIndexOf(":");
                         string path = pathline.Substring(0, split_index);
