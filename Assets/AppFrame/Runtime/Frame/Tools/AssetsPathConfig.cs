@@ -9,6 +9,9 @@ namespace AppFrame.Data
         public const string AppScene = "Scenes/App/AppScene";
         public const string update_progress = "App/Update/Textures/update_progress";
         public const string UpdateView = "App/Update/Views/UpdateView";
+        public const string ask_bg = "Ask/Textures/ask_bg";
+        public const string AskView = "Ask/Views/AskView";
+        public const string LoadingView = "Loading/Views/LoadingView";
         public const string TestScene = "Scenes/Test/TestScene";
         public const string UpdateScene = "Scenes/Update/UpdateScene";
         public const string AppTableConfig = "Table/Config/AppTableConfig";
@@ -16,9 +19,6 @@ namespace AppFrame.Data
         public const string UserDataJson = "Table/Json/UserDataJson";
         public const string TestXml = "Table/Xml/TestXml";
         public const string UserDataXml = "Table/Xml/UserDataXml";
-        public const string ask_bg = "App/Ask/Textures/ask_bg";
-        public const string AskView = "App/Ask/Views/AskView";
-        public const string LoadingView = "App/Loading/Views/LoadingView";
         public const string Cube = "Test/Common/Materials/Cube";
         public const string Quad = "Test/Common/Materials/Quad";
         public const string logo = "Test/Common/Textures/logo";

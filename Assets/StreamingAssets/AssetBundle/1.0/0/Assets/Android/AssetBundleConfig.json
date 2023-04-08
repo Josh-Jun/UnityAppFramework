@@ -4,25 +4,50 @@
     "Des": "请输入本版更新描述",
     "Modules": [
         {
-            "ModuleName": "App",
+            "ModuleName": "Ask",
             "Folders": [
                 {
-                    "FolderName": "Ask",
-                    "BundleName": "app/ask",
+                    "FolderName": "Textures",
+                    "BundleName": "ask/textures",
                     "Tag": "0",
                     "Mold": "1",
-                    "MD5": "51e3efb38d74217d06b3c370c985743e",
-                    "Size": "10091",
+                    "MD5": "10c99b2662d62a822e78779f60e919be",
+                    "Size": "4207",
                     "Dependencies": []
                 },
                 {
-                    "FolderName": "Loading",
-                    "BundleName": "app/loading",
+                    "FolderName": "Views",
+                    "BundleName": "ask/views",
                     "Tag": "0",
                     "Mold": "1",
-                    "MD5": "6586d828ab13c5dc204094d6be8b1043",
-                    "Size": "11780",
+                    "MD5": "dd915df6979bc4da31f6d5e2061cadc4",
+                    "Size": "7191",
                     "Dependencies": []
+                }
+            ]
+        },
+        {
+            "ModuleName": "Loading",
+            "Folders": [
+                {
+                    "FolderName": "Textures",
+                    "BundleName": "loading/textures",
+                    "Tag": "0",
+                    "Mold": "1",
+                    "MD5": "6e5a6b28c43820ffa20dcd2ed18b2298",
+                    "Size": "4158",
+                    "Dependencies": []
+                },
+                {
+                    "FolderName": "Views",
+                    "BundleName": "loading/views",
+                    "Tag": "0",
+                    "Mold": "1",
+                    "MD5": "604878e455eab2ef539268b96b150fcb",
+                    "Size": "11622",
+                    "Dependencies": [
+                        "loading/textures"
+                    ]
                 }
             ]
         },
@@ -55,8 +80,8 @@
                     "BundleName": "scenes/updatescene",
                     "Tag": "0",
                     "Mold": "1",
-                    "MD5": "13750a81604ac02dba532f6114a192df",
-                    "Size": "28057",
+                    "MD5": "81ba5146c62583dd70176342bac8f9ba",
+                    "Size": "44265",
                     "Dependencies": []
                 }
             ]
