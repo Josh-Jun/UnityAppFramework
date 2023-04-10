@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using AppFrame.Enum;
 using AppFrame.Tools;
+using DG.Tweening;
 using UnityEngine;
 
 namespace AppFrame.View
 {
     public class ViewBase : EventBaseMono
     {
+        public ViewMold mold;
+        public Sequence TweenSequence = DOTween.Sequence();
+        
         [Obsolete("此方法已弃用，请使用InitWindow方法", true)]
         protected virtual void Awake()
         {
@@ -43,13 +48,44 @@ namespace AppFrame.View
         /// <summary>关闭窗口</summary>
         protected virtual void CloseView()
         {
-
+            
         }
-
         /// <summary>设置窗体显/隐</summary>
         public void SetViewActive(bool isActive = true)
         {
             if (this == null) return;
+
+            if (TweenSequence.IsActive())
+            {
+                if (isActive)
+                {
+                    TweenSequence.OnStart(() =>
+                    {
+                        SetActive(isActive);
+                    });
+                }
+                else
+                {
+                    TweenSequence.OnComplete(() =>
+                    {
+                        SetActive(isActive);
+                    });
+                }
+                TweenSequence.Play();
+            }
+            else
+            {
+                SetActive(isActive);
+            }
+        }
+
+        private void SetActive(bool isActive)
+        {
+            if (!isActive)
+            {
+                CloseView();
+                TweenSequence.Kill();
+            }
             if (gameObject != null)
             {
                 if (gameObject.activeSelf != isActive)
@@ -57,14 +93,9 @@ namespace AppFrame.View
                     gameObject.SetActive(isActive);
                 }
             }
-
             if (isActive)
             {
                 OpenView();
-            }
-            else
-            {
-                CloseView();
             }
         }
 

@@ -15,7 +15,7 @@ using UnityEngine.XR.Interaction.Toolkit.UI;
 
 namespace AppFrame.View
 {
-    public class GoRoot : SingletonMono<GoRoot>
+    public class ViewManager : SingletonMono<ViewManager>
     {
         #region Private Variable
 
@@ -88,8 +88,6 @@ namespace AppFrame.View
         /// </summary>
         void Awake()
         {
-            transform.SetParent(App.App.app.transform);
-
             #region UI Canvas
 
             CanvasObject = new GameObject("UI Canvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler),

@@ -182,7 +182,7 @@ namespace AppFrame.Manager
         {
             var go = LoadAsset<GameObject>(path);
             if (go == null) return null;
-            go = Instantiate(go, GoRoot.Instance.UIRectTransform);
+            go = Instantiate(go, ViewManager.Instance.UIRectTransform);
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
@@ -199,7 +199,7 @@ namespace AppFrame.Manager
             }
 
             EventDispatcher.TriggerEvent(go.name, state);
-            GoRoot.Instance.AddView<T>(t as ViewBase);
+            ViewManager.Instance.AddView<T>(t as ViewBase);
             return t;
         }
 
@@ -211,7 +211,7 @@ namespace AppFrame.Manager
         public T LoadUIView<T>(GameObject go, bool state = false) where T : Component
         {
             if (go == null) return null;
-            go = Instantiate(go, GoRoot.Instance.UIRectTransform);
+            go = Instantiate(go, ViewManager.Instance.UIRectTransform);
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
@@ -228,7 +228,7 @@ namespace AppFrame.Manager
             }
 
             EventDispatcher.TriggerEvent(go.name, state);
-            GoRoot.Instance.AddView<T>(t as ViewBase);
+            ViewManager.Instance.AddView<T>(t as ViewBase);
             return t;
         }
         /// <summary> 
@@ -240,7 +240,7 @@ namespace AppFrame.Manager
         {
             var go = LoadAsset<GameObject>(path);
             if (go == null) return null;
-            var parent = isTemp ? GoRoot.Instance.TempGoRoot : GoRoot.Instance.GlobalGoRoot;
+            var parent = isTemp ? ViewManager.Instance.TempGoRoot : ViewManager.Instance.GlobalGoRoot;
             go = Instantiate(go, parent);
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localScale = Vector3.one;
@@ -258,7 +258,7 @@ namespace AppFrame.Manager
             }
 
             EventDispatcher.TriggerEvent(go.name, state);
-            GoRoot.Instance.AddView<T>(t as ViewBase);
+            ViewManager.Instance.AddView<T>(t as ViewBase);
             return t;
         }
 
@@ -270,7 +270,7 @@ namespace AppFrame.Manager
         public T LoadGoView<T>(GameObject go, bool isTemp, bool state = false) where T : Component
         {
             if (go == null) return null;
-            var parent = isTemp ? GoRoot.Instance.TempGoRoot : GoRoot.Instance.GlobalGoRoot;
+            var parent = isTemp ? ViewManager.Instance.TempGoRoot : ViewManager.Instance.GlobalGoRoot;
             go = Instantiate(go, parent);
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localScale = Vector3.one;
@@ -288,7 +288,7 @@ namespace AppFrame.Manager
             }
 
             EventDispatcher.TriggerEvent(go.name, state);
-            GoRoot.Instance.AddView<T>(t as ViewBase);
+            ViewManager.Instance.AddView<T>(t as ViewBase);
             return t;
         }
         #endregion

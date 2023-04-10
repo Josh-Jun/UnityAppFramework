@@ -22,4 +22,12 @@ namespace AppFrame.Enum
         Hybrid = 0,//Dll资源AB
         Assets = 1,//资源AB
     }
+
+    /// <summary>AB包类型</summary>
+    public enum ViewMold
+    {
+        UI2DView = 0,//2DUI
+        UI3DView = 1,//3DUI
+        GOView = 1,//3DModel
+    }
 }
