@@ -11,8 +11,8 @@
                     "BundleName": "app/config",
                     "Tag": "0",
                     "Mold": "1",
-                    "MD5": "23fe91a65009b91f62f4fd4d127961fc",
-                    "Size": "1982",
+                    "MD5": "15700bc37a11ffe674816a6db22812c5",
+                    "Size": "1983",
                     "Dependencies": []
                 },
                 {
@@ -20,8 +20,8 @@
                     "BundleName": "app/dll",
                     "Tag": "0",
                     "Mold": "1",
-                    "MD5": "3be5a1fad2df03353d10833aea150503",
-                    "Size": "2074068",
+                    "MD5": "5d3745b5a6cf38b2097d2bba46c65ab0",
+                    "Size": "2073713",
                     "Dependencies": []
                 },
                 {
@@ -36,15 +36,15 @@
             ]
         },
         {
-            "ModuleName": "Scenes",
+            "ModuleName": "Scene",
             "Folders": [
                 {
                     "FolderName": "AppScene",
-                    "BundleName": "scenes/appscene",
+                    "BundleName": "scene/appscene",
                     "Tag": "0",
                     "Mold": "1",
-                    "MD5": "61e0b76771dde2d94513172090758714",
-                    "Size": "7020",
+                    "MD5": "44dd03db065939d01bc4b1736b40ee00",
+                    "Size": "7019",
                     "Dependencies": []
                 }
             ]

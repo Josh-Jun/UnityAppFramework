@@ -3,13 +3,13 @@ CompatibilityAssetBundleManifest:
   AssetBundleInfos:
     Info_0:
       Name: app/config
-      Hash: 8ff0de9e44c90c8cc5a6f05c6aed9e90
-      CRC: 905464483
+      Hash: fa02c66dc44db89a0966ccf50f6a647b
+      CRC: 1704485797
       Dependencies: {}
     Info_1:
       Name: app/dll
-      Hash: 88f7d41233b00a54ab94e0858e8dfec2
-      CRC: 2119779114
+      Hash: 01fb86031fa5d55e0d978159c6fa03f6
+      CRC: 265900021
       Dependencies: {}
     Info_2:
       Name: app/update
@@ -17,7 +17,7 @@ CompatibilityAssetBundleManifest:
       CRC: 2642025609
       Dependencies: {}
     Info_3:
-      Name: scenes/appscene
-      Hash: 30af24bd1dab455e5f2ca6644eeefd76
-      CRC: 2739178096
+      Name: scene/appscene
+      Hash: 43b91f965bf42b6731536c6c1f158708
+      CRC: 178472624
       Dependencies: {}

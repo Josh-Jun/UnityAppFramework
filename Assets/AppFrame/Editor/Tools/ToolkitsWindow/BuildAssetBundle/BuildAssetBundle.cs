@@ -314,7 +314,7 @@ namespace AppFrame.Editor
                 bundleName = sceneName;
             }
 
-            if (sceneName == "Scenes")
+            if (sceneName == "Scene")
             {
                 if (fileInfo.Extension == ".unity")
                 {

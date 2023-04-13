@@ -52,36 +52,50 @@
             ]
         },
         {
-            "ModuleName": "Scenes",
+            "ModuleName": "Scene",
             "Folders": [
                 {
                     "FolderName": "TestAsset",
-                    "BundleName": "scenes/testasset",
+                    "BundleName": "scene/testasset",
                     "Tag": "0",
                     "Mold": "1",
-                    "MD5": "c39fa96445707c82b22d0e22b336d944",
-                    "Size": "19179",
+                    "MD5": "dee5dac786fa4530ae97e2b6dda7b619",
+                    "Size": "19178",
                     "Dependencies": []
                 },
                 {
                     "FolderName": "TestScene",
-                    "BundleName": "scenes/testscene",
+                    "BundleName": "scene/testscene",
                     "Tag": "0",
                     "Mold": "1",
-                    "MD5": "b1b8552ca739e7f02d9149e0a541bc7a",
-                    "Size": "30308",
+                    "MD5": "72e55f99b5d445b9fb3502e6a5f9bc47",
+                    "Size": "30306",
                     "Dependencies": [
-                        "scenes/testasset",
+                        "scene/testasset",
                         "test/common"
                     ]
                 },
                 {
                     "FolderName": "UpdateScene",
-                    "BundleName": "scenes/updatescene",
+                    "BundleName": "scene/updatescene",
                     "Tag": "0",
                     "Mold": "1",
-                    "MD5": "81ba5146c62583dd70176342bac8f9ba",
-                    "Size": "44265",
+                    "MD5": "0af201fbcf0d7f7bc24462cf498504e8",
+                    "Size": "28056",
+                    "Dependencies": []
+                }
+            ]
+        },
+        {
+            "ModuleName": "Shader",
+            "Folders": [
+                {
+                    "FolderName": "Shaders",
+                    "BundleName": "shader/shaders",
+                    "Tag": "0",
+                    "Mold": "1",
+                    "MD5": "00f4cc7e651e74265e06f4abd6b536ee",
+                    "Size": "115005",
                     "Dependencies": []
                 }
             ]
