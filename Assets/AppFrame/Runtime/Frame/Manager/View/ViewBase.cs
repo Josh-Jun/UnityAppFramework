@@ -10,12 +10,14 @@ namespace AppFrame.View
 {
     public class ViewBase : EventBaseMono
     {
-        public ViewMold mold;
-        public Sequence TweenSequence = null;
-        
+        public ViewMold ViewMold { get; set; }
+        public Sequence TweenSequence { get; set; }
+        public bool IsPlayTween { get; set; } = false;
+
         [Obsolete("此方法已弃用，请使用InitWindow方法", true)]
         protected virtual void Awake()
         {
+            TweenSequence = DOTween.Sequence();
             InitView();
             RegisterEvent();
         }
@@ -55,7 +57,7 @@ namespace AppFrame.View
         {
             if (this == null) return;
             
-            if (TweenSequence != null)
+            if (IsPlayTween)
             {
                 if (isActive)
                 {
@@ -85,7 +87,7 @@ namespace AppFrame.View
             {
                 CloseView();
                 TweenSequence.Kill();
-                TweenSequence = null;
+                IsPlayTween = false;
             }
             if (gameObject != null)
             {
