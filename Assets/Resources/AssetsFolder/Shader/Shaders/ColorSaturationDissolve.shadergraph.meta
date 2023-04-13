@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 5ee8319f76f965642b3c86efdfd265ca
+guid: 1d526c33086779e48a719b33fdfc4e7c
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 2
   userData: 
-  assetBundleName: 
+  assetBundleName: shaders/shaders
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 625f186215c104763be7675aa2d941aa, type: 3}

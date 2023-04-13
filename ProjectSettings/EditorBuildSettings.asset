@@ -9,13 +9,13 @@ EditorBuildSettings:
     path: Assets/AppMain/Scenes/Launcher.unity
     guid: cc32b4ee21e24ea46bba0e0ec88bbab1
   - enabled: 1
-    path: Assets/Resources/HybridFolder/Scenes/App/AppScene.unity
+    path: Assets/Resources/HybridFolder/Scene/App/AppScene.unity
     guid: 03bbd6c5501e6d14ca4aeeb46b1d8abe
   - enabled: 1
-    path: Assets/Resources/AssetsFolder/Scenes/Update/UpdateScene.unity
+    path: Assets/Resources/AssetsFolder/Scene/Update/UpdateScene.unity
     guid: 5461c776027a725429fc8c47549447ce
   - enabled: 1
-    path: Assets/Resources/AssetsFolder/Scenes/Test/TestScene.unity
+    path: Assets/Resources/AssetsFolder/Scene/Test/TestScene.unity
     guid: 282ec1f01f77fe24985b55ebfd1cfc97
   m_configObjects:
     Unity.XR.PXR.Settings: {fileID: 11400000, guid: b9e1fd26def765844b2ea1a1a60b0317,

@@ -90,7 +90,7 @@ namespace Launcher
                 LoadMetadataForAOTAssemblies();
                 LoadHotfixAssemblies();
                 AppScriptConfig = AssetBundleManager.Instance.LoadAsset<AppScriptConfig>("App", "Config", "AppScriptConfig");
-                AssetBundle ab = AssetBundleManager.Instance.LoadAssetBundle("Scenes", "AppScene");
+                AssetBundle ab = AssetBundleManager.Instance.LoadAssetBundle("Scene", "AppScene");
                 UpdateView = AssetBundleManager.Instance.LoadAsset<GameObject>("App", "Update", "UpdateView");
             }
             else

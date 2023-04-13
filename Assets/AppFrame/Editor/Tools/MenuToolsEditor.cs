@@ -203,7 +203,7 @@ namespace AppFrame.Editor
                 {
                     if (files[i].Name.EndsWith(".meta")) continue; //剔除.meta文件
                     if (files[i].Name.Contains("lua")) continue; //剔除lua文件
-                    if (files[i].FullName.Contains("Scenes") && !files[i].Name.EndsWith(".unity")) continue; //剔除场景以外的文件
+                    if (files[i].FullName.Contains("Scene") && !files[i].Name.EndsWith(".unity")) continue; //剔除场景以外的文件
                     fileInfos.Add(files[i]);
                 }
             }
