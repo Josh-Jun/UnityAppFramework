@@ -41,7 +41,7 @@ namespace App
             OutputAppInfo();
             //初始化Logic脚本
             InitLogicScripts();
-            InitLogicBegin("Scenes/App/AppScene");
+            InitLogicBegin("Scene/App/AppScene");
         }
         
         private static void OutputAppInfo()

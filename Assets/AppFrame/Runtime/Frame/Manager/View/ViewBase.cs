@@ -11,7 +11,7 @@ namespace AppFrame.View
     public class ViewBase : EventBaseMono
     {
         public ViewMold mold;
-        public Sequence TweenSequence = DOTween.Sequence();
+        public Sequence TweenSequence = null;
         
         [Obsolete("此方法已弃用，请使用InitWindow方法", true)]
         protected virtual void Awake()
@@ -29,7 +29,7 @@ namespace AppFrame.View
         /// <summary>初始化UI窗口</summary>
         protected virtual void InitView()
         {
-
+            
         }
 
         /// <summary>注册消息事件,默认删除此事件</summary>
@@ -54,8 +54,8 @@ namespace AppFrame.View
         public void SetViewActive(bool isActive = true)
         {
             if (this == null) return;
-
-            if (TweenSequence.IsActive())
+            
+            if (TweenSequence != null)
             {
                 if (isActive)
                 {
@@ -85,6 +85,7 @@ namespace AppFrame.View
             {
                 CloseView();
                 TweenSequence.Kill();
+                TweenSequence = null;
             }
             if (gameObject != null)
             {
