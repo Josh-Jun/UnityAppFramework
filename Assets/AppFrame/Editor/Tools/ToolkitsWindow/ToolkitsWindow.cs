@@ -34,6 +34,7 @@ namespace AppFrame.Editor
 
         private List<TemplateContainer> viewElements = new List<TemplateContainer>();
         private int stamp = 0;
+        private const string STAMP_KEY = "EDITOR_TOOLKITS_STAMP";
 
         private static ScrollView infos;
 
@@ -47,6 +48,7 @@ namespace AppFrame.Editor
 
         public void CreateGUI()
         {
+            stamp = PlayerPrefs.HasKey(STAMP_KEY) ? PlayerPrefs.GetInt(STAMP_KEY) : 0;
             // Each editor window contains a root VisualElement object
             root = rootVisualElement;
 
@@ -54,16 +56,10 @@ namespace AppFrame.Editor
             var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>($"{basePath}/ToolkitsWindow.uxml");
             visualTree.CloneTree(root);
 
-            leftListView = root.Q<ListView>("left");
-            // leftListView.
-            leftListView.itemsSource = itemsName;
-            leftListView.makeItem = MakeListItem;
-            leftListView.bindItem = BindListItem;
-            leftListView.onSelectedIndicesChange += OnItemsChosen;
-
+            infos = root.Q<ScrollView>("infos");
             view_title = root.Q<Label>("view_title");
             view_title.text = itemsName[0];
-
+            
             var right = root.Q<VisualElement>("right");
             for (int i = 0; i < itemsName.Length; i++)
             {
@@ -74,9 +70,14 @@ namespace AppFrame.Editor
                 viewElements.Add(view);
                 right.Add(view);
             }
-
-            viewElements[stamp].style.display = DisplayStyle.Flex;
-
+            
+            leftListView = root.Q<ListView>("left");
+            leftListView.itemsSource = itemsName;
+            leftListView.makeItem = MakeListItem;
+            leftListView.bindItem = BindListItem;
+            leftListView.onSelectedIndicesChange += OnItemsChosen;
+            leftListView.SetSelection(stamp);
+            
             BuildAppFunction();
             BuildAssetBundleFunction();
             SetAppScriptConfigFunction();
@@ -85,8 +86,6 @@ namespace AppFrame.Editor
             ChangePrefabsFontFunction();
             FindSameFileNameFunction();
             CopyTemplateScriptsFunction();
-
-            infos = root.Q<ScrollView>("infos");
         }
 
         private void BuildAppFunction()
@@ -452,6 +451,7 @@ namespace AppFrame.Editor
                 viewElements[stamp].style.display = DisplayStyle.None;
                 viewElements[index].style.display = DisplayStyle.Flex;
                 stamp = index;
+                PlayerPrefs.SetInt(STAMP_KEY, stamp);
             }
         }
 
