@@ -115,7 +115,8 @@ namespace AppFrame.Tools
 
             Vector2 dirV2 = eventData.position - beginPos;
             var dir = scrollRect.horizontal ? dirV2.x > 0 : dirV2.y > 0;
-            if (Math.Abs(dirV2.x) > scrollDistance)
+            var dis = scrollRect.horizontal ? dirV2.x : dirV2.y;
+            if (Math.Abs(dis) > scrollDistance)
             {
                 if (dir)
                 {
