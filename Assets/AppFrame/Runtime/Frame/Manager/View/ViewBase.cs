@@ -8,16 +8,22 @@ using UnityEngine;
 
 namespace AppFrame.View
 {
+    public class ViewTweenData
+    {
+        public TweenMold mold;
+        public Vector3 from;
+        public Vector3 to;
+        public float duration;
+    }
     public class ViewBase : EventBaseMono
     {
+        public bool ViewActive { get { return gameObject.activeSelf; } }
         public ViewMold ViewMold { get; set; }
-        public Sequence TweenSequence { get; set; }
-        public bool IsPlayTween { get; set; } = false;
+        public List<ViewTweenData> ViewTweenDataList { get; set; } = new List<ViewTweenData>();
 
         [Obsolete("此方法已弃用，请使用InitWindow方法", true)]
         protected virtual void Awake()
         {
-            TweenSequence = DOTween.Sequence();
             InitView();
             RegisterEvent();
         }
@@ -52,28 +58,53 @@ namespace AppFrame.View
         {
             
         }
+
+        private Sequence TweenSequence;
         /// <summary>设置窗体显/隐</summary>
         public void SetViewActive(bool isActive = true)
         {
             if (this == null) return;
             
-            if (IsPlayTween)
+            if (ViewTweenDataList.Count > 0)
             {
+                TweenSequence = DOTween.Sequence();
+                for (int i = 0; i < ViewTweenDataList.Count; i++)
+                {
+                    ViewTweenData data = ViewTweenDataList[i];
+                    switch (data.mold)
+                    {
+                        case TweenMold.Move:
+                            transform.localPosition = data.from;
+                            TweenSequence.Join(transform.DOLocalMove(data.to, data.duration).SetEase(Ease.Linear));
+                            break;
+                        case TweenMold.Rotate:
+                            transform.localEulerAngles = data.from;
+                            TweenSequence.Join(transform.DOLocalRotate(data.to, data.duration).SetEase(Ease.Linear));
+                            break;
+                        case TweenMold.Scale:
+                            transform.localScale = data.from;
+                            TweenSequence.Join(transform.DOScale(data.to, data.duration).SetEase(Ease.Linear));
+                            break;
+                        case TweenMold.Fade:
+                            CanvasGroup canvasGroup = this.TryGetComponent<CanvasGroup>();
+                            canvasGroup.alpha = data.from.x;
+                            TweenSequence.Join(canvasGroup.DOFade(data.to.x, data.duration).SetEase(Ease.Linear));
+                            break;
+                    }
+                }
+                
                 if (isActive)
                 {
-                    TweenSequence.OnStart(() =>
-                    {
-                        SetActive(isActive);
-                    });
+                    SetActive(isActive);
                 }
                 else
                 {
                     TweenSequence.OnComplete(() =>
                     {
+                        ViewTweenDataList.Clear();
                         SetActive(isActive);
                     });
                 }
-                TweenSequence.Play();
             }
             else
             {
@@ -86,8 +117,6 @@ namespace AppFrame.View
             if (!isActive)
             {
                 CloseView();
-                TweenSequence.Kill();
-                IsPlayTween = false;
             }
             if (gameObject != null)
             {
@@ -100,12 +129,6 @@ namespace AppFrame.View
             {
                 OpenView();
             }
-        }
-
-        /// <summary>获取窗体的状态</summary>
-        public bool GetViewActive()
-        {
-            return gameObject.activeSelf;
         }
 
         public void SetAsLastSibling()

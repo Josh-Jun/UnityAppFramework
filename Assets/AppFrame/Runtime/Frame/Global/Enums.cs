@@ -30,4 +30,13 @@ namespace AppFrame.Enum
         UI3DView = 1,//3DUI
         GOView = 1,//3DModel
     }
+    
+    /// <summary>Tween类型</summary>
+    public enum TweenMold
+    {
+        Move,
+        Rotate,
+        Scale,
+        Fade,
+    }
 }
