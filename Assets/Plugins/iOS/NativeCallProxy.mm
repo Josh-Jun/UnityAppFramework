@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
 #import "NativeCallProxy.h"
+#import <AudioToolbox/AudioToolbox.h>
 
 
 @implementation FrameworkLibAPI
@@ -34,12 +35,14 @@ extern "C" {
         NSString* data = [api getAppData:[NSString stringWithUTF8String:key]];
         return strdup([data cStringUsingEncoding:NSUTF8StringEncoding]);
     }
-	void savePhoto(char *readAddr)
-	{
+	void savePhoto(char *readAddr) {
 		NSString *strReadAddr = [NSString stringWithUTF8String:readAddr];
 		UIImage *img = [UIImage imageWithContentsOfFile:strReadAddr];
 		PhotoManager *instance = [PhotoManager alloc];
 		UIImageWriteToSavedPhotosAlbum(img, instance, @selector(imageSaved:didFinishSavingWithError:contextInfo:), nil);
+	}
+	void vibrate() {
+	    AudioServicesPlaySystemSound(1520);
 	}
 }
 

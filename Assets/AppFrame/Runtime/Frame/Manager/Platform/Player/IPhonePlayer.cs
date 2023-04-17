@@ -14,6 +14,8 @@ namespace AppFrame.Manager
         private static extern void showHostMainWindow(string msg);
         [DllImport("__Internal")]
         private static extern void savePhoto(string path);
+        [DllImport("__Internal")]
+        private static extern void vibrate();
 #endif
 
         public override bool IsEditor { get; } = false;
@@ -36,6 +38,12 @@ namespace AppFrame.Manager
         public override string GetAssetsPath(string folder)
         {
             return $"{Application.streamingAssetsPath}/{folder}";
+        }
+        public override void Vibrate()
+        {
+#if UNITY_IPHONE
+            vibrate();
+#endif
         }
         public override void SavePhoto(string imagePath)
         {

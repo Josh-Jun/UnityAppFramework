@@ -42,6 +42,7 @@ namespace AppFrame.Manager
         public abstract string Name { get; }
         public abstract string PlatformName { get; }
         public abstract int GetNetSignal();
+        public abstract void Vibrate();
         public abstract string GetDataPath(string folder);
         public abstract string GetAssetsPath(string folder);
         public abstract void InstallApp(string appPath);

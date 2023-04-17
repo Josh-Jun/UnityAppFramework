@@ -31,6 +31,12 @@ namespace AppFrame.Manager
         {
             
         }
+        public override void Vibrate()
+        {
+#if UNITY_EDITOR
+            Log.I("Vibrate Editor");
+#endif
+        }
         public override void QuitUnityPlayer()
         {
 #if UNITY_EDITOR

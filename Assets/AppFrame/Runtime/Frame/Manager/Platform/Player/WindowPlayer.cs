@@ -29,6 +29,10 @@ namespace AppFrame.Manager
         {
             
         }
+        public override void Vibrate()
+        {
+            Log.I("Vibrate Window");
+        }
         public override void QuitUnityPlayer()
         {
             Log.I("Quit Window");

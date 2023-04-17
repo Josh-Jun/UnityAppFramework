@@ -185,6 +185,16 @@ public class AndroidHelper extends UnityPlayerActivity {
         mToast.show();
     }
     
+    //震动效果
+    //这里的mpattern数组 mpattern[0] 是延迟震动时间，mpattern[1]是震动的频率，mpattern[2]是暂停时间，mpattern[3]是震动的频率 依此类推
+    //index：震动的类型
+    //index = -1 只震动一次
+    //index = 0 一直震动
+    public static void vibrate(long[] mpattern, int index) {
+        Vibrator vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(mpattern, index);
+    }
+    
     //发送消息给Unity
     private static void SendMsg(String methodName, String parameter) {
         UnityPlayer.UnitySendMessage(GoName, methodName, parameter);

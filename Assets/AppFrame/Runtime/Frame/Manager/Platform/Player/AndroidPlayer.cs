@@ -55,6 +55,13 @@ namespace AppFrame.Manager
             JavaObject(AppToolsPackage).CallStatic("installApp", appPath);
 #endif
         }
+        public override void Vibrate()
+        {
+#if UNITY_ANDROID
+            var mpattern = new long[] { 0, 150 };
+            JavaObject(AppToolsPackage).CallStatic("vibrate", mpattern, -1);
+#endif
+        }
         public override void SavePhoto(string imagePath)
         {
 #if UNITY_ANDROID
