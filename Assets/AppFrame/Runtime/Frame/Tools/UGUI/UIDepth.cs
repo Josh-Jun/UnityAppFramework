@@ -9,7 +9,9 @@ namespace AppFrame.Tools
     {
         public int order = 100;
         public bool isUI = false;
-
+        /// <summary>
+        /// 对于3D物体和粒子特效，材质需要设置为透明模式
+        /// </summary>
         private void Start()
         {
             if (isUI)
