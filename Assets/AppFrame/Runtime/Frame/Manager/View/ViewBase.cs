@@ -66,27 +66,6 @@ namespace AppFrame.View
             if (isActive) OpenView();
         }
 
-        private void SetActive(bool isActive)
-        {
-            if (!isActive)
-            {
-                CloseView();
-            }
-
-            if (gameObject != null)
-            {
-                if (gameObject.activeSelf != isActive)
-                {
-                    gameObject.SetActive(isActive);
-                }
-            }
-
-            if (isActive)
-            {
-                OpenView();
-            }
-        }
-
         public void SetAsLastSibling()
         {
             transform.SetAsLastSibling();
