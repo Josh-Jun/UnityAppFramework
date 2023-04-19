@@ -26,6 +26,7 @@ namespace AppFrame.Tools
         public void Init()
         {
             self = GetComponent<GridLayoutGroup>();
+            if(self == null) return;
             Rect rect = (transform.parent as RectTransform).rect;
             self.cellSize = new Vector2(rect.width, rect.height);
         }
