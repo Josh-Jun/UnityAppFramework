@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using AppFrame.View;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,13 +22,13 @@ namespace Modules.#NAMESPACE#
 
         protected override void OpenView()
         {
-            base.OpenWindow();
+            base.OpenView();
 			#NOTRIM#
         }
 
         protected override void CloseView()
         {
-            base.CloseWindow();
+            base.CloseView();
 			#NOTRIM#
         }
     }
