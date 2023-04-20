@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Table.Data;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -14,7 +13,6 @@ using AppFrame.Info;
 using AppFrame.Interface;
 using AppFrame.Manager;
 using AppFrame.Tools;
-using Table.Data;
 
 namespace Modules.Test
 {
@@ -97,7 +95,7 @@ namespace Modules.Test
             VideoManager.Instance.PlayVideo(null, video); //播放视频
             VideoManager.Instance.PlayVideo(null, "视频地址", () => { }); //播放视频
             //获取配置表
-            TableManager.Instance.GetTable<TestXml>(""); //获取配置表
+            TableManager.Instance.GetTable<UserDataJson>(""); //获取配置表
             //时间任务
             int timeid1 = -1;
             timeid1 = TimeUpdateManager.Instance.StartTimer((time) => { }); //一直执行 相当于Update

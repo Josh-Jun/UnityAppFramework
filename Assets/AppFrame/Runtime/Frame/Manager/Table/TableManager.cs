@@ -5,7 +5,6 @@ using AppFrame.Config;
 using AppFrame.Data;
 using AppFrame.Enum;
 using AppFrame.Tools;
-using Table.Data;
 using UnityEngine;
 
 namespace AppFrame.Manager
