@@ -9,19 +9,25 @@ using UnityEngine;
 namespace AppFrame.Editor
 {
     [InitializeOnLoad]
-    public static class SceneToolsEditor
+    public class SceneToolsEditor
     {
+        private const string AUTO_KEY = "EDITOR_AUTO";
         static SceneToolsEditor()
         {
             EditorApplication.playModeStateChanged += EditorApplication_playModeStateChanged;
-            Menu.SetChecked("Tools/AutoOpenScene", false);
+            if (!PlayerPrefs.HasKey(AUTO_KEY))
+            {
+                PlayerPrefs.SetInt(AUTO_KEY, 0);
+            }
+            Menu.SetChecked("Tools/AutoOpenScene", PlayerPrefs.GetInt(AUTO_KEY) == 1);
         }
         
         [MenuItem("Tools/AutoOpenScene", false, 10)]
         public static void AutoOpenScene()
         {
-            var Auto = !Menu.GetChecked("Tools/AutoOpenScene");
-            Menu.SetChecked("Tools/AutoOpenScene", Auto);
+            Menu.SetChecked("Tools/AutoOpenScene", PlayerPrefs.GetInt(AUTO_KEY) != 1);
+            var value = Menu.GetChecked("Tools/AutoOpenScene") ? 1 : 0;
+            PlayerPrefs.SetInt(AUTO_KEY, value);
         }
 
         private static void OpenScene()
