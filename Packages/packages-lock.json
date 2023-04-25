@@ -231,7 +231,7 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "783860fd6cbeb325020cf8c73e52f7a8028b68ff"
+      "hash": "b888dcd3057c252942a29f721c71df14f14bce45"
     },
     "com.unity.visualscripting": {
       "version": "1.7.8",
