@@ -32,8 +32,6 @@ namespace Launcher
 
         private string mainfestPath;
 
-        public static string PlatformName;
-
         public static AssetBundleManager Instance
         {
             get
@@ -59,11 +57,37 @@ namespace Launcher
             }
         }
 
+        public static string PlatformName
+        {
+            get
+            {
+                string platform = "";
+                switch (Application.platform)
+                {
+                    case RuntimePlatform.WindowsPlayer:
+                        platform = "StandaloneWindows";
+                        break;
+                    case RuntimePlatform.IPhonePlayer:
+                        platform = "iOS";
+                        break;
+                    case RuntimePlatform.Android:
+                        platform = "Android";
+                        break;
+                    case RuntimePlatform.WindowsEditor:
+                    case RuntimePlatform.OSXEditor:
+                        platform = "Android";
+                        break;
+                    default:
+                        break;
+                }
+                return platform;
+            }
+        }
+
         public void InitManager()
         {
             // OutputPath > 项目目录/AssetBundle/{buildTarget}/{Application.version}/{AppConfig.ResVersion}/{mold}
             var head = IsEditor ? "" : "file://";
-            PlatformName = Launcher.AppConfig.TargetPackage == TargetPackage.Mobile ? "Android" : Launcher.AppConfig.TargetPackage.ToString();
             mainfestDataPath = $"{head}{Application.persistentDataPath}/AssetBundle/{PlatformName}/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid";
             mainfestAssetsPath =$"{head}{Application.streamingAssetsPath}/AssetBundle/{PlatformName}/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid";
             
