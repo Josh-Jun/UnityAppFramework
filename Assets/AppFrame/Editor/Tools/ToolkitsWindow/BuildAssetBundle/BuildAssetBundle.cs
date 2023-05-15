@@ -77,7 +77,29 @@ namespace AppFrame.Editor
             SetAssetBundleLabels();
             DeleteAssetBundle(buildTarget);
             BuildAllAssetBundles(buildTarget);
-            CreateFile(buildTarget);
+            CreateMD5File(buildTarget);
+            CopyABToBuildVersion(buildTarget, outputPath);
+            if (AppConfig.LoadAssetsMold == LoadAssetsMold.Local)
+            {
+                CopyABToBuildVersion(buildTarget, $"{Application.streamingAssetsPath}/AssetBundle");
+            }
+        }
+
+        public static void CopyABToBuildVersion(BuildTarget buildTarget, string headPath)
+        {
+            string copyPath = GetCacheOutputPath(buildTarget);
+            string targetPath = GetOutputPath(buildTarget, headPath);
+            if (Directory.Exists(targetPath))
+            {
+                Directory.Delete(targetPath, true);
+            }
+            string dir = Path.GetDirectoryName(targetPath);
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+            FileUtil.CopyFileOrDirectory(copyPath, targetPath);
+            EditorUtility.RevealInFinder(targetPath);
         }
 
         public static void BuildAndCopyDll(BuildTarget buildTarget)
@@ -336,7 +358,7 @@ namespace AppFrame.Editor
         //[MenuItem("AssetBundle/BuildAllAssetBundle(一键打包)")]
         public static void BuildAllAssetBundles(BuildTarget buildTarget)
         {
-            string outPath = $"{outputPath}/{Application.version}/{AppConfig.ResVersion}/{mold}/{buildTarget}";
+            string outPath = GetCacheOutputPath(buildTarget);
             if (!FileTools.FolderExist(outPath))
             {
                 FileTools.CreateFolder(outPath);
@@ -350,7 +372,6 @@ namespace AppFrame.Editor
                 if (AssetBundleManifest)
                 {
                     AssetDatabase.Refresh();
-                    EditorUtility.RevealInFinder(outPath);
                     Debug.Log("AssetBundle 打包成功! " + outPath);
                 }
             }
@@ -360,7 +381,6 @@ namespace AppFrame.Editor
                 if (ScriptableAssetBundleManifest)
                 {
                     AssetDatabase.Refresh();
-                    EditorUtility.RevealInFinder(outPath);
                     Debug.Log("AssetBundle 打包成功! " + outPath);
                 }
             }
@@ -394,7 +414,7 @@ namespace AppFrame.Editor
         //[MenuItem("AssetBundle/DeleteAllAssetBundle(一键删除)")]
         public static void DeleteAssetBundle(BuildTarget buildTarget)
         {
-            string outPath = $"{outputPath}/{Application.version}/{AppConfig.ResVersion}/{mold}/{buildTarget}";
+            string outPath = GetCacheOutputPath(buildTarget);
             if (!FileTools.FolderExist(outPath))
             {
                 return;
@@ -412,13 +432,14 @@ namespace AppFrame.Editor
         private static CompatibilityAssetBundleManifest ScriptableAssetBundleManifest = null;
         private static AssetBundleManifest AssetBundleManifest = null;
         //[MenuItem("AssetBundle/CreateMD5File(生成MD5文件)")]
-        public static void CreateFile(BuildTarget buildTarget)
+        public static void CreateMD5File(BuildTarget buildTarget)
         {
-            string outPath = $"{outputPath}/{Application.version}/{AppConfig.ResVersion}/{mold}/{buildTarget}";
+            string outPath = GetCacheOutputPath(buildTarget);
             string filePath = outPath + "/AssetBundleConfig.json";
 
             AssetBundleConfig config = new AssetBundleConfig();
             config.GameVersion = Application.version;
+            config.ResVersion = AppConfig.ResVersion;
             config.Platform = buildTarget.ToString();
             config.Des = des;
             config.Modules = new List<Module>();
@@ -434,7 +455,6 @@ namespace AppFrame.Editor
                     f.FolderName = folder.Key;
                     f.BundleName = folder.Value;
                     f.Tag = "0";
-                    f.Mold = ((int)AppConfig.ABPipeline).ToString();
                     f.MD5 = GetFileMD5(file.FullName);
                     f.Size = $"{file.Length}";
                     f.Dependencies = AppConfig.ABPipeline == ABPipeline.Default
@@ -537,6 +557,19 @@ namespace AppFrame.Editor
         }
 
         #endregion
+
+        private static string GetCacheOutputPath(BuildTarget buildTarget)
+        {
+            // OutputPath > 项目目录/AssetBundle/{buildTarget}/{Application.version}/{AppConfig.ResVersion}/{mold}
+            // OutputPath > 项目目录/AssetBundle/BuildABCache/{mold}/{buildTarget}
+            return $"{Application.dataPath.Replace("Assets", "AssetBundle/BuildABCache")}/{mold}/{buildTarget}";
+        }
+        private static string GetOutputPath(BuildTarget buildTarget, string headPath)
+        {
+            // OutputPath > 项目目录/AssetBundle/{buildTarget}/{Application.version}/{AppConfig.ResVersion}/{mold}
+            // OutputPath > 项目目录/AssetBundle/BuildABCache/{mold}/{buildTarget}
+            return $"{headPath}/{buildTarget}/{Application.version}/{AppConfig.ResVersion}/{mold}";
+        }
 
         public static List<bool> m_ExportList = new List<bool>();
         public static List<string> m_DataList = new List<string>();

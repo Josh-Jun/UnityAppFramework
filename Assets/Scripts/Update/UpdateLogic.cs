@@ -70,8 +70,8 @@ namespace Modules.Update
 
         public void Begin()
         {
-            LocalPath = PlatformManager.Instance.GetDataPath($"AssetBundle/{Application.version}/{AppInfo.AppConfig.ResVersion}/Assets/{PlatformManager.Instance.Name}/");
-            ServerUrl = NetcomManager.ABUrl + $"{Application.version}/{AppInfo.AppConfig.ResVersion}/Assets/{PlatformManager.Instance.Name}/";
+            LocalPath = PlatformManager.Instance.GetDataPath($"AssetBundle/{PlatformManager.Instance.Name}/{Application.version}/{AppInfo.AppConfig.ResVersion}/Assets/");
+            ServerUrl = NetcomManager.ABUrl + $"{PlatformManager.Instance.Name}/{Application.version}/{AppInfo.AppConfig.ResVersion}/Assets/";
 
             LocalVersionConfigPath = LocalPath + "AssetBundleConfig.json";
             ServerVersionConfigPath = ServerUrl + "AssetBundleConfig.json";
@@ -85,7 +85,7 @@ namespace Modules.Update
                     Root.StartApp();
                     break;
                 case LoadAssetsMold.Local:
-                    var localPath = PlatformManager.Instance.GetAssetsPath($"AssetBundle/{Application.version}/{AppInfo.AppConfig.ResVersion}/Assets/{PlatformManager.Instance.Name}/");
+                    var localPath = PlatformManager.Instance.GetAssetsPath($"AssetBundle/{PlatformManager.Instance.Name}/{Application.version}/{AppInfo.AppConfig.ResVersion}/Assets/");
                     var configPath = localPath + "AssetBundleConfig.json";
                     DownLoad(configPath, (string data) =>
                     {
@@ -463,6 +463,7 @@ namespace Modules.Update
             {
                 alreadyConfig = new AssetBundleConfig();
                 alreadyConfig.GameVersion = serverABConfig.GameVersion;
+                alreadyConfig.ResVersion = serverABConfig.ResVersion;
                 alreadyConfig.Platform = serverABConfig.Platform;
                 alreadyConfig.Des = serverABConfig.Des;
                 alreadyConfig.Modules = new List<Module>();
@@ -478,7 +479,6 @@ namespace Modules.Update
                         f.FolderName = folder.FolderName;
                         f.BundleName = folder.BundleName;
                         f.Tag = "0";
-                        f.Mold = folder.Mold;
                         f.MD5 = "";
                         f.Size = folder.Size;
                         m.Folders.Add(f);

@@ -36,8 +36,8 @@ namespace Launcher
 
         public static void Init(Action<bool> callback)
         {
-            LocalPath = $"{Application.persistentDataPath}/AssetBundle/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid/{AssetBundleManager.PlatformName}/";
-            ServerUrl = $"{server_url}/AssetBundle/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid/{AssetBundleManager.PlatformName}/";
+            LocalPath = $"{Application.persistentDataPath}/AssetBundle/{AssetBundleManager.PlatformName}/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid/";
+            ServerUrl = $"{server_url}/AssetBundle/{AssetBundleManager.PlatformName}/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid/";
 
             LocalVersionConfigPath = LocalPath + "AssetBundleConfig.json";
             ServerVersionConfigPath = ServerUrl + "AssetBundleConfig.json";
@@ -48,7 +48,7 @@ namespace Launcher
                     callback?.Invoke(false);
                     break;
                 case LoadAssetsMold.Local:
-                    var localPath = $"{Application.streamingAssetsPath}/AssetBundle/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid/{AssetBundleManager.PlatformName}/";
+                    var localPath = $"{Application.streamingAssetsPath}/AssetBundle/{AssetBundleManager.PlatformName}/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid/";
                     var configPath = localPath + "AssetBundleConfig.json";
                     DownLoad(configPath, (string data) =>
                     {
@@ -366,6 +366,7 @@ namespace Launcher
             {
                 alreadyConfig = new AssetBundleConfig();
                 alreadyConfig.GameVersion = serverABConfig.GameVersion;
+                alreadyConfig.ResVersion = serverABConfig.ResVersion;
                 alreadyConfig.Platform = serverABConfig.Platform;
                 alreadyConfig.Des = serverABConfig.Des;
                 alreadyConfig.Modules = new List<Module>();
@@ -381,7 +382,6 @@ namespace Launcher
                         f.FolderName = folder.FolderName;
                         f.BundleName = folder.BundleName;
                         f.Tag = "0";
-                        f.Mold = folder.Mold;
                         f.MD5 = "";
                         f.Size = folder.Size;
                         m.Folders.Add(f);

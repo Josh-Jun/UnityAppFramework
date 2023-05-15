@@ -246,7 +246,7 @@ namespace AppFrame.Editor
             };
             root.Q<Button>("CreateMD5File").clicked+= () =>
             {
-                BuildAssetBundle.CreateFile((BuildTarget)build_target.value);
+                BuildAssetBundle.CreateMD5File((BuildTarget)build_target.value);
             };
         }
 

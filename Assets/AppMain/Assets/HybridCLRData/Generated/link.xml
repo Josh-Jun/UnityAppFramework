@@ -235,7 +235,6 @@
     <type fullname="System.Xml.Formatting" preserve="all" />
     <type fullname="System.Xml.Serialization.XmlAttributeAttribute" preserve="all" />
     <type fullname="System.Xml.Serialization.XmlElementAttribute" preserve="all" />
-    <type fullname="System.Xml.Serialization.XmlRootAttribute" preserve="all" />
     <type fullname="System.Xml.Serialization.XmlSerializer" preserve="all" />
     <type fullname="System.Xml.Serialization.XmlSerializerNamespaces" preserve="all" />
     <type fullname="System.Xml.XmlDocument" preserve="all" />

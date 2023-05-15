@@ -1,0 +1,72 @@
+ManifestFileVersion: 1
+CompatibilityAssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: ask/textures
+      Hash: 07b93ca2dd8ed6cd3f4d9e1591a27444
+      CRC: 2444687878
+      Dependencies: {}
+    Info_1:
+      Name: ask/views
+      Hash: 1e37ecdadba380781a331addfcf78397
+      CRC: 1311028321
+      Dependencies: {}
+    Info_2:
+      Name: loading/textures
+      Hash: 942466376b33b899f859e9db482058f6
+      CRC: 2452469142
+      Dependencies: {}
+    Info_3:
+      Name: loading/views
+      Hash: 3a2295428925359e20b17543f998d127
+      CRC: 2637344935
+      Dependencies: {}
+        Dependency_0: loading/textures
+    Info_4:
+      Name: scene/testasset
+      Hash: 19769438264760b71649cfda19298cca
+      CRC: 847373211
+      Dependencies: {}
+    Info_5:
+      Name: scene/testscene
+      Hash: 8ff6d8aba52102951011fd5d6af7dd84
+      CRC: 639667664
+      Dependencies: {}
+        Dependency_0: scene/testasset
+        Dependency_1: test/common
+    Info_6:
+      Name: scene/updatescene
+      Hash: f6da389dad6e69687da1c63eab2f82da
+      CRC: 908409588
+      Dependencies: {}
+    Info_7:
+      Name: shader/shaders
+      Hash: 4f2e0cf7804352a4f93233eead3958ea
+      CRC: 699545913
+      Dependencies: {}
+    Info_8:
+      Name: table/config
+      Hash: 66a392bb70598392db84c59ee2ef782d
+      CRC: 2597651592
+      Dependencies: {}
+    Info_9:
+      Name: table/json
+      Hash: d5d3ff84dc41f7806c0fe764f8d97f4a
+      CRC: 3681980044
+      Dependencies: {}
+    Info_10:
+      Name: table/xml
+      Hash: 7ab750321b36d649587e923ae6a0f6e1
+      CRC: 3785905710
+      Dependencies: {}
+    Info_11:
+      Name: test/common
+      Hash: bdc6d4c98679b92a37437e21dc189b5e
+      CRC: 3984175893
+      Dependencies: {}
+    Info_12:
+      Name: test/mobile
+      Hash: 55ca4f931026e98dc767bcaa41591c4a
+      CRC: 1685306137
+      Dependencies: {}
+        Dependency_0: test/common

@@ -42,8 +42,8 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	//System.Collections.Generic.IList`1<System.Object>
 	//System.Collections.Generic.KeyValuePair`2<System.Object,System.Object>
 	//System.Collections.Generic.List`1<UnityEngine.EventSystems.RaycastResult>
-	//System.Collections.Generic.List`1<UnityEngine.Vector3>
 	//System.Collections.Generic.List`1<System.Object>
+	//System.Collections.Generic.List`1<UnityEngine.Vector3>
 	//System.Collections.Generic.List`1<System.Int32>
 	//System.Collections.Generic.List`1<AppFrame.Tools.ExcelData>
 	//System.Collections.Generic.List`1/Enumerator<System.Object>

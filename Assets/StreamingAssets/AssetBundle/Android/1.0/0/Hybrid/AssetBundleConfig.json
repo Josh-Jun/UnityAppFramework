@@ -1,0 +1,50 @@
+{
+    "GameVersion": "1.0",
+    "ResVersion": "0",
+    "Platform": "Android",
+    "Des": "请输入本版更新描述",
+    "Modules": [
+        {
+            "ModuleName": "App",
+            "Folders": [
+                {
+                    "FolderName": "Config",
+                    "BundleName": "app/config",
+                    "Tag": "0",
+                    "MD5": "15700bc37a11ffe674816a6db22812c5",
+                    "Size": "1983",
+                    "Dependencies": []
+                },
+                {
+                    "FolderName": "Dll",
+                    "BundleName": "app/dll",
+                    "Tag": "0",
+                    "MD5": "e654925d8772990e8c3ef82c0e2cbfe6",
+                    "Size": "2074027",
+                    "Dependencies": []
+                },
+                {
+                    "FolderName": "Update",
+                    "BundleName": "app/update",
+                    "Tag": "0",
+                    "MD5": "3282d8a1003097adce06460ef5b0e084",
+                    "Size": "16710",
+                    "Dependencies": []
+                }
+            ]
+        },
+        {
+            "ModuleName": "Scene",
+            "Folders": [
+                {
+                    "FolderName": "AppScene",
+                    "BundleName": "scene/appscene",
+                    "Tag": "0",
+                    "MD5": "44dd03db065939d01bc4b1736b40ee00",
+                    "Size": "7019",
+                    "Dependencies": []
+                }
+            ]
+        }
+    ]
+}

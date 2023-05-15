@@ -61,10 +61,11 @@ namespace Launcher
 
         public void InitManager()
         {
+            // OutputPath > 项目目录/AssetBundle/{buildTarget}/{Application.version}/{AppConfig.ResVersion}/{mold}
             var head = IsEditor ? "" : "file://";
             PlatformName = Launcher.AppConfig.TargetPackage == TargetPackage.Mobile ? "Android" : Launcher.AppConfig.TargetPackage.ToString();
-            mainfestDataPath = $"{head}{Application.persistentDataPath}/AssetBundle/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid/{PlatformName}";
-            mainfestAssetsPath =$"{head}{Application.streamingAssetsPath}/AssetBundle/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid/{PlatformName}";
+            mainfestDataPath = $"{head}{Application.persistentDataPath}/AssetBundle/{PlatformName}/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid";
+            mainfestAssetsPath =$"{head}{Application.streamingAssetsPath}/AssetBundle/{PlatformName}/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid";
             
             switch (Launcher.AppConfig.LoadAssetsMold)
             {
