@@ -127,21 +127,20 @@ namespace AppFrame.Editor
                 newHybridPath = MoveAssetsToRoot(hybridPath);
             }
 
-            string _str = ApkTarget == TargetPackage.Mobile ? "meta-app" : "meta-vr";
+            string str = ApkTarget == TargetPackage.Mobile ? "app" : "vr";
             string version = PlayerSettings.bundleVersion;
-            string date = string.Format("{0}{1:00}{2:00}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-            string name = DevelopmentBuild
-                ? string.Format("{0}_v{1}_beta-{2}", _str, version, date)
-                : string.Format("{0}_v{1}_release-{2}", _str, version, date);
+            string date = $"{DateTime.Now.Year}{DateTime.Now.Month:00}{DateTime.Now.Day:00}";
+            string dev = DevelopmentBuild ? "beta" : "release";
             string suffix = NativeApp || EditorUserBuildSettings.activeBuildTarget == BuildTarget.iOS ? "" : ".apk";
-            string outName = string.Format("{0}{1}", name, suffix);
+            string name = $"{PlayerSettings.applicationIdentifier.ToLower()}_{str}_v{version}_{dev}_{date}{suffix}";
+            
             EditorUserBuildSettings.SwitchActiveBuildTarget(EditorUserBuildSettings.selectedBuildTargetGroup,
                 EditorUserBuildSettings.activeBuildTarget);
             if (Directory.Exists(outputPath))
             {
-                if (File.Exists(outName))
+                if (File.Exists(name))
                 {
-                    File.Delete(outName);
+                    File.Delete(name);
                 }
             }
             else
@@ -149,7 +148,7 @@ namespace AppFrame.Editor
                 Directory.CreateDirectory(outputPath);
             }
 
-            string BuildPath = string.Format("{0}/{1}", outputPath, outName);
+            string BuildPath = string.Format("{0}/{1}", outputPath, name);
             var buildOption = BuildOptions.None;
             if (DevelopmentBuild)
             {
