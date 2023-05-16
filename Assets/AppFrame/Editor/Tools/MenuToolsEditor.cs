@@ -128,9 +128,9 @@ namespace AppFrame.Editor
                 for (int i = 0; i < files.Length; i++)
                 {
                     if (files[i].Name.EndsWith(".meta")) continue; //剔除.meta文件
-                    if (files[i].Name.EndsWith(".unity")) continue;//剔除场景以外的文件
-                    if (files[i].FullName.Contains("Shader")) continue; 
-                    if (files[i].FullName.Contains("Scene")) continue;
+                    if (files[i].FullName.Contains("Shader")) continue; //剔除Shader
+                    if (files[i].FullName.Contains("Dll")) continue; //剔除Dll
+                    if (files[i].FullName.Contains("Scene") && !files[i].Name.EndsWith(".unity")) continue; //剔除场景以外的文件
                     fileInfos.Add(files[i]);
                 }
             }
