@@ -49,10 +49,9 @@ namespace App
         {
             var stringBuilder = new StringBuilder(1024);
             stringBuilder.AppendLine("App配置信息:");
-            stringBuilder.AppendLine($"操作系统 : {SystemInfo.operatingSystem}");
-            stringBuilder.AppendLine($"系统内存 : {SystemInfo.systemMemorySize/1000f}G");
-            stringBuilder.AppendLine($"设备标识 : {SystemInfo.deviceUniqueIdentifier}");
-            stringBuilder.AppendLine("--------------------------------------------------");
+            stringBuilder.AppendLine($"当前操作系统 : {SystemInfo.operatingSystem}");
+            stringBuilder.AppendLine($"系统运行内存 : {SystemInfo.systemMemorySize/1000f}G");
+            stringBuilder.AppendLine($"设备唯一标识 : {SystemInfo.deviceUniqueIdentifier}");
             var infoServer = AppInfo.AppConfig.IsTestServer ? "是" : "否";
             stringBuilder.AppendLine($"是否测试环境 : {infoServer}");
             var mold = new []{ "原生资源", "本地资产", "远端资产" };
