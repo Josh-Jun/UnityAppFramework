@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
 using System.Reflection;
+using System.Text;
 using AppFrame.Config;
 using AppFrame.Data;
 using AppFrame.Enum;
@@ -46,9 +47,22 @@ namespace App
         
         private static void OutputAppInfo()
         {
-            string info_server = AppInfo.AppConfig.IsTestServer ? "测试环境" : "生产环境";
-            Log.I("配置信息:");
-            Log.I($"当前服务器:{info_server}");
+            var stringBuilder = new StringBuilder(1024);
+            stringBuilder.AppendLine("App配置信息:");
+            stringBuilder.AppendLine($"操作系统 : {SystemInfo.operatingSystem}");
+            stringBuilder.AppendLine($"系统内存 : {SystemInfo.systemMemorySize/1000f}G");
+            stringBuilder.AppendLine($"设备标识 : {SystemInfo.deviceUniqueIdentifier}");
+            stringBuilder.AppendLine("--------------------------------------------------");
+            var infoServer = AppInfo.AppConfig.IsTestServer ? "是" : "否";
+            stringBuilder.AppendLine($"是否测试环境 : {infoServer}");
+            var mold = new []{ "原生资源", "本地资产", "远端资产" };
+            stringBuilder.AppendLine($"资源加载模式 : {mold[(int)AppInfo.AppConfig.LoadAssetsMold]}");
+            var infoDevelopment = AppInfo.AppConfig.IsDebug ? "是" : "否";
+            stringBuilder.AppendLine($"是否开发构建 : {infoDevelopment}");
+            stringBuilder.AppendLine($"应用默认帧率 : {AppInfo.AppConfig.AppFrameRate}");
+            stringBuilder.AppendLine($"资产构建管线 : {AppInfo.AppConfig.ABPipeline}");
+            stringBuilder.AppendLine($"资产版本标识 : {AppInfo.AppConfig.ResVersion}");
+            Log.I(stringBuilder.ToString());
         }
 
         public static void StartApp()
