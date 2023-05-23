@@ -35,8 +35,8 @@ namespace AppFrame.Tools
                         timeData = timerPairs[UpdateMold.Update][i];
                         if (timeData.isTime)
                         {
-                            timeData.addTime = Time.time - timeData.tagTime;
-                            timeData.cb(timeData.addTime);
+                            timeData.addTime += Time.deltaTime;
+                            timeData.cb((float)timeData.addTime);
                         }
                     }
                 }
@@ -56,15 +56,15 @@ namespace AppFrame.Tools
                         fixedTimerData = timerPairs[UpdateMold.FixedUpdate][i];
                         if (fixedTimerData.isTime)
                         {
-                            int time = (int)(Time.fixedTime * 100) - (int)(fixedTimerData.tagTime * 100);
-                            fixedTimerData.addTime = time / 100f;
-                            fixedTimerData.cb(fixedTimerData.addTime);
+                            fixedTimerData.addTime += Time.fixedDeltaTime;
+                            fixedTimerData.cb((float)fixedTimerData.addTime);
                         }
                     }
                 }
             }
         }
 
+        private TimerData lateTimeData;
         private void LateUpdate()
         {
             if (timerPairs.ContainsKey(UpdateMold.LateUpdate))
@@ -73,11 +73,11 @@ namespace AppFrame.Tools
                 {
                     for (int i = 0, length = timerPairs[UpdateMold.LateUpdate].Count; i < length; i++)
                     {
-                        timeData = timerPairs[UpdateMold.LateUpdate][i];
-                        if (timeData.isTime)
+                        lateTimeData = timerPairs[UpdateMold.LateUpdate][i];
+                        if (lateTimeData.isTime)
                         {
-                            timeData.addTime = Time.time - timeData.tagTime;
-                            timeData.cb(timeData.addTime);
+                            lateTimeData.addTime += Time.deltaTime;
+                            lateTimeData.cb((float)timeData.addTime);
                         }
                     }
                 }
@@ -88,13 +88,11 @@ namespace AppFrame.Tools
         public int StartTimer(Action<float> cb, UpdateMold updateMold = UpdateMold.Update)
         {
             timeId += 1;
-            float tagTime = updateMold == UpdateMold.FixedUpdate ? Time.fixedTime : Time.time;
             TimerData timer = new TimerData
             {
                 id = timeId,
                 isTime = true,
                 addTime = 0,
-                tagTime = tagTime,
                 cb = cb,
             };
             
