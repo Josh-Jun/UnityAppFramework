@@ -747,7 +747,7 @@ namespace AppFrame.Tools
     {
         public int id; //计时Id
         public bool isTime; //是否计时
-        public double addTime; //累计时间
+        public float addTime; //累计时间
         public Action<float> cb; //回调
     }
 }

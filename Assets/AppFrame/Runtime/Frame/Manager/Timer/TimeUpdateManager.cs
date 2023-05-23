@@ -36,7 +36,7 @@ namespace AppFrame.Tools
                         if (timeData.isTime)
                         {
                             timeData.addTime += Time.deltaTime;
-                            timeData.cb((float)timeData.addTime);
+                            timeData.cb(timeData.addTime);
                         }
                     }
                 }
@@ -57,7 +57,8 @@ namespace AppFrame.Tools
                         if (fixedTimerData.isTime)
                         {
                             fixedTimerData.addTime += Time.fixedDeltaTime;
-                            fixedTimerData.cb((float)fixedTimerData.addTime);
+                            var time = (float)Math.Round(fixedTimerData.addTime, 2, MidpointRounding.AwayFromZero);
+                            fixedTimerData.cb(time);
                         }
                     }
                 }
@@ -77,7 +78,7 @@ namespace AppFrame.Tools
                         if (lateTimeData.isTime)
                         {
                             lateTimeData.addTime += Time.deltaTime;
-                            lateTimeData.cb((float)timeData.addTime);
+                            lateTimeData.cb(timeData.addTime);
                         }
                     }
                 }
