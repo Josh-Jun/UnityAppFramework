@@ -30,6 +30,9 @@ namespace App
 
         public static void Init()
         {
+            var manager = new GameObject("Manager");
+            manager.transform.SetParent(App.app.transform);
+            
             AppInfo.AppConfig = ULauncher.AppConfig;
             
             //Log开关

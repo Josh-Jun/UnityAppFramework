@@ -13,19 +13,17 @@ namespace AppFrame.Tools
             {
                 lock (SingletonLock)
                 {
-                    Transform parent = App.App.app.transform.Find(ParentName);
-                    if (parent == null)
-                    {
-                        parent = new GameObject(ParentName).transform;
-                        parent.SetParent(App.App.app.transform);
-                    }
                     if (_Instance == null)
                     {
                         _Instance = FindObjectOfType<T>();
                         if (_Instance == null)
                         {
-                            GameObject go = new GameObject(typeof(T).Name);
-                            go.transform.SetParent(parent);
+                            var parent = GameObject.Find(ParentName);
+                            var go = new GameObject(typeof(T).Name);
+                            if (parent != null)
+                            {
+                                go.transform.SetParent(parent.transform);
+                            }
                             _Instance = go.AddComponent<T>();
                         }
                         _Instance.OnSingletonMonoInit();
