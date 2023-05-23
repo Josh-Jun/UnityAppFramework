@@ -2,7 +2,7 @@
 namespace AppFrame.Enum
 {
     /// <summary>更新类型</summary>
-    public enum UpdateMold
+    public enum HotfixMold
     {
         None = 0,//不更新
         Hotfix = 1,//更新资源
@@ -28,6 +28,14 @@ namespace AppFrame.Enum
     {
         UI2DView = 0,//2DUI
         UI3DView = 1,//3DUI
-        GOView = 1,//3DModel
+        GoView = 2,//3DModel
+    }
+
+    /// <summary>AB包类型</summary>
+    public enum UpdateMold
+    {
+        Update = 0,//2DUI
+        FixedUpdate = 1,//3DUI
+        LateUpdate = 2,//3DModel
     }
 }

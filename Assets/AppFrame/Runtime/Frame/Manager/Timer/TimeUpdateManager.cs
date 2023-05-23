@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AppFrame.Enum;
 using UnityEngine;
 
 namespace AppFrame.Tools
@@ -8,8 +9,7 @@ namespace AppFrame.Tools
     public class TimeUpdateManager : SingletonMono<TimeUpdateManager>
     {
         private int timeId = 0; //下标
-        private List<TimerData> timerLst = new List<TimerData>(); //计时Lst
-        private List<TimerData> timerFixedLst = new List<TimerData>(); //计时Lst
+        private Dictionary<UpdateMold, List<TimerData>> timerPairs = new Dictionary<UpdateMold, List<TimerData>>();
 
         public float GameTime
         {
@@ -26,11 +26,11 @@ namespace AppFrame.Tools
 
         private void Update()
         {
-            if (timerLst.Count > 0)
+            if (timerPairs[UpdateMold.Update].Count > 0)
             {
-                for (int i = 0, length = timerLst.Count; i < length; i++)
+                for (int i = 0, length = timerPairs[UpdateMold.Update].Count; i < length; i++)
                 {
-                    timeData = timerLst[i];
+                    timeData = timerPairs[UpdateMold.Update][i];
                     if (timeData.isTime)
                     {
                         timeData.addTime = Time.time - timeData.tagTime;
@@ -44,11 +44,11 @@ namespace AppFrame.Tools
 
         private void FixedUpdate()
         {
-            if (timerFixedLst.Count > 0)
+            if (timerPairs[UpdateMold.FixedUpdate].Count > 0)
             {
-                for (int i = 0, length = timerFixedLst.Count; i < length; i++)
+                for (int i = 0, length = timerPairs[UpdateMold.FixedUpdate].Count; i < length; i++)
                 {
-                    fixedTimerData = timerFixedLst[i];
+                    fixedTimerData = timerPairs[UpdateMold.FixedUpdate][i];
                     if (fixedTimerData.isTime)
                     {
                         int time = (int)(Time.fixedTime * 100) - (int)(fixedTimerData.tagTime * 100);
@@ -59,11 +59,27 @@ namespace AppFrame.Tools
             }
         }
 
+        private void LateUpdate()
+        {
+            if (timerPairs[UpdateMold.LateUpdate].Count > 0)
+            {
+                for (int i = 0, length = timerPairs[UpdateMold.LateUpdate].Count; i < length; i++)
+                {
+                    timeData = timerPairs[UpdateMold.LateUpdate][i];
+                    if (timeData.isTime)
+                    {
+                        timeData.addTime = Time.time - timeData.tagTime;
+                        timeData.cb(timeData.addTime);
+                    }
+                }
+            }
+        }
+
         /// <summary>开始计时</summary>
-        public int StartTimer(Action<float> cb, bool isFixed = false)
+        public int StartTimer(Action<float> cb, UpdateMold updateMold = UpdateMold.Update)
         {
             timeId += 1;
-            float tagTime = isFixed ? Time.fixedTime : Time.time;
+            float tagTime = updateMold == UpdateMold.FixedUpdate ? Time.fixedTime : Time.time;
             TimerData timer = new TimerData
             {
                 id = timeId,
@@ -72,36 +88,32 @@ namespace AppFrame.Tools
                 tagTime = tagTime,
                 cb = cb,
             };
-            if (isFixed)
+            
+            if (timerPairs.ContainsKey(updateMold))
             {
-                timerFixedLst.Add(timer);
+                timerPairs[updateMold].Add(timer);
             }
             else
             {
-                timerLst.Add(timer);
+                var data = new List<TimerData>();
+                data.Add(timer);
+                timerPairs.Add(updateMold, data);
             }
-
             return timeId;
         }
 
         /// <summary>暂停计时</summary>
         public void PauseTimer(int id)
         {
-            for (int i = 0; i < timerFixedLst.Count; i++)
+            foreach (var data in timerPairs.Values)
             {
-                if (timerFixedLst[i].id == id)
+                for (int i = 0; i < data.Count; i++)
                 {
-                    timerFixedLst[i].isTime = false;
-                    break;
-                }
-            }
-
-            for (int i = 0; i < timerLst.Count; i++)
-            {
-                if (timerLst[i].id == id)
-                {
-                    timerLst[i].isTime = false;
-                    break;
+                    if (data[i].id == id)
+                    {
+                        data[i].isTime = false;
+                        break;
+                    }
                 }
             }
         }
@@ -109,21 +121,15 @@ namespace AppFrame.Tools
         /// <summary>继续计时</summary>
         public void ContinueTimer(int id)
         {
-            for (int i = 0; i < timerFixedLst.Count; i++)
+            foreach (var data in timerPairs.Values)
             {
-                if (timerFixedLst[i].id == id)
+                for (int i = 0; i < data.Count; i++)
                 {
-                    timerFixedLst[i].isTime = true;
-                    break;
-                }
-            }
-
-            for (int i = 0; i < timerLst.Count; i++)
-            {
-                if (timerLst[i].id == id)
-                {
-                    timerLst[i].isTime = true;
-                    break;
+                    if (data[i].id == id)
+                    {
+                        data[i].isTime = true;
+                        break;
+                    }
                 }
             }
         }
@@ -131,21 +137,15 @@ namespace AppFrame.Tools
         /// <summary>结束计时</summary>
         public void EndTimer(int id)
         {
-            for (int i = 0; i < timerFixedLst.Count; i++)
+            foreach (var data in timerPairs.Values)
             {
-                if (timerFixedLst[i].id == id)
+                for (int i = 0; i < data.Count; i++)
                 {
-                    timerFixedLst.Remove(timerFixedLst[i]);
-                    break;
-                }
-            }
-
-            for (int i = 0; i < timerLst.Count; i++)
-            {
-                if (timerLst[i].id == id)
-                {
-                    timerLst.Remove(timerLst[i]);
-                    break;
+                    if (data[i].id == id)
+                    {
+                        data.Remove(data[i]);
+                        break;
+                    }
                 }
             }
         }
@@ -153,8 +153,10 @@ namespace AppFrame.Tools
         /// <summary>结束所有计时</summary>
         public void EndAllTimer()
         {
-            timerLst.Clear();
-            timerFixedLst.Clear();
+            foreach (var data in timerPairs.Values)
+            {
+                data.Clear();
+            }
         }
 
         /// <summary>获取秒</summary>

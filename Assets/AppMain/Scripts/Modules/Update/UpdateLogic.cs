@@ -42,7 +42,7 @@ namespace Modules.Update
         private long alreadyDownloadSize = 0;
         private long downloadingSize;
 
-        private UpdateMold UpdateMold = UpdateMold.None;
+        private HotfixMold _hotfixMold = HotfixMold.None;
         /// <summary> 获取下载大小(M) </summary>
         private float GetLoadedSize
         {
@@ -100,21 +100,21 @@ namespace Modules.Update
 
                     view.SetTipsText("检查更新中...");
                     view.SetProgressValue(0);
-                    StartUpdate((UpdateMold mold, string des) =>
+                    StartUpdate((HotfixMold mold, string des) =>
                     {
-                        UpdateMold = mold;
+                        _hotfixMold = mold;
                         Log.I($"更新结果:{mold}");
                         switch (mold)
                         {
-                            case UpdateMold.Hotfix:
+                            case HotfixMold.Hotfix:
                                 view.SetContentText(des);
                                 view.SetUpdateTipsActive(true);
                                 break;
-                            case UpdateMold.App:
+                            case HotfixMold.App:
                                 view.SetContentText($"发现新版本应用:v{serverABConfig.GameVersion}");
                                 view.SetUpdateTipsActive(true);
                                 break;
-                            case UpdateMold.None:
+                            case HotfixMold.None:
                                 view.SetViewActive(false);
                                 SetABModulePairs(localABConfig);
                                 Root.StartApp();
@@ -142,9 +142,9 @@ namespace Modules.Update
             float time = 0;
             float previousSize = 0;
             float speed = 0;
-            switch (UpdateMold)
+            switch (_hotfixMold)
             {
-                case UpdateMold.Hotfix:
+                case HotfixMold.Hotfix:
                     StartDownLoad();
                     while (GetProgress < 1)
                     {
@@ -170,7 +170,7 @@ namespace Modules.Update
                     view.SetViewActive(false);
                     Root.StartApp();
                     break;
-                case UpdateMold.App:
+                case HotfixMold.App:
                     #region 断点续传
                     // if (!PlayerPrefs.HasKey("APP_DOWNLOADING"))
                     // {
@@ -236,7 +236,7 @@ namespace Modules.Update
                     });
                     #endregion
                     break;
-                case UpdateMold.None:
+                case HotfixMold.None:
                     break;
             }
         }
@@ -244,7 +244,7 @@ namespace Modules.Update
         #region Public Function
 
         /// <summary> 开始热更新 </summary>
-        private void StartUpdate(Action<UpdateMold, string> UpdateCallBack)
+        private void StartUpdate(Action<HotfixMold, string> UpdateCallBack)
         {
             if (FileTools.FileExist(LocalVersionConfigPath))
             {
@@ -517,7 +517,7 @@ namespace Modules.Update
         }
 
         /// <summary> 检查更新 </summary>
-        private void CheckUpdate(AssetBundleConfig localABConfig, Action<UpdateMold> cb = null)
+        private void CheckUpdate(AssetBundleConfig localABConfig, Action<HotfixMold> cb = null)
         {
             if (Application.internetReachability == NetworkReachability.NotReachable)
             {
@@ -569,7 +569,7 @@ namespace Modules.Update
                         }
                         alreadyDownloadSize = GetSize(alreadlyFolders);
                         TotalSize = GetSize(serverFolders.Values.ToList()) / 1024f / 1024f;
-                        UpdateMold mold = downloadFolders.Count > 0 ? UpdateMold.Hotfix : UpdateMold.None;
+                        HotfixMold mold = downloadFolders.Count > 0 ? HotfixMold.Hotfix : HotfixMold.None;
                         cb?.Invoke(mold);
                     }
                     else
@@ -580,7 +580,7 @@ namespace Modules.Update
                         // }
                         //大版本更新,下载新程序覆盖安装
                         Log.I("大版本更新,下载新程序覆盖安装");
-                        cb?.Invoke(UpdateMold.App);
+                        cb?.Invoke(HotfixMold.App);
                     }
                 });
             }
