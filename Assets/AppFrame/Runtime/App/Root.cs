@@ -66,7 +66,10 @@ namespace App
 
         public static void StartApp()
         {
-            AssetBundleManager.Instance.LoadAssetBundle("Shader", "Shaders");
+            if (AppInfo.AppConfig.LoadAssetsMold != LoadAssetsMold.Native)
+            {
+                AssetBundleManager.Instance.LoadAssetBundle("Shader", "Shaders");
+            }
             //初始化Global的Logic脚本的Begin方法
             InitLogicBegin("Global");
             LoadScene(appScriptConfig.MainSceneName, true);

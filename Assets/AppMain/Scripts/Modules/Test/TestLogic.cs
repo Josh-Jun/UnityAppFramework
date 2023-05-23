@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using AppFrame.Data;
 using AppFrame.Data.Json;
 using AppFrame.Data.Xml;
+using AppFrame.Enum;
 using AppFrame.Info;
 using AppFrame.Interface;
 using AppFrame.Manager;
@@ -70,6 +71,10 @@ namespace Modules.Test
             string formula= "20*(30-10)";
             var result = new System.Data.DataTable().Compute(formula, "");
             Log.I(result);
+            TimeUpdateManager.Instance.StartTimer((time) =>
+            {
+                Log.I(time);
+            }, UpdateMold.FixedUpdate);
         }
 
         public async void LogText()

@@ -26,15 +26,18 @@ namespace AppFrame.Tools
 
         private void Update()
         {
-            if (timerPairs[UpdateMold.Update].Count > 0)
+            if (timerPairs.ContainsKey(UpdateMold.Update))
             {
-                for (int i = 0, length = timerPairs[UpdateMold.Update].Count; i < length; i++)
+                if (timerPairs[UpdateMold.Update].Count > 0)
                 {
-                    timeData = timerPairs[UpdateMold.Update][i];
-                    if (timeData.isTime)
+                    for (int i = 0, length = timerPairs[UpdateMold.Update].Count; i < length; i++)
                     {
-                        timeData.addTime = Time.time - timeData.tagTime;
-                        timeData.cb(timeData.addTime);
+                        timeData = timerPairs[UpdateMold.Update][i];
+                        if (timeData.isTime)
+                        {
+                            timeData.addTime = Time.time - timeData.tagTime;
+                            timeData.cb(timeData.addTime);
+                        }
                     }
                 }
             }
@@ -44,16 +47,19 @@ namespace AppFrame.Tools
 
         private void FixedUpdate()
         {
-            if (timerPairs[UpdateMold.FixedUpdate].Count > 0)
+            if (timerPairs.ContainsKey(UpdateMold.FixedUpdate))
             {
-                for (int i = 0, length = timerPairs[UpdateMold.FixedUpdate].Count; i < length; i++)
+                if (timerPairs[UpdateMold.FixedUpdate].Count > 0)
                 {
-                    fixedTimerData = timerPairs[UpdateMold.FixedUpdate][i];
-                    if (fixedTimerData.isTime)
+                    for (int i = 0, length = timerPairs[UpdateMold.FixedUpdate].Count; i < length; i++)
                     {
-                        int time = (int)(Time.fixedTime * 100) - (int)(fixedTimerData.tagTime * 100);
-                        fixedTimerData.addTime = time / 100f;
-                        fixedTimerData.cb(fixedTimerData.addTime);
+                        fixedTimerData = timerPairs[UpdateMold.FixedUpdate][i];
+                        if (fixedTimerData.isTime)
+                        {
+                            int time = (int)(Time.fixedTime * 100) - (int)(fixedTimerData.tagTime * 100);
+                            fixedTimerData.addTime = time / 100f;
+                            fixedTimerData.cb(fixedTimerData.addTime);
+                        }
                     }
                 }
             }
@@ -61,15 +67,18 @@ namespace AppFrame.Tools
 
         private void LateUpdate()
         {
-            if (timerPairs[UpdateMold.LateUpdate].Count > 0)
+            if (timerPairs.ContainsKey(UpdateMold.LateUpdate))
             {
-                for (int i = 0, length = timerPairs[UpdateMold.LateUpdate].Count; i < length; i++)
+                if (timerPairs[UpdateMold.LateUpdate].Count > 0)
                 {
-                    timeData = timerPairs[UpdateMold.LateUpdate][i];
-                    if (timeData.isTime)
+                    for (int i = 0, length = timerPairs[UpdateMold.LateUpdate].Count; i < length; i++)
                     {
-                        timeData.addTime = Time.time - timeData.tagTime;
-                        timeData.cb(timeData.addTime);
+                        timeData = timerPairs[UpdateMold.LateUpdate][i];
+                        if (timeData.isTime)
+                        {
+                            timeData.addTime = Time.time - timeData.tagTime;
+                            timeData.cb(timeData.addTime);
+                        }
                     }
                 }
             }
