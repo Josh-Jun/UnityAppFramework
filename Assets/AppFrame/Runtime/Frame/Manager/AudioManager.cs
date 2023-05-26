@@ -45,6 +45,24 @@ namespace AppFrame.Manager
         }
 
         /// <summary>
+        /// 设置背景音乐音量
+        /// </summary>
+        /// <param name="volume"></param>
+        public void SetBackgroundVolume(float volume)
+        {
+            backgroundAudio.volume = volume;
+        }
+        
+        /// <summary>
+        /// 设置特效音乐音量
+        /// </summary>
+        /// <param name="volume"></param>
+        public void SetEffectVolume(float volume)
+        {
+            effectAudio.volume = volume;
+        }
+        
+        /// <summary>
         /// 停止播放背景音乐
         /// </summary>
         public void StopBackgroundMusic()
@@ -83,7 +101,7 @@ namespace AppFrame.Manager
         }
 
         /// <summary>
-        /// 体质播放音乐
+        /// 停止播放音乐
         /// </summary>
         /// <param name="_audio"></param>
         private void StopAudio(AudioSource _audio)
