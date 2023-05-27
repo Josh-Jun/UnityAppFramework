@@ -185,7 +185,7 @@ namespace AppFrame.Tools
                         }
                         catch (Exception e)
                         {
-                            Debug.LogError(e);
+                            Log.E(e);
                         }
                     }
 
@@ -215,7 +215,7 @@ namespace AppFrame.Tools
                         }
                         catch (Exception e)
                         {
-                            Debug.LogError(e);
+                            Log.E(e);
                         }
                     }
 
@@ -245,7 +245,7 @@ namespace AppFrame.Tools
                         }
                         catch (Exception e)
                         {
-                            Debug.LogError(e);
+                            Log.E(e);
                         }
                     }
 
@@ -275,7 +275,7 @@ namespace AppFrame.Tools
                         }
                         catch (Exception e)
                         {
-                            Debug.LogError(e);
+                            Log.E(e);
                         }
                     }
 
@@ -305,7 +305,7 @@ namespace AppFrame.Tools
                         }
                         catch (Exception e)
                         {
-                            Debug.LogError(e);
+                            Log.E(e);
                         }
                     }
 
