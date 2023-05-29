@@ -426,7 +426,11 @@ namespace AppFrame.Tools
 
             EventListener.Get(com).onClick = (obj) => { cb?.Invoke(arg0, arg1, arg2, arg3); };
         }
-
+        
+        #endregion
+        
+        #region BtnOnClick params
+        
         /// <summary>
         /// 多个参数的Button点击事件
         /// </summary>
@@ -521,7 +525,7 @@ namespace AppFrame.Tools
 
         #endregion
 
-        #region On Up Down params
+        #region OnDown params
 
         /// <summary>
         /// 多个参数的GameObject点击事件
@@ -706,6 +710,10 @@ namespace AppFrame.Tools
 
             EventListener.Get(com).onDown = (obj) => { cb?.Invoke(arg0, arg1, arg2, arg3); };
         }
+        
+        #endregion
+
+        #region OnUp params
 
         /// <summary>
         /// 多个参数的GameObject点击事件
