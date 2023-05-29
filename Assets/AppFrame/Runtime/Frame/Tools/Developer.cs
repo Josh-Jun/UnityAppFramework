@@ -3,12 +3,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using System;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using UnityEngine.Networking;
-using UnityEngine.Rendering;
 
 namespace AppFrame.Tools
 {
@@ -527,6 +521,378 @@ namespace AppFrame.Tools
 
         #endregion
 
+        #region On Up Down params
+
+        /// <summary>
+        /// 多个参数的GameObject点击事件
+        /// </summary>
+        /// <param name="go"></param>
+        /// <param name="cb"></param>
+        public static void OnDown(this GameObject go, UnityAction cb)
+        {
+            if (go == null)
+            {
+                Debug.LogError($"GameObject({go.name}) is null!!!");
+                return;
+            }
+
+            EventListener.Get(go).onDown = (obj) => { cb?.Invoke(); };
+        }
+
+        /// <summary>
+        /// 多个参数的GameObject点击事件
+        /// </summary>
+        /// <param name="go"></param>
+        /// <param name="cb"></param>
+        /// <param name="arg"></param>
+        public static void OnDown<T>(this GameObject go, UnityAction<T> cb, T arg)
+        {
+            if (go == null)
+            {
+                Debug.LogError($"GameObject({go.name}) is null!!!");
+                return;
+            }
+
+            EventListener.Get(go).onDown = (obj) => { cb?.Invoke(arg); };
+        }
+
+        /// <summary>
+        /// 多个参数的GameObject点击事件
+        /// </summary>
+        /// <param name="go"></param>
+        /// <param name="cb"></param>
+        /// <param name="arg0"></param>
+        /// <param name="arg1"></param>
+        public static void OnDown<T0, T1>(this GameObject go, UnityAction<T0, T1> cb, T0 arg0, T1 arg1)
+        {
+            if (go == null)
+            {
+                Debug.LogError($"GameObject({go.name}) is null!!!");
+                return;
+            }
+
+            EventListener.Get(go).onDown = (obj) => { cb?.Invoke(arg0, arg1); };
+        }
+
+        /// <summary>
+        /// 多个参数的GameObject点击事件
+        /// </summary>
+        /// <param name="go"></param>
+        /// <param name="cb"></param>
+        /// <param name="arg0"></param>
+        /// <param name="arg1"></param>
+        /// <param name="arg2"></param>
+        public static void OnDown<T0, T1, T2>(this GameObject go, UnityAction<T0, T1, T2> cb, T0 arg0, T1 arg1,
+            T2 arg2)
+        {
+            if (go == null)
+            {
+                Debug.LogError($"GameObject({go.name}) is null!!!");
+                return;
+            }
+
+            EventListener.Get(go).onDown = (obj) => { cb?.Invoke(arg0, arg1, arg2); };
+        }
+
+        /// <summary>
+        /// 多个参数的GameObject点击事件
+        /// </summary>
+        /// <param name="go"></param>
+        /// <param name="cb"></param>
+        /// <param name="arg0"></param>
+        /// <param name="arg1"></param>
+        /// <param name="arg2"></param>
+        /// <param name="arg3"></param>
+        public static void OnDown<T0, T1, T2, T3>(this GameObject go, UnityAction<T0, T1, T2, T3> cb, T0 arg0, T1 arg1,
+            T2 arg2, T3 arg3)
+        {
+            if (go == null)
+            {
+                Debug.LogError($"GameObject({go.name}) is null!!!");
+                return;
+            }
+
+            EventListener.Get(go).onDown = (obj) => { cb?.Invoke(arg0, arg1, arg2, arg3); };
+        }
+
+        /// <summary>
+        /// 多个参数的组件点击事件
+        /// </summary>
+        /// <param name="com"></param>
+        /// <param name="cb"></param>
+        public static void OnDown(this Component com, UnityAction cb)
+        {
+            if (com == null)
+            {
+                Debug.LogError($"Component({com}) is null!!!");
+                return;
+            }
+
+            EventListener.Get(com).onDown = (obj) => { cb?.Invoke(); };
+        }
+
+        /// <summary>
+        /// 多个参数的组件点击事件
+        /// </summary>
+        /// <param name="com"></param>
+        /// <param name="cb"></param>
+        /// <param name="arg"></param>
+        public static void OnDown<T>(this Component com, UnityAction<T> cb, T arg)
+        {
+            if (com == null)
+            {
+                Debug.LogError($"Component({com}) is null!!!");
+                return;
+            }
+
+            EventListener.Get(com).onDown = (obj) => { cb?.Invoke(arg); };
+        }
+
+        /// <summary>
+        /// 多个参数的组件点击事件
+        /// </summary>
+        /// <param name="com"></param>
+        /// <param name="cb"></param>
+        /// <param name="arg0"></param>
+        /// <param name="arg1"></param>
+        public static void OnDown<T0, T1>(this Component com, UnityAction<T0, T1> cb, T0 arg0, T1 arg1)
+        {
+            if (com == null)
+            {
+                Debug.LogError($"Component({com}) is null!!!");
+                return;
+            }
+
+            EventListener.Get(com).onDown = (obj) => { cb?.Invoke(arg0, arg1); };
+        }
+
+        /// <summary>
+        /// 多个参数的组件点击事件
+        /// </summary>
+        /// <param name="com"></param>
+        /// <param name="cb"></param>
+        /// <param name="arg0"></param>
+        /// <param name="arg1"></param>
+        /// <param name="arg2"></param>
+        public static void OnDown<T0, T1, T2>(this Component com, UnityAction<T0, T1, T2> cb, T0 arg0, T1 arg1,
+            T2 arg2)
+        {
+            if (com == null)
+            {
+                Debug.LogError($"Component({com}) is null!!!");
+                return;
+            }
+
+            EventListener.Get(com).onDown = (obj) => { cb?.Invoke(arg0, arg1, arg2); };
+        }
+
+        /// <summary>
+        /// 多个参数的组件点击事件
+        /// </summary>
+        /// <param name="com"></param>
+        /// <param name="cb"></param>
+        /// <param name="arg0"></param>
+        /// <param name="arg1"></param>
+        /// <param name="arg2"></param>
+        /// <param name="arg3"></param>
+        public static void OnDown<T0, T1, T2, T3>(this Component com, UnityAction<T0, T1, T2, T3> cb, T0 arg0, T1 arg1,
+            T2 arg2, T3 arg3)
+        {
+            if (com == null)
+            {
+                Debug.LogError($"Component({com}) is null!!!");
+                return;
+            }
+
+            EventListener.Get(com).onDown = (obj) => { cb?.Invoke(arg0, arg1, arg2, arg3); };
+        }
+
+        /// <summary>
+        /// 多个参数的GameObject点击事件
+        /// </summary>
+        /// <param name="go"></param>
+        /// <param name="cb"></param>
+        public static void OnUp(this GameObject go, UnityAction cb)
+        {
+            if (go == null)
+            {
+                Debug.LogError($"GameObject({go.name}) is null!!!");
+                return;
+            }
+
+            EventListener.Get(go).onUp = (obj) => { cb?.Invoke(); };
+        }
+
+        /// <summary>
+        /// 多个参数的GameObject点击事件
+        /// </summary>
+        /// <param name="go"></param>
+        /// <param name="cb"></param>
+        /// <param name="arg"></param>
+        public static void OnUp<T>(this GameObject go, UnityAction<T> cb, T arg)
+        {
+            if (go == null)
+            {
+                Debug.LogError($"GameObject({go.name}) is null!!!");
+                return;
+            }
+
+            EventListener.Get(go).onUp = (obj) => { cb?.Invoke(arg); };
+        }
+
+        /// <summary>
+        /// 多个参数的GameObject点击事件
+        /// </summary>
+        /// <param name="go"></param>
+        /// <param name="cb"></param>
+        /// <param name="arg0"></param>
+        /// <param name="arg1"></param>
+        public static void OnUp<T0, T1>(this GameObject go, UnityAction<T0, T1> cb, T0 arg0, T1 arg1)
+        {
+            if (go == null)
+            {
+                Debug.LogError($"GameObject({go.name}) is null!!!");
+                return;
+            }
+
+            EventListener.Get(go).onUp = (obj) => { cb?.Invoke(arg0, arg1); };
+        }
+
+        /// <summary>
+        /// 多个参数的GameObject点击事件
+        /// </summary>
+        /// <param name="go"></param>
+        /// <param name="cb"></param>
+        /// <param name="arg0"></param>
+        /// <param name="arg1"></param>
+        /// <param name="arg2"></param>
+        public static void OnUp<T0, T1, T2>(this GameObject go, UnityAction<T0, T1, T2> cb, T0 arg0, T1 arg1,
+            T2 arg2)
+        {
+            if (go == null)
+            {
+                Debug.LogError($"GameObject({go.name}) is null!!!");
+                return;
+            }
+
+            EventListener.Get(go).onUp = (obj) => { cb?.Invoke(arg0, arg1, arg2); };
+        }
+
+        /// <summary>
+        /// 多个参数的GameObject点击事件
+        /// </summary>
+        /// <param name="go"></param>
+        /// <param name="cb"></param>
+        /// <param name="arg0"></param>
+        /// <param name="arg1"></param>
+        /// <param name="arg2"></param>
+        /// <param name="arg3"></param>
+        public static void OnUp<T0, T1, T2, T3>(this GameObject go, UnityAction<T0, T1, T2, T3> cb, T0 arg0, T1 arg1,
+            T2 arg2, T3 arg3)
+        {
+            if (go == null)
+            {
+                Debug.LogError($"GameObject({go.name}) is null!!!");
+                return;
+            }
+
+            EventListener.Get(go).onUp = (obj) => { cb?.Invoke(arg0, arg1, arg2, arg3); };
+        }
+
+        /// <summary>
+        /// 多个参数的组件点击事件
+        /// </summary>
+        /// <param name="com"></param>
+        /// <param name="cb"></param>
+        public static void OnUp(this Component com, UnityAction cb)
+        {
+            if (com == null)
+            {
+                Debug.LogError($"Component({com}) is null!!!");
+                return;
+            }
+
+            EventListener.Get(com).onUp = (obj) => { cb?.Invoke(); };
+        }
+
+        /// <summary>
+        /// 多个参数的组件点击事件
+        /// </summary>
+        /// <param name="com"></param>
+        /// <param name="cb"></param>
+        /// <param name="arg"></param>
+        public static void OnUp<T>(this Component com, UnityAction<T> cb, T arg)
+        {
+            if (com == null)
+            {
+                Debug.LogError($"Component({com}) is null!!!");
+                return;
+            }
+
+            EventListener.Get(com).onUp = (obj) => { cb?.Invoke(arg); };
+        }
+
+        /// <summary>
+        /// 多个参数的组件点击事件
+        /// </summary>
+        /// <param name="com"></param>
+        /// <param name="cb"></param>
+        /// <param name="arg0"></param>
+        /// <param name="arg1"></param>
+        public static void OnUp<T0, T1>(this Component com, UnityAction<T0, T1> cb, T0 arg0, T1 arg1)
+        {
+            if (com == null)
+            {
+                Debug.LogError($"Component({com}) is null!!!");
+                return;
+            }
+
+            EventListener.Get(com).onUp = (obj) => { cb?.Invoke(arg0, arg1); };
+        }
+
+        /// <summary>
+        /// 多个参数的组件点击事件
+        /// </summary>
+        /// <param name="com"></param>
+        /// <param name="cb"></param>
+        /// <param name="arg0"></param>
+        /// <param name="arg1"></param>
+        /// <param name="arg2"></param>
+        public static void OnUp<T0, T1, T2>(this Component com, UnityAction<T0, T1, T2> cb, T0 arg0, T1 arg1,
+            T2 arg2)
+        {
+            if (com == null)
+            {
+                Debug.LogError($"Component({com}) is null!!!");
+                return;
+            }
+
+            EventListener.Get(com).onUp = (obj) => { cb?.Invoke(arg0, arg1, arg2); };
+        }
+
+        /// <summary>
+        /// 多个参数的组件点击事件
+        /// </summary>
+        /// <param name="com"></param>
+        /// <param name="cb"></param>
+        /// <param name="arg0"></param>
+        /// <param name="arg1"></param>
+        /// <param name="arg2"></param>
+        /// <param name="arg3"></param>
+        public static void OnUp<T0, T1, T2, T3>(this Component com, UnityAction<T0, T1, T2, T3> cb, T0 arg0, T1 arg1,
+            T2 arg2, T3 arg3)
+        {
+            if (com == null)
+            {
+                Debug.LogError($"Component({com}) is null!!!");
+                return;
+            }
+
+            EventListener.Get(com).onUp = (obj) => { cb?.Invoke(arg0, arg1, arg2, arg3); };
+        }
+
+        #endregion
+
         #region EventTrigger
 
         /// <summary>
@@ -555,10 +921,57 @@ namespace AppFrame.Tools
         }
 
         /// <summary>
-        /// 移除EventTrigger事件
+        /// 移除EventTrigger事件(移除一个方法)
         /// </summary>
         /// <param name="obj"></param>
-        public static void RemoveEventTrigger(this GameObject obj)
+        public static void RemoveEventTrigger(this GameObject obj, EventTriggerType eventType, UnityAction<BaseEventData> ua)
+        {
+            if (obj == null)
+            {
+                Debug.LogError($"GameObject({obj.name}) is null!!!");
+                return;
+            }
+
+            EventTrigger eventTrigger = obj.TryGetComponent<EventTrigger>();
+            EventTrigger.Entry entry = eventTrigger.triggers.Find(s => s.eventID == eventType);
+
+            if (entry != null)
+            {
+                entry.callback.RemoveListener(ua);
+                eventTrigger.triggers.Remove(entry);
+            }
+        }
+        
+        /// <summary>
+        /// 移除EventTrigger事件(移除一个事件类型)
+        /// </summary>
+        /// <param name="obj"></param>
+        public static void RemoveEventTrigger(this GameObject obj, EventTriggerType eventType, bool isClear = false)
+        {
+            if (obj == null)
+            {
+                Debug.LogError($"GameObject({obj.name}) is null!!!");
+                return;
+            }
+
+            EventTrigger eventTrigger = obj.TryGetComponent<EventTrigger>();
+            EventTrigger.Entry entry = eventTrigger.triggers.Find(s => s.eventID == eventType);
+
+            if (entry != null)
+            {
+                entry.callback.RemoveAllListeners();
+                if (isClear)
+                {
+                    eventTrigger.triggers.Remove(entry);
+                }
+            }
+        }
+        
+        /// <summary>
+        /// 移除EventTrigger事件(移除所有)
+        /// </summary>
+        /// <param name="obj"></param>
+        public static void RemoveAllEventTrigger(this GameObject obj)
         {
             if (obj == null)
             {
@@ -597,10 +1010,57 @@ namespace AppFrame.Tools
         }
 
         /// <summary>
-        /// 移除EventTrigger事件
+        /// 移除EventTrigger事件(移除一个方法)
+        /// </summary>
+        /// <param name="obj"></param>
+        public static void RemoveEventTrigger(this Component obj, EventTriggerType eventType, UnityAction<BaseEventData> ua)
+        {
+            if (obj == null)
+            {
+                Debug.LogError($"GameObject({obj.name}) is null!!!");
+                return;
+            }
+
+            EventTrigger eventTrigger = obj.TryGetComponent<EventTrigger>();
+            EventTrigger.Entry entry = eventTrigger.triggers.Find(s => s.eventID == eventType);
+
+            if (entry != null)
+            {
+                entry.callback.RemoveListener(ua);
+                eventTrigger.triggers.Remove(entry);
+            }
+        }
+        
+        /// <summary>
+        /// 移除EventTrigger事件(移除一个事件类型)
+        /// </summary>
+        /// <param name="obj"></param>
+        public static void RemoveEventTrigger(this Component obj, EventTriggerType eventType, bool isClear = false)
+        {
+            if (obj == null)
+            {
+                Debug.LogError($"GameObject({obj.name}) is null!!!");
+                return;
+            }
+
+            EventTrigger eventTrigger = obj.TryGetComponent<EventTrigger>();
+            EventTrigger.Entry entry = eventTrigger.triggers.Find(s => s.eventID == eventType);
+
+            if (entry != null)
+            {
+                entry.callback.RemoveAllListeners();
+                if (isClear)
+                {
+                    eventTrigger.triggers.Remove(entry);
+                }
+            }
+        }
+        
+        /// <summary>
+        /// 移除EventTrigger事件(移除所有)
         /// </summary>
         /// <param name="com"></param>
-        public static void RemoveEventTrigger(this Component com)
+        public static void RemoveAllEventTrigger(this Component com)
         {
             if (com == null)
             {
