@@ -14,6 +14,8 @@ namespace Modules.Ask
         private Text askText;
         private Button btn_confirm;
         private Button btn_cancel;
+        private Text confirm_text;
+        private Text cancel_text;
 
         private GameObject tipsPanel;
         private Text tipsText;
@@ -24,6 +26,8 @@ namespace Modules.Ask
             askText = askPanel.FindComponent<Text>("TipsText");
             btn_confirm = askPanel.FindComponent<Button>("BtnConfirm");
             btn_cancel = askPanel.FindComponent<Button>("BtnCancel");
+            confirm_text = askPanel.FindComponent<Text>("BtnConfirm/Text");
+            cancel_text = askPanel.FindComponent<Text>("BtnCancel/Text");
             
             tipsPanel = this.FindGameObject("TipsPanel");
             tipsText = tipsPanel.FindComponent<Text>("TipsBg/TipsText");
@@ -55,12 +59,20 @@ namespace Modules.Ask
             tipsText.text = tips;
             TimeTaskManager.Instance.AddTimeTask(() => { SetViewActive(false); }, time);
         }
-        public void SetViewInfo(string tips, Action confirm_callback = null, Action cancel_callback = null)
+        public void SetViewInfo(AskData askData)
         {
             askPanel.SetActive(true);
-            askText.text = tips;
-            btn_confirm.onClick.AddListener(() => { OnClickEvent(btn_confirm, confirm_callback); });
-            btn_cancel.onClick.AddListener(() => { OnClickEvent(btn_cancel, cancel_callback); });
+            askText.text = askData.content;
+            if (!string.IsNullOrEmpty(askData.confirm))
+            {
+                confirm_text.text = askData.confirm;
+            }
+            if (!string.IsNullOrEmpty(askData.cancel))
+            {
+                cancel_text.text = askData.cancel;
+            }
+            btn_confirm.onClick.AddListener(() => { OnClickEvent(btn_confirm, askData.confirm_callback); });
+            btn_cancel.onClick.AddListener(() => { OnClickEvent(btn_cancel, askData.cancel_callback); });
         }
         private void OnClickEvent(Button btn, Action callback)
         {

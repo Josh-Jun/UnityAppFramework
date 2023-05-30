@@ -14,7 +14,7 @@ namespace Modules.Ask
         public AskView view;
         public AskLogic()
         {
-            AddEventMsg<string, Action, Action>("ShowAskView", ShowAskView);
+            AddEventMsg<AskData>("ShowAskView", ShowAskView);
             AddEventMsg<string, float>("ShowTips", ShowTips);
         }
         public void Begin()
@@ -28,10 +28,10 @@ namespace Modules.Ask
         {
             view.SetViewActive(false);
         }
-        public void ShowAskView(string content, Action confirm_callback = null, Action cancel_callback = null)
+        public void ShowAskView(AskData askData)
         {
             view.SetViewActive();
-            view.SetViewInfo(content, confirm_callback, cancel_callback);
+            view.SetViewInfo(askData);
         }
 
         public void ShowTips(string content, float time = 2f)

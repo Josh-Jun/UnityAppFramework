@@ -14,6 +14,7 @@ using AppFrame.Info;
 using AppFrame.Interface;
 using AppFrame.Manager;
 using AppFrame.Tools;
+using Modules.Ask;
 
 namespace Modules.Test
 {
@@ -140,9 +141,11 @@ namespace Modules.Test
 
         private void ButtonQuitEvent()
         {
-            //Ask.AskRoot.Instance.ShowAskView("确定退出程序？", () => { PlatformManager.Instance.QuitUnityPlayer(); });
-            SendEventMsg<string, Action, Action>("ShowAskView", "确定退出程序？",
-                () => { PlatformManager.Instance.QuitUnityPlayer(); }, null);
+            AskData data = new AskData();
+            data.content = "确定退出程序?";
+            data.confirm_callback = PlatformManager.Instance.QuitUnityPlayer;
+            //Root.GetLogicScript<AskLogic>().ShowAskView(data);
+            SendEventMsg<AskData>("ShowAskView", data);
         }
 
         private void ButtonEvent()
