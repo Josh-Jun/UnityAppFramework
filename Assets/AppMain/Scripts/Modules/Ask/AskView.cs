@@ -59,20 +59,14 @@ namespace Modules.Ask
             tipsText.text = tips;
             TimeTaskManager.Instance.AddTimeTask(() => { SetViewActive(false); }, time);
         }
-        public void SetViewInfo(AskData askData)
+        public void SetViewInfo(string content, Action confirm_callback, Action cancel_callback, string confirm = null, string cancel = null)
         {
             askPanel.SetActive(true);
-            askText.text = askData.content;
-            if (!string.IsNullOrEmpty(askData.confirm))
-            {
-                confirm_text.text = askData.confirm;
-            }
-            if (!string.IsNullOrEmpty(askData.cancel))
-            {
-                cancel_text.text = askData.cancel;
-            }
-            btn_confirm.onClick.AddListener(() => { OnClickEvent(btn_confirm, askData.confirm_callback); });
-            btn_cancel.onClick.AddListener(() => { OnClickEvent(btn_cancel, askData.cancel_callback); });
+            askText.text = content;
+            confirm_text.text = string.IsNullOrEmpty(confirm) ? "确定" : confirm;
+            cancel_text.text = string.IsNullOrEmpty(cancel) ? "取消" : cancel;
+            btn_confirm.onClick.AddListener(() => { OnClickEvent(btn_confirm, confirm_callback); });
+            btn_cancel.onClick.AddListener(() => { OnClickEvent(btn_cancel, cancel_callback); });
         }
         private void OnClickEvent(Button btn, Action callback)
         {

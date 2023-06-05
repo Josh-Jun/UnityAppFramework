@@ -44,6 +44,29 @@ namespace AppFrame.Tools
             m_eventController.AddEventListener(eventType, handler, isDesignateRemove);
         }
 
+        public static void AddEventListener<T0, T1, T2, T3, T4>(string eventType, Action<T0, T1, T2, T3, T4> handler,
+            bool isDesignateRemove = true)
+        {
+            m_eventController.AddEventListener(eventType, handler, isDesignateRemove);
+        }
+        
+        public static void AddEventListener<T0, T1, T2, T3, T4, T5>(string eventType, Action<T0, T1, T2, T3, T4, T5> handler,
+            bool isDesignateRemove = true)
+        {
+            m_eventController.AddEventListener(eventType, handler, isDesignateRemove);
+        }
+        
+        public static void AddEventListener<T0, T1, T2, T3, T4, T5, T6>(string eventType, Action<T0, T1, T2, T3, T4, T5, T6> handler,
+            bool isDesignateRemove = true)
+        {
+            m_eventController.AddEventListener(eventType, handler, isDesignateRemove);
+        }
+        
+        public static void AddEventListener<T0, T1, T2, T3, T4, T5, T6, T7>(string eventType, Action<T0, T1, T2, T3, T4, T5, T6, T7> handler,
+            bool isDesignateRemove = true)
+        {
+            m_eventController.AddEventListener(eventType, handler, isDesignateRemove);
+        }
         #endregion
 
         #region 触发事件
@@ -94,6 +117,41 @@ namespace AppFrame.Tools
             }
         }
 
+        public static void TriggerEvent<T0, T1, T2, T3, T4>(string eventType, T0 args0, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
+        {
+            var isTrigger = m_eventController.DispatchEvent<T0, T1, T2, T3, T4>(eventType, args0, arg1, arg2, arg3, arg4);
+            if (!isTrigger)
+            {
+                Log.I($"{eventType}事件未注册");
+            }
+        }
+
+        public static void TriggerEvent<T0, T1, T2, T3, T4, T5>(string eventType, T0 args0, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
+        {
+            var isTrigger = m_eventController.DispatchEvent<T0, T1, T2, T3, T4, T5>(eventType, args0, arg1, arg2, arg3, arg4, arg5);
+            if (!isTrigger)
+            {
+                Log.I($"{eventType}事件未注册");
+            }
+        }
+
+        public static void TriggerEvent<T0, T1, T2, T3, T4, T5, T6>(string eventType, T0 args0, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
+        {
+            var isTrigger = m_eventController.DispatchEvent<T0, T1, T2, T3, T4, T5, T6>(eventType, args0, arg1, arg2, arg3, arg4, arg5, arg6);
+            if (!isTrigger)
+            {
+                Log.I($"{eventType}事件未注册");
+            }
+        }
+
+        public static void TriggerEvent<T0, T1, T2, T3, T4, T5, T6, T7>(string eventType, T0 args0, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
+        {
+            var isTrigger = m_eventController.DispatchEvent<T0, T1, T2, T3, T4, T5, T6, T7>(eventType, args0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            if (!isTrigger)
+            {
+                Log.I($"{eventType}事件未注册");
+            }
+        }
         #endregion
 
         #region 移除事件
@@ -141,6 +199,25 @@ namespace AppFrame.Tools
             return m_eventController.RemoveEventListener(eventType, handler);
         }
 
+        public static bool RemoveEventListener<T0, T1, T2, T3, T4>(string eventType, Action<T0, T1, T2, T3, T4> handler)
+        {
+            return m_eventController.RemoveEventListener(eventType, handler);
+        }
+
+        public static bool RemoveEventListener<T0, T1, T2, T3, T4, T5>(string eventType, Action<T0, T1, T2, T3, T4, T5> handler)
+        {
+            return m_eventController.RemoveEventListener(eventType, handler);
+        }
+
+        public static bool RemoveEventListener<T0, T1, T2, T3, T4, T5, T6>(string eventType, Action<T0, T1, T2, T3, T4, T5, T6> handler)
+        {
+            return m_eventController.RemoveEventListener(eventType, handler);
+        }
+
+        public static bool RemoveEventListener<T0, T1, T2, T3, T4, T5, T6, T7>(string eventType, Action<T0, T1, T2, T3, T4, T5, T6, T7> handler)
+        {
+            return m_eventController.RemoveEventListener(eventType, handler);
+        }
         #endregion
     }
 }

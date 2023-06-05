@@ -6,10 +6,10 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Video;
 using System.Threading.Tasks;
+using App;
 using AppFrame.Data;
 using AppFrame.Data.Json;
 using AppFrame.Data.Xml;
-using AppFrame.Enum;
 using AppFrame.Info;
 using AppFrame.Interface;
 using AppFrame.Manager;
@@ -72,10 +72,6 @@ namespace Modules.Test
             string formula= "20*(30-10)";
             var result = new System.Data.DataTable().Compute(formula, "");
             Log.I(result);
-            TimeUpdateManager.Instance.StartTimer((time) =>
-            {
-                Log.I(time);
-            }, UpdateMold.FixedUpdate);
         }
 
         public async void LogText()
@@ -141,11 +137,8 @@ namespace Modules.Test
 
         private void ButtonQuitEvent()
         {
-            AskData data = new AskData();
-            data.content = "确定退出程序?";
-            data.confirm_callback = PlatformManager.Instance.QuitUnityPlayer;
-            //Root.GetLogicScript<AskLogic>().ShowAskView(data);
-            SendEventMsg<AskData>("ShowAskView", data);
+            //Root.GetLogicScript<AskLogic>().ShowAskView("ShowAskView", "确定退出程序?", PlatformManager.Instance.QuitUnityPlayer, null, null, null);
+            SendEventMsg<string, Action, Action>("ShowAskView", "确定退出程序?", PlatformManager.Instance.QuitUnityPlayer, null);
         }
 
         private void ButtonEvent()
