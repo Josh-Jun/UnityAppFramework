@@ -105,11 +105,6 @@ namespace AppFrame.Editor
                 var value =
                     files[i].FullName.Substring(files[i].FullName.IndexOf(folder)).Replace('\\', '/').Split('.')[0]
                         .Replace($"{folder}/", "");
-                if (files[i].FullName.Contains("Pico") || files[i].FullName.Contains("Mobile"))
-                {
-                    value = value.Replace("Mobile", "{0}").Replace("Pico", "{0}");
-                }
-
                 if (!value.Contains("/")) continue;
                 sb.AppendLine($"        public const string {name} = \"{value}\";");
             }
@@ -117,6 +112,7 @@ namespace AppFrame.Editor
             return sb.ToString();
         }
 
+        private static string[] IncludeMarks = { "Views", "Config", "Scene", "Loaded" };
         private static List<FileInfo> GetFiles(string folder)
         {
             var path = $"{Application.dataPath}/Resources/{folder}";
@@ -127,10 +123,21 @@ namespace AppFrame.Editor
                 FileInfo[] files = direction.GetFiles("*", SearchOption.AllDirectories);
                 for (int i = 0; i < files.Length; i++)
                 {
+                    if (files[i].FullName.Contains("Scene") && !files[i].Name.EndsWith(".unity")) continue; //剔除场景以外的文件
                     if (files[i].Name.EndsWith(".meta")) continue; //剔除.meta文件
                     if (files[i].FullName.Contains("Shader")) continue; //剔除Shader
                     if (files[i].FullName.Contains("Dll")) continue; //剔除Dll
-                    if (files[i].FullName.Contains("Scene") && !files[i].Name.EndsWith(".unity")) continue; //剔除场景以外的文件
+                    if (files[i].FullName.Contains("Test")) continue; //剔除Test
+                    var isContinue = true;
+                    for (int j = 0; j < IncludeMarks.Length; j++)
+                    {
+                        if (files[i].FullName.Contains(IncludeMarks[j]))
+                        {
+                            isContinue = false;
+                            break;
+                        }
+                    }
+                    if (isContinue) continue; //
                     fileInfos.Add(files[i]);
                 }
             }
