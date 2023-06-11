@@ -56,7 +56,7 @@
       "url": "https://packages.unity.cn"
     },
     "com.unity.debug.srdebug": {
-      "version": "https://github.com/Josh-Jun/UPM.git#srdebug/1.11.0",
+      "version": "https://github.com/Josh-Jun/UnityPackageManager.git#srdebug/1.11.0",
       "depth": 0,
       "source": "git",
       "dependencies": {
@@ -72,7 +72,7 @@
       "url": "https://packages.unity.cn"
     },
     "com.unity.gif.gifplayer": {
-      "version": "https://github.com/Josh-Jun/UPM.git#gifplayer/1.0.0",
+      "version": "https://github.com/Josh-Jun/UnityPackageManager.git#gifplayer/1.0.0",
       "depth": 0,
       "source": "git",
       "dependencies": {
@@ -225,13 +225,13 @@
       }
     },
     "com.unity.ui.videoplayer": {
-      "version": "https://github.com/Josh-Jun/UPM.git#uivideoplayer/1.0.0",
+      "version": "https://github.com/Josh-Jun/UnityPackageManager.git#uivideoplayer/1.0.0",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "b888dcd3057c252942a29f721c71df14f14bce45"
+      "hash": "5acbd1c5c9caa3f34d6cefa23ba22c68a0872b19"
     },
     "com.unity.visualscripting": {
       "version": "1.7.8",
@@ -244,7 +244,7 @@
       "url": "https://packages.unity.cn"
     },
     "com.unity.vodeo.avpro": {
-      "version": "https://github.com/Josh-Jun/UPM.git#avpro/2.5.0",
+      "version": "https://github.com/Josh-Jun/UnityPackageManager.git#avpro/2.5.0",
       "depth": 0,
       "source": "git",
       "dependencies": {
