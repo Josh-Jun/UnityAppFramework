@@ -60,7 +60,7 @@ namespace AppFrame.Editor
 
             EditorUtility.SetDirty(AppConfig);
 
-            HybridCLRSettings.Instance.enable = LoadAssetsMold != LoadAssetsMold.Local;
+            HybridCLRSettings.Instance.enable = LoadAssetsMold != LoadAssetsMold.Native;
 
             if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android)
             {
