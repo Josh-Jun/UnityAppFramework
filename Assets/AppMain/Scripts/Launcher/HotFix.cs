@@ -233,14 +233,14 @@ namespace Launcher
             DownLoad(ServerUrl + AssetBundleManager.PlatformName + ".manifest", (byte[] manifest_data) =>
             {
                 //将manifest文件写入本地
-                FileTool.CreateFile(LocalPath + AssetBundleManager.PlatformName + ".manifest", manifest_data);
+                HotfixTool.CreateFile(LocalPath + AssetBundleManager.PlatformName + ".manifest", manifest_data);
                 if (Launcher.AppConfig.ABPipeline == ABPipeline.Default)
                 {
                     //下载总AB包
                     DownLoad(ServerUrl + AssetBundleManager.PlatformName, (byte[] ab_data) =>
                     {
                         //将ab文件写入本地
-                        FileTool.CreateFile(LocalPath + AssetBundleManager.PlatformName, ab_data);
+                        HotfixTool.CreateFile(LocalPath + AssetBundleManager.PlatformName, ab_data);
                         callback?.Invoke();
                     });
                 }
@@ -263,9 +263,9 @@ namespace Launcher
                     {
                         if (localFolders[folder.BundleName].MD5 != folder.MD5)
                         {
-                            if (FileTool.FileExist(LocalPath + folder.BundleName))
+                            if (HotfixTool.FileExist(LocalPath + folder.BundleName))
                             {
-                                FileTool.DeleteFile(LocalPath + folder.BundleName);
+                                HotfixTool.DeleteFile(LocalPath + folder.BundleName);
                             }
                         }
                     }
@@ -276,12 +276,12 @@ namespace Launcher
                     //下载manifest文件
                     DownLoad(ServerUrl + folder.BundleName + ".manifest", (byte[] _manifest_data) =>
                     {
-                        if (FileTool.FileExist(LocalPath + folder.BundleName + ".manifest"))
+                        if (HotfixTool.FileExist(LocalPath + folder.BundleName + ".manifest"))
                         {
-                            FileTool.DeleteFile(LocalPath + folder.BundleName + ".manifest");
+                            HotfixTool.DeleteFile(LocalPath + folder.BundleName + ".manifest");
                         }
                         //将manifest文件写入本地
-                        FileTool.CreateFile(LocalPath + folder.BundleName + ".manifest", _manifest_data);
+                        HotfixTool.CreateFile(LocalPath + folder.BundleName + ".manifest", _manifest_data);
                     });
                 }
                 
@@ -295,7 +295,7 @@ namespace Launcher
                 Finished = false;
                 DownLoad(ServerUrl + folder.BundleName, (byte[] bytes) =>
                 {
-                    FileTool.CreateFile(LocalPath + folder.BundleName, bytes);
+                    HotfixTool.CreateFile(LocalPath + folder.BundleName, bytes);
                     UpdateLocalConfigMD5(folder);
                     downloadingSize = 0;
                     alreadyDownloadSize += Convert.ToInt64(folder.Size);
@@ -324,13 +324,13 @@ namespace Launcher
                     }
                 }
             }
-            if (FileTool.FileExist(LocalVersionConfigPath))
+            if (HotfixTool.FileExist(LocalVersionConfigPath))
             {
-                FileTool.DeleteFile(LocalVersionConfigPath);
+                HotfixTool.DeleteFile(LocalVersionConfigPath);
             }
 
             string json = JsonUtility.ToJson(alreadyConfig, true);
-            FileTool.CreateFile(LocalVersionConfigPath,json);
+            HotfixTool.CreateFile(LocalVersionConfigPath,json);
         }
 
         private static void UpdateLocalConfigTag(Folder folder)
@@ -352,13 +352,13 @@ namespace Launcher
                 }
             }
             
-            if (FileTool.FileExist(LocalVersionConfigPath))
+            if (HotfixTool.FileExist(LocalVersionConfigPath))
             {
-                FileTool.DeleteFile(LocalVersionConfigPath);
+                HotfixTool.DeleteFile(LocalVersionConfigPath);
             }
 
             string json = JsonUtility.ToJson(alreadyConfig, true);
-            FileTool.CreateFile(LocalVersionConfigPath,json);
+            HotfixTool.CreateFile(LocalVersionConfigPath,json);
         }
         private static void InitLocalConfig()
         {
@@ -389,13 +389,13 @@ namespace Launcher
                     alreadyConfig.Modules.Add(m);
                 }
                 
-                if (FileTool.FileExist(LocalVersionConfigPath))
+                if (HotfixTool.FileExist(LocalVersionConfigPath))
                 {
-                    FileTool.DeleteFile(LocalVersionConfigPath);
+                    HotfixTool.DeleteFile(LocalVersionConfigPath);
                 }
 
                 string json = JsonUtility.ToJson(alreadyConfig, true);
-                FileTool.CreateFile(LocalVersionConfigPath,json);
+                HotfixTool.CreateFile(LocalVersionConfigPath,json);
             }
         }
         /// <summary> 获取文件夹名和包名 </summary>
