@@ -8,9 +8,9 @@ using UnityEngine;
 
 namespace Launcher
 {
-    public class AssetBundleManager : MonoBehaviour
+    public class HybridABManager : MonoBehaviour
     {
-        private static AssetBundleManager _Instance = null;
+        private static HybridABManager _Instance = null;
 
         public Dictionary<string, Dictionary<string, Folder>> ABModulePairs { get; private set; } =
             new Dictionary<string, Dictionary<string, Folder>>();
@@ -32,7 +32,7 @@ namespace Launcher
 
         private string mainfestPath;
 
-        public static AssetBundleManager Instance
+        public static HybridABManager Instance
         {
             get
             {
@@ -40,8 +40,8 @@ namespace Launcher
                 {
                     if (_Instance == null)
                     {
-                        GameObject go = new GameObject(typeof(AssetBundleManager).Name);
-                        _Instance = go.AddComponent<AssetBundleManager>();
+                        GameObject go = new GameObject(typeof(HybridABManager).Name);
+                        _Instance = go.AddComponent<HybridABManager>();
                     }
                     return _Instance;
                 }

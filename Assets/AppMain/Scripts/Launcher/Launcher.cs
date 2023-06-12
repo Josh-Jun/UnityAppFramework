@@ -39,7 +39,7 @@ namespace Launcher
             
             AppConfig = Resources.Load<AppConfig>("AppConfig");
 
-            AssetBundleManager.Instance.InitManager();
+            HybridABManager.Instance.InitManager();
             
             HotFix.Init((isHotfix) =>
             {
@@ -89,9 +89,9 @@ namespace Launcher
             {
                 LoadMetadataForAOTAssemblies();
                 LoadHotfixAssemblies();
-                AppScriptConfig = AssetBundleManager.Instance.LoadAsset<AppScriptConfig>("App", "Config", "AppScriptConfig");
-                AssetBundle ab = AssetBundleManager.Instance.LoadAssetBundle("Scene", "AppScene");
-                UpdateView = AssetBundleManager.Instance.LoadAsset<GameObject>("App", "Update", "UpdateView");
+                AppScriptConfig = HybridABManager.Instance.LoadAsset<AppScriptConfig>("App", "Config", "AppScriptConfig");
+                AssetBundle ab = HybridABManager.Instance.LoadAssetBundle("Scene", "AppScene");
+                UpdateView = HybridABManager.Instance.LoadAsset<GameObject>("App", "Update", "UpdateView");
             }
             else
             {
@@ -106,7 +106,7 @@ namespace Launcher
             for (int i = 0; i < HotfixAssemblyNames.Count; i++)
             {
                 string name = HotfixAssemblyNames[i];
-                TextAsset ta = AssetBundleManager.Instance.LoadAsset<TextAsset>("App", "Dll", name);
+                TextAsset ta = HybridABManager.Instance.LoadAsset<TextAsset>("App", "Dll", name);
                 System.Reflection.Assembly.Load(ta.bytes);
             }
         }
@@ -115,7 +115,7 @@ namespace Launcher
             HomologousImageMode mode = HomologousImageMode.SuperSet;
             foreach (var aotDllName in AOTMetaAssemblyNames)
             {
-                TextAsset ta =  AssetBundleManager.Instance.LoadAsset<TextAsset>("App", "Dll", aotDllName);
+                TextAsset ta =  HybridABManager.Instance.LoadAsset<TextAsset>("App", "Dll", aotDllName);
                 LoadImageErrorCode err = RuntimeApi.LoadMetadataForAOTAssembly(ta.bytes, mode);
             }
         }

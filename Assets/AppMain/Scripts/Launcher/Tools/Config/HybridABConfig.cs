@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Launcher
 {
     [System.Serializable]
-    public class AssetBundleConfig
+    public class HybridABConfig
     {
         public string GameVersion;//游戏版本号
         public string ResVersion; //资源版本号

@@ -19,8 +19,8 @@ namespace Launcher
         private static string ServerUrl;
         private static string ServerVersionConfigPath;
 
-        private static AssetBundleConfig localABConfig;
-        private static AssetBundleConfig serverABConfig;
+        private static HybridABConfig localABConfig;
+        private static HybridABConfig serverABConfig;
 
         private static Dictionary<string, Folder> localFolders = new Dictionary<string, Folder>();
         private static Dictionary<string, Folder> serverFolders = new Dictionary<string, Folder>();
@@ -36,8 +36,8 @@ namespace Launcher
 
         public static void Init(Action<bool> callback)
         {
-            LocalPath = $"{Application.persistentDataPath}/AssetBundle/{AssetBundleManager.PlatformName}/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid/";
-            ServerUrl = $"{server_url}/AssetBundle/{AssetBundleManager.PlatformName}/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid/";
+            LocalPath = $"{Application.persistentDataPath}/AssetBundle/{HybridABManager.PlatformName}/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid/";
+            ServerUrl = $"{server_url}/AssetBundle/{HybridABManager.PlatformName}/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid/";
 
             LocalVersionConfigPath = LocalPath + "AssetBundleConfig.json";
             ServerVersionConfigPath = ServerUrl + "AssetBundleConfig.json";
@@ -48,11 +48,11 @@ namespace Launcher
                     callback?.Invoke(false);
                     break;
                 case LoadAssetsMold.Local:
-                    var localPath = $"{Application.streamingAssetsPath}/AssetBundle/{AssetBundleManager.PlatformName}/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid/";
+                    var localPath = $"{Application.streamingAssetsPath}/AssetBundle/{HybridABManager.PlatformName}/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid/";
                     var configPath = localPath + "AssetBundleConfig.json";
                     DownLoad(configPath, (string data) =>
                     {
-                        var config = JsonUtility.FromJson<AssetBundleConfig>(data);
+                        var config = JsonUtility.FromJson<HybridABConfig>(data);
                         SetABModulePairs(config);
                         callback?.Invoke(true);
                     });
@@ -85,7 +85,7 @@ namespace Launcher
                 DownLoad($"file://{LocalVersionConfigPath}", (string data) =>
                 {
                     localABConfig = !string.IsNullOrEmpty(data)
-                        ? JsonUtility.FromJson<AssetBundleConfig>(data)
+                        ? JsonUtility.FromJson<HybridABConfig>(data)
                         : null;
                     //检查版本更新信息
                     CheckUpdate(localABConfig, (mold) => { UpdateCallBack?.Invoke(mold, serverABConfig.Des); });
@@ -98,7 +98,7 @@ namespace Launcher
             }
         }
 
-        private static void CheckUpdate(AssetBundleConfig localABConfig, Action<bool> cb = null)
+        private static void CheckUpdate(HybridABConfig localABConfig, Action<bool> cb = null)
         {
             if (Application.internetReachability == NetworkReachability.NotReachable)
             {
@@ -108,7 +108,7 @@ namespace Launcher
             {
                 DownLoad(ServerVersionConfigPath, (string data) =>
                 {
-                    serverABConfig = JsonUtility.FromJson<AssetBundleConfig>(data);
+                    serverABConfig = JsonUtility.FromJson<HybridABConfig>(data);
                     SetABModulePairs(serverABConfig);
                     if (!CheckVersion(serverABConfig.GameVersion))
                     {
@@ -194,7 +194,7 @@ namespace Launcher
             return sum;
         }
 
-        private static Dictionary<string, Folder> GetFolders(AssetBundleConfig config)
+        private static Dictionary<string, Folder> GetFolders(HybridABConfig config)
         {
             Dictionary<string, Folder> folders = new Dictionary<string, Folder>();
             for (int i = 0; i < config.Modules.Count; i++)
@@ -230,17 +230,17 @@ namespace Launcher
         public static void StartDownLoad(Action callback)
         {
             // 下载总manifest文件
-            DownLoad(ServerUrl + AssetBundleManager.PlatformName + ".manifest", (byte[] manifest_data) =>
+            DownLoad(ServerUrl + HybridABManager.PlatformName + ".manifest", (byte[] manifest_data) =>
             {
                 //将manifest文件写入本地
-                HotfixTool.CreateFile(LocalPath + AssetBundleManager.PlatformName + ".manifest", manifest_data);
+                HotfixTool.CreateFile(LocalPath + HybridABManager.PlatformName + ".manifest", manifest_data);
                 if (Launcher.AppConfig.ABPipeline == ABPipeline.Default)
                 {
                     //下载总AB包
-                    DownLoad(ServerUrl + AssetBundleManager.PlatformName, (byte[] ab_data) =>
+                    DownLoad(ServerUrl + HybridABManager.PlatformName, (byte[] ab_data) =>
                     {
                         //将ab文件写入本地
-                        HotfixTool.CreateFile(LocalPath + AssetBundleManager.PlatformName, ab_data);
+                        HotfixTool.CreateFile(LocalPath + HybridABManager.PlatformName, ab_data);
                         callback?.Invoke();
                     });
                 }
@@ -305,7 +305,7 @@ namespace Launcher
             yield return new WaitForEndOfFrame();
         }
 
-        private static AssetBundleConfig alreadyConfig = null;
+        private static HybridABConfig alreadyConfig = null;
         private static void UpdateLocalConfigMD5(Folder folder)
         {
             InitLocalConfig();
@@ -364,7 +364,7 @@ namespace Launcher
         {
             if (alreadyConfig == null)
             {
-                alreadyConfig = new AssetBundleConfig();
+                alreadyConfig = new HybridABConfig();
                 alreadyConfig.GameVersion = serverABConfig.GameVersion;
                 alreadyConfig.ResVersion = serverABConfig.ResVersion;
                 alreadyConfig.Platform = serverABConfig.Platform;
@@ -399,7 +399,7 @@ namespace Launcher
             }
         }
         /// <summary> 获取文件夹名和包名 </summary>
-        private static void SetABModulePairs(AssetBundleConfig config)
+        private static void SetABModulePairs(HybridABConfig config)
         {
             //获取文件夹名和包名，用来给AssetbundleSceneManager里的folderDic赋值
             foreach (var module in config.Modules)
@@ -413,7 +413,7 @@ namespace Launcher
                     }
                 }
 
-                AssetBundleManager.Instance.SetAbModulePairs(module.ModuleName, folderPairs);
+                HybridABManager.Instance.SetAbModulePairs(module.ModuleName, folderPairs);
             }
         }
 
