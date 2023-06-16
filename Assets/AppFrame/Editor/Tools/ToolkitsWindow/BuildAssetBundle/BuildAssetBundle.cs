@@ -83,6 +83,7 @@ namespace AppFrame.Editor
             {
                 CopyABToBuildVersion(buildTarget, $"{Application.streamingAssetsPath}/AssetBundle");
             }
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
 
         public static void CopyABToBuildVersion(BuildTarget buildTarget, string headPath)
@@ -538,13 +539,12 @@ namespace AppFrame.Editor
         /// <returns></returns>
         public static string GetFileMD5(string filePath)
         {
-            FileStream fs = new FileStream(filePath, FileMode.Open);
+            FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
 
             // 引入命名空间   using System.Security.Cryptography;
             MD5 md5 = new MD5CryptoServiceProvider();
 
             byte[] bt = md5.ComputeHash(fs);
-            fs.Close();
 
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < bt.Length; i++)
@@ -552,6 +552,7 @@ namespace AppFrame.Editor
                 sb.Append(bt[i].ToString("x2"));
             }
 
+            fs.Close();
             md5.Dispose();
             return sb.ToString();
         }
