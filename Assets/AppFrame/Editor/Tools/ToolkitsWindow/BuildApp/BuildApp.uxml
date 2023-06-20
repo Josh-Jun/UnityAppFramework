@@ -7,6 +7,7 @@
         <uie:EnumField label="Build Mold" value="Center" name="BuildMold" />
         <ui:Toggle label="Export Project" name="ExportProject" />
         <uie:EnumField label="AB Build Pipeline" value="Center" name="ABBuildPipeline" />
+        <uie:Vector2Field label="Vec2 Field" name="UIReferenceResolution" />
         <ui:Button text="Apply" display-tooltip-when-elided="true" name="BuildAppApply" />
         <ui:TextField picking-mode="Ignore" label="Output Path" name="BuildAppOutputPath">
             <ui:Button text="Browse" display-tooltip-when-elided="true" name="BuildAppOutputPathBrowse" style="margin-top: 0;" />

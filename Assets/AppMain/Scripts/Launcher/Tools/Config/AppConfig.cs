@@ -17,6 +17,7 @@ namespace AppFrame.Config
         [Tooltip("App原生")] public bool NativeApp;
         [Tooltip("AB包打包加载方式")] public ABPipeline ABPipeline;
         [Tooltip("AB资源版本")] public string ResVersion;
+        [Tooltip("UI参考分辨率")] public Vector2 UIReferenceResolution;
     }
     
     /// <summary>安卓包不同渠道</summary>

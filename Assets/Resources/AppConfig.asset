@@ -20,3 +20,4 @@ MonoBehaviour:
   NativeApp: 0
   ABPipeline: 1
   ResVersion: 0
+  UIReferenceResolution: {x: 2160, y: 1080}

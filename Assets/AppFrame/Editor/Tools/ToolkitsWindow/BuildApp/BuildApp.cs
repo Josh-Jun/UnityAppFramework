@@ -27,6 +27,7 @@ namespace AppFrame.Editor
         public static TargetPackage ApkTarget = TargetPackage.Mobile;
         public static bool NativeApp = false;
         public static ABPipeline Pipeline = ABPipeline.Default;
+        public static Vector2 UIReferenceResolution;
         public static string outputPath;
 
         public static void Init()
@@ -42,6 +43,7 @@ namespace AppFrame.Editor
                 ApkTarget = AppConfig.TargetPackage;
                 NativeApp = AppConfig.NativeApp;
                 Pipeline = AppConfig.ABPipeline;
+                UIReferenceResolution = AppConfig.UIReferenceResolution;
             }
             else
             {
@@ -57,6 +59,7 @@ namespace AppFrame.Editor
             AppConfig.TargetPackage = ApkTarget;
             AppConfig.NativeApp = NativeApp;
             AppConfig.ABPipeline = Pipeline;
+            AppConfig.UIReferenceResolution = UIReferenceResolution;
 
             EditorUtility.SetDirty(AppConfig);
 
@@ -133,7 +136,7 @@ namespace AppFrame.Editor
             string dev = DevelopmentBuild ? "beta" : "release";
             string suffix = NativeApp || EditorUserBuildSettings.activeBuildTarget == BuildTarget.iOS ? "" : ".apk";
             string name = $"{PlayerSettings.applicationIdentifier.ToLower()}_{str}_v{version}_{dev}_{date}{suffix}";
-            
+
             EditorUserBuildSettings.SwitchActiveBuildTarget(EditorUserBuildSettings.selectedBuildTargetGroup,
                 EditorUserBuildSettings.activeBuildTarget);
             if (Directory.Exists(outputPath))

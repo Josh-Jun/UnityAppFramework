@@ -7,7 +7,6 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
-using UnityEngine.UI;
 using Button = UnityEngine.UIElements.Button;
 using Toggle = UnityEngine.UIElements.Toggle;
 
@@ -59,7 +58,7 @@ namespace AppFrame.Editor
             infos = root.Q<ScrollView>("infos");
             view_title = root.Q<Label>("view_title");
             view_title.text = itemsName[0];
-            
+
             var right = root.Q<VisualElement>("right");
             for (int i = 0; i < itemsName.Length; i++)
             {
@@ -70,14 +69,14 @@ namespace AppFrame.Editor
                 viewElements.Add(view);
                 right.Add(view);
             }
-            
+
             leftListView = root.Q<ListView>("left");
             leftListView.itemsSource = itemsName;
             leftListView.makeItem = MakeListItem;
             leftListView.bindItem = BindListItem;
             leftListView.onSelectedIndicesChange += OnItemsChosen;
             leftListView.SetSelection(stamp);
-            
+
             BuildAppFunction();
             BuildAssetBundleFunction();
             SetAppScriptConfigFunction();
@@ -98,8 +97,9 @@ namespace AppFrame.Editor
             var build_mold = root.Q<EnumField>("BuildMold");
             var export_project = root.Q<Toggle>("ExportProject");
             var ab_build_pipeline = root.Q<EnumField>("ABBuildPipeline");
+            var ui_reference_resolution = root.Q<Vector2Field>("UIReferenceResolution");
             var output_path = root.Q<TextField>("BuildAppOutputPath");
-            
+
             development_build.value = BuildApp.DevelopmentBuild;
             is_test_server.value = BuildApp.IsTestServer;
             load_assets_mold.Init(BuildApp.LoadAssetsMold);
@@ -107,8 +107,9 @@ namespace AppFrame.Editor
             build_mold.Init(BuildApp.ApkTarget);
             export_project.value = BuildApp.NativeApp;
             ab_build_pipeline.Init(BuildApp.Pipeline);
+            ui_reference_resolution.value = BuildApp.UIReferenceResolution;
             output_path.value = BuildApp.outputPath;
-            
+
             development_build.RegisterCallback<ChangeEvent<bool>>((evt) =>
             {
                 BuildApp.DevelopmentBuild = evt.newValue;
@@ -129,7 +130,7 @@ namespace AppFrame.Editor
             build_mold.RegisterCallback<ChangeEvent<string>>((evt) =>
             {
                 var mold = (TargetPackage)System.Enum.Parse(typeof(TargetPackage), evt.newValue);
-                export_project.style.display = 
+                export_project.style.display =
                     mold == TargetPackage.Mobile ? DisplayStyle.Flex : DisplayStyle.None;
                 BuildApp.ApkTarget = mold;
             });
@@ -141,6 +142,10 @@ namespace AppFrame.Editor
             {
                 var mold = (ABPipeline)System.Enum.Parse(typeof(ABPipeline), evt.newValue);
                 BuildApp.Pipeline = mold;
+            });
+            ui_reference_resolution.RegisterCallback<ChangeEvent<Vector2>>((evt) =>
+            {
+                BuildApp.UIReferenceResolution = evt.newValue;
             });
             output_path.RegisterCallback<ChangeEvent<string>>((evt) =>
             {
@@ -164,7 +169,7 @@ namespace AppFrame.Editor
             BuildAssetBundle.Init();
             var build_target = root.Q<EnumField>("BuildTarget");
             build_target.Init(BuildTarget.Android);
-            
+
             var build_path = root.Q<TextField>("BuildPath");
             build_path.value = "Assets/Resources/HybridFolder";
             root.Q<Button>("BuildPath_Browse").clicked += () =>
@@ -190,12 +195,12 @@ namespace AppFrame.Editor
             {
                 BuildAssetBundle.des = evt.newValue;
             });
-            
+
             var folder_list = root.Q<ScrollView>("FolderList");
             var label_page = root.Q<Label>("ListText");
-            
+
             RefreshAssetBundleList(folder_list, label_page);
-            
+
             var ab_mold = root.Q<EnumField>("ABMold");
             ab_mold.RegisterCallback<ChangeEvent<string>>((evt) =>
             {
@@ -208,7 +213,7 @@ namespace AppFrame.Editor
             });
             ab_mold.Init(ABMold.Hybrid);
             ab_mold.value = ABMold.Hybrid;
-            
+
             root.Q<Button>("All").clicked += () =>
             {
                 BuildAssetBundle.SelectList(true);
@@ -219,32 +224,32 @@ namespace AppFrame.Editor
                 BuildAssetBundle.SelectList(false);
                 RefreshAssetBundleList(folder_list, label_page);
             };
-            
-            root.Q<Button>("BuildAndCopyDll").clicked+= () =>
+
+            root.Q<Button>("BuildAndCopyDll").clicked += () =>
             {
                 BuildAssetBundle.BuildAndCopyDll((BuildTarget)build_target.value);
             };
-            root.Q<Button>("AutoBuildAllAssetBuildBundle").clicked+= () =>
+            root.Q<Button>("AutoBuildAllAssetBuildBundle").clicked += () =>
             {
                 BuildAssetBundle.AutoBuildAssetBundle((BuildTarget)build_target.value);
             };
-            root.Q<Button>("DeleteAllAssetBundle").clicked+= () =>
+            root.Q<Button>("DeleteAllAssetBundle").clicked += () =>
             {
                 BuildAssetBundle.DeleteAssetBundle((BuildTarget)build_target.value);
             };
-            root.Q<Button>("RemoveAllAssetsBundleLabels").clicked+= () =>
+            root.Q<Button>("RemoveAllAssetsBundleLabels").clicked += () =>
             {
                 BuildAssetBundle.RemoveAllAssetBundleLabels();
             };
-            root.Q<Button>("SetAllAssetBundleLabels").clicked+= () =>
+            root.Q<Button>("SetAllAssetBundleLabels").clicked += () =>
             {
                 BuildAssetBundle.SetAssetBundleLabels();
             };
-            root.Q<Button>("BuildAllAssetBuildBundle").clicked+= () =>
+            root.Q<Button>("BuildAllAssetBuildBundle").clicked += () =>
             {
                 BuildAssetBundle.BuildAllAssetBundles((BuildTarget)build_target.value);
             };
-            root.Q<Button>("CreateMD5File").clicked+= () =>
+            root.Q<Button>("CreateMD5File").clicked += () =>
             {
                 BuildAssetBundle.CreateMD5File((BuildTarget)build_target.value);
             };
@@ -278,7 +283,7 @@ namespace AppFrame.Editor
             var table_mold = root.Q<EnumField>("table_mold");
             table_mold.Init(TableMold.Json);
             var table_path = root.Q<TextField>("table_path");
-            table_path.value = $"{Application.dataPath.Replace("Assets","")}Data/excel";
+            table_path.value = $"{Application.dataPath.Replace("Assets", "")}Data/excel";
             root.Q<Button>("table_path_browse").clicked += () =>
             {
                 table_path.value = EditorTool.Browse(true);
@@ -318,7 +323,7 @@ namespace AppFrame.Editor
                 FindSameFileName.FindSameFile((ObjectType)objectType.value, textFilesField.value);
             };
         }
-        
+
         private void CopyTemplateScriptsFunction()
         {
             var unity_install_path = root.Q<TextField>("unity_install_path");
@@ -345,12 +350,12 @@ namespace AppFrame.Editor
                     int index = i;
                     var tableItem = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>($"{basePath}/SetAppTableConfig/table_item.uxml");
                     VisualElement table = tableItem.CloneTree();
-                    
+
                     table.Q<Button>("btn_table_remove").style.backgroundImage =
                         new StyleBackground((Texture2D)EditorGUIUtility.IconContent("CollabDeleted Icon").image);
                     table.Q<Button>("btn_table_add").style.backgroundImage =
                         new StyleBackground((Texture2D)EditorGUIUtility.IconContent("CollabCreate Icon").image);
-                    
+
                     table.Q<EnumField>("TableMold").Init(table_list[index].TableMold);
                     table.Q<EnumField>("TableMold").RegisterCallback<ChangeEvent<string>>((ent) =>
                     {
@@ -394,7 +399,7 @@ namespace AppFrame.Editor
                     script.Q<Button>("btn_script_add").style.backgroundImage =
                         new StyleBackground((Texture2D)EditorGUIUtility.IconContent("CollabCreate Icon").image);
 
-                    
+
                     var dropdown = script.Q<DropdownField>("SceneName");
                     dropdown.choices = SetAppScriptConfig.SceneNames;
                     dropdown.value = SetAppScriptConfig.SceneNames[SetAppScriptConfig.SceneNames.IndexOf(script_list[index].SceneName)];
