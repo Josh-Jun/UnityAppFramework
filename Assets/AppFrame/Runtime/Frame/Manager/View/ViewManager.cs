@@ -100,7 +100,8 @@ namespace AppFrame.View
 
             UICanvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             UICanvasScaler.referenceResolution = AppInfo.AppConfig.UIReferenceResolution;
-            UICanvasScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Shrink;
+            UICanvasScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+            UICanvasScaler.matchWidthOrHeight = AppInfo.AppConfig.UIReferenceResolution.x < AppInfo.AppConfig.UIReferenceResolution.y ? 0 : 1;
 
             #endregion
 
