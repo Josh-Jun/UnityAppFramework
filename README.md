@@ -6,5 +6,4 @@ Unity 热更框架
 2.  目前已经接入[HybridCLR](https://github.com/focus-creative-games/HybridCLR)热更，可正常进行代码热更。
 
 #### 使用说明
-1.  本框架将逻辑和UI部分分开管理，View脚本继承Mono挂在View预制体上，主要处理UI的显示和UI逻辑，Logic脚本主要处理功能逻辑和数据处理。
-2.  资源文件的存放位置有着严格标准(因为里面的好多编辑器工具为了一键操作，路径都是固定写死的)。
+详细使用方法和整个框架的设计过程将持续更新在我的[个人博客](https://www.shijunzh.com/)上，本人比较懒，更新速度可能有些慢，敬请理解。
