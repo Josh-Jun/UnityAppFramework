@@ -27,6 +27,16 @@ namespace AppFrame.Manager
             PlatformMsgReceiver.Instance.Init();
         }
         
+        public override void OpenAppSetting()
+        {
+            
+        }
+
+        public override void RequestUserPermission(string permission)
+        {
+            
+        }
+
         public override int GetNetSignal()
         {
             return 0;

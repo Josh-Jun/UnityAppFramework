@@ -16,5 +16,10 @@ namespace AppFrame.Manager
         {
             
         }
+
+        public void PermissionCallbacks(string permission, int code)
+        {
+            
+        }
     }
 }

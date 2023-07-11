@@ -13,6 +13,17 @@ namespace AppFrame.Manager
         {
             return 0;
         }
+        
+        public override void OpenAppSetting()
+        {
+            
+        }
+
+        public override void RequestUserPermission(string permission)
+        {
+            
+        }
+
         public override string GetDataPath(string folder)
         {
             return $"{Application.dataPath.Replace("Assets", "")}{folder}";

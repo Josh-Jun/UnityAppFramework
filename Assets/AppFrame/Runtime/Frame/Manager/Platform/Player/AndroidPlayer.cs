@@ -5,6 +5,7 @@ using AppFrame.Config;
 using AppFrame.Enum;
 using AppFrame.Info;
 using UnityEngine;
+using UnityEngine.Android;
 
 namespace AppFrame.Manager
 {
@@ -29,8 +30,59 @@ namespace AppFrame.Manager
             PlatformMsgReceiver.Instance.Init();
             JavaObject(AppToolsPackage).CallStatic("init", MainJavaObject);
         }
+
+        private PermissionCallbacks _permissionCallbacks;
+        private PermissionCallbacks PermissionCallbacks
+        {
+            get
+            {
+                if (_permissionCallbacks == null)
+                {
+                    _permissionCallbacks = new PermissionCallbacks();
+                    _permissionCallbacks.PermissionGranted += OnGranted;
+                    _permissionCallbacks.PermissionDenied += OnDenied;
+                    _permissionCallbacks.PermissionDeniedAndDontAskAgain += OnDeniedAndDontAskAgain;
+                }
+                return _permissionCallbacks;
+            }
+        }
+        //同意麦克风权限
+        private void OnGranted(string permission)
+        {
+            PlatformMsgReceiver.Instance.PermissionCallbacks(permission, 1);
+        }
+        //拒绝麦克风权限
+        private void OnDenied(string permission)
+        {
+            PlatformMsgReceiver.Instance.PermissionCallbacks(permission, 0);
+        }
+        //无法获取麦克风权限，打开设置
+        private void OnDeniedAndDontAskAgain(string permission)
+        {
+            PlatformMsgReceiver.Instance.PermissionCallbacks(permission, -1);
+        }
+
+        public override void RequestUserPermission(string permission)
+        {
+#if UNITY_ANDROID
+            if (!Permission.HasUserAuthorizedPermission(permission))
+            {
+                Permission.RequestUserPermission(permission, PermissionCallbacks);
+            }
+#endif
+        }
+
+        public override void OpenAppSetting()
+        {
+            
+#if UNITY_ANDROID
+            JavaObject(AppToolsPackage).CallStatic("openAppSetting");
+#endif
+        }
+
         public override int GetNetSignal()
         {
+#if UNITY_ANDROID
             if (Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork)
             {
                 return JavaObject(AppToolsPackage).CallStatic<int>("getMonetSignal");
@@ -39,6 +91,7 @@ namespace AppFrame.Manager
             {
                 return JavaObject(AppToolsPackage).CallStatic<int>("getWiFiSignal");
             }
+#endif
             return 0;
         }
         public override string GetDataPath(string folder)
