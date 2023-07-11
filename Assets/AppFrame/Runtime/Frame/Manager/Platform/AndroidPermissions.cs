@@ -1,4 +1,4 @@
-namespace MyNamespace
+namespace AppFrame.Manager
 {
     public class AndroidPermissions
     {

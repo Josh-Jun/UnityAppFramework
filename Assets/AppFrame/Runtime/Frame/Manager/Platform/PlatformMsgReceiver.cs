@@ -17,7 +17,11 @@ namespace AppFrame.Manager
             
         }
 
-        public void PermissionCallbacks(string permission, int code)
+        public void AndroidPermissionCallbacks(string permission, int code)
+        {
+            
+        }
+        public void iOSPermissionCallbacks(string msg)
         {
             
         }

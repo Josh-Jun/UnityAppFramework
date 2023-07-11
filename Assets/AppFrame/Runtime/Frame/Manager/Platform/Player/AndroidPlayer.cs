@@ -49,17 +49,17 @@ namespace AppFrame.Manager
         //同意麦克风权限
         private void OnGranted(string permission)
         {
-            PlatformMsgReceiver.Instance.PermissionCallbacks(permission, 1);
+            PlatformMsgReceiver.Instance.AndroidPermissionCallbacks(permission, 1);
         }
         //拒绝麦克风权限
         private void OnDenied(string permission)
         {
-            PlatformMsgReceiver.Instance.PermissionCallbacks(permission, 0);
+            PlatformMsgReceiver.Instance.AndroidPermissionCallbacks(permission, 0);
         }
         //无法获取麦克风权限，打开设置
         private void OnDeniedAndDontAskAgain(string permission)
         {
-            PlatformMsgReceiver.Instance.PermissionCallbacks(permission, -1);
+            PlatformMsgReceiver.Instance.AndroidPermissionCallbacks(permission, -1);
         }
 
         public override void RequestUserPermission(string permission)

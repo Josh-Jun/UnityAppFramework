@@ -9,13 +9,19 @@ namespace AppFrame.Manager
     {
 #if UNITY_IPHONE
         [DllImport("__Internal")]
-        private static extern string getAppData(string key);
+        private static extern string GetAppData(string key);
         [DllImport("__Internal")]
-        private static extern void showHostMainWindow(string msg);
+        private static extern void ShowHostMainWindow(string msg);
         [DllImport("__Internal")]
-        private static extern void savePhoto(string path);
+        private static extern void SavePhoto(string path);
         [DllImport("__Internal")]
-        private static extern void vibrate();
+        private static extern void Vibrate();
+        [DllImport("__Internal")]
+        private static extern void OpenAppSettings();
+        [DllImport("__Internal")]
+        private static extern bool HasUserAuthorizedPermission(string permission);
+        [DllImport("__Internal")]
+        private static extern void RequestUserPermission(string permission);
 #endif
 
         public override bool IsEditor { get; } = false;
@@ -29,12 +35,20 @@ namespace AppFrame.Manager
         
         public override void OpenAppSetting()
         {
-            
+#if UNITY_IPHONE
+            OpenAppSettings();
+#endif
         }
 
         public override void RequestUserPermission(string permission)
         {
             
+#if UNITY_IPHONE
+            if(!HasUserAuthorizedPermission(permission))
+            {
+                RequestUserPermission(permission);
+            }
+#endif
         }
 
         public override int GetNetSignal()
@@ -52,13 +66,13 @@ namespace AppFrame.Manager
         public override void Vibrate()
         {
 #if UNITY_IPHONE
-            vibrate();
+            Vibrate();
 #endif
         }
         public override void SavePhoto(string imagePath)
         {
 #if UNITY_IPHONE
-            savePhoto(imagePath);
+            SavePhoto(imagePath);
 #endif
         }
         public override void InstallApp(string appPath)
@@ -70,7 +84,7 @@ namespace AppFrame.Manager
         public override string GetAppData(string key)
         {
 #if UNITY_IPHONE
-            return getAppData(key);
+            return GetAppData(key);
 #else
             return null;
 #endif
@@ -78,7 +92,7 @@ namespace AppFrame.Manager
         public override void QuitUnityPlayer()
         {
 #if UNITY_IPHONE
-            showHostMainWindow("");
+            ShowHostMainWindow("");
 #endif
         }
     }
