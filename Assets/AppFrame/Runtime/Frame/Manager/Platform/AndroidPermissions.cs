@@ -22,13 +22,11 @@ namespace AppFrame.Manager
         public const string INSTALL_PACKAGES = "android.permission.INSTALL_PACKAGES";
         // 允许程序访问网络连接，可能产生GPRS流量
         public const string INTERNET = "android.permission.INTERNET";
-        // 程序可以读取设备外部存储空间(内置SDcard和外置SDCard)的文件，如果您的App已经添加了WRITE_EXTERNAL_STORAGE 权限，则就没必要添加读的权限了，写权限已经 包含了读权限了
-        public const string READ_EXTERNAL_STORAGE = "android.permission.READ_EXTERNAL_STORAGE";
         // 允许程序录制声音通过手机或耳机的麦克
         public const string RECORD_AUDIO = "android.permission.RECORD_AUDIO";
         // 允许程序振动
         public const string VIBRATE = "android.permission.VIBRATE";
-        // 允许程序写入外部存储,如SD卡上写文件
+        // 允许程序写入外部存储,如SD卡上读写文件
         public const string WRITE_EXTERNAL_STORAGE = "android.permission.WRITE_EXTERNAL_STORAGE";
 
     }
