@@ -18,8 +18,8 @@ namespace AppFrame.Manager
         public const string BLUETOOTH_ADMIN = "android.permission.BLUETOOTH_ADMIN";
         // 允许程序访问摄像头进行拍照
         public const string CAMERA = "android.permission.CAMERA";
-        // 允许程序安装应用
-        public const string INSTALL_PACKAGES = "android.permission.INSTALL_PACKAGES";
+        // 允许应用程序请求安装包
+        public const string REQUEST_INSTALL_PACKAGES = "android.permission.REQUEST_INSTALL_PACKAGES";
         // 允许程序访问网络连接，可能产生GPRS流量
         public const string INTERNET = "android.permission.INTERNET";
         // 允许程序录制声音通过手机或耳机的麦克
