@@ -8,6 +8,8 @@ namespace Modules.#NAMESPACE#
 {
     public class #SCRIPTNAME# : SingletonEvent<#SCRIPTNAME#>, ILogic
     {
+        private #NAMESPACE#View view;
+        
         public #SCRIPTNAME#()
         {
 			#NOTRIM#
