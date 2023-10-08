@@ -58,7 +58,7 @@ namespace AppFrame.Tools
                 samples[i / 2] = ft;
             }
 
-            AudioClip audioClip = AudioClip.Create("mySound", samples.Length, 1, frequency, false, false);
+            AudioClip audioClip = AudioClip.Create("audioClip", samples.Length, 1, frequency, false);
             audioClip.SetData(samples, 0);
 
             return audioClip;
