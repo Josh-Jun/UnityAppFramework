@@ -44,7 +44,7 @@ namespace AppFrame.Tools
         /// <param name="rawData"></param>
         /// <param name="frequency">32000,24000</param>
         /// <returns></returns>
-        public static AudioClip BytesToClip(byte[] rawData, int frequency)
+        public static AudioClip BytesToClip(byte[] rawData, int frequency = 16000)
         {
             float[] samples = new float[rawData.Length / 2];
             float rescaleFactor = 32767;
