@@ -74,13 +74,6 @@ namespace AppFrame.Manager
                     FileTools.CreateFile(localPath, bytes);
                 });
             }
-            
-            DownloadTexture(url, texture =>
-            {
-                var bytes = PictureTools.CreateByte(texture);
-                var sprite = PictureTools.CreateSprite(bytes, texture.width, texture.height);
-                callback?.Invoke(sprite);
-            });
         }
         
         public void DownloadAudio(string url, AudioType audioType, Action<AudioClip> callback)
