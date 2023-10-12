@@ -34,11 +34,11 @@ namespace AppFrame.Manager
             }
             else
             {
-                uwr.GetTexture(url, texture =>
+                uwr.GetBytes(url, bytes =>
                 {
-                    callback?.Invoke(texture);
-                    var bytes = PictureTools.CreateByte(texture);
                     FileTools.CreateFile(localPath, bytes);
+                    uwr = Uwr;
+                    uwr.GetTexture(localPath, callback);
                 });
             }
         }
@@ -59,19 +59,21 @@ namespace AppFrame.Manager
             {
                 uwr.GetTexture(localPath, (texture) =>
                 {
-                    var bytes = PictureTools.CreateByte(texture);
-                    var sprite = PictureTools.CreateSprite(bytes, texture.width, texture.height);
+                    var sprite = PictureTools.CreateSprite(texture);
                     callback?.Invoke(sprite);
                 });
             }
             else
             {
-                uwr.GetTexture(url, texture =>
+                uwr.GetBytes(url, bytes =>
                 {
-                    var bytes = PictureTools.CreateByte(texture);
-                    var sprite = PictureTools.CreateSprite(bytes, texture.width, texture.height);
-                    callback?.Invoke(sprite);
                     FileTools.CreateFile(localPath, bytes);
+                    uwr = Uwr;
+                    uwr.GetTexture(localPath, texture =>
+                    {
+                        var sprite = PictureTools.CreateSprite(texture);
+                        callback?.Invoke(sprite);
+                    });
                 });
             }
         }
@@ -95,12 +97,12 @@ namespace AppFrame.Manager
             }
             else
             {
-                uwr.GetAudioClip(url, clip =>
+                uwr.GetBytes(url, bytes =>
                 {
-                    callback?.Invoke(clip);
-                    var bytes = AudioTools.ClipToBytes(clip);
                     FileTools.CreateFile(localPath, bytes);
-                }, audioType);
+                    uwr = Uwr;
+                    uwr.GetAudioClip(localPath, callback, audioType);
+                });
             }
         }
     }

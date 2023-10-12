@@ -27,6 +27,16 @@ namespace AppFrame.Tools
                     new Vector2(0.5f, 0.5f)); //后面Vector2就是你Anchors的Pivot的x/y属性值
             return sprite;
         }
+        
+        /// <summary> 创建Sprite</summary>
+        public static Sprite CreateSprite(Texture2D texture)
+        {
+            //设置头像  
+            Sprite sprite =
+                Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height),
+                    new Vector2(0.5f, 0.5f)); //后面Vector2就是你Anchors的Pivot的x/y属性值
+            return sprite;
+        }
 
         public static byte[] CreateByte(Sprite sp)
         {

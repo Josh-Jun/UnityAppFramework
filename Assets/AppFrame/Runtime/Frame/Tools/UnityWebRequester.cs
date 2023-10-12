@@ -208,7 +208,7 @@ namespace AppFrame.Tools
             }
 
             DownloadHandlerTexture downloadHandlerTexture = new DownloadHandlerTexture();
-            uwr.downloadHandler = new DownloadHandlerTexture();
+            uwr.downloadHandler = downloadHandlerTexture;
             uwrao = uwr.SendWebRequest();
             uwrao.completed += (ao) =>
             {
