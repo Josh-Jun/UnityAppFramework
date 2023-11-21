@@ -20,8 +20,6 @@ namespace App
 {
     public class Root
     {
-        private static ILogic _updateLogic = null;
-
         private static AppScriptConfig appScriptConfig;
 
         private static Dictionary<string, List<string>> sceneScriptsPairs = new Dictionary<string, List<string>>();
@@ -188,7 +186,6 @@ namespace App
 
         public static void AppPause(bool isPause)
         {
-            _updateLogic?.AppPause(isPause);
             if (appScriptConfig != null)
             {
                 for (int i = 0; i < appScriptConfig.LogicScript.Count; i++)
@@ -203,7 +200,6 @@ namespace App
 
         public static void AppFocus(bool isFocus)
         {
-            _updateLogic?.AppFocus(isFocus);
             if (appScriptConfig != null)
             {
                 for (int i = 0; i < appScriptConfig.LogicScript.Count; i++)
@@ -218,7 +214,6 @@ namespace App
 
         public static void AppQuit()
         {
-            _updateLogic?.AppQuit();
             if (appScriptConfig != null)
             {
                 for (int i = 0; i < appScriptConfig.LogicScript.Count; i++)
