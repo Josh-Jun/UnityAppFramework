@@ -80,31 +80,31 @@ namespace App
         private static void InitLogicScripts()
         {
             appScriptConfig = ULauncher.AppScriptConfig;
-            for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
+            for (int i = 0; i < appScriptConfig.LogicScript.Count; i++)
             {
-                if (!iLogicPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
+                if (!iLogicPairs.ContainsKey(appScriptConfig.LogicScript[i].ScriptName))
                 {
-                    ILogic iLogic = GetLogic(appScriptConfig.RootScript[i].ScriptName);
+                    ILogic iLogic = GetLogic(appScriptConfig.LogicScript[i].ScriptName);
                     if (iLogic != null)
                     {
-                        iLogicPairs.Add(appScriptConfig.RootScript[i].ScriptName, iLogic);
+                        iLogicPairs.Add(appScriptConfig.LogicScript[i].ScriptName, iLogic);
                     }
                     else
                     {
-                        Debug.LogError($"Root脚本为空 脚本名称:{appScriptConfig.RootScript[i].ScriptName}");
+                        Debug.LogError($"Root脚本为空 脚本名称:{appScriptConfig.LogicScript[i].ScriptName}");
                     }
                 }
 
-                if (!sceneScriptsPairs.ContainsKey(appScriptConfig.RootScript[i].SceneName))
+                if (!sceneScriptsPairs.ContainsKey(appScriptConfig.LogicScript[i].SceneName))
                 {
                     List<string> scripts = new List<string>();
-                    scripts.Add(appScriptConfig.RootScript[i].ScriptName);
-                    sceneScriptsPairs.Add(appScriptConfig.RootScript[i].SceneName, scripts);
+                    scripts.Add(appScriptConfig.LogicScript[i].ScriptName);
+                    sceneScriptsPairs.Add(appScriptConfig.LogicScript[i].SceneName, scripts);
                 }
                 else
                 {
-                    sceneScriptsPairs[appScriptConfig.RootScript[i].SceneName]
-                        .Add(appScriptConfig.RootScript[i].ScriptName);
+                    sceneScriptsPairs[appScriptConfig.LogicScript[i].SceneName]
+                        .Add(appScriptConfig.LogicScript[i].ScriptName);
                 }
             }
         }
@@ -191,11 +191,11 @@ namespace App
             _updateLogic?.AppPause(isPause);
             if (appScriptConfig != null)
             {
-                for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
+                for (int i = 0; i < appScriptConfig.LogicScript.Count; i++)
                 {
-                    if (iLogicPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
+                    if (iLogicPairs.ContainsKey(appScriptConfig.LogicScript[i].ScriptName))
                     {
-                        iLogicPairs[appScriptConfig.RootScript[i].ScriptName].AppPause(isPause);
+                        iLogicPairs[appScriptConfig.LogicScript[i].ScriptName].AppPause(isPause);
                     }
                 }
             }
@@ -206,11 +206,11 @@ namespace App
             _updateLogic?.AppFocus(isFocus);
             if (appScriptConfig != null)
             {
-                for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
+                for (int i = 0; i < appScriptConfig.LogicScript.Count; i++)
                 {
-                    if (iLogicPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
+                    if (iLogicPairs.ContainsKey(appScriptConfig.LogicScript[i].ScriptName))
                     {
-                        iLogicPairs[appScriptConfig.RootScript[i].ScriptName].AppFocus(isFocus);
+                        iLogicPairs[appScriptConfig.LogicScript[i].ScriptName].AppFocus(isFocus);
                     }
                 }
             }
@@ -221,11 +221,11 @@ namespace App
             _updateLogic?.AppQuit();
             if (appScriptConfig != null)
             {
-                for (int i = 0; i < appScriptConfig.RootScript.Count; i++)
+                for (int i = 0; i < appScriptConfig.LogicScript.Count; i++)
                 {
-                    if (iLogicPairs.ContainsKey(appScriptConfig.RootScript[i].ScriptName))
+                    if (iLogicPairs.ContainsKey(appScriptConfig.LogicScript[i].ScriptName))
                     {
-                        iLogicPairs[appScriptConfig.RootScript[i].ScriptName].AppQuit();
+                        iLogicPairs[appScriptConfig.LogicScript[i].ScriptName].AppQuit();
                     }
                 }
             }

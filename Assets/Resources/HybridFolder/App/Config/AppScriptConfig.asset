@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AppScriptConfig
   m_EditorClassIdentifier: 
   MainSceneName: Scene/Test/TestScene
-  RootScript:
+  LogicScript:
   - SceneName: Global
     ScriptName: Modules.Ask.AskLogic
   - SceneName: Global

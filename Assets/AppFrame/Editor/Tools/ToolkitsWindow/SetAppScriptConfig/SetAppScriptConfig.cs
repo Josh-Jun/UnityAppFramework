@@ -16,7 +16,7 @@ namespace AppFrame.Editor
         private static List<int> levels = new List<int>();
         public static int level = 0;
 
-        public static List<RootScript> GetRootScripts()
+        public static List<LogicScript> GetRootScripts()
         {
             config = Resources.Load<AppScriptConfig>(configPath);
             MainSceneName = config.MainSceneName;
@@ -42,20 +42,20 @@ namespace AppFrame.Editor
 
             level = SceneNames.IndexOf(MainSceneName);
 
-            for (int i = 0; i < config.RootScript.Count; i++)
+            for (int i = 0; i < config.LogicScript.Count; i++)
             {
-                int index = SceneNames.IndexOf(config.RootScript[i].SceneName);
+                int index = SceneNames.IndexOf(config.LogicScript[i].SceneName);
                 levels.Add(index);
             }
 
-            return config.RootScript;
+            return config.LogicScript;
         }
 
         public static void Remove(int index)
         {
-            if (config.RootScript.Count > 1)
+            if (config.LogicScript.Count > 1)
             {
-                config.RootScript.RemoveAt(index);
+                config.LogicScript.RemoveAt(index);
                 levels.RemoveAt(index);
             }
             else
@@ -66,32 +66,32 @@ namespace AppFrame.Editor
         
         public static void Add()
         {
-            RootScript rootScript = new RootScript
+            LogicScript logicScript = new LogicScript
             {
                 SceneName = SceneNames[levels[levels.Count - 1]],
                 ScriptName = "Modules.Test.TestLogic",
             };
-            int index = SceneNames.IndexOf(rootScript.SceneName);
-            config.RootScript.Add(rootScript);
+            int index = SceneNames.IndexOf(logicScript.SceneName);
+            config.LogicScript.Add(logicScript);
             levels.Add(index);
         }
 
         public static void SetConfigSceneValue(int index, string value)
         {
-            config.RootScript[index].SceneName = value;
+            config.LogicScript[index].SceneName = value;
         }
         public static void SetConfigScriptValue(int index, string value)
         {
-            config.RootScript[index].ScriptName = value;
+            config.LogicScript[index].ScriptName = value;
         }
 
         public static void ApplyConfig()
         {
             foreach (int id in levels)
             {
-                if (id < config.RootScript.Count && id < SceneNames.Count)
+                if (id < config.LogicScript.Count && id < SceneNames.Count)
                 {
-                    config.RootScript[id].SceneName = SceneNames[id];
+                    config.LogicScript[id].SceneName = SceneNames[id];
                 }
             }
             config.MainSceneName = SceneNames[level];
