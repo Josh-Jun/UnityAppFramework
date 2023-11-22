@@ -1,7 +1,10 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <ui:VisualElement name="SetAppScriptConfig" style="flex-grow: 1; display: flex; margin-top: 1px;">
-        <ui:DropdownField label="MainSceneName" index="-1" choices="System.Collections.Generic.List`1[System.String]" name="main_scene_name" style="overflow: visible; display: flex; width: auto; flex-shrink: 0;" />
-        <ui:ScrollView vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" name="script_scroll_view" focusable="true" style="margin-bottom: 0; width: auto;" />
+        <ui:VisualElement name="Main" style="flex-direction: row;">
+            <ui:Label text="MainSceneName" display-tooltip-when-elided="true" style="flex-direction: row; padding-left: 3px; padding-right: 3px; -unity-text-align: middle-left;" />
+            <ui:DropdownField index="-1" choices="System.Collections.Generic.List`1[System.String]" name="main_scene_name" style="overflow: visible; display: flex; width: 200px; flex-shrink: 1; justify-content: flex-start; white-space: nowrap;" />
+        </ui:VisualElement>
+        <ui:ScrollView vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" name="script_scroll_view" focusable="true" style="margin-bottom: 0; width: auto; border-top-width: 0; border-bottom-width: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); -unity-text-align: middle-left;" />
         <ui:Button text="Apply" display-tooltip-when-elided="true" name="btn_script_apply" />
     </ui:VisualElement>
 </ui:UXML>

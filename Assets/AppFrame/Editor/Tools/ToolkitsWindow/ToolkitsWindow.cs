@@ -400,19 +400,29 @@ namespace AppFrame.Editor
                         new StyleBackground((Texture2D)EditorGUIUtility.IconContent("CollabCreate Icon").image);
 
 
-                    var dropdown = script.Q<DropdownField>("SceneName");
-                    dropdown.choices = SetAppScriptConfig.SceneNames;
-                    dropdown.value = SetAppScriptConfig.SceneNames[SetAppScriptConfig.SceneNames.IndexOf(script_list[index].SceneName)];
-                    dropdown.RegisterCallback<ChangeEvent<string>>((evt) =>
+                    var scenename = script.Q<DropdownField>("SceneName");
+                    var scriptname = script.Q<DropdownField>("ScriptName");
+                    
+                    scenename.choices = SetAppScriptConfig.SceneNames;
+                    scenename.value = SetAppScriptConfig.SceneNames[SetAppScriptConfig.SceneNames.IndexOf(script_list[index].SceneName)];
+                    
+                    scriptname.choices = SetAppScriptConfig.ScriptNames;
+                    scriptname.value = SetAppScriptConfig.ScriptNames[SetAppScriptConfig.ScriptNames.IndexOf(script_list[index].ScriptName)];
+                    
+                    scenename.RegisterCallback<ChangeEvent<string>>((evt) =>
                     {
                         SetAppScriptConfig.SetConfigSceneValue(index, evt.newValue);
+                        UpdateFoldoutText(script);
                     });
-
-                    script.Q<TextField>("ScriptName").value = script_list[index].ScriptName;
-                    script.Q<TextField>("ScriptName").RegisterCallback<ChangeEvent<string>>((evt) =>
+                    
+                    scriptname.RegisterCallback<ChangeEvent<string>>((evt) =>
                     {
                         SetAppScriptConfig.SetConfigScriptValue(index, evt.newValue);
+                        UpdateFoldoutText(script);
                     });
+
+                    UpdateFoldoutText(script);
+                    
                     script.Q<Button>("btn_script_remove").clicked += () =>
                     {
                         SetAppScriptConfig.Remove(index);
@@ -426,6 +436,16 @@ namespace AppFrame.Editor
                     table_script_view.Add(script);
                 }
             }
+        }
+
+        private void UpdateFoldoutText(VisualElement script)
+        {
+            var scenenames = script.Q<DropdownField>("SceneName").value.Split('/');
+            var scriptnames = script.Q<DropdownField>("ScriptName").value.Split('.');
+            var scene_label = scenenames[scenenames.Length - 1];
+            var script_label = scriptnames[scriptnames.Length - 1];
+            var label = $"LogicScript (SceneName:{scene_label}|ScriptName:{script_label})";
+            script.Q<Foldout>("LogicScript").text = label;
         }
 
         private void RefreshAssetBundleList(ScrollView folder_list, Label label_page)

@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using AppFrame.Config;
 using UnityEditor;
 using UnityEngine;
@@ -13,6 +16,7 @@ namespace AppFrame.Editor
         private const string configPath = "HybridFolder/App/Config/AppScriptConfig";
         private static string MainSceneName = "Test";
         public static List<string> SceneNames = new List<string>();
+        public static List<string> ScriptNames = new List<string>();
         private static List<int> levels = new List<int>();
         public static int level = 0;
 
@@ -46,6 +50,16 @@ namespace AppFrame.Editor
             {
                 int index = SceneNames.IndexOf(config.LogicScript[i].SceneName);
                 levels.Add(index);
+            }
+            
+            ScriptNames.Clear();
+            Assembly assembly = Assembly.Load("App.Module");
+            Type[] types = assembly.GetTypes();
+            for (int i = 0; i < types.Length; i++)
+            {
+                if (types[i].IsDefined (typeof (CompilerGeneratedAttribute), false)) continue;
+                if (types[i].FullName.Contains("View")) continue;
+                ScriptNames.Add(types[i].FullName);
             }
 
             return config.LogicScript;
