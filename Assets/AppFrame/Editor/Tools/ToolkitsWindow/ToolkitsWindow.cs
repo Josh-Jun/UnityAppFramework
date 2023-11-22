@@ -350,7 +350,7 @@ namespace AppFrame.Editor
                     int index = i;
                     var tableItem = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>($"{basePath}/SetAppTableConfig/table_item.uxml");
                     VisualElement table = tableItem.CloneTree();
-
+                    List<string> tablenames = new List<string>();
                     table.Q<Button>("btn_table_remove").style.backgroundImage =
                         new StyleBackground((Texture2D)EditorGUIUtility.IconContent("CollabDeleted Icon").image);
                     table.Q<Button>("btn_table_add").style.backgroundImage =
@@ -361,12 +361,22 @@ namespace AppFrame.Editor
                     {
                         var mold = (TableMold)System.Enum.Parse(typeof(TableMold), ent.newValue);
                         SetAppTableConfig.SetConfigMoldValue(index, mold);
+                        tablenames = table_list[index].TableMold == TableMold.Json? SetAppTableConfig.JsonTableNames : SetAppTableConfig.XmlTableNames;
+                        table.Q<DropdownField>("TableName").choices = tablenames;
+                        if (tablenames.Count > 0)
+                        {
+                            table.Q<DropdownField>("TableName").value = tablenames[0];
+                        }
                     });
-                    table.Q<TextField>("TableName").value = table_list[index].TableName;
-                    table.Q<TextField>("TableName").RegisterCallback<ChangeEvent<string>>((ent) =>
+                    
+                    tablenames = table_list[index].TableMold == TableMold.Json? SetAppTableConfig.JsonTableNames : SetAppTableConfig.XmlTableNames;
+                    table.Q<DropdownField>("TableName").choices = tablenames;
+                    table.Q<DropdownField>("TableName").value = tablenames[tablenames.IndexOf(table_list[index].TableName)];
+                    table.Q<DropdownField>("TableName").RegisterCallback<ChangeEvent<string>>((ent) =>
                     {
                         SetAppTableConfig.SetConfigNameValue(index, ent.newValue);
                     });
+                    
                     table.Q<Button>("btn_table_remove").clicked += () =>
                     {
                         SetAppTableConfig.RemoveTable(index);
