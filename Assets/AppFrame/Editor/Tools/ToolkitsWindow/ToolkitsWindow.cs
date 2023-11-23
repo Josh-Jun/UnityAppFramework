@@ -507,7 +507,7 @@ namespace AppFrame.Editor
 
         public static void ShowHelpBox(string msg, HelpBoxMessageType type = HelpBoxMessageType.Info)
         {
-            var helpBox = new HelpBox(msg, HelpBoxMessageType.Info);
+            var helpBox = new HelpBox(msg, type);
             infos.Add(helpBox);
         }
     }
