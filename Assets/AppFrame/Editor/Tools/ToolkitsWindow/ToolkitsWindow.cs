@@ -19,17 +19,7 @@ namespace AppFrame.Editor
         private ListView leftListView;
         private Label view_title;
 
-        private string[] itemsName =
-        {
-            "BuildApp",
-            "BuildAssetBundle",
-            "SetAppScriptConfig",
-            "SetAppTableConfig",
-            "Table2CSharp",
-            "ChangePrefabsFont",
-            "FindSameFileName",
-            "CopyTemplateScripts",
-        };
+        private string[] itemsName;
 
         private List<TemplateContainer> viewElements = new List<TemplateContainer>();
         private int stamp = 0;
@@ -47,6 +37,7 @@ namespace AppFrame.Editor
 
         public void CreateGUI()
         {
+            itemsName = GetItemsName();
             stamp = PlayerPrefs.HasKey(STAMP_KEY) ? PlayerPrefs.GetInt(STAMP_KEY) : 0;
             // Each editor window contains a root VisualElement object
             root = rootVisualElement;
@@ -85,6 +76,22 @@ namespace AppFrame.Editor
             ChangePrefabsFontFunction();
             FindSameFileNameFunction();
             CopyTemplateScriptsFunction();
+        }
+        private string[] GetItemsName()
+        {
+            List<string> list = new List<string>();
+            DirectoryInfo directoryInfo = new DirectoryInfo(basePath);
+            DirectoryInfo[] directory = directoryInfo.GetDirectories("*");
+            foreach (var info in directory)
+            {
+                var files = info.GetFiles("*.cs");
+                if (files.Length > 0)
+                {
+                    var filename = Path.GetFileNameWithoutExtension(files[0].FullName);
+                    list.Add(filename);
+                }
+            }
+            return list.ToArray();
         }
 
         private void BuildAppFunction()
