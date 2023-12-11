@@ -6,6 +6,13 @@ using UnityEngine;
 /// </summary>
 namespace AppFrame.Tools
 {
+    public enum PictureType
+    {
+        Jpg,
+        Png,
+        Exr,
+        Tga,
+    }
     public static class PictureTools
     {
         /// <summary> 创建Sprite</summary>
@@ -38,19 +45,30 @@ namespace AppFrame.Tools
             return sprite;
         }
 
-        public static byte[] CreateByte(Sprite sp)
+        public static byte[] CreateByte(Sprite sp, PictureType type = PictureType.Jpg)
         {
-            //转换成Texture
-            Texture2D temp = sp.texture;
-            //在转换成bytes
-            byte[] textureByte = temp.EncodeToPNG();
-            return textureByte;
+            return CreateByte(sp.texture, type);
         }
 
-        public static byte[] CreateByte(Texture2D texture)
+        public static byte[] CreateByte(Texture2D texture, PictureType type = PictureType.Jpg)
         {
-            //在转换成bytes
-            byte[] textureByte = texture.EncodeToPNG();
+            //根据不同图片格式转换成bytes,如果不根据格式转，jpg转png时会出现byte比原始数据大的情况。
+            byte[] textureByte = null;
+            switch (type)
+            {
+                case PictureType.Jpg:
+                    textureByte = texture.EncodeToJPG();
+                    break;
+                case PictureType.Png:
+                    textureByte = texture.EncodeToPNG();
+                    break;
+                case PictureType.Exr:
+                    textureByte = texture.EncodeToEXR();
+                    break;
+                case PictureType.Tga:
+                    textureByte = texture.EncodeToTGA();
+                    break;
+            }
             return textureByte;
         }
 
