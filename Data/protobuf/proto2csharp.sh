@@ -1,6 +1,6 @@
 PROTO_OUT=./output/AppProtoData.Proto
 CSHARP_DLL_OUT_PATH=./dll
-PROJECT_COPY_DIR=../../Assets/AppFrame/Runtime/Frame/Global
+PROJECT_COPY_DIR=../../Assets/AppFrame/Runtime/Frame/Manager/Network/Data
 
 rm -rf $PROTO_OUT
 mkdir $PROTO_OUT

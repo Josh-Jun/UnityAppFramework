@@ -1,5 +1,5 @@
 syntax = "proto3";
-package AppProtoData;
+package AppFrame.Network.Data;
 
 // 命令
 enum MSG_CMD

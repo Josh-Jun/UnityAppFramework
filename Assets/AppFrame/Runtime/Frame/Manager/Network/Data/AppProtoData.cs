@@ -9,7 +9,7 @@ using pb = global::Google.Protobuf;
 using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
 using scg = global::System.Collections.Generic;
-namespace AppProtoData {
+namespace AppFrame.Network.Data {
 
   /// <summary>Holder for reflection information generated from proto/AppProtoData.proto</summary>
   public static partial class AppProtoDataReflection {
@@ -24,15 +24,15 @@ namespace AppProtoData {
     static AppProtoDataReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Chhwcm90by9BcHBQcm90b0RhdGEucHJvdG8SDEFwcFByb3RvRGF0YSIPCg1D",
-            "MlNfSGVhcnRCZWF0IhsKDVMyQ19IZWFydEJlYXQSCgoCdHMYASABKBIqMQoH",
-            "TVNHX0NNRBISCg5DMlNfSEVBUlRfQkVBVBAAEhIKDlMyQ19IRUFSVF9CRUFU",
-            "EAFiBnByb3RvMw=="));
+            "Chhwcm90by9BcHBQcm90b0RhdGEucHJvdG8SFUFwcEZyYW1lLk5ldHdvcmsu",
+            "RGF0YSIPCg1DMlNfSGVhcnRCZWF0IhsKDVMyQ19IZWFydEJlYXQSCgoCdHMY",
+            "ASABKBIqMQoHTVNHX0NNRBISCg5DMlNfSEVBUlRfQkVBVBAAEhIKDlMyQ19I",
+            "RUFSVF9CRUFUEAFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::AppProtoData.MSG_CMD), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::AppProtoData.C2S_HeartBeat), global::AppProtoData.C2S_HeartBeat.Parser, null, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::AppProtoData.S2C_HeartBeat), global::AppProtoData.S2C_HeartBeat.Parser, new[]{ "Ts" }, null, null, null, null)
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::AppFrame.Network.Data.MSG_CMD), }, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::AppFrame.Network.Data.C2S_HeartBeat), global::AppFrame.Network.Data.C2S_HeartBeat.Parser, null, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::AppFrame.Network.Data.S2C_HeartBeat), global::AppFrame.Network.Data.S2C_HeartBeat.Parser, new[]{ "Ts" }, null, null, null, null)
           }));
     }
     #endregion
@@ -61,7 +61,7 @@ namespace AppProtoData {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::AppProtoData.AppProtoDataReflection.Descriptor.MessageTypes[0]; }
+      get { return global::AppFrame.Network.Data.AppProtoDataReflection.Descriptor.MessageTypes[0]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -165,7 +165,7 @@ namespace AppProtoData {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::AppProtoData.AppProtoDataReflection.Descriptor.MessageTypes[1]; }
+      get { return global::AppFrame.Network.Data.AppProtoDataReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
