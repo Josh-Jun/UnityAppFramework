@@ -40,10 +40,10 @@ namespace AppFrame.Manager
 
             // OutputPath > 项目目录/AssetBundle/{buildTarget}/{Application.version}/{AppConfig.ResVersion}/{mold}
             var head = PlatformManager.Instance.IsEditor ? "" : "file://";
-            mainfestDataPath = $"{head}{PlatformManager.Instance.GetDataPath($"AssetBundle/{PlatformManager.Instance.Name}/{Application.version}/{AppInfo.AppConfig.ResVersion}/Assets")}";
-            mainfestAssetsPath =$"{head}{PlatformManager.Instance.GetAssetsPath($"AssetBundle/{PlatformManager.Instance.Name}/{Application.version}/{AppInfo.AppConfig.ResVersion}/Assets")}";
+            mainfestDataPath = $"{head}{PlatformManager.Instance.GetDataPath($"AssetBundle/{PlatformManager.Instance.Name}/{Application.version}/{Global.AppConfig.ResVersion}/Assets")}";
+            mainfestAssetsPath =$"{head}{PlatformManager.Instance.GetAssetsPath($"AssetBundle/{PlatformManager.Instance.Name}/{Application.version}/{Global.AppConfig.ResVersion}/Assets")}";
 
-            switch (AppInfo.AppConfig.LoadAssetsMold)
+            switch (Global.AppConfig.LoadAssetsMold)
             {
                 case LoadAssetsMold.Local:
                     mainfestPath = mainfestAssetsPath;

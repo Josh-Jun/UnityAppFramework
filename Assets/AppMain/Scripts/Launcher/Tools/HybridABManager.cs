@@ -88,10 +88,10 @@ namespace Launcher
         {
             // OutputPath > 项目目录/AssetBundle/{buildTarget}/{Application.version}/{AppConfig.ResVersion}/{mold}
             var head = IsEditor ? "" : "file://";
-            mainfestDataPath = $"{head}{Application.persistentDataPath}/AssetBundle/{PlatformName}/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid";
-            mainfestAssetsPath =$"{head}{Application.streamingAssetsPath}/AssetBundle/{PlatformName}/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid";
+            mainfestDataPath = $"{head}{Application.persistentDataPath}/AssetBundle/{PlatformName}/{Application.version}/{Global.AppConfig.ResVersion}/Hybrid";
+            mainfestAssetsPath =$"{head}{Application.streamingAssetsPath}/AssetBundle/{PlatformName}/{Application.version}/{Global.AppConfig.ResVersion}/Hybrid";
             
-            switch (Launcher.AppConfig.LoadAssetsMold)
+            switch (Global.AppConfig.LoadAssetsMold)
             {
                 case LoadAssetsMold.Local:
                     mainfestPath = mainfestAssetsPath;

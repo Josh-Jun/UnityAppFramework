@@ -12,23 +12,6 @@ namespace Launcher
 {
     public class Launcher : MonoBehaviour
     {
-        public static List<string> AOTMetaAssemblyNames { get; } = new List<string>()
-        {
-            "mscorlib.dll",
-            "System.dll",
-            "System.Core.dll",
-            "UnityEngine.CoreModule.dll",
-        };
-
-        public static List<string> HotfixAssemblyNames { get; } = new List<string>()
-        {
-            "App.Frame.dll",
-            "App.Module.dll",
-        };
-
-        public static AppScriptConfig AppScriptConfig;
-        public static AppConfig AppConfig;
-        public static GameObject UpdateView;
         private Slider slider;
         private Text text;
         private void Awake()
@@ -37,7 +20,7 @@ namespace Launcher
             text = transform.Find("Canvas/Slider/Text").GetComponent<Text>();
             slider.gameObject.SetActive(false);
             
-            AppConfig = Resources.Load<AppConfig>("AppConfig");
+            Global.AppConfig = Resources.Load<AppConfig>("AppConfig");
 
             HybridABManager.Instance.InitManager();
             
@@ -89,13 +72,13 @@ namespace Launcher
             {
                 LoadMetadataForAOTAssemblies();
                 LoadHotfixAssemblies();
-                AppScriptConfig = HybridABManager.Instance.LoadAsset<AppScriptConfig>("App", "Config", "AppScriptConfig");
+                Global.AppScriptConfig = HybridABManager.Instance.LoadAsset<AppScriptConfig>("App", "Config", "AppScriptConfig");
                 AssetBundle ab = HybridABManager.Instance.LoadAssetBundle("Scene", "AppScene");
-                UpdateView = HybridABManager.Instance.LoadAsset<GameObject>("App", "Update", "UpdateView");
+                Global.UpdateView = HybridABManager.Instance.LoadAsset<GameObject>("App", "Update", "UpdateView");
             }
             else
             {
-                AppScriptConfig = Resources.Load<AppScriptConfig>("HybridFolder/App/Config/AppScriptConfig");
+                Global.AppScriptConfig = Resources.Load<AppScriptConfig>("HybridFolder/App/Config/AppScriptConfig");
             }
             
             SceneManager.LoadScene("AppScene");
@@ -103,9 +86,9 @@ namespace Launcher
 
         private void LoadHotfixAssemblies()
         {
-            for (int i = 0; i < HotfixAssemblyNames.Count; i++)
+            for (int i = 0; i < Global.HotfixAssemblyNames.Count; i++)
             {
-                string name = HotfixAssemblyNames[i];
+                string name = Global.HotfixAssemblyNames[i];
                 TextAsset ta = HybridABManager.Instance.LoadAsset<TextAsset>("App", "Dll", name);
                 System.Reflection.Assembly.Load(ta.bytes);
             }
@@ -113,7 +96,7 @@ namespace Launcher
         private void LoadMetadataForAOTAssemblies()
         {
             HomologousImageMode mode = HomologousImageMode.SuperSet;
-            foreach (var aotDllName in AOTMetaAssemblyNames)
+            foreach (var aotDllName in Global.AOTMetaAssemblyNames)
             {
                 TextAsset ta =  HybridABManager.Instance.LoadAsset<TextAsset>("App", "Dll", aotDllName);
                 LoadImageErrorCode err = RuntimeApi.LoadMetadataForAOTAssembly(ta.bytes, mode);

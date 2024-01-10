@@ -23,7 +23,7 @@ namespace AppFrame.Manager
         public override string Name { get; } = "Android";
         public override string PlatformName
         {
-            get { return AppInfo.AppConfig.TargetPackage == TargetPackage.Mobile ? "android" : AppInfo.AppConfig.TargetPackage.ToString().ToLower(); }
+            get { return Global.AppConfig.TargetPackage == TargetPackage.Mobile ? "android" : Global.AppConfig.TargetPackage.ToString().ToLower(); }
         } 
         public AndroidPlayer()
         {

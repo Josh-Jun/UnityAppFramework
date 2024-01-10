@@ -14,14 +14,11 @@ using AppFrame.Tools;
 using AppFrame.Data;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-using ULauncher = Launcher.Launcher;
 
 namespace App
 {
     public class Root
     {
-        private static AppScriptConfig appScriptConfig;
-
         private static Dictionary<string, List<string>> sceneScriptsPairs = new Dictionary<string, List<string>>();
         private static Dictionary<string, ILogic> iLogicPairs = new Dictionary<string, ILogic>();
         private static List<ILogic> RuntimeRoots = new List<ILogic>();
@@ -31,14 +28,12 @@ namespace App
             var manager = new GameObject("Manager");
             manager.transform.SetParent(App.app.transform);
             
-            AppInfo.AppConfig = ULauncher.AppConfig;
-            
             //Log开关
-            Log.Enabled = AppInfo.AppConfig.IsDebug;
+            Log.Enabled = Global.AppConfig.IsDebug;
             //禁止程序休眠
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
             //设置程序帧率
-            Application.targetFrameRate = AppInfo.AppConfig.AppFrameRate;
+            Application.targetFrameRate = Global.AppConfig.AppFrameRate;
             //输出App信息
             OutputAppInfo();
             //初始化Logic脚本
@@ -53,56 +48,55 @@ namespace App
             stringBuilder.AppendLine($"当前操作系统 : {SystemInfo.operatingSystem}");
             stringBuilder.AppendLine($"系统运行内存 : {SystemInfo.systemMemorySize/1000f}G");
             stringBuilder.AppendLine($"设备唯一标识 : {SystemInfo.deviceUniqueIdentifier}");
-            var infoServer = AppInfo.AppConfig.IsTestServer ? "是" : "否";
+            var infoServer = Global.AppConfig.IsTestServer ? "是" : "否";
             stringBuilder.AppendLine($"是否测试环境 : {infoServer}");
             var mold = new []{ "原生资源", "本地资产", "远端资产" };
-            stringBuilder.AppendLine($"资源加载模式 : {mold[(int)AppInfo.AppConfig.LoadAssetsMold]}");
-            var infoDevelopment = AppInfo.AppConfig.IsDebug ? "是" : "否";
+            stringBuilder.AppendLine($"资源加载模式 : {mold[(int)Global.AppConfig.LoadAssetsMold]}");
+            var infoDevelopment = Global.AppConfig.IsDebug ? "是" : "否";
             stringBuilder.AppendLine($"是否开发构建 : {infoDevelopment}");
-            stringBuilder.AppendLine($"应用默认帧率 : {AppInfo.AppConfig.AppFrameRate}");
-            stringBuilder.AppendLine($"资产构建管线 : {AppInfo.AppConfig.ABPipeline}");
-            stringBuilder.AppendLine($"资产版本标识 : {AppInfo.AppConfig.ResVersion}");
+            stringBuilder.AppendLine($"应用默认帧率 : {Global.AppConfig.AppFrameRate}");
+            stringBuilder.AppendLine($"资产构建管线 : {Global.AppConfig.ABPipeline}");
+            stringBuilder.AppendLine($"资产版本标识 : {Global.AppConfig.ResVersion}");
             Log.I(stringBuilder.ToString());
         }
 
         public static void StartApp()
         {
-            if (AppInfo.AppConfig.LoadAssetsMold != LoadAssetsMold.Native)
+            if (Global.AppConfig.LoadAssetsMold != LoadAssetsMold.Native)
             {
                 AssetBundleManager.Instance.LoadAssetBundle("Shader", "Shaders");
             }
             //初始化Global的Logic脚本的Begin方法
             InitLogicBegin("Global");
-            LoadScene(appScriptConfig.MainSceneName, true);
+            LoadScene(Global.AppScriptConfig.MainSceneName, true);
         }
         private static void InitLogicScripts()
         {
-            appScriptConfig = ULauncher.AppScriptConfig;
-            for (int i = 0; i < appScriptConfig.LogicScript.Count; i++)
+            for (int i = 0; i < Global.AppScriptConfig.LogicScript.Count; i++)
             {
-                if (!iLogicPairs.ContainsKey(appScriptConfig.LogicScript[i].ScriptName))
+                if (!iLogicPairs.ContainsKey(Global.AppScriptConfig.LogicScript[i].ScriptName))
                 {
-                    ILogic iLogic = GetLogic(appScriptConfig.LogicScript[i].ScriptName);
+                    ILogic iLogic = GetLogic(Global.AppScriptConfig.LogicScript[i].ScriptName);
                     if (iLogic != null)
                     {
-                        iLogicPairs.Add(appScriptConfig.LogicScript[i].ScriptName, iLogic);
+                        iLogicPairs.Add(Global.AppScriptConfig.LogicScript[i].ScriptName, iLogic);
                     }
                     else
                     {
-                        Debug.LogError($"Root脚本为空 脚本名称:{appScriptConfig.LogicScript[i].ScriptName}");
+                        Debug.LogError($"Root脚本为空 脚本名称:{Global.AppScriptConfig.LogicScript[i].ScriptName}");
                     }
                 }
 
-                if (!sceneScriptsPairs.ContainsKey(appScriptConfig.LogicScript[i].SceneName))
+                if (!sceneScriptsPairs.ContainsKey(Global.AppScriptConfig.LogicScript[i].SceneName))
                 {
                     List<string> scripts = new List<string>();
-                    scripts.Add(appScriptConfig.LogicScript[i].ScriptName);
-                    sceneScriptsPairs.Add(appScriptConfig.LogicScript[i].SceneName, scripts);
+                    scripts.Add(Global.AppScriptConfig.LogicScript[i].ScriptName);
+                    sceneScriptsPairs.Add(Global.AppScriptConfig.LogicScript[i].SceneName, scripts);
                 }
                 else
                 {
-                    sceneScriptsPairs[appScriptConfig.LogicScript[i].SceneName]
-                        .Add(appScriptConfig.LogicScript[i].ScriptName);
+                    sceneScriptsPairs[Global.AppScriptConfig.LogicScript[i].SceneName]
+                        .Add(Global.AppScriptConfig.LogicScript[i].ScriptName);
                 }
             }
         }
@@ -186,13 +180,13 @@ namespace App
 
         public static void AppPause(bool isPause)
         {
-            if (appScriptConfig != null)
+            if (Global.AppScriptConfig != null)
             {
-                for (int i = 0; i < appScriptConfig.LogicScript.Count; i++)
+                for (int i = 0; i < Global.AppScriptConfig.LogicScript.Count; i++)
                 {
-                    if (iLogicPairs.ContainsKey(appScriptConfig.LogicScript[i].ScriptName))
+                    if (iLogicPairs.ContainsKey(Global.AppScriptConfig.LogicScript[i].ScriptName))
                     {
-                        iLogicPairs[appScriptConfig.LogicScript[i].ScriptName].AppPause(isPause);
+                        iLogicPairs[Global.AppScriptConfig.LogicScript[i].ScriptName].AppPause(isPause);
                     }
                 }
             }
@@ -200,13 +194,13 @@ namespace App
 
         public static void AppFocus(bool isFocus)
         {
-            if (appScriptConfig != null)
+            if (Global.AppScriptConfig != null)
             {
-                for (int i = 0; i < appScriptConfig.LogicScript.Count; i++)
+                for (int i = 0; i < Global.AppScriptConfig.LogicScript.Count; i++)
                 {
-                    if (iLogicPairs.ContainsKey(appScriptConfig.LogicScript[i].ScriptName))
+                    if (iLogicPairs.ContainsKey(Global.AppScriptConfig.LogicScript[i].ScriptName))
                     {
-                        iLogicPairs[appScriptConfig.LogicScript[i].ScriptName].AppFocus(isFocus);
+                        iLogicPairs[Global.AppScriptConfig.LogicScript[i].ScriptName].AppFocus(isFocus);
                     }
                 }
             }
@@ -214,13 +208,13 @@ namespace App
 
         public static void AppQuit()
         {
-            if (appScriptConfig != null)
+            if (Global.AppScriptConfig != null)
             {
-                for (int i = 0; i < appScriptConfig.LogicScript.Count; i++)
+                for (int i = 0; i < Global.AppScriptConfig.LogicScript.Count; i++)
                 {
-                    if (iLogicPairs.ContainsKey(appScriptConfig.LogicScript[i].ScriptName))
+                    if (iLogicPairs.ContainsKey(Global.AppScriptConfig.LogicScript[i].ScriptName))
                     {
-                        iLogicPairs[appScriptConfig.LogicScript[i].ScriptName].AppQuit();
+                        iLogicPairs[Global.AppScriptConfig.LogicScript[i].ScriptName].AppQuit();
                     }
                 }
             }

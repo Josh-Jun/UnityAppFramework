@@ -28,7 +28,7 @@ namespace AppFrame.Manager
             private set { }
             get
             {
-                return AppInfo.AppConfig.IsTestServer ? "" : ""; //测试服务器:生产服务器
+                return Global.AppConfig.IsTestServer ? "" : ""; //测试服务器:生产服务器
             }
         }
 
@@ -40,7 +40,7 @@ namespace AppFrame.Manager
             private set { }
             get
             {
-                return AppInfo.AppConfig.IsTestServer ? "" : ""; //测试服务器:生产服务器
+                return Global.AppConfig.IsTestServer ? "" : ""; //测试服务器:生产服务器
             }
         }
 
@@ -52,7 +52,7 @@ namespace AppFrame.Manager
             private set { }
             get
             {
-                return AppInfo.AppConfig.IsTestServer ? 17888 : 8080; //测试服务器:生产服务器
+                return Global.AppConfig.IsTestServer ? 17888 : 8080; //测试服务器:生产服务器
             }
         }
 
@@ -63,7 +63,7 @@ namespace AppFrame.Manager
             {
                 string test_url = Path.Combine(Application.dataPath.Replace("Assets", ""), "AssetBundle/"); //本地AB包地址
                 string pro_url = "https://meta-oss.genimous.com/vr-ota/dev_test/AssetBundle/"; //服务器AB包地址
-                return AppInfo.AppConfig.IsTestServer ? test_url : pro_url;
+                return Global.AppConfig.IsTestServer ? test_url : pro_url;
             }
         }
 
@@ -74,7 +74,7 @@ namespace AppFrame.Manager
             {
                 string test_url = Path.Combine(Application.dataPath.Replace("Assets", ""), "App/"); //本地AB包地址
                 string pro_url = "https://meta-oss.genimous.com/vr-ota/App/"; //服务器AB包地址
-                return AppInfo.AppConfig.IsTestServer ? test_url : pro_url;
+                return Global.AppConfig.IsTestServer ? test_url : pro_url;
             }
         }
 

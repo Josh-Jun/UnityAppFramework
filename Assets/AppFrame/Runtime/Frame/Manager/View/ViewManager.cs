@@ -99,9 +99,9 @@ namespace AppFrame.View
             UICanvas.worldCamera = Camera.main;
 
             UICanvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            UICanvasScaler.referenceResolution = AppInfo.AppConfig.UIReferenceResolution;
+            UICanvasScaler.referenceResolution = Global.AppConfig.UIReferenceResolution;
             UICanvasScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
-            UICanvasScaler.matchWidthOrHeight = AppInfo.AppConfig.UIReferenceResolution.x < AppInfo.AppConfig.UIReferenceResolution.y ? 0 : 1;
+            UICanvasScaler.matchWidthOrHeight = Global.AppConfig.UIReferenceResolution.x < Global.AppConfig.UIReferenceResolution.y ? 0 : 1;
 
             #endregion
 

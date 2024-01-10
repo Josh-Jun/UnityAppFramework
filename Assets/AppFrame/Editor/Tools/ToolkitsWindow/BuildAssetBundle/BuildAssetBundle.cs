@@ -124,7 +124,7 @@ namespace AppFrame.Editor
             Directory.CreateDirectory(targetDstDir);
 
             List<string> list = new List<string>();
-            list.AddRange(Launcher.Launcher.AOTMetaAssemblyNames);
+            list.AddRange(Global.AOTMetaAssemblyNames);
             foreach (var dll in list)
             {
                 string srcDllPath = $"{aotAssembliesSrcDir}/{dll}";
@@ -150,7 +150,7 @@ namespace AppFrame.Editor
             Directory.CreateDirectory(targetDstDir);
 
             List<string> list = new List<string>();
-            list.AddRange(Launcher.Launcher.HotfixAssemblyNames);
+            list.AddRange(Global.HotfixAssemblyNames);
             foreach (var dll in list)
             {
                 string srcDllPath = $"{aotAssembliesSrcDir}/{dll}";

@@ -70,8 +70,8 @@ namespace Modules.Update
 
         public void Begin()
         {
-            LocalPath = PlatformManager.Instance.GetDataPath($"AssetBundle/{PlatformManager.Instance.Name}/{Application.version}/{AppInfo.AppConfig.ResVersion}/Assets/");
-            ServerUrl = NetcomManager.ABUrl + $"{PlatformManager.Instance.Name}/{Application.version}/{AppInfo.AppConfig.ResVersion}/Assets/";
+            LocalPath = PlatformManager.Instance.GetDataPath($"AssetBundle/{PlatformManager.Instance.Name}/{Application.version}/{Global.AppConfig.ResVersion}/Assets/");
+            ServerUrl = NetcomManager.ABUrl + $"{PlatformManager.Instance.Name}/{Application.version}/{Global.AppConfig.ResVersion}/Assets/";
 
             LocalVersionConfigPath = LocalPath + "AssetBundleConfig.json";
             ServerVersionConfigPath = ServerUrl + "AssetBundleConfig.json";
@@ -79,13 +79,13 @@ namespace Modules.Update
             appUrl = NetcomManager.AppUrl + "meta.apk";
             appPath = PlatformManager.Instance.GetDataPath("App/meta.apk");
 
-            switch (AppInfo.AppConfig.LoadAssetsMold)
+            switch (Global.AppConfig.LoadAssetsMold)
             {
                 case LoadAssetsMold.Native:
                     Root.StartApp();
                     break;
                 case LoadAssetsMold.Local:
-                    var localPath = PlatformManager.Instance.GetAssetsPath($"AssetBundle/{PlatformManager.Instance.Name}/{Application.version}/{AppInfo.AppConfig.ResVersion}/Assets/");
+                    var localPath = PlatformManager.Instance.GetAssetsPath($"AssetBundle/{PlatformManager.Instance.Name}/{Application.version}/{Global.AppConfig.ResVersion}/Assets/");
                     var configPath = localPath + "AssetBundleConfig.json";
                     DownLoad(configPath, (string data) =>
                     {
@@ -95,7 +95,7 @@ namespace Modules.Update
                     });
                     break;
                 case LoadAssetsMold.Remote:
-                    view = AssetsManager.Instance.LoadUIView<UpdateView>(Launcher.Launcher.UpdateView);
+                    view = AssetsManager.Instance.LoadUIView<UpdateView>(Global.UpdateView);
                     view.SetViewActive();
 
                     view.SetTipsText("检查更新中...");
@@ -273,7 +273,7 @@ namespace Modules.Update
             {
                 //将manifest文件写入本地
                 FileTools.CreateFile(LocalPath + PlatformManager.Instance.Name + ".manifest", manifest_data);
-                if (AppInfo.AppConfig.ABPipeline == ABPipeline.Default)
+                if (Global.AppConfig.ABPipeline == ABPipeline.Default)
                 {
                      //下载总AB包
                      DownLoad(ServerUrl + PlatformManager.Instance.Name, (byte[] ab_data) =>
@@ -283,7 +283,7 @@ namespace Modules.Update
                         view.StartCoroutine(DownLoadAssetBundle());
                      });
                 }
-                else if(AppInfo.AppConfig.ABPipeline == ABPipeline.Scriptable)
+                else if(Global.AppConfig.ABPipeline == ABPipeline.Scriptable)
                 {
                     view.StartCoroutine(DownLoadAssetBundle());
                 }
@@ -336,7 +336,7 @@ namespace Modules.Update
                     }
                 }
                 yield return new WaitForEndOfFrame();
-                if (AppInfo.AppConfig.ABPipeline == ABPipeline.Default)
+                if (Global.AppConfig.ABPipeline == ABPipeline.Default)
                 {
                     //下载manifest文件
                     DownLoad(ServerUrl + folder.BundleName + ".manifest", (byte[] _manifest_data) =>

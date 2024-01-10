@@ -36,19 +36,19 @@ namespace Launcher
 
         public static void Init(Action<bool> callback)
         {
-            LocalPath = $"{Application.persistentDataPath}/AssetBundle/{HybridABManager.PlatformName}/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid/";
-            ServerUrl = $"{server_url}/AssetBundle/{HybridABManager.PlatformName}/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid/";
+            LocalPath = $"{Application.persistentDataPath}/AssetBundle/{HybridABManager.PlatformName}/{Application.version}/{Global.AppConfig.ResVersion}/Hybrid/";
+            ServerUrl = $"{server_url}/AssetBundle/{HybridABManager.PlatformName}/{Application.version}/{Global.AppConfig.ResVersion}/Hybrid/";
 
             LocalVersionConfigPath = LocalPath + "AssetBundleConfig.json";
             ServerVersionConfigPath = ServerUrl + "AssetBundleConfig.json";
 
-            switch (Launcher.AppConfig.LoadAssetsMold)
+            switch (Global.AppConfig.LoadAssetsMold)
             {
                 case LoadAssetsMold.Native:
                     callback?.Invoke(false);
                     break;
                 case LoadAssetsMold.Local:
-                    var localPath = $"{Application.streamingAssetsPath}/AssetBundle/{HybridABManager.PlatformName}/{Application.version}/{Launcher.AppConfig.ResVersion}/Hybrid/";
+                    var localPath = $"{Application.streamingAssetsPath}/AssetBundle/{HybridABManager.PlatformName}/{Application.version}/{Global.AppConfig.ResVersion}/Hybrid/";
                     var configPath = localPath + "AssetBundleConfig.json";
                     DownLoad(configPath, (string data) =>
                     {
@@ -234,7 +234,7 @@ namespace Launcher
             {
                 //将manifest文件写入本地
                 HotfixTool.CreateFile(LocalPath + HybridABManager.PlatformName + ".manifest", manifest_data);
-                if (Launcher.AppConfig.ABPipeline == ABPipeline.Default)
+                if (Global.AppConfig.ABPipeline == ABPipeline.Default)
                 {
                     //下载总AB包
                     DownLoad(ServerUrl + HybridABManager.PlatformName, (byte[] ab_data) =>
@@ -244,7 +244,7 @@ namespace Launcher
                         callback?.Invoke();
                     });
                 }
-                else if (Launcher.AppConfig.ABPipeline == ABPipeline.Scriptable)
+                else if (Global.AppConfig.ABPipeline == ABPipeline.Scriptable)
                 {
                     callback?.Invoke();
                 }
@@ -271,7 +271,7 @@ namespace Launcher
                     }
                 }
                 yield return new WaitForEndOfFrame();
-                if (Launcher.AppConfig.ABPipeline == ABPipeline.Default)
+                if (Global.AppConfig.ABPipeline == ABPipeline.Default)
                 {
                     //下载manifest文件
                     DownLoad(ServerUrl + folder.BundleName + ".manifest", (byte[] _manifest_data) =>
