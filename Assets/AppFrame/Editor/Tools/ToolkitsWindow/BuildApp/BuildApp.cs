@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using AppFrame.Config;
 using AppFrame.Enum;
-using HybridCLR.Editor;
+using HybridCLR.Editor.Settings;
 using UnityEditor;
 using UnityEngine;
 #if PICO_XR_SETTING
