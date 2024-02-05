@@ -7,20 +7,102 @@ using System.Runtime.CompilerServices;
 using AppFrame.Config;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace AppFrame.Editor
 {
-    public class SetAppScriptConfig
+    public class SetAppScriptConfig : IToolkitEditor
     {
-        private static AppScriptConfig config = null;
+        private AppScriptConfig config = null;
         private const string configPath = "HybridFolder/App/Config/AppScriptConfig";
-        private static string MainSceneName = "Test";
-        public static List<string> SceneNames = new List<string>();
-        public static List<string> ScriptNames = new List<string>();
-        private static List<int> levels = new List<int>();
-        public static int level = 0;
+        private string MainSceneName = "Test";
+        private List<string> SceneNames = new List<string>();
+        private List<string> ScriptNames = new List<string>();
+        private List<int> levels = new List<int>();
+        private int level = 0;
+        public void OnCreate(VisualElement root)
+        {
+            var script_scroll_view = root.Q<ScrollView>("script_scroll_view");
+            var script_list = GetRootScripts();
+            var main_scene_name = root.Q<DropdownField>("main_scene_name");
+            main_scene_name.choices = SceneNames;
+            main_scene_name.value = SceneNames[level];
+            main_scene_name.RegisterCallback<ChangeEvent<string>>((evt) =>
+            {
+                level = SceneNames.IndexOf(evt.newValue);
+            });
 
-        public static List<LogicScript> GetRootScripts()
+            RefreshScriptView(script_scroll_view);
+            root.Q<Button>("btn_script_apply").clicked += ApplyConfig;
+        }
+        
+        private void RefreshScriptView(ScrollView table_script_view)
+        {
+            var script_list = GetRootScripts();
+
+            if (script_list.Count > 0)
+            {
+                table_script_view.Clear();
+                for (int i = 0; i < script_list.Count; i++)
+                {
+                    int index = i;
+                    var scriptItem = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>($"Assets/AppFrame/Editor/Tools/ToolkitsWindow/SetAppScriptConfig/script_item.uxml");
+                    VisualElement script = scriptItem.CloneTree();
+                    script.Q<Button>("btn_script_remove").style.backgroundImage =
+                        new StyleBackground((Texture2D)EditorGUIUtility.IconContent("CollabDeleted Icon").image);
+                    script.Q<Button>("btn_script_add").style.backgroundImage =
+                        new StyleBackground((Texture2D)EditorGUIUtility.IconContent("CollabCreate Icon").image);
+
+
+                    var scenename = script.Q<DropdownField>("SceneName");
+                    var scriptname = script.Q<DropdownField>("ScriptName");
+                    
+                    scenename.choices = SceneNames;
+                    scenename.value = SceneNames[SceneNames.IndexOf(script_list[index].SceneName)];
+                    
+                    scriptname.choices = ScriptNames;
+                    scriptname.value = ScriptNames[ScriptNames.IndexOf(script_list[index].ScriptName)];
+                    
+                    scenename.RegisterCallback<ChangeEvent<string>>((evt) =>
+                    {
+                        SetConfigSceneValue(index, evt.newValue);
+                        UpdateFoldoutText(script);
+                    });
+                    
+                    scriptname.RegisterCallback<ChangeEvent<string>>((evt) =>
+                    {
+                        SetConfigScriptValue(index, evt.newValue);
+                        UpdateFoldoutText(script);
+                    });
+
+                    UpdateFoldoutText(script);
+                    
+                    script.Q<Button>("btn_script_remove").clicked += () =>
+                    {
+                        Remove(index);
+                        RefreshScriptView(table_script_view);
+                    };
+                    script.Q<Button>("btn_script_add").clicked += () =>
+                    {
+                        Add();
+                        RefreshScriptView(table_script_view);
+                    };
+                    table_script_view.Add(script);
+                }
+            }
+        }
+        
+        private void UpdateFoldoutText(VisualElement script)
+        {
+            var scenenames = script.Q<DropdownField>("SceneName").value.Split('/');
+            var scriptnames = script.Q<DropdownField>("ScriptName").value.Split('.');
+            var scene_label = scenenames[scenenames.Length - 1];
+            var script_label = scriptnames[scriptnames.Length - 1];
+            var label = $"LogicScript (SceneName:{scene_label}|ScriptName:{script_label})";
+            script.Q<Foldout>("LogicScript").text = label;
+        }
+        
+        private List<LogicScript> GetRootScripts()
         {
             config = Resources.Load<AppScriptConfig>(configPath);
             MainSceneName = config.MainSceneName;
@@ -65,7 +147,7 @@ namespace AppFrame.Editor
             return config.LogicScript;
         }
 
-        public static void Remove(int index)
+        private void Remove(int index)
         {
             if (config.LogicScript.Count > 1)
             {
@@ -78,7 +160,7 @@ namespace AppFrame.Editor
             }
         }
         
-        public static void Add()
+        private void Add()
         {
             LogicScript logicScript = new LogicScript
             {
@@ -90,16 +172,16 @@ namespace AppFrame.Editor
             levels.Add(index);
         }
 
-        public static void SetConfigSceneValue(int index, string value)
+        private void SetConfigSceneValue(int index, string value)
         {
             config.LogicScript[index].SceneName = value;
         }
-        public static void SetConfigScriptValue(int index, string value)
+        private void SetConfigScriptValue(int index, string value)
         {
             config.LogicScript[index].ScriptName = value;
         }
 
-        public static void ApplyConfig()
+        private void ApplyConfig()
         {
             foreach (int id in levels)
             {

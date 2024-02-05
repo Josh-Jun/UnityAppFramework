@@ -7,7 +7,9 @@ using AppFrame.Config;
 using AppFrame.Enum;
 using HybridCLR.Editor.Settings;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.UIElements;
 #if PICO_XR_SETTING
 using UnityEditor.XR.Management;
 using UnityEditor.XR.Management.Metadata;
@@ -16,21 +18,83 @@ using UnityEngine.XR.Management;
 
 namespace AppFrame.Editor
 {
-    public class BuildApp
+    public class BuildApp : IToolkitEditor
     {
-        private static AppConfig AppConfig; //App配置表 
-        private static string configPath = "AppConfig";
-        public static bool DevelopmentBuild = true;
-        public static bool IsTestServer = true;
-        public static LoadAssetsMold LoadAssetsMold = LoadAssetsMold.Native;
-        public static int AppFrameRate = 30;
-        public static TargetPackage ApkTarget = TargetPackage.Mobile;
-        public static bool NativeApp = false;
-        public static ABPipeline Pipeline = ABPipeline.Default;
-        public static Vector2 UIReferenceResolution;
-        public static string outputPath;
+        private AppConfig AppConfig; //App配置表 
+        private string configPath = "AppConfig";
+        private bool DevelopmentBuild = true;
+        private bool IsTestServer = true;
+        private LoadAssetsMold LoadAssetsMold = LoadAssetsMold.Native;
+        private int AppFrameRate = 30;
+        private TargetPackage ApkTarget = TargetPackage.Mobile;
+        private bool NativeApp = false;
+        private ABPipeline Pipeline = ABPipeline.Default;
+        private Vector2 UIReferenceResolution;
+        private string outputPath;
 
-        public static void Init()
+        public void OnCreate(VisualElement root)
+        {
+            Init();
+            var development_build = root.Q<Toggle>("DevelopmentBuild");
+            var is_test_server = root.Q<Toggle>("IsTestServer");
+            var load_assets_mold = root.Q<EnumField>("LoadAssetsMold");
+            var app_frame_rate = root.Q<TextField>("AppFrameRate");
+            var build_mold = root.Q<EnumField>("BuildMold");
+            var export_project = root.Q<Toggle>("ExportProject");
+            var ab_build_pipeline = root.Q<EnumField>("ABBuildPipeline");
+            var ui_reference_resolution = root.Q<Vector2Field>("UIReferenceResolution");
+            var output_path = root.Q<TextField>("BuildAppOutputPath");
+
+            development_build.value = DevelopmentBuild;
+            is_test_server.value = IsTestServer;
+            load_assets_mold.Init(LoadAssetsMold);
+            app_frame_rate.value = AppFrameRate.ToString();
+            build_mold.Init(ApkTarget);
+            export_project.value = NativeApp;
+            ab_build_pipeline.Init(Pipeline);
+            ui_reference_resolution.value = UIReferenceResolution;
+            output_path.value = outputPath;
+
+            development_build.RegisterCallback<ChangeEvent<bool>>((evt) => { DevelopmentBuild = evt.newValue; });
+            is_test_server.RegisterCallback<ChangeEvent<bool>>((evt) => { IsTestServer = evt.newValue; });
+            load_assets_mold.RegisterCallback<ChangeEvent<string>>((evt) =>
+            {
+                var mold = (LoadAssetsMold)System.Enum.Parse(typeof(LoadAssetsMold), evt.newValue);
+                LoadAssetsMold = mold;
+            });
+            app_frame_rate.RegisterCallback<ChangeEvent<string>>((evt) => { AppFrameRate = int.Parse(evt.newValue); });
+            build_mold.RegisterCallback<ChangeEvent<string>>((evt) =>
+            {
+                var mold = (TargetPackage)System.Enum.Parse(typeof(TargetPackage), evt.newValue);
+                export_project.style.display =
+                    mold == TargetPackage.Mobile ? DisplayStyle.Flex : DisplayStyle.None;
+                ApkTarget = mold;
+            });
+            export_project.RegisterCallback<ChangeEvent<bool>>((evt) => { NativeApp = evt.newValue; });
+            ab_build_pipeline.RegisterCallback<ChangeEvent<string>>((evt) =>
+            {
+                var mold = (ABPipeline)System.Enum.Parse(typeof(ABPipeline), evt.newValue);
+                Pipeline = mold;
+            });
+            ui_reference_resolution.RegisterCallback<ChangeEvent<Vector2>>((evt) =>
+            {
+                UIReferenceResolution = evt.newValue;
+            });
+            output_path.RegisterCallback<ChangeEvent<string>>((evt) => { outputPath = evt.newValue; });
+            root.Q<Button>("BuildAppOutputPathBrowse").clicked += () =>
+            {
+                output_path.value = EditorTool.Browse(true);
+                outputPath = output_path.value;
+            };
+            root.Q<Button>("BuildAppApply").clicked += () => { ApplyConfig(); };
+            root.Q<Button>("BuildApp").clicked += () =>
+            {
+                ApplyConfig();
+                Build();
+            };
+        }
+
+        private void Init()
         {
             outputPath = Application.dataPath.Replace("Assets", "App");
             AppConfig = Resources.Load<AppConfig>(configPath);
@@ -50,7 +114,8 @@ namespace AppFrame.Editor
                 ToolkitsWindow.ShowHelpBox("找不到AppConfig，请新建AppConfig");
             }
         }
-        public static void ApplyConfig()
+
+        private void ApplyConfig()
         {
             AppConfig.IsDebug = DevelopmentBuild;
             AppConfig.LoadAssetsMold = LoadAssetsMold;
@@ -116,10 +181,10 @@ namespace AppFrame.Editor
             AssetDatabase.Refresh();
         }
 
-        private static string assetsPath = "Assets/Resources/AssetsFolder";
-        private static string hybridPath = "Assets/Resources/HybridFolder";
+        private string assetsPath = "Assets/Resources/AssetsFolder";
+        private string hybridPath = "Assets/Resources/HybridFolder";
 
-        public static void Build()
+        private void Build()
         {
             string newAssetsPath = "";
             string newHybridPath = "";
@@ -174,7 +239,7 @@ namespace AppFrame.Editor
             Debug.Log(string.Format("GenericBuild Success Path = {0}", BuildPath));
         }
 
-        private static string[] GetBuildScenes()
+        private string[] GetBuildScenes()
         {
             List<string> names = new List<string>();
             foreach (EditorBuildSettingsScene e in EditorBuildSettings.scenes)
@@ -204,7 +269,7 @@ namespace AppFrame.Editor
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        private static string MoveAssetsToRoot(string path)
+        private string MoveAssetsToRoot(string path)
         {
             path = AbsolutePathToRelativePath(path);
             string floderName = path.Split('/').Last();
@@ -221,7 +286,7 @@ namespace AppFrame.Editor
         /// </summary>
         /// <param name="currentPath"></param>
         /// <param name="originPath"></param>
-        private static void MoveAssetsToOriginPath(string currentPath, string originPath)
+        private void MoveAssetsToOriginPath(string currentPath, string originPath)
         {
             currentPath = AbsolutePathToRelativePath(currentPath);
             originPath = AbsolutePathToRelativePath(originPath);
@@ -236,7 +301,7 @@ namespace AppFrame.Editor
         /// </summary>
         /// <param name="relativePath"></param>
         /// <returns></returns>
-        private static string RelativePathToAbsolutePath(string relativePath)
+        private string RelativePathToAbsolutePath(string relativePath)
         {
             return string.Format("{0}/{1}", Application.dataPath, relativePath.Replace("Assets/", ""));
         }
@@ -246,7 +311,7 @@ namespace AppFrame.Editor
         /// </summary>
         /// <param name="absolutePath"></param>
         /// <returns></returns>
-        private static string AbsolutePathToRelativePath(string absolutePath)
+        private string AbsolutePathToRelativePath(string absolutePath)
         {
             return absolutePath.Substring(absolutePath.IndexOf("Assets"));
         }

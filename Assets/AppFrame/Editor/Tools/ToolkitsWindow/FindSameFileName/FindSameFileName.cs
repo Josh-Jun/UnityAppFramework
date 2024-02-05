@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace AppFrame.Editor
 {
@@ -22,9 +24,9 @@ namespace AppFrame.Editor
         PhysicMaterial = 12,
         PhysicsMaterial2D = 13
     }
-    public class FindSameFileName
+    public class FindSameFileName : IToolkitEditor
     {
-        private static string[] items =
+        private string[] items =
         {
             "t:Prefab t:Texture t:AudioClip t:Scene t:Material t:Model t:AnimationClip t:Shader t:TextAsset t:AnimatorController t:PhysicMaterial t:PhysicsMaterial2D",
             "t:Prefab",
@@ -41,9 +43,22 @@ namespace AppFrame.Editor
             "t:PhysicMaterial",
             "t:PhysicsMaterial2D"
         };
-        private static Dictionary<string, string> FileNames = new Dictionary<string, string>();
-        
-        public static void FindSameFile(ObjectType objectType, string filesPath)
+        private Dictionary<string, string> FileNames = new Dictionary<string, string>();
+        public void OnCreate(VisualElement root)
+        {
+            var objectType = root.Q<EnumField>("object_type");
+            objectType.Init(ObjectType.All);
+            var textFilesField = root.Q<TextField>("text_files_path");
+            textFilesField.value = "";
+
+            root.Q<Button>("files_path_browse").clicked += () => { textFilesField.value = EditorTool.Browse(); };
+
+            root.Q<Button>("btn_find").clicked += () =>
+            {
+                FindSameFile((ObjectType)objectType.value, textFilesField.value);
+            };
+        }
+        private void FindSameFile(ObjectType objectType, string filesPath)
         {
             if (string.IsNullOrEmpty(filesPath))
             {

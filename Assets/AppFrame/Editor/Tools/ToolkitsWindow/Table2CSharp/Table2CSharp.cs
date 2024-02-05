@@ -5,15 +5,31 @@ using System.Text;
 using AppFrame.Enum;
 using AppFrame.Tools;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace AppFrame.Editor
 {
-    public class Table2CSharp
+    public class Table2CSharp : IToolkitEditor
     {
-        private static List<ExcelData> excelDatas = new List<ExcelData>();
-
-        public static void Apply(string excelPath, TableMold tableMold)
+        private List<ExcelData> excelDatas = new List<ExcelData>();
+        public void OnCreate(VisualElement root)
+        {
+            var table_mold = root.Q<EnumField>("table_mold");
+            table_mold.Init(TableMold.Json);
+            var table_path = root.Q<TextField>("table_path");
+            table_path.value = $"{Application.dataPath.Replace("Assets", "")}Data/excel";
+            root.Q<Button>("table_path_browse").clicked += () =>
+            {
+                table_path.value = EditorTool.Browse(true);
+            };
+            root.Q<Button>("table_apply").clicked += () =>
+            {
+                Apply(table_path.value, (TableMold)table_mold.value);
+            };
+        }
+        private void Apply(string excelPath, TableMold tableMold)
         {
             if (string.IsNullOrEmpty(excelPath))
             {
@@ -48,7 +64,7 @@ namespace AppFrame.Editor
             }
         }
 
-        private static void CreateJsonCSharp(ExcelData data)
+        private void CreateJsonCSharp(ExcelData data)
         {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("using System;");
@@ -86,7 +102,7 @@ namespace AppFrame.Editor
             AssetDatabase.Refresh();
         }
 
-        private static void CreateJsonConfig(ExcelData data)
+        private void CreateJsonConfig(ExcelData data)
         {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("{");
@@ -125,7 +141,7 @@ namespace AppFrame.Editor
             AssetDatabase.Refresh();
         }
 
-        private static void CreateXmlConfig(ExcelData data)
+        private void CreateXmlConfig(ExcelData data)
         {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
@@ -153,7 +169,7 @@ namespace AppFrame.Editor
             AssetDatabase.Refresh();
         }
         
-        private static void CreateXmlCSharp(ExcelData data)
+        private void CreateXmlCSharp(ExcelData data)
         {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("using System;");

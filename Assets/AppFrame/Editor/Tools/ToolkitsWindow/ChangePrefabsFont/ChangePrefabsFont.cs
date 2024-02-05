@@ -1,14 +1,30 @@
 using AppFrame.Editor;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
+using Button = UnityEngine.UIElements.Button;
 
 namespace AppFrame.Editor
 {
-    public class ChangePrefabsFont
+    public class ChangePrefabsFont : IToolkitEditor
     {
+        public void OnCreate(VisualElement root)
+        {
+            var textPrefabsField = root.Q<TextField>("text_prefab_path");
+            textPrefabsField.value = "";
+            var fontObjectField = root.Q<ObjectField>("object_font");
+            fontObjectField.objectType = typeof(Font);
 
-        public static void ChangeFont(Font changeFont, string prefabsPath)
+            root.Q<Button>("prefab_path_browse").clicked += () => { textPrefabsField.value = EditorTool.Browse(); };
+
+            root.Q<Button>("change_font_apply").clicked += () =>
+            {
+                ChangeFont((Font)fontObjectField.value, textPrefabsField.value);
+            };
+        }
+        private void ChangeFont(Font changeFont, string prefabsPath)
         {
             if (changeFont == null)
             {
@@ -37,7 +53,7 @@ namespace AppFrame.Editor
             ToolkitsWindow.ShowHelpBox("字体更换完成");
         }
 
-        private static void SetAllTextFont(Transform go, Font changeFont)
+        private void SetAllTextFont(Transform go, Font changeFont)
         {
             foreach (Transform item in go)
             {

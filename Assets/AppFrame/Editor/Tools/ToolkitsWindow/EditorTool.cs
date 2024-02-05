@@ -1,11 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace AppFrame.Editor
 {
+    public interface IToolkitEditor
+    {
+        void OnCreate(VisualElement root);
+    }
     public class EditorTool
     {
         public static string Browse(bool isFullPath = false)
@@ -36,6 +43,13 @@ namespace AppFrame.Editor
                     File.Copy($"{from}/{fileInfo.Name}", $"{to}/{fileInfo.Name}", true);
                 }
             }
+        }
+        public static IToolkitEditor GetEditor(string scriptName)
+        {
+            Assembly assembly = Assembly.Load("App.Frame.Editor");
+            Type type = assembly.GetType($"AppFrame.Editor.{scriptName}");
+            var obj = Activator.CreateInstance(type); //创建此类型实例
+            return obj as IToolkitEditor;
         }
     }
 }

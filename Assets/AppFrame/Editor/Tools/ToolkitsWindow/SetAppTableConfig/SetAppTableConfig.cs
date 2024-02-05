@@ -7,19 +7,80 @@ using System.Runtime.CompilerServices;
 using AppFrame.Config;
 using AppFrame.Enum;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace AppFrame.Editor
 {
-    public class SetAppTableConfig
+    public class SetAppTableConfig : IToolkitEditor
     {
-        private static AppTableConfig config = null;
+        private AppTableConfig config = null;
         private const string configPath = "AssetsFolder/Table/Config/AppTableConfig";
-        public static List<string> XmlTableNames = new List<string>();
-        public static List<string> JsonTableNames = new List<string>();
+        private List<string> XmlTableNames = new List<string>();
+        private List<string> JsonTableNames = new List<string>();
         
-        private static string basePath = "Assets/AppFrame/Runtime/Frame/Manager/Table/Data/";
-        public static List<AppTable> GetAppTables()
+        private string basePath = "Assets/AppFrame/Runtime/Frame/Manager/Table/Data/";
+        public void OnCreate(VisualElement root)
+        {
+            var table_scroll_view = root.Q<ScrollView>("table_scroll_view");
+            RefreshTableView(table_scroll_view);
+            root.Q<Button>("btn_table_apply").clicked += ApplyConfig;
+        }
+        private void RefreshTableView(ScrollView table_scroll_view)
+        {
+            var table_list = GetAppTables();
+
+            if (table_list.Count > 0)
+            {
+                table_scroll_view.Clear();
+                for (int i = 0; i < table_list.Count; i++)
+                {
+                    int index = i;
+                    var tableItem = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>($"Assets/AppFrame/Editor/Tools/ToolkitsWindow/SetAppTableConfig/table_item.uxml");
+                    VisualElement table = tableItem.CloneTree();
+                    List<string> tablenames = new List<string>();
+                    table.Q<Button>("btn_table_remove").style.backgroundImage =
+                        new StyleBackground((Texture2D)EditorGUIUtility.IconContent("CollabDeleted Icon").image);
+                    table.Q<Button>("btn_table_add").style.backgroundImage =
+                        new StyleBackground((Texture2D)EditorGUIUtility.IconContent("CollabCreate Icon").image);
+
+                    table.Q<EnumField>("TableMold").Init(table_list[index].TableMold);
+                    table.Q<EnumField>("TableMold").RegisterCallback<ChangeEvent<string>>((ent) =>
+                    {
+                        var mold = (TableMold)System.Enum.Parse(typeof(TableMold), ent.newValue);
+                        SetConfigMoldValue(index, mold);
+                        tablenames = table_list[index].TableMold == TableMold.Json? JsonTableNames : XmlTableNames;
+                        table.Q<DropdownField>("TableName").choices = tablenames;
+                        if (tablenames.Count > 0)
+                        {
+                            table.Q<DropdownField>("TableName").value = tablenames[0];
+                        }
+                    });
+                    
+                    tablenames = table_list[index].TableMold == TableMold.Json? JsonTableNames : XmlTableNames;
+                    table.Q<DropdownField>("TableName").choices = tablenames;
+                    table.Q<DropdownField>("TableName").value = tablenames[tablenames.IndexOf(table_list[index].TableName)];
+                    table.Q<DropdownField>("TableName").RegisterCallback<ChangeEvent<string>>((ent) =>
+                    {
+                        SetConfigNameValue(index, ent.newValue);
+                    });
+                    
+                    table.Q<Button>("btn_table_remove").clicked += () =>
+                    {
+                        RemoveTable(index);
+                        RefreshTableView(table_scroll_view);
+                    };
+                    table.Q<Button>("btn_table_add").clicked += () =>
+                    {
+                        AddTable();
+                        RefreshTableView(table_scroll_view);
+                    };
+                    table_scroll_view.Add(table);
+                }
+            }
+        }
+        private List<AppTable> GetAppTables()
         {
             config = Resources.Load<AppTableConfig>(configPath);
 
@@ -28,7 +89,7 @@ namespace AppFrame.Editor
             return config.AppTable;
         }
 
-        private static void GetTablePath()
+        private void GetTablePath()
         {
             string[] allPath = AssetDatabase.FindAssets("t:Script", new string[] { basePath });
             for (int i = 0; i < allPath.Length; i++)
@@ -46,7 +107,7 @@ namespace AppFrame.Editor
             }
         }
         
-        public static void AddTable()
+        private void AddTable()
         {
             AppTable appTable = new AppTable
             {
@@ -56,7 +117,7 @@ namespace AppFrame.Editor
             config.AppTable.Add(appTable);
         }
 
-        public static void RemoveTable(int index)
+        private void RemoveTable(int index)
         {
             if (config.AppTable.Count > 1)
             {
@@ -68,16 +129,16 @@ namespace AppFrame.Editor
             }
         }
 
-        public static void SetConfigNameValue(int index, string value)
+        private void SetConfigNameValue(int index, string value)
         {
             config.AppTable[index].TableName = value;
         }
-        public static void SetConfigMoldValue(int index, TableMold value)
+        private void SetConfigMoldValue(int index, TableMold value)
         {
             config.AppTable[index].TableMold = value;
         }
         
-        public static void ApplyConfig()
+        private void ApplyConfig()
         {
             EditorUtility.SetDirty(config);
             AssetDatabase.Refresh();

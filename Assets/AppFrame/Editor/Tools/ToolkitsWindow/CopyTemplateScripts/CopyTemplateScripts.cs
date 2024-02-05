@@ -1,13 +1,28 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace AppFrame.Editor
 {
-    public class CopyTemplateScripts
+    public class CopyTemplateScripts : IToolkitEditor
     {
-        public static void Copy(string copyToPath)
+        public void OnCreate(VisualElement root)
+        {
+            var unity_install_path = root.Q<TextField>("unity_install_path");
+            unity_install_path.value = AppDomain.CurrentDomain.BaseDirectory;
+            root.Q<Button>("unity_install_path_browse").clicked += () =>
+            {
+                unity_install_path.value = EditorTool.Browse(true);
+            };
+            root.Q<Button>("btn_copy_template").clicked += () =>
+            {
+                Copy(unity_install_path.value);
+            };
+        }
+        private void Copy(string copyToPath)
         {
             if (string.IsNullOrEmpty(copyToPath))
             {

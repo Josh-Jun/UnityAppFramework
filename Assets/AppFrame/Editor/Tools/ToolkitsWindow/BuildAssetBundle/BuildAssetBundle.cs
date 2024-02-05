@@ -12,29 +12,140 @@ using HybridCLR.Editor.Commands;
 using UnityEditor;
 using UnityEditor.Build.Content;
 using UnityEditor.Build.Pipeline;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.Build.Pipeline;
+using UnityEngine.UIElements;
 
 namespace AppFrame.Editor
 {
-    public class BuildAssetBundle
+    public class BuildAssetBundle : IToolkitEditor
     {
-        public static string outputPath;
-        public static string buildPath;
+        private string outputPath;
+        private string buildPath;
 
-        private static Dictionary<string, Dictionary<string, string>> moduleDic =
+        private Dictionary<string, Dictionary<string, string>> moduleDic =
             new Dictionary<string, Dictionary<string, string>>();
 
-        public static string des = "请输入本版更新描述";
+        private string des = "请输入本版更新描述";
 
-        private static AppConfig AppConfig; //App配置表 
-        private static string configPath = "AppConfig";
+        private AppConfig AppConfig; //App配置表 
+        private string configPath = "AppConfig";
 
-        private static string m_TmpBuildPath = "";
+        private string m_TmpBuildPath = "";
 
-        private static ABMold mold = ABMold.Hybrid;
+        private ABMold mold = ABMold.Hybrid;
 
-        public static void Init()
+        public void OnCreate(VisualElement root)
+        {
+            Init();
+            var build_target = root.Q<EnumField>("BuildTarget");
+            build_target.Init(BuildTarget.Android);
+
+            var build_path = root.Q<TextField>("BuildPath");
+            build_path.value = "Assets/Resources/HybridFolder";
+            root.Q<Button>("BuildPath_Browse").clicked += () =>
+            {
+                build_path.value = EditorTool.Browse();
+                buildPath = build_path.value;
+            };
+            var output_path = root.Q<TextField>("OutputPath");
+            output_path.value = Application.dataPath.Replace("Assets", "AssetBundle");
+            root.Q<Button>("OutputPath_Browse").clicked += () =>
+            {
+                output_path.value = EditorTool.Browse(true);
+                outputPath = output_path.value;
+            };
+            var res_version = root.Q<TextField>("ResVersion");
+            res_version.value = AppConfig.ResVersion;
+            res_version.RegisterCallback<ChangeEvent<string>>((evt) =>
+            {
+                AppConfig.ResVersion = evt.newValue;
+                EditorUtility.SetDirty(AppConfig);
+            });
+            var update_des = root.Q<TextField>("UpdateDes");
+            update_des.RegisterCallback<ChangeEvent<string>>((evt) =>
+            {
+                des = evt.newValue;
+            });
+
+            var folder_list = root.Q<ScrollView>("FolderList");
+            var label_page = root.Q<Label>("ListText");
+
+            RefreshAssetBundleList(folder_list, label_page);
+
+            var ab_mold = root.Q<EnumField>("ABMold");
+            ab_mold.RegisterCallback<ChangeEvent<string>>((evt) =>
+            {
+                var mold = (ABMold)System.Enum.Parse(typeof(ABMold), evt.newValue);
+                SetBuildPath(mold);
+                build_path.value = buildPath;
+                RefreshAssetBundleList(folder_list, label_page);
+                root.Q<Button>("BuildAndCopyDll").style.display =
+                    mold == ABMold.Hybrid ? DisplayStyle.Flex : DisplayStyle.None;
+            });
+            ab_mold.Init(ABMold.Hybrid);
+            ab_mold.value = ABMold.Hybrid;
+
+            root.Q<Button>("All").clicked += () =>
+            {
+                SelectList(true);
+                RefreshAssetBundleList(folder_list, label_page);
+            };
+            root.Q<Button>("NotAll").clicked += () =>
+            {
+                SelectList(false);
+                RefreshAssetBundleList(folder_list, label_page);
+            };
+
+            root.Q<Button>("BuildAndCopyDll").clicked += () =>
+            {
+                BuildAndCopyDll((BuildTarget)build_target.value);
+            };
+            root.Q<Button>("AutoBuildAllAssetBuildBundle").clicked += () =>
+            {
+                AutoBuildAssetBundle((BuildTarget)build_target.value);
+            };
+            root.Q<Button>("DeleteAllAssetBundle").clicked += () =>
+            {
+                DeleteAssetBundle((BuildTarget)build_target.value);
+            };
+            root.Q<Button>("RemoveAllAssetsBundleLabels").clicked += () =>
+            {
+                RemoveAllAssetBundleLabels();
+            };
+            root.Q<Button>("SetAllAssetBundleLabels").clicked += () =>
+            {
+                SetAssetBundleLabels();
+            };
+            root.Q<Button>("BuildAllAssetBuildBundle").clicked += () =>
+            {
+                BuildAllAssetBundles((BuildTarget)build_target.value);
+            };
+            root.Q<Button>("CreateMD5File").clicked += () =>
+            {
+                CreateMD5File((BuildTarget)build_target.value);
+            };
+        }
+        private void RefreshAssetBundleList(ScrollView folder_list, Label label_page)
+        {
+            folder_list.Clear();
+            for (int i = 0; i < m_DataList.Count; i++)
+            {
+                int index = i;
+                Toggle toggle = new Toggle(m_DataList[index]);
+                toggle.value = m_ExportList[index];
+                toggle.RegisterCallback<ChangeEvent<bool>>((ent) =>
+                {
+                    m_ExportList[index] = ent.newValue;
+                    label_page.text = $"打包 : {SelectCount()} / {m_ExportList.Count}";
+                });
+                folder_list.Add(toggle);
+            }
+
+            label_page.text = $"打包 : {SelectCount()} / {m_ExportList.Count}";
+        }
+        private void Init()
         {
             AppConfig = Resources.Load<AppConfig>(configPath);
 
@@ -42,32 +153,32 @@ namespace AppFrame.Editor
             outputPath = Application.dataPath.Replace("Assets", "AssetBundle");
         }
 
-        public static void SetBuildPath(ABMold mold)
+        private void SetBuildPath(ABMold mold)
         {
-            BuildAssetBundle.mold = mold;
+            this.mold = mold;
             buildPath = mold == ABMold.Hybrid
                 ? buildPath.Replace("AssetsFolder", "HybridFolder")
                 : buildPath.Replace("HybridFolder", "AssetsFolder");
             GetFolders_Layer1();
         }
 
-        public static void SelectList(bool value)
+        private void SelectList(bool value)
         {
             for (int i = 0; i < m_ExportList.Count; i++)
                 m_ExportList[i] = value;
         }
 
-        public static void SetResVersion(string ResVersion)
+        private void SetResVersion(string ResVersion)
         {
             AppConfig.ResVersion = ResVersion;
             EditorUtility.SetDirty(AppConfig);
         }
-        public static string GetResVersion()
+        private string GetResVersion()
         {
             return AppConfig.ResVersion;
         }
 
-        public static void AutoBuildAssetBundle(BuildTarget buildTarget)
+        private void AutoBuildAssetBundle(BuildTarget buildTarget)
         {
             if (mold == ABMold.Hybrid)
             {
@@ -86,7 +197,7 @@ namespace AppFrame.Editor
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
 
-        public static void CopyABToBuildVersion(BuildTarget buildTarget, string headPath)
+        private void CopyABToBuildVersion(BuildTarget buildTarget, string headPath)
         {
             string copyPath = GetCacheOutputPath(buildTarget);
             string targetPath = GetOutputPath(buildTarget, headPath);
@@ -103,7 +214,7 @@ namespace AppFrame.Editor
             EditorUtility.RevealInFinder(targetPath);
         }
 
-        public static void BuildAndCopyDll(BuildTarget buildTarget)
+        private void BuildAndCopyDll(BuildTarget buildTarget)
         {
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
             PrebuildCommand.GenerateAll();
@@ -112,13 +223,13 @@ namespace AppFrame.Editor
         }
 
 
-        private static void CopyDLLToSourceData(BuildTarget target)
+        private void CopyDLLToSourceData(BuildTarget target)
         {
             string targetDstDir = $"{Application.dataPath}/Resources/HybridFolder/App/Dll";
             CopyAOTAssembliesToSourceData(target, targetDstDir);
             CopyMyAssembliesToSourceData(target, targetDstDir);
         }
-        private static void CopyAOTAssembliesToSourceData(BuildTarget target, string targetDstDir)
+        private void CopyAOTAssembliesToSourceData(BuildTarget target, string targetDstDir)
         {
             string aotAssembliesSrcDir = SettingsUtil.GetAssembliesPostIl2CppStripDir(target);
             Directory.CreateDirectory(targetDstDir);
@@ -144,7 +255,7 @@ namespace AppFrame.Editor
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
 
-        private static void CopyMyAssembliesToSourceData(BuildTarget target, string targetDstDir)
+        private void CopyMyAssembliesToSourceData(BuildTarget target, string targetDstDir)
         {
             string aotAssembliesSrcDir = SettingsUtil.GetHotUpdateDllsOutputDirByTarget(target);
             Directory.CreateDirectory(targetDstDir);
@@ -170,7 +281,7 @@ namespace AppFrame.Editor
 
         #region 自动做标记
 
-        public static void RemoveAllAssetBundleLabels()
+        private void RemoveAllAssetBundleLabels()
         {
             moduleDic.Clear();
             var names = AssetDatabase.GetAllAssetBundleNames();
@@ -183,7 +294,7 @@ namespace AppFrame.Editor
         }
 
         //[MenuItem("AssetBundle/Set AssetBundle Labels(自动做标记)")]
-        public static void SetAssetBundleLabels()
+        private void SetAssetBundleLabels()
         {
             Init_SelectFolderDic();
 
@@ -234,7 +345,7 @@ namespace AppFrame.Editor
         /// </summary>
         /// <param name="fileSystemInfo">文件</param>
         /// <param name="sceneName">场景名字</param>
-        public static void OnSceneFileSystemInfo(FileSystemInfo fileSystemInfo, string sceneName,
+        private void OnSceneFileSystemInfo(FileSystemInfo fileSystemInfo, string sceneName,
             Dictionary<string, string> namePathDic)
         {
             if (!fileSystemInfo.Exists)
@@ -268,7 +379,7 @@ namespace AppFrame.Editor
         /// <summary>
         /// 5. 找到文件 ，就要修改它的 AssetBundle Labels ;
         /// </summary>
-        public static void SetLabels(FileInfo fileInfo, string sceneName, Dictionary<string, string> namePathDic)
+        private void SetLabels(FileInfo fileInfo, string sceneName, Dictionary<string, string> namePathDic)
         {
             // Unity自身产生的 .meta文件 不用去读 ；
             if (fileInfo.Extension == ".meta")
@@ -306,7 +417,7 @@ namespace AppFrame.Editor
         /// </summary>
         /// <param name="fileInfo"></param>
         /// <param name="sceneName"></param>
-        public static string GetBundleName(FileInfo fileInfo, string sceneName)
+        private string GetBundleName(FileInfo fileInfo, string sceneName)
         {
             var bundleName = "";
             // windows 全路径 \ 
@@ -357,7 +468,7 @@ namespace AppFrame.Editor
         #region 打包
         
         //[MenuItem("AssetBundle/BuildAllAssetBundle(一键打包)")]
-        public static void BuildAllAssetBundles(BuildTarget buildTarget)
+        private void BuildAllAssetBundles(BuildTarget buildTarget)
         {
             string outPath = GetCacheOutputPath(buildTarget);
             if (!FileTools.FolderExist(outPath))
@@ -387,7 +498,7 @@ namespace AppFrame.Editor
             }
         }
 
-        public static CompatibilityAssetBundleManifest ScriptableBuildAssetBundles(string outputPath, bool forceRebuild,
+        private CompatibilityAssetBundleManifest ScriptableBuildAssetBundles(string outputPath, bool forceRebuild,
             bool useChunkBasedCompression,
             BuildTarget buildTarget)
         {
@@ -413,7 +524,7 @@ namespace AppFrame.Editor
         #region 删除
 
         //[MenuItem("AssetBundle/DeleteAllAssetBundle(一键删除)")]
-        public static void DeleteAssetBundle(BuildTarget buildTarget)
+        private void DeleteAssetBundle(BuildTarget buildTarget)
         {
             string outPath = GetCacheOutputPath(buildTarget);
             if (!FileTools.FolderExist(outPath))
@@ -430,10 +541,10 @@ namespace AppFrame.Editor
 
         #region 生成MD5文件
 
-        private static CompatibilityAssetBundleManifest ScriptableAssetBundleManifest = null;
-        private static AssetBundleManifest AssetBundleManifest = null;
+        private CompatibilityAssetBundleManifest ScriptableAssetBundleManifest = null;
+        private AssetBundleManifest AssetBundleManifest = null;
         //[MenuItem("AssetBundle/CreateMD5File(生成MD5文件)")]
-        public static void CreateMD5File(BuildTarget buildTarget)
+        private void CreateMD5File(BuildTarget buildTarget)
         {
             string outPath = GetCacheOutputPath(buildTarget);
             string filePath = outPath + "/AssetBundleConfig.json";
@@ -484,7 +595,7 @@ namespace AppFrame.Editor
         /// </summary>
         /// <param name="fileSystemInfo"></param>
         /// <param name="list"></param>
-        public static void ListFiles(FileSystemInfo fileSystemInfo, ref List<string> list)
+        private void ListFiles(FileSystemInfo fileSystemInfo, ref List<string> list)
         {
             if (fileSystemInfo.Extension == ".meta")
                 return;
@@ -511,7 +622,7 @@ namespace AppFrame.Editor
         /// </summary>
         /// <param name="fileSystemInfo"></param>
         /// <param name="list"></param>
-        public static void ListFiles(FileSystemInfo fileSystemInfo, ref List<FileInfo> list)
+        private void ListFiles(FileSystemInfo fileSystemInfo, ref List<FileInfo> list)
         {
             if (fileSystemInfo.Extension == ".meta")
                 return;
@@ -537,7 +648,7 @@ namespace AppFrame.Editor
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public static string GetFileMD5(string filePath)
+        private string GetFileMD5(string filePath)
         {
             FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
 
@@ -559,24 +670,24 @@ namespace AppFrame.Editor
 
         #endregion
 
-        private static string GetCacheOutputPath(BuildTarget buildTarget)
+        private string GetCacheOutputPath(BuildTarget buildTarget)
         {
             // OutputPath > 项目目录/AssetBundle/{buildTarget}/{Application.version}/{AppConfig.ResVersion}/{mold}
             // OutputPath > 项目目录/AssetBundle/BuildABCache/{mold}/{buildTarget}
             return $"{Application.dataPath.Replace("Assets", "AssetBundle/BuildABCache")}/{mold}/{buildTarget}";
         }
-        private static string GetOutputPath(BuildTarget buildTarget, string headPath)
+        private string GetOutputPath(BuildTarget buildTarget, string headPath)
         {
             // OutputPath > 项目目录/AssetBundle/{buildTarget}/{Application.version}/{AppConfig.ResVersion}/{mold}
             // OutputPath > 项目目录/AssetBundle/BuildABCache/{mold}/{buildTarget}
             return $"{headPath}/{buildTarget}/{Application.version}/{AppConfig.ResVersion}/{mold}";
         }
 
-        public static List<bool> m_ExportList = new List<bool>();
-        public static List<string> m_DataList = new List<string>();
-        public static Dictionary<string, bool> m_SelectFolderDic = new Dictionary<string, bool>();
+        public List<bool> m_ExportList = new List<bool>();
+        public List<string> m_DataList = new List<string>();
+        public Dictionary<string, bool> m_SelectFolderDic = new Dictionary<string, bool>();
 
-        public static void Init_SelectFolderDic()
+        public void Init_SelectFolderDic()
         {
             m_SelectFolderDic.Clear();
             for (int i = 0; i < m_ExportList.Count; i++)
@@ -586,7 +697,7 @@ namespace AppFrame.Editor
             }
         }
 
-        public static void GetFolders_Layer1()
+        private void GetFolders_Layer1()
         {
             if (m_TmpBuildPath == "" || m_TmpBuildPath != buildPath)
             {
@@ -603,7 +714,7 @@ namespace AppFrame.Editor
             }
         }
 
-        public static int SelectCount()
+        private int SelectCount()
         {
             int selectCount = 0;
             for (int i = 0; i < m_ExportList.Count; i++)
