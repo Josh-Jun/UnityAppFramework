@@ -11,25 +11,25 @@ namespace Modules.#NAMESPACE#
         protected override void InitView()
         {
             base.InitView();
-			#NOTRIM#
+            #NOTRIM#
         }
 
         protected override void RegisterEvent()
         {
             base.RegisterEvent();
-			#NOTRIM#
+            #NOTRIM#
         }
 
         protected override void OpenView()
         {
             base.OpenView();
-			#NOTRIM#
+            #NOTRIM#
         }
 
         protected override void CloseView()
         {
             base.CloseView();
-			#NOTRIM#
+            #NOTRIM#
         }
     }
 }

@@ -12,15 +12,15 @@ namespace Modules.#NAMESPACE#
         
         public #SCRIPTNAME#()
         {
-			#NOTRIM#
+            #NOTRIM#
         }
         public void Begin()
         {
-			#NOTRIM#
+            #NOTRIM#
         }
         public void End()
         {
-			#NOTRIM#
+            #NOTRIM#
         }
         public void AppPause(bool pause)
         {
