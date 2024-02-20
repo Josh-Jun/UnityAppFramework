@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:VisualElement style="flex-direction: row; justify-content: flex-start; min-width: auto; margin-left: 0; margin-right: 0; margin-top: 0; background-color: rgb(56, 56, 56);">
+        <ui:Label text="1" display-tooltip-when-elided="true" name="Count" style="-unity-text-align: middle-left; white-space: nowrap; margin-left: 10px; margin-right: 5px; flex-direction: row; align-items: center; justify-content: flex-start; padding-left: 0; padding-right: 0; max-width: 50px; min-width: 50px;" />
+        <ui:DropdownField index="-1" choices="System.Collections.Generic.List`1[System.String]" name="UIPath" style="min-width: 120px; max-width: 120px; -unity-text-align: middle-left; align-items: center; justify-content: center; white-space: nowrap;" />
+        <ui:DropdownField index="-1" choices="System.Collections.Generic.List`1[System.String]" name="UIComponent" style="min-width: 200px; max-width: 200px; -unity-text-align: middle-left; align-items: center; justify-content: center; white-space: nowrap;" />
+        <ui:VisualElement style="flex-direction: row; -unity-text-align: middle-center; white-space: normal; align-items: center; max-width: 100px; min-width: 100px;">
+            <ui:Button display-tooltip-when-elided="true" name="btn_remove" enable-rich-text="true" focusable="true" style="cursor: initial; visibility: visible; display: flex; opacity: 1; margin-left: 2px; margin-right: 2px; margin-top: 1px; margin-bottom: 1px; padding-left: 1px; padding-right: 1px; width: 18px; height: 18px; font-size: 12px; -unity-font-style: normal; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; background-color: rgba(88, 88, 88, 0);" />
+            <ui:Button display-tooltip-when-elided="true" name="btn_add" enable-rich-text="true" focusable="true" usage-hints="None" style="margin-left: 2px; margin-right: 2px; margin-top: 1px; margin-bottom: 1px; padding-left: 1px; padding-right: 1px; width: 18px; height: 18px; -unity-font-style: bold; font-size: 20px; -unity-text-align: middle-center; white-space: nowrap; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; background-color: rgba(88, 88, 88, 0);" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
