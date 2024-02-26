@@ -35,7 +35,7 @@ namespace AppFrame.Editor
 
         public void CreateGUI()
         {
-            itemsName = GetItemsName();
+            itemsName = EditorTool.GetToolkitNames();
             stamp = PlayerPrefs.HasKey(STAMP_KEY) ? PlayerPrefs.GetInt(STAMP_KEY) : 0;
             // Each editor window contains a root VisualElement object
             root = rootVisualElement;
@@ -70,23 +70,8 @@ namespace AppFrame.Editor
                 IToolkitEditor editor = EditorTool.GetEditor(itemsName[i]);
                 editor.OnCreate(root);
             }
-        }
 
-        private string[] GetItemsName()
-        {
-            List<string> list = new List<string>();
-            DirectoryInfo directoryInfo = new DirectoryInfo(EditorTool.BaseDataPath);
-            DirectoryInfo[] directory = directoryInfo.GetDirectories("*");
-            foreach (var info in directory)
-            {
-                var files = info.GetFiles("*.cs");
-                if (files.Length > 0)
-                {
-                    var filename = Path.GetFileNameWithoutExtension(files[0].FullName);
-                    list.Add(filename);
-                }
-            }
-            return list.ToArray();
+            EditorTool.GetToolkitNames();
         }
 
         private void OnItemsChosen(IEnumerable<int> objs)

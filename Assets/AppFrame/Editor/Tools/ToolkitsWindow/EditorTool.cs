@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -13,10 +14,12 @@ namespace AppFrame.Editor
     {
         void OnCreate(VisualElement root);
     }
+
     public class EditorTool
     {
         public const string BasePath = "AppFrame/Editor/Tools/ToolkitsWindow";
         public const string BaseDataPath = "Assets/AppFrame/Editor/Tools/ToolkitsWindow";
+
         public static string Browse(bool isFullPath = false)
         {
             var newPath = EditorUtility.OpenFolderPanel("Browse Folder", Application.dataPath, string.Empty);
@@ -33,7 +36,7 @@ namespace AppFrame.Editor
 
             return newPath;
         }
-        
+
         public static void Copy(string from, string to, string extension)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(from);
@@ -46,12 +49,28 @@ namespace AppFrame.Editor
                 }
             }
         }
+
         public static IToolkitEditor GetEditor(string scriptName)
         {
             Assembly assembly = Assembly.Load("App.Frame.Editor");
             Type type = assembly.GetType($"AppFrame.Editor.{scriptName}");
             var obj = Activator.CreateInstance(type); //创建此类型实例
             return obj as IToolkitEditor;
+        }
+
+        public static string[] GetToolkitNames()
+        {
+            Assembly assembly = Assembly.Load("App.Frame.Editor");
+            var types = assembly.GetTypes();
+            var names = new List<string>();
+            for (int i = 0; i < types.Length; i++)
+            {
+                if (types[i].IsDefined(typeof(CompilerGeneratedAttribute), false)) continue;
+                if (types[i].GetInterface("IToolkitEditor") == null) continue;
+                names.Add(types[i].Name);
+            }
+
+            return names.ToArray();
         }
 
         public static T GetEditorAsset<T>(string path) where T : ScriptableObject
