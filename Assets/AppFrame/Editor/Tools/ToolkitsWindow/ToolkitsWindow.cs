@@ -70,8 +70,6 @@ namespace AppFrame.Editor
                 IToolkitEditor editor = EditorTool.GetEditor(itemsName[i]);
                 editor.OnCreate(root);
             }
-
-            EditorTool.GetToolkitNames();
         }
 
         private void OnItemsChosen(IEnumerable<int> objs)
