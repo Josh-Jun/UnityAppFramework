@@ -26,17 +26,14 @@ namespace AppFrame.Editor
 
         private List<UIViewData> uiViewDatas = new List<UIViewData>();
 
-        private string templetPath =
-            "AppFrame/Editor/Tools/ToolkitsWindow/BuildUIViewScript/ui_view_script_templet.txt";
+        private string templetPath = $"{EditorTool.BasePath}/BuildUIViewScript/ui_view_script_templet.txt";
 
         private string viewScriptPath = "AppMain/Scripts/Modules/";
 
         public void OnCreate(VisualElement root)
         {
             //获取item
-            uiGameObject =
-                AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(
-                    $"Assets/AppFrame/Editor/Tools/ToolkitsWindow/BuildUIViewScript/view_item.uxml");
+            uiGameObject = EditorTool.GetEditorAsset<VisualTreeAsset>($"BuildUIViewScript/view_item.uxml");
             //获取根节点Foldout，并隐藏
             rootFoldout = root.Q<Foldout>("UIView");
             rootFoldout.style.display = DisplayStyle.None;

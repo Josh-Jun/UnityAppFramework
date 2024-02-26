@@ -13,7 +13,6 @@ namespace AppFrame.Editor
 {
     public class ToolkitsWindow : EditorWindow
     {
-        private const string basePath = "Assets/AppFrame/Editor/Tools/ToolkitsWindow";
         private VisualElement root;
         private ListView leftListView;
         private Label view_title;
@@ -42,7 +41,7 @@ namespace AppFrame.Editor
             root = rootVisualElement;
 
             // Import UXML
-            var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>($"{basePath}/ToolkitsWindow.uxml");
+            var visualTree = EditorTool.GetEditorAsset<VisualTreeAsset>($"ToolkitsWindow.uxml");
             visualTree.CloneTree(root);
 
             infos = root.Q<ScrollView>("infos");
@@ -52,8 +51,7 @@ namespace AppFrame.Editor
             var right = root.Q<VisualElement>("right");
             for (int i = 0; i < itemsName.Length; i++)
             {
-                var viewItem =
-                    AssetDatabase.LoadAssetAtPath<VisualTreeAsset>($"{basePath}/{itemsName[i]}/{itemsName[i]}.uxml");
+                var viewItem = EditorTool.GetEditorAsset<VisualTreeAsset>($"{itemsName[i]}/{itemsName[i]}.uxml");
                 var view = viewItem.CloneTree();
                 view.style.display = DisplayStyle.None;
                 viewElements.Add(view);
@@ -77,7 +75,7 @@ namespace AppFrame.Editor
         private string[] GetItemsName()
         {
             List<string> list = new List<string>();
-            DirectoryInfo directoryInfo = new DirectoryInfo(basePath);
+            DirectoryInfo directoryInfo = new DirectoryInfo(EditorTool.BaseDataPath);
             DirectoryInfo[] directory = directoryInfo.GetDirectories("*");
             foreach (var info in directory)
             {

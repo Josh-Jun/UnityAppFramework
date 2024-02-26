@@ -8,8 +8,6 @@ using UnityEngine.Video;
 using System.Threading.Tasks;
 using App;
 using AppFrame.Data;
-using AppFrame.Data.Json;
-using AppFrame.Data.Xml;
 using AppFrame.Info;
 using AppFrame.Interface;
 using AppFrame.Manager;
@@ -44,7 +42,6 @@ namespace Modules.Test
             // mobile = new RenderTexture(Screen.width, Screen.height, 32);
             // window.SetMobileCamera(mobile);
             view.PlayGif();
-            Log.I(TableManager.Instance.GetTable<UserDataJson>("UserDataJson").UserData[0].NickName);
             RunTest();
         }
 
@@ -97,7 +94,7 @@ namespace Modules.Test
             VideoManager.Instance.PlayVideo(null, video); //播放视频
             VideoManager.Instance.PlayVideo(null, "视频地址", () => { }); //播放视频
             //获取配置表
-            TableManager.Instance.GetTable<UserDataJson>(""); //获取配置表
+            // TableManager.Instance.GetTable<UserDataJson>(""); //获取配置表
             //时间任务
             int timeid1 = -1;
             timeid1 = TimeUpdateManager.Instance.StartTimer((time) => { }); //一直执行 相当于Update

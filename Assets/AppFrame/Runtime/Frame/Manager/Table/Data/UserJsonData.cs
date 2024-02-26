@@ -4,12 +4,12 @@ using System.Collections.Generic;
 namespace AppFrame.Data.Json
 {
     [System.Serializable]
-    public class UserDataJson
+    public class UserJsonData
     {
-        public List<UserData> UserData = new List<UserData>();
+        public List<User> User = new List<User>();
     }
     [System.Serializable]
-    public class UserData
+    public class User
     {
         public int UserId;
         public long PhoneNumber;

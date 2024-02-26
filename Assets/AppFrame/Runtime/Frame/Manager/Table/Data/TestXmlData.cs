@@ -5,13 +5,13 @@ using System.Xml.Serialization;
 namespace AppFrame.Data.Xml
 {
     [System.Serializable]
-    public class UserDataXml
+    public class TestXmlData
     {
-        [XmlElement("UserData")]
-        public List<UserData> UserData = new List<UserData>();
+        [XmlElement("Test")]
+        public List<Test> Test = new List<Test>();
     }
     [System.Serializable]
-    public class UserData
+    public class Test
     {
         [XmlAttribute("UserId")]
         public int UserId;

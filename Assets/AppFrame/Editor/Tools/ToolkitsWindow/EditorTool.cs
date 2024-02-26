@@ -15,6 +15,8 @@ namespace AppFrame.Editor
     }
     public class EditorTool
     {
+        public const string BasePath = "AppFrame/Editor/Tools/ToolkitsWindow";
+        public const string BaseDataPath = "Assets/AppFrame/Editor/Tools/ToolkitsWindow";
         public static string Browse(bool isFullPath = false)
         {
             var newPath = EditorUtility.OpenFolderPanel("Browse Folder", Application.dataPath, string.Empty);
@@ -50,6 +52,11 @@ namespace AppFrame.Editor
             Type type = assembly.GetType($"AppFrame.Editor.{scriptName}");
             var obj = Activator.CreateInstance(type); //创建此类型实例
             return obj as IToolkitEditor;
+        }
+
+        public static T GetEditorAsset<T>(string path) where T : ScriptableObject
+        {
+            return AssetDatabase.LoadAssetAtPath<T>($"{BaseDataPath}/{path}");
         }
     }
 }

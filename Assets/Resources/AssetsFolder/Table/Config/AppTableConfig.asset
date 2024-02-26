@@ -12,8 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3da822e5aac9c524cab0d6f22b011894, type: 3}
   m_Name: AppTableConfig
   m_EditorClassIdentifier: 
-  AppTable:
-  - TableName: UserDataJson
-    TableMold: 0
-  - TableName: UserDataXml
-    TableMold: 1
+  AppTable: []

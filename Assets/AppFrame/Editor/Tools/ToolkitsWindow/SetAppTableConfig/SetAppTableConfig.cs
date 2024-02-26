@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 using AppFrame.Config;
 using AppFrame.Enum;
+using AppFrame.Tools;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -13,134 +15,248 @@ using UnityEngine.UIElements;
 
 namespace AppFrame.Editor
 {
+    public class TableData
+    {
+        public string tableName;
+        public TableMold tableMold;
+        public ExcelData excelData;
+    }
     public class SetAppTableConfig : IToolkitEditor
     {
         private AppTableConfig config = null;
         private const string configPath = "AssetsFolder/Table/Config/AppTableConfig";
-        private List<string> XmlTableNames = new List<string>();
-        private List<string> JsonTableNames = new List<string>();
         
-        private string basePath = "Assets/AppFrame/Runtime/Frame/Manager/Table/Data/";
+        private string basePath = "AppFrame/Runtime/Frame/Manager/Table/Data/";
+        
+        private string excelPath = $"{Application.dataPath.Replace("Assets", "")}Data/excel";
+        
+        private List<TableData> tableDatas = new List<TableData>();
+        
         public void OnCreate(VisualElement root)
         {
             var table_scroll_view = root.Q<ScrollView>("table_scroll_view");
-            RefreshTableView(table_scroll_view);
+            config = Resources.Load<AppTableConfig>(configPath);
+            InitTableView(table_scroll_view);
+            
             root.Q<Button>("btn_table_apply").clicked += ApplyConfig;
         }
-        private void RefreshTableView(ScrollView table_scroll_view)
+
+        private void InitTableView(ScrollView table_scroll_view)
         {
-            var table_list = GetAppTables();
+            tableDatas = GetTableDatas();
 
-            if (table_list.Count > 0)
+            for (int i = 0; i < tableDatas.Count; i++)
             {
-                table_scroll_view.Clear();
-                for (int i = 0; i < table_list.Count; i++)
+                int index = i;
+                var tableEnumField = new EnumField(tableDatas[index].tableMold){ label = $"{tableDatas[index].tableName}" };
+                tableEnumField.RegisterCallback<ChangeEvent<string>>((ent) =>
                 {
-                    int index = i;
-                    var tableItem = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>($"Assets/AppFrame/Editor/Tools/ToolkitsWindow/SetAppTableConfig/table_item.uxml");
-                    VisualElement table = tableItem.CloneTree();
-                    List<string> tablenames = new List<string>();
-                    table.Q<Button>("btn_table_remove").style.backgroundImage =
-                        new StyleBackground((Texture2D)EditorGUIUtility.IconContent("CollabDeleted Icon").image);
-                    table.Q<Button>("btn_table_add").style.backgroundImage =
-                        new StyleBackground((Texture2D)EditorGUIUtility.IconContent("CollabCreate Icon").image);
+                    var mold = (TableMold)System.Enum.Parse(typeof(TableMold), ent.newValue);
+                    tableDatas[index].tableMold = mold;
+                });
+                table_scroll_view.Add(tableEnumField);
+            }
+        }
 
-                    table.Q<EnumField>("TableMold").Init(table_list[index].TableMold);
-                    table.Q<EnumField>("TableMold").RegisterCallback<ChangeEvent<string>>((ent) =>
+        private List<TableData> GetTableDatas()
+        {
+            List<TableData> datas = new List<TableData>();
+            DirectoryInfo directoryInfo = new DirectoryInfo(excelPath);
+            FileInfo[] fileInfos = directoryInfo.GetFiles();
+            foreach (FileInfo fileInfo in fileInfos)
+            {
+                if (fileInfo.Extension.Equals(".xlsx"))
+                {
+                    var excelDatas = ExcelTools.ReadExcel($"{excelPath}/{fileInfo.Name}");
+                    for (int j = 0; j < excelDatas.Count; j++)
                     {
-                        var mold = (TableMold)System.Enum.Parse(typeof(TableMold), ent.newValue);
-                        SetConfigMoldValue(index, mold);
-                        tablenames = table_list[index].TableMold == TableMold.Json? JsonTableNames : XmlTableNames;
-                        table.Q<DropdownField>("TableName").choices = tablenames;
-                        if (tablenames.Count > 0)
+                        ExcelData excel = excelDatas[j];
+                        if (excel.sheetName.Contains("#")) continue;
+                        TableData tableData = new TableData()
                         {
-                            table.Q<DropdownField>("TableName").value = tablenames[0];
-                        }
-                    });
-                    
-                    tablenames = table_list[index].TableMold == TableMold.Json? JsonTableNames : XmlTableNames;
-                    table.Q<DropdownField>("TableName").choices = tablenames;
-                    table.Q<DropdownField>("TableName").value = tablenames[tablenames.IndexOf(table_list[index].TableName)];
-                    table.Q<DropdownField>("TableName").RegisterCallback<ChangeEvent<string>>((ent) =>
-                    {
-                        SetConfigNameValue(index, ent.newValue);
-                    });
-                    
-                    table.Q<Button>("btn_table_remove").clicked += () =>
-                    {
-                        RemoveTable(index);
-                        RefreshTableView(table_scroll_view);
-                    };
-                    table.Q<Button>("btn_table_add").clicked += () =>
-                    {
-                        AddTable();
-                        RefreshTableView(table_scroll_view);
-                    };
-                    table_scroll_view.Add(table);
+                            tableName = excel.sheetName,
+                            tableMold = TableMold.Json,
+                            excelData = excel
+                        };
+                        datas.Add(tableData);
+                    }
                 }
             }
-        }
-        private List<AppTable> GetAppTables()
-        {
-            config = Resources.Load<AppTableConfig>(configPath);
-
-            GetTablePath();
-            
-            return config.AppTable;
-        }
-
-        private void GetTablePath()
-        {
-            string[] allPath = AssetDatabase.FindAssets("t:Script", new string[] { basePath });
-            for (int i = 0; i < allPath.Length; i++)
-            {
-                string assetPath = AssetDatabase.GUIDToAssetPath(allPath[i]);
-                var filename = Path.GetFileNameWithoutExtension(assetPath);
-                if (filename.Contains("Xml"))
-                {
-                    XmlTableNames.Add(filename);
-                }
-                else if (filename.Contains("Json"))
-                {
-                    JsonTableNames.Add(filename);
-                }
-            }
-        }
-        
-        private void AddTable()
-        {
-            AppTable appTable = new AppTable
-            {
-                TableName = "TestTableData",
-                TableMold = TableMold.Json,
-            };
-            config.AppTable.Add(appTable);
-        }
-
-        private void RemoveTable(int index)
-        {
-            if (config.AppTable.Count > 1)
-            {
-                config.AppTable.RemoveAt(index);
-            }
-            else
-            {
-                ToolkitsWindow.ShowHelpBox("不能删除最后一个Table");
-            }
-        }
-
-        private void SetConfigNameValue(int index, string value)
-        {
-            config.AppTable[index].TableName = value;
-        }
-        private void SetConfigMoldValue(int index, TableMold value)
-        {
-            config.AppTable[index].TableMold = value;
+            return datas;
         }
         
         private void ApplyConfig()
         {
+            config.AppTable.Clear();
+            for (int i = 0; i < tableDatas.Count; i++)
+            {
+                var data = tableDatas[i];
+                switch (data.tableMold)
+                {
+                    case TableMold.Json:
+                        CreateJsonCSharp(data.excelData);
+                        CreateJsonConfig(data.excelData);
+                        break;
+                    case TableMold.Xml:
+                        CreateXmlCSharp(data.excelData);
+                        CreateXmlConfig(data.excelData);
+                        break;
+                }
+
+                var appTable = new AppTable()
+                {
+                    TableName = $"{data.tableName}{data.tableMold}Data",
+                    TableMold = data.tableMold
+                };
+                config.AppTable.Add(appTable);
+            }
             EditorUtility.SetDirty(config);
+            AssetDatabase.Refresh();
+        }
+        
+        private void CreateJsonCSharp(ExcelData data)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine("using System;");
+            stringBuilder.AppendLine("using System.Collections.Generic;");
+            stringBuilder.AppendLine("");
+            stringBuilder.AppendLine("namespace AppFrame.Data.Json");
+            stringBuilder.AppendLine("{");
+            stringBuilder.AppendLine($"    [System.Serializable]");
+            stringBuilder.AppendLine($"    public class {data.sheetName}JsonData");
+            stringBuilder.AppendLine("    {");
+
+            stringBuilder.AppendLine($"        public List<{data.sheetName}> {data.sheetName} = new List<{data.sheetName}>();");
+
+            stringBuilder.AppendLine("    }");
+
+            stringBuilder.AppendLine($"    [System.Serializable]");
+            stringBuilder.AppendLine($"    public class {data.sheetName}");
+            stringBuilder.AppendLine("    {");
+
+            for (int c = 2; c < data.datas.GetLength(1); c++)
+            {
+                stringBuilder.AppendLine($"        public {data.datas[3,c]} {data.datas[2,c]};");
+            }
+
+            stringBuilder.AppendLine("    }");
+            stringBuilder.Append("}");
+
+            string output = string.Format("{0}/AppFrame/Runtime/Frame/Manager/Table/Data/{1}JsonData.cs", Application.dataPath, data.sheetName);
+            FileStream fs1 = new FileStream(output, FileMode.Create, FileAccess.Write);
+            StreamWriter sw = new StreamWriter(fs1);
+            sw.WriteLine(stringBuilder.ToString()); //开始写入值
+            sw.Close();
+            fs1.Close();
+
+            AssetDatabase.Refresh();
+        }
+
+        private void CreateJsonConfig(ExcelData data)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine("{");
+            stringBuilder.AppendLine($"  \"{data.sheetName}\": [");
+
+            for (int r = 4; r < data.datas.GetLength(0); r++)
+            {
+                stringBuilder.AppendLine("    {");
+                for (int c = 2; c < data.datas.GetLength(1); c++)
+                {
+                    string str = c == data.datas.GetLength(1) - 1 ? "" : ",";
+                    if (data.datas[3, c].ToString() == "string")
+                    {
+                        stringBuilder.AppendLine($"      \"{data.datas[2,c]}\": \"{data.datas[r,c]}\"{str}");
+                    }
+                    else
+                    {
+                        stringBuilder.AppendLine($"      \"{data.datas[2,c]}\": {data.datas[r,c]}{str}");
+                    }
+                }
+                string _str = r == data.datas.GetLength(0) - 1 ? "    }" : "    },";
+                stringBuilder.AppendLine(_str);
+            }
+
+            stringBuilder.AppendLine("  ]");
+            
+            stringBuilder.Append("}");
+
+            string output = string.Format("{0}/Resources/AssetsFolder/Table/Json/{1}JsonData.json", Application.dataPath, data.sheetName);
+            FileStream fs1 = new FileStream(output, FileMode.Create, FileAccess.Write);
+            StreamWriter sw = new StreamWriter(fs1);
+            sw.WriteLine(stringBuilder.ToString()); //开始写入值
+            sw.Close();
+            fs1.Close();
+
+            AssetDatabase.Refresh();
+        }
+
+        private void CreateXmlConfig(ExcelData data)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+            stringBuilder.AppendLine($"<{data.sheetName}XmlData>");
+
+            for (int r = 4; r < data.datas.GetLength(0); r++)
+            {
+                stringBuilder.Append($"    <{data.sheetName}");
+                for (int c = 2; c < data.datas.GetLength(1); c++)
+                {
+                    stringBuilder.Append($" {data.datas[2,c]}=\"{data.datas[r,c]}\"");
+                }
+                stringBuilder.AppendLine($"></{data.sheetName}>");
+            }
+
+            stringBuilder.Append($"</{data.sheetName}XmlData>");
+
+            string output = string.Format("{0}/Resources/AssetsFolder/Table/Xml/{1}XmlData.xml", Application.dataPath, data.sheetName);
+            FileStream fs1 = new FileStream(output, FileMode.Create, FileAccess.Write);
+            StreamWriter sw = new StreamWriter(fs1);
+            sw.WriteLine(stringBuilder.ToString()); //开始写入值
+            sw.Close();
+            fs1.Close();
+
+            AssetDatabase.Refresh();
+        }
+        
+        private void CreateXmlCSharp(ExcelData data)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine("using System;");
+            stringBuilder.AppendLine("using System.Collections.Generic;");
+            stringBuilder.AppendLine("using System.Xml.Serialization;");
+            stringBuilder.AppendLine("");
+            stringBuilder.AppendLine("namespace AppFrame.Data.Xml");
+            stringBuilder.AppendLine("{");
+            stringBuilder.AppendLine($"    [System.Serializable]");
+            stringBuilder.AppendLine($"    public class {data.sheetName}XmlData");
+            stringBuilder.AppendLine("    {");
+
+            stringBuilder.AppendLine($"        [XmlElement(\"{data.sheetName}\")]");
+            stringBuilder.AppendLine($"        public List<{data.sheetName}> {data.sheetName} = new List<{data.sheetName}>();");
+
+            stringBuilder.AppendLine("    }");
+
+            stringBuilder.AppendLine($"    [System.Serializable]");
+            stringBuilder.AppendLine($"    public class {data.sheetName}");
+            stringBuilder.AppendLine("    {");
+
+            for (int c = 2; c < data.datas.GetLength(1); c++)
+            {
+                stringBuilder.AppendLine($"        [XmlAttribute(\"{data.datas[2,c]}\")]");
+                stringBuilder.AppendLine($"        public {data.datas[3,c]} {data.datas[2,c]};");
+            }
+
+            stringBuilder.AppendLine("    }");
+            stringBuilder.Append("}");
+
+            string output = string.Format("{0}/AppFrame/Runtime/Frame/Manager/Table/Data/{1}XmlData.cs", Application.dataPath, data.sheetName);
+            FileStream fs1 = new FileStream(output, FileMode.Create, FileAccess.Write);
+            StreamWriter sw = new StreamWriter(fs1);
+            sw.WriteLine(stringBuilder.ToString()); //开始写入值
+            sw.Close();
+            fs1.Close();
+
             AssetDatabase.Refresh();
         }
     }
