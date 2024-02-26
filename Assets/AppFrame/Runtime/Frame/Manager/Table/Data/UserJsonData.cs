@@ -6,7 +6,7 @@ namespace AppFrame.Data.Json
     [System.Serializable]
     public class UserJsonData
     {
-        public List<User> User = new List<User>();
+        public List<User> Users = new List<User>();
     }
     [System.Serializable]
     public class User

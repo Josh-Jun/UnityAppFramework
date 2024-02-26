@@ -148,8 +148,6 @@ namespace AppFrame.Editor
             sw.WriteLine(stringBuilder.ToString()); //开始写入值
             sw.Close();
             fs1.Close();
-
-            AssetDatabase.Refresh();
         }
 
         private void CreateJsonConfig(ExcelData data)
@@ -187,8 +185,6 @@ namespace AppFrame.Editor
             sw.WriteLine(stringBuilder.ToString()); //开始写入值
             sw.Close();
             fs1.Close();
-
-            AssetDatabase.Refresh();
         }
 
         private void CreateXmlConfig(ExcelData data)
@@ -215,8 +211,6 @@ namespace AppFrame.Editor
             sw.WriteLine(stringBuilder.ToString()); //开始写入值
             sw.Close();
             fs1.Close();
-
-            AssetDatabase.Refresh();
         }
         
         private void CreateXmlCSharp(ExcelData data)
@@ -256,8 +250,6 @@ namespace AppFrame.Editor
             sw.WriteLine(stringBuilder.ToString()); //开始写入值
             sw.Close();
             fs1.Close();
-
-            AssetDatabase.Refresh();
         }
     }
 }

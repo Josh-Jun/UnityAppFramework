@@ -8,7 +8,7 @@ namespace AppFrame.Data.Xml
     public class TestXmlData
     {
         [XmlElement("Test")]
-        public List<Test> Test = new List<Test>();
+        public List<Test> Tests = new List<Test>();
     }
     [System.Serializable]
     public class Test
