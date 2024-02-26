@@ -126,7 +126,7 @@ namespace AppFrame.Editor
             stringBuilder.AppendLine($"    public class {data.sheetName}JsonData");
             stringBuilder.AppendLine("    {");
 
-            stringBuilder.AppendLine($"        public List<{data.sheetName}> {data.sheetName} = new List<{data.sheetName}>();");
+            stringBuilder.AppendLine($"        public List<{data.sheetName}> {data.sheetName}s = new List<{data.sheetName}>();");
 
             stringBuilder.AppendLine("    }");
 
@@ -156,7 +156,7 @@ namespace AppFrame.Editor
         {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("{");
-            stringBuilder.AppendLine($"  \"{data.sheetName}\": [");
+            stringBuilder.AppendLine($"  \"{data.sheetName}s\": [");
 
             for (int r = 4; r < data.datas.GetLength(0); r++)
             {
@@ -199,12 +199,12 @@ namespace AppFrame.Editor
 
             for (int r = 4; r < data.datas.GetLength(0); r++)
             {
-                stringBuilder.Append($"    <{data.sheetName}");
+                stringBuilder.Append($"    <{data.sheetName}s");
                 for (int c = 2; c < data.datas.GetLength(1); c++)
                 {
                     stringBuilder.Append($" {data.datas[2,c]}=\"{data.datas[r,c]}\"");
                 }
-                stringBuilder.AppendLine($"></{data.sheetName}>");
+                stringBuilder.AppendLine($"></{data.sheetName}s>");
             }
 
             stringBuilder.Append($"</{data.sheetName}XmlData>");
@@ -233,7 +233,7 @@ namespace AppFrame.Editor
             stringBuilder.AppendLine("    {");
 
             stringBuilder.AppendLine($"        [XmlElement(\"{data.sheetName}\")]");
-            stringBuilder.AppendLine($"        public List<{data.sheetName}> {data.sheetName} = new List<{data.sheetName}>();");
+            stringBuilder.AppendLine($"        public List<{data.sheetName}> {data.sheetName}s = new List<{data.sheetName}>();");
 
             stringBuilder.AppendLine("    }");
 
