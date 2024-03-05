@@ -31,17 +31,22 @@ namespace AppFrame.Editor
         private string excelPath = $"{Application.dataPath.Replace("Assets", "")}Data/excel";
         
         private List<TableData> tableDatas = new List<TableData>();
+
+        private ScrollView table_scroll_view;
+
+        private Button btn_table_apply;
         
         public void OnCreate(VisualElement root)
         {
-            var table_scroll_view = root.Q<ScrollView>("table_scroll_view");
+            table_scroll_view = root.Q<ScrollView>("table_scroll_view");
             config = Resources.Load<AppTableConfig>(configPath);
-            InitTableView(table_scroll_view);
             
-            root.Q<Button>("btn_table_apply").clicked += ApplyConfig;
+            btn_table_apply = root.Q<Button>("btn_table_apply");
+            btn_table_apply.text = tableDatas.Count == 0 ? "Load Excel" : "Apply";
+            btn_table_apply.clicked += ApplyConfig;
         }
 
-        private void InitTableView(ScrollView table_scroll_view)
+        private void InitTableView()
         {
             tableDatas = GetTableDatas();
 
@@ -87,6 +92,12 @@ namespace AppFrame.Editor
         
         private void ApplyConfig()
         {
+            if (tableDatas.Count == 0)
+            {
+                InitTableView();
+                btn_table_apply.text = "Apply";
+                return;
+            }
             config.AppTable.Clear();
             for (int i = 0; i < tableDatas.Count; i++)
             {
