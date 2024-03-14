@@ -62,6 +62,7 @@ namespace AppFrame.Editor
             leftListView.itemsSource = itemsName;
             leftListView.makeItem = MakeListItem;
             leftListView.bindItem = BindListItem;
+            leftListView.selectionType = SelectionType.Single;
             leftListView.onSelectedIndicesChange += OnItemsChosen;
             leftListView.SetSelection(stamp);
 
