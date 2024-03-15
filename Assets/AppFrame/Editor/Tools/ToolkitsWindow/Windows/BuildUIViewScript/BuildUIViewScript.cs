@@ -49,7 +49,7 @@ namespace AppFrame.Editor
             parent = root.Q<VisualElement>("Root");
             child = root.Q<VisualElement>("Child");
             btns = root.Q<VisualElement>("Btns");
-            btns.Q<Label>().text = "请选择对象";
+            btns.Q<Label>().text = "请选择对象并选择需要操作的组件";
             parent.style.display = DisplayStyle.None;
             btns.style.display = DisplayStyle.None;
 
@@ -71,7 +71,7 @@ namespace AppFrame.Editor
                 }
                 else
                 {
-                    btns.Q<Label>().text = "请选择对象";
+                    btns.Q<Label>().text = "请选择对象并添加需要操作的组件";
                 }
             });
 
@@ -149,7 +149,8 @@ namespace AppFrame.Editor
         /// <param name="go"></param>
         private void OnOnjectFieldChange(GameObject go)
         {
-            btns.Q<Label>().text = "请选择对象";
+            allUIObjects.Clear();
+            btns.Q<Label>().text = "请选择对象并添加需要操作的组件";
             parent.style.display = go ? DisplayStyle.Flex : DisplayStyle.None;
             btns.style.display = go ? DisplayStyle.Flex : DisplayStyle.None;
             if(go == null) return;
