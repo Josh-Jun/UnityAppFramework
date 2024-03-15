@@ -3,7 +3,7 @@
         <ui:Button text="AutoBuildAllAssetBuildBundle(一键自动打AB包)" display-tooltip-when-elided="true" name="AutoBuildAllAssetBuildBundle" />
         <uie:EnumField label="BuildTarget" value="Center" name="BuildTarget" />
         <uie:EnumField label="ABMold" value="Center" name="ABMold" />
-        <ui:VisualElement name="ListPanel" style="flex-direction: row; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-left: 156px; margin-right: 3px;">
+        <ui:VisualElement name="ListPanel" style="flex-direction: row; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-left: 126px; margin-right: 4px;">
             <ui:ScrollView name="FolderList" style="flex-direction: column; align-items: stretch; flex-grow: 0;" />
             <ui:VisualElement style="border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); flex-grow: 1; width: auto; align-items: flex-end;">
                 <ui:Label text="打包 : 4 / 4" display-tooltip-when-elided="true" name="ListText" style="-unity-text-align: upper-right; flex-shrink: 1; -unity-font-style: bold;" />
