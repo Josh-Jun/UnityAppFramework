@@ -17,8 +17,7 @@ namespace AppFrame.Editor
 
     public class EditorTool
     {
-        public const string BasePath = "AppFrame/Editor/Tools/ToolkitsWindow";
-        public const string BaseDataPath = "Assets/AppFrame/Editor/Tools/ToolkitsWindow";
+        public const string BaseWindowPath = "AppFrame/Editor/Tools/ToolkitsWindow/Windows";
 
         public static string Browse(bool isFullPath = false)
         {
@@ -73,9 +72,9 @@ namespace AppFrame.Editor
             return names.ToArray();
         }
 
-        public static T GetEditorAsset<T>(string path) where T : ScriptableObject
+        public static T GetEditorWindowsAsset<T>(string path) where T : ScriptableObject
         {
-            return AssetDatabase.LoadAssetAtPath<T>($"{BaseDataPath}/{path}");
+            return AssetDatabase.LoadAssetAtPath<T>($"Assets/{BaseWindowPath}/{path}");
         }
     }
 }

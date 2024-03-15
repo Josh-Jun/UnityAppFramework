@@ -41,7 +41,7 @@ namespace AppFrame.Editor
             root = rootVisualElement;
 
             // Import UXML
-            var visualTree = EditorTool.GetEditorAsset<VisualTreeAsset>($"ToolkitsWindow.uxml");
+            var visualTree = EditorTool.GetEditorWindowsAsset<VisualTreeAsset>($"ToolkitsWindow.uxml");
             visualTree.CloneTree(root);
 
             infos = root.Q<ScrollView>("infos");
@@ -51,7 +51,7 @@ namespace AppFrame.Editor
             var right = root.Q<VisualElement>("right");
             for (int i = 0; i < itemsName.Length; i++)
             {
-                var viewItem = EditorTool.GetEditorAsset<VisualTreeAsset>($"{itemsName[i]}/{itemsName[i]}.uxml");
+                var viewItem = EditorTool.GetEditorWindowsAsset<VisualTreeAsset>($"{itemsName[i]}/{itemsName[i]}.uxml");
                 var view = viewItem.CloneTree();
                 view.style.display = DisplayStyle.None;
                 viewElements.Add(view);
@@ -63,7 +63,7 @@ namespace AppFrame.Editor
             leftListView.makeItem = MakeListItem;
             leftListView.bindItem = BindListItem;
             leftListView.selectionType = SelectionType.Single;
-            leftListView.onSelectedIndicesChange += OnItemsChosen;
+            leftListView.selectedIndicesChanged += OnItemsChosen;
             leftListView.SetSelection(stamp);
 
             for (int i = 0; i < itemsName.Length; i++)
@@ -90,7 +90,6 @@ namespace AppFrame.Editor
         {
             var label = ve as Label;
             label.text = itemsName[index];
-            label.name = index.ToString();
         }
 
         private VisualElement MakeListItem()

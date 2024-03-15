@@ -1,0 +1,18 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:VisualElement name="BuildUIViewScript">
+        <ui:VisualElement style="flex-direction: row; justify-content: flex-start; -unity-text-align: middle-center; white-space: normal; align-items: stretch; margin-top: 5px; margin-bottom: 5px; margin-left: 10px;">
+            <uie:ObjectField name="UIGameObject" label="UI View Root" style="max-width: 300px; -unity-text-align: upper-left; justify-content: flex-start; overflow: hidden; align-items: flex-start; min-width: auto; flex-shrink: 1; margin-left: 0; margin-right: 0; margin-top: 0;" />
+            <ui:VisualElement name="Btns" style="flex-direction: row; -unity-text-align: middle-center; white-space: normal; align-items: center; max-width: none; min-width: auto; align-self: flex-start; margin-left: 50px;">
+                <ui:Button display-tooltip-when-elided="true" name="btn_remove" enable-rich-text="true" focusable="true" style="cursor: initial; visibility: visible; display: flex; opacity: 1; margin-left: 2px; margin-right: 2px; margin-top: 1px; margin-bottom: 1px; padding-left: 1px; padding-right: 1px; width: 18px; height: 18px; font-size: 12px; -unity-font-style: normal; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; background-color: rgba(255, 255, 255, 0); -unity-background-image-tint-color: rgb(255, 255, 255);" />
+                <ui:Button display-tooltip-when-elided="true" name="btn_add" enable-rich-text="true" focusable="true" usage-hints="None" style="margin-left: 2px; margin-right: 2px; margin-top: 1px; margin-bottom: 1px; padding-left: 1px; padding-right: 1px; width: 18px; height: 18px; -unity-font-style: bold; font-size: 20px; -unity-text-align: middle-center; white-space: nowrap; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; background-color: rgba(255, 255, 255, 0); -unity-background-scale-mode: stretch-to-fill;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="Root" style="flex-grow: 1; flex-direction: row; border-top-width: 1px; border-right-width: 0; border-bottom-width: 1px; border-left-width: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
+            <ui:Foldout text="Foldout" name="UIView" style="margin-left: 5px; -unity-text-align: middle-left; justify-content: flex-start; flex-direction: column; align-items: stretch; width: 40%; border-right-width: 1px; border-bottom-width: 0; border-top-width: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-width: 0;">
+                <ui:TreeView focusable="true" name="TreeView" virtualization-method="DynamicHeight" auto-expand="false" style="-unity-text-align: lower-left; text-overflow: clip;" />
+            </ui:Foldout>
+            <ui:VisualElement name="Child" style="flex-grow: 1;" />
+        </ui:VisualElement>
+        <ui:Button text="Build" display-tooltip-when-elided="true" name="BtnBuild" style="display: flex;" />
+    </ui:VisualElement>
+</ui:UXML>

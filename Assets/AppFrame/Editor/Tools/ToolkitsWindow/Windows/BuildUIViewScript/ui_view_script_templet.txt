@@ -9,30 +9,30 @@ namespace Modules.#NAMESPACE#
 {
     public class #SCRIPTNAME# : ViewBase
     {
-        #VARIABLE#
-        #GETSET#
+#VARIABLE#
+#GETSET#
         protected override void InitView()
         {
             base.InitView();
-            #INIT#
+#INIT#
         }
 
         protected override void RegisterEvent()
         {
             base.RegisterEvent();
-            #REGISTER#
+#REGISTER#
         }
 
         protected override void OpenView()
         {
             base.OpenView();
-            #OPEN#
+#OPEN#
         }
 
         protected override void CloseView()
         {
             base.CloseView();
-            #CLOSE#
+#CLOSE#
         }
     }
 }

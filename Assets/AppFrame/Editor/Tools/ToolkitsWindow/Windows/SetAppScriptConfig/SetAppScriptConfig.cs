@@ -46,7 +46,7 @@ namespace AppFrame.Editor
                 for (int i = 0; i < script_list.Count; i++)
                 {
                     int index = i;
-                    var scriptItem = EditorTool.GetEditorAsset<VisualTreeAsset>($"SetAppScriptConfig/script_item.uxml");
+                    var scriptItem = EditorTool.GetEditorWindowsAsset<VisualTreeAsset>($"SetAppScriptConfig/script_item.uxml");
                     VisualElement script = scriptItem.CloneTree();
                     script.Q<Button>("btn_script_remove").style.backgroundImage =
                         new StyleBackground((Texture2D)EditorGUIUtility.IconContent("CollabDeleted Icon").image);
