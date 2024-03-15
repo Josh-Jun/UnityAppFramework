@@ -190,7 +190,6 @@ namespace AppFrame.Editor
             if (data != null)
             {
                 selectedUIViewData = data;
-                Debug.Log(data.path);
                 RefreshView(data);
             }
         }
