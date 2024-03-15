@@ -78,3 +78,5 @@ crashlytics-build.properties
 .vsconfig
 /HybridCLRData
 /UIElementsSchema
+Assets/UnityDefaultRuntimeTheme.tss
+Assets/UnityDefaultRuntimeTheme.tss.meta
