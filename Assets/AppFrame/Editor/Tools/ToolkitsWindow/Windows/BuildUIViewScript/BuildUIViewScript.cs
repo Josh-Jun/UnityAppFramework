@@ -49,6 +49,7 @@ namespace AppFrame.Editor
             parent = root.Q<VisualElement>("Root");
             child = root.Q<VisualElement>("Child");
             btns = root.Q<VisualElement>("Btns");
+            btns.Q<Label>().text = "请选择对象";
             parent.style.display = DisplayStyle.None;
             btns.style.display = DisplayStyle.None;
 
@@ -58,6 +59,20 @@ namespace AppFrame.Editor
             uiGameObjectField.RegisterCallback<ChangeEvent<Object>>((evt) =>
             {
                 OnOnjectFieldChange(evt.newValue as GameObject);
+            });
+            
+            rootFoldout.RegisterCallback<ChangeEvent<bool>>(evt =>
+            {
+                if (!evt.newValue)
+                {
+                    btns.Q<Label>().text = "";
+                    selectedUIViewData = null;
+                    RefreshView(selectedUIViewData);
+                }
+                else
+                {
+                    btns.Q<Label>().text = "请选择对象";
+                }
             });
 
             //获取按钮，并添加按钮事件
@@ -83,8 +98,15 @@ namespace AppFrame.Editor
                 if (selectedUIViewData != null)
                 {
                     var components = GetUIComponents(selectedUIViewData.go);
-                    selectedUIViewData.components.Add(components[0]);
-                    RefreshView(selectedUIViewData);
+                    if (selectedUIViewData.components.Count < components.Length)
+                    {
+                        selectedUIViewData.components.Add(components[0]);
+                        RefreshView(selectedUIViewData);
+                    }
+                    else
+                    {
+                        ToolkitsWindow.ShowHelpBox("组件数量已达到上限");
+                    }
                 }
             };
         }
@@ -127,6 +149,7 @@ namespace AppFrame.Editor
         /// <param name="go"></param>
         private void OnOnjectFieldChange(GameObject go)
         {
+            btns.Q<Label>().text = "请选择对象";
             parent.style.display = go ? DisplayStyle.Flex : DisplayStyle.None;
             btns.style.display = go ? DisplayStyle.Flex : DisplayStyle.None;
             if(go == null) return;
@@ -190,6 +213,7 @@ namespace AppFrame.Editor
             if (data != null)
             {
                 selectedUIViewData = data;
+                btns.Q<Label>().text = data.path;
                 RefreshView(data);
             }
         }
@@ -200,6 +224,7 @@ namespace AppFrame.Editor
         private void RefreshView(UIViewData data)
         {
             child.Clear();
+            if(data == null) return;
             for (int i = 0; i < data.components.Count; i++)
             {
                 int index = i;
