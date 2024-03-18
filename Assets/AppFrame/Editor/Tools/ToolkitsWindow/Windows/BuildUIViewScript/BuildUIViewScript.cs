@@ -310,11 +310,14 @@ namespace AppFrame.Editor
             {
                 for (int i = 0; i < uiViewData.Value.components.Count; i++)
                 {
-                    var type = uiViewData.Value.components[i].GetType().Name;
-                    var name = $"{uiViewData.Value.name.ToLower()}{type}";
-                    var nameUpperCase = $"{ToUpperCase(name)}";
-                    string str = $"\t\tpublic {type} {nameUpperCase} {{ get {{ return {name}; }} set {{ {name} = value; }}}}";
-                    sb.AppendLine(str);
+                    if (IsPublic(uiViewData.Value.components[i]))
+                    {
+                        var type = uiViewData.Value.components[i].GetType().Name;
+                        var name = $"{uiViewData.Value.name.ToLower()}{type}";
+                        var nameUpperCase = $"{ToUpperCase(name)}";
+                        string str = $"\t\tpublic {type} {nameUpperCase} {{ get {{ return {name}; }} set {{ {name} = value; }}}}";
+                        sb.AppendLine(str);
+                    }
                 }
             }
             return sb.ToString();
