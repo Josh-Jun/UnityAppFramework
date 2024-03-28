@@ -702,7 +702,7 @@ namespace AppFrame.Editor
             if (m_TmpBuildPath == "" || m_TmpBuildPath != buildPath)
             {
                 m_TmpBuildPath = buildPath;
-                string targetFolder = Application.dataPath.Replace("Assets", m_TmpBuildPath + "\\");
+                string targetFolder = Application.dataPath.Replace("Assets", m_TmpBuildPath + "/");
 
                 m_DataList.Clear();
                 m_ExportList.Clear();
