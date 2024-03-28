@@ -29,18 +29,22 @@ namespace AppFrame.Editor
             if (Path.GetExtension(newFilePath) == ".txt" || Path.GetExtension(newFilePath) == ".cs")
             {
                 var realPath = Application.dataPath.Replace("Assets", "") + newFilePath;
-                var scriptContent = File.ReadAllText(realPath);
-                // 这里实现自定义的一些规则
-                // scriptContent = scriptContent.Replace("#SCRIPTNAME#", Path.GetFileNameWithoutExtension(newFilePath));
-                var namespaces = Path.GetFileNameWithoutExtension(newFilePath);
-                for (int i = 0; i < temps.Length; i++)
+                Debug.Log(realPath);
+                if (File.Exists(realPath))
                 {
-                    namespaces = namespaces.Replace(temps[i], "");
+                    var scriptContent = File.ReadAllText(realPath);
+                    // 这里实现自定义的一些规则
+                    // scriptContent = scriptContent.Replace("#SCRIPTNAME#", Path.GetFileNameWithoutExtension(newFilePath));
+                    var namespaces = Path.GetFileNameWithoutExtension(newFilePath);
+                    for (int i = 0; i < temps.Length; i++)
+                    {
+                        namespaces = namespaces.Replace(temps[i], "");
+                    }
+
+                    scriptContent = scriptContent.Replace("#NAMESPACE#", namespaces);
+
+                    File.WriteAllText(realPath, scriptContent);
                 }
-
-                scriptContent = scriptContent.Replace("#NAMESPACE#", namespaces);
-
-                File.WriteAllText(realPath, scriptContent);
             }
         }
 
