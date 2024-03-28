@@ -29,7 +29,6 @@ namespace AppFrame.Editor
             if (Path.GetExtension(newFilePath) == ".txt" || Path.GetExtension(newFilePath) == ".cs")
             {
                 var realPath = Application.dataPath.Replace("Assets", "") + newFilePath;
-                Debug.Log(realPath);
                 if (File.Exists(realPath))
                 {
                     var scriptContent = File.ReadAllText(realPath);
