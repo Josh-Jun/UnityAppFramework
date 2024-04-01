@@ -49,29 +49,73 @@ namespace AppFrame.Editor
 
         #endregion
 
+        #region 拷贝模板脚本到Unity脚本模板路径
+
+        [MenuItem("Tools/CopyTemplateScripts", false, 0)]
+        public static void CopyTemplateScripts()
+        {
+            var template_script_path = $"{Application.dataPath}/AppFrame/Editor/ScriptTemplates";
+            var base_path = string.Empty;
+#if UNITY_EDITOR_WIN
+            base_path = $"{AppDomain.CurrentDomain.BaseDirectory}/Data";
+#elif UNITY_EDITOR_OSX
+            base_path = $"{AppDomain.CurrentDomain.BaseDirectory}/Unity.app/Contents";
+#endif
+            if (base_path != string.Empty)
+            {
+                var install_path = $"{base_path}/Resources/ScriptTemplates";
+                EditorTool.Copy(template_script_path, install_path, "txt");
+            }
+        }
+
+        #endregion
+        
+        #region 打开默认路径
+        
         [MenuItem("Tools/OpenFolder/DataPath", false, 0)]
         public static void OpenDataFolder()
         {
+#if UNITY_EDITOR_WIN
             System.Diagnostics.Process.Start("explorer.exe", $"file://{Application.dataPath}");
+#elif UNITY_EDITOR_OSX
+            System.Diagnostics.Process.Start("open", $"-R {Application.dataPath}");
+#endif
         }
 
         [MenuItem("Tools/OpenFolder/PersistentDataPath", false, 0)]
         public static void OpenPersistentDataFolder()
         {
+#if UNITY_EDITOR_WIN
             System.Diagnostics.Process.Start("explorer.exe", $"file://{Application.persistentDataPath}");
+#elif UNITY_EDITOR_OSX
+            System.Diagnostics.Process.Start("open", $"-R {Application.persistentDataPath}");
+#endif
         }
 
         [MenuItem("Tools/OpenFolder/StreamingAssetsPath", false, 0)]
         public static void OpenStreamingAssetsFolder()
         {
+#if UNITY_EDITOR_WIN
             System.Diagnostics.Process.Start("explorer.exe", $"file://{Application.streamingAssetsPath}");
+#elif UNITY_EDITOR_OSX
+            System.Diagnostics.Process.Start("open", $"-R {Application.streamingAssetsPath}");
+#endif
         }
 
         [MenuItem("Tools/OpenFolder/TemporaryCachePath", false, 0)]
         public static void OpenTemporaryCacheFolder()
         {
+#if UNITY_EDITOR_WIN
             System.Diagnostics.Process.Start("explorer.exe", $"file://{Application.temporaryCachePath}");
+#elif UNITY_EDITOR_OSX
+            System.Diagnostics.Process.Start("open", $"-R {Application.temporaryCachePath}");
+#endif
         }
+        
+        #endregion
+
+        #region 创建资源路径配置文件（自动/手动）
+        
         [DidReloadScripts]
         [MenuItem("Tools/CreateAssetsPath", false, 3)]
         public static void CreateAssetsPath()
@@ -147,6 +191,10 @@ namespace AppFrame.Editor
 
             return fileInfos;
         }
+
+        #endregion
+
+        #region 复制文件依赖关系
 
         [MenuItem("Assets/复制文件夹(复制依赖关系) %#D", false, 0)]
         public static void CopyFolderKeepAssetsUsing()
@@ -415,6 +463,8 @@ namespace AppFrame.Editor
 
             return relativePath;
         }
+
+        #endregion
 
         #endregion
     }
