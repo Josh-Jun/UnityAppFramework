@@ -80,3 +80,4 @@ crashlytics-build.properties
 /UIElementsSchema
 Assets/UnityDefaultRuntimeTheme.tss
 Assets/UnityDefaultRuntimeTheme.tss.meta
+.DS_Store
