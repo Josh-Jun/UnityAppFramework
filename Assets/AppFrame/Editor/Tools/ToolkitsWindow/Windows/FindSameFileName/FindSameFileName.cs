@@ -58,6 +58,15 @@ namespace AppFrame.Editor
                 FindSameFile((ObjectType)objectType.value, textFilesField.value);
             };
         }
+        public void OnUpdate()
+        {
+            
+        }
+        public void OnDestroy()
+        {
+            
+        }
+
         private void FindSameFile(ObjectType objectType, string filesPath)
         {
             if (string.IsNullOrEmpty(filesPath))

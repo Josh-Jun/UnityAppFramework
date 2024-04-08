@@ -24,6 +24,15 @@ namespace AppFrame.Editor
                 ChangeFont((Font)fontObjectField.value, textPrefabsField.value);
             };
         }
+        public void OnUpdate()
+        {
+            
+        }
+        public void OnDestroy()
+        {
+            
+        }
+
         private void ChangeFont(Font changeFont, string prefabsPath)
         {
             if (changeFont == null)

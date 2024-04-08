@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:VisualElement name="DoTweenEasing" style="flex-grow: 1; display: flex; margin-top: 5px; justify-content: flex-start; align-self: auto;">
+        <ui:VisualElement>
+            <ui:EnumField label="Easing" name="Easing" type="DG.Tweening.Ease, DOTween" value="InOutQuad" />
+            <ui:FloatField label="Duration" value="5" name="Duration" />
+        </ui:VisualElement>
+        <ui:VisualElement style="align-self: center; justify-content: flex-start; align-items: stretch; margin-top: 20px; margin-bottom: 0; margin-right: 0; margin-left: 0; flex-direction: column-reverse;">
+            <uie:CurveField name="Curve" focusable="true" style="overflow: hidden; visibility: visible; display: flex; height: 400px; width: 400px; justify-content: flex-start; align-self: center;" />
+            <ui:VisualElement style="flex-direction: row; width: 400px; min-width: auto; min-height: auto; height: 35px;">
+                <ui:Slider picking-mode="Ignore" value="0" high-value="1.5" name="Animation" low-value="-0.5" show-input-field="false" inverted="false" focusable="true" direction="Horizontal" style="margin-bottom: 20px; height: auto; flex-direction: row; align-items: flex-start; justify-content: space-around; align-self: center; width: auto; flex-wrap: nowrap; opacity: 1; flex-shrink: 1; margin-left: 5px; margin-right: 0; padding-right: 0; flex-grow: 0; margin-top: 0;" />
+                <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="Play" style="align-items: auto; flex-direction: row; align-self: auto; justify-content: flex-start; cursor: initial; background-image: none; padding-right: 0; padding-bottom: 0; padding-top: 0; padding-left: 0; margin-left: 0; margin-bottom: 0; margin-right: 0; margin-top: 0; flex-shrink: 1; flex-grow: 0; width: 20px; height: 20px; position: relative; white-space: nowrap; -unity-text-align: upper-center; -unity-background-scale-mode: stretch-to-fill;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

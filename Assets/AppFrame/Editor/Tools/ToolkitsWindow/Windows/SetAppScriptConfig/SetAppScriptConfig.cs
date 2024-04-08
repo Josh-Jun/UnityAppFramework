@@ -36,6 +36,15 @@ namespace AppFrame.Editor
             root.Q<Button>("btn_script_apply").clicked += ApplyConfig;
         }
         
+        public void OnUpdate()
+        {
+            
+        }
+        public void OnDestroy()
+        {
+            
+        }
+
         private void RefreshScriptView(ScrollView table_script_view)
         {
             var script_list = GetRootScripts();

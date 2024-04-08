@@ -46,6 +46,15 @@ namespace AppFrame.Editor
             btn_table_apply.clicked += ApplyConfig;
         }
 
+        public void OnUpdate()
+        {
+            
+        }
+        public void OnDestroy()
+        {
+            
+        }
+
         private void InitTableView()
         {
             tableDatas = GetTableDatas();

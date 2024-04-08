@@ -111,6 +111,15 @@ namespace AppFrame.Editor
             };
         }
 
+        public void OnUpdate()
+        {
+            
+        }
+        public void OnDestroy()
+        {
+            
+        }
+
         private void BuildEvent()
         {
             var path = Path.Combine(Application.dataPath, templetPath);

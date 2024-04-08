@@ -127,6 +127,15 @@ namespace AppFrame.Editor
                 CreateMD5File((BuildTarget)build_target.value);
             };
         }
+        public void OnUpdate()
+        {
+            
+        }
+        public void OnDestroy()
+        {
+            
+        }
+
         private void RefreshAssetBundleList(ScrollView folder_list, Label label_page)
         {
             folder_list.Clear();

@@ -13,6 +13,8 @@ namespace AppFrame.Editor
     public interface IToolkitEditor
     {
         void OnCreate(VisualElement root);
+        void OnUpdate();
+        void OnDestroy();
     }
 
     public class EditorTool

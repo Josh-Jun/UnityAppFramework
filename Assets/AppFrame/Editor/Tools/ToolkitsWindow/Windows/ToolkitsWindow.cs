@@ -25,12 +25,15 @@ namespace AppFrame.Editor
 
         private static ScrollView infos;
 
+        private List<IToolkitEditor> editors = new List<IToolkitEditor>();
+
         [MenuItem("Tools/ToolkitsWindow", false, 1)]
         public static void ShowExample()
         {
             var icon = EditorGUIUtility.IconContent("Assembly Icon").image;
             ToolkitsWindow wnd = GetWindow<ToolkitsWindow>();
             wnd.titleContent = new GUIContent("Toolkits", icon);
+            
         }
 
         public void CreateGUI()
@@ -70,6 +73,23 @@ namespace AppFrame.Editor
             {
                 IToolkitEditor editor = EditorTool.GetEditor(itemsName[i]);
                 editor.OnCreate(root);
+                editors.Add(editor);
+            }
+        }
+
+        public void Update()
+        {
+            for (int i = 0; i < editors.Count; i++)
+            {
+                editors[i].OnUpdate();
+            }
+        }
+
+        public void OnDestroy()
+        {
+            for (int i = 0; i < editors.Count; i++)
+            {
+                editors[i].OnDestroy();
             }
         }
 

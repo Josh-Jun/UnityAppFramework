@@ -94,6 +94,15 @@ namespace AppFrame.Editor
             };
         }
 
+        public void OnUpdate()
+        {
+            
+        }
+        public void OnDestroy()
+        {
+            
+        }
+
         private void Init()
         {
             outputPath = Application.dataPath.Replace("Assets", "App");

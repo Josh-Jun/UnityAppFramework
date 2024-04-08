@@ -1,8 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <ui:VisualElement name="BuildAssetBundle" style="flex-grow: 1; display: flex; margin-top: 5px;">
         <ui:Button text="AutoBuildAllAssetBuildBundle(一键自动打AB包)" display-tooltip-when-elided="true" name="AutoBuildAllAssetBuildBundle" />
-        <uie:EnumField label="BuildTarget" value="Center" name="BuildTarget" />
-        <uie:EnumField label="ABMold" value="Center" name="ABMold" />
+        <uie:EnumField label="BuildTarget" name="BuildTarget" type="UnityEditor.BuildTarget, UnityEditor.CoreModule" value="Android" />
+        <uie:EnumField label="ABMold" name="ABMold" type="AppFrame.Enum.ABMold, App.Frame" />
         <ui:VisualElement name="ListPanel" style="flex-direction: row; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-left: 126px; margin-right: 4px;">
             <ui:ScrollView name="FolderList" style="flex-direction: column; align-items: stretch; flex-grow: 0;" />
             <ui:VisualElement style="border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); flex-grow: 1; width: auto; align-items: flex-end;">
