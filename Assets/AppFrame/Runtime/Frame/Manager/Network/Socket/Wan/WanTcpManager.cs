@@ -82,7 +82,7 @@ namespace AppFrame.Network.Wan.Tcp
             }
             catch (Exception ex)
             {
-                Debug.LogError("StartRcvData:" + ex.Message);
+                Log.E("StartRcvData:" + ex.Message);
             }
         }
 
@@ -121,7 +121,7 @@ namespace AppFrame.Network.Wan.Tcp
             }
             catch (Exception ex)
             {
-                Debug.LogError("ReceiveHeadError:" + ex.Message);
+                Log.E("ReceiveHeadError:" + ex.Message);
             }
         }
 
@@ -155,7 +155,7 @@ namespace AppFrame.Network.Wan.Tcp
             }
             catch (Exception ex)
             {
-                Debug.LogError("RcvBodyError:" + ex.Message);
+                Log.E("RcvBodyError:" + ex.Message);
             }
         }
 
@@ -197,7 +197,7 @@ namespace AppFrame.Network.Wan.Tcp
             }
             catch (Exception ex)
             {
-                Debug.LogError("SendMsgError:" + ex.Message);
+                Log.E("SendMsgError:" + ex.Message);
             }
         }
 
@@ -222,7 +222,7 @@ namespace AppFrame.Network.Wan.Tcp
             }
             catch (Exception ex)
             {
-                Debug.LogError("SendMsgError:" + ex.Message);
+                Log.E("SendMsgError:" + ex.Message);
             }
         }
 
@@ -252,7 +252,7 @@ namespace AppFrame.Network.Wan.Tcp
             }
             catch (Exception arg)
             {
-                Debug.LogError("Tcp关闭Socket错误：" + arg);
+                Log.E("Tcp关闭Socket错误：" + arg);
                 return false;
             }
         }

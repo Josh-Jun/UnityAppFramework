@@ -99,7 +99,7 @@ namespace AppFrame.Network.Wan.Udp
 			}
 			catch (Exception ex)
 			{
-				Debug.LogError("SndMsgError:" + ex.Message);
+				Log.E("SndMsgError:" + ex.Message);
 			}
 		}
 

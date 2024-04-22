@@ -195,7 +195,7 @@ namespace AppFrame.Manager
             }
             else
             {
-                Debug.LogError($"{typeof(T).FullName}:脚本不存在,");
+                Log.E($"{typeof(T).FullName}:脚本不存在,");
             }
 
             EventDispatcher.TriggerEvent(go.name, state);
@@ -224,7 +224,7 @@ namespace AppFrame.Manager
             }
             else
             {
-                Debug.LogError($"{typeof(T).FullName}:脚本不存在,");
+                Log.E($"{typeof(T).FullName}:脚本不存在,");
             }
 
             EventDispatcher.TriggerEvent(go.name, state);
@@ -254,7 +254,7 @@ namespace AppFrame.Manager
             }
             else
             {
-                Debug.LogError($"{typeof(T).FullName}:脚本已存在,");
+                Log.E($"{typeof(T).FullName}:脚本已存在,");
             }
 
             EventDispatcher.TriggerEvent(go.name, state);
@@ -284,7 +284,7 @@ namespace AppFrame.Manager
             }
             else
             {
-                Debug.LogError($"{typeof(T).FullName}:脚本已存在,");
+                Log.E($"{typeof(T).FullName}:脚本已存在,");
             }
 
             EventDispatcher.TriggerEvent(go.name, state);

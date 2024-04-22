@@ -83,7 +83,7 @@ namespace App
                     }
                     else
                     {
-                        Debug.LogError($"Root脚本为空 脚本名称:{Global.AppScriptConfig.LogicScript[i].ScriptName}");
+                        Log.E($"Root脚本为空 脚本名称:{Global.AppScriptConfig.LogicScript[i].ScriptName}");
                     }
                 }
 

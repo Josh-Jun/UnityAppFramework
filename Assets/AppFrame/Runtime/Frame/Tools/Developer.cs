@@ -54,7 +54,7 @@ namespace AppFrame.Tools
         {
             if (image == null)
             {
-                Debug.LogError("Image is null!!!");
+                Log.E("Image is null!!!");
                 return;
             }
 
@@ -66,7 +66,7 @@ namespace AppFrame.Tools
         {
             if (image == null)
             {
-                Debug.LogError("Image is null!!!");
+                Log.E("Image is null!!!");
                 return;
             }
 
@@ -116,7 +116,7 @@ namespace AppFrame.Tools
         {
             if (go == null)
             {
-                Debug.LogError($"GameObject({go.name}) is null!!!");
+                Log.E($"GameObject({go.name}) is null!!!");
                 return;
             }
 
@@ -132,7 +132,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"Component({com}) is null!!!");
+                Log.E($"Component({com}) is null!!!");
                 return;
             }
 
@@ -149,7 +149,7 @@ namespace AppFrame.Tools
         {
             if (go == null)
             {
-                Debug.LogError($"GameObject({go.name}) is null!!!");
+                Log.E($"GameObject({go.name}) is null!!!");
                 return;
             }
 
@@ -160,7 +160,7 @@ namespace AppFrame.Tools
             }
             else
             {
-                Debug.LogError($"对象{go.name} --- 没有脚本:{typeof(T).Name}");
+                Log.E($"对象{go.name} --- 没有脚本:{typeof(T).Name}");
             }
         }
 
@@ -174,7 +174,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"Component({com}) is null!!!");
+                Log.E($"Component({com}) is null!!!");
                 return;
             }
 
@@ -185,7 +185,7 @@ namespace AppFrame.Tools
             }
             else
             {
-                Debug.LogError("对象{com.gameObject.name} --- 没有脚本:{typeof(T).Name}");
+                Log.E("对象{com.gameObject.name} --- 没有脚本:{typeof(T).Name}");
             }
         }
 
@@ -203,7 +203,7 @@ namespace AppFrame.Tools
         {
             if (go == null)
             {
-                Debug.LogError($"GameObject({go.name}) is null!!!");
+                Log.E($"GameObject({go.name}) is null!!!");
                 return null;
             }
 
@@ -226,7 +226,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"Component({com}) is null!!!");
+                Log.E($"Component({com}) is null!!!");
                 return null;
             }
 
@@ -252,7 +252,7 @@ namespace AppFrame.Tools
         {
             if (go == null)
             {
-                Debug.LogError($"GameObject({go.name}) is null!!!");
+                Log.E($"GameObject({go.name}) is null!!!");
                 return;
             }
 
@@ -269,7 +269,7 @@ namespace AppFrame.Tools
         {
             if (go == null)
             {
-                Debug.LogError($"GameObject({go.name}) is null!!!");
+                Log.E($"GameObject({go.name}) is null!!!");
                 return;
             }
 
@@ -287,7 +287,7 @@ namespace AppFrame.Tools
         {
             if (go == null)
             {
-                Debug.LogError($"GameObject({go.name}) is null!!!");
+                Log.E($"GameObject({go.name}) is null!!!");
                 return;
             }
 
@@ -307,7 +307,7 @@ namespace AppFrame.Tools
         {
             if (go == null)
             {
-                Debug.LogError($"GameObject({go.name}) is null!!!");
+                Log.E($"GameObject({go.name}) is null!!!");
                 return;
             }
 
@@ -328,7 +328,7 @@ namespace AppFrame.Tools
         {
             if (go == null)
             {
-                Debug.LogError($"GameObject({go.name}) is null!!!");
+                Log.E($"GameObject({go.name}) is null!!!");
                 return;
             }
 
@@ -344,7 +344,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"Component({com}) is null!!!");
+                Log.E($"Component({com}) is null!!!");
                 return;
             }
 
@@ -361,7 +361,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"Component({com}) is null!!!");
+                Log.E($"Component({com}) is null!!!");
                 return;
             }
 
@@ -379,7 +379,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"Component({com}) is null!!!");
+                Log.E($"Component({com}) is null!!!");
                 return;
             }
 
@@ -399,7 +399,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"Component({com}) is null!!!");
+                Log.E($"Component({com}) is null!!!");
                 return;
             }
 
@@ -420,7 +420,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"Component({com}) is null!!!");
+                Log.E($"Component({com}) is null!!!");
                 return;
             }
 
@@ -440,7 +440,7 @@ namespace AppFrame.Tools
         {
             if (btn == null)
             {
-                Debug.LogError($"Button({btn}) is null!!!");
+                Log.E($"Button({btn}) is null!!!");
                 return;
             }
 
@@ -457,7 +457,7 @@ namespace AppFrame.Tools
         {
             if (btn == null)
             {
-                Debug.LogError($"Button({btn}) is null!!!");
+                Log.E($"Button({btn}) is null!!!");
                 return;
             }
 
@@ -475,7 +475,7 @@ namespace AppFrame.Tools
         {
             if (btn == null)
             {
-                Debug.LogError($"Button({btn}) is null!!!");
+                Log.E($"Button({btn}) is null!!!");
                 return;
             }
 
@@ -495,7 +495,7 @@ namespace AppFrame.Tools
         {
             if (btn == null)
             {
-                Debug.LogError($"Button({btn}) is null!!!");
+                Log.E($"Button({btn}) is null!!!");
                 return;
             }
 
@@ -516,7 +516,7 @@ namespace AppFrame.Tools
         {
             if (btn == null)
             {
-                Debug.LogError($"Button({btn}) is null!!!");
+                Log.E($"Button({btn}) is null!!!");
                 return;
             }
 
@@ -536,7 +536,7 @@ namespace AppFrame.Tools
         {
             if (go == null)
             {
-                Debug.LogError($"GameObject({go.name}) is null!!!");
+                Log.E($"GameObject({go.name}) is null!!!");
                 return;
             }
 
@@ -553,7 +553,7 @@ namespace AppFrame.Tools
         {
             if (go == null)
             {
-                Debug.LogError($"GameObject({go.name}) is null!!!");
+                Log.E($"GameObject({go.name}) is null!!!");
                 return;
             }
 
@@ -571,7 +571,7 @@ namespace AppFrame.Tools
         {
             if (go == null)
             {
-                Debug.LogError($"GameObject({go.name}) is null!!!");
+                Log.E($"GameObject({go.name}) is null!!!");
                 return;
             }
 
@@ -591,7 +591,7 @@ namespace AppFrame.Tools
         {
             if (go == null)
             {
-                Debug.LogError($"GameObject({go.name}) is null!!!");
+                Log.E($"GameObject({go.name}) is null!!!");
                 return;
             }
 
@@ -612,7 +612,7 @@ namespace AppFrame.Tools
         {
             if (go == null)
             {
-                Debug.LogError($"GameObject({go.name}) is null!!!");
+                Log.E($"GameObject({go.name}) is null!!!");
                 return;
             }
 
@@ -628,7 +628,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"Component({com}) is null!!!");
+                Log.E($"Component({com}) is null!!!");
                 return;
             }
 
@@ -645,7 +645,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"Component({com}) is null!!!");
+                Log.E($"Component({com}) is null!!!");
                 return;
             }
 
@@ -663,7 +663,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"Component({com}) is null!!!");
+                Log.E($"Component({com}) is null!!!");
                 return;
             }
 
@@ -683,7 +683,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"Component({com}) is null!!!");
+                Log.E($"Component({com}) is null!!!");
                 return;
             }
 
@@ -704,7 +704,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"Component({com}) is null!!!");
+                Log.E($"Component({com}) is null!!!");
                 return;
             }
 
@@ -724,7 +724,7 @@ namespace AppFrame.Tools
         {
             if (go == null)
             {
-                Debug.LogError($"GameObject({go.name}) is null!!!");
+                Log.E($"GameObject({go.name}) is null!!!");
                 return;
             }
 
@@ -741,7 +741,7 @@ namespace AppFrame.Tools
         {
             if (go == null)
             {
-                Debug.LogError($"GameObject({go.name}) is null!!!");
+                Log.E($"GameObject({go.name}) is null!!!");
                 return;
             }
 
@@ -759,7 +759,7 @@ namespace AppFrame.Tools
         {
             if (go == null)
             {
-                Debug.LogError($"GameObject({go.name}) is null!!!");
+                Log.E($"GameObject({go.name}) is null!!!");
                 return;
             }
 
@@ -779,7 +779,7 @@ namespace AppFrame.Tools
         {
             if (go == null)
             {
-                Debug.LogError($"GameObject({go.name}) is null!!!");
+                Log.E($"GameObject({go.name}) is null!!!");
                 return;
             }
 
@@ -800,7 +800,7 @@ namespace AppFrame.Tools
         {
             if (go == null)
             {
-                Debug.LogError($"GameObject({go.name}) is null!!!");
+                Log.E($"GameObject({go.name}) is null!!!");
                 return;
             }
 
@@ -816,7 +816,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"Component({com}) is null!!!");
+                Log.E($"Component({com}) is null!!!");
                 return;
             }
 
@@ -833,7 +833,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"Component({com}) is null!!!");
+                Log.E($"Component({com}) is null!!!");
                 return;
             }
 
@@ -851,7 +851,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"Component({com}) is null!!!");
+                Log.E($"Component({com}) is null!!!");
                 return;
             }
 
@@ -871,7 +871,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"Component({com}) is null!!!");
+                Log.E($"Component({com}) is null!!!");
                 return;
             }
 
@@ -892,7 +892,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"Component({com}) is null!!!");
+                Log.E($"Component({com}) is null!!!");
                 return;
             }
 
@@ -914,7 +914,7 @@ namespace AppFrame.Tools
         {
             if (obj == null)
             {
-                Debug.LogError($"GameObject({obj.name}) is null!!!");
+                Log.E($"GameObject({obj.name}) is null!!!");
                 return;
             }
 
@@ -936,7 +936,7 @@ namespace AppFrame.Tools
         {
             if (obj == null)
             {
-                Debug.LogError($"GameObject({obj.name}) is null!!!");
+                Log.E($"GameObject({obj.name}) is null!!!");
                 return;
             }
 
@@ -958,7 +958,7 @@ namespace AppFrame.Tools
         {
             if (obj == null)
             {
-                Debug.LogError($"GameObject({obj.name}) is null!!!");
+                Log.E($"GameObject({obj.name}) is null!!!");
                 return;
             }
 
@@ -983,7 +983,7 @@ namespace AppFrame.Tools
         {
             if (obj == null)
             {
-                Debug.LogError($"GameObject({obj.name}) is null!!!");
+                Log.E($"GameObject({obj.name}) is null!!!");
                 return;
             }
 
@@ -1003,7 +1003,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"GameObject({com}) is null!!!");
+                Log.E($"GameObject({com}) is null!!!");
                 return;
             }
 
@@ -1025,7 +1025,7 @@ namespace AppFrame.Tools
         {
             if (obj == null)
             {
-                Debug.LogError($"GameObject({obj.name}) is null!!!");
+                Log.E($"GameObject({obj.name}) is null!!!");
                 return;
             }
 
@@ -1047,7 +1047,7 @@ namespace AppFrame.Tools
         {
             if (obj == null)
             {
-                Debug.LogError($"GameObject({obj.name}) is null!!!");
+                Log.E($"GameObject({obj.name}) is null!!!");
                 return;
             }
 
@@ -1072,7 +1072,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"GameObject({com}) is null!!!");
+                Log.E($"GameObject({com}) is null!!!");
                 return;
             }
 
@@ -1095,7 +1095,7 @@ namespace AppFrame.Tools
         {
             if (go == null)
             {
-                Debug.LogError($"GameObject({go.name}) is null!!!");
+                Log.E($"GameObject({go.name}) is null!!!");
                 return null;
             }
 
@@ -1112,7 +1112,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"Component({com}) is null!!!");
+                Log.E($"Component({com}) is null!!!");
                 return null;
             }
 
@@ -1130,7 +1130,7 @@ namespace AppFrame.Tools
         {
             if (go == null)
             {
-                Debug.LogError($"GameObject({go.name}) is null!!!");
+                Log.E($"GameObject({go.name}) is null!!!");
                 return null;
             }
 
@@ -1148,7 +1148,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"Component({com}) is null!!!");
+                Log.E($"Component({com}) is null!!!");
                 return null;
             }
 
@@ -1166,7 +1166,7 @@ namespace AppFrame.Tools
         {
             if (go == null)
             {
-                Debug.LogError($"GameObject({go.name}) is null!!!");
+                Log.E($"GameObject({go.name}) is null!!!");
                 return null;
             }
 
@@ -1184,7 +1184,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"Component({com}) is null!!!");
+                Log.E($"Component({com}) is null!!!");
                 return null;
             }
 
@@ -1201,7 +1201,7 @@ namespace AppFrame.Tools
         {
             if (gomeObject == null)
             {
-                Debug.LogError($"GameObject({gomeObject.name}) is null!!!");
+                Log.E($"GameObject({gomeObject.name}) is null!!!");
                 return null;
             }
 
@@ -1229,7 +1229,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"Component({com}) is null!!!");
+                Log.E($"Component({com}) is null!!!");
                 return null;
             }
 
@@ -1257,7 +1257,7 @@ namespace AppFrame.Tools
         {
             if (gomeObject == null)
             {
-                Debug.LogError($"GameObject({gomeObject.name}) is null!!!");
+                Log.E($"GameObject({gomeObject.name}) is null!!!");
                 return null;
             }
 
@@ -1285,7 +1285,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"Component({com}) is null!!!");
+                Log.E($"Component({com}) is null!!!");
                 return null;
             }
 
@@ -1313,7 +1313,7 @@ namespace AppFrame.Tools
         {
             if (gomeObject == null)
             {
-                Debug.LogError($"GameObject({gomeObject.name}) is null!!!");
+                Log.E($"GameObject({gomeObject.name}) is null!!!");
                 return null;
             }
 
@@ -1341,7 +1341,7 @@ namespace AppFrame.Tools
         {
             if (com == null)
             {
-                Debug.LogError($"Component({com}) is null!!!");
+                Log.E($"Component({com}) is null!!!");
                 return null;
             }
 

@@ -235,7 +235,7 @@ namespace AppFrame.Network.Lan.Tcp
             }
             else
             {
-                Debug.LogError("NetTcpSvc.RemoveSession(SessionTcp session)为空 ");
+                Log.E("NetTcpSvc.RemoveSession(SessionTcp session)为空 ");
             }
         }
 
@@ -268,7 +268,7 @@ namespace AppFrame.Network.Lan.Tcp
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError(e);
+                    Log.E(e);
                 }
             }
         }
@@ -285,7 +285,7 @@ namespace AppFrame.Network.Lan.Tcp
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError(e);
+                    Log.E(e);
                 }
             }
         }
@@ -301,7 +301,7 @@ namespace AppFrame.Network.Lan.Tcp
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError(e);
+                    Log.E(e);
                 }
             }
         }
@@ -451,7 +451,7 @@ namespace AppFrame.Network.Lan.Tcp
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError(e);
+                    Log.E(e);
                 }
             }
         }
@@ -467,7 +467,7 @@ namespace AppFrame.Network.Lan.Tcp
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError(e);
+                    Log.E(e);
                 }
             }
         }
@@ -483,7 +483,7 @@ namespace AppFrame.Network.Lan.Tcp
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError(e);
+                    Log.E(e);
                 }
             }
         }
