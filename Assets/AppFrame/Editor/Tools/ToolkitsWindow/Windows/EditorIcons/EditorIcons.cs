@@ -102,7 +102,7 @@ namespace AppFrame.Editor
                 btn.RegisterCallback<MouseUpEvent>((evt) =>
                 {
                     EditorGUIUtility.systemCopyBuffer = content.tooltip;
-                    ToolkitsWindow.ShowHelpBox($"已复制[{content.tooltip}]到剪切板！！！");
+                    ToolkitsWindow.ShowHelpBox($"已复制<color=#00ff00>[{content.tooltip}]</color>到剪切板！！！");
                 });
                 var s = $"Name: {content.tooltip}";
                 s += $"\nSize: {content.image.width}x{content.image.height}";
