@@ -101,7 +101,8 @@ namespace AppFrame.Editor
                 btn.Add(ve);
                 btn.RegisterCallback<MouseUpEvent>((evt) =>
                 {
-                    EditorGUIUtility.systemCopyBuffer = content.tooltip;              
+                    EditorGUIUtility.systemCopyBuffer = content.tooltip;
+                    ToolkitsWindow.ShowHelpBox($"已复制[{content.tooltip}]到剪切板！！！");
                 });
                 var s = $"Name: {content.tooltip}";
                 s += $"\nSize: {content.image.width}x{content.image.height}";
