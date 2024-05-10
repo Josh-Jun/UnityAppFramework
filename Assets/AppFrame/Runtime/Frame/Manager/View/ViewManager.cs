@@ -20,6 +20,7 @@ namespace AppFrame.View
         #region Private Variable
 
         private GameObject CanvasObject; //Canvas游戏对象
+        private GameObject UIRootObject; //UIView Root跟对象
         private GameObject EventSystemObject; //EventSystem游戏对象
         private GameObject GlobalGameObject; //3D游戏对象父物体(全局)
         private GameObject TempGameObject; //3D游戏对象父物体(临时)
@@ -66,6 +67,13 @@ namespace AppFrame.View
             private set { }
         }
 
+        /// <summary> 获取3D游戏对象根对象(全局) </summary>
+        public RectTransform UIRoot
+        {
+            get { return UIRootObject.GetComponent<RectTransform>(); }
+            private set { }
+        }
+
         /// <summary> 获取3D游戏对象根对象(临时) </summary>
         public Transform TempGoRoot
         {
@@ -108,6 +116,9 @@ namespace AppFrame.View
             GlobalGameObject = new GameObject("GlobalGoRoot");
             GlobalGameObject.transform.SetParent(transform);
 
+            UIRootObject = new GameObject("UI Root", typeof(RectTransform));
+            UIRootObject.transform.SetParent(UIRectTransform);
+
             #region EventSystem
 
             if (EventSystem.current == null)
@@ -132,9 +143,18 @@ namespace AppFrame.View
                 Reset3DUIRoot();
             }
 #endif
+            SafeAreaAdjuster();
         }
 
         #region Private Function
+
+        private void SafeAreaAdjuster()
+        {
+            UIRoot.anchorMin = Vector2.zero;
+            UIRoot.anchorMax = Vector2.one;
+            UIRoot.offsetMin = Vector2.zero;
+            UIRoot.offsetMax = Vector2.zero;
+        }
 
         #endregion
 

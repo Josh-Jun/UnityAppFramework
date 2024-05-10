@@ -182,7 +182,7 @@ namespace AppFrame.Manager
         {
             var go = LoadAsset<GameObject>(path);
             if (go == null) return null;
-            go = Instantiate(go, ViewManager.Instance.UIRectTransform);
+            go = Instantiate(go, ViewManager.Instance.UIRoot);
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
@@ -211,7 +211,7 @@ namespace AppFrame.Manager
         public T LoadUIView<T>(GameObject go, bool state = false) where T : Component
         {
             if (go == null) return null;
-            go = Instantiate(go, ViewManager.Instance.UIRectTransform);
+            go = Instantiate(go, ViewManager.Instance.UIRoot);
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
