@@ -59,15 +59,6 @@
       },
       "url": "https://packages.unity.com"
     },
-    "com.unity.debug.srdebug": {
-      "version": "https://github.com/Josh-Jun/UnityPackageManager.git#srdebug/1.11.0",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.unity.ugui": "1.0.0"
-      },
-      "hash": "bfe1e0a182368f8acbe55f5e2ad6092b9d056640"
-    },
     "com.unity.ext.nunit": {
       "version": "1.0.6",
       "depth": 1,
@@ -256,15 +247,6 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
-    },
-    "com.unity.vodeo.avpro": {
-      "version": "https://github.com/Josh-Jun/UnityPackageManager.git#avpro/2.5.0",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.unity.ugui": "1.0.0"
-      },
-      "hash": "0d2116874678ca07c61488f54c92fe4e2750b839"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
