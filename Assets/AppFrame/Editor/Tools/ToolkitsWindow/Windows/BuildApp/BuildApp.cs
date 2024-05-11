@@ -32,6 +32,8 @@ namespace AppFrame.Editor
         private Vector2 UIReferenceResolution;
         private string outputPath;
 
+        private MarginOffset UIOffset;
+
         public void OnCreate(VisualElement root)
         {
             Init();
@@ -43,6 +45,10 @@ namespace AppFrame.Editor
             var export_project = root.Q<Toggle>("ExportProject");
             var ab_build_pipeline = root.Q<EnumField>("ABBuildPipeline");
             var ui_reference_resolution = root.Q<Vector2Field>("UIReferenceResolution");
+            var left_floatfield = root.Q<IntegerField>("Left");
+            var right_floatfield = root.Q<IntegerField>("Right");
+            var top_floatfield = root.Q<IntegerField>("Top");
+            var bottom_floatfield = root.Q<IntegerField>("Bottom");
             var output_path = root.Q<TextField>("BuildAppOutputPath");
 
             development_build.value = DevelopmentBuild;
@@ -53,6 +59,10 @@ namespace AppFrame.Editor
             export_project.value = NativeApp;
             ab_build_pipeline.Init(Pipeline);
             ui_reference_resolution.value = UIReferenceResolution;
+            left_floatfield.value = UIOffset.Left;
+            right_floatfield.value = UIOffset.Right;
+            top_floatfield.value = UIOffset.Top;
+            bottom_floatfield.value = UIOffset.Bottom;
             output_path.value = outputPath;
 
             development_build.RegisterCallback<ChangeEvent<bool>>((evt) => { DevelopmentBuild = evt.newValue; });
@@ -79,6 +89,22 @@ namespace AppFrame.Editor
             ui_reference_resolution.RegisterCallback<ChangeEvent<Vector2>>((evt) =>
             {
                 UIReferenceResolution = evt.newValue;
+            });
+            left_floatfield.RegisterCallback<ChangeEvent<int>>((evt) =>
+            {
+                UIOffset.Left = evt.newValue;
+            });
+            right_floatfield.RegisterCallback<ChangeEvent<int>>((evt) =>
+            {
+                UIOffset.Right = evt.newValue;
+            });
+            top_floatfield.RegisterCallback<ChangeEvent<int>>((evt) =>
+            {
+                UIOffset.Top = evt.newValue;
+            });
+            bottom_floatfield.RegisterCallback<ChangeEvent<int>>((evt) =>
+            {
+                UIOffset.Bottom = evt.newValue;
             });
             output_path.RegisterCallback<ChangeEvent<string>>((evt) => { outputPath = evt.newValue; });
             root.Q<Button>("BuildAppOutputPathBrowse").clicked += () =>
@@ -117,6 +143,7 @@ namespace AppFrame.Editor
                 NativeApp = AppConfig.NativeApp;
                 Pipeline = AppConfig.ABPipeline;
                 UIReferenceResolution = AppConfig.UIReferenceResolution;
+                UIOffset = AppConfig.UIOffset;
             }
             else
             {
@@ -134,6 +161,7 @@ namespace AppFrame.Editor
             AppConfig.NativeApp = NativeApp;
             AppConfig.ABPipeline = Pipeline;
             AppConfig.UIReferenceResolution = UIReferenceResolution;
+            AppConfig.UIOffset = UIOffset;
 
             EditorUtility.SetDirty(AppConfig);
 

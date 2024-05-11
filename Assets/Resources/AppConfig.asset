@@ -21,3 +21,8 @@ MonoBehaviour:
   ABPipeline: 1
   ResVersion: 0
   UIReferenceResolution: {x: 2160, y: 1080}
+  UIOffset:
+    Left: 0
+    Right: 0
+    Top: 0
+    Bottom: 0

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System;
+using AppFrame.Config;
 using AppFrame.Enum;
 using AppFrame.Info;
 using AppFrame.Tools;
@@ -109,7 +110,8 @@ namespace AppFrame.View
             UICanvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             UICanvasScaler.referenceResolution = Global.AppConfig.UIReferenceResolution;
             UICanvasScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
-            UICanvasScaler.matchWidthOrHeight = Global.AppConfig.UIReferenceResolution.x < Global.AppConfig.UIReferenceResolution.y ? 0 : 1;
+            UICanvasScaler.matchWidthOrHeight =
+                Global.AppConfig.UIReferenceResolution.x < Global.AppConfig.UIReferenceResolution.y ? 0 : 1;
 
             #endregion
 
@@ -118,6 +120,7 @@ namespace AppFrame.View
 
             UIRootObject = new GameObject("UI Root", typeof(RectTransform));
             UIRootObject.transform.SetParent(UIRectTransform);
+            UIRootObject.layer = 5;
 
             #region EventSystem
 
@@ -143,17 +146,17 @@ namespace AppFrame.View
                 Reset3DUIRoot();
             }
 #endif
-            SafeAreaAdjuster();
+            SafeAreaAdjuster(Global.AppConfig.UIOffset);
         }
 
         #region Private Function
 
-        private void SafeAreaAdjuster()
+        private void SafeAreaAdjuster(MarginOffset offset)
         {
             UIRoot.anchorMin = Vector2.zero;
             UIRoot.anchorMax = Vector2.one;
-            UIRoot.offsetMin = Vector2.zero;
-            UIRoot.offsetMax = Vector2.zero;
+            UIRoot.offsetMin = new Vector2(-offset.Right, offset.Bottom);
+            UIRoot.offsetMax = new Vector2(offset.Left, -offset.Top);
         }
 
         #endregion
