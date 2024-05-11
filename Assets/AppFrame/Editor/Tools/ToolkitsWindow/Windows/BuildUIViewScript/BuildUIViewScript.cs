@@ -24,9 +24,10 @@ namespace AppFrame.Editor
         private ObjectField uiGameObjectField;
         private Dictionary<string, UIViewData> allUIObjects = new Dictionary<string, UIViewData>();
 
-        private string templetPath = $"{EditorTool.BaseWindowPath}/BuildUIViewScript/ui_view_script_templet.txt";
+        private string templetViewPath = $"{EditorTool.BaseWindowPath}/BuildUIViewScript/ui_view_script_templet.txt";
+        private string templetLogicPath = $"{EditorTool.BaseWindowPath}/BuildUIViewScript/ui_logic_script_templet.txt";
 
-        private string viewScriptPath = "AppMain/Scripts/Modules/";
+        private string ScriptPath = "AppMain/Scripts/Modules/";
 
         private VisualElement parent;
         private VisualElement child;
@@ -122,33 +123,46 @@ namespace AppFrame.Editor
 
         private void BuildEvent()
         {
-            var path = Path.Combine(Application.dataPath, templetPath);
-            var script = File.ReadAllText(path);
+            var view_path = Path.Combine(Application.dataPath, templetViewPath);
+            var view_script = File.ReadAllText(view_path);
+            var logic_path = Path.Combine(Application.dataPath, templetLogicPath);
+            var logic_script = File.ReadAllText(logic_path);
 
-            var script_name = rootFoldout.text;
+            var view_script_name = rootFoldout.text;
             var folder_name = rootFoldout.text.Replace("View", "");
-            var script_path = Path.Combine(Application.dataPath, $"{viewScriptPath}/{folder_name}");
-            viewScriptPath = Path.Combine(script_path, $"{script_name}.cs");
+            var script_path = Path.Combine(Application.dataPath, $"{ScriptPath}/{folder_name}");
+            var view_script_path = Path.Combine(script_path, $"{view_script_name}.cs");
+            var logic_script_name = $"{folder_name}Logic";
+            var logic_script_path = Path.Combine(script_path, $"{logic_script_name}.cs");
 
-            script = script.Replace("#NAMESPACE#", folder_name);
-            script = script.Replace("#SCRIPTNAME#", script_name);
-            script = script.Replace("#VARIABLE#", CraetePrivateVariableContent());
-            script = script.Replace("#GETSET#", CraetePublicVariableContent());
-            script = script.Replace("#INIT#", CraeteInitContent());
-            script = script.Replace("#REGISTER#", CraeteRegisterContent());
-            script = script.Replace("#OPEN#", "");
-            script = script.Replace("#CLOSE#", "");
+            view_script = view_script.Replace("#NAMESPACE#", folder_name);
+            view_script = view_script.Replace("#SCRIPTNAME#", view_script_name);
+            view_script = view_script.Replace("#VARIABLE#", CraetePrivateVariableContent());
+            view_script = view_script.Replace("#GETSET#", CraetePublicVariableContent());
+            view_script = view_script.Replace("#INIT#", CraeteInitContent());
+            view_script = view_script.Replace("#REGISTER#", CraeteRegisterContent());
+            view_script = view_script.Replace("#OPEN#", "");
+            view_script = view_script.Replace("#CLOSE#", "");
+
+            logic_script = logic_script.Replace("#NAMESPACE#", folder_name);
+            logic_script = logic_script.Replace("#SCRIPTNAME#", logic_script_name);
+            
             if (!Directory.Exists(script_path))
             {
                 Directory.CreateDirectory(script_path);
             }
 
-            if (File.Exists(viewScriptPath))
+            if (File.Exists(view_script_path))
             {
-                File.Delete(viewScriptPath);
+                File.Delete(view_script_path);
+            }
+            if (File.Exists(logic_script_path))
+            {
+                File.Delete(logic_script_path);
             }
 
-            File.WriteAllText(viewScriptPath, script);
+            File.WriteAllText(view_script_path, view_script);
+            File.WriteAllText(logic_script_path, logic_script);
             AssetDatabase.Refresh();
         }
 

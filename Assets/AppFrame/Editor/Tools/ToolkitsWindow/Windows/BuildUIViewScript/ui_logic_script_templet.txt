@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using AppFrame.Interface;
+using AppFrame.Data;
 using AppFrame.Tools;
+using AppFrame.Manager;
 using UnityEngine;
 
 namespace Modules.#NAMESPACE#
@@ -12,30 +14,30 @@ namespace Modules.#NAMESPACE#
         
         public #SCRIPTNAME#()
         {
-            #NOTRIM#
+            
         }
         public void Begin()
         {
             if (view == null)
             {
-                view = AssetsManager.Instance.LoadUIView<#NAMESPACE#View>("");
+                view = AssetsManager.Instance.LoadUIView<#NAMESPACE#View>(AssetsPathConfig.#NAMESPACE#View);
             }
         }
         public void End()
         {
-            #NOTRIM#
+            
         }
         public void AppPause(bool pause)
         {
-            #NOTRIM#
+            
         }
         public void AppFocus(bool focus)
         {
-            #NOTRIM#
+            
         }
         public void AppQuit()
         {
-            #NOTRIM#
+            
         }
     }
 }
