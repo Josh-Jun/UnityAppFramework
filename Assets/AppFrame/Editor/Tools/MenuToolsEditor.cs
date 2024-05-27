@@ -88,7 +88,8 @@ namespace AppFrame.Editor
 #if UNITY_EDITOR_WIN
             System.Diagnostics.Process.Start("explorer.exe", $"file://{Application.persistentDataPath}");
 #elif UNITY_EDITOR_OSX
-            System.Diagnostics.Process.Start("open", $"-R {Application.persistentDataPath}");
+            var url = new System.Uri(Application.persistentDataPath).AbsoluteUri;
+            UnityEngine.Application.OpenURL(url);
 #endif
         }
 
