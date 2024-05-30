@@ -70,7 +70,6 @@ namespace AppFrame.Editor
                 if (types[i].GetInterface(type) == null) continue;
                 var name = fullname ? types[i].FullName : types[i].Name;
                 names.Add(name);
-                Debug.Log(name);
             }
             return names;
         }
