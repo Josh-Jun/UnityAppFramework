@@ -59,19 +59,20 @@ namespace AppFrame.Editor
             return obj as IToolkitEditor;
         }
 
-        public static string[] GetToolkitNames()
+        public static List<string> GetScriptName(string assemblyName, string type, bool fullname = true)
         {
-            Assembly assembly = Assembly.Load("App.Frame.Editor");
+            Assembly assembly = Assembly.Load(assemblyName);
             var types = assembly.GetTypes();
             var names = new List<string>();
             for (int i = 0; i < types.Length; i++)
             {
                 if (types[i].IsDefined(typeof(CompilerGeneratedAttribute), false)) continue;
-                if (types[i].GetInterface("IToolkitEditor") == null) continue;
-                names.Add(types[i].Name);
+                if (types[i].GetInterface(type) == null) continue;
+                var name = fullname ? types[i].FullName : types[i].Name;
+                names.Add(name);
+                Debug.Log(name);
             }
-
-            return names.ToArray();
+            return names;
         }
 
         public static T GetEditorWindowsAsset<T>(string path) where T : ScriptableObject

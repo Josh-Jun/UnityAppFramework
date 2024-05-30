@@ -143,15 +143,7 @@ namespace AppFrame.Editor
                 levels.Add(index);
             }
             
-            ScriptNames.Clear();
-            Assembly assembly = Assembly.Load("App.Module");
-            Type[] types = assembly.GetTypes();
-            for (int i = 0; i < types.Length; i++)
-            {
-                if (types[i].IsDefined (typeof (CompilerGeneratedAttribute), false)) continue;
-                if (types[i].FullName.Contains("View")) continue;
-                ScriptNames.Add(types[i].FullName);
-            }
+            ScriptNames = EditorTool.GetScriptName("App.Module","ILogic");
 
             return config.LogicScript;
         }

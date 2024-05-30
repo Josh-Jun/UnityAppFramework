@@ -38,7 +38,7 @@ namespace AppFrame.Editor
 
         public void CreateGUI()
         {
-            itemsName = EditorTool.GetToolkitNames();
+            itemsName = EditorTool.GetScriptName("App.Frame.Editor","IToolkitEditor", false).ToArray();
             stamp = PlayerPrefs.HasKey(STAMP_KEY) ? PlayerPrefs.GetInt(STAMP_KEY) : 0;
             // Each editor window contains a root VisualElement object
             root = rootVisualElement;
