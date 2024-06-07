@@ -1,0 +1,21 @@
+on:
+  push:
+    # delete this item if you don't want to trigger this workflow when modify this repo
+    branches: main
+name: Mirror GitHub Auto Queried Repos to Gitee
+jobs:
+  run:
+    name: Sync-GitHub-to-Gitee
+    runs-on: ubuntu-latest
+    steps:
+    - name: Mirror the Github repos to Gitee.
+      uses: Yikun/hub-mirror-action@master
+      with:
+        src: 'github/${{ github.repository_owner }}'
+        dst: 'gitee/${{ secrets.GITEE_USER }}'
+        dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
+        dst_token: ${{ secrets.GITEE_TOKEN }}
+        account_type: user
+        force_update: true
+        clone_style: ssh
+        static_list: ${{ github.event.repository.name }}
