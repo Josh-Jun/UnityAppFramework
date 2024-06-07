@@ -2,6 +2,7 @@ on:
   push:
     # delete this item if you don't want to trigger this workflow when modify this repo
     branches: main
+    
 name: Mirror GitHub Auto Queried Repos to Gitee
 jobs:
   run:
