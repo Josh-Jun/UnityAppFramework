@@ -72,8 +72,6 @@ namespace AppFrame.Editor
             var folder_list = root.Q<ScrollView>("FolderList");
             var label_page = root.Q<Label>("ListText");
 
-            RefreshAssetBundleList(folder_list, label_page);
-
             var ab_mold = root.Q<EnumField>("ABMold");
             ab_mold.RegisterCallback<ChangeEvent<string>>((evt) =>
             {
@@ -86,6 +84,9 @@ namespace AppFrame.Editor
             });
             ab_mold.Init(ABMold.Hybrid);
             ab_mold.value = ABMold.Hybrid;
+            
+            SetBuildPath(ABMold.Hybrid);
+            RefreshAssetBundleList(folder_list, label_page);
 
             root.Q<Button>("All").clicked += () =>
             {

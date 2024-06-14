@@ -20,6 +20,7 @@ public class Global
     };
 
     public static AppScriptConfig AppScriptConfig;
+    public static readonly string AppScene = "Scenes/App/AppScene";
     public static AppConfig AppConfig;
     public static GameObject UpdateView;
 }

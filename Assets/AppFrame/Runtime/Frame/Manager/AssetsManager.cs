@@ -17,6 +17,19 @@ namespace AppFrame.Manager
         protected override void OnSingletonMonoInit()
         {
             base.OnSingletonMonoInit();
+            InitConfig();
+        }
+
+        public void InitConfig()
+        {
+            AssetPathConfig config = LoadAsset<AssetPathConfig>("Global/AssetConfig/AssetPathConfig");
+            foreach (var ap in config.AssetPath)
+            {
+                if (!AppInfo.AssetPathPairs.ContainsKey(ap.name))
+                {
+                    AppInfo.AssetPathPairs.Add(ap.name, ap.path);
+                }
+            }
         }
 
         #region 移动游戏对象到场景

@@ -20,7 +20,7 @@ namespace Modules.#NAMESPACE#
         {
             if (view == null)
             {
-                view = AssetsManager.Instance.LoadUIView<#NAMESPACE#View>(AssetsPathConfig.#NAMESPACE#View);
+                view = AssetsManager.Instance.LoadUIView<#NAMESPACE#View>(AppInfo.AssetPathPairs["#NAMESPACE#View"]);
             }
         }
         public void End()

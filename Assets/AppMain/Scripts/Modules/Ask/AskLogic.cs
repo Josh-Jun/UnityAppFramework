@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using AppFrame.Data;
+using AppFrame.Info;
 using AppFrame.Interface;
 using AppFrame.Manager;
 using AppFrame.Tools;
@@ -14,7 +15,7 @@ namespace Modules.Ask
         public AskView view;
         public AskLogic()
         {
-            AddEventMsg<string, Action, Action, string, string>("ShowAskView", ShowAskView);
+            AddEventMsg<string, Action, Action, string, string>("ShowAskViewAsBtnText", ShowAskView);
             AddEventMsg<string, Action, Action>("ShowAskView", ShowAskView);
             AddEventMsg<string, float>("ShowTips", ShowTips);
         }
@@ -22,7 +23,7 @@ namespace Modules.Ask
         {
             if (view == null)
             {
-                view = AssetsManager.Instance.LoadUIView<AskView>(AssetsPathConfig.AskView);
+                view = AssetsManager.Instance.LoadUIView<AskView>(AppInfo.AssetPathPairs["AskView"]);
             }
         }
         public void End()

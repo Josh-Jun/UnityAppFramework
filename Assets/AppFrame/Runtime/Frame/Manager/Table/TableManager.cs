@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using AppFrame.Config;
 using AppFrame.Data;
 using AppFrame.Enum;
+using AppFrame.Info;
 using AppFrame.Tools;
 using UnityEngine;
 
@@ -24,7 +25,7 @@ namespace AppFrame.Manager
         {
             if (appTableConfig == null)
             {
-                appTableConfig = AssetsManager.Instance.LoadAsset<AppTableConfig>(AssetsPathConfig.AppTableConfig);
+                appTableConfig = AssetsManager.Instance.LoadAsset<AppTableConfig>(AppInfo.AssetPathPairs["AppTableConfig"]);
                 for (int i = 0; i < appTableConfig.AppTable.Count; i++)
                 {
                     var path = $"Table/{appTableConfig.AppTable[i].TableMold}/{appTableConfig.AppTable[i].TableName}";

@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1dd40a2f9c02f34f89f31326d1f048b, type: 3}
   m_Name: AppScriptConfig
   m_EditorClassIdentifier: 
-  MainSceneName: Scene/Test/TestScene
+  MainSceneName: Scenes/Test/TestScene
   LogicScript:
   - SceneName: Global
     ScriptName: Modules.Ask.AskLogic
   - SceneName: Global
     ScriptName: Modules.Loading.LoadingLogic
-  - SceneName: Scene/App/AppScene
+  - SceneName: Scenes/App/AppScene
     ScriptName: Modules.Update.UpdateLogic
-  - SceneName: Scene/Test/TestScene
+  - SceneName: Scenes/Test/TestScene
     ScriptName: Modules.Test.TestLogic

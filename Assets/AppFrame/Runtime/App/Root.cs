@@ -38,7 +38,7 @@ namespace App
             OutputAppInfo();
             //初始化Logic脚本
             InitLogicScripts();
-            InitLogicBegin(AssetsPathConfig.AppScene);
+            InitLogicBegin(Global.AppScene);
         }
         
         private static void OutputAppInfo()

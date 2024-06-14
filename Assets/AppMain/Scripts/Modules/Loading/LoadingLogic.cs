@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using App;
 using AppFrame.Data;
+using AppFrame.Info;
 using AppFrame.Interface;
 using AppFrame.Manager;
 using AppFrame.Tools;
@@ -23,7 +24,7 @@ namespace Modules.Loading
             if (view == null)
             {
                 //加载窗体
-                view = AssetsManager.Instance.LoadUIView<LoadingView>(AssetsPathConfig.LoadingView);
+                view = AssetsManager.Instance.LoadUIView<LoadingView>(AppInfo.AssetPathPairs["LoadingView"]);
             }
         }
 

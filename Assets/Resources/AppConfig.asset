@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsDebug: 1
   IsTestServer: 0
-  LoadAssetsMold: 1
+  LoadAssetsMold: 0
   AppFrameRate: 60
   TargetPackage: 0
   NativeApp: 0

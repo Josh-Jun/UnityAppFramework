@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using AppFrame.Config;
 using AppFrame.Tools;
 using UnityEditor;
 using UnityEditor.Callbacks;
@@ -51,7 +52,7 @@ namespace AppFrame.Editor
 
         #region 拷贝模板脚本到Unity脚本模板路径
 
-        [MenuItem("Tools/CopyTemplateScripts", false, 0)]
+        [MenuItem("Tools/Editor/CopyTemplateScripts", false, 0)]
         public static void CopyTemplateScripts()
         {
             var template_script_path = $"{Application.dataPath}/AppFrame/Editor/ScriptTemplates";
@@ -68,6 +69,70 @@ namespace AppFrame.Editor
             }
         }
 
+        #endregion
+        
+        #region 更新资源路径配置文件（自动/手动）
+        
+        [DidReloadScripts]
+        [MenuItem("Tools/Editor/UpdateAssetPathConfig", false, 0)]
+        public static void UpdateAssetPathConfig()
+        {
+            var config = Resources.Load<AssetPathConfig>("AssetsFolder/Global/AssetConfig/AssetPathConfig");
+            config.AssetPath.Clear();
+            var folder = "AssetsFolder";
+            List<FileInfo> files = GetFiles(folder);
+            for (int i = 0; i < files.Count; i++)
+            {
+                var key = files[i].Name.Split('.')[0];
+                
+                var value = 
+                    files[i].FullName.Substring(files[i].FullName.IndexOf(folder)).Replace('\\', '/').Split('.')[0].Replace($"{folder}/", "");
+                if (!value.Contains("/")) continue;
+
+                AssetPath ap = new AssetPath
+                {
+                    name = key,
+                    path = value,
+                };
+                config.AssetPath.Add(ap);
+            }
+            EditorUtility.SetDirty(config);
+            AssetDatabase.Refresh();
+        }
+        
+        private static string[] IncludeMarks = { "Views", "Configs", "Scenes", "Prefabs" };
+        private static List<FileInfo> GetFiles(string folder)
+        {
+            var path = $"{Application.dataPath}/Resources/{folder}";
+            List<FileInfo> fileInfos = new List<FileInfo>();
+            if (Directory.Exists(path))
+            {
+                DirectoryInfo direction = new DirectoryInfo(path);
+                FileInfo[] files = direction.GetFiles("*", SearchOption.AllDirectories);
+                for (int i = 0; i < files.Length; i++)
+                {
+                    if (files[i].FullName.Contains("Scene") && !files[i].Name.EndsWith(".unity")) continue; //剔除场景以外的文件
+                    if (files[i].Name.EndsWith(".meta")) continue; //剔除.meta文件
+                    if (files[i].FullName.Contains("Shader")) continue; //剔除Shader
+                    if (files[i].FullName.Contains("Dll")) continue; //剔除Dll
+                    if (files[i].FullName.Contains("Test")) continue; //剔除Test
+                    var isContinue = true;
+                    for (int j = 0; j < IncludeMarks.Length; j++)
+                    {
+                        if (files[i].FullName.Contains(IncludeMarks[j]))
+                        {
+                            isContinue = false;
+                            break;
+                        }
+                    }
+                    if (isContinue) continue; //
+                    fileInfos.Add(files[i]);
+                }
+            }
+
+            return fileInfos;
+        }
+        
         #endregion
         
         #region 打开默认路径
@@ -113,86 +178,6 @@ namespace AppFrame.Editor
 #endif
         }
         
-        #endregion
-
-        #region 创建资源路径配置文件（自动/手动）
-        
-        [DidReloadScripts]
-        [MenuItem("Tools/CreateAssetsPath", false, 3)]
-        public static void CreateAssetsPath()
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine("namespace AppFrame.Data");
-            stringBuilder.AppendLine("{");
-            stringBuilder.AppendLine("    public class AssetsPathConfig");
-            stringBuilder.AppendLine("    {");
-            stringBuilder.Append(GetAllPath("HybridFolder"));
-            stringBuilder.Append(GetAllPath("AssetsFolder"));
-            stringBuilder.AppendLine("    }");
-            stringBuilder.Append("}");
-
-            string output = string.Format("{0}/AppFrame/Runtime/Frame/Tools/AssetsPathConfig.cs", Application.dataPath);
-            FileStream fs1 = new FileStream(output, FileMode.Create, FileAccess.Write);
-            StreamWriter sw = new StreamWriter(fs1);
-            sw.WriteLine(stringBuilder.ToString()); //开始写入值
-            sw.Close();
-            fs1.Close();
-
-            AssetDatabase.Refresh();
-        }
-
-        private static string GetAllPath(string folder)
-        {
-            StringBuilder sb = new StringBuilder();
-            List<FileInfo> files = GetFiles(folder);
-
-            for (int i = 0; i < files.Count; i++)
-            {
-                var name = files[i].Name.Split('.')[0];
-                if (sb.ToString().Contains(name)) continue;
-                var value =
-                    files[i].FullName.Substring(files[i].FullName.IndexOf(folder)).Replace('\\', '/').Split('.')[0]
-                        .Replace($"{folder}/", "");
-                if (!value.Contains("/")) continue;
-                sb.AppendLine($"        public const string {name} = \"{value}\";");
-            }
-
-            return sb.ToString();
-        }
-
-        private static string[] IncludeMarks = { "Views", "Config", "Scene", "Loaded" };
-        private static List<FileInfo> GetFiles(string folder)
-        {
-            var path = $"{Application.dataPath}/Resources/{folder}";
-            List<FileInfo> fileInfos = new List<FileInfo>();
-            if (Directory.Exists(path))
-            {
-                DirectoryInfo direction = new DirectoryInfo(path);
-                FileInfo[] files = direction.GetFiles("*", SearchOption.AllDirectories);
-                for (int i = 0; i < files.Length; i++)
-                {
-                    if (files[i].FullName.Contains("Scene") && !files[i].Name.EndsWith(".unity")) continue; //剔除场景以外的文件
-                    if (files[i].Name.EndsWith(".meta")) continue; //剔除.meta文件
-                    if (files[i].FullName.Contains("Shader")) continue; //剔除Shader
-                    if (files[i].FullName.Contains("Dll")) continue; //剔除Dll
-                    if (files[i].FullName.Contains("Test")) continue; //剔除Test
-                    var isContinue = true;
-                    for (int j = 0; j < IncludeMarks.Length; j++)
-                    {
-                        if (files[i].FullName.Contains(IncludeMarks[j]))
-                        {
-                            isContinue = false;
-                            break;
-                        }
-                    }
-                    if (isContinue) continue; //
-                    fileInfos.Add(files[i]);
-                }
-            }
-
-            return fileInfos;
-        }
-
         #endregion
 
         #region 复制文件依赖关系
