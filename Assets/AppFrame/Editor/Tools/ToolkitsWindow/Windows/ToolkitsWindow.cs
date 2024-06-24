@@ -28,12 +28,12 @@ namespace AppFrame.Editor
         private List<IToolkitEditor> editors = new List<IToolkitEditor>();
 
         [MenuItem("Tools/ToolkitsWindow", false, 1)]
-        public static void ShowExample()
+        public static void ShowWindow()
         {
             var icon = EditorGUIUtility.IconContent("Assembly Icon").image;
-            ToolkitsWindow wnd = GetWindow<ToolkitsWindow>();
-            wnd.titleContent = new GUIContent("Toolkits", icon);
-            
+            ToolkitsWindow window = GetWindow<ToolkitsWindow>();
+            window.titleContent = new GUIContent("Toolkits", icon);
+            window.SaveChanges();
         }
 
         public void CreateGUI()
