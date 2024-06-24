@@ -6,16 +6,12 @@
  * function    :
  * ===============================================
  * */
-using System;
+
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using AppFrame.Tools;
 using AppFrame.View;
 // using Pico.Tools;
 using UnityEngine;
-using UnityEngine.Animations;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Modules.Test

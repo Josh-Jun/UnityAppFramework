@@ -1,18 +1,12 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Collections;
 using System.Reflection;
 using System.Text;
 using AppFrame.Config;
-using AppFrame.Data;
-using AppFrame.Enum;
 using AppFrame.Info;
 using AppFrame.Interface;
 using AppFrame.Manager;
-using AppFrame.Tools;
-using AppFrame.Data;
-using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 namespace App

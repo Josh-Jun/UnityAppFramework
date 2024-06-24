@@ -1,12 +1,6 @@
-﻿using System.Diagnostics;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using Debug = UnityEngine.Debug;
-using SObject = System.Object;
 
 namespace UnityEngine.UI
 {

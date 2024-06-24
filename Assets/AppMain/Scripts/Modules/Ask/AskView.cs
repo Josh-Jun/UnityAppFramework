@@ -7,8 +7,6 @@
  * ===============================================
  * */
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using AppFrame.Tools;
 using AppFrame.View;
 using UnityEngine;

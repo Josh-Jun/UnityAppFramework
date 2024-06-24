@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,7 +11,6 @@ using HybridCLR.Editor.Commands;
 using UnityEditor;
 using UnityEditor.Build.Content;
 using UnityEditor.Build.Pipeline;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.Build.Pipeline;
 using UnityEngine.UIElements;

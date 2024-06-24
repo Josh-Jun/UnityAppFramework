@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using AppFrame.Enum;
 using AppFrame.Tools;
-using DG.Tweening;
-using UnityEngine;
 
 namespace AppFrame.View
 {

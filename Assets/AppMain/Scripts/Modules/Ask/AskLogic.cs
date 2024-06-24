@@ -7,14 +7,10 @@
  * ===============================================
  * */
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using AppFrame.Data;
 using AppFrame.Info;
 using AppFrame.Interface;
 using AppFrame.Manager;
 using AppFrame.Tools;
-using UnityEngine;
 
 namespace Modules.Ask
 {

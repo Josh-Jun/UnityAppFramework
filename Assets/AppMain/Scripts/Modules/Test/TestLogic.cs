@@ -7,20 +7,15 @@
  * ===============================================
  * */
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Video;
 using System.Threading.Tasks;
-using App;
-using AppFrame.Data;
-using AppFrame.Info;
 using AppFrame.Interface;
 using AppFrame.Manager;
 using AppFrame.Tools;
-using Modules.Ask;
 
 namespace Modules.Test
 {

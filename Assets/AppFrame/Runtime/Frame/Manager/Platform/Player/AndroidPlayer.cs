@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using AppFrame.Config;
-using AppFrame.Enum;
-using AppFrame.Info;
+﻿using AppFrame.Config;
 using UnityEngine;
 using UnityEngine.Android;
 

@@ -4,7 +4,6 @@ using System.Collections;
 using System.Linq;
 using System.Reflection;
 using AppFrame.Config;
-using AppFrame.Enum;
 using AppFrame.Info;
 using AppFrame.Tools;
 using AppFrame.View;

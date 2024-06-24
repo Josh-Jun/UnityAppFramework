@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 /// <summary>
 /// 功能:音频工具 

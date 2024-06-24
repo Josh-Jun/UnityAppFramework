@@ -6,16 +6,12 @@
  * function    :
  * ===============================================
  * */
-using System;
-using System.Collections;
-using System.Collections.Generic;
+
 using App;
-using AppFrame.Data;
 using AppFrame.Info;
 using AppFrame.Interface;
 using AppFrame.Manager;
 using AppFrame.Tools;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Modules.Loading
