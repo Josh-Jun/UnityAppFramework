@@ -1,4 +1,12 @@
-﻿using System;
+﻿/* *
+ * ===============================================
+ * author      : Josh@book
+ * e-mail      : shijun_z@163.com
+ * create time : 2024年6月24 13:57
+ * function    :
+ * ===============================================
+ * */
+using System;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;

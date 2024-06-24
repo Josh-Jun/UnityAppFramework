@@ -19,13 +19,23 @@ namespace AppFrame.Editor
         #region 脚本模板导入修改命名空间
 
         private static string[] temps = { "Logic", "View" };
-
+        private static StringBuilder head = new StringBuilder(1024);
         /// <summary>  
         /// 此函数在asset被创建完，文件已经生成到磁盘上，但是没有生成.meta文件和import之前被调用  
         /// </summary>  
         /// <param name="newFileMeta">newfilemeta 是由创建文件的path加上.meta组成的</param>  
         public static void OnWillCreateAsset(string newFileMeta)
         {
+            head.Length = 0;
+            head.AppendLine("/* *");
+            head.AppendLine(" * ===============================================");
+            head.AppendLine($" * author      : {EditorTool.GetGitConfig("user.name")}");
+            head.AppendLine($" * e-mail      : {EditorTool.GetGitConfig("user.email")}");
+            head.AppendLine($" * create time : {DateTime.Now.Year}年{DateTime.Now.Month}月{DateTime.Now.Day} {DateTime.Now.Hour}:{DateTime.Now.Minute}");
+            head.AppendLine(" * function    : ");
+            head.AppendLine(" * ===============================================");
+            head.AppendLine(" * */");
+            
             var newFilePath = newFileMeta.Replace(".meta", "");
             if (Path.GetExtension(newFilePath) == ".txt" || Path.GetExtension(newFilePath) == ".cs")
             {
@@ -42,6 +52,7 @@ namespace AppFrame.Editor
                     }
 
                     scriptContent = scriptContent.Replace("#NAMESPACE#", namespaces);
+                    scriptContent = scriptContent.Insert(0, head.ToString());
 
                     File.WriteAllText(realPath, scriptContent);
                 }
@@ -55,7 +66,7 @@ namespace AppFrame.Editor
         [MenuItem("Tools/Editor/CopyTemplateScripts", false, 0)]
         public static void CopyTemplateScripts()
         {
-            var template_script_path = $"{Application.dataPath}/AppFrame/Editor/ScriptTemplates";
+            var template_script_path = $"{Application.dataPath}/AppFrame/Editor/Tools/ScriptTemplates";
             var base_path = string.Empty;
 #if UNITY_EDITOR_WIN
             base_path = $"{AppDomain.CurrentDomain.BaseDirectory}/Data";
@@ -66,6 +77,11 @@ namespace AppFrame.Editor
             {
                 var install_path = $"{base_path}/Resources/ScriptTemplates";
                 EditorTool.Copy(template_script_path, install_path, "txt");
+            }
+            var result = EditorUtility.DisplayDialog("重要提示", "脚本模版拷贝成功，重启Unity Editor生效", "重启", "取消");
+            if (result)
+            {
+                EditorApplication.OpenProject($"{Application.dataPath.Replace("Assets", string.Empty)}");
             }
         }
 

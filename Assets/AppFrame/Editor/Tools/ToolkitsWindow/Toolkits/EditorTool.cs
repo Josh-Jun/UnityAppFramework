@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -77,6 +78,26 @@ namespace AppFrame.Editor
         public static T GetEditorWindowsAsset<T>(string path) where T : ScriptableObject
         {
             return AssetDatabase.LoadAssetAtPath<T>($"Assets/{BaseWindowPath}/{path}");
+        }
+
+        public static string GetGitConfig(string key)
+        {
+            using var process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "git",
+                    Arguments = $"config --get {key}",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true,
+                }
+            };
+
+            process.Start();
+            var result = process.StandardOutput.ReadToEnd().Trim();
+            process.WaitForExit();
+            return result;
         }
     }
 }
