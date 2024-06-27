@@ -104,6 +104,12 @@ namespace Launcher
             {
                 ABModulePairs.Add(moduleName, folderPairs);
             }
+
+            if (Global.AppConfig.ABPipeline == ABPipeline.Default)
+            {
+                assetbundle = AssetBundle.LoadFromFile($"{mainfestPath}/{PlatformName}");
+                mainfest = assetbundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
+            }
         }
 
         public AssetBundle LoadAssetBundle(string bundleName, string[] Dependencies = null)
@@ -162,11 +168,13 @@ namespace Launcher
         /// <summary>
         /// 获取一个 bundle 包的所有依赖关系[最重要]
         /// </summary>
-        /// <param name="bundleName"></param>
+        /// <param name="moduleName"></param>
+        /// <param name="folderName"></param>
         /// <returns></returns>
-        private string[] GetDependence(string bundleName)
+        private string[] GetDependence(string moduleName, string folderName)
         {
-            return mainfest.GetAllDependencies(bundleName);
+            Folder folder = ABModulePairs[moduleName][folderName];
+            return folder.Dependencies;
         }
 
         public void UnloadCacheAssetBundles()
@@ -186,9 +194,9 @@ namespace Launcher
         /// <summary>
         /// 单个包卸载
         /// </summary>
-        public void UnLoad(string sceneName, string folderName)
+        public void UnLoad(string moduleName, string folderName)
         {
-            string bundleName = ABModulePairs[sceneName][folderName].BundleName;
+            string bundleName = ABModulePairs[moduleName][folderName].BundleName;
             if (AssetBundlesCache.ContainsKey(bundleName))
             {
                 AssetBundlesCache[bundleName].Unload(false);
@@ -205,8 +213,6 @@ namespace Launcher
             AssetBundle.UnloadAllAssetBundles(false);
             //注意清空缓存
             AssetBundlesCache.Clear();
-            assetbundle = null;
-            mainfest = null;
         }
     }
 }
