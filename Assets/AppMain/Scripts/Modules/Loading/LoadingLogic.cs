@@ -3,7 +3,7 @@
  * author      : Josh@book
  * e-mail      : shijun_z@163.com
  * create time : 2024年6月24 13:57
- * function    :
+ * function    : 进度条场景(Logic) - 加载场景过渡功能
  * ===============================================
  * */
 

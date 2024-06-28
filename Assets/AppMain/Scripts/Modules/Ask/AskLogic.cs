@@ -3,7 +3,7 @@
  * author      : Josh@book
  * e-mail      : shijun_z@163.com
  * create time : 2024年6月24 13:57
- * function    : 
+ * function    : 弹窗功能(Logic) - 1,确认弹窗  2,提示弹窗
  * ===============================================
  * */
 using System;

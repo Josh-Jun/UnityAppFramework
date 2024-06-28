@@ -3,7 +3,7 @@
  * author      : Josh@book
  * e-mail      : shijun_z@163.com
  * create time : 2024年6月24 13:57
- * function    :
+ * function    : 更新功能(View) - 1,资源更新 2,应用更新
  * ===============================================
  * */
 using AppFrame.Tools;
