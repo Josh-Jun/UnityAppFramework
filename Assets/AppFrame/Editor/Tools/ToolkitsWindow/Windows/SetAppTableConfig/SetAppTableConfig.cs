@@ -29,16 +29,13 @@ namespace AppFrame.Editor
 
         private ScrollView table_scroll_view;
 
-        private Button btn_table_apply;
-        
         public void OnCreate(VisualElement root)
         {
             table_scroll_view = root.Q<ScrollView>("table_scroll_view");
             config = Resources.Load<AppTableConfig>(configPath);
             
-            btn_table_apply = root.Q<Button>("btn_table_apply");
-            btn_table_apply.text = tableDatas.Count == 0 ? "Load Excel" : "Apply";
-            btn_table_apply.clicked += ApplyConfig;
+            root.Q<Button>("btn_table_apply").clicked += ApplyConfig;
+            InitTableView();
         }
 
         public void OnUpdate()
@@ -53,7 +50,7 @@ namespace AppFrame.Editor
         private void InitTableView()
         {
             tableDatas = GetTableDatas();
-
+            table_scroll_view.Clear();
             for (int i = 0; i < tableDatas.Count; i++)
             {
                 int index = i;
@@ -96,12 +93,6 @@ namespace AppFrame.Editor
         
         private void ApplyConfig()
         {
-            if (tableDatas.Count == 0)
-            {
-                InitTableView();
-                btn_table_apply.text = "Apply";
-                return;
-            }
             config.AppTable.Clear();
             for (int i = 0; i < tableDatas.Count; i++)
             {

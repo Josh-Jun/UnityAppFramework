@@ -53,6 +53,9 @@ namespace AppFrame.Editor
                 view.style.display = DisplayStyle.None;
                 viewElements.Add(view);
                 right.Add(view);
+                
+                IToolkitEditor editor = EditorTool.GetEditor(itemsName[i]);
+                editors.Add(editor);
             }
 
             leftListView = root.Q<ListView>("left");
@@ -62,13 +65,8 @@ namespace AppFrame.Editor
             leftListView.selectionType = SelectionType.Single;
             leftListView.selectedIndicesChanged += OnItemsChosen;
             leftListView.SetSelection(stamp);
-
-            for (int i = 0; i < itemsName.Length; i++)
-            {
-                IToolkitEditor editor = EditorTool.GetEditor(itemsName[i]);
-                editor.OnCreate(root);
-                editors.Add(editor);
-            }
+            
+            editors[stamp].OnCreate(root);
         }
 
         public void Update()
@@ -93,6 +91,7 @@ namespace AppFrame.Editor
             {
                 infos.Clear();
                 view_title.text = itemsName[index];
+                editors[index].OnCreate(root);
                 viewElements[stamp].style.display = DisplayStyle.None;
                 viewElements[index].style.display = DisplayStyle.Flex;
                 stamp = index;
