@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
-/// <summary>
-/// 程序入口
-/// </summary>
-/// 
+
 namespace App
 {
+    /// <summary>
+    /// 程序入口
+    /// </summary>
     public class App : MonoBehaviour
     {
-        public static App app = null;
+        private static App app = null;
 
         private void Awake()
         {
@@ -18,7 +18,7 @@ namespace App
                 //切换场景不销毁此对象
                 DontDestroyOnLoad(gameObject);
                 //启动入口
-                Root.Init();
+                Root.Init(transform);
             }
             else
             {

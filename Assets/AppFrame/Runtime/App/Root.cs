@@ -17,10 +17,10 @@ namespace App
         private static Dictionary<string, ILogic> iLogicPairs = new Dictionary<string, ILogic>();
         private static List<ILogic> RuntimeRoots = new List<ILogic>();
 
-        public static void Init()
+        public static void Init(Transform app)
         {
             var manager = new GameObject("Manager");
-            manager.transform.SetParent(App.app.transform);
+            manager.transform.SetParent(app);
             
             //Log开关
             Log.Enabled = Global.AppConfig.IsDebug;
