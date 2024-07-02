@@ -17,8 +17,11 @@ namespace App
                 app = this;
                 //切换场景不销毁此对象
                 DontDestroyOnLoad(gameObject);
+                //创建Manager根对象
+                var manager = new GameObject("Manager");
+                manager.transform.SetParent(transform);
                 //启动入口
-                Root.Init(transform);
+                Root.Init();
             }
             else
             {
