@@ -20,10 +20,11 @@ namespace AppFrame.Tools
                         {
                             var parent = GameObject.Find(ParentName);
                             var go = new GameObject(typeof(T).Name);
-                            if (parent != null)
+                            if (parent == null)
                             {
-                                go.transform.SetParent(parent.transform);
+                                parent = new GameObject(ParentName);
                             }
+                            go.transform.SetParent(parent.transform);
                             _Instance = go.AddComponent<T>();
                         }
                         _Instance.OnSingletonMonoInit();
