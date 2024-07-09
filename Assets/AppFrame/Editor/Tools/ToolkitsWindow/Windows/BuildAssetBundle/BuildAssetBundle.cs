@@ -358,28 +358,24 @@ namespace AppFrame.Editor
         {
             if (!fileSystemInfo.Exists)
                 Debug.LogError(fileSystemInfo.FullName + "不存在！");
-            string name = AppConfig.TargetPackage == TargetPackage.Mobile ? "Pico" : "Mobile";
             DirectoryInfo directoryInfo = fileSystemInfo as DirectoryInfo;
             // 获取所有文件系统[包括文件夹和文件]
             FileSystemInfo[] fileSystemInfos = directoryInfo.GetFileSystemInfos();
             foreach (FileSystemInfo tempfileSystemInfo in fileSystemInfos)
             {
-                if (tempfileSystemInfo.Name != name)
+                FileInfo fileInfo = tempfileSystemInfo as FileInfo;
+                if (fileInfo == null)
                 {
-                    FileInfo fileInfo = tempfileSystemInfo as FileInfo;
-                    if (fileInfo == null)
-                    {
-                        // 代表强转失败 ,不是文件 , 是文件夹
-                        // 4. 如果访问的是文件夹 ， 再继续访问里面的所有文件系统，直到找到文件 (递归思想)；
-                        // 再调用本方法 
-                        OnSceneFileSystemInfo(tempfileSystemInfo, sceneName, namePathDic);
-                    }
-                    else
-                    {
-                        // 代表强转成功了 , 是文件 ;
-                        // 5. 找到文件 ， 就要修改它的 AssetBundle Labels ;
-                        SetLabels(fileInfo, sceneName, namePathDic);
-                    }
+                    // 代表强转失败 ,不是文件 , 是文件夹
+                    // 4. 如果访问的是文件夹 ， 再继续访问里面的所有文件系统，直到找到文件 (递归思想)；
+                    // 再调用本方法 
+                    OnSceneFileSystemInfo(tempfileSystemInfo, sceneName, namePathDic);
+                }
+                else
+                {
+                    // 代表强转成功了 , 是文件 ;
+                    // 5. 找到文件 ， 就要修改它的 AssetBundle Labels ;
+                    SetLabels(fileInfo, sceneName, namePathDic);
                 }
             }
         }

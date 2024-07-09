@@ -61,7 +61,15 @@ namespace AppFrame.Editor
             top_floatfield.value = UIOffset.Top;
             bottom_floatfield.value = UIOffset.Bottom;
             output_path.value = outputPath;
-
+            
+            build_mold.style.display = 
+                EditorUserBuildSettings.activeBuildTarget == BuildTarget.iOS || 
+                EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android ? DisplayStyle.Flex : DisplayStyle.None;
+            
+            export_project.style.display = 
+                EditorUserBuildSettings.activeBuildTarget == BuildTarget.iOS || 
+                EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android ? DisplayStyle.Flex : DisplayStyle.None;
+            
             development_build.RegisterCallback<ChangeEvent<bool>>((evt) => { DevelopmentBuild = evt.newValue; });
             is_test_server.RegisterCallback<ChangeEvent<bool>>((evt) => { IsTestServer = evt.newValue; });
             load_assets_mold.RegisterCallback<ChangeEvent<string>>((evt) =>
