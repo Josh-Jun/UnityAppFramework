@@ -190,11 +190,11 @@ namespace AppFrame.Manager
         /// path = 窗口路径，不包含AssetsFolder
         /// state 初始化窗口是否显示
         /// </summary>
-        public T LoadUIView<T>(string path, bool state = false) where T : Component
+        public T LoadUIView<T>(string path, int panelId = 0, bool state = false) where T : Component
         {
             var go = LoadAsset<GameObject>(path);
             if (go == null) return null;
-            go = Instantiate(go, ViewManager.Instance.UIRoot);
+            go = Instantiate(go, ViewManager.Instance.UIPanels[panelId]);
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");
@@ -220,10 +220,10 @@ namespace AppFrame.Manager
         /// path = 窗口路径，不包含AssetsFolder
         /// state 初始化窗口是否显示
         /// </summary>
-        public T LoadUIView<T>(GameObject go, bool state = false) where T : Component
+        public T LoadUIView<T>(GameObject go, int panelId = 0, bool state = false) where T : Component
         {
             if (go == null) return null;
-            go = Instantiate(go, ViewManager.Instance.UIRoot);
+            go = Instantiate(go, ViewManager.Instance.UIPanels[panelId]);
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localScale = Vector3.one;
             go.name = go.name.Replace("(Clone)", "");

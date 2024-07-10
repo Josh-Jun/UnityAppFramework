@@ -24,6 +24,7 @@ namespace AppFrame.View
 
         private static Dictionary<string, ViewBase> viewPairs = new Dictionary<string, ViewBase>();
         private Dictionary<string, Transform> rootPairs = new Dictionary<string, Transform>();
+        private List<RectTransform> uiPanels = new List<RectTransform>();
 
         #endregion
 
@@ -64,10 +65,17 @@ namespace AppFrame.View
             private set { }
         }
 
-        /// <summary> 获取3D游戏对象根对象(全局) </summary>
+        /// <summary> 获取UIRoot </summary>
         public RectTransform UIRoot
         {
             get { return UIRootObject.GetComponent<RectTransform>(); }
+            private set { }
+        }
+        
+        /// <summary> 获取UIPanels </summary>
+        public List<RectTransform> UIPanels
+        {
+            get { return uiPanels; }
             private set { }
         }
 
@@ -113,11 +121,11 @@ namespace AppFrame.View
 
             GlobalGameObject = new GameObject("GlobalGoRoot");
             GlobalGameObject.transform.SetParent(transform);
-
+            
             UIRootObject = new GameObject("UI Root", typeof(RectTransform));
             UIRootObject.transform.SetParent(UIRectTransform);
             UIRootObject.layer = 5;
-
+            
             #region EventSystem
 
             if (EventSystem.current == null)
@@ -143,6 +151,8 @@ namespace AppFrame.View
             }
 #endif
             SafeAreaAdjuster(Global.AppConfig.UIOffset);
+            
+            InitUIPanel();
         }
 
         #region Private Function
@@ -153,6 +163,23 @@ namespace AppFrame.View
             UIRoot.anchorMax = Vector2.one;
             UIRoot.offsetMin = new Vector2(-offset.Right, offset.Bottom);
             UIRoot.offsetMax = new Vector2(offset.Left, -offset.Top);
+        }
+
+        private void InitUIPanel()
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                int index = i;
+                GameObject go = new GameObject($"UIPanel{index}",typeof(RectTransform));
+                go.transform.SetParent(UIRoot);
+                go.layer = 5;
+                RectTransform rt = go.transform as RectTransform;
+                rt.anchorMin = Vector2.zero;
+                rt.anchorMax = Vector2.one;
+                rt.offsetMin = Vector2.zero;
+                rt.offsetMax = Vector2.zero;
+                uiPanels.Add(rt);
+            }
         }
 
         #endregion

@@ -27,7 +27,7 @@ namespace Modules.Ask
         {
             if (view == null)
             {
-                view = AssetsManager.Instance.LoadUIView<AskView>(AppInfo.AssetPathPairs["AskView"]);
+                view = AssetsManager.Instance.LoadUIView<AskView>(AppInfo.AssetPathPairs["AskView"], 2);
             }
         }
         public void End()

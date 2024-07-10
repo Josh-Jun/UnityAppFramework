@@ -101,7 +101,7 @@ namespace Modules.Update
                     });
                     break;
                 case LoadAssetsMold.Remote:
-                    view = AssetsManager.Instance.LoadUIView<UpdateView>(Global.UpdateView);
+                    view = AssetsManager.Instance.LoadUIView<UpdateView>(Global.UpdateView, 1);
                     view.SetViewActive();
 
                     view.SetTipsText("检查更新中...");
