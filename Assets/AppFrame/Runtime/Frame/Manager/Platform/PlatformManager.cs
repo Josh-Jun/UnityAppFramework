@@ -14,6 +14,9 @@ namespace AppFrame.Manager
                 {
                     switch (Application.platform)
                     {
+                        case RuntimePlatform.OSXPlayer:
+                            _instance = new WindowPlayer();
+                            break;
                         case RuntimePlatform.WindowsPlayer:
                             _instance = new WindowPlayer();
                             break;
@@ -24,8 +27,6 @@ namespace AppFrame.Manager
                             _instance = new AndroidPlayer();
                             break;
                         case RuntimePlatform.WindowsEditor:
-                            _instance = new EditorPlayer();
-                            break;
                         case RuntimePlatform.OSXEditor:
                             _instance = new EditorPlayer();
                             break;
