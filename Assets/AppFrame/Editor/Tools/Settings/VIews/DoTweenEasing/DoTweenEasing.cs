@@ -46,19 +46,17 @@ namespace AppFrame.Editor
                 duration = evt.newValue;
             });
             
-            btnPlay.RegisterCallback<MouseUpEvent>((ent) =>
-            {
-                PLayTween();
-            });
+            btnPlay.RegisterCallback<MouseUpEvent>((ent) => PlayTween());
         }
 
-        private void PLayTween()
+        private void PlayTween()
         {
+            DOTweenEditorPreview.Stop(true);
             animationSlider.value = 0;
             var tween = DOTween.To(() => animationSlider.value, v => animationSlider.value = v, 1f, duration).SetEase(ease);
-            DOTweenEditorPreview.PrepareTweenForPreview(tween);
+            DOTweenEditorPreview.PrepareTweenForPreview(tween, false);
             DOTweenEditorPreview.Start();
-        } 
+        }
 
         public void OnUpdate()
         {
