@@ -21,7 +21,7 @@ MonoBehaviour:
   useSmoothDeltaTime: 0
   maxSmoothUnscaledTime: 0.15
   rewindCallbackMode: 0
-  showUnityEditorReport: 0
+  showUnityEditorReport: 1
   logBehaviour: 0
   drawGizmos: 1
   defaultRecyclable: 0

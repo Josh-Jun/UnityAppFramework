@@ -108,7 +108,6 @@ namespace DG.DOTweenEditor
             { DOTweenAnimation.AnimationType.CameraRect, new[] { typeof(Camera) } },
 #if true // UI_MARKER
             { DOTweenAnimation.AnimationType.UIWidthHeight, new[] { typeof(RectTransform) } },
-            { DOTweenAnimation.AnimationType.FillAmount, new[] { typeof(Image) } },
 #endif
         };
 
@@ -135,7 +134,6 @@ namespace DG.DOTweenEditor
             "Scale",
             "Color", "Fade",
 #if true // UI_MARKER
-            "FillAmount",
             "Text",
 #endif
 #if false // TK2D_MARKER
@@ -363,9 +361,6 @@ namespace DG.DOTweenEditor
                         _src.endValueFloat = 0;
                         _src.optionalBool0 = _src.animationType == DOTweenAnimation.AnimationType.UIWidthHeight;
                         break;
-                    case DOTweenAnimation.AnimationType.FillAmount:
-                        _src.endValueFloat = 1;
-                        break;
                     case DOTweenAnimation.AnimationType.Color:
                     case DOTweenAnimation.AnimationType.Fade:
                         _isLightSrc = targetGO.GetComponent<Light>() != null;
@@ -509,12 +504,6 @@ namespace DG.DOTweenEditor
                     if (_src.optionalBool0) GUIEndValueFloat();
                     else GUIEndValueV2();
                     _src.optionalBool0 = EditorGUILayout.Toggle("Uniform Scale", _src.optionalBool0);
-                    break;
-                case DOTweenAnimation.AnimationType.FillAmount:
-                    GUIEndValueFloat();
-                    if (_src.endValueFloat < 0) _src.endValueFloat = 0;
-                    if (_src.endValueFloat > 1) _src.endValueFloat = 1;
-                    canBeRelative = false;
                     break;
                 case DOTweenAnimation.AnimationType.Color:
                     GUIEndValueColor();
