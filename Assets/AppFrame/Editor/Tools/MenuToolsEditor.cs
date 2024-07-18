@@ -59,7 +59,7 @@ namespace AppFrame.Editor
 
         #region 拷贝模板脚本到Unity脚本模板路径
 
-        [MenuItem("Tools/Editor/CopyTemplateScripts", false, 0)]
+        [MenuItem("App/Editor/CopyTemplateScripts", false, 0)]
         public static void CopyTemplateScripts()
         {
             var template_script_path = $"{Application.dataPath}/AppFrame/Editor/Tools/ScriptTemplates";
@@ -86,7 +86,7 @@ namespace AppFrame.Editor
         #region 更新资源路径配置文件（自动/手动）
         
         [DidReloadScripts]
-        [MenuItem("Tools/Editor/UpdateAssetPathConfig", false, 0)]
+        [MenuItem("App/Editor/UpdateAssetPathConfig", false, 0)]
         public static void UpdateAssetPathConfig()
         {
             var config = Resources.Load<AssetPathConfig>("AssetsFolder/Global/AssetConfig/AssetPathConfig");
@@ -149,7 +149,7 @@ namespace AppFrame.Editor
         
         #region 打开默认路径
         
-        [MenuItem("Tools/OpenFolder/DataPath", false, 0)]
+        [MenuItem("App/OpenFolder/DataPath", false, 0)]
         public static void OpenDataFolder()
         {
 #if UNITY_EDITOR_WIN
@@ -159,7 +159,7 @@ namespace AppFrame.Editor
 #endif
         }
 
-        [MenuItem("Tools/OpenFolder/PersistentDataPath", false, 0)]
+        [MenuItem("App/OpenFolder/PersistentDataPath", false, 0)]
         public static void OpenPersistentDataFolder()
         {
 #if UNITY_EDITOR_WIN
@@ -170,7 +170,7 @@ namespace AppFrame.Editor
 #endif
         }
 
-        [MenuItem("Tools/OpenFolder/StreamingAssetsPath", false, 0)]
+        [MenuItem("App/OpenFolder/StreamingAssetsPath", false, 0)]
         public static void OpenStreamingAssetsFolder()
         {
 #if UNITY_EDITOR_WIN
@@ -180,7 +180,7 @@ namespace AppFrame.Editor
 #endif
         }
 
-        [MenuItem("Tools/OpenFolder/TemporaryCachePath", false, 0)]
+        [MenuItem("App/OpenFolder/TemporaryCachePath", false, 0)]
         public static void OpenTemporaryCacheFolder()
         {
 #if UNITY_EDITOR_WIN

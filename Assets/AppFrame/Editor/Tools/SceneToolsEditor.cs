@@ -16,14 +16,14 @@ namespace AppFrame.Editor
             {
                 PlayerPrefs.SetInt(AUTO_KEY, 0);
             }
-            Menu.SetChecked("Tools/AutoOpenScene", PlayerPrefs.GetInt(AUTO_KEY) == 1);
+            Menu.SetChecked("App/AutoOpenScene", PlayerPrefs.GetInt(AUTO_KEY) == 1);
         }
         
-        [MenuItem("Tools/AutoOpenScene", false, 10)]
+        [MenuItem("App/AutoOpenScene", false, 10)]
         public static void AutoOpenScene()
         {
-            Menu.SetChecked("Tools/AutoOpenScene", PlayerPrefs.GetInt(AUTO_KEY) != 1);
-            var value = Menu.GetChecked("Tools/AutoOpenScene") ? 1 : 0;
+            Menu.SetChecked("App/AutoOpenScene", PlayerPrefs.GetInt(AUTO_KEY) != 1);
+            var value = Menu.GetChecked("App/AutoOpenScene") ? 1 : 0;
             PlayerPrefs.SetInt(AUTO_KEY, value);
         }
 
