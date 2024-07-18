@@ -75,6 +75,11 @@ namespace AppFrame.Editor
                     {
                         var editor = EditorTool.GetEditor(itemsName[index]);
                         editor.OnUpdate();
+                    },
+                    deactivateHandler = () =>
+                    {
+                        var editor = EditorTool.GetEditor(itemsName[index]);
+                        editor.OnDestroy();
                     }
                 };
                 provaders.Add(provader);
