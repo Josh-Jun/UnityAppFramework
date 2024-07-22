@@ -25,6 +25,25 @@ namespace AppFrame.Editor
             var provider = new SettingsProvider("Project/AppToolkit", SettingsScope.Project)
             {
                 label = "AppToolkit",
+                titleBarGuiHandler = () =>
+                {
+                    var rect = GUILayoutUtility.GetLastRect();
+                    var buttonStyle = GUI.skin.GetStyle("IconButton");
+
+                    #region  绘制官方网站跳转按钮
+                    var w = rect.x + rect.width;
+                    rect.x = w - 19;
+                    rect.y += 6;
+                    rect.width = rect.height = 18;
+                    var content = EditorGUIUtility.IconContent("_Help");
+                    content.tooltip = "点击访问 GitHub 查看源码";
+                    if (GUI.Button(rect, content, buttonStyle))
+                    {
+                        Application.OpenURL("https://github.com/Josh-Jun/UnityAppFramework");
+                    }
+                    #endregion
+
+                },
                 guiHandler = (text) =>
                 {
                     var itemsName = EditorTool.GetScriptName("App.Frame.Editor","IToolkitEditor", false).ToArray();
