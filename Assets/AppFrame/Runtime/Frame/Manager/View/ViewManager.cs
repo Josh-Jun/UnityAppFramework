@@ -110,6 +110,7 @@ namespace AppFrame.View
 
             UICanvas.renderMode = RenderMode.ScreenSpaceOverlay;
             UICanvas.worldCamera = Camera.main;
+            UICanvas.vertexColorAlwaysGammaSpace = true;
 
             UICanvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             UICanvasScaler.referenceResolution = Global.AppConfig.UIReferenceResolution;

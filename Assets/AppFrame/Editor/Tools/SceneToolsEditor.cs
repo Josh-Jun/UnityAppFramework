@@ -50,7 +50,7 @@ namespace AppFrame.Editor
                     break;
                 case PlayModeStateChange.ExitingEditMode: //编辑转播放时监听(播放之前)
                     // Debug.Log("在退出编辑模式时，在编辑器处于播放模式之前发生。");
-                    if (Menu.GetChecked("Tools/AutoOpenScene"))
+                    if (Menu.GetChecked("App/AutoOpenScene"))
                     {
                         OpenScene();
                     }
