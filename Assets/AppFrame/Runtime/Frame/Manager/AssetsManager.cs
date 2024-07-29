@@ -248,11 +248,11 @@ namespace AppFrame.Manager
         /// path = 窗口路径，不包含AssetsFolder
         /// state 初始化窗口是否显示
         /// </summary>
-        public T LoadGoView<T>(string path, bool isTemp, bool state = false) where T : Component
+        public T LoadGoView<T>(string path, bool state = false) where T : Component
         {
             var go = LoadAsset<GameObject>(path);
             if (go == null) return null;
-            var parent = isTemp ? ViewManager.Instance.TempGoRoot : ViewManager.Instance.GlobalGoRoot;
+            var parent = ViewManager.Instance.GoRoot;
             go = Instantiate(go, parent);
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localScale = Vector3.one;
@@ -279,10 +279,10 @@ namespace AppFrame.Manager
         /// path = 窗口路径，不包含AssetsFolder
         /// state 初始化窗口是否显示
         /// </summary>
-        public T LoadGoView<T>(GameObject go, bool isTemp, bool state = false) where T : Component
+        public T LoadGoView<T>(GameObject go, bool state = false) where T : Component
         {
             if (go == null) return null;
-            var parent = isTemp ? ViewManager.Instance.TempGoRoot : ViewManager.Instance.GlobalGoRoot;
+            var parent = ViewManager.Instance.GoRoot;
             go = Instantiate(go, parent);
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localScale = Vector3.one;

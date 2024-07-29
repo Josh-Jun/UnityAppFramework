@@ -7,6 +7,7 @@
  * ===============================================
  * */
 
+using System;
 using App;
 using AppFrame.Info;
 using AppFrame.Interface;
@@ -32,7 +33,7 @@ namespace Modules.Loading
             }
         }
 
-        public void LoadScene(string sceneName, bool isLoading = false, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
+        public void LoadScene(string sceneName, bool isLoading = false, Action callback = null, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
             view.SetViewActive(isLoading);
             Root.LoadScene(sceneName, isLoading, progress =>
@@ -41,6 +42,7 @@ namespace Modules.Loading
                 if (progress >= 1)
                 {
                     view.SetViewActive(false);
+                    callback?.Invoke();
                 }
             }, loadSceneMode);
         }

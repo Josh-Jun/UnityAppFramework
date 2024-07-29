@@ -19,8 +19,7 @@ namespace AppFrame.View
         private GameObject CanvasObject; //Canvas游戏对象
         private GameObject UIRootObject; //UIView Root跟对象
         private GameObject EventSystemObject; //EventSystem游戏对象
-        private GameObject GlobalGameObject; //3D游戏对象父物体(全局)
-        private GameObject TempGameObject; //3D游戏对象父物体(临时)
+        private GameObject GameObjectRoot; //3D游戏对象父物体
 
         private static Dictionary<string, ViewBase> viewPairs = new Dictionary<string, ViewBase>();
         private Dictionary<string, Transform> rootPairs = new Dictionary<string, Transform>();
@@ -59,9 +58,9 @@ namespace AppFrame.View
         }
 
         /// <summary> 获取3D游戏对象根对象(全局) </summary>
-        public Transform GlobalGoRoot
+        public Transform GoRoot
         {
-            get { return GlobalGameObject.transform; }
+            get { return GameObjectRoot.transform; }
             private set { }
         }
 
@@ -76,21 +75,6 @@ namespace AppFrame.View
         public List<RectTransform> UIPanels
         {
             get { return uiPanels; }
-            private set { }
-        }
-
-        /// <summary> 获取3D游戏对象根对象(临时) </summary>
-        public Transform TempGoRoot
-        {
-            get
-            {
-                if (TempGameObject == null)
-                {
-                    TempGameObject = new GameObject("TempGoRoot");
-                }
-
-                return TempGameObject.transform;
-            }
             private set { }
         }
 
@@ -120,8 +104,8 @@ namespace AppFrame.View
 
             #endregion
 
-            GlobalGameObject = new GameObject("GlobalGoRoot");
-            GlobalGameObject.transform.SetParent(transform);
+            GameObjectRoot = new GameObject("Go Root");
+            GameObjectRoot.transform.SetParent(transform);
             
             UIRootObject = new GameObject("UI Root", typeof(RectTransform));
             UIRootObject.transform.SetParent(UIRectTransform);
@@ -262,13 +246,24 @@ namespace AppFrame.View
             return viewPairs[scriptName] as T;
         }
 
+        public void RemoveView(ViewBase view)
+        {
+            var scriptName = view.GetType().FullName;
+            if (viewPairs.ContainsKey(scriptName))
+            {
+                GameObject go = viewPairs[scriptName].gameObject;
+                Destroy(go);
+                viewPairs.Remove(scriptName);
+            }
+        }
+
         /// <summary> 添加3D对象预制体，返回GameObject </summary>
         public Transform TryGetEmptyNode(string name)
         {
             if (!rootPairs.ContainsKey(name))
             {
                 GameObject go = new GameObject(name);
-                go.transform.SetParent(GlobalGoRoot, false);
+                go.transform.SetParent(GoRoot, false);
                 rootPairs.Add(name, go.transform);
                 return go.transform;
             }
