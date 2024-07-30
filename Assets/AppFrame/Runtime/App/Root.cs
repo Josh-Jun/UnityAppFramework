@@ -15,7 +15,7 @@ namespace App
     {
         private static Dictionary<string, List<string>> sceneScriptsPairs = new Dictionary<string, List<string>>();
         private static Dictionary<string, ILogic> iLogicPairs = new Dictionary<string, ILogic>();
-        private static List<ILogic> RuntimeRoots = new List<ILogic>();
+        private static List<ILogic> RuntimeLogics = new List<ILogic>();
 
         public static void Init()
         {
@@ -61,6 +61,9 @@ namespace App
             InitLogicBegin("Global");
             LoadScene(Global.AppScriptConfig.MainSceneName, true);
         }
+        /// <summary>
+        /// 初始化所有Logic脚本
+        /// </summary>
         private static void InitLogicScripts()
         {
             for (int i = 0; i < Global.AppScriptConfig.LogicScript.Count; i++)
@@ -91,10 +94,15 @@ namespace App
                 }
             }
         }
-
+        /// <summary>
+        /// 加载场景（只能通过这个方法加载场景，否则Logic脚本不能正常实用Begin和End方法）
+        /// </summary>
+        /// <param name="sceneName"></param>
+        /// <param name="isLoading"></param>
+        /// <param name="loadingEvent"></param>
+        /// <param name="mode"></param>
         public static void LoadScene(string sceneName, bool isLoading = false, Action<float> loadingEvent = null, LoadSceneMode mode = LoadSceneMode.Single)
         {
-            InitLogicEnd();
             if (isLoading)
             {
                 AssetsManager.Instance.LoadingSceneAsync(sceneName, (progress) => 
@@ -110,16 +118,25 @@ namespace App
             {
                 AssetsManager.Instance.LoadSceneAsync(sceneName, () =>
                 {
-                    InitLogicBegin(sceneName, () => 
-                    {
-                        loadingEvent?.Invoke(1);  
-                    });
+                    InitLogicBegin(sceneName);
+                    loadingEvent?.Invoke(1);
                 }, mode);
             }
         }
-
-        public static void InitLogicBegin(string sceneName, Action callback = null)
+        /// <summary>
+        /// 根据场景名称执行End和Begin方法
+        /// </summary>
+        /// <param name="sceneName"></param>
+        private static void InitLogicBegin(string sceneName)
         {
+            // 先执行当前Logic脚本的End方法
+            foreach (var logic in RuntimeLogics)
+            {
+                logic.End();
+            }
+            // 清理运行时Logic脚本
+            RuntimeLogics.Clear();
+            // 根据加载的场景，找到当前场景所有的运行时Logic，并执行Begin方法
             if (sceneScriptsPairs.ContainsKey(sceneName))
             {
                 for (int i = 0; i < sceneScriptsPairs[sceneName].Count; i++)
@@ -128,24 +145,17 @@ namespace App
                     {
                         iLogicPairs[sceneScriptsPairs[sceneName][i]].Begin();
                         if (sceneName.Equals("Global")) continue;
-                        RuntimeRoots.Add(iLogicPairs[sceneScriptsPairs[sceneName][i]]);
+                        RuntimeLogics.Add(iLogicPairs[sceneScriptsPairs[sceneName][i]]);
                     }
                 }
             }
-
-            callback?.Invoke();
         }
-
-        private static void InitLogicEnd()
-        {
-            for (int i = 0; i < RuntimeRoots.Count; i++)
-            {
-                RuntimeRoots[i].End();
-            }
-
-            RuntimeRoots.Clear();
-        }
-
+        /// <summary>
+        /// 根据脚本名称，在程序集中获取实例
+        /// </summary>
+        /// <param name="fullName"></param>
+        /// <param name="assemblyString"></param>
+        /// <returns></returns>
         private static ILogic GetLogic(string fullName, string assemblyString = "App.Module")
         {
             if (!AppInfo.AssemblyPairs.ContainsKey(assemblyString))
@@ -156,7 +166,11 @@ namespace App
             var obj = Activator.CreateInstance(type); //创建此类型实例
             return obj as ILogic;
         }
-
+        /// <summary>
+        /// 获取对应Logic脚本
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static T GetLogicScript<T>() where T : class
         {
             var type = typeof(T);
