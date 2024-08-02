@@ -252,6 +252,7 @@ namespace AppFrame.View
             if (viewPairs.ContainsKey(scriptName))
             {
                 GameObject go = viewPairs[scriptName].gameObject;
+                EventDispatcher.RemoveEventListener(go.name);
                 Destroy(go);
                 viewPairs.Remove(scriptName);
             }
