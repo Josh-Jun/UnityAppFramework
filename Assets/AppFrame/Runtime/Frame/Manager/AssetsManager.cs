@@ -110,7 +110,7 @@ namespace AppFrame.Manager
                 yield return new WaitForEndOfFrame();
             }
 
-            toProgress = 100;
+            toProgress = 99;
             while (displayProgress < toProgress)
             {
                 ++displayProgress;
@@ -119,12 +119,13 @@ namespace AppFrame.Manager
                 yield return new WaitForEndOfFrame();
             }
 
-            yield return new WaitUntil(() => LoadingProgress == 1);
+            yield return new WaitUntil(() => LoadingProgress >= 0.99f);
             async.allowSceneActivation = true;
             async.completed += (AsyncOperation ao) =>
             {
                 Scene scene = SceneManager.GetSceneByName(name);
                 SceneManager.SetActiveScene(scene);
+                callback?.Invoke(1);
             };
         }
 
