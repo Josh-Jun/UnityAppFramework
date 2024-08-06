@@ -199,31 +199,6 @@ namespace AppFrame.View
             return position;
         }
 
-        /// <summary> 判断是否点中UI </summary>
-        public bool CheckUIRaycastObjects(int layer = 0)
-        {
-            PointerEventData eventData = new PointerEventData(EventSystem.current);
-            if (Application.platform == RuntimePlatform.WindowsEditor ||
-                Application.platform == RuntimePlatform.WindowsPlayer)
-            {
-                eventData.pressPosition = Input.mousePosition;
-                eventData.position = Input.mousePosition;
-            }
-            else if (Application.platform == RuntimePlatform.Android ||
-                     Application.platform == RuntimePlatform.IPhonePlayer)
-            {
-                if (Input.touchCount > 0)
-                {
-                    eventData.pressPosition = Input.GetTouch(0).position;
-                    eventData.position = Input.GetTouch(0).position;
-                }
-            }
-
-            List<RaycastResult> list = new List<RaycastResult>();
-            this.UIGraphicRaycaster.Raycast(eventData, list);
-            return list.Count > layer;
-        }
-
         public void AddView<T>(ViewBase view)
         {
             var type = typeof(T);

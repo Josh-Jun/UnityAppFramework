@@ -120,6 +120,7 @@ namespace AppFrame.Manager
             }
 
             yield return new WaitUntil(() => LoadingProgress >= 0.99f);
+            callback?.Invoke(0.9999f);
             async.allowSceneActivation = true;
             async.completed += (AsyncOperation ao) =>
             {
