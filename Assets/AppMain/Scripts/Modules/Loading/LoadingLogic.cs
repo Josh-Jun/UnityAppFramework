@@ -29,7 +29,7 @@ namespace Modules.Loading
             if (view == null)
             {
                 //加载窗体
-                view = AssetsManager.Instance.LoadUIView<LoadingView>(AppInfo.AssetPathPairs["LoadingView"], 1);
+                view = AssetsManager.Instance.LoadUIView<LoadingView>(AppInfo.AssetPathPairs[nameof(LoadingView)], 1);
             }
         }
 

@@ -19,7 +19,7 @@ namespace Modules.#NAMESPACE#
         {
             if (view == null)
             {
-                view = AssetsManager.Instance.LoadUIView<#NAMESPACE#View>(AppInfo.AssetPathPairs["#NAMESPACE#View"]);
+                view = AssetsManager.Instance.LoadUIView<#NAMESPACE#View>(AppInfo.AssetPathPairs[nameof(#NAMESPACE#View)]);
             }
         }
         public void End()
