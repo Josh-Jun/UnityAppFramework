@@ -58,7 +58,7 @@ namespace AppFrame.Editor
             uiGameObjectField.objectType = typeof(GameObject);
             uiGameObjectField.RegisterCallback<ChangeEvent<Object>>((evt) =>
             {
-                OnOnjectFieldChange(evt.newValue as GameObject);
+                OnObjectFieldChange(evt.newValue as GameObject);
             });
             
             rootFoldout.RegisterCallback<ChangeEvent<bool>>(evt =>
@@ -169,7 +169,7 @@ namespace AppFrame.Editor
         /// 当对象选择有变化时调用
         /// </summary>
         /// <param name="go"></param>
-        private void OnOnjectFieldChange(GameObject go)
+        private void OnObjectFieldChange(GameObject go)
         {
             allUIObjects.Clear();
             btns.Q<Label>().text = "请选择对象并添加需要操作的组件";
@@ -337,7 +337,7 @@ namespace AppFrame.Editor
                         var type = uiViewData.Value.components[i].GetType().Name;
                         var name = $"{uiViewData.Value.name.ToLower()}{type}";
                         var nameUpperCase = $"{ToUpperCase(name)}";
-                        string str = $"\t\tpublic {type} {nameUpperCase} {{ get {{ return {name}; }} set {{ {name} = value; }}}}";
+                        string str = $"\t\tpublic {type} {nameUpperCase} {{ get {{ return {name}; }} }}";
                         sb.AppendLine(str);
                     }
                 }
