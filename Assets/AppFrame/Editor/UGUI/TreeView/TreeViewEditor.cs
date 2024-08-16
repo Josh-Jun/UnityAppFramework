@@ -89,8 +89,8 @@ namespace AppFrame.Editor
             var scrollview = scroll.GetComponent<ScrollRect>();
             var vlg = scrollview.content.gameObject.AddComponent<VerticalLayoutGroup>();
             vlg.childAlignment = TextAnchor.UpperCenter;
-            vlg.childControlHeight = true;
             vlg.childControlWidth = true;
+            vlg.childControlHeight = true;
             vlg.childScaleWidth = true;
             vlg.childScaleHeight = true;
             vlg.childForceExpandWidth = true;
@@ -109,9 +109,12 @@ namespace AppFrame.Editor
             template.layer = 5;
             var tvlg = template.AddComponent<VerticalLayoutGroup>();
             tvlg.childAlignment = TextAnchor.MiddleLeft;
-            tvlg.childControlHeight = true;
             tvlg.childControlWidth = true;
+            tvlg.childControlHeight = true;
             tvlg.childScaleWidth = true;
+            tvlg.childScaleHeight = false;
+            tvlg.childForceExpandWidth = false;
+            tvlg.childForceExpandHeight = false;
             template.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 20);
             
             var root = new GameObject("Root", typeof(RectTransform), typeof(CanvasRenderer));
@@ -121,7 +124,12 @@ namespace AppFrame.Editor
             var rvlg = root.AddComponent<HorizontalLayoutGroup>();
             rvlg.spacing = 2;
             rvlg.childAlignment = TextAnchor.MiddleLeft;
-            rvlg.childScaleWidth = true;
+            tvlg.childControlWidth = false;
+            tvlg.childControlHeight = false;
+            tvlg.childScaleWidth = true;
+            tvlg.childScaleHeight = false;
+            tvlg.childForceExpandWidth = false;
+            tvlg.childForceExpandHeight = false;
             
             var btn = DefaultControls.CreateButton(GetStandardResources());
             DestroyImmediate(btn.transform.GetChild(0).gameObject);
