@@ -54,9 +54,14 @@ namespace AppFrame.Editor
         private SerializedProperty enterColor;
         private SerializedProperty clickColor;
         
+        
+        private TreeView treeView;
+        
         void OnEnable()
         {
             _target = new SerializedObject(target);
+            
+            treeView = (TreeView)target;
             
             isToggle = _target.FindProperty("isToggle");
             itemParent = _target.FindProperty("itemParent");
@@ -185,7 +190,7 @@ namespace AppFrame.Editor
         public override void OnInspectorGUI()
         { 
             base.OnInspectorGUI();
-            serializedObject.Update();
+            Undo.RecordObject(treeView, "object change");
 
             EditorGUILayout.PropertyField(isToggle);
             EditorGUILayout.PropertyField(item);
@@ -193,8 +198,11 @@ namespace AppFrame.Editor
             EditorGUILayout.PropertyField(itemHeight);
             EditorGUILayout.PropertyField(enterColor);
             EditorGUILayout.PropertyField(clickColor);
-
-            serializedObject.ApplyModifiedProperties();
+            if (GUI.changed)
+            {
+                EditorUtility.SetDirty(target);
+            }
+            _target.ApplyModifiedProperties();
         }
 
         static bool IsValidCanvas(Canvas canvas)
