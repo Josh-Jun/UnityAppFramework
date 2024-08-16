@@ -124,12 +124,12 @@ namespace AppFrame.Editor
             var rvlg = root.AddComponent<HorizontalLayoutGroup>();
             rvlg.spacing = 2;
             rvlg.childAlignment = TextAnchor.MiddleLeft;
-            tvlg.childControlWidth = false;
-            tvlg.childControlHeight = false;
-            tvlg.childScaleWidth = true;
-            tvlg.childScaleHeight = false;
-            tvlg.childForceExpandWidth = false;
-            tvlg.childForceExpandHeight = false;
+            rvlg.childControlWidth = false;
+            rvlg.childControlHeight = false;
+            rvlg.childScaleWidth = true;
+            rvlg.childScaleHeight = false;
+            rvlg.childForceExpandWidth = false;
+            rvlg.childForceExpandHeight = false;
             
             var btn = DefaultControls.CreateButton(GetStandardResources());
             DestroyImmediate(btn.transform.GetChild(0).gameObject);
