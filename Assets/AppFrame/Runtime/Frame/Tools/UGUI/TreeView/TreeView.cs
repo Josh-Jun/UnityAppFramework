@@ -51,9 +51,13 @@ namespace UnityEngine.UI
 
         private List<TreeData> selectItems = new List<TreeData>();
 
+        private float width;
+
         public Action<List<TreeData>> RefreshTreeViewEvent;
         void Awake()
         {
+            width = GetComponent<RectTransform>().rect.width;
+            item.SetActive(false);
             // _treeDates = new List<TreeData>()
             // {
             //     new TreeData(){Id = 0, Layer = 0, Name = "test1", ParentId = -1},
@@ -87,6 +91,19 @@ namespace UnityEngine.UI
                 if (data.ParentId == parentData.Id)
                 {
                     _treeItemsPairs[data.Id].SetActive(parentData.IsUnfold);
+                }
+            }
+        }
+
+        private void OnClickToggleEvent(bool value, TreeData parentData)
+        {
+            parentData.IsChecked = value;
+            foreach (var data in _treeDates)
+            {
+                if (data.ParentId == parentData.Id)
+                {
+                    data.IsChecked = value;
+                    _treeItemsPairs[data.Id].transform.Find("Root/Toggle").GetComponent<Toggle>().isOn = value;
                 }
             }
         }
@@ -152,15 +169,15 @@ namespace UnityEngine.UI
             var toggle = rt.Find("Root/Toggle").GetComponent<Toggle>();
             toggle.gameObject.SetActive(isToggle);
             toggle.isOn = data.IsChecked;
-            toggle.onValueChanged.AddListener(value => data.IsChecked = value);
+            toggle.onValueChanged.AddListener(value => { OnClickToggleEvent(value, data); });
             
             var layout = rt.Find("Root").GetComponent<HorizontalLayoutGroup>();
             layout.padding.left = data.Layer * itemHeight;
             
             var text_rt = rt.Find("Root/Text").GetComponent<RectTransform>();
             var w = isToggle ? 
-                rt.sizeDelta.x - 3 * (itemHeight + layout.spacing) : 
-                rt.sizeDelta.x - 2 * (itemHeight + layout.spacing);
+                width - 3 * (itemHeight + layout.spacing) : 
+                width - 2 * (itemHeight + layout.spacing);
             text_rt.sizeDelta = new Vector2(w, itemHeight);
             var text = rt.Find("Root/Text").GetComponent<Text>();
             text.text = data.Name;
