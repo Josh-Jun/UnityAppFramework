@@ -31,6 +31,7 @@ namespace UnityEngine.UI
     public class TreeView : MonoBehaviour
     {
         public bool isToggle = true;
+        public int tabCount = 1;
         public int itemHeight = 20;
         public RectTransform itemParent;
         [HideInInspector]
@@ -176,7 +177,7 @@ namespace UnityEngine.UI
             toggle.onValueChanged.AddListener(value => { OnClickToggleEvent(value, data); });
             
             var layout = rt.Find("Root").GetComponent<HorizontalLayoutGroup>();
-            layout.padding.left = data.Layer * itemHeight;
+            layout.padding.left = (data.Layer+tabCount) * itemHeight;
             
             var text_rt = rt.Find("Root/Text").GetComponent<RectTransform>();
             var w = isToggle ? 
@@ -246,7 +247,7 @@ namespace UnityEngine.UI
                         var dd = enumerable.First();
                         dragData.Layer = dd.Layer + 1;
                         var hlg = _treeItemsPairs[dragData.Id].transform.Find("Root").GetComponent<HorizontalLayoutGroup>();
-                        hlg.padding.left = dragData.Layer * itemHeight;
+                        hlg.padding.left = (dragData.Layer+tabCount) * itemHeight;
                         if (!dd.IsUnfold)
                         {
                             _treeItemsPairs[dd.Id].transform.Find("Root/Button").GetComponent<RectTransform>().localEulerAngles = !dd.IsUnfold ? Vector3.zero : Vector3.forward * 90;
