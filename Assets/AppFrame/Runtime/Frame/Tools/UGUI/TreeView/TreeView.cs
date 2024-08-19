@@ -74,7 +74,7 @@ namespace UnityEngine.UI
                 var data = treeDatas[i];
                 AddItem(data);
             }
-            RefreshArrow();
+            RefreshTreeView();
         }
 
         private void UnfoldChildItem(TreeData parentData)
@@ -102,7 +102,7 @@ namespace UnityEngine.UI
             }
         }
 
-        private void RefreshArrow()
+        public void RefreshTreeView()
         {
             foreach (var data in _treeDates)
             {
@@ -252,13 +252,12 @@ namespace UnityEngine.UI
                             _treeItemsPairs[dd.Id].transform.Find("Root/Button").GetComponent<RectTransform>().localEulerAngles = !dd.IsUnfold ? Vector3.zero : Vector3.forward * 90;
                             UnfoldChildItem(dd);
                         }
-                        RefreshArrow();
+                        RefreshTreeView();
                         RefreshTreeViewEvent?.Invoke(_treeDates);
                     }
                 }
                 dragData = null;
             });
-            RefreshArrow();
         }
 
         private GameObject dragItem;
