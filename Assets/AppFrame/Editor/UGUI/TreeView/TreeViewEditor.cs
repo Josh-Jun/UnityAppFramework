@@ -45,31 +45,6 @@ namespace AppFrame.Editor
             }
             return s_StandardResources;
         }
-        private SerializedObject _target;
-        
-        private SerializedProperty isToggle;
-        private SerializedProperty itemParent;
-        private SerializedProperty item;
-        private SerializedProperty itemHeight;
-        private SerializedProperty enterColor;
-        private SerializedProperty clickColor;
-        
-        
-        private TreeView treeView;
-        
-        void OnEnable()
-        {
-            _target = new SerializedObject(target);
-            
-            treeView = (TreeView)target;
-            
-            isToggle = _target.FindProperty("isToggle");
-            itemParent = _target.FindProperty("itemParent");
-            item = _target.FindProperty("item");
-            itemHeight = _target.FindProperty("itemHeight");
-            enterColor = _target.FindProperty("enterColor");
-            clickColor = _target.FindProperty("clickColor");
-        }
         
         [MenuItem("GameObject/UI/TreeView")]
         public static void TreeView()
@@ -184,25 +159,6 @@ namespace AppFrame.Editor
             template.SetActive(false);
             
             Selection.activeGameObject = go;
-        }
-
-        // Update is called once per frame
-        public override void OnInspectorGUI()
-        { 
-            base.OnInspectorGUI();
-            Undo.RecordObject(treeView, "object change");
-
-            EditorGUILayout.PropertyField(isToggle);
-            EditorGUILayout.PropertyField(item);
-            EditorGUILayout.PropertyField(itemParent);
-            EditorGUILayout.PropertyField(itemHeight);
-            EditorGUILayout.PropertyField(enterColor);
-            EditorGUILayout.PropertyField(clickColor);
-            if (GUI.changed)
-            {
-                EditorUtility.SetDirty(target);
-            }
-            _target.ApplyModifiedProperties();
         }
 
         static bool IsValidCanvas(Canvas canvas)

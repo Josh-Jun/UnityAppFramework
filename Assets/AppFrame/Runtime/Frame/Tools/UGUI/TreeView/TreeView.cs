@@ -30,19 +30,12 @@ namespace UnityEngine.UI
 
     public class TreeView : MonoBehaviour
     {
-        [HideInInspector]
         public bool isToggle = true;
-        [HideInInspector]
+        public int itemHeight = 20;
         public RectTransform itemParent;
         [HideInInspector]
         public GameObject item;
-
-        [HideInInspector]
-        public int itemHeight = 20;
-
-        [HideInInspector]
         public Color enterColor = Color.gray;
-        [HideInInspector]
         public Color clickColor = Color.blue;
 
         private List<TreeData> _treeDates = new List<TreeData>();
@@ -81,6 +74,7 @@ namespace UnityEngine.UI
                 var data = treeDatas[i];
                 AddItem(data);
             }
+            RefreshArrow();
         }
 
         private void UnfoldChildItem(TreeData parentData)
@@ -105,6 +99,16 @@ namespace UnityEngine.UI
                     data.IsChecked = value;
                     _treeItemsPairs[data.Id].transform.Find("Root/Toggle").GetComponent<Toggle>().isOn = value;
                 }
+            }
+        }
+
+        private void RefreshArrow()
+        {
+            foreach (var data in _treeDates)
+            {
+                var t = _treeItemsPairs[data.Id].transform;
+                var color = t.childCount > 1 ? Color.white : Color.clear;
+                t.Find("Root/Button").GetComponent<Image>().color = color;
             }
         }
 
@@ -248,11 +252,13 @@ namespace UnityEngine.UI
                             _treeItemsPairs[dd.Id].transform.Find("Root/Button").GetComponent<RectTransform>().localEulerAngles = !dd.IsUnfold ? Vector3.zero : Vector3.forward * 90;
                             UnfoldChildItem(dd);
                         }
+                        RefreshArrow();
                         RefreshTreeViewEvent?.Invoke(_treeDates);
                     }
                 }
                 dragData = null;
             });
+            RefreshArrow();
         }
 
         private GameObject dragItem;
