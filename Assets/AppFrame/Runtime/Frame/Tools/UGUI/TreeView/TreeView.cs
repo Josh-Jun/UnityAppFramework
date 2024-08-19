@@ -181,8 +181,8 @@ namespace UnityEngine.UI
             
             var text_rt = rt.Find("Root/Text").GetComponent<RectTransform>();
             var w = isToggle ? 
-                width - 3 * (itemHeight + layout.spacing) : 
-                width - 2 * (itemHeight + layout.spacing);
+                width - 3 * (itemHeight + layout.spacing) - tabCount * itemHeight: 
+                width - 2 * (itemHeight + layout.spacing) - tabCount * itemHeight;
             text_rt.sizeDelta = new Vector2(w, itemHeight);
             var text = rt.Find("Root/Text").GetComponent<Text>();
             text.text = data.Name;
