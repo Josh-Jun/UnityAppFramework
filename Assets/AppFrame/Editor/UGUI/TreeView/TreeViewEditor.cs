@@ -67,6 +67,10 @@ namespace AppFrame.Editor
             scrollTransform.offsetMax = Vector2.zero;
 
             var scrollview = scroll.GetComponent<ScrollRect>();
+            scrollview.horizontal = false;
+            scrollview.horizontalScrollbarVisibility = ScrollRect.ScrollbarVisibility.Permanent;
+            scrollview.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHideAndExpandViewport;
+            scrollview.verticalScrollbarSpacing = 0;
             var vlg = scrollview.content.gameObject.AddComponent<VerticalLayoutGroup>();
             vlg.childAlignment = TextAnchor.UpperCenter;
             vlg.childControlWidth = true;
