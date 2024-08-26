@@ -2,8 +2,8 @@
  * ===============================================
  * author      : Josh@book
  * e-mail      : shijun_z@163.com
- * create time : 2024年8月14 10:23
- * function    :
+ * create time : 2024年8月21 14:48
+ * function    : 
  * ===============================================
  * */
 
@@ -15,8 +15,7 @@ using UnityEngine.UI;
 
 namespace AppFrame.Editor
 {
-    [CustomEditor(typeof(TreeView), true)]
-    public class TreeViewEditor : UnityEditor.Editor
+    public class MultilevelMenuEditor : UnityEditor.Editor
     {
         private const string kStandardSpritePath       = "UI/Skin/UISprite.psd";
         private const string kBackgroundSpritePath     = "UI/Skin/Background.psd";
@@ -42,126 +41,76 @@ namespace AppFrame.Editor
             }
             return s_StandardResources;
         }
-        
-        [MenuItem("GameObject/UI/TreeView")]
-        public static void TreeView()
+
+        [MenuItem("GameObject/UI/MultilevelMenu")]
+        public static void MultilevelMenu()
         {
-            GameObject parent = GetOrCreateCanvasGameObject();
+            var parent = GetOrCreateCanvasGameObject();
 
-            GameObject go = new GameObject("TreeView", typeof(RectTransform), typeof(CanvasRenderer));
+            var go = DefaultControls.CreateButton(GetStandardResources());
+            go.name = "Multilevel Menu";
             go.transform.SetParent(parent.transform, false);
-            go.AddComponent<Image>();
-            go.layer = 5;
+            var go_rt = go.GetComponent<RectTransform>();
+            go_rt.sizeDelta = new Vector2(120, 30);
+            DestroyImmediate(go.transform.GetChild(0).gameObject);
 
-            #region ScrollView
-
-            var scroll = DefaultControls.CreateScrollView(GetStandardResources());
-            scroll.transform.SetParent(go.transform, false);
-            var scrollTransform = scroll.GetComponent<RectTransform>();
-            scrollTransform.anchorMin = Vector2.zero;
-            scrollTransform.anchorMax = Vector2.one;
-            scrollTransform.offsetMin = Vector2.zero;
-            scrollTransform.offsetMax = Vector2.zero;
-
-            var scrollview = scroll.GetComponent<ScrollRect>();
-            scrollview.horizontal = false;
-            scrollview.horizontalScrollbarVisibility = ScrollRect.ScrollbarVisibility.Permanent;
-            scrollview.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHideAndExpandViewport;
-            scrollview.verticalScrollbarSpacing = 0;
-            var vlg = scrollview.content.gameObject.AddComponent<VerticalLayoutGroup>();
-            vlg.childAlignment = TextAnchor.UpperCenter;
+            var root = DefaultControls.CreateImage(GetStandardResources());
+            root.name = "Root";
+            var root_rt = root.GetComponent<RectTransform>();
+            root_rt.SetParent(go_rt, false);
+            root_rt.anchorMin = Vector2.zero;
+            root_rt.anchorMax = Vector2.zero;
+            root_rt.pivot = Vector2.up;
+            var vlg = root.AddComponent<VerticalLayoutGroup>();
+            vlg.childAlignment = TextAnchor.MiddleLeft;
+            vlg.spacing = 4;
+            vlg.padding = new RectOffset(4, 4, 4, 4);
             vlg.childControlWidth = true;
             vlg.childControlHeight = true;
             vlg.childScaleWidth = true;
             vlg.childScaleHeight = true;
             vlg.childForceExpandWidth = true;
-            vlg.childForceExpandHeight = true;
-
-            var size = scrollview.content.gameObject.AddComponent<ContentSizeFitter>();
-            size.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
-            size.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-
-            #endregion
-
-            #region Template
-
-            var template = new GameObject("Template", typeof(RectTransform), typeof(CanvasRenderer));
-            template.transform.SetParent(go.transform, false);
-            template.layer = 5;
-            var tvlg = template.AddComponent<VerticalLayoutGroup>();
-            tvlg.childAlignment = TextAnchor.MiddleLeft;
-            tvlg.childControlWidth = true;
-            tvlg.childControlHeight = true;
-            tvlg.childScaleWidth = true;
-            tvlg.childScaleHeight = false;
-            tvlg.childForceExpandWidth = false;
-            tvlg.childForceExpandHeight = false;
-            template.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 20);
+            vlg.childForceExpandHeight = false;
+            var csf = root.AddComponent<ContentSizeFitter>();
+            csf.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
             
-            var root = new GameObject("Root", typeof(RectTransform), typeof(CanvasRenderer));
-            root.AddComponent<Image>().color = Color.clear;
-            root.transform.SetParent(template.transform, false);
-            root.layer = 5;
-            var rvlg = root.AddComponent<HorizontalLayoutGroup>();
-            rvlg.spacing = 2;
-            rvlg.childAlignment = TextAnchor.MiddleLeft;
-            rvlg.childControlWidth = false;
-            rvlg.childControlHeight = false;
-            rvlg.childScaleWidth = true;
-            rvlg.childScaleHeight = false;
-            rvlg.childForceExpandWidth = false;
-            rvlg.childForceExpandHeight = false;
-            
-            var btn = DefaultControls.CreateButton(GetStandardResources());
-            DestroyImmediate(btn.transform.GetChild(0).gameObject);
-            btn.transform.SetParent(root.transform, false);
-            btn.GetComponent<RectTransform>().sizeDelta = Vector2.one * 20;
-            btn.name = "Button";
+            var item = DefaultControls.CreateImage(GetStandardResources());
+            item.name = "Item";
+            item.transform.SetParent(root_rt, false);
+            var hlg = item.AddComponent<HorizontalLayoutGroup>();
+            hlg.childAlignment = TextAnchor.MiddleLeft;
+            hlg.spacing = 10;
+            hlg.childControlWidth = true;
+            hlg.childControlHeight = true;
+            hlg.childScaleWidth = true;
+            hlg.childScaleHeight = true;
+            hlg.childForceExpandWidth = false;
+            hlg.childForceExpandHeight = false;
 
-            var toggle = DefaultControls.CreateToggle(GetStandardResources());
-            DestroyImmediate(toggle.transform.Find("Label").gameObject);
-            toggle.transform.SetParent(root.transform, false);
-            toggle.GetComponent<RectTransform>().sizeDelta = Vector2.one * 20;
-            var bg = toggle.transform.GetChild(0).GetComponent<RectTransform>();
-            var cm = toggle.transform.GetChild(0).GetChild(0).GetComponent<RectTransform>();
-            bg.anchorMin = Vector2.zero;
-            bg.anchorMax = Vector2.one;
-            bg.offsetMin = Vector2.zero;
-            bg.offsetMax = Vector2.zero;
-            cm.anchorMin = Vector2.zero;
-            cm.anchorMax = Vector2.one;
-            cm.offsetMin = Vector2.zero;
-            cm.offsetMax = Vector2.zero;
-            
-            var image = DefaultControls.CreateImage(GetStandardResources());
-            image.transform.SetParent(root.transform, false);
-            image.GetComponent<RectTransform>().sizeDelta = Vector2.one * 20;
-            image.GetComponent<Image>().raycastTarget = false;
-            
             var text = DefaultControls.CreateText(GetStandardResources());
-            text.transform.SetParent(root.transform, false);
-            text.GetComponent<RectTransform>().sizeDelta = new Vector2(300, 20);
+            text.name = "Text";
+            text.transform.SetParent(item.transform, false);
             text.GetComponent<Text>().raycastTarget = false;
             text.GetComponent<Text>().alignment = TextAnchor.MiddleLeft;
             text.GetComponent<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
             text.GetComponent<Text>().verticalOverflow = VerticalWrapMode.Overflow;
-            text.name = "Text";
-            
-            #endregion
 
-            var treeView = go.AddComponent<TreeView>();
-            treeView.isToggle = true;
-            treeView.itemParent = scrollview.content;
-            treeView.item = template;
-            treeView.itemHeight = 20;
-            treeView.enterColor = Color.gray;
-            treeView.clickColor = Color.blue;
+            var le = text.AddComponent<LayoutElement>();
+            le.flexibleWidth = 1;
+
+            var image = DefaultControls.CreateImage(GetStandardResources());
+            image.name = "Image";
+            image.GetComponent<Image>().raycastTarget = false;
+            image.transform.SetParent(item.transform, false);
+
+            var menu = go.AddComponent<MultilevelMenu>();
+            menu.root = root;
+            menu.item = item;
             
-            template.SetActive(false);
-            
-            Selection.activeGameObject = go;
+            root.SetActive(false);
         }
-
+        
         static bool IsValidCanvas(Canvas canvas)
         {
             if (canvas == null || !canvas.gameObject.activeInHierarchy)
