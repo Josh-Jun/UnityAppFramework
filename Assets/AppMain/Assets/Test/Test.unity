@@ -236,7 +236,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -15}
-  m_SizeDelta: {x: 120, y: 30}
+  m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &87186901
 CanvasRenderer:
@@ -335,7 +335,6 @@ MonoBehaviour:
   root: {fileID: 1755353987}
   item: {fileID: 599548157}
   selectColor: {r: 0.1514774, g: 0.51188636, b: 0.8679245, a: 1}
-  rootSelectColor: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
 --- !u!1 &122774085
 GameObject:
   m_ObjectHideFlags: 0
@@ -1701,7 +1700,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 599548157}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

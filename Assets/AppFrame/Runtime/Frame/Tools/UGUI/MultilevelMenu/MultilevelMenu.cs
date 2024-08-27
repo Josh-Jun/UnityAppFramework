@@ -21,7 +21,6 @@ namespace UnityEngine.UI
         public GameObject item;
 
         public Color selectColor = Color.blue;
-        public Color rootSelectColor = Color.gray;
 
         private List<string> _menuPathList = new List<string>();
 
@@ -49,7 +48,11 @@ namespace UnityEngine.UI
         {
             root.SetActive(false);
             item.SetActive(false);
-            GetComponent<Button>().onClick.AddListener(() => { _rootMenu.SetActive(!_rootMenu.activeSelf); });
+            GetComponent<Button>().onClick.AddListener(() =>
+            {
+                if(_rootMenu == null) return;
+                _rootMenu.SetActive(!_rootMenu.activeSelf);
+            });
 
             // List<string> menus = new List<string>();
             // menus.Add("Empty");
@@ -62,12 +65,13 @@ namespace UnityEngine.UI
             // menus.Add("Light/Directional Light");
             // menus.Add("Light/Point Light");
             // menus.Add("Light/Spot Light");
-            // menus.Add("1/2/3/4");
+            // menus.Add("1/2/3/44444");
             // MenuPathList = menus;
         }
 
         private void InitMultilevelMenu()
         {
+            if(_menuPathList == null || _menuPathList.Count == 0) return;
             List<string> root_menu = new List<string>();
             Dictionary<string, List<string>> childPairs = new Dictionary<string, List<string>>();
             foreach (var menu in _menuPathList)
@@ -99,14 +103,8 @@ namespace UnityEngine.UI
                             childPairs.Add(_str_, childs);
                         }
                     }
-                }
-            }
-
-            foreach (var menu in _menuPathList)
-            {
-                var str = menu.Split('/');
-                var _str_ = str[str.Length - 1];
-                foots.Add(_str_);
+                }                
+                foots.Add(str[str.Length - 1]);
             }
 
             _rootMenu = CreateMenu(root_menu);
@@ -135,7 +133,15 @@ namespace UnityEngine.UI
                 child.transform.Find("Text").GetComponent<Text>().text = str;
                 child.transform.Find("Image").gameObject.SetActive(!foots.Contains(str));
                 child.SetActive(true);
-                AddEventTrigger(child, EventTriggerType.PointerEnter, data => { OpenMultilevelMenu(data, child.name); });
+                AddEventTrigger(child, EventTriggerType.PointerEnter, data =>
+                {
+                    OpenMultilevelMenu(data);
+                    child.GetComponent<Image>().color = selectColor;
+                });
+                AddEventTrigger(child, EventTriggerType.PointerExit, data =>
+                {
+                    child.GetComponent<Image>().color = Color.clear;
+                });
                 if (foots.Contains(str))
                 {
                     AddEventTrigger(child, EventTriggerType.PointerClick, data =>
@@ -149,24 +155,25 @@ namespace UnityEngine.UI
             return go;
         }
 
-        private void OpenMultilevelMenu(BaseEventData data, string menuName)
+        private void OpenMultilevelMenu(BaseEventData data)
         {
+            var eventData = data as PointerEventData;
+            if (eventData == null) return;
+            var go = eventData.pointerEnter;
+            if(go == null) return;
             foreach (var menu in _multilevelMenu)
             {
-                if (!menuName.Contains(menu.Key))
+                if (!go.name.Contains(menu.Key))
                 {
                     menu.Value.SetActive(false);
                 }
             }
-            var eventData = data as PointerEventData;
-            if (!_multilevelMenu.ContainsKey(menuName)) return;
-            if (eventData == null) return;
-            var go = eventData.pointerEnter;
+            if (!_multilevelMenu.ContainsKey(go.name)) return;
             var rt = go.GetComponent<RectTransform>();
             var pos = rt.position;
             var offset = (rt.rect.width / 2 + 4) * Vector3.right + (rt.rect.height / 2 + 4) * Vector3.up;
-            _multilevelMenu[menuName].GetComponent<RectTransform>().position = pos + offset;
-            _multilevelMenu[menuName].SetActive(true);
+            _multilevelMenu[go.name].GetComponent<RectTransform>().position = pos + offset;
+            _multilevelMenu[go.name].SetActive(true);
             children = gameObject.GetComponentsInChildren<RectTransform>();
         }
        
