@@ -171,7 +171,8 @@ namespace UnityEngine.UI
             if (!_multilevelMenu.ContainsKey(go.name)) return;
             var rt = go.GetComponent<RectTransform>();
             var pos = rt.position;
-            var offset = (rt.rect.width / 2 + 4) * Vector3.right + (rt.rect.height / 2 + 4) * Vector3.up;
+            var layout = go.transform.parent.GetComponent<VerticalLayoutGroup>();
+            var offset = (rt.rect.width / 2 + layout.padding.left) * Vector3.right + (rt.rect.height / 2 + layout.padding.top) * Vector3.up;
             _multilevelMenu[go.name].GetComponent<RectTransform>().position = pos + offset;
             _multilevelMenu[go.name].SetActive(true);
             children = gameObject.GetComponentsInChildren<RectTransform>();
