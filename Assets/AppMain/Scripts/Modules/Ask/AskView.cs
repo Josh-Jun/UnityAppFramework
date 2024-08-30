@@ -71,12 +71,13 @@ namespace Modules.Ask
             askText.text = content;
             confirm_text.text = string.IsNullOrEmpty(confirm) ? "确定" : confirm;
             cancel_text.text = string.IsNullOrEmpty(cancel) ? "取消" : cancel;
-            btn_confirm.onClick.AddListener(() => { OnClickEvent(btn_confirm, confirm_callback); });
-            btn_cancel.onClick.AddListener(() => { OnClickEvent(btn_cancel, cancel_callback); });
+            btn_confirm.onClick.RemoveAllListeners();
+            btn_cancel.onClick.RemoveAllListeners();
+            btn_confirm.onClick.AddListener(() => { OnClickEvent(confirm_callback); });
+            btn_cancel.onClick.AddListener(() => { OnClickEvent(cancel_callback); });
         }
-        private void OnClickEvent(Button btn, Action callback)
+        private void OnClickEvent(Action callback)
         {
-            btn.onClick.RemoveAllListeners();
             SetViewActive(false);
             callback?.Invoke();
         }
