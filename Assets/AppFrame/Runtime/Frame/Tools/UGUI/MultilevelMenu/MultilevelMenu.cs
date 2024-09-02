@@ -147,6 +147,7 @@ namespace UnityEngine.UI
                     AddEventTrigger(child, EventTriggerType.PointerClick, data =>
                     {
                         CLoseAllMenu();
+                        child.GetComponent<Image>().color = Color.clear;
                         OnSelect?.Invoke(str);
                     });
                 }
