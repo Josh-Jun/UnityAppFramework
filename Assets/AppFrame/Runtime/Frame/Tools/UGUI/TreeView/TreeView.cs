@@ -175,7 +175,7 @@ namespace UnityEngine.UI
             toggle.onValueChanged.AddListener(value => { OnClickToggleEvent(value, data); });
             
             var layout = rt.Find("Root").GetComponent<HorizontalLayoutGroup>();
-            layout.padding.left = (data.Layer+tabCount) * itemHeight;
+            layout.padding.left = (data.Layer + tabCount) * itemHeight;
             
             var text_rt = rt.Find("Root/Text").GetComponent<RectTransform>();
             var w = isToggle ? 
@@ -217,6 +217,7 @@ namespace UnityEngine.UI
             AddEventTrigger(root.gameObject, EventTriggerType.BeginDrag, eventData =>
             {
                 var pointerEventData = eventData as PointerEventData;
+                if(data.Id < 0) return;
                 var d = go.transform.Find("Root/Text").gameObject;
                 dragItem = Instantiate(d, transform);
                 dragItem.transform.position = pointerEventData.currentInputModule.input.mousePosition;
@@ -245,18 +246,32 @@ namespace UnityEngine.UI
                         var dd = enumerable.First();
                         dragData.Layer = dd.Layer + 1;
                         var hlg = _treeItemsPairs[dragData.Id].transform.Find("Root").GetComponent<HorizontalLayoutGroup>();
-                        hlg.padding.left = (dragData.Layer+tabCount) * itemHeight;
+                        hlg.padding.left = (dragData.Layer + tabCount) * itemHeight;
                         if (!dd.IsUnfold)
                         {
                             _treeItemsPairs[dd.Id].transform.Find("Root/Button").GetComponent<RectTransform>().localEulerAngles = !dd.IsUnfold ? Vector3.zero : Vector3.forward * 90;
                             UnfoldChildItem(dd);
                         }
+
+                        RefreshChildrenTab(dragData);
                         RefreshTreeView();
                         RefreshTreeViewEvent?.Invoke(_treeDates);
                     }
                 }
                 dragData = null;
             });
+        }
+
+        private void RefreshChildrenTab(TreeData parent)
+        {
+            var children = _treeDates.Where(d => d.ParentId == parent.Id);
+            foreach (var child in children)
+            {
+                child.Layer = parent.Layer + 1;
+                var childLayout = _treeItemsPairs[child.Id].transform.Find("Root").GetComponent<HorizontalLayoutGroup>();
+                childLayout.padding.left = (child.Layer + tabCount) * itemHeight;
+                RefreshChildrenTab(child);
+            }
         }
 
         private GameObject dragItem;
