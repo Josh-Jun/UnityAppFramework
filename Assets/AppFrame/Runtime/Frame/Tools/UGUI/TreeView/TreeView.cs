@@ -65,16 +65,16 @@ namespace UnityEngine.UI
             // InitTreeView(_treeDates);
         }
 
-        public void InitTreeView(List<TreeData> treeDatas)
-        {
-            Clear();
-            for (int i = 0; i < treeDatas.Count; i++)
-            {
-                var data = treeDatas[i];
-                AddItem(data);
-            }
-            RefreshTreeView();
-        }
+        // public void InitTreeView(List<TreeData> treeDatas)
+        // {
+        //     Clear();
+        //     for (int i = 0; i < treeDatas.Count; i++)
+        //     {
+        //         var data = treeDatas[i];
+        //         AddItem(data);
+        //     }
+        //     RefreshTreeView();
+        // }
 
         private void UnfoldChildItem(TreeData parentData)
         {
@@ -101,7 +101,7 @@ namespace UnityEngine.UI
             }
         }
 
-        public void RefreshTreeView()
+        private void RefreshTreeView()
         {
             foreach (var data in _treeDates)
             {
@@ -148,7 +148,7 @@ namespace UnityEngine.UI
 
         public void AddItem(TreeData data)
         {
-            var parent = data.ParentId < 0 ? itemParent : _treeItemsPairs[data.ParentId].transform;
+            var parent = _treeDates.Count == 0 ? itemParent : _treeItemsPairs[data.ParentId].transform;
             var go = Instantiate(item, parent);
             go.name = data.Id.ToString();
             var rt = go.GetComponent<RectTransform>();
@@ -233,6 +233,7 @@ namespace UnityEngine.UI
             });
             AddEventTrigger(root.gameObject, EventTriggerType.EndDrag, eventData =>
             {
+                if(dragItem == null && dragData == null) return;
                 var pointerEventData = eventData as PointerEventData;
                 Destroy(dragItem);
                 if (pointerEventData != null)
@@ -260,6 +261,8 @@ namespace UnityEngine.UI
                 }
                 dragData = null;
             });
+            _treeDates.Add(data);
+            RefreshTreeView();
         }
 
         private void RefreshChildrenTab(TreeData parent)
