@@ -47,7 +47,7 @@ namespace Launcher
                     callback?.Invoke(false);
                     break;
                 case LoadAssetsMold.Local:
-                    var localPath = $"{Application.streamingAssetsPath}/AssetBundle/{HybridABManager.PlatformName}/{Application.version}/{Global.AppConfig.ResVersion}/Hybrid/";
+                    var localPath = $"file://{Application.streamingAssetsPath}/AssetBundle/{HybridABManager.PlatformName}/{Application.version}/{Global.AppConfig.ResVersion}/Hybrid/";
                     var configPath = localPath + "AssetBundleConfig.json";
                     DownLoad(configPath, (string data) =>
                     {

@@ -13,12 +13,15 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Video;
 using System.Threading.Tasks;
+using AppFrame.Attribute;
 using AppFrame.Interface;
 using AppFrame.Manager;
 using AppFrame.Tools;
+using AppFrame.View;
 
 namespace Modules.Test
 {
+    [LogicOf(Assets.MainScene)]
     public class TestLogic : SingletonEvent<TestLogic>, ILogic
     {
         private TestView view;
@@ -38,12 +41,8 @@ namespace Modules.Test
         public void Begin()
         {
             //加载窗体
-            string prefab_TestPath = $"Test/{Global.AppConfig.TargetPackage}/Views/TestView";
-            view = AssetsManager.Instance.LoadUIView<TestView>(prefab_TestPath);
-            view.SetViewActive();
+            view = ViewManager.Instance.GetView<TestView>();
 
-            // mobile = new RenderTexture(Screen.width, Screen.height, 32);
-            // window.SetMobileCamera(mobile);
             view.PlayGif();
             RunTest();
         }
@@ -127,7 +126,7 @@ namespace Modules.Test
 
         private void TakePhoto()
         {
-            PictureTools.TakePhoto(view.renderCamera, PlatformManager.Instance.GetDataPath("Screenshots"),
+            PictureTools.TakePhoto(Camera.main, PlatformManager.Instance.GetDataPath("Screenshots"),
                 (Texture2D texture, string fileName) =>
                 {
                     PlatformManager.Instance.SavePhoto(PlatformManager.Instance.GetDataPath("Screenshots/") + fileName);

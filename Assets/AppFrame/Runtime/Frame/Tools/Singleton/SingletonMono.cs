@@ -6,7 +6,7 @@ namespace AppFrame.Tools
     {
         private static T _Instance;
         private static readonly object SingletonLock = "MonoLock";
-        private const string ParentName = "Manager";
+        private const string GoName = "Manager";
         public static T Instance
         {
             get
@@ -18,18 +18,15 @@ namespace AppFrame.Tools
                         _Instance = FindObjectOfType<T>();
                         if (_Instance == null)
                         {
-                            var parent = GameObject.Find(ParentName);
-                            var go = new GameObject(typeof(T).Name);
-                            if (parent == null)
+                            var go = GameObject.Find(GoName);
+                            if (go == null)
                             {
-                                parent = new GameObject(ParentName);
+                                go = new GameObject(GoName);
                             }
-                            go.transform.SetParent(parent.transform);
                             _Instance = go.AddComponent<T>();
                         }
                         _Instance.OnSingletonMonoInit();
                     }
-
                     return _Instance;
                 }
             }

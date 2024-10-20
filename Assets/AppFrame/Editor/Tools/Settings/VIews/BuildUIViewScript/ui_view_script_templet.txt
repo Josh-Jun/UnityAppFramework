@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using AppFrame.Tools;
@@ -7,6 +8,7 @@ using UnityEngine.UI;
 
 namespace Modules.#NAMESPACE#
 {
+    [ViewOf(ViewMold.UI2D, 0)]
     public class #SCRIPTNAME# : ViewBase
     {
 #VARIABLE#

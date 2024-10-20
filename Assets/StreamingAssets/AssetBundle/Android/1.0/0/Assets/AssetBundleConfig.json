@@ -11,19 +11,23 @@
                     "FolderName": "Textures",
                     "BundleName": "ask/textures",
                     "Tag": "0",
-                    "MD5": "10c99b2662d62a822e78779f60e919be",
-                    "Size": "4207",
+                    "MD5": "6272139fddc457dca55a91456e9659b1",
+                    "Size": "4140",
                     "Dependencies": []
                 },
                 {
                     "FolderName": "Views",
                     "BundleName": "ask/views",
                     "Tag": "0",
-                    "MD5": "dd915df6979bc4da31f6d5e2061cadc4",
-                    "Size": "7191",
+                    "MD5": "d92f53766c668440599725916d1f7f2a",
+                    "Size": "7183",
                     "Dependencies": []
                 }
             ]
+        },
+        {
+            "ModuleName": "Global",
+            "Folders": []
         },
         {
             "ModuleName": "Loading",
@@ -32,16 +36,16 @@
                     "FolderName": "Textures",
                     "BundleName": "loading/textures",
                     "Tag": "0",
-                    "MD5": "6e5a6b28c43820ffa20dcd2ed18b2298",
-                    "Size": "4158",
+                    "MD5": "3bd19020d86842683af470c2feeac0e1",
+                    "Size": "4085",
                     "Dependencies": []
                 },
                 {
                     "FolderName": "Views",
                     "BundleName": "loading/views",
                     "Tag": "0",
-                    "MD5": "604878e455eab2ef539268b96b150fcb",
-                    "Size": "11622",
+                    "MD5": "0cf0cd339555ba9b128717559944752a",
+                    "Size": "11556",
                     "Dependencies": [
                         "loading/textures"
                     ]
@@ -49,33 +53,14 @@
             ]
         },
         {
-            "ModuleName": "Scene",
+            "ModuleName": "Scenes",
             "Folders": [
                 {
-                    "FolderName": "TestAsset",
-                    "BundleName": "scene/testasset",
+                    "FolderName": "MainScene",
+                    "BundleName": "scenes/mainscene",
                     "Tag": "0",
-                    "MD5": "19f87edefa056bd4939971196fa0d405",
-                    "Size": "19215",
-                    "Dependencies": []
-                },
-                {
-                    "FolderName": "TestScene",
-                    "BundleName": "scene/testscene",
-                    "Tag": "0",
-                    "MD5": "72e55f99b5d445b9fb3502e6a5f9bc47",
-                    "Size": "30306",
-                    "Dependencies": [
-                        "scene/testasset",
-                        "test/common"
-                    ]
-                },
-                {
-                    "FolderName": "UpdateScene",
-                    "BundleName": "scene/updatescene",
-                    "Tag": "0",
-                    "MD5": "0af201fbcf0d7f7bc24462cf498504e8",
-                    "Size": "28056",
+                    "MD5": "2f6b21d86c6ec2a88f6ac385fe152acc",
+                    "Size": "45617",
                     "Dependencies": []
                 }
             ]
@@ -87,8 +72,8 @@
                     "FolderName": "Shaders",
                     "BundleName": "shader/shaders",
                     "Tag": "0",
-                    "MD5": "00f4cc7e651e74265e06f4abd6b536ee",
-                    "Size": "115005",
+                    "MD5": "080c8aa681d34631d1b68bbf7557b9b9",
+                    "Size": "240892",
                     "Dependencies": []
                 }
             ]
@@ -97,27 +82,27 @@
             "ModuleName": "Table",
             "Folders": [
                 {
-                    "FolderName": "Config",
-                    "BundleName": "table/config",
+                    "FolderName": "Configs",
+                    "BundleName": "table/configs",
                     "Tag": "0",
-                    "MD5": "466599c67609cdc32999103f16f59203",
-                    "Size": "1846",
+                    "MD5": "8b6e2427e9e0651f9a72de4017dcdbd0",
+                    "Size": "1849",
                     "Dependencies": []
                 },
                 {
                     "FolderName": "Json",
                     "BundleName": "table/json",
                     "Tag": "0",
-                    "MD5": "5e564d582d65331d398538b40040096c",
-                    "Size": "1585",
+                    "MD5": "57a30391e58afa7aabd628ec8c58f159",
+                    "Size": "1582",
                     "Dependencies": []
                 },
                 {
                     "FolderName": "Xml",
                     "BundleName": "table/xml",
                     "Tag": "0",
-                    "MD5": "146579dbd2d8a0799c186ad87b1a45de",
-                    "Size": "1586",
+                    "MD5": "8e79a1f8d367286edc12594f1b2870a6",
+                    "Size": "1579",
                     "Dependencies": []
                 }
             ]
@@ -126,21 +111,21 @@
             "ModuleName": "Test",
             "Folders": [
                 {
-                    "FolderName": "Common",
-                    "BundleName": "test/common",
+                    "FolderName": "Textures",
+                    "BundleName": "test/textures",
                     "Tag": "0",
-                    "MD5": "120eb7687ab02e6d52aac4ed8e150c92",
-                    "Size": "70310212",
+                    "MD5": "34c22d6338e384fe884b4ef58a0bcedf",
+                    "Size": "70229003",
                     "Dependencies": []
                 },
                 {
-                    "FolderName": "Mobile",
-                    "BundleName": "test/mobile",
+                    "FolderName": "Views",
+                    "BundleName": "test/views",
                     "Tag": "0",
-                    "MD5": "d4409a9e6ddebdec4f6184926279e7af",
-                    "Size": "12857",
+                    "MD5": "62199a33db061f400355727885997381",
+                    "Size": "7573",
                     "Dependencies": [
-                        "test/common"
+                        "test/textures"
                     ]
                 }
             ]

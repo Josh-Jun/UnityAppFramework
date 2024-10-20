@@ -3,7 +3,6 @@
 
 #if true && (UNITY_4_6 || UNITY_5 || UNITY_2017_1_OR_NEWER) // MODULE_MARKER
 
-using System;
 using System.Globalization;
 using UnityEngine;
 using UnityEngine.UI;

@@ -7,6 +7,8 @@
  * ===============================================
  * */
 using System;
+using AppFrame.Attribute;
+using AppFrame.Enum;
 using AppFrame.Tools;
 using AppFrame.View;
 using UnityEngine;
@@ -14,6 +16,7 @@ using UnityEngine.UI;
 
 namespace Modules.Ask
 {
+    [ViewOf(ViewMold.UI2D, 2)]
     public class AskView : ViewBase
     {
         private GameObject askPanel;

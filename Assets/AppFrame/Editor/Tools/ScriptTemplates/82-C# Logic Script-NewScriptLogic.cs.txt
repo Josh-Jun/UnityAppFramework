@@ -1,12 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using AppFrame.Interface;
 using AppFrame.Tools;
 using AppFrame.Manager;
+using AppFrame.Attribute;
+using AppFrame.View;
 using UnityEngine;
 
 namespace Modules.#NAMESPACE#
 {
+    [LogicOf(Assets.Global)]
     public class #SCRIPTNAME# : SingletonEvent<#SCRIPTNAME#>, ILogic
     {
         private #NAMESPACE#View view;
@@ -17,10 +21,7 @@ namespace Modules.#NAMESPACE#
         }
         public void Begin()
         {
-            if (view == null)
-            {
-                view = AssetsManager.Instance.LoadUIView<#NAMESPACE#View>(AppInfo.AssetPathPairs[nameof(#NAMESPACE#View)]);
-            }
+            view = ViewManager.Instance.GetView<AskView>();
         }
         public void End()
         {

@@ -7,12 +7,15 @@
  * ===============================================
  * */
 
+using AppFrame.Attribute;
+using AppFrame.Enum;
 using AppFrame.Tools;
 using AppFrame.View;
 using UnityEngine.UI;
 
 namespace Modules.Loading
 {
+    [ViewOf(ViewMold.UI2D, 1)]
     public class LoadingView : ViewBase
     {
         private Slider loadingSlider;

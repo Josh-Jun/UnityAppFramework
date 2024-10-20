@@ -7,6 +7,8 @@
  * ===============================================
  * */
 
+using AppFrame.Attribute;
+using AppFrame.Enum;
 using DG.Tweening;
 using AppFrame.Tools;
 using AppFrame.View;
@@ -16,6 +18,7 @@ using UnityEngine.UI;
 
 namespace Modules.Test
 {
+    [ViewOf(ViewMold.UI2D, 0, true)]
     public class TestView : ViewBase
     {
         private Button btn;
@@ -24,11 +27,7 @@ namespace Modules.Test
         private Button btn_quit;
         private Text text;
         private RawImage rawImage;
-        private RectTransform mobileImageRoot;
-        private Transform selfStick;
-        private Camera mobileCamera;
         private GifPlayer gifPlayer;
-        public Camera renderCamera { private set; get; }
 
         protected override void InitView()
         {
@@ -39,10 +38,6 @@ namespace Modules.Test
             btn_quit = this.FindComponent<Button>("BtnQuit");
             text = this.FindComponent<Text>("Image/Text");
             rawImage = this.FindComponent<RawImage>("RawImage");
-            mobileImageRoot = this.FindComponent<RectTransform>("MobileImageRoot");
-            mobileCamera = this.FindComponent<Camera>("MobileCamera");
-            renderCamera = mobileCamera.FindComponent<Camera>("RenderCamera");
-            selfStick = this.FindComponent<Transform>("SelfStick");
             gifPlayer = this.FindComponent<GifPlayer>("GifImage");
             btn.transform.DORotate(new Vector3(0, 0, 90), 5).SetEase(Ease.Linear);
         }
@@ -70,19 +65,6 @@ namespace Modules.Test
         public void SetRawImage(Texture2D texture)
         {
             rawImage.texture = texture;
-        }
-
-        public void SetMobileCamera(RenderTexture renderTexture)
-        {
-            // mobileCamera.targetTexture = renderTexture;
-            // mobileImageRoot.FindComponent<RawImage>("MobileImage").texture = renderTexture;
-            // mobileCamera.TryGetComponent<ParentConstraint>().AddSource(new ConstraintSource { sourceTransform = PicoXRManager.Instance.RightController.transform, weight = 1 });
-            // mobileCamera.TryGetComponent<ParentConstraint>().SetTranslationOffset(0, new Vector3(0f, 0.1f, 5f));
-            // mobileCamera.TryGetComponent<ParentConstraint>().SetRotationOffset(0, new Vector3(0f, 180f, 0f));
-            // selfStick.TryGetComponent<ParentConstraint>().AddSource(new ConstraintSource { sourceTransform = PicoXRManager.Instance.RightController.transform, weight = 1 });
-            // selfStick.TryGetComponent<ParentConstraint>().SetTranslationOffset(0, Vector3.zero);
-            // selfStick.Find("Cube/Quad").GetComponent<MeshRenderer>().sharedMaterial.mainTexture = renderTexture;
-            // mobileImageRoot.TryGetComponent<ParentConstraint>().AddSource(new ConstraintSource { sourceTransform = PicoXRManager.Instance.MainCamera.transform, weight = 1 });
         }
 
         public void SetText(string value)

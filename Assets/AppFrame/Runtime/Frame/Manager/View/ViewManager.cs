@@ -1,61 +1,110 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using System;
-using AppFrame.Config;
+using System.Linq;
+using AppFrame.Manager;
 using AppFrame.Tools;
-using UnityEngine.InputSystem.UI;
-#if PICO_XR_SETTING
-using UnityEngine.XR.Interaction.Toolkit.UI;
-#endif
+using AppFrame.Attribute;
+using AppFrame.Enum;
 
 namespace AppFrame.View
 {
     public class ViewManager : SingletonMono<ViewManager>
     {
         #region Private Variable
-
-        private GameObject CanvasObject; //Canvas游戏对象
-        private GameObject UIRootObject; //UIView Root跟对象
-        private GameObject EventSystemObject; //EventSystem游戏对象
         private GameObject GameObjectRoot; //3D游戏对象父物体
 
-        private static Dictionary<string, ViewBase> viewPairs = new Dictionary<string, ViewBase>();
-        private Dictionary<string, Transform> rootPairs = new Dictionary<string, Transform>();
-        private List<RectTransform> uiPanels = new List<RectTransform>();
+        private static Dictionary<string, ViewBase> ViewPairs = new Dictionary<string, ViewBase>();
+        private Dictionary<string, Transform> GoNodePairs = new Dictionary<string, Transform>();
+        private List<RectTransform> UIPanels = new List<RectTransform>();
 
         #endregion
 
         #region Public Variable
 
-        /// <summary> Canvas组件 </summary>
-        public Canvas UICanvas
+        #region Canvas2D
+        
+        public GameObject Canvas2D; // Canvas2D游戏对象
+        public GameObject SafeArea2D; // 2DUI安全区对象
+
+        /// <summary> Canvas2D组件 </summary>
+        public Canvas UI2DCanvas
         {
-            get { return CanvasObject.GetComponent<Canvas>(); }
+            get { return Canvas2D.GetComponent<Canvas>(); }
             private set { }
         }
 
-        /// <summary> 获取Canvas根RectTransform </summary>
-        public RectTransform UIRectTransform
+        /// <summary> 获取Canvas2D根RectTransform </summary>
+        public RectTransform UI2DRectTransform
         {
-            get { return CanvasObject.GetComponent<RectTransform>(); }
+            get { return Canvas2D.GetComponent<RectTransform>(); }
             private set { }
         }
 
-        /// <summary> 获取CanvasScaler组件 </summary>
-        public CanvasScaler UICanvasScaler
+        /// <summary> 获取Canvas2DScaler组件 </summary>
+        public CanvasScaler UI2DCanvasScaler
         {
-            get { return CanvasObject.GetComponent<CanvasScaler>(); }
+            get { return Canvas2D.GetComponent<CanvasScaler>(); }
             private set { }
         }
 
-        /// <summary> 获取GraphicRaycaster组件 </summary>
-        public GraphicRaycaster UIGraphicRaycaster
+        /// <summary> 获取Canvas2D GraphicRaycaster组件 </summary>
+        public GraphicRaycaster UI2DGraphicRaycaster
         {
-            get { return CanvasObject.GetComponent<GraphicRaycaster>(); }
+            get { return Canvas2D.GetComponent<GraphicRaycaster>(); }
             private set { }
         }
+
+        /// <summary> 获取UIRoot </summary>
+        public RectTransform UISafeArea2D
+        {
+            get { return SafeArea2D.GetComponent<RectTransform>(); }
+            private set { }
+        }
+        
+        /// <summary> 获取UIPanels </summary>
+        public List<RectTransform> UI2DPanels
+        {
+            get { return UIPanels; }
+            private set { }
+        }
+
+        #endregion
+
+        #region Canvas3D
+
+        public GameObject Canvas3D; // Canvas3D游戏对象
+        
+        /// <summary> Canvas3D组件 </summary>
+        public Canvas UI3DCanvas
+        {
+            get { return Canvas3D.GetComponent<Canvas>(); }
+            private set { }
+        }
+
+        /// <summary> 获取Canvas3D根RectTransform </summary>
+        public RectTransform UI3DRectTransform
+        {
+            get { return Canvas3D.GetComponent<RectTransform>(); }
+            private set { }
+        }
+
+        /// <summary> 获取Canvas2DScaler组件 </summary>
+        public CanvasScaler UI3DCanvasScaler
+        {
+            get { return Canvas3D.GetComponent<CanvasScaler>(); }
+            private set { }
+        }
+
+        /// <summary> 获取Canvas3D GraphicRaycaster组件 </summary>
+        public GraphicRaycaster UI3DGraphicRaycaster
+        {
+            get { return Canvas3D.GetComponent<GraphicRaycaster>(); }
+            private set { }
+        }
+
+        #endregion
 
         /// <summary> 获取3D游戏对象根对象(全局) </summary>
         public Transform GoRoot
@@ -63,190 +112,181 @@ namespace AppFrame.View
             get { return GameObjectRoot.transform; }
             private set { }
         }
-
-        /// <summary> 获取UIRoot </summary>
-        public RectTransform UIRoot
-        {
-            get { return UIRootObject.GetComponent<RectTransform>(); }
-            private set { }
-        }
-        
-        /// <summary> 获取UIPanels </summary>
-        public List<RectTransform> UIPanels
-        {
-            get { return uiPanels; }
-            private set { }
-        }
-
         #endregion
 
         /// <summary>
         /// UIRoot脚本初始化
         /// </summary>
-        void Awake()
+        private void Awake()
         {
-            #region UI Canvas
-
-            CanvasObject = new GameObject("UI Canvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler),
-                typeof(GraphicRaycaster));
-            CanvasObject.transform.SetParent(transform);
-            CanvasObject.layer = 5;
-
-            UICanvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            UICanvas.worldCamera = Camera.main;
-            UICanvas.vertexColorAlwaysGammaSpace = true;
-
-            UICanvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            UICanvasScaler.referenceResolution = Global.AppConfig.UIReferenceResolution;
-            UICanvasScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
-            UICanvasScaler.matchWidthOrHeight =
-                Global.AppConfig.UIReferenceResolution.x < Global.AppConfig.UIReferenceResolution.y ? 0 : 1;
-
-            #endregion
-
-            GameObjectRoot = new GameObject("Go Root");
-            GameObjectRoot.transform.SetParent(transform);
+            Canvas2D = this.FindGameObject("UI Root/2D Canvas");
+            Canvas3D = this.FindGameObject("UI Root/3D Canvas");
             
-            UIRootObject = new GameObject("UI Root", typeof(RectTransform));
-            UIRootObject.transform.SetParent(UIRectTransform);
-            UIRootObject.layer = 5;
+            SafeArea2D = this.FindGameObject("UI Root/2D Canvas/Safe Area");
+
+            GameObjectRoot = this.FindGameObject("Go Root");
             
-            #region EventSystem
-
-            if (EventSystem.current == null)
-            {
-                Type t = null;
-#if PICO_XR_SETTING
-                t = AppInfo.AppConfig.TargetPackage == TargetPackage.Mobile
-                    ? typeof(InputSystemUIInputModule)
-                    : typeof(XRUIInputModule);
-#endif
-                t = typeof(InputSystemUIInputModule);
-                EventSystemObject = new GameObject("EventSystem", typeof(EventSystem), t);
-                EventSystemObject.transform.SetParent(transform);
-            }
-
-            #endregion
-
-#if PICO_XR_SETTING
-            if (AppInfo.AppConfig.TargetPackage == TargetPackage.XR)
-            {
-                Init3DUIRoot(Camera.main);
-                Reset3DUIRoot();
-            }
-#endif
-            SafeAreaAdjuster(Global.AppConfig.UIOffset);
+            Canvas2DSetting();
+            Canvas3DSetting();
             
-            InitUIPanel();
+            InitUIPanels();
+            
+            SafeAreaAdjuster();
         }
 
         #region Private Function
 
-        private void SafeAreaAdjuster(MarginOffset offset)
+        private void Canvas2DSetting()
         {
-            UIRoot.anchorMin = Vector2.zero;
-            UIRoot.anchorMax = Vector2.one;
-            UIRoot.offsetMin = new Vector2(-offset.Right, offset.Bottom);
-            UIRoot.offsetMax = new Vector2(offset.Left, -offset.Top);
+            UI2DCanvasScaler.referenceResolution = Global.AppConfig.UIReferenceResolution;
+            UI2DCanvasScaler.matchWidthOrHeight =
+                Global.AppConfig.UIReferenceResolution.x < Global.AppConfig.UIReferenceResolution.y ? 0 : 1;
         }
 
-        private void InitUIPanel()
+        private void Canvas3DSetting()
         {
-            for (int i = 0; i < 3; i++)
+            UI3DRectTransform.sizeDelta = Global.AppConfig.UIReferenceResolution;
+        }
+
+        private void InitUIPanels()
+        {
+            foreach (RectTransform panel in UISafeArea2D)
             {
-                int index = i;
-                GameObject go = new GameObject($"UIPanel{index}",typeof(RectTransform));
-                go.transform.SetParent(UIRoot);
-                go.layer = 5;
-                RectTransform rt = go.transform as RectTransform;
-                rt.anchorMin = Vector2.zero;
-                rt.anchorMax = Vector2.one;
-                rt.offsetMin = Vector2.zero;
-                rt.offsetMax = Vector2.zero;
-                uiPanels.Add(rt);
+                UIPanels.Add(panel);
             }
         }
+
+        public void InitViewScripts()
+        {
+            var types = Utils.GetAssemblyTypes<ViewBase>();
+            foreach (var type in types)
+            {
+                var la = type.GetCustomAttributes(typeof(ViewOfAttribute), false).First();
+                if (la is not ViewOfAttribute attribute) continue;
+                if(type.FullName == "Modules.Update.UpdateView") continue;
+                var view = CreateView(type, attribute);
+                ViewPairs.Add(type.FullName!, view);
+            }
+        }
+        
+        private ViewBase CreateView(Type type, ViewOfAttribute attribute)
+        {
+            var path = $"{type.Name.Replace("View", "")}/Views/{type.Name}";
+            var go = AssetsManager.Instance.LoadAsset<GameObject>(path);
+            if (go == null) return null;
+            Transform parent = null;
+            switch (attribute.View)
+            {
+                case ViewMold.UI2D:
+                    parent = UIPanels[attribute.Layer];
+                    break;
+                case ViewMold.UI3D:
+                    parent = UI3DRectTransform;
+                    break;
+                case ViewMold.Go3D:
+                    parent = GoRoot;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(attribute.View), attribute.View, null);
+            }
+            var view = Instantiate(go, parent);
+            view.transform.localPosition = Vector3.zero;
+            view.transform.localScale = Vector3.one;
+            view.name = view.name.Replace("(Clone)", "");
+            var vb = view.AddComponent(type) as ViewBase;
+            EventDispatcher.TriggerEvent(go.name, attribute.Active);
+            return vb;
+        }
+        
 
         #endregion
 
         #region Public Function
 
-#if PICO_XR_SETTING
-        public void Init3DUIRoot(Camera camera3d = null)
+        public T AddView<T>(GameObject go, ViewMold mold = ViewMold.UI2D, int layer = 0, bool state = false) where T : Component
         {
-            if (camera3d == null) return;
-            UICanvas.renderMode = RenderMode.WorldSpace;
-            UIRectTransform.localScale = Vector3.one * 0.0025f;
-            UIRectTransform.sizeDelta = new Vector2(1920, 1080);
-            UICanvas.worldCamera = camera3d;
-            UICanvasScaler.referencePixelsPerUnit = 100;
-            UICanvas.TryGetComponent<TrackedDeviceGraphicRaycaster>();
-        }
+            if (go == null) return null;
+            Transform parent = null;
+            switch (mold)
+            {
+                case ViewMold.UI2D:
+                    parent = UIPanels[layer];
+                    break;
+                case ViewMold.UI3D:
+                    parent = UI3DRectTransform;
+                    break;
+                case ViewMold.Go3D:
+                    parent = GoRoot;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(mold), mold, null);
+            }
+            var view = Instantiate(go, parent);
+            view.transform.localEulerAngles = Vector3.zero;
+            view.transform.localScale = Vector3.one;
+            view.name = view.name.Replace("(Clone)", "");
+            T t =  (T)go.AddComponent(typeof(T));
 
-        public void Reset3DUIRoot(float dis = 5f, float hight = 1f, Camera camera3d = null)
-        {
-            Camera camera = camera3d == null ? Camera.main : camera3d;
-            Vector3 target = new Vector3(0, hight, dis);
-            UIRectTransform.transform.position = target;
-            UIRectTransform.transform.eulerAngles = camera.transform.eulerAngles;
+            EventDispatcher.TriggerEvent(go.name, state);
+            ViewPairs.Add(typeof(T).FullName!, t as ViewBase);
+            return t;
         }
-#endif
+        
+        public void SafeAreaAdjuster()
+        {
+            var bottomPixels = Screen.safeArea.y;
+
+            var topPixel = Screen.currentResolution.height - (Screen.safeArea.y + Screen.safeArea.height);
+
+            var bottomRatio = bottomPixels / Screen.currentResolution.height;
+            var topRatio = topPixel / Screen.currentResolution.height;
+
+            var referenceResolution = UI2DCanvasScaler.referenceResolution;
+            var bottomUnits = referenceResolution.y * bottomRatio;
+            var topUnits = referenceResolution.y * topRatio;
+
+            UISafeArea2D.offsetMin = new Vector2(UISafeArea2D.offsetMin.x, bottomUnits);
+            UISafeArea2D.offsetMax = new Vector2(UISafeArea2D.offsetMax.x, -topUnits);
+        }
+        
         /// <summary> UGUI坐标 mousePosition</summary>
         public Vector2 ScreenPointInRectangle(Vector2 mousePosition)
         {
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(UIRectTransform, mousePosition, Camera.main,
-                out Vector2 position);
+            var cam = UI2DCanvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : UI2DCanvas.worldCamera;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(UI2DRectTransform, mousePosition, cam, out var position);
             return position;
-        }
-
-        public void AddView<T>(ViewBase view)
-        {
-            var type = typeof(T);
-            var scriptName = type.Namespace == string.Empty ? type.Name : type.FullName;
-            if (!viewPairs.ContainsKey(scriptName))
-            {
-                viewPairs.Add(scriptName, view);
-            }
         }
 
         public T GetView<T>() where T : class
         {
             var type = typeof(T);
             var scriptName = type.Namespace == string.Empty ? type.Name : type.FullName;
-            if (!viewPairs.ContainsKey(scriptName))
+            if (!ViewPairs.ContainsKey(scriptName!))
             {
                 return null;
             }
-
-            return viewPairs[scriptName] as T;
+            return ViewPairs[scriptName] as T;
         }
 
         public void RemoveView(ViewBase view)
         {
             var scriptName = view.GetType().FullName;
-            if (viewPairs.ContainsKey(scriptName))
-            {
-                GameObject go = viewPairs[scriptName].gameObject;
-                EventDispatcher.RemoveEventListener(go.name);
-                Destroy(go);
-                viewPairs.Remove(scriptName);
-            }
+            if (!ViewPairs.TryGetValue(scriptName!, out var pair)) return;
+            var go = pair.gameObject;
+            EventDispatcher.RemoveEventListener(go.name);
+            Destroy(go);
+            ViewPairs.Remove(scriptName);
         }
 
         /// <summary> 添加3D对象预制体，返回GameObject </summary>
-        public Transform TryGetEmptyNode(string name)
+        public Transform TryGetEmptyNode(string nodeName)
         {
-            if (!rootPairs.ContainsKey(name))
-            {
-                GameObject go = new GameObject(name);
-                go.transform.SetParent(GoRoot, false);
-                rootPairs.Add(name, go.transform);
-                return go.transform;
-            }
-            else
-            {
-                return rootPairs[name];
-            }
+            if (GoNodePairs.TryGetValue(nodeName, out var emptyNode)) return emptyNode;
+            var go = new GameObject(nodeName);
+            go.transform.SetParent(GoRoot, false);
+            GoNodePairs.Add(nodeName, go.transform);
+            return go.transform;
+
         }
 
         #endregion

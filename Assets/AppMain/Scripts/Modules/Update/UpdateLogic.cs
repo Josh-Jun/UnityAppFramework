@@ -12,14 +12,17 @@ using System.Collections.Generic;
 using System.Linq;
 using App;
 using AppFrame.Config;
+using AppFrame.Attribute;
 using AppFrame.Enum;
 using AppFrame.Interface;
 using AppFrame.Manager;
 using AppFrame.Tools;
+using AppFrame.View;
 using UnityEngine;
 
 namespace Modules.Update
 {
+    [LogicOf(Root.AppScene)]
     public class UpdateLogic : SingletonEvent<UpdateLogic>, ILogic
     {
         private UpdateView view;
@@ -93,6 +96,10 @@ namespace Modules.Update
                 case LoadAssetsMold.Local:
                     var localPath = PlatformManager.Instance.GetAssetsPath($"AssetBundle/{PlatformManager.Instance.Name}/{Application.version}/{Global.AppConfig.ResVersion}/Assets/");
                     var configPath = localPath + "AssetBundleConfig.json";
+                    if (Application.platform == RuntimePlatform.OSXEditor)
+                    {
+                        configPath = $"file://{configPath}";
+                    }
                     DownLoad(configPath, (string data) =>
                     {
                         var config = JsonUtility.FromJson<AssetBundleConfig>(data);
@@ -101,10 +108,7 @@ namespace Modules.Update
                     });
                     break;
                 case LoadAssetsMold.Remote:
-                    if (view == null)
-                    {
-                        view = AssetsManager.Instance.LoadUIView<UpdateView>(Global.UpdateView, 1);
-                    }
+                    view = ViewManager.Instance.AddView<UpdateView>(Global.UpdateView);
                     view.SetViewActive();
 
                     view.SetTipsText("检查更新中...");

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using AppFrame.Config;
 using AppFrame.Tools;
 using UnityEditor;
 using UnityEditor.Callbacks;
@@ -85,14 +84,17 @@ namespace AppFrame.Editor
         
         #region 更新资源路径配置文件（自动/手动）
         
+        private static StringBuilder stringBuilder = new StringBuilder(1024);
+        private static string targetPath = $"{Application.dataPath}/AppFrame/Runtime/Frame/Tools/Assets.cs";
         [DidReloadScripts]
-        [MenuItem("App/Editor/UpdateAssetPathConfig", false, 0)]
+        [MenuItem("App/Editor/UpdateAssetsConfig", false, 0)]
         public static void UpdateAssetPathConfig()
         {
-            var config = Resources.Load<AssetPathConfig>("AssetsFolder/Global/AssetConfig/AssetPathConfig");
-            config.AssetPath.Clear();
             var folder = "AssetsFolder";
             List<FileInfo> files = GetFiles(folder);
+            stringBuilder.AppendLine("public class Assets");
+            stringBuilder.AppendLine("{");
+            stringBuilder.AppendLine($"    public const string Global = \"Global\";");
             for (int i = 0; i < files.Count; i++)
             {
                 var key = files[i].Name.Split('.')[0];
@@ -100,15 +102,10 @@ namespace AppFrame.Editor
                 var value = 
                     files[i].FullName.Substring(files[i].FullName.IndexOf(folder)).Replace('\\', '/').Split('.')[0].Replace($"{folder}/", "");
                 if (!value.Contains("/")) continue;
-
-                AssetPath ap = new AssetPath
-                {
-                    name = key,
-                    path = value,
-                };
-                config.AssetPath.Add(ap);
+                stringBuilder.AppendLine($"    public const string {key} = \"{value}\";");
             }
-            EditorUtility.SetDirty(config);
+            stringBuilder.AppendLine("}");
+            File.WriteAllText(targetPath, stringBuilder.ToString());
             AssetDatabase.Refresh();
         }
         
@@ -149,7 +146,7 @@ namespace AppFrame.Editor
         
         #region 打开默认路径
         
-        [MenuItem("App/OpenFolder/DataPath", false, 0)]
+        [MenuItem("Assets/Open Folder/DataPath", false, 0)]
         public static void OpenDataFolder()
         {
 #if UNITY_EDITOR_WIN
@@ -159,7 +156,7 @@ namespace AppFrame.Editor
 #endif
         }
 
-        [MenuItem("App/OpenFolder/PersistentDataPath", false, 0)]
+        [MenuItem("Assets/Open Folder/PersistentDataPath", false, 0)]
         public static void OpenPersistentDataFolder()
         {
 #if UNITY_EDITOR_WIN
@@ -170,7 +167,7 @@ namespace AppFrame.Editor
 #endif
         }
 
-        [MenuItem("App/OpenFolder/StreamingAssetsPath", false, 0)]
+        [MenuItem("Assets/Open Folder/StreamingAssetsPath", false, 0)]
         public static void OpenStreamingAssetsFolder()
         {
 #if UNITY_EDITOR_WIN
@@ -180,7 +177,7 @@ namespace AppFrame.Editor
 #endif
         }
 
-        [MenuItem("App/OpenFolder/TemporaryCachePath", false, 0)]
+        [MenuItem("Assets/Open Folder/TemporaryCachePath", false, 0)]
         public static void OpenTemporaryCacheFolder()
         {
 #if UNITY_EDITOR_WIN

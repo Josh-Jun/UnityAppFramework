@@ -9,27 +9,6 @@
         <uie:EnumField label="AB Build Pipeline" name="ABBuildPipeline" type="AppFrame.Config.ABPipeline, App.Main" />
         <ui:VisualElement>
             <uie:Vector2Field label="UIResolution" name="UIReferenceResolution" style="flex-direction: row;" />
-            <ui:VisualElement style="flex-direction: row;">
-                <ui:Label tabindex="-1" text="UIOffset" parse-escape-sequences="true" display-tooltip-when-elided="true" style="margin-left: 3px;" />
-                <ui:VisualElement style="flex-direction: column; margin-left: 63px;">
-                    <ui:VisualElement style="flex-direction: row;">
-                        <ui:IntegerField value="0" name="Left" style="max-width: 100px; min-width: 70px; flex-direction: row-reverse; margin-right: 3px; margin-left: 3px; align-items: auto;">
-                            <ui:Label tabindex="-1" text="L " parse-escape-sequences="true" display-tooltip-when-elided="true" />
-                        </ui:IntegerField>
-                        <ui:IntegerField value="0" name="Top" style="max-width: 100px; min-width: 70px; flex-direction: row-reverse; margin-right: 3px; margin-left: 3px; align-items: center; justify-content: space-between; align-self: auto; flex-wrap: nowrap;">
-                            <ui:Label tabindex="-1" text="T " parse-escape-sequences="true" display-tooltip-when-elided="true" />
-                        </ui:IntegerField>
-                    </ui:VisualElement>
-                    <ui:VisualElement style="flex-direction: row;">
-                        <ui:IntegerField value="0" name="Right" style="max-width: 100px; min-width: 70px; flex-direction: row-reverse; margin-right: 3px; margin-left: 3px; align-items: auto;">
-                            <ui:Label tabindex="-1" text="R " parse-escape-sequences="true" display-tooltip-when-elided="true" />
-                        </ui:IntegerField>
-                        <ui:IntegerField value="0" name="Bottom" style="max-width: 100px; min-width: 70px; flex-direction: row-reverse; margin-right: 3px; margin-left: 3px; align-items: auto;">
-                            <ui:Label tabindex="-1" text="B " parse-escape-sequences="true" display-tooltip-when-elided="true" />
-                        </ui:IntegerField>
-                    </ui:VisualElement>
-                </ui:VisualElement>
-            </ui:VisualElement>
         </ui:VisualElement>
         <ui:Button text="Apply" display-tooltip-when-elided="true" name="BuildAppApply" />
         <ui:TextField picking-mode="Ignore" label="Output Path" name="BuildAppOutputPath">

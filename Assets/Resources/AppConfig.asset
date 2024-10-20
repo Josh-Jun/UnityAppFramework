@@ -14,15 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsDebug: 1
   IsTestServer: 0
-  LoadAssetsMold: 0
+  LoadAssetsMold: 1
   AppFrameRate: 60
   TargetPackage: 0
   NativeApp: 0
   ABPipeline: 1
   ResVersion: 0
   UIReferenceResolution: {x: 2160, y: 1080}
-  UIOffset:
-    Left: 0
-    Right: 0
-    Top: 0
-    Bottom: 0

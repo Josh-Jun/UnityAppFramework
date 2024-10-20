@@ -3,70 +3,58 @@ CompatibilityAssetBundleManifest:
   AssetBundleInfos:
     Info_0:
       Name: ask/textures
-      Hash: 07b93ca2dd8ed6cd3f4d9e1591a27444
-      CRC: 2444687878
+      Hash: 2f20377628a2a88a83a2e401e537ba92
+      CRC: 225668715
       Dependencies: {}
     Info_1:
       Name: ask/views
-      Hash: 1e37ecdadba380781a331addfcf78397
-      CRC: 1311028321
+      Hash: c81104fbecf8772d5dbc025492111ffc
+      CRC: 1728207129
       Dependencies: {}
     Info_2:
       Name: loading/textures
-      Hash: 942466376b33b899f859e9db482058f6
-      CRC: 2452469142
+      Hash: 24a366df6434fcad0cab9fab6219dff4
+      CRC: 2707712348
       Dependencies: {}
     Info_3:
       Name: loading/views
-      Hash: 3a2295428925359e20b17543f998d127
-      CRC: 2637344935
+      Hash: ec1492c367e43cf62f3765b4f9b29996
+      CRC: 3780173764
       Dependencies: {}
         Dependency_0: loading/textures
     Info_4:
-      Name: scene/testasset
-      Hash: 19769438264760b71649cfda19298cca
-      CRC: 847373211
+      Name: scenes/mainscene
+      Hash: a303cc36dfbcd2719f4c4d1bf9f9fd06
+      CRC: 2316386285
       Dependencies: {}
     Info_5:
-      Name: scene/testscene
-      Hash: 8ff6d8aba52102951011fd5d6af7dd84
-      CRC: 639667664
+      Name: shader/shaders
+      Hash: dd4d3ece6cbbb9581a9267ea6f0e2cbf
+      CRC: 183135618
       Dependencies: {}
-        Dependency_0: scene/testasset
-        Dependency_1: test/common
     Info_6:
-      Name: scene/updatescene
-      Hash: f6da389dad6e69687da1c63eab2f82da
-      CRC: 908409588
+      Name: table/configs
+      Hash: fd55f5159b673f97724603693e641b27
+      CRC: 1792409868
       Dependencies: {}
     Info_7:
-      Name: shader/shaders
-      Hash: 4f2e0cf7804352a4f93233eead3958ea
-      CRC: 699545913
+      Name: table/json
+      Hash: 462c76c2168e73099e3a1eac8b1d7c36
+      CRC: 3934146150
       Dependencies: {}
     Info_8:
-      Name: table/config
-      Hash: 66a392bb70598392db84c59ee2ef782d
-      CRC: 2597651592
+      Name: table/xml
+      Hash: 386d034dff340811048bc29c454485b7
+      CRC: 3120894723
       Dependencies: {}
     Info_9:
-      Name: table/json
-      Hash: d5d3ff84dc41f7806c0fe764f8d97f4a
-      CRC: 3681980044
+      Name: test/textures
+      Hash: a339c7255c47beb3607237459429bd69
+      CRC: 3022465748
       Dependencies: {}
     Info_10:
-      Name: table/xml
-      Hash: 7ab750321b36d649587e923ae6a0f6e1
-      CRC: 3785905710
+      Name: test/views
+      Hash: c526bd4a0f4a902183d4f983ada80dca
+      CRC: 350175798
       Dependencies: {}
-    Info_11:
-      Name: test/common
-      Hash: bdc6d4c98679b92a37437e21dc189b5e
-      CRC: 3984175893
-      Dependencies: {}
-    Info_12:
-      Name: test/mobile
-      Hash: 55ca4f931026e98dc767bcaa41591c4a
-      CRC: 1685306137
-      Dependencies: {}
-        Dependency_0: test/common
+        Dependency_0: test/textures

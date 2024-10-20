@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using AppFrame.Config;
-using AppFrame.Enum;
-using AppFrame.Info;
 using AppFrame.Tools;
+using AppFrame.Enum;
 using UnityEngine;
 
 namespace AppFrame.Manager
@@ -22,7 +21,7 @@ namespace AppFrame.Manager
         {
             if (appTableConfig == null)
             {
-                appTableConfig = AssetsManager.Instance.LoadAsset<AppTableConfig>(AppInfo.AssetPathPairs[nameof(AppTableConfig)]);
+                appTableConfig = AssetsManager.Instance.LoadAsset<AppTableConfig>(Assets.AppTableConfig);
                 for (int i = 0; i < appTableConfig.AppTable.Count; i++)
                 {
                     var path = $"Table/{appTableConfig.AppTable[i].TableMold}/{appTableConfig.AppTable[i].TableName}";

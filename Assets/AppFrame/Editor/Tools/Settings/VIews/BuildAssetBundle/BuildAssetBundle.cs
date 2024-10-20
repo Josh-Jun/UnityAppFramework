@@ -6,6 +6,7 @@ using System.Text;
 using AppFrame.Config;
 using AppFrame.Enum;
 using AppFrame.Tools;
+// using AppMain.Config;
 using HybridCLR.Editor;
 using HybridCLR.Editor.Commands;
 using UnityEditor;
@@ -425,7 +426,7 @@ namespace AppFrame.Editor
         {
             var bundleName = "";
             // windows 全路径 \ 
-            string windowsPath = fileInfo.FullName;
+            string windowsPath = fileInfo.FullName.Replace(Application.dataPath, "Assets");
             // D:\Unity_forWork\Unity_Project\AssetBundle02_Senior\Assets\AssetsFolder\Scene1\Character\NB\Player4.prefab
             // Debug.Log(windowsPath);
             // 转换成Unity可识别的路径 把 \ 改为 /   [加@有奇效]     
@@ -437,7 +438,6 @@ namespace AppFrame.Editor
             // 获取Scene之后的部分 :  Character/NB/Player4.prefab
             int sceneIndex = unityPath.IndexOf(sceneName) + sceneName.Length;
             string bundlePath = unityPath.Substring(sceneIndex + 1);
-            
             if (bundlePath.Contains("/"))
             {
                 // 后续还有路径, 包含子目录[取第一个/后的名字]
@@ -452,7 +452,7 @@ namespace AppFrame.Editor
                 bundleName = sceneName;
             }
 
-            if (sceneName == "Scene")
+            if (sceneName == "Scenes")
             {
                 if (fileInfo.Extension == ".unity")
                 {
@@ -463,7 +463,7 @@ namespace AppFrame.Editor
                     bundleName += "Asset";
                 }
             }
-
+            Debug.Log(bundleName);
             return bundleName;
         }
 

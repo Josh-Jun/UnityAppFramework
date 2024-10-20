@@ -8,40 +8,32 @@
             "ModuleName": "App",
             "Folders": [
                 {
-                    "FolderName": "Config",
-                    "BundleName": "app/config",
-                    "Tag": "0",
-                    "MD5": "15700bc37a11ffe674816a6db22812c5",
-                    "Size": "1983",
-                    "Dependencies": []
-                },
-                {
                     "FolderName": "Dll",
                     "BundleName": "app/dll",
                     "Tag": "0",
-                    "MD5": "e654925d8772990e8c3ef82c0e2cbfe6",
-                    "Size": "2074027",
+                    "MD5": "c67f440d1b303f2c87cb04d71729d093",
+                    "Size": "2284191",
                     "Dependencies": []
                 },
                 {
                     "FolderName": "Update",
                     "BundleName": "app/update",
                     "Tag": "0",
-                    "MD5": "3282d8a1003097adce06460ef5b0e084",
-                    "Size": "16710",
+                    "MD5": "b2bacc8855cc7d7925bfc16cd18407f5",
+                    "Size": "16644",
                     "Dependencies": []
                 }
             ]
         },
         {
-            "ModuleName": "Scene",
+            "ModuleName": "Scenes",
             "Folders": [
                 {
                     "FolderName": "AppScene",
-                    "BundleName": "scene/appscene",
+                    "BundleName": "scenes/appscene",
                     "Tag": "0",
-                    "MD5": "44dd03db065939d01bc4b1736b40ee00",
-                    "Size": "7019",
+                    "MD5": "0fa27d4d206483e83d325d3a9cc9366c",
+                    "Size": "11987",
                     "Dependencies": []
                 }
             ]

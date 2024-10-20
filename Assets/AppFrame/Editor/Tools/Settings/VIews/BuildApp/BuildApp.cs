@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using AppFrame.Config;
-using HybridCLR.Editor.Settings;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using AppFrame.Config;
 #if PICO_XR_SETTING
 using UnityEditor.XR.Management;
 using UnityEditor.XR.Management.Metadata;
@@ -28,8 +27,6 @@ namespace AppFrame.Editor
         private ABPipeline Pipeline = ABPipeline.Default;
         private Vector2 UIReferenceResolution;
         private string outputPath;
-
-        private MarginOffset UIOffset;
 
         public void OnCreate(VisualElement root)
         {
@@ -56,10 +53,6 @@ namespace AppFrame.Editor
             export_project.value = NativeApp;
             ab_build_pipeline.Init(Pipeline);
             ui_reference_resolution.value = UIReferenceResolution;
-            left_floatfield.value = UIOffset.Left;
-            right_floatfield.value = UIOffset.Right;
-            top_floatfield.value = UIOffset.Top;
-            bottom_floatfield.value = UIOffset.Bottom;
             output_path.value = outputPath;
             
             build_mold.style.display = 
@@ -94,22 +87,6 @@ namespace AppFrame.Editor
             ui_reference_resolution.RegisterCallback<ChangeEvent<Vector2>>((evt) =>
             {
                 UIReferenceResolution = evt.newValue;
-            });
-            left_floatfield.RegisterCallback<ChangeEvent<int>>((evt) =>
-            {
-                UIOffset.Left = evt.newValue;
-            });
-            right_floatfield.RegisterCallback<ChangeEvent<int>>((evt) =>
-            {
-                UIOffset.Right = evt.newValue;
-            });
-            top_floatfield.RegisterCallback<ChangeEvent<int>>((evt) =>
-            {
-                UIOffset.Top = evt.newValue;
-            });
-            bottom_floatfield.RegisterCallback<ChangeEvent<int>>((evt) =>
-            {
-                UIOffset.Bottom = evt.newValue;
             });
             output_path.RegisterCallback<ChangeEvent<string>>((evt) => { outputPath = evt.newValue; });
             root.Q<Button>("BuildAppOutputPathBrowse").clicked += () =>
@@ -148,7 +125,6 @@ namespace AppFrame.Editor
                 NativeApp = AppConfig.NativeApp;
                 Pipeline = AppConfig.ABPipeline;
                 UIReferenceResolution = AppConfig.UIReferenceResolution;
-                UIOffset = AppConfig.UIOffset;
             }
             else
             {
@@ -166,11 +142,10 @@ namespace AppFrame.Editor
             AppConfig.NativeApp = NativeApp;
             AppConfig.ABPipeline = Pipeline;
             AppConfig.UIReferenceResolution = UIReferenceResolution;
-            AppConfig.UIOffset = UIOffset;
 
             EditorUtility.SetDirty(AppConfig);
 
-            HybridCLRSettings.Instance.enable = LoadAssetsMold != LoadAssetsMold.Native;
+            // HybridCLRSettings = LoadAssetsMold != LoadAssetsMold.Native;
 
             if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android)
             {

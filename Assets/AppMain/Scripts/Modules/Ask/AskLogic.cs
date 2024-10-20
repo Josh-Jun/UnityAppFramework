@@ -7,13 +7,14 @@
  * ===============================================
  * */
 using System;
-using AppFrame.Info;
+using AppFrame.Attribute;
 using AppFrame.Interface;
-using AppFrame.Manager;
 using AppFrame.Tools;
+using AppFrame.View;
 
 namespace Modules.Ask
 {
+    [LogicOf(Assets.Global)]
     public class AskLogic : SingletonEvent<AskLogic>, ILogic
     {
         public AskView view;
@@ -25,10 +26,7 @@ namespace Modules.Ask
         }
         public void Begin()
         {
-            if (view == null)
-            {
-                view = AssetsManager.Instance.LoadUIView<AskView>(AppInfo.AssetPathPairs[nameof(AskView)], 2);
-            }
+            view = ViewManager.Instance.GetView<AskView>();
         }
         public void End()
         {

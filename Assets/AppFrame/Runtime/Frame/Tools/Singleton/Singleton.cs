@@ -1,5 +1,4 @@
-﻿
-using AppFrame.Interface;
+﻿using AppFrame.Interface;
 
 namespace AppFrame.Tools
 {

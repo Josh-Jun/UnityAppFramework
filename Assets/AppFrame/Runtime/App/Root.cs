@@ -1,21 +1,23 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using System.Reflection;
 using System.Text;
-using AppFrame.Config;
-using AppFrame.Info;
+using AppFrame.Attribute;
 using AppFrame.Interface;
 using AppFrame.Manager;
+using AppFrame.Tools;
+using AppFrame.Config;
+using AppFrame.View;
 using UnityEngine.SceneManagement;
 
 namespace App
 {
     public class Root
     {
-        private static Dictionary<string, List<string>> sceneScriptsPairs = new Dictionary<string, List<string>>();
-        private static Dictionary<string, ILogic> iLogicPairs = new Dictionary<string, ILogic>();
-        private static List<ILogic> RuntimeLogics = new List<ILogic>();
+        public const string AppScene = "Scenes/App/AppScene";
+        private static Dictionary<string, List<ILogic>> SceneLogicPairs = new Dictionary<string, List<ILogic>>();
+        private static string CurrentSceneName;
 
         public static void Init()
         {
@@ -29,7 +31,8 @@ namespace App
             OutputAppInfo();
             //初始化Logic脚本
             InitLogicScripts();
-            InitLogicBegin(Global.AppScene);
+            CurrentSceneName = AppScene;
+            ExecuteSceneMethods(CurrentSceneName, "Begin");
         }
         
         private static void OutputAppInfo()
@@ -57,114 +60,64 @@ namespace App
             {
                 AssetBundleManager.Instance.LoadAssetBundle("Shader", "Shaders");
             }
+            ViewManager.Instance.InitViewScripts();
             //初始化Global的Logic脚本的Begin方法
-            InitLogicBegin("Global");
-            LoadScene(Global.AppScriptConfig.MainSceneName, true);
+            ExecuteSceneMethods("Global", "Begin");
+            LoadScene(Assets.MainScene);
         }
         /// <summary>
         /// 初始化所有Logic脚本
         /// </summary>
         private static void InitLogicScripts()
         {
-            for (int i = 0; i < Global.AppScriptConfig.LogicScript.Count; i++)
+            var types = Utils.GetAssemblyTypes<ILogic>();
+            foreach (var type in types)
             {
-                if (!iLogicPairs.ContainsKey(Global.AppScriptConfig.LogicScript[i].ScriptName))
+                var la = type.GetCustomAttributes(typeof(LogicOfAttribute), false).First();
+                if (la is not LogicOfAttribute attribute) continue;
+                var obj = Activator.CreateInstance(type);
+                var logic = obj as ILogic;
+                if (!SceneLogicPairs.ContainsKey(attribute.Scene))
                 {
-                    ILogic iLogic = GetLogic(Global.AppScriptConfig.LogicScript[i].ScriptName);
-                    if (iLogic != null)
-                    {
-                        iLogicPairs.Add(Global.AppScriptConfig.LogicScript[i].ScriptName, iLogic);
-                    }
-                    else
-                    {
-                        Log.E($"Root脚本为空 脚本名称:{Global.AppScriptConfig.LogicScript[i].ScriptName}");
-                    }
-                }
-
-                if (!sceneScriptsPairs.ContainsKey(Global.AppScriptConfig.LogicScript[i].SceneName))
-                {
-                    List<string> scripts = new List<string>();
-                    scripts.Add(Global.AppScriptConfig.LogicScript[i].ScriptName);
-                    sceneScriptsPairs.Add(Global.AppScriptConfig.LogicScript[i].SceneName, scripts);
+                    var logics = new List<ILogic> { logic };
+                    SceneLogicPairs.Add(attribute.Scene, logics);
                 }
                 else
                 {
-                    sceneScriptsPairs[Global.AppScriptConfig.LogicScript[i].SceneName]
-                        .Add(Global.AppScriptConfig.LogicScript[i].ScriptName);
+                    SceneLogicPairs[attribute.Scene].Add(logic);
                 }
             }
         }
         /// <summary>
         /// 加载场景（只能通过这个方法加载场景，否则Logic脚本不能正常实用Begin和End方法）
         /// </summary>
-        /// <param name="sceneName"></param>
+        /// <param name="targetSceneName"></param>
         /// <param name="isLoading"></param>
         /// <param name="loadingEvent"></param>
         /// <param name="mode"></param>
-        public static void LoadScene(string sceneName, bool isLoading = false, Action<float> loadingEvent = null, LoadSceneMode mode = LoadSceneMode.Single)
+        public static void LoadScene(string targetSceneName, bool isLoading = false, Action<float> loadingEvent = null, LoadSceneMode mode = LoadSceneMode.Single)
         {
+            ExecuteSceneMethods(CurrentSceneName, "End");
+            CurrentSceneName = targetSceneName;
             if (isLoading)
             {
-                AssetsManager.Instance.LoadingSceneAsync(sceneName, (progress) => 
+                AssetsManager.Instance.LoadingSceneAsync(targetSceneName, (progress) => 
                 { 
                     loadingEvent?.Invoke(progress);
                     if (progress >= 1)
                     {
-                        InitLogicBegin(sceneName);
+                        ExecuteSceneMethods(CurrentSceneName, "Begin");
                     }
                 }, mode);
             }
             else
             {
-                AssetsManager.Instance.LoadSceneAsync(sceneName, () =>
+                AssetsManager.Instance.LoadSceneAsync(targetSceneName, () =>
                 {
-                    InitLogicBegin(sceneName);
+                    ExecuteSceneMethods(CurrentSceneName, "Begin");
                     loadingEvent?.Invoke(1);
                 }, mode);
             }
-        }
-        /// <summary>
-        /// 根据场景名称执行End和Begin方法
-        /// </summary>
-        /// <param name="sceneName"></param>
-        private static void InitLogicBegin(string sceneName)
-        {
-            // 先执行当前Logic脚本的End方法
-            foreach (var logic in RuntimeLogics)
-            {
-                logic.End();
-            }
-            // 清理运行时Logic脚本
-            RuntimeLogics.Clear();
-            // 根据加载的场景，找到当前场景所有的运行时Logic，并执行Begin方法
-            if (sceneScriptsPairs.ContainsKey(sceneName))
-            {
-                for (int i = 0; i < sceneScriptsPairs[sceneName].Count; i++)
-                {
-                    if (iLogicPairs.ContainsKey(sceneScriptsPairs[sceneName][i]))
-                    {
-                        iLogicPairs[sceneScriptsPairs[sceneName][i]].Begin();
-                        if (sceneName.Equals("Global")) continue;
-                        RuntimeLogics.Add(iLogicPairs[sceneScriptsPairs[sceneName][i]]);
-                    }
-                }
-            }
-        }
-        /// <summary>
-        /// 根据脚本名称，在程序集中获取实例
-        /// </summary>
-        /// <param name="fullName"></param>
-        /// <param name="assemblyString"></param>
-        /// <returns></returns>
-        private static ILogic GetLogic(string fullName, string assemblyString = "App.Module")
-        {
-            if (!AppInfo.AssemblyPairs.ContainsKey(assemblyString))
-            {
-                AppInfo.AssemblyPairs.Add(assemblyString, Assembly.Load(assemblyString));//加载程序集,返回类型是一个Assembly
-            }
-            Type type = AppInfo.AssemblyPairs[assemblyString].GetType($"{fullName}");
-            var obj = Activator.CreateInstance(type); //创建此类型实例
-            return obj as ILogic;
         }
         /// <summary>
         /// 获取对应Logic脚本
@@ -174,55 +127,50 @@ namespace App
         public static T GetLogicScript<T>() where T : class
         {
             var type = typeof(T);
-            var scriptName = type.Namespace == string.Empty ? type.Name : type.FullName;
-            if (!iLogicPairs.ContainsKey(scriptName))
+            foreach (var logics in SceneLogicPairs.Values)
             {
-                return null;
+                if (logics.FirstOrDefault(logic => logic.GetType() == type) is T t) return t;
             }
-
-            return iLogicPairs[scriptName] as T;
+            return null;
         }
 
-        public static void AppPause(bool isPause)
+        private static void ExecuteSceneMethods(string sceneName, string methodName, params object[] args)
         {
-            if (Global.AppScriptConfig != null)
+            var types = Utils.GetObjsType(args);
+            if (!SceneLogicPairs.TryGetValue(sceneName, value: out var pair)) return;
+            foreach (var logic in pair)
             {
-                for (int i = 0; i < Global.AppScriptConfig.LogicScript.Count; i++)
+                var method = logic.GetType().GetMethod(methodName, types);
+                method?.Invoke(logic, args);
+            }
+        }
+
+        private static void ExecuteMethods(string methodName, params object[] args)
+        {
+            var types = Utils.GetObjsType(args);
+            foreach (var logics in SceneLogicPairs.Values)
+            {
+                foreach (var logic in logics)
                 {
-                    if (iLogicPairs.ContainsKey(Global.AppScriptConfig.LogicScript[i].ScriptName))
-                    {
-                        iLogicPairs[Global.AppScriptConfig.LogicScript[i].ScriptName].AppPause(isPause);
-                    }
+                    var method = logic.GetType().GetMethod(methodName, types);
+                    method?.Invoke(logic, args);
                 }
             }
+        }
+        
+        public static void AppPause(bool isPause)
+        {
+            ExecuteMethods("AppPause", isPause);
         }
 
         public static void AppFocus(bool isFocus)
         {
-            if (Global.AppScriptConfig != null)
-            {
-                for (int i = 0; i < Global.AppScriptConfig.LogicScript.Count; i++)
-                {
-                    if (iLogicPairs.ContainsKey(Global.AppScriptConfig.LogicScript[i].ScriptName))
-                    {
-                        iLogicPairs[Global.AppScriptConfig.LogicScript[i].ScriptName].AppFocus(isFocus);
-                    }
-                }
-            }
+            ExecuteMethods("AppFocus", isFocus);
         }
 
         public static void AppQuit()
         {
-            if (Global.AppScriptConfig != null)
-            {
-                for (int i = 0; i < Global.AppScriptConfig.LogicScript.Count; i++)
-                {
-                    if (iLogicPairs.ContainsKey(Global.AppScriptConfig.LogicScript[i].ScriptName))
-                    {
-                        iLogicPairs[Global.AppScriptConfig.LogicScript[i].ScriptName].AppQuit();
-                    }
-                }
-            }
+            ExecuteMethods("AppQuit");
         }
     }
 }

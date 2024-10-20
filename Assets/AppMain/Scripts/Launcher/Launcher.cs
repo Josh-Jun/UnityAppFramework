@@ -25,7 +25,6 @@ namespace Launcher
             {
                 StartCoroutine(DownLoading(isHotfix));
             });
-            
         }
         
         private IEnumerator DownLoading(bool isHotfix)
@@ -69,13 +68,8 @@ namespace Launcher
             {
                 LoadMetadataForAOTAssemblies();
                 LoadHotfixAssemblies();
-                Global.AppScriptConfig = HybridABManager.Instance.LoadAsset<AppScriptConfig>("App", "Config", "AppScriptConfig");
-                AssetBundle ab = HybridABManager.Instance.LoadAssetBundle("Scene", "AppScene");
+                var ab = HybridABManager.Instance.LoadAssetBundle("Scenes", "AppScene");
                 Global.UpdateView = HybridABManager.Instance.LoadAsset<GameObject>("App", "Update", "UpdateView");
-            }
-            else
-            {
-                Global.AppScriptConfig = Resources.Load<AppScriptConfig>("HybridFolder/App/Config/AppScriptConfig");
             }
             
             SceneManager.LoadScene("AppScene");
@@ -83,10 +77,9 @@ namespace Launcher
 
         private void LoadHotfixAssemblies()
         {
-            for (int i = 0; i < Global.HotfixAssemblyNames.Count; i++)
+            foreach (var assemblyName in Global.HotfixAssemblyNames)
             {
-                string name = Global.HotfixAssemblyNames[i];
-                TextAsset ta = HybridABManager.Instance.LoadAsset<TextAsset>("App", "Dll", name);
+                var ta = HybridABManager.Instance.LoadAsset<TextAsset>("App", "Dll", assemblyName);
                 System.Reflection.Assembly.Load(ta.bytes);
             }
         }

@@ -9,14 +9,15 @@
 
 using System;
 using App;
-using AppFrame.Info;
+using AppFrame.Attribute;
 using AppFrame.Interface;
-using AppFrame.Manager;
 using AppFrame.Tools;
+using AppFrame.View;
 using UnityEngine.SceneManagement;
 
 namespace Modules.Loading
 {
+    [LogicOf(Assets.Global)]
     public class LoadingLogic : SingletonEvent<LoadingLogic>, ILogic
     {
         private LoadingView view;
@@ -26,11 +27,7 @@ namespace Modules.Loading
         }
         public void Begin()
         {
-            if (view == null)
-            {
-                //加载窗体
-                view = AssetsManager.Instance.LoadUIView<LoadingView>(AppInfo.AssetPathPairs[nameof(LoadingView)], 1);
-            }
+            view = ViewManager.Instance.GetView<LoadingView>();
         }
 
         public void LoadScene(string sceneName, bool isLoading = false, Action callback = null, LoadSceneMode loadSceneMode = LoadSceneMode.Single)

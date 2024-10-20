@@ -1,8 +1,11 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Reflection;
 
 namespace AppFrame.Tools
 {
@@ -126,7 +129,23 @@ namespace AppFrame.Tools
             GC.Collect();
             Resources.UnloadUnusedAssets();
         }
+        
+        public static List<Type> GetAssemblyTypes<T>(string assemblyString = "App.Module")
+        {
+            var assembly = Assembly.Load(assemblyString);
+            var types = assembly.GetTypes();
+            return types.Where(type => type != typeof(T) && typeof(T).IsAssignableFrom(type)).ToList();
+        }
 
+        public static Type[] GetObjsType(object[] args)
+        {
+            var types = new Type[args.Length];
+            for (var i = 0; i < args.Length; i++)
+            {
+                types[i] = args[i].GetType();
+            }
+            return types;
+        }
         #endregion
     }
 }

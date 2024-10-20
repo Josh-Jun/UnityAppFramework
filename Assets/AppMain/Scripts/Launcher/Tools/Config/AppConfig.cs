@@ -18,7 +18,6 @@ namespace AppFrame.Config
         [Tooltip("AB包打包加载方式")] public ABPipeline ABPipeline;
         [Tooltip("AB资源版本")] public string ResVersion;
         [Tooltip("UI参考分辨率")] public Vector2 UIReferenceResolution;
-        [Tooltip("UI边距偏移量")] public MarginOffset UIOffset;
     }
 
     /// <summary>安卓包不同渠道</summary>
@@ -41,23 +40,5 @@ namespace AppFrame.Config
         Native = 0, //本地资源
         Local = 1, //本地ab
         Remote = 2, //远端ab
-    }
-
-    /// <summary> 边缘偏移量 </summary>
-    [Serializable]
-    public struct MarginOffset
-    {
-        public int Left;
-        public int Right;
-        public int Top;
-        public int Bottom;
-
-        public MarginOffset(int left, int right, int top, int bottom)
-        {
-            Left = left;
-            Right = right;
-            Top = top;
-            Bottom = bottom;
-        }
     }
 }

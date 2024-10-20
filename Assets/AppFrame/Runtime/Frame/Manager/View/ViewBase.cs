@@ -1,6 +1,6 @@
 ﻿using System;
-using AppFrame.Enum;
 using AppFrame.Tools;
+using AppFrame.Enum;
 
 namespace AppFrame.View
 {

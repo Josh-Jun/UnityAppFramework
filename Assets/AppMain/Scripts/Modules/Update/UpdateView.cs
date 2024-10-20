@@ -6,6 +6,9 @@
  * function    : 更新功能(View) - 1,资源更新 2,应用更新
  * ===============================================
  * */
+
+using AppFrame.Attribute;
+using AppFrame.Enum;
 using AppFrame.Tools;
 using AppFrame.View;
 using UnityEngine;
@@ -13,6 +16,7 @@ using UnityEngine.UI;
 
 namespace Modules.Update
 {
+    [ViewOf(ViewMold.UI2D)]
     public class UpdateView : ViewBase
     {
         private RectTransform progressBarPanel;

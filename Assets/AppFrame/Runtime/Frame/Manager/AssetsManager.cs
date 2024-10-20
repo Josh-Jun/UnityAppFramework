@@ -2,11 +2,8 @@
 using System;
 using System.Collections;
 using System.Linq;
-using System.Reflection;
-using AppFrame.Config;
-using AppFrame.Info;
 using AppFrame.Tools;
-using AppFrame.View;
+using AppFrame.Config;
 using UnityEngine.SceneManagement;
 
 namespace AppFrame.Manager
@@ -16,19 +13,6 @@ namespace AppFrame.Manager
         protected override void OnSingletonMonoInit()
         {
             base.OnSingletonMonoInit();
-            InitConfig();
-        }
-
-        public void InitConfig()
-        {
-            AssetPathConfig config = LoadAsset<AssetPathConfig>("Global/AssetConfig/AssetPathConfig");
-            foreach (var ap in config.AssetPath)
-            {
-                if (!AppInfo.AssetPathPairs.ContainsKey(ap.name))
-                {
-                    AppInfo.AssetPathPairs.Add(ap.name, ap.path);
-                }
-            }
         }
 
         #region 移动游戏对象到场景
@@ -182,128 +166,6 @@ namespace AppFrame.Manager
         {
             GameObject go = Instantiate(prefab, parent);
             return go;
-        }
-        #endregion
-
-        #region 加载窗口
-
-        /// <summary> 
-        /// 加载窗口 添加T(Component)类型脚本
-        /// path = 窗口路径，不包含AssetsFolder
-        /// state 初始化窗口是否显示
-        /// </summary>
-        public T LoadUIView<T>(string path, int panelId = 0, bool state = false) where T : Component
-        {
-            var go = LoadAsset<GameObject>(path);
-            if (go == null) return null;
-            go = Instantiate(go, ViewManager.Instance.UIPanels[panelId]);
-            go.transform.localEulerAngles = Vector3.zero;
-            go.transform.localScale = Vector3.one;
-            go.name = go.name.Replace("(Clone)", "");
-            T t = null;
-            AppInfo.AssemblyPairs.TryGetValue("App.Module", out Assembly assembly);
-            var type = assembly.GetType(typeof(T).FullName);
-            if (type != null)
-            {
-                t = (T)go.AddComponent(type);
-            }
-            else
-            {
-                Log.E($"{typeof(T).FullName}:脚本不存在,");
-            }
-
-            EventDispatcher.TriggerEvent(go.name, state);
-            ViewManager.Instance.AddView<T>(t as ViewBase);
-            return t;
-        }
-
-        /// <summary> 
-        /// 加载窗口 添加T(Component)类型脚本
-        /// path = 窗口路径，不包含AssetsFolder
-        /// state 初始化窗口是否显示
-        /// </summary>
-        public T LoadUIView<T>(GameObject go, int panelId = 0, bool state = false) where T : Component
-        {
-            if (go == null) return null;
-            go = Instantiate(go, ViewManager.Instance.UIPanels[panelId]);
-            go.transform.localEulerAngles = Vector3.zero;
-            go.transform.localScale = Vector3.one;
-            go.name = go.name.Replace("(Clone)", "");
-            T t = null;
-            AppInfo.AssemblyPairs.TryGetValue("App.Module", out Assembly assembly);
-            var type = assembly.GetType(typeof(T).FullName);
-            if (type != null)
-            {
-                t = (T)go.AddComponent(type);
-            }
-            else
-            {
-                Log.E($"{typeof(T).FullName}:脚本不存在,");
-            }
-
-            EventDispatcher.TriggerEvent(go.name, state);
-            ViewManager.Instance.AddView<T>(t as ViewBase);
-            return t;
-        }
-        /// <summary> 
-        /// 加载窗口 添加T(Component)类型脚本
-        /// path = 窗口路径，不包含AssetsFolder
-        /// state 初始化窗口是否显示
-        /// </summary>
-        public T LoadGoView<T>(string path, bool state = false) where T : Component
-        {
-            var go = LoadAsset<GameObject>(path);
-            if (go == null) return null;
-            var parent = ViewManager.Instance.GoRoot;
-            go = Instantiate(go, parent);
-            go.transform.localEulerAngles = Vector3.zero;
-            go.transform.localScale = Vector3.one;
-            go.name = go.name.Replace("(Clone)", "");
-            T t = null;
-            AppInfo.AssemblyPairs.TryGetValue("App.Module", out Assembly assembly);
-            var type = assembly.GetType(typeof(T).FullName);
-            if (type != null)
-            {
-                t = (T)go.AddComponent(type);
-            }
-            else
-            {
-                Log.E($"{typeof(T).FullName}:脚本已存在,");
-            }
-
-            EventDispatcher.TriggerEvent(go.name, state);
-            ViewManager.Instance.AddView<T>(t as ViewBase);
-            return t;
-        }
-
-        /// <summary> 
-        /// 加载窗口 添加T(Component)类型脚本
-        /// path = 窗口路径，不包含AssetsFolder
-        /// state 初始化窗口是否显示
-        /// </summary>
-        public T LoadGoView<T>(GameObject go, bool state = false) where T : Component
-        {
-            if (go == null) return null;
-            var parent = ViewManager.Instance.GoRoot;
-            go = Instantiate(go, parent);
-            go.transform.localEulerAngles = Vector3.zero;
-            go.transform.localScale = Vector3.one;
-            go.name = go.name.Replace("(Clone)", "");
-            T t = null;
-            AppInfo.AssemblyPairs.TryGetValue("App.Module", out Assembly assembly);
-            var type = assembly.GetType(typeof(T).FullName);
-            if (type != null)
-            {
-                t = (T)go.AddComponent(type);
-            }
-            else
-            {
-                Log.E($"{typeof(T).FullName}:脚本已存在,");
-            }
-
-            EventDispatcher.TriggerEvent(go.name, state);
-            ViewManager.Instance.AddView<T>(t as ViewBase);
-            return t;
         }
         #endregion
 

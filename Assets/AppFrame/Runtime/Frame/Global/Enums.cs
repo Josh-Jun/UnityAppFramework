@@ -22,16 +22,16 @@ namespace AppFrame.Enum
         Hybrid = 0,//Dll资源AB
         Assets = 1,//资源AB
     }
-
-    /// <summary>AB包类型</summary>
+    
+    /// <summary>View类型</summary>
     public enum ViewMold
     {
-        UI2DView = 0,//2DUI
-        UI3DView = 1,//3DUI
-        GoView = 2,//3DModel
+        UI2D = 0,//2DUI
+        UI3D = 1,//3DUI
+        Go3D = 2,//GameObject
     }
 
-    /// <summary>AB包类型</summary>
+    /// <summary>更新方法类型</summary>
     public enum UpdateMold
     {
         Update = 0,//2DUI
