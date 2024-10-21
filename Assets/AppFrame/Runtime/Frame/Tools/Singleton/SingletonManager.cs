@@ -10,15 +10,16 @@ namespace AppFrame.Tools
         /// <summary> 添加单例 </summary>
         public void Add(ISingleton obj)
         {
-            string name = obj.ToString();
-            if (!SingletonPool.ContainsKey(name))
-            {
-                SingletonPool.Add(name, obj);
-            }
-            else
+            var name = obj.ToString();
+            if (!SingletonPool.TryAdd(name, obj))
             {
                 Log.I($"已具有相同名称的实例:{name}");
             }
+        }
+
+        public ISingleton Get(string name)
+        {
+            return SingletonPool.GetValueOrDefault(name);
         }
 
         /// <summary> 删除所有单例 </summary>

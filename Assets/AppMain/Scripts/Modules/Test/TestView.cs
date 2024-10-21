@@ -12,7 +12,6 @@ using AppFrame.Enum;
 using DG.Tweening;
 using AppFrame.Tools;
 using AppFrame.View;
-// using Pico.Tools;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -62,6 +61,11 @@ namespace Modules.Test
             base.CloseView();
         }
 
+        [Event("TestViewEvent")]
+        public void TestEvent(string param)
+        {
+            Log.I("TestViewEvent", ("Test", param));
+        }
         public void SetRawImage(Texture2D texture)
         {
             rawImage.texture = texture;

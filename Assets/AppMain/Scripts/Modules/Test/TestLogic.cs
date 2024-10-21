@@ -45,6 +45,17 @@ namespace Modules.Test
 
             view.PlayGif();
             RunTest();
+            TimeUpdateManager.Instance.StartTimer((time) =>
+            {
+                if (Input.GetKeyDown(KeyCode.A))
+                {
+                    EventManager.Instance.ExecuteEvent("TestViewEvent", "Execute");
+                }
+                if (Input.GetKeyDown(KeyCode.S))
+                {
+                    EventManager.Instance.ExecuteEvent("TestLogicEvent");
+                }
+            });
         }
 
         public void End()
@@ -122,6 +133,12 @@ namespace Modules.Test
             view.AddEventTrigger(EventTriggerType.PointerClick, (arg) => { });
             //平台管理类,不同平台对应的原生方法和属性
             PlatformManager.Instance.GetDataPath("");
+        }
+
+        [Event("TestLogicEvent")]
+        public void TestEvent()
+        {
+            Log.I("TestLogicEvent", ("Test", this));
         }
 
         private void TakePhoto()

@@ -23,7 +23,7 @@ namespace AppFrame.Tools
             }
         }
 
-        public SingletonEvent()
+        protected SingletonEvent()
         {
             _Instance = this as T;
             SingletonManager.Instance.Add(_Instance);
