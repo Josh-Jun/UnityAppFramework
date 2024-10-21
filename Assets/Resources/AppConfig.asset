@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: AppConfig
   m_EditorClassIdentifier: 
   IsDebug: 1
-  IsTestServer: 0
-  LoadAssetsMold: 1
+  IsTestServer: 1
+  LoadAssetsMold: 2
   AppFrameRate: 60
   TargetPackage: 0
   NativeApp: 0

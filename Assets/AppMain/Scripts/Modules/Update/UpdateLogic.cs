@@ -19,6 +19,8 @@ using AppFrame.Manager;
 using AppFrame.Tools;
 using AppFrame.View;
 using UnityEngine;
+using Folder = AppFrame.Config.Folder;
+using Module = AppFrame.Config.Module;
 
 namespace Modules.Update
 {
@@ -82,9 +84,14 @@ namespace Modules.Update
             LocalPath = PlatformManager.Instance.GetDataPath($"AssetBundle/{PlatformManager.Instance.Name}/{Application.version}/{Global.AppConfig.ResVersion}/Assets/");
             ServerUrl = NetcomManager.ABUrl + $"{PlatformManager.Instance.Name}/{Application.version}/{Global.AppConfig.ResVersion}/Assets/";
 
+            if (Application.platform == RuntimePlatform.OSXEditor)
+            {
+                ServerUrl = $"file://{ServerUrl}";
+            }
+            
             LocalVersionConfigPath = LocalPath + "AssetBundleConfig.json";
             ServerVersionConfigPath = ServerUrl + "AssetBundleConfig.json";
-
+            
             appUrl = NetcomManager.AppUrl + "meta.apk";
             appPath = PlatformManager.Instance.GetDataPath("App/meta.apk");
 

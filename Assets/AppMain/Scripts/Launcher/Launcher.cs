@@ -11,6 +11,7 @@ namespace Launcher
     {
         private Slider slider;
         private Text text;
+
         private void Awake()
         {
             slider = transform.Find("Canvas/Slider").GetComponent<Slider>();
@@ -19,14 +20,14 @@ namespace Launcher
             
             Global.AppConfig = Resources.Load<AppConfig>("AppConfig");
 
-            HybridABManager.Instance.InitManager();
+            HybridABManager.Instance.InitManager(transform);
             
             HotFix.Init((isHotfix) =>
             {
+                StartCoroutine(HotFix.DownLoadAssetBundle());
                 StartCoroutine(DownLoading(isHotfix));
             });
         }
-        
         private IEnumerator DownLoading(bool isHotfix)
         {
             if (isHotfix)
@@ -69,8 +70,10 @@ namespace Launcher
                 LoadMetadataForAOTAssemblies();
                 LoadHotfixAssemblies();
                 var ab = HybridABManager.Instance.LoadAssetBundle("Scenes", "AppScene");
-                Global.UpdateView = HybridABManager.Instance.LoadAsset<GameObject>("App", "Update", "UpdateView");
             }
+            Global.UpdateView = Global.AppConfig.LoadAssetsMold == LoadAssetsMold.Native 
+                ? Resources.Load<GameObject>("HybridFolder/App/Update/Views/UpdateView") 
+                : HybridABManager.Instance.LoadAsset<GameObject>("App", "Update", "UpdateView");
             
             SceneManager.LoadScene("AppScene");
         }

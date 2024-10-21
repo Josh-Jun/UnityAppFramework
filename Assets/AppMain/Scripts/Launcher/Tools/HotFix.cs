@@ -30,25 +30,41 @@ namespace Launcher
         public static float TotalSize = 0; // 资源的总大小 MB
         private static long alreadyDownloadSize = 0;
         private static long downloadingSize;
-
-        private static string server_url;
+        
+        private static string ABUrl
+        {
+            get
+            {
+                string test_url = Application.dataPath.Replace("/Assets", ""); //本地AB包地址
+                string pro_url = "https://meta-oss.genimous.com/vr-ota/dev_test/AssetBundle/"; //服务器AB包地址
+                return Global.AppConfig.IsTestServer ? test_url : pro_url;
+            }
+        }
 
         public static void Init(Action<bool> callback)
         {
             LocalPath = $"{Application.persistentDataPath}/AssetBundle/{HybridABManager.PlatformName}/{Application.version}/{Global.AppConfig.ResVersion}/Hybrid/";
-            ServerUrl = $"{server_url}/AssetBundle/{HybridABManager.PlatformName}/{Application.version}/{Global.AppConfig.ResVersion}/Hybrid/";
+            ServerUrl = $"{ABUrl}/AssetBundle/{HybridABManager.PlatformName}/{Application.version}/{Global.AppConfig.ResVersion}/Hybrid/";
 
+            if (Application.platform == RuntimePlatform.OSXEditor)
+            {
+                ServerUrl = $"file://{ServerUrl}";
+            }
+            
             LocalVersionConfigPath = LocalPath + "AssetBundleConfig.json";
             ServerVersionConfigPath = ServerUrl + "AssetBundleConfig.json";
-
             switch (Global.AppConfig.LoadAssetsMold)
             {
                 case LoadAssetsMold.Native:
                     callback?.Invoke(false);
                     break;
                 case LoadAssetsMold.Local:
-                    var localPath = $"file://{Application.streamingAssetsPath}/AssetBundle/{HybridABManager.PlatformName}/{Application.version}/{Global.AppConfig.ResVersion}/Hybrid/";
+                    var localPath = $"{Application.streamingAssetsPath}/AssetBundle/{HybridABManager.PlatformName}/{Application.version}/{Global.AppConfig.ResVersion}/Hybrid/";
                     var configPath = localPath + "AssetBundleConfig.json";
+                    if (Application.platform == RuntimePlatform.OSXEditor)
+                    {
+                        configPath = $"file://{configPath}";
+                    }
                     DownLoad(configPath, (string data) =>
                     {
                         var config = JsonUtility.FromJson<HybridABConfig>(data);
@@ -61,7 +77,7 @@ namespace Launcher
                     {
                         if (isUpdate)
                         {
-                            HotFix.StartDownLoad(() =>
+                            StartDownLoad(() =>
                             {
                                 callback?.Invoke(isUpdate);
                             });

@@ -80,8 +80,9 @@ namespace Launcher
             }
         }
 
-        public void InitManager()
+        public void InitManager(Transform root)
         {
+            transform.SetParent(root);
             // OutputPath > 项目目录/AssetBundle/{buildTarget}/{Application.version}/{AppConfig.ResVersion}/{mold}
             var head = IsEditor ? "" : "file://";
             mainfestDataPath = $"{head}{Application.persistentDataPath}/AssetBundle/{PlatformName}/{Application.version}/{Global.AppConfig.ResVersion}/Hybrid";

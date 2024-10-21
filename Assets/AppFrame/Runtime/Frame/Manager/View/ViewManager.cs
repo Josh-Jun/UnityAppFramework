@@ -155,19 +155,6 @@ namespace AppFrame.View
                 UIPanels.Add(panel);
             }
         }
-
-        public void InitViewScripts()
-        {
-            var types = Utils.GetAssemblyTypes<ViewBase>();
-            foreach (var type in types)
-            {
-                var la = type.GetCustomAttributes(typeof(ViewOfAttribute), false).First();
-                if (la is not ViewOfAttribute attribute) continue;
-                if(type.FullName == "Modules.Update.UpdateView") continue;
-                var view = CreateView(type, attribute);
-                ViewPairs.Add(type.FullName!, view);
-            }
-        }
         
         private ViewBase CreateView(Type type, ViewOfAttribute attribute)
         {
@@ -202,6 +189,19 @@ namespace AppFrame.View
         #endregion
 
         #region Public Function
+        
+        public void InitViewScripts()
+        {
+            var types = Utils.GetAssemblyTypes<ViewBase>();
+            foreach (var type in types)
+            {
+                var la = type.GetCustomAttributes(typeof(ViewOfAttribute), false).First();
+                if (la is not ViewOfAttribute attribute) continue;
+                if(type.FullName == "Modules.Update.UpdateView") continue;
+                var view = CreateView(type, attribute);
+                ViewPairs.Add(type.FullName!, view);
+            }
+        }
 
         public T AddView<T>(GameObject go, ViewMold mold = ViewMold.UI2D, int layer = 0, bool state = false) where T : Component
         {
@@ -225,9 +225,9 @@ namespace AppFrame.View
             view.transform.localEulerAngles = Vector3.zero;
             view.transform.localScale = Vector3.one;
             view.name = view.name.Replace("(Clone)", "");
-            T t =  (T)go.AddComponent(typeof(T));
+            var t =  view.AddComponent(typeof(T)) as T;
 
-            EventDispatcher.TriggerEvent(go.name, state);
+            EventDispatcher.TriggerEvent(view.name, state);
             ViewPairs.Add(typeof(T).FullName!, t as ViewBase);
             return t;
         }
