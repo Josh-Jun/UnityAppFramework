@@ -8,7 +8,7 @@ namespace AppFrame.View
     public class ViewBase : EventBaseMono
     {
         public bool ViewActive { get { return gameObject.activeSelf; } }
-        public ViewMold ViewMold { get; set; }
+        public ViewMold Mold { get; set; }
 
         [Obsolete("此方法已弃用，请使用InitWindow方法", true)]
         protected virtual void Awake()

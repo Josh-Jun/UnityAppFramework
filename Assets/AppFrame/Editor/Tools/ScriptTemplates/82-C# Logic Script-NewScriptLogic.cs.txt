@@ -21,7 +21,7 @@ namespace Modules.#NAMESPACE#
         }
         public void Begin()
         {
-            view = ViewManager.Instance.GetView<AskView>();
+            view = ViewManager.Instance.GetView<#NAMESPACE#View>();
         }
         public void End()
         {
