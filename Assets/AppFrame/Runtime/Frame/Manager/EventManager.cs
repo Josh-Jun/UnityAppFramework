@@ -71,10 +71,22 @@ namespace AppFrame.Manager
             }
         }
 
-        public void ExecuteEvent(string eventName, params object[] args)
+        public void Execute(string eventName, params object[] args)
         {
             if (Events.TryGetValue(eventName, out var data))
             {
+                var paramsInfo = data.method.GetParameters();
+                if (paramsInfo.Length != args.Length)
+                {
+                    Log.W($"类对象{data.obj}中{eventName}事件对应的方法{data.method.Name}参数对应不上！！！");
+                    return;
+                }
+                for (var i = 0; i < args.Length; i++)
+                {
+                    if (args[i].GetType() == paramsInfo[i].ParameterType) continue;
+                    Log.W($"参数类型不正确", ("目标类型", paramsInfo[i].ParameterType.Name), ("来源类型", args[i].GetType().Name));
+                    return;
+                }
                 data.method.Invoke(data.obj, args);
             }
             else
@@ -83,17 +95,17 @@ namespace AppFrame.Manager
             }
         }
 
-        public bool HasEvent(string eventName)
+        public bool Has(string eventName)
         {
             return Events.ContainsKey(eventName);
         }
 
-        public void RemoveEvent(string eventName)
+        public void Remove(string eventName)
         {
             Events.Remove(eventName);
         }
 
-        public void RemoveAllEvent()
+        public void RemoveAll()
         {
             Events.Clear();
         }

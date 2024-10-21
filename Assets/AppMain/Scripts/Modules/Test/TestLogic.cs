@@ -49,11 +49,11 @@ namespace Modules.Test
             {
                 if (Input.GetKeyDown(KeyCode.A))
                 {
-                    EventManager.Instance.ExecuteEvent("TestViewEvent", "Execute");
+                    EventManager.Instance.Execute("TestViewEvent", "Execute");
                 }
                 if (Input.GetKeyDown(KeyCode.S))
                 {
-                    EventManager.Instance.ExecuteEvent("TestLogicEvent");
+                    EventManager.Instance.Execute("TestLogicEvent");
                 }
             });
         }
