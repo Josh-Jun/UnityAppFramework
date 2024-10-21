@@ -3,11 +3,12 @@ using System;
 using System.Security.Cryptography;
 using System.IO;
 using System.Text;
-/// <summary> 
-/// 功能:MD5工具 
-/// </summary>
+
 namespace AppFrame.Tools
 {
+    /// <summary> 
+    /// 功能:MD5工具 
+    /// </summary>
     [Serializable]
     public class MD5Tools
     {

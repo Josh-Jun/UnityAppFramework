@@ -1,11 +1,12 @@
 ﻿using System.IO;
 using System.Text;
 using UnityEngine;
-/// <summary>
-/// 功能:文件工具 
-/// </summary>
+
 namespace AppFrame.Tools
 {
+    /// <summary>
+    /// 功能:文件工具 
+    /// </summary>
     public class FileTools
     {
         /// <summary> 创建文件 </summary>

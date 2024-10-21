@@ -6,7 +6,9 @@ using UnityEngine;
 
 namespace AppFrame.Tools
 {
-//功能:AES加解密工具
+    /// <summary>
+    /// 功能:AES加解密工具
+    /// </summary>
     public class AESTools
     {
         #region AES带头 加、解密

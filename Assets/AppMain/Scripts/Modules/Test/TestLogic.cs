@@ -144,9 +144,9 @@ namespace Modules.Test
         private void TakePhoto()
         {
             PictureTools.TakePhoto(Camera.main, PlatformManager.Instance.GetDataPath("Screenshots"),
-                (Texture2D texture, string fileName) =>
+                (Texture2D texture, string filePath) =>
                 {
-                    PlatformManager.Instance.SavePhoto(PlatformManager.Instance.GetDataPath("Screenshots/") + fileName);
+                    PlatformManager.Instance.SavePhoto(filePath);
                     view.SetRawImage(texture);
                 });
         }

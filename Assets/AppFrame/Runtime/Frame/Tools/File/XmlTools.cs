@@ -4,9 +4,10 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using UnityEngine;
-/// <summary> 功能：对象与XML  序列化/反序列化 工具 </summary>
+
 namespace AppFrame.Tools
 {
+    /// <summary> 功能：对象与XML  序列化/反序列化 工具 </summary>
     public class XmlTools
     {
         /// <summary> 将XML数据反序列化为指定类型对象 </summary>

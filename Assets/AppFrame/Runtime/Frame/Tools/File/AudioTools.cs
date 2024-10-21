@@ -1,10 +1,11 @@
 using System;
 using UnityEngine;
-/// <summary>
-/// 功能:音频工具 
-/// </summary>
+
 namespace AppFrame.Tools
 {
+    /// <summary>
+    /// 功能:音频工具 
+    /// </summary>
     public class AudioTools
     {
         /// <summary>

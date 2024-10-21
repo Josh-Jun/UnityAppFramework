@@ -1,8 +1,8 @@
 ﻿using System;
+using System.IO;
 using UnityEngine;
-/// <summary>
-/// 图片工具类
-/// </summary>
+using Object = UnityEngine.Object;
+
 namespace AppFrame.Tools
 {
     public enum PictureType
@@ -12,6 +12,7 @@ namespace AppFrame.Tools
         Exr,
         Tga,
     }
+    /// <summary> 图片工具类 </summary>
     public static class PictureTools
     {
         /// <summary> 创建Sprite</summary>
@@ -101,29 +102,6 @@ namespace AppFrame.Tools
         }
 
         /// <summary>
-        /// 屏幕截图
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="size"></param>
-        /// <param name="callback"></param>
-        public static void TakePhoto(string path, Vector2 size, Action<Texture2D, string> callback = null)
-        {
-            Texture2D texture = new Texture2D((int)size.x, (int)size.y, TextureFormat.RGB24, false);
-            texture.ReadPixels(new Rect(0, 0, size.x, size.y), 0, 0, false);
-            texture.Apply();
-            var img = texture.EncodeToPNG();
-            string imageName = string.Format("Image{0}.png", Utils.GetTimeStamp);
-            string file = string.Format("{0}/{1}", path, imageName);
-            if (!FileTools.FolderExist(path)) //创建生成目录，如果不存在则创建目录  
-            {
-                FileTools.CreateFolder(path);
-            }
-
-            FileTools.CreateFile(file, img);
-            callback?.Invoke(texture, imageName);
-        }
-
-        /// <summary>
         /// 相机截图
         /// </summary>
         /// <param name="camera"></param>
@@ -132,49 +110,50 @@ namespace AppFrame.Tools
         /// <param name="callback"></param>
         public static void TakePhoto(Camera camera, string path, Action<Texture2D, string> callback = null)
         {
-            Texture2D texture = CaptureCamera(camera,
-                new Rect(Screen.width / 2 - camera.pixelWidth / 2, Screen.height / 2 - camera.pixelHeight / 2,
-                    camera.pixelWidth, camera.pixelHeight));
-            var img = texture.EncodeToPNG();
-            string imageName = string.Format("Image{0}.png", Utils.GetTimeStamp);
-            string file = string.Format("{0}/{1}", path, imageName);
-            if (!FileTools.FolderExist(path)) //创建生成目录，如果不存在则创建目录  
-            {
-                FileTools.CreateFolder(path);
-            }
-
-            FileTools.CreateFile(file, img);
-            callback?.Invoke(texture, imageName);
+            var filePath = $"{path}/Image{Utils.GetTimeStamp}.png";
+            var item = TakeTransparentCapture(camera, camera.pixelWidth, camera.pixelHeight, filePath);
+            callback?.Invoke(item.Item1, filePath);
         }
-
-        /// <summary>  
-        /// 对相机截图。   
-        /// </summary>  
-        /// <returns>The screenshot2.</returns>  
-        /// <param name="camera">Camera.要被截屏的相机</param>  
-        /// <param name="rect">Rect.截屏的区域</param>  
-        private static Texture2D CaptureCamera(Camera camera, Rect rect)
+        
+        public static (Texture2D, byte[]) TakeTransparentCapture(Camera camera, int width, int height, string savePath)
         {
-            // 创建一个RenderTexture对象  
-            RenderTexture rt = new RenderTexture(camera.pixelWidth, camera.pixelHeight, 0);
-            // 临时设置相关相机的targetTexture为rt, 并手动渲染相关相机  
-            camera.targetTexture = rt;
+            // Depending on your render pipeline, this may not work.
+            var bak_cam_targetTexture = camera.targetTexture;
+            var bak_cam_clearFlags = camera.clearFlags;
+            var bak_RenderTexture_active = RenderTexture.active;
+
+            var tex_transparent = new Texture2D(width, height, TextureFormat.ARGB32, false);
+            // Must use 24-bit depth buffer to be able to fill background.
+            var render_texture = RenderTexture.GetTemporary(width, height, 24, RenderTextureFormat.ARGB32);
+            var grab_area = new Rect(0, 0, width, height);
+
+            RenderTexture.active = render_texture;
+            camera.targetTexture = render_texture;
+            camera.clearFlags = CameraClearFlags.SolidColor;
+
+            // Simple: use a clear background
+            camera.backgroundColor = Color.clear;
             camera.Render();
-            //ps: --- 如果这样加上第二个相机，可以实现只截图某几个指定的相机一起看到的图像。  
-            //ps: camera2.targetTexture = rt;  
-            //ps: camera2.Render();  
-            //ps: -------------------------------------------------------------------  
-            // 激活这个rt, 并从中中读取像素。  
-            RenderTexture.active = rt;
-            Texture2D screenShot = new Texture2D((int)rect.width, (int)rect.height, TextureFormat.RGB24, false);
-            screenShot.ReadPixels(rect, 0, 0); // 注：这个时候，它是从RenderTexture.active中读取像素  
-            screenShot.Apply();
-            // 重置相关参数，以使用camera继续在屏幕上显示  
-            camera.targetTexture = null;
-            //ps: camera2.targetTexture = null;  
-            RenderTexture.active = null; // JC: added to avoid errors  
-            GameObject.Destroy(rt);
-            return screenShot;
+            tex_transparent.ReadPixels(grab_area, 0, 0);
+            tex_transparent.Apply();
+
+            // Encode the resulting output texture to a byte array then write to the file
+            var pngShot = tex_transparent.EncodeToPNG();
+            
+            var array = savePath.Split('/');
+            var directory = savePath.Replace(array[^1], "");
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+            File.WriteAllBytes(savePath, pngShot);
+
+            camera.clearFlags = bak_cam_clearFlags;
+            camera.targetTexture = bak_cam_targetTexture;
+            RenderTexture.active = bak_RenderTexture_active;
+            RenderTexture.ReleaseTemporary(render_texture);
+            Object.Destroy(tex_transparent);
+            return (tex_transparent, pngShot);
         }
     }
 }
