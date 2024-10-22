@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 namespace Modules.#NAMESPACE#
 {
-    [ViewOf(ViewMold.UI2D, 0)]
+    [ViewOf(ViewMold.UI2D, "#NAMESPACE#")]
     public class #SCRIPTNAME# : ViewBase
     {
         protected override void InitView()
