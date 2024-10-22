@@ -31,14 +31,17 @@ namespace AppFrame.Attribute
         public ViewMold View { get; private set; }
         // 2D UI层级
         public int Layer { get; private set; }
+        // 预制体module文件夹名称
+        public string Module { get; private set; }
         // 默认显隐状态，默认关闭
         public bool Active { get; private set; }
 
-        public ViewOfAttribute(ViewMold View, int Layer = 0, bool Active = false)
+        public ViewOfAttribute(ViewMold View, string Module, bool Active = false, int Layer = 0)
         {
             this.View = View;
             this.Layer = Layer;
             this.Active = Active;
+            this.Module = Module;
         }
     }
 

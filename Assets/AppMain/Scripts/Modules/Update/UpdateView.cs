@@ -16,7 +16,7 @@ using UnityEngine.UI;
 
 namespace Modules.Update
 {
-    [ViewOf(ViewMold.UI2D)]
+    [ViewOf(ViewMold.UI2D, "Update")]
     public class UpdateView : ViewBase
     {
         private RectTransform progressBarPanel;

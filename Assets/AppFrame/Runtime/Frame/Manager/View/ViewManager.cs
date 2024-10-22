@@ -163,7 +163,7 @@ namespace AppFrame.View
         
         private ViewBase CreateView(Type type, ViewOfAttribute attribute)
         {
-            var path = $"{type.Name.Replace("View", "")}/Views/{type.Name}";
+            var path = $"{attribute.Module}/Views/{type.Name}";
             var go = AssetsManager.Instance.LoadAsset<GameObject>(path);
             if (go == null) return null;
             Transform parent = null;
@@ -186,7 +186,7 @@ namespace AppFrame.View
             view.transform.localScale = Vector3.one;
             view.name = view.name.Replace("(Clone)", "");
             var vb = view.AddComponent(type) as ViewBase;
-            EventDispatcher.TriggerEvent(go.name, attribute.Active);
+            EventDispatcher.TriggerEvent(view.name, attribute.Active);
             return vb;
         }
         

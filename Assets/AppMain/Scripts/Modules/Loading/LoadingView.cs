@@ -15,7 +15,7 @@ using UnityEngine.UI;
 
 namespace Modules.Loading
 {
-    [ViewOf(ViewMold.UI2D, 1)]
+    [ViewOf(ViewMold.UI2D, "Loading", false, 1)]
     public class LoadingView : ViewBase
     {
         private Slider loadingSlider;

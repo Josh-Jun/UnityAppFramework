@@ -17,7 +17,7 @@ using UnityEngine.UI;
 
 namespace Modules.Test
 {
-    [ViewOf(ViewMold.UI2D, 0, true)]
+    [ViewOf(ViewMold.UI2D, "Test", true, 0)]
     public class TestView : ViewBase
     {
         private Button btn;
