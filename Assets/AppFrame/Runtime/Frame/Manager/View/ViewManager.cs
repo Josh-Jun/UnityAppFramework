@@ -240,18 +240,24 @@ namespace AppFrame.View
         public void SafeAreaAdjuster()
         {
             var bottomPixels = Screen.safeArea.y;
+            var leftPixels = Screen.safeArea.x;
 
-            var topPixel = Screen.currentResolution.height - (Screen.safeArea.y + Screen.safeArea.height);
+            var topPixel = (Screen.safeArea.y + Screen.safeArea.height) - Screen.currentResolution.height;
+            var rightPixel = (Screen.safeArea.x + Screen.safeArea.width) - Screen.currentResolution.width;
 
             var bottomRatio = bottomPixels / Screen.currentResolution.height;
+            var leftRatio = leftPixels / Screen.currentResolution.width;
             var topRatio = topPixel / Screen.currentResolution.height;
+            var rightRatio = rightPixel / Screen.currentResolution.width;
 
             var referenceResolution = UI2DCanvasScaler.referenceResolution;
             var bottomUnits = referenceResolution.y * bottomRatio;
             var topUnits = referenceResolution.y * topRatio;
+            var leftUnits = referenceResolution.x * leftRatio;
+            var rightUnits = referenceResolution.x * rightRatio;
 
-            UISafeArea2D.offsetMin = new Vector2(UISafeArea2D.offsetMin.x, bottomUnits);
-            UISafeArea2D.offsetMax = new Vector2(UISafeArea2D.offsetMax.x, -topUnits);
+            UISafeArea2D.offsetMin = new Vector2(leftUnits, bottomUnits);
+            UISafeArea2D.offsetMax = new Vector2(rightUnits, topUnits);
         }
         
         /// <summary> UGUI坐标 mousePosition</summary>
