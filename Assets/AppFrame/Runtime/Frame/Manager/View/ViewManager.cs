@@ -130,13 +130,8 @@ namespace AppFrame.View
             Canvas3DSetting();
             
             InitUIPanels();
-
-#if !UNITY_EDITOR && !UNITY_STANDALONE_WIN && !UNITY_STANDALONE_OSX
-            if (!PlatformManager.Instance.IsEditor)
-            {
-                SafeAreaAdjuster();
-            }
-#endif
+            
+            SafeAreaAdjuster();
         }
 
         #region Private Function
