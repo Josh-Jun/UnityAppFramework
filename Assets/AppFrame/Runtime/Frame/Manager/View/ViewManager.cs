@@ -219,14 +219,14 @@ namespace AppFrame.View
         
         public void SafeAreaAdjuster()
         {
-            UI2DCanvasScaler.referenceResolution = new Vector2(Screen.currentResolution.width, Screen.currentResolution.height);
-            UI2DCanvasScaler.matchWidthOrHeight = Screen.currentResolution.width < Screen.currentResolution.height ? 0 : 1;
+            UI2DCanvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
+            UI2DCanvasScaler.matchWidthOrHeight = Screen.width < Screen.height ? 0 : 1;
             
             var bottomPixels = Screen.safeArea.y;
             var leftPixels = Screen.safeArea.x;
 
-            var topPixel = Screen.safeArea.y + Screen.safeArea.height - Screen.currentResolution.height;
-            var rightPixel = Screen.safeArea.x + Screen.safeArea.width - Screen.currentResolution.width;
+            var topPixel = Screen.safeArea.y + Screen.safeArea.height - Screen.height;
+            var rightPixel = Screen.safeArea.x + Screen.safeArea.width - Screen.width;
 
             UISafeArea2D.offsetMin = new Vector2(leftPixels, bottomPixels);
             UISafeArea2D.offsetMax = new Vector2(rightPixel, topPixel);
