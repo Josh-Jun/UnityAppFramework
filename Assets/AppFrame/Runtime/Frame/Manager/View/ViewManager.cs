@@ -126,27 +126,12 @@ namespace AppFrame.View
 
             GameObjectRoot = this.FindGameObject("Go Root");
             
-            Canvas2DSetting();
-            Canvas3DSetting();
-            
             InitUIPanels();
             
             SafeAreaAdjuster();
         }
 
         #region Private Function
-
-        private void Canvas2DSetting()
-        {
-            UI2DCanvasScaler.referenceResolution = Global.AppConfig.UIReferenceResolution;
-            UI2DCanvasScaler.matchWidthOrHeight =
-                Global.AppConfig.UIReferenceResolution.x < Global.AppConfig.UIReferenceResolution.y ? 0 : 1;
-        }
-
-        private void Canvas3DSetting()
-        {
-            UI3DRectTransform.sizeDelta = Global.AppConfig.UIReferenceResolution;
-        }
 
         private void InitUIPanels()
         {
@@ -234,25 +219,17 @@ namespace AppFrame.View
         
         public void SafeAreaAdjuster()
         {
+            UI2DCanvasScaler.referenceResolution = new Vector2(Screen.currentResolution.width, Screen.currentResolution.height);
+            UI2DCanvasScaler.matchWidthOrHeight = Screen.currentResolution.width < Screen.currentResolution.height ? 0 : 1;
+            
             var bottomPixels = Screen.safeArea.y;
             var leftPixels = Screen.safeArea.x;
 
-            var topPixel = (Screen.safeArea.y + Screen.safeArea.height) - Screen.currentResolution.height;
-            var rightPixel = (Screen.safeArea.x + Screen.safeArea.width) - Screen.currentResolution.width;
+            var topPixel = Screen.safeArea.y + Screen.safeArea.height - Screen.currentResolution.height;
+            var rightPixel = Screen.safeArea.x + Screen.safeArea.width - Screen.currentResolution.width;
 
-            var bottomRatio = bottomPixels / Screen.currentResolution.height;
-            var leftRatio = leftPixels / Screen.currentResolution.width;
-            var topRatio = topPixel / Screen.currentResolution.height;
-            var rightRatio = rightPixel / Screen.currentResolution.width;
-
-            var referenceResolution = UI2DCanvasScaler.referenceResolution;
-            var bottomUnits = referenceResolution.y * bottomRatio;
-            var topUnits = referenceResolution.y * topRatio;
-            var leftUnits = referenceResolution.x * leftRatio;
-            var rightUnits = referenceResolution.x * rightRatio;
-
-            UISafeArea2D.offsetMin = new Vector2(leftUnits, bottomUnits);
-            UISafeArea2D.offsetMax = new Vector2(rightUnits, topUnits);
+            UISafeArea2D.offsetMin = new Vector2(leftPixels, bottomPixels);
+            UISafeArea2D.offsetMax = new Vector2(rightPixel, topPixel);
         }
         
         /// <summary> UGUI坐标 mousePosition</summary>

@@ -38,11 +38,6 @@ namespace AppFrame.Editor
             var build_mold = root.Q<EnumField>("BuildMold");
             var export_project = root.Q<Toggle>("ExportProject");
             var ab_build_pipeline = root.Q<EnumField>("ABBuildPipeline");
-            var ui_reference_resolution = root.Q<Vector2Field>("UIReferenceResolution");
-            var left_floatfield = root.Q<IntegerField>("Left");
-            var right_floatfield = root.Q<IntegerField>("Right");
-            var top_floatfield = root.Q<IntegerField>("Top");
-            var bottom_floatfield = root.Q<IntegerField>("Bottom");
             var output_path = root.Q<TextField>("BuildAppOutputPath");
 
             development_build.value = DevelopmentBuild;
@@ -52,7 +47,6 @@ namespace AppFrame.Editor
             build_mold.Init(ApkTarget);
             export_project.value = NativeApp;
             ab_build_pipeline.Init(Pipeline);
-            ui_reference_resolution.value = UIReferenceResolution;
             output_path.value = outputPath;
             
             build_mold.style.display = 
@@ -83,10 +77,6 @@ namespace AppFrame.Editor
             {
                 var mold = (ABPipeline)System.Enum.Parse(typeof(ABPipeline), evt.newValue);
                 Pipeline = mold;
-            });
-            ui_reference_resolution.RegisterCallback<ChangeEvent<Vector2>>((evt) =>
-            {
-                UIReferenceResolution = evt.newValue;
             });
             output_path.RegisterCallback<ChangeEvent<string>>((evt) => { outputPath = evt.newValue; });
             root.Q<Button>("BuildAppOutputPathBrowse").clicked += () =>
@@ -124,7 +114,6 @@ namespace AppFrame.Editor
                 ApkTarget = AppConfig.TargetPackage;
                 NativeApp = AppConfig.NativeApp;
                 Pipeline = AppConfig.ABPipeline;
-                UIReferenceResolution = AppConfig.UIReferenceResolution;
             }
             else
             {
@@ -141,7 +130,6 @@ namespace AppFrame.Editor
             AppConfig.TargetPackage = ApkTarget;
             AppConfig.NativeApp = NativeApp;
             AppConfig.ABPipeline = Pipeline;
-            AppConfig.UIReferenceResolution = UIReferenceResolution;
 
             EditorUtility.SetDirty(AppConfig);
 

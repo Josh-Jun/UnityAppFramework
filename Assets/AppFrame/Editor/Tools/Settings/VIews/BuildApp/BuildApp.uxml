@@ -7,9 +7,6 @@
         <uie:EnumField label="Build Mold" name="BuildMold" type="AppFrame.Config.TargetPackage, App.Main" />
         <ui:Toggle label="Export Project" name="ExportProject" />
         <uie:EnumField label="AB Build Pipeline" name="ABBuildPipeline" type="AppFrame.Config.ABPipeline, App.Main" />
-        <ui:VisualElement>
-            <uie:Vector2Field label="UIResolution" name="UIReferenceResolution" style="flex-direction: row;" />
-        </ui:VisualElement>
         <ui:Button text="Apply" display-tooltip-when-elided="true" name="BuildAppApply" />
         <ui:TextField picking-mode="Ignore" label="Output Path" name="BuildAppOutputPath">
             <ui:Button text="Browse" display-tooltip-when-elided="true" name="BuildAppOutputPathBrowse" style="margin-top: 0;" />
