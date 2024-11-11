@@ -2,6 +2,7 @@ using System.IO;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace AppFrame.Editor
 {
@@ -27,11 +28,11 @@ namespace AppFrame.Editor
             PlayerPrefs.SetInt(AUTO_KEY, value);
         }
 
-        private static void OpenScene()
+        private static void OpenScene(string path = "Assets/AppMain/Scenes/Launcher.unity")
         {
-            string path = "Assets/AppMain/Scenes/Launcher.unity";
+            if(path == null) return;
             string SceneName = Path.GetFileNameWithoutExtension(path);
-            bool IsCurScene = EditorSceneManager.GetActiveScene().name.Equals(SceneName); //是否为当前场景
+            bool IsCurScene = SceneManager.GetActiveScene().name.Equals(SceneName); //是否为当前场景
             if (!Application.isPlaying)
             {
                 if (!IsCurScene)
@@ -40,18 +41,31 @@ namespace AppFrame.Editor
                 }
             }
         }
-
+        
         private static void EditorApplication_playModeStateChanged(PlayModeStateChange obj)
         {
             switch (obj)
             {
                 case PlayModeStateChange.EnteredEditMode: //停止播放事件监听后被监听
                     // Debug.Log("如果编辑器应用程序处于编辑模式而之前处于播放模式，则在编辑器应用程序的下一次更新期间发生。");
+                    if (Menu.GetChecked("App/AutoOpenScene"))
+                    {
+                        if (PlayerPrefs.HasKey("TEMP_SCENE_PATH"))
+                        {
+                            EditorSceneManager.OpenScene(PlayerPrefs.GetString("TEMP_SCENE_PATH"));
+                            PlayerPrefs.DeleteKey("TEMP_SCENE_PATH");
+                        }
+                    }
                     break;
                 case PlayModeStateChange.ExitingEditMode: //编辑转播放时监听(播放之前)
                     // Debug.Log("在退出编辑模式时，在编辑器处于播放模式之前发生。");
                     if (Menu.GetChecked("App/AutoOpenScene"))
                     {
+                        if (SceneManager.GetActiveScene().path != string.Empty)
+                        {
+                            PlayerPrefs.SetString("TEMP_SCENE_PATH", SceneManager.GetActiveScene().path);
+                            EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
+                        }
                         OpenScene();
                     }
                     break;
