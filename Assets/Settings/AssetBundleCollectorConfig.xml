@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root Version="v2.1">
+  <Common ShowPackageView="True" ShowEditorAlias="False" UniqueBundleName="True" />
+  <Package PackageName="BuiltinPackage" PackageDesc="首包内置资源" AutoAddressable="False" LocationToLower="False" IncludeAssetGUID="False" IgnoreRuleName="NormalIgnoreRule" />
+  <Package PackageName="HotfixPackage" PackageDesc="热更资源" AutoAddressable="False" LocationToLower="False" IncludeAssetGUID="False" IgnoreRuleName="NormalIgnoreRule" />
+</root>

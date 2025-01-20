@@ -73,6 +73,7 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treaming[Aa]ssets/aa/*
 #/[Pp]roject[Ss]ettings/*.txt
 /[Aa]sset[Bb]undle/
+/[Bb]undles/
 /Assets/AppFramework/Libraries/XLua/Gen
 /Assets/AppFramework/Libraries/XLua/Gen.meta
 .vsconfig

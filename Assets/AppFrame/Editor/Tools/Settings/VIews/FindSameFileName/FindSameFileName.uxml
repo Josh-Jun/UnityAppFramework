@@ -1,9 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:VisualElement name="FindSameFileName" style="flex-grow: 1; display: flex; margin-top: 5px;">
-        <uie:EnumField label="ObjectType" name="object_type" type="AppFrame.Editor.ObjectType, App.Frame.Editor" />
-        <ui:TextField picking-mode="Ignore" label="Files Path" name="text_files_path">
-            <ui:Button text="Browse" display-tooltip-when-elided="true" name="files_path_browse" style="margin-right: 0; margin-top: 0; margin-bottom: 0;" />
-        </ui:TextField>
-        <ui:Button text="Find" display-tooltip-when-elided="true" name="btn_find" />
-    </ui:VisualElement>
-</ui:UXML>

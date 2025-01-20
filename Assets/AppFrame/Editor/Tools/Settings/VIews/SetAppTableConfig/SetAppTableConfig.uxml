@@ -1,6 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <ui:VisualElement name="SetAppTableConfig" style="flex-grow: 0; display: flex; margin-top: 5px; flex-direction: column;">
-        <ui:ScrollView vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" name="table_scroll_view" style="align-items: center;" />
-        <ui:Button text="Apply" display-tooltip-when-elided="true" name="btn_table_apply" />
-    </ui:VisualElement>
-</ui:UXML>

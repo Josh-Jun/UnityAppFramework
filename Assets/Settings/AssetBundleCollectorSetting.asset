@@ -1,0 +1,245 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 185f6993d5150494d98da50e26cb1c25, type: 3}
+  m_Name: AssetBundleCollectorSetting
+  m_EditorClassIdentifier: 
+  ShowPackageView: 1
+  ShowEditorAlias: 0
+  UniqueBundleName: 1
+  Packages:
+  - PackageName: BuiltinPackage
+    PackageDesc: "\u9996\u5305\u5185\u7F6E\u8D44\u6E90"
+    EnableAddressable: 0
+    LocationToLower: 0
+    IncludeAssetGUID: 0
+    AutoCollectShaders: 1
+    IgnoreRuleName: NormalIgnoreRule
+    Groups:
+    - GroupName: Dlls
+      GroupDesc: 
+      AssetTags: dll
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Bundles/Builtin/Dlls
+        CollectorGUID: 1f9939546994cd1408ec6718fc7a0740
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: Scenes
+      GroupDesc: 
+      AssetTags: scene
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Bundles/Builtin/Scenes
+        CollectorGUID: 8553d7bcd7e799b4b83b9492288591c3
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectScene
+        AssetTags: 
+        UserData: 
+    - GroupName: Audios
+      GroupDesc: 
+      AssetTags: audio
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Bundles/Builtin/Audios
+        CollectorGUID: 85bb02ed6e4ba4448b61d1d8f3494139
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: Shaders
+      GroupDesc: 
+      AssetTags: shader
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Bundles/Builtin/Shaders/ShaderVariant
+        CollectorGUID: 580e69872610a4b49be1c0812927d572
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectShaderVariants
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Bundles/Builtin/Shaders/Graphs
+        CollectorGUID: 0e4b184fc9402467cb7d450308774826
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Bundles/Builtin/Shaders
+        CollectorGUID: c44fa3e6595e6f046890230ef472c98c
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectShader
+        AssetTags: 
+        UserData: 
+    - GroupName: Configs
+      GroupDesc: 
+      AssetTags: config
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Bundles/Builtin/Configs
+        CollectorGUID: c48567d7fc01e430095630281cd08efe
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: Images
+      GroupDesc: 
+      AssetTags: image
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Bundles/Builtin/Images
+        CollectorGUID: bf07f4c4f1348496ca87a80dfacf4fe6
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: Materials
+      GroupDesc: 
+      AssetTags: material
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Bundles/Builtin/Materials
+        CollectorGUID: 3e82d376f79ae40dab8e29fa7a214d71
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: Prefabs
+      GroupDesc: 
+      AssetTags: prefab
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Bundles/Builtin/Prefabs
+        CollectorGUID: 07258433da6d54f6aae82154deabf710
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectPrefab
+        AssetTags: 
+        UserData: 
+    - GroupName: Videos
+      GroupDesc: 
+      AssetTags: video
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Bundles/Builtin/Videos
+        CollectorGUID: d2bb6abfdf7b54efbb25c6ec85ec4390
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+  - PackageName: HotfixPackage
+    PackageDesc: "\u70ED\u66F4\u8D44\u6E90"
+    EnableAddressable: 0
+    LocationToLower: 0
+    IncludeAssetGUID: 0
+    AutoCollectShaders: 1
+    IgnoreRuleName: NormalIgnoreRule
+    Groups:
+    - GroupName: Audios
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Bundles/Hotfix/Audios
+        CollectorGUID: 29815b9818ce94d86bda0b9155f3d618
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: Images
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Bundles/Hotfix/Images
+        CollectorGUID: ac2a073fd3119440bbf85255c215d992
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: Materials
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Bundles/Hotfix/Materials
+        CollectorGUID: ee8e16f582af644de981a0528abbd88c
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: Prefabs
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Bundles/Hotfix/Prefabs
+        CollectorGUID: 0a82a04a14c75460bab7bdbdd2f04af3
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectPrefab
+        AssetTags: 
+        UserData: 
+    - GroupName: Scenes
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Bundles/Hotfix/Scenes
+        CollectorGUID: 9cb5b61e74c50254c8a9a670c1a568d9
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectScene
+        AssetTags: 
+        UserData: 
+    - GroupName: Videos
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Bundles/Hotfix/Videos
+        CollectorGUID: fbbe26c0e1f414721a8c9e3258ce45fb
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
