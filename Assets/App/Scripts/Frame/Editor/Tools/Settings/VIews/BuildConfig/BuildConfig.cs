@@ -364,7 +364,7 @@ namespace App.Editor.View
         {
             var sb = new StringBuilder();
             var array = dataStr.Split('|');
-            if (array.Length > 1)
+            if (typeStr.Contains("[]"))
             {
                 sb.Append("[");
             }
@@ -385,7 +385,7 @@ namespace App.Editor.View
                 }
             }
 
-            if (array.Length <= 1) return sb.ToString();
+            if (!typeStr.Contains("[]")) return sb.ToString();
             sb.Remove(sb.Length - 1, 1);
             sb.Append("],");
             return sb.ToString();
