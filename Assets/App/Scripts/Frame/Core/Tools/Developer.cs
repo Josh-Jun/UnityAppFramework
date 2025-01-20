@@ -1396,24 +1396,24 @@ namespace App.Core.Tools
             return new Vector3(x, y, z);
         }
         
-        public static Vector3[] StringToVector3Array(this string str, char separator = '|')
+        public static Vector3[] StringToVector3Array(this string str, char separator1 = '|', char separator2 = ',')
         {
             if(string.IsNullOrEmpty(str)) return null;
-            var split = str.Split(separator);
+            var split = str.Split(separator1);
             var arr = new Vector3[split.Length];
             for (var i = 0; i < split.Length; i++)
             {
-                var v = split[i].StringToVector3();
+                var v = split[i].StringToVector3(separator2);
                 arr[i] = v;
             }
             return arr;
         }
 
-        public static List<Vector3> StringToVector3List(this string str, char separator = '|')
+        public static List<Vector3> StringToVector3List(this string str, char separator1 = '|', char separator2 = ',')
         {
             if(string.IsNullOrEmpty(str)) return null;
-            var split = str.Split(separator);
-            return split.Select(t => t.StringToVector3()).ToList();
+            var split = str.Split(separator1);
+            return split.Select(t => t.StringToVector3(separator2)).ToList();
         }
 
         public static int[] StringToInt32Array(this string str, char separator = '|')
