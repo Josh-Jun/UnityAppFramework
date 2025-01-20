@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using App.Core.Master;
 using UnityEngine;
 using UnityEngine.Events;
@@ -1378,6 +1379,111 @@ namespace App.Core.Tools
             }
 
             return current;
+        }
+
+        #endregion
+
+        #region string
+
+        public static Vector3 StringToVector3(this string str, char separator = ',')
+        {
+            if(string.IsNullOrEmpty(str)) return Vector3.zero;
+            var split = str.Split(separator);
+            if (split.Length != 3) return Vector3.zero;
+            float.TryParse(split[0], out var x);
+            float.TryParse(split[1], out var y);
+            float.TryParse(split[2], out var z);
+            return new Vector3(x, y, z);
+        }
+        
+        public static Vector3[] StringToVector3Array(this string str, char separator = '|')
+        {
+            if(string.IsNullOrEmpty(str)) return null;
+            var split = str.Split(separator);
+            var arr = new Vector3[split.Length];
+            for (var i = 0; i < split.Length; i++)
+            {
+                var v = split[i].StringToVector3();
+                arr[i] = v;
+            }
+            return arr;
+        }
+
+        public static List<Vector3> StringToVector3List(this string str, char separator = '|')
+        {
+            if(string.IsNullOrEmpty(str)) return null;
+            var split = str.Split(separator);
+            return split.Select(t => t.StringToVector3()).ToList();
+        }
+
+        public static int[] StringToInt32Array(this string str, char separator = '|')
+        {
+            if(string.IsNullOrEmpty(str)) return null;
+            var split = str.Split(separator);
+            var arr = new int[split.Length];
+            for (var i = 0; i < split.Length; i++)
+            {
+                if (int.TryParse(split[i], out var value))
+                {
+                    arr[i] = value;
+                }
+            }
+            return arr;
+        }
+
+        public static float[] StringToFloatArray(this string str, char separator = '|')
+        {
+            if(string.IsNullOrEmpty(str)) return null;
+            var split = str.Split(separator);
+            var arr = new float[split.Length];
+            for (var i = 0; i < split.Length; i++)
+            {
+                if (float.TryParse(split[i], out var value))
+                {
+                    arr[i] = value;
+                }
+            }
+            return arr;
+        }
+        
+        public static long[] StringToInt64Array(this string str, char separator = '|')
+        {
+            if(string.IsNullOrEmpty(str)) return null;
+            var split = str.Split(separator);
+            var arr = new long[split.Length];
+            for (var i = 0; i < split.Length; i++)
+            {
+                if (long.TryParse(split[i], out var value))
+                {
+                    arr[i] = value;
+                }
+            }
+            return arr;
+        }
+        
+        public static List<int> StringToInt32List(this string str, char separator = '|')
+        {
+            if(string.IsNullOrEmpty(str)) return null;
+            var split = str.Split(separator);
+            var list = split.Select(t => int.TryParse(t, out var value) ? value : 0).ToList();
+            return list;
+        }
+
+        public static List<float> StringToFloatList(this string str, char separator = '|')
+        {
+            if(string.IsNullOrEmpty(str)) return null;
+            var split = str.Split(separator);
+            var list = split.Select(t => float.TryParse(t, out var value) ? value : 0).ToList();
+            return list;
+        }
+        
+        public static List<long> StringToInt64List(this string str, char separator = '|')
+        {
+            
+            if(string.IsNullOrEmpty(str)) return null;
+            var split = str.Split(separator);
+            var list = split.Select(t => long.TryParse(t, out var value) ? value : 0).ToList();
+            return list;
         }
 
         #endregion
