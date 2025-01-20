@@ -3,8 +3,10 @@ public class AssetPath
     public const string Global = "Global";
     public const string App = "Assets/Bundles/Builtin/Prefabs/App.prefab";
     public const string AppScene = "Assets/Bundles/Builtin/Scenes/AppScene.unity";
+    public const string TestJsonData = "Assets/Bundles/Builtin/Configs/Json/TestJsonData.json";
     public const string UserJsonData = "Assets/Bundles/Builtin/Configs/Json/UserJsonData.json";
-    public const string TestXmlData = "Assets/Bundles/Builtin/Configs/Xml/TestXmlData.xml";
+    public const string AdminXmlData = "Assets/Bundles/Builtin/Configs/Xml/AdminXmlData.xml";
+    public const string UserXmlData = "Assets/Bundles/Builtin/Configs/Xml/UserXmlData.xml";
     public const string AskView = "Assets/Bundles/Builtin/Prefabs/UI/Views/Ask/AskView.prefab";
     public const string LoadingView = "Assets/Bundles/Builtin/Prefabs/UI/Views/Loading/LoadingView.prefab";
     public const string UpdateView = "Assets/Bundles/Builtin/Prefabs/UI/Views/Update/UpdateView.prefab";

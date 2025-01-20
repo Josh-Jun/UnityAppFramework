@@ -342,20 +342,15 @@ namespace App.Editor.View
                 for (var c = 3; c < data.datas.GetLength(1); c++)
                 {
                     if ($"{data.datas[1, c]}".Contains("#") || $"{data.datas[2, c]}".Contains("#")) continue;
-                    if (data.datas[5, c].ToString() == "string")
-                    {
-                        stringBuilder.AppendLine($"      \"{data.datas[4, c]}\": \"{data.datas[r, c]}\",");
-                    }
-                    else
-                    {
-                        stringBuilder.AppendLine($"      \"{data.datas[4, c]}\": {data.datas[r, c]},");
-                    }
+                    var dataStr = data.datas[r, c].ToString();
+                    var typeStr = data.datas[5, c].ToString();
+                    stringBuilder.AppendLine($"      \"{data.datas[4, c]}\": {GetJsonData(dataStr, typeStr)}");
                 }
 
                 stringBuilder.Remove(stringBuilder.Length - 2, 1);
-                var _str = r == data.datas.GetLength(0) - 1 ? "    }" : "    },";
-                stringBuilder.AppendLine(_str);
+                stringBuilder.AppendLine("    },");
             }
+            stringBuilder.Remove(stringBuilder.Length - 2, 1);
 
             stringBuilder.AppendLine("  ]");
 
@@ -363,6 +358,37 @@ namespace App.Editor.View
 
             var output = $"{Application.dataPath}/Bundles/Builtin/Configs/Json/{data.sheetName}JsonData.json";
             SaveFile(output, stringBuilder);
+        }
+
+        private static string GetJsonData(string dataStr, string typeStr)
+        {
+            var sb = new StringBuilder();
+            var array = dataStr.Split('|');
+            if (array.Length > 1)
+            {
+                sb.Append("[");
+            }
+            foreach (var value in array)
+            {
+                if (typeStr.Contains("string"))
+                {
+                    sb.Append($"\"{value}\",");
+                }
+                else if(typeStr.Contains("Vector3"))
+                {
+                    var str = value.Split(',');
+                    sb.Append($"{{\"x\":{str[0]},\"y\":{str[1]},\"z\":{str[2]}}},");
+                }
+                else
+                {
+                    sb.Append($"{value},");
+                }
+            }
+
+            if (array.Length <= 1) return sb.ToString();
+            sb.Remove(sb.Length - 1, 1);
+            sb.Append("],");
+            return sb.ToString();
         }
 
         private static void CreateXmlConfig(ExcelData data)

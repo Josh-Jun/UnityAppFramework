@@ -53,5 +53,6 @@ namespace App.Core.Master
         public long PhoneNumber;
         public string NickName;
         public int Sex;
+        public Vector3[] Test1;
     }
 }

@@ -5,105 +5,120 @@
       "UserId": 10000,
       "PhoneNumber": 18731228223,
       "NickName": "Josh",
-      "Sex": 1
+      "Sex": 1,
+      "Test1": [{"x":1,"y":1,"z":1},{"x":2,"y":2,"z":2}]
     },
     {
       "Id": 2,
       "UserId": 10001,
       "PhoneNumber": 18731228224,
       "NickName": "Josh1",
-      "Sex": 0
+      "Sex": 0,
+      "Test1": [{"x":1,"y":1,"z":1},{"x":2,"y":2,"z":2}]
     },
     {
       "Id": 3,
       "UserId": 10002,
       "PhoneNumber": 18731228225,
       "NickName": "Josh2",
-      "Sex": 1
+      "Sex": 1,
+      "Test1": [{"x":1,"y":1,"z":1},{"x":2,"y":2,"z":2}]
     },
     {
       "Id": 4,
       "UserId": 10003,
       "PhoneNumber": 18731228226,
       "NickName": "Josh3",
-      "Sex": 0
+      "Sex": 0,
+      "Test1": [{"x":1,"y":1,"z":1},{"x":2,"y":2,"z":2}]
     },
     {
       "Id": 5,
       "UserId": 10004,
       "PhoneNumber": 18731228227,
       "NickName": "Josh4",
-      "Sex": 1
+      "Sex": 1,
+      "Test1": [{"x":1,"y":1,"z":1},{"x":2,"y":2,"z":2}]
     },
     {
       "Id": 6,
       "UserId": 10005,
       "PhoneNumber": 18731228228,
       "NickName": "Josh5",
-      "Sex": 1
+      "Sex": 1,
+      "Test1": [{"x":1,"y":1,"z":1},{"x":2,"y":2,"z":2}]
     },
     {
       "Id": 7,
       "UserId": 10006,
       "PhoneNumber": 18731228229,
       "NickName": "Josh6",
-      "Sex": 1
+      "Sex": 1,
+      "Test1": [{"x":1,"y":1,"z":1},{"x":2,"y":2,"z":2}]
     },
     {
       "Id": 8,
       "UserId": 10007,
       "PhoneNumber": 18731228230,
       "NickName": "Josh7",
-      "Sex": 0
+      "Sex": 0,
+      "Test1": [{"x":1,"y":1,"z":1},{"x":2,"y":2,"z":2}]
     },
     {
       "Id": 9,
       "UserId": 10008,
       "PhoneNumber": 18731228231,
       "NickName": "Josh8",
-      "Sex": 1
+      "Sex": 1,
+      "Test1": [{"x":1,"y":1,"z":1},{"x":2,"y":2,"z":2}]
     },
     {
       "Id": 10,
       "UserId": 10009,
       "PhoneNumber": 18731228232,
       "NickName": "Josh9",
-      "Sex": 1
+      "Sex": 1,
+      "Test1": [{"x":1,"y":1,"z":1},{"x":2,"y":2,"z":2}]
     },
     {
       "Id": 12,
       "UserId": 10011,
       "PhoneNumber": 18731228234,
       "NickName": "Josh11",
-      "Sex": 1
+      "Sex": 1,
+      "Test1": [{"x":1,"y":1,"z":1},{"x":2,"y":2,"z":2}]
     },
     {
       "Id": 13,
       "UserId": 10012,
       "PhoneNumber": 18731228235,
       "NickName": "Josh12",
-      "Sex": 1
+      "Sex": 1,
+      "Test1": [{"x":1,"y":1,"z":1},{"x":2,"y":2,"z":2}]
     },
     {
       "Id": 14,
       "UserId": 10013,
       "PhoneNumber": 18731228236,
       "NickName": "Josh13",
-      "Sex": 0
+      "Sex": 0,
+      "Test1": [{"x":1,"y":1,"z":1},{"x":2,"y":2,"z":2}]
     },
     {
       "Id": 15,
       "UserId": 10014,
       "PhoneNumber": 18731228237,
       "NickName": "Josh14",
-      "Sex": 1
+      "Sex": 1,
+      "Test1": [{"x":1,"y":1,"z":1},{"x":2,"y":2,"z":2}]
     },
     {
       "Id": 16,
       "UserId": 10015,
       "PhoneNumber": 18731228238,
       "NickName": "Josh15",
-      "Sex": 1
+      "Sex": 1,
+      "Test1": [{"x":1,"y":1,"z":1},{"x":2,"y":2,"z":2}]
     }
   ]
 }
