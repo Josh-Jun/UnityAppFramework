@@ -45,19 +45,6 @@ namespace App.Core.Helper
     }
 
     [AttributeUsage(AttributeTargets.Class)]
-    public class ItemOfAttribute : System.Attribute
-    {
-        public string Location { get; private set; }
-        public bool Active { get; private set; }
-
-        public ItemOfAttribute(string Location, bool Active = false)
-        {
-            this.Location = Location;
-            this.Active = Active;
-        }
-    }
-
-    [AttributeUsage(AttributeTargets.Class)]
     public class ConfigAttribute : System.Attribute
     {
         public ConfigAttribute()

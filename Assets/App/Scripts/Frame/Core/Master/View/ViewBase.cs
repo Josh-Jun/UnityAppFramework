@@ -6,7 +6,7 @@ namespace App.Core.Master
 {
     public class ViewBase : EventBaseMono
     {
-        public bool ViewActive { get { return gameObject.activeSelf; } }
+        public bool ViewActive => gameObject.activeSelf;
         public ViewMold Mold { get; set; }
 
         [Obsolete("此方法已弃用，请使用InitWindow方法", true)]

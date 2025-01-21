@@ -13,7 +13,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Video;
 using System.Threading.Tasks;
-using App.Core;
 using App.Core.Helper;
 using App.Core.Master;
 using App.Core.Tools;

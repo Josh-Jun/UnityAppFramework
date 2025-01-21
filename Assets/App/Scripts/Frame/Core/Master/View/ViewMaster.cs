@@ -143,21 +143,13 @@ namespace App.Core.Master
         {
             var go = AssetsMaster.Instance.LoadAsset<GameObject>(attribute.Location);
             if (go == null) return null;
-            Transform parent = null;
-            switch (attribute.View)
+            var parent = attribute.View switch
             {
-                case ViewMold.UI2D:
-                    parent = UIPanels[attribute.Layer];
-                    break;
-                case ViewMold.UI3D:
-                    parent = UI3DRectTransform;
-                    break;
-                case ViewMold.Go3D:
-                    parent = GoRoot;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(attribute.View), attribute.View, null);
-            }
+                ViewMold.UI2D => UIPanels[attribute.Layer],
+                ViewMold.UI3D => UI3DRectTransform,
+                ViewMold.Go3D => GoRoot,
+                _ => throw new ArgumentOutOfRangeException(nameof(attribute.View), attribute.View, null)
+            };
             var view = Instantiate(go, parent);
             view.transform.localPosition = Vector3.zero;
             view.transform.localScale = Vector3.one;
@@ -167,7 +159,6 @@ namespace App.Core.Master
             return vb;
         }
         
-
         #endregion
 
         #region Public Function
@@ -178,8 +169,8 @@ namespace App.Core.Master
             foreach (var type in types)
             {
                 if (ViewPairs.ContainsKey(type.FullName!)) continue;
-                var la = type.GetCustomAttributes(typeof(ViewOfAttribute), false).First();
-                if (la is not ViewOfAttribute attribute) continue;
+                var obj = type.GetCustomAttributes(typeof(ViewOfAttribute), false).First();
+                if (obj is not ViewOfAttribute attribute) continue;
                 var view = CreateView(type, attribute);
                 ViewPairs.Add(type.FullName!, view);
             }
@@ -188,21 +179,13 @@ namespace App.Core.Master
         public T AddView<T>(GameObject go, ViewMold mold = ViewMold.UI2D, int layer = 0, bool state = false) where T : Component
         {
             if (go == null) return null;
-            Transform parent = null;
-            switch (mold)
+            var parent = mold switch
             {
-                case ViewMold.UI2D:
-                    parent = UIPanels[layer];
-                    break;
-                case ViewMold.UI3D:
-                    parent = UI3DRectTransform;
-                    break;
-                case ViewMold.Go3D:
-                    parent = GoRoot;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(mold), mold, null);
-            }
+                ViewMold.UI2D => UIPanels[layer],
+                ViewMold.UI3D => UI3DRectTransform,
+                ViewMold.Go3D => GoRoot,
+                _ => throw new ArgumentOutOfRangeException(nameof(mold), mold, null)
+            };
             var view = Instantiate(go, parent);
             view.transform.localEulerAngles = Vector3.zero;
             view.transform.localScale = Vector3.one;
@@ -237,15 +220,44 @@ namespace App.Core.Master
             return position;
         }
 
-        public T GetView<T>() where T : class
+        public void OpenView<T>() where T : ViewBase
+        {
+            var view = GetView<T>();
+            if (view == null)
+            {
+                Log.W($"View {typeof(T).FullName} has no view");
+                return;
+            }
+            view.SetViewActive();
+        }
+        
+        public void CLoseView<T>(bool isClear = false) where T : ViewBase
+        {
+            var view = GetView<T>();
+            if (view == null)
+            {
+                Log.W($"View {typeof(T).FullName} has no view");
+                return;
+            }
+            if (isClear)
+            {
+                RemoveView(view);
+            }
+            else
+            {
+                view.SetViewActive(false);
+            }
+        }
+
+        public T GetView<T>() where T : ViewBase
         {
             var type = typeof(T);
             var scriptName = type.Namespace == string.Empty ? type.Name : type.FullName;
-            if (!ViewPairs.ContainsKey(scriptName!))
-            {
-                return null;
-            }
-            return ViewPairs[scriptName] as T;
+            if (ViewPairs.ContainsKey(scriptName!)) return ViewPairs[scriptName] as T;
+            var obj = type.GetCustomAttributes(typeof(ViewOfAttribute), false).First();
+            if (obj is ViewOfAttribute attribute) return CreateView(type, attribute) as T;
+            Log.W($"View {type.FullName} has no {nameof(T)}");
+            return null;
         }
 
         public void RemoveView(ViewBase view)
@@ -266,7 +278,6 @@ namespace App.Core.Master
             go.transform.SetParent(GoRoot, false);
             GoNodePairs.Add(nodeName, go.transform);
             return go.transform;
-
         }
 
         #endregion
