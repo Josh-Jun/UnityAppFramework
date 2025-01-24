@@ -12,9 +12,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace App.Core.Master
+namespace App.Core.Tools
 {
-    public class AnimationEventCallback : MonoBehaviour
+    public class AnimationEventListener : MonoBehaviour
     {
         private readonly Dictionary<string, (bool, Action<string>)> StringCallbacks = new Dictionary<string, (bool, Action<string>)>();
         private readonly Dictionary<string, (bool, Action<int>)> IntCallbacks = new Dictionary<string, (bool, Action<int>)>();

@@ -10,6 +10,44 @@ namespace App.Core.Tools
 {
     public static class Developer
     {
+        #region AnimationCLip
+        
+        public static void AddAnimationClipEvent<T>(this AnimationClip clip, int frame, T parameter)
+        {
+            var type = typeof(T);
+            var _event  = new AnimationEvent
+            {
+                time = frame / clip.frameRate,
+            };
+            if (type == typeof(string))
+            {
+                _event.functionName = "AnimationEventStringCallback";
+                _event.stringParameter = parameter as string;
+            }
+            else if (type == typeof(int))
+            {
+                _event.functionName = "AnimationEventIntCallback";
+                _event.intParameter = parameter as int? ?? 0;
+            }
+            else if (type == typeof(float))
+            {
+                _event.functionName = "AnimationEventFloatCallback";
+                _event.floatParameter = parameter as float? ?? 0;
+            }
+            else if (type == typeof(Object))
+            {
+                _event.functionName = "AnimationEventObjectCallback";
+                _event.objectReferenceParameter = parameter as UnityEngine.Object;
+            }
+            else
+            {
+                Log.W($"AnimationEvent type is not support!!! type:{type}");
+            }
+            clip.AddEvent(_event);
+        }
+
+        #endregion
+        
         #region Animator Event
 
         private static int DEVELOP_ANIMATOR_TIME_ID = -1; //动画时间任务id
@@ -17,23 +55,72 @@ namespace App.Core.Tools
 
         public static void PlayBack(this Animator _animator, string stateName, UnityAction callback = null)
         {
-            _animator.Play(stateName, callback, -1);
+            var AnimationClips = _animator.runtimeAnimatorController.animationClips;
+            float _time = 0;
+            foreach (var t in AnimationClips)
+            {
+                if (t.name == stateName)
+                {
+                    _time = t.length;
+                }
+            }
+
+            _animator.enabled = true;
+            _animator.StartPlayback();
+            _animator.speed = -1;
+            _animator.Play(stateName, 0, 1);
+            DEVELOP_ANIMATOR_TIME_ID = TimeUpdateMaster.Instance.StartTimer((float time) =>
+            {
+                if (time >= _time)
+                {
+                    callback?.Invoke();
+                    TimeUpdateMaster.Instance.EndTimer(DEVELOP_ANIMATOR_TIME_ID);
+                }
+            });
         }
 
         public static void Play(this Animator _animator, string stateName, UnityAction callback = null)
         {
-            _animator.Play(stateName, callback, 1);
+            var AnimationClips = _animator.runtimeAnimatorController.animationClips;
+            float _time = 0;
+            foreach (var t in AnimationClips)
+            {
+                if (t.name == stateName)
+                {
+                    _time = t.length;
+                }
+            }
+
+            _animator.enabled = true;
+            _animator.StartPlayback();
+            _animator.speed = 1;
+            _animator.Play(stateName, 0, 0);
+            DEVELOP_ANIMATOR_TIME_ID = TimeUpdateMaster.Instance.StartTimer((float time) =>
+            {
+                if (time >= _time)
+                {
+                    callback?.Invoke();
+                    TimeUpdateMaster.Instance.EndTimer(DEVELOP_ANIMATOR_TIME_ID);
+                }
+            });
         }
 
-        public static void Play(this Animator _animator, string stateName, UnityAction callback = null, float speed = 1)
+        /// <summary>
+        /// 播放动画
+        /// </summary>
+        /// <param name="_animator"></param>
+        /// <param name="stateName"></param>
+        /// <param name="speed"></param>
+        /// <param name="callback"></param>
+        public static void Play(this Animator _animator, string stateName, float speed, UnityAction callback = null)
         {
-            AnimationClip[] AnimationClips = _animator.runtimeAnimatorController.animationClips;
+            var AnimationClips = _animator.runtimeAnimatorController.animationClips;
             float _time = 0;
-            for (int i = 0; i < AnimationClips.Length; i++)
+            foreach (var t in AnimationClips)
             {
-                if (AnimationClips[i].name == stateName)
+                if (t.name == stateName)
                 {
-                    _time = AnimationClips[i].length;
+                    _time = t.length;
                 }
             }
 
@@ -51,20 +138,48 @@ namespace App.Core.Tools
             });
         }
 
-        public static void PlayFrames(this Image image, List<Sprite> sequenceFrames, float time = 0.05f,
-            UnityAction callback = null, bool loop = false, bool isNativeSize = false)
+        public static void PlayFrames(this Image image, List<Sprite> sequenceFrames, float time = 0.05f, UnityAction callback = null, bool loop = false, bool isNativeSize = false)
         {
             if (image == null)
             {
                 Log.E("Image is null!!!");
                 return;
             }
-
-            image.PlayFrames(sequenceFrames.ToArray(), time, callback, loop, isNativeSize);
+            
+            var index = 0; //可以用来控制起始播放的动画帧索引
+            float recordTime = 0;
+            DEVELOP_FRAMES_TIME_ID = TimeUpdateMaster.Instance.StartTimer((float currentTime) =>
+            {
+                if (currentTime - recordTime >= time)
+                {
+                    recordTime = currentTime;
+                    //当我们需要在整个动画播放完之后  重复播放后面的部分 就可以展现我们纯代码播放的自由性
+                    if (index > sequenceFrames.Count - 1)
+                    {
+                        callback?.Invoke();
+                        if (loop)
+                        {
+                            index = 0;
+                        }
+                        else
+                        {
+                            TimeUpdateMaster.Instance.EndTimer(DEVELOP_FRAMES_TIME_ID);
+                        }
+                    }
+                    else
+                    {
+                        image.sprite = sequenceFrames[index];
+                        index++;
+                        if (isNativeSize)
+                        {
+                            image.SetNativeSize();
+                        }
+                    }
+                }
+            });
         }
 
-        public static void PlayFrames(this Image image, Sprite[] sequenceFrames, float time = 0.05f,
-            UnityAction callback = null, bool loop = false, bool isNativeSize = false)
+        public static void PlayFrames(this Image image, Sprite[] sequenceFrames, float time = 0.05f, UnityAction callback = null, bool loop = false, bool isNativeSize = false)
         {
             if (image == null)
             {
@@ -72,7 +187,7 @@ namespace App.Core.Tools
                 return;
             }
 
-            int index = 0; //可以用来控制起始播放的动画帧索引
+            var index = 0; //可以用来控制起始播放的动画帧索引
             float recordTime = 0;
             DEVELOP_FRAMES_TIME_ID = TimeUpdateMaster.Instance.StartTimer((float currentTime) =>
             {
@@ -911,8 +1026,7 @@ namespace App.Core.Tools
         /// <param name="obj"></param>
         /// <param name="eventType"></param>
         /// <param name="ua"></param>
-        public static void AddEventTrigger(this GameObject obj, EventTriggerType eventType,
-            UnityAction<BaseEventData> ua)
+        public static void AddEventTrigger(this GameObject obj, EventTriggerType eventType, UnityAction<BaseEventData> ua)
         {
             if (obj == null)
             {
@@ -920,21 +1034,22 @@ namespace App.Core.Tools
                 return;
             }
 
-            EventTrigger eventTrigger = obj.TryGetComponent<EventTrigger>();
-            //eventTrigger.triggers = new List<EventTrigger.Entry>();
+            var eventTrigger = obj.TryGetComponent<EventTrigger>();
 
-            UnityAction<BaseEventData> callback = new UnityAction<BaseEventData>(ua);
+            var callback = new UnityAction<BaseEventData>(ua);
 
-            EventTrigger.Entry entry = new EventTrigger.Entry { eventID = eventType };
+            var entry = new EventTrigger.Entry { eventID = eventType };
             entry.callback.AddListener(callback);
             eventTrigger.triggers.Add(entry);
         }
 
         /// <summary>
-        /// 移除EventTrigger事件(移除一个方法)
+        /// 移除EventTrigger事件
         /// </summary>
         /// <param name="obj"></param>
-        public static void RemoveEventTrigger(this GameObject obj, EventTriggerType eventType, UnityAction<BaseEventData> ua)
+        /// <param name="triggerType"></param>
+        /// <param name="ua"></param>
+        public static void RemoveEventTrigger(this GameObject obj, EventTriggerType triggerType, UnityAction<BaseEventData> ua)
         {
             if (obj == null)
             {
@@ -942,8 +1057,8 @@ namespace App.Core.Tools
                 return;
             }
 
-            EventTrigger eventTrigger = obj.TryGetComponent<EventTrigger>();
-            EventTrigger.Entry entry = eventTrigger.triggers.Find(s => s.eventID == eventType);
+            var eventTrigger = obj.TryGetComponent<EventTrigger>();
+            var entry = eventTrigger.triggers.Find(s => s.eventID == triggerType);
 
             if (entry != null)
             {
@@ -953,9 +1068,11 @@ namespace App.Core.Tools
         }
         
         /// <summary>
-        /// 移除EventTrigger事件(移除一个事件类型)
+        /// 移除EventTrigger事件
         /// </summary>
         /// <param name="obj"></param>
+        /// <param name="eventType"></param>
+        /// <param name="isClear"></param>
         public static void RemoveEventTrigger(this GameObject obj, EventTriggerType eventType, bool isClear = false)
         {
             if (obj == null)
@@ -964,8 +1081,8 @@ namespace App.Core.Tools
                 return;
             }
 
-            EventTrigger eventTrigger = obj.TryGetComponent<EventTrigger>();
-            EventTrigger.Entry entry = eventTrigger.triggers.Find(s => s.eventID == eventType);
+            var eventTrigger = obj.TryGetComponent<EventTrigger>();
+            var entry = eventTrigger.triggers.Find(s => s.eventID == eventType);
 
             if (entry != null)
             {
@@ -989,7 +1106,7 @@ namespace App.Core.Tools
                 return;
             }
 
-            EventTrigger eventTrigger = obj.TryGetComponent<EventTrigger>();
+            var eventTrigger = obj.TryGetComponent<EventTrigger>();
             eventTrigger.triggers.Clear();
             UnityEngine.Object.Destroy(eventTrigger);
         }
@@ -1000,8 +1117,7 @@ namespace App.Core.Tools
         /// <param name="com"></param>
         /// <param name="eventType"></param>
         /// <param name="ua"></param>
-        public static void AddEventTrigger(this Component com, EventTriggerType eventType,
-            UnityAction<BaseEventData> ua)
+        public static void AddEventTrigger(this Component com, EventTriggerType eventType, UnityAction<BaseEventData> ua)
         {
             if (com == null)
             {
@@ -1009,12 +1125,11 @@ namespace App.Core.Tools
                 return;
             }
 
-            EventTrigger eventTrigger = com.TryGetComponent<EventTrigger>();
-            //eventTrigger.triggers = new List<EventTrigger.Entry>();
+            var eventTrigger = com.TryGetComponent<EventTrigger>();
 
-            UnityAction<BaseEventData> callback = new UnityAction<BaseEventData>(ua);
+            var callback = new UnityAction<BaseEventData>(ua);
 
-            EventTrigger.Entry entry = new EventTrigger.Entry { eventID = eventType };
+            var entry = new EventTrigger.Entry { eventID = eventType };
             entry.callback.AddListener(callback);
             eventTrigger.triggers.Add(entry);
         }
@@ -1023,6 +1138,8 @@ namespace App.Core.Tools
         /// 移除EventTrigger事件(移除一个方法)
         /// </summary>
         /// <param name="obj"></param>
+        /// <param name="eventType"></param>
+        /// <param name="ua"></param>
         public static void RemoveEventTrigger(this Component obj, EventTriggerType eventType, UnityAction<BaseEventData> ua)
         {
             if (obj == null)
@@ -1031,8 +1148,8 @@ namespace App.Core.Tools
                 return;
             }
 
-            EventTrigger eventTrigger = obj.TryGetComponent<EventTrigger>();
-            EventTrigger.Entry entry = eventTrigger.triggers.Find(s => s.eventID == eventType);
+            var eventTrigger = obj.TryGetComponent<EventTrigger>();
+            var entry = eventTrigger.triggers.Find(s => s.eventID == eventType);
 
             if (entry != null)
             {
@@ -1045,6 +1162,8 @@ namespace App.Core.Tools
         /// 移除EventTrigger事件(移除一个事件类型)
         /// </summary>
         /// <param name="obj"></param>
+        /// <param name="eventType"></param>
+        /// <param name="isClear"></param>
         public static void RemoveEventTrigger(this Component obj, EventTriggerType eventType, bool isClear = false)
         {
             if (obj == null)
@@ -1053,8 +1172,8 @@ namespace App.Core.Tools
                 return;
             }
 
-            EventTrigger eventTrigger = obj.TryGetComponent<EventTrigger>();
-            EventTrigger.Entry entry = eventTrigger.triggers.Find(s => s.eventID == eventType);
+            var eventTrigger = obj.TryGetComponent<EventTrigger>();
+            var entry = eventTrigger.triggers.Find(s => s.eventID == eventType);
 
             if (entry != null)
             {
@@ -1078,9 +1197,9 @@ namespace App.Core.Tools
                 return;
             }
 
-            EventTrigger eventTrigger = com.TryGetComponent<EventTrigger>();
+            var eventTrigger = com.TryGetComponent<EventTrigger>();
             eventTrigger.triggers.Clear();
-            UnityEngine.Object.Destroy(eventTrigger);
+            Object.Destroy(eventTrigger);
         }
 
         #endregion
@@ -1124,7 +1243,6 @@ namespace App.Core.Tools
         /// <summary>
         /// 根据路径查找组件
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="go"></param>
         /// <param name="path"></param>
         /// <returns></returns>
@@ -1142,7 +1260,6 @@ namespace App.Core.Tools
         /// <summary>
         /// 根据路径查找组件
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="com"></param>
         /// <param name="path"></param>
         /// <returns></returns>
@@ -1207,7 +1324,7 @@ namespace App.Core.Tools
                 return null;
             }
 
-            Transform transform = gomeObject.transform.Find(childName);
+            var transform = gomeObject.transform.Find(childName);
             if (transform == null)
             {
                 foreach (Transform trs in gomeObject.transform)
@@ -1235,12 +1352,12 @@ namespace App.Core.Tools
                 return null;
             }
 
-            Transform transform = com.transform.Find(childName);
+            var transform = com.transform.Find(childName);
             if (transform == null)
             {
                 foreach (Transform trs in com.transform)
                 {
-                    transform = trs.gameObject.FindDeepGameObject(childName).transform;
+                    transform = trs.FindDeepGameObject(childName).transform;
                     if (transform != null)
                         return transform.gameObject;
                 }
@@ -1263,7 +1380,7 @@ namespace App.Core.Tools
                 return null;
             }
 
-            Transform transform = gomeObject.transform.Find(childName);
+            var transform = gomeObject.transform.Find(childName);
             if (transform == null)
             {
                 foreach (Transform trs in gomeObject.transform)
@@ -1291,7 +1408,7 @@ namespace App.Core.Tools
                 return null;
             }
 
-            Transform transform = com.transform.Find(childName);
+            var transform = com.transform.Find(childName);
             if (transform == null)
             {
                 foreach (Transform trs in com.transform)
@@ -1319,7 +1436,7 @@ namespace App.Core.Tools
                 return null;
             }
 
-            Transform transform = gomeObject.transform.Find(childName);
+            var transform = gomeObject.transform.Find(childName);
             if (transform == null)
             {
                 foreach (Transform trs in gomeObject.transform)
@@ -1347,7 +1464,7 @@ namespace App.Core.Tools
                 return null;
             }
 
-            Transform transform = com.transform.Find(childName);
+            var transform = com.transform.Find(childName);
             if (transform == null)
             {
                 foreach (Transform trs in com.transform)
@@ -1365,14 +1482,15 @@ namespace App.Core.Tools
 
         #region FindLoopSelectable
 
+        /// <summary>
+        /// 循环查找Selectable
         /// </summary>
-        /// 循环寻找下一个UI组件
         /// <param name="current"></param>
         /// <param name="dir"></param>
         /// <returns></returns>
         public static Selectable FindLoopSelectable(this Selectable current, Vector3 dir)
         {
-            Selectable first = current.FindSelectable(dir); //用一个向量Vector3去寻找第一个Selectable
+            var first = current.FindSelectable(dir); //用一个向量Vector3去寻找第一个Selectable
             if (first != null) //如果下一个为null，用递归方法循环继续寻找第一个
             {
                 current = first.FindLoopSelectable(dir);
