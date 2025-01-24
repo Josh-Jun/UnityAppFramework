@@ -1383,7 +1383,7 @@ namespace App.Core.Tools
 
         #endregion
 
-        #region string
+        #region String
 
         public static Vector3 StringToVector3(this string str, char separator = ',')
         {
