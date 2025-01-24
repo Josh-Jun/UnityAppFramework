@@ -55,7 +55,7 @@ namespace App.Editor.Tools
                         var path = paths.Aggregate("", (current, p) => current + $"/{p}");
                         if (GUILayout.Button(paths[^1]))
                         {
-                            SettingsService.OpenProjectSettings($"Project/AppToolkit/{path}");
+                            SettingsService.OpenProjectSettings($"Project/AppToolkit{path}");
                         }
                     }
                 }
