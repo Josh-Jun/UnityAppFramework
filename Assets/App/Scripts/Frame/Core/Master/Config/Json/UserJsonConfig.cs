@@ -3,6 +3,7 @@ using UnityEngine;
 using App.Core.Tools;
 using App.Core.Helper;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace App.Core.Master
 {
@@ -13,8 +14,7 @@ namespace App.Core.Master
         private readonly Dictionary<int, User> _dict = new Dictionary<int, User>();
         public void Load()
         {
-            var path = $"Assets/Bundles/Builtin/Configs/Json/UserJsonData.json";
-            var textAsset = AssetsMaster.Instance.LoadAsset<TextAsset>(path);
+            var textAsset = AssetsMaster.Instance.LoadAsset<TextAsset>(AssetPath.UserJsonData);
             _data = JsonUtility.FromJson<UserJsonData>(textAsset.text);
             foreach (var data in _data.Users)
             {

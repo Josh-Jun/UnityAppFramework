@@ -1,11 +1,3 @@
-/* *
- * ===============================================
- * author      : Josh@book
- * e-mail      : shijun_z@163.com
- * create time : 2025年1月20 18:36
- * function    : 
- * ===============================================
- * */
 using System;
 using UnityEngine;
 using App.Core.Tools;
@@ -22,8 +14,7 @@ namespace App.Core.Master
         private readonly Dictionary<int, Admin> _dict = new Dictionary<int, Admin>();
         public void Load()
         {
-            var path = $"Assets/Bundles/Builtin/Configs/Xml/AdminXmlData.xml";
-            var textAsset = AssetsMaster.Instance.LoadAsset<TextAsset>(path);
+            var textAsset = AssetsMaster.Instance.LoadAsset<TextAsset>(AssetPath.AdminXmlData);
             _data = XmlTools.ProtoDeSerialize<AdminXmlData>(textAsset.bytes);
             foreach (var data in _data.Admins)
             {

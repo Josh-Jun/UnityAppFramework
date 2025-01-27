@@ -218,9 +218,7 @@ namespace App.Editor.View
                 $"        private readonly Dictionary<int, {data.sheetName}> _dict = new Dictionary<int, {data.sheetName}>();");
             stringBuilder.AppendLine("        public void Load()");
             stringBuilder.AppendLine("        {");
-            stringBuilder.AppendLine(
-                $"            var path = $\"Assets/Bundles/Builtin/Configs/{mold}/{data.sheetName}{mold}Data.{mold.ToString().ToLower()}\";");
-            stringBuilder.AppendLine("            var textAsset = AssetsMaster.Instance.LoadAsset<TextAsset>(path);");
+            stringBuilder.AppendLine($"            var textAsset = AssetsMaster.Instance.LoadAsset<TextAsset>(AssetPath.{data.sheetName}{mold}Data);");
             switch (mold)
             {
                 case ConfigMold.Json:
