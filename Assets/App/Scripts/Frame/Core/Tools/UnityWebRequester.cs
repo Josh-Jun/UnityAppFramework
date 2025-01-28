@@ -9,14 +9,9 @@ namespace App.Core.Tools
 {
     public class UnityWebRequester
     {
-        private UnityWebRequest uwr;
-        private Dictionary<string, string> headerPairs = new Dictionary<string, string>();
+        private UnityWebRequest uwr = new();
+        private readonly Dictionary<string, string> headerPairs = new Dictionary<string, string>();
         private UnityWebRequestAsyncOperation uwrao;
-
-        public UnityWebRequester()
-        {
-            uwr = new UnityWebRequest();
-        }
 
         /// <summary> 是否下载完 </summary>
         public bool IsDone
@@ -30,7 +25,6 @@ namespace App.Core.Tools
 
                 return false;
             }
-            private set { }
         }
 
         /// <summary> 获取当前下载大小(b) </summary>
@@ -45,7 +39,6 @@ namespace App.Core.Tools
 
                 return 0;
             }
-            private set { }
         }
 
         /// <summary> 获取下载进度 </summary>
@@ -60,15 +53,11 @@ namespace App.Core.Tools
 
                 return 0;
             }
-            private set { }
         }
 
         public void AddHeader(string key, string value)
         {
-            if (!headerPairs.ContainsKey(key))
-            {
-                headerPairs.Add(key, value);
-            }
+            headerPairs.TryAdd(key, value);
         }
 
         public void Destory()
@@ -91,7 +80,7 @@ namespace App.Core.Tools
         {
             //获取要下载的文件的总大小
             var head = UnityWebRequest.Head(url);
-            UnityWebRequestAsyncOperation ao = head.SendWebRequest();
+            var ao = head.SendWebRequest();
             if (!string.IsNullOrEmpty(head.error))
             {
                 callBack?.Invoke(-1, 0);
@@ -101,14 +90,14 @@ namespace App.Core.Tools
 
             ao.completed += (async) =>
             {
-                long totalLength = Convert.ToInt64(head.GetResponseHeader("Content-Length"));
+                var totalLength = Convert.ToInt64(head.GetResponseHeader("Content-Length"));
                 head.Dispose();
                 //创建网络请求
                 uwr.url = url;
                 uwr.method = UnityWebRequest.kHttpVerbGET;
                 uwr.downloadHandler = new DownloadHandlerFile(filePath, true);
 
-                FileInfo file = new FileInfo(filePath);
+                var file = new FileInfo(filePath);
                 var fileLength = file.Length;
                 //设置开始下载文件从什么位置开始
                 uwr.SetRequestHeader("Range", $"bytes={fileLength}-"); //这句很重要
@@ -132,8 +121,7 @@ namespace App.Core.Tools
         /// GET请求
         /// </summary>
         /// <param name="url">请求地址,like 'http://www.my-server.com/ '</param>
-        /// <param name="actionResult">请求发起后处理回调结果的委托</param>
-        /// <param name="actionProgress"></param>
+        /// <param name="callback">请求发起后处理回调结果的委托</param>
         /// <returns></returns>
         public void Get(string url, Action<string> callback)
         {
@@ -163,8 +151,7 @@ namespace App.Core.Tools
         /// 请求byte数据
         /// </summary>
         /// <param name="url"></param>
-        /// <param name="actionResult">请求发起后处理回调结果的委托,处理请求结果的byte数组</param>
-        /// <param name="actionProgress"></param>
+        /// <param name="callback">请求发起后处理回调结果的委托,处理请求结果的byte数组</param>
         /// <returns></returns>
         public void GetBytes(string url, Action<byte[]> callback)
         {
@@ -194,8 +181,7 @@ namespace App.Core.Tools
         /// 请求图片
         /// </summary>
         /// <param name="url">图片地址,like 'http://www.my-server.com/image.png '</param>
-        /// <param name="actionResult">请求发起后处理回调结果的委托,处理请求结果的图片</param>
-        /// <param name="actionProgress"></param>
+        /// <param name="callback">请求发起后处理回调结果的委托,处理请求结果的图片</param>
         /// <returns></returns>
         public void GetTexture(string url, Action<Texture2D> callback)
         {
@@ -226,8 +212,7 @@ namespace App.Core.Tools
         /// 请求AssetBundle
         /// </summary>
         /// <param name="url">AssetBundle地址,like 'http://www.my-server.com/myData.unity3d'</param>
-        /// <param name="actionResult">请求发起后处理回调结果的委托,处理请求结果的AssetBundle</param>
-        /// <param name="actionProgress"></param>
+        /// <param name="callback">请求发起后处理回调结果的委托,处理请求结果的AssetBundle</param>
         /// <returns></returns>
         public void GetAssetBundle(string url, Action<AssetBundle> callback)
         {
@@ -258,8 +243,7 @@ namespace App.Core.Tools
         /// 请求服务器地址上的音效
         /// </summary>
         /// <param name="url">没有音频地址,like 'http://myserver.com/mymovie.mp3'</param>
-        /// <param name="actionResult">请求发起后处理回调结果的委托,处理请求结果的MovieTexture</param>
-        /// <param name="actionProgress"></param>
+        /// <param name="callback">请求发起后处理回调结果的委托,处理请求结果的MovieTexture</param>
         /// <param name="audioType">音效类型</param>
         /// <returns></returns>
         public void GetAudioClip(string url, Action<AudioClip> callback, AudioType audioType = AudioType.MPEG)
@@ -292,8 +276,7 @@ namespace App.Core.Tools
         /// </summary>
         /// <param name="url">服务器请求目标地址,like "http://www.my-server.com/myform"</param>
         /// <param name="formData">form表单参数</param>
-        /// <param name="actionResult">处理返回结果的委托</param>
-        /// <param name="actionProgress"></param>
+        /// <param name="callback">处理返回结果的委托</param>
         /// <returns></returns>
         public void Post(string url, WWWForm formData, Action<string> callback)
         {
@@ -326,8 +309,7 @@ namespace App.Core.Tools
         /// </summary>
         /// <param name="url">服务器请求目标地址,like "http://www.my-server.com/myform"</param>
         /// <param name="postData">json字符串</param>
-        /// <param name="actionResult">处理返回结果的委托</param>
-        /// <param name="actionProgress"></param>
+        /// <param name="callback">处理返回结果的委托</param>
         /// <returns></returns>
         public void Post(string url, string postData, Action<string> callback)
         {
@@ -360,8 +342,7 @@ namespace App.Core.Tools
         /// </summary>
         /// <param name="url">服务器请求目标地址,like "http://www.my-server.com/myform"</param>
         /// <param name="formFields">字典</param>
-        /// <param name="actionResult">处理返回结果的委托</param>
-        /// <param name="actionProgress"></param>
+        /// <param name="callback">处理返回结果的委托</param>
         /// <returns></returns>
         public void Post(string url, Dictionary<string, string> formFields, Action<string> callback)
         {
@@ -400,8 +381,7 @@ namespace App.Core.Tools
         /// </summary>
         /// <param name="url">服务器目标地址 like 'http://www.my-server.com/upload' </param>
         /// <param name="contentBytes">需要上传的字节流</param>
-        /// <param name="actionResult">处理返回结果的委托</param>
-        /// <param name="actionProgress"></param>
+        /// <param name="callback">处理返回结果的委托</param>
         /// <returns></returns>
         public void Put(string url, byte[] contentBytes, Action<string> callback)
         {
@@ -433,8 +413,7 @@ namespace App.Core.Tools
         /// </summary>
         /// <param name="url">服务器目标地址 like 'http://www.my-server.com/upload' </param>
         /// <param name="content">需要上传的字符串</param>
-        /// <param name="actionResult">处理返回结果的委托</param>
-        /// <param name="actionProgress"></param>
+        /// <param name="callback">处理返回结果的委托</param>
         /// <returns></returns>
         public void Put(string url, string content, Action<string> callback)
         {

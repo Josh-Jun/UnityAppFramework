@@ -9,14 +9,14 @@ namespace App.Core.Master
         private static readonly string lockNetTcp = "lockNetTcp"; //加锁
 
         private SocketTcp<SessionTcp> server; //Server Socket连接
-        private Queue<MsgPackage> msgPackageQueue = new Queue<MsgPackage>(); //消息队列(Server)
-        private Queue<SessionTcp> offLineQueue = new Queue<SessionTcp>(); //离线队列
+        private readonly Queue<MsgPackage> msgPackageQueue = new Queue<MsgPackage>(); //消息队列(Server)
+        private readonly Queue<SessionTcp> offLineQueue = new Queue<SessionTcp>(); //离线队列
 
-        public Dictionary<SessionTcp, string>
+        private readonly Dictionary<SessionTcp, string>
             clientKeyValuePairs = new Dictionary<SessionTcp, string>(); //Client Session字典
 
         private SocketTcp<SessionTcp> client; //Client Socket连接
-        private Queue<SocketMsg> msgQueue = new Queue<SocketMsg>(); //消息队列(Client)
+        private readonly Queue<SocketMsg> msgQueue = new Queue<SocketMsg>(); //消息队列(Client)
         private int TIME_ID = -1;
 
         /// <summary>服务端网络初始化</summary>
@@ -30,11 +30,6 @@ namespace App.Core.Master
             //日志是否开启、日志的回调函数(内容，级别) 覆盖unity日志系统 查看网络错误
             server.SetLog(true, (string msg, int lv) =>
             {
-                if (this == null)
-                {
-                    return;
-                }
-
                 switch (lv)
                 {
                     case 0: //普通
@@ -71,11 +66,6 @@ namespace App.Core.Master
             //日志是否开启、日志的回调函数(内容，级别) 覆盖unity日志系统 查看网络错误
             client.SetLog(true, (string msg, int lv) =>
             {
-                if (this == null)
-                {
-                    return;
-                }
-
                 switch (lv)
                 {
                     case 0: //普通
@@ -149,7 +139,7 @@ namespace App.Core.Master
         /// <summary> 通过学生设备id获取当前学生Session </summary>
         public SessionTcp GetStudentSessionByDeviceId(string deviceId)
         {
-            foreach (SessionTcp session in clientKeyValuePairs.Keys)
+            foreach (var session in clientKeyValuePairs.Keys)
             {
                 if (clientKeyValuePairs[session] == deviceId)
                 {

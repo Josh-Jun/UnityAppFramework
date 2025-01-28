@@ -17,24 +17,22 @@ namespace App.Core.Tools
                 File.Delete(path);
             }
 
-            FileStream fs = new FileStream(path, FileMode.Create);
+            var fs = new FileStream(path, FileMode.Create);
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            using (ExcelPackage package = new ExcelPackage(fs))
+            using var package = new ExcelPackage(fs);
+            for (var i = 0; i < excel.Count; i++)
             {
-                for (int i = 0; i < excel.Count; i++)
+                var worksheet = package.Workbook.Worksheets.Add(excel[i].sheetName);
+                for (var r = 1; r < excel[i].datas.GetLength(0); r++)
                 {
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(excel[i].sheetName);
-                    for (int r = 1; r < excel[i].datas.GetLength(0); r++)
+                    for (var c = 1; c < excel[i].datas.GetLength(1); c++)
                     {
-                        for (int c = 1; c < excel[i].datas.GetLength(1); c++)
-                        {
-                            worksheet.Cells[r, c].Value = excel[i].datas[r,c];
-                        }
+                        worksheet.Cells[r, c].Value = excel[i].datas[r,c];
                     }
                 }
-
-                package.Save();
             }
+
+            package.Save();
         }
 
         public static List<ExcelData> ReadExcel(string path)

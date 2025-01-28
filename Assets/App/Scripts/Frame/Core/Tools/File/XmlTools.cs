@@ -15,14 +15,12 @@ namespace App.Core.Tools
         {
             try
             {
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    ms.Write(msg, 0, msg.Length);
-                    ms.Position = 0;
-                    XmlSerializer xs = new XmlSerializer(typeof(T));
-                    object obj = xs.Deserialize(ms);
-                    return (T)obj;
-                }
+                using var ms = new MemoryStream();
+                ms.Write(msg, 0, msg.Length);
+                ms.Position = 0;
+                var xs = new XmlSerializer(typeof(T));
+                var obj = xs.Deserialize(ms);
+                return (T)obj;
             }
             catch (Exception e)
             {
@@ -34,33 +32,33 @@ namespace App.Core.Tools
         // 将类对象转换为 字符串xml 
         public static string ProtoStrSerialize<T>(object obj, bool isIndented = true)
         {
-            MemoryStream memoryStream = new MemoryStream();
-            XmlSerializer xs = new XmlSerializer(typeof(T));
-            XmlTextWriter xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.UTF8);
+            var memoryStream = new MemoryStream();
+            var xs = new XmlSerializer(typeof(T));
+            using var xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.UTF8);
             if (isIndented)
             {
                 xmlTextWriter.Formatting = Formatting.Indented;
             }
 
-            XmlSerializerNamespaces _namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[]
+            var _namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[]
                 { new XmlQualifiedName(string.Empty, string.Empty) });
             xs.Serialize(xmlTextWriter, obj, _namespaces);
             memoryStream = (MemoryStream)xmlTextWriter.BaseStream;
-            UTF8Encoding encoding = new UTF8Encoding();
+            var encoding = new UTF8Encoding();
             return encoding.GetString(memoryStream.ToArray());
         }
 
         public static byte[] ProtoByteSerialize<T>(object obj, bool isIndented = true)
         {
-            MemoryStream memoryStream = new MemoryStream();
-            XmlSerializer xs = new XmlSerializer(typeof(T));
-            XmlTextWriter xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.UTF8);
+            var memoryStream = new MemoryStream();
+            var xs = new XmlSerializer(typeof(T));
+            var xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.UTF8);
             if (isIndented)
             {
                 xmlTextWriter.Formatting = Formatting.Indented;
             }
 
-            XmlSerializerNamespaces _namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[]
+            var _namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[]
                 { new XmlQualifiedName(string.Empty, string.Empty) });
             xs.Serialize(xmlTextWriter, obj, _namespaces);
             memoryStream = (MemoryStream)xmlTextWriter.BaseStream;
@@ -70,18 +68,14 @@ namespace App.Core.Tools
         /// <summary> Object是否可以转换xml </summary>
         public static bool Xmlserialize(string path, object obj)
         {
+            using var fs = new FileStream(path, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
             try
             {
-                using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite))
-                {
-                    using (StreamWriter sw = new StreamWriter(fs, System.Text.Encoding.UTF8))
-                    {
-                        //XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
-                        //namespaces.Add(string.Empty, string.Empty);
-                        XmlSerializer xs = new XmlSerializer(obj.GetType());
-                        xs.Serialize(sw, obj);
-                    }
-                }
+                using var sw = new StreamWriter(fs, System.Text.Encoding.UTF8);
+                //XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
+                //namespaces.Add(string.Empty, string.Empty);
+                var xs = new XmlSerializer(obj.GetType());
+                xs.Serialize(sw, obj);
 
                 return true;
             }
@@ -96,14 +90,12 @@ namespace App.Core.Tools
         /// <summary> 根据xml文件路径转换为T类型对象 </summary>
         public static T XmlDeserialize<T>(string path) where T : class
         {
-            T t = default;
+            T t = null;
             try
             {
-                using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
-                {
-                    XmlSerializer xs = new XmlSerializer(typeof(T));
-                    t = (T)xs.Deserialize(fs);
-                }
+                using var fs = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+                var xs = new XmlSerializer(typeof(T));
+                t = (T)xs.Deserialize(fs);
             }
             catch (Exception e)
             {
@@ -117,13 +109,11 @@ namespace App.Core.Tools
         public static object XmlDeserialize(string path, Type type)
         {
             object obj = null;
+            var xs = new XmlSerializer(type);
             try
             {
-                using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
-                {
-                    XmlSerializer xs = new XmlSerializer(type);
-                    obj = xs.Deserialize(fs);
-                }
+                using var fs = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+                obj = xs.Deserialize(fs);
             }
             catch (Exception e)
             {
@@ -135,7 +125,7 @@ namespace App.Core.Tools
 
         public static XmlDocument Load(string xml_path)
         {
-            XmlDocument xmlDocument = new XmlDocument();
+            var xmlDocument = new XmlDocument();
             xmlDocument.Load(xml_path);
             return xmlDocument;
         }

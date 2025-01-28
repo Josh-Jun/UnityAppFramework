@@ -9,7 +9,7 @@ namespace App.Core.Master
     {
         private TimerTask timer; //计时器
         private static readonly string lockTask = "lockTask"; //任务锁
-        private Queue<TaskPack> timerQueue = new Queue<TaskPack>(); //定时任务队列
+        private readonly Queue<TaskPack> timerQueue = new Queue<TaskPack>(); //定时任务队列
 
         protected override void OnSingletonMonoInit()
         {
@@ -45,15 +45,17 @@ namespace App.Core.Master
 
         private void Update()
         {
-            if (timerQueue.Count > 0)
+            lock (lockTask)
             {
-                TaskPack taskPack = null;
-                lock (lockTask)
+                if (timerQueue.Count > 0)
                 {
-                    taskPack = timerQueue.Dequeue();
-                    if (taskPack != null)
+                    lock (lockTask)
                     {
-                        taskPack.cb();
+                        var taskPack = timerQueue.Dequeue();
+                        if (taskPack != null)
+                        {
+                            taskPack.cb();
+                        }
                     }
                 }
             }

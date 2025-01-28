@@ -20,12 +20,9 @@ namespace App.Core.Tools
             {
                 throw new ArgumentOutOfRangeException("Max Size must be greater than 0", nameof (maxSize));
             }
-            if (create == null)
-            {
-                throw new ArgumentNullException(nameof(create));
-            }
+
             this.m_Stack = new Stack<T>(defaultSize);
-            this.m_Create = create;
+            this.m_Create = create ?? throw new ArgumentNullException(nameof(create));
             this.m_MaxSize = maxSize;
         }
         

@@ -16,19 +16,27 @@ namespace App.Core.Tools
         public VectorDelegate onDrag;//拖拽中事件
         public VectorDelegate onEndDrag;//结束拖拽事件
 
-        static public EventListener Get(GameObject go)
+        public static EventListener Get(GameObject go)
         {
-            PhysicsRaycaster raycaster = Camera.main.gameObject.GetComponent<PhysicsRaycaster>();
-            if (raycaster == null) raycaster = Camera.main.gameObject.AddComponent<PhysicsRaycaster>();
-            EventListener listener = go.GetComponent<EventListener>();
+            if (Camera.main != null)
+            {
+                var raycaster = Camera.main.gameObject.GetComponent<PhysicsRaycaster>();
+                if (raycaster == null) raycaster = Camera.main.gameObject.AddComponent<PhysicsRaycaster>();
+            }
+
+            var listener = go.GetComponent<EventListener>();
             if (listener == null) listener = go.AddComponent<EventListener>();
             return listener;
         }
-        static public EventListener Get(Component com)
+        public static EventListener Get(Component com)
         {
-            PhysicsRaycaster raycaster = Camera.main.gameObject.GetComponent<PhysicsRaycaster>();
-            if (raycaster == null) raycaster = Camera.main.gameObject.AddComponent<PhysicsRaycaster>();
-            EventListener listener = com.GetComponent<EventListener>();
+            if (Camera.main != null)
+            {
+                var raycaster = Camera.main.gameObject.GetComponent<PhysicsRaycaster>();
+                if (raycaster == null) raycaster = Camera.main.gameObject.AddComponent<PhysicsRaycaster>();
+            }
+
+            var listener = com.GetComponent<EventListener>();
             if (listener == null) listener = com.gameObject.AddComponent<EventListener>();
             return listener;
         }

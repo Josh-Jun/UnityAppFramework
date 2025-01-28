@@ -13,12 +13,7 @@ namespace App.Core.Tools
             {
                 lock (SingletonLock)
                 {
-                    if (null == _Instance)
-                    {
-                        _Instance = new T();
-                    }
-
-                    return _Instance;
+                    return _Instance ??= new T();
                 }
             }
         }

@@ -16,7 +16,7 @@ namespace App.Core.Tools
             {
                 CreateDirectory(targetPath);
                 DeleteFile(targetPath);
-                FileInfo file = new FileInfo(targetPath);
+                var file = new FileInfo(targetPath);
                 Stream stream = file.Create();
                 stream.Write(bytes, 0, bytes.Length);
                 stream.Close();
@@ -24,7 +24,7 @@ namespace App.Core.Tools
             }
             catch
             {
-                Debug.LogError(string.Format("<color=#0000FF> 创建文件-文件夹路径错误:{0}</color>", targetPath));
+                Debug.LogError($"<color=#0000FF> 创建文件-文件夹路径错误:{targetPath}</color>");
             }
         }
 
@@ -35,16 +35,16 @@ namespace App.Core.Tools
             {
                 CreateDirectory(targetPath);
                 DeleteFile(targetPath);
-                FileInfo file = new FileInfo(targetPath);
+                var file = new FileInfo(targetPath);
                 Stream stream = file.Create();
-                byte[] bytes = Encoding.UTF8.GetBytes(content);
+                var bytes = Encoding.UTF8.GetBytes(content);
                 stream.Write(bytes, 0, bytes.Length);
                 stream.Close();
                 stream.Dispose();
             }
             catch
             {
-                Debug.LogError(string.Format("<color=#0000FF> 创建文件-文件夹路径错误:{0}</color>", targetPath));
+                Debug.LogError($"<color=#0000FF> 创建文件-文件夹路径错误:{targetPath}</color>");
             }
         }
 
@@ -55,14 +55,14 @@ namespace App.Core.Tools
             {
                 CreateDirectory(targetPath);
                 DeleteFile(targetPath);
-                FileInfo file = new FileInfo(targetPath);
+                var file = new FileInfo(targetPath);
                 Stream stream = file.Create();
                 stream.Close();
                 stream.Dispose();
             }
             catch
             {
-                Debug.LogError(string.Format("<color=#0000FF> 创建文件-文件夹路径错误:{0}</color>", targetPath));
+                Debug.LogError($"<color=#0000FF> 创建文件-文件夹路径错误:{targetPath}</color>");
             }
         }
 
@@ -71,15 +71,15 @@ namespace App.Core.Tools
         {
             try
             {
-                string dirName = Path.GetDirectoryName(targetPath);
+                var dirName = Path.GetDirectoryName(targetPath);
                 if (!Directory.Exists(dirName))
                 {
-                    Directory.CreateDirectory(dirName);
+                    if (dirName != null) Directory.CreateDirectory(dirName);
                 }
             }
             catch
             {
-                Debug.LogError(string.Format("<color=#0000FF> 创建目录-文件夹路径错误:{0}</color>", targetPath));
+                Debug.LogError($"<color=#0000FF> 创建目录-文件夹路径错误:{targetPath}</color>");
             }
         }
 
@@ -95,7 +95,7 @@ namespace App.Core.Tools
             }
             catch
             {
-                Debug.LogError(string.Format("<color=#0000FF>创建文件夹-文件夹路径错误:{0}</color>", targetPath));
+                Debug.LogError($"<color=#0000FF>创建文件夹-文件夹路径错误:{targetPath}</color>");
             }
         }
 
@@ -111,7 +111,7 @@ namespace App.Core.Tools
             }
             catch
             {
-                Debug.LogError(string.Format("<color=#0000FF>删除文件-文件夹路径错误:{0}</color>", targetPath));
+                Debug.LogError($"<color=#0000FF>删除文件-文件夹路径错误:{targetPath}</color>");
             }
         }
 
@@ -120,15 +120,15 @@ namespace App.Core.Tools
         {
             try
             {
-                DirectoryInfo folder = new DirectoryInfo(targetPath);
-                FileSystemInfo[] files = folder.GetFileSystemInfos();
-                int length = files.Length;
-                for (int i = 0; i < length; i++)
+                var folder = new DirectoryInfo(targetPath);
+                var files = folder.GetFileSystemInfos();
+                var length = files.Length;
+                for (var i = 0; i < length; i++)
                 {
                     //如果这个文件是文件夹
                     if (files[i] is DirectoryInfo)
                     {
-                        DirectoryInfo subdir = new DirectoryInfo(files[i].FullName);
+                        var subdir = new DirectoryInfo(files[i].FullName);
                         subdir.Delete(true); //删除子目录和文件
                     }
                     else
@@ -139,7 +139,7 @@ namespace App.Core.Tools
             }
             catch
             {
-                Debug.LogError(string.Format("<color=#0000FF> 删除文件夹下所有文件-文件夹路径错误:{0}</color>", targetPath));
+                Debug.LogError($"<color=#0000FF> 删除文件夹下所有文件-文件夹路径错误:{targetPath}</color>");
             }
         }
 
@@ -152,7 +152,7 @@ namespace App.Core.Tools
                 if (File.Exists(targetPath))
                 {
                     // 2、根据路径字符串判断是文件还是文件夹
-                    FileAttributes attr = File.GetAttributes(targetPath);
+                    var attr = File.GetAttributes(targetPath);
                     // 3、根据具体类型进行删除
                     if (attr == FileAttributes.Directory)
                     {
@@ -163,7 +163,7 @@ namespace App.Core.Tools
             }
             catch
             {
-                Debug.LogError(string.Format("<color=#0000FF> 删除文件夹下所有文件-文件夹路径错误:{0}</color>", targetPath));
+                Debug.LogError($"<color=#0000FF> 删除文件夹下所有文件-文件夹路径错误:{targetPath}</color>");
             }
         }
 

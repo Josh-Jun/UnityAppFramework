@@ -8,7 +8,7 @@ namespace App.Core.Master
     public static class ViewDeveloper
     {
         private static Sequence TweenSequence;
-        private static List<Tweener> Tweeners = new List<Tweener>();
+        private static readonly List<Tweener> Tweeners = new List<Tweener>();
 
         public static ViewBase Move(this ViewBase view, Vector3 from, Vector3 to, float duration)
         {
@@ -33,7 +33,7 @@ namespace App.Core.Master
 
         public static ViewBase Fade(this ViewBase view, float from, float to, float duration)
         {
-            CanvasGroup canvasGroup = view.TryGetComponent<CanvasGroup>();
+            var canvasGroup = view.TryGetComponent<CanvasGroup>();
             canvasGroup.alpha = from;
             Tweeners.Add(canvasGroup.DOFade(to, duration).SetEase(Ease.Linear).Pause());
             return view;
@@ -41,18 +41,16 @@ namespace App.Core.Master
 
         public static void Play(this ViewBase view, bool isOpenView)
         {
-            if(isOpenView) view.SetViewActive(isOpenView);
+            if(isOpenView) view.SetViewActive(true);
             TweenSequence = DOTween.Sequence();
-            Tweener tweener;
-            for (int i = 0; i < Tweeners.Count; i++)
+            foreach (var tweener in Tweeners)
             {
-                tweener = Tweeners[i];
                 TweenSequence.Join(tweener);
             }
             TweenSequence.OnComplete(() =>
             {
                 Tweeners.Clear();
-                if(!isOpenView) view.SetViewActive(isOpenView);
+                if(!isOpenView) view.SetViewActive(false);
             });
             TweenSequence.Play();
         }

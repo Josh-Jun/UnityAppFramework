@@ -8,15 +8,15 @@ namespace App.Core.Master
 {
 	public class SocketTcp<T> where T : SessionTcpBase, new()
 	{
-		private Socket socketTcp = null;
+		private readonly Socket socketTcp = null;
 
 		public T session = null;
 
-		public int backlog = 100;
+		private readonly int backlog = 100;
 
-		private List<T> sessionList = new List<T>();
+		private readonly List<T> sessionList = new List<T>();
 
-		private int overtime = 5000;
+		private readonly int overtime = 5000;
 
 		private Action<bool> serverCallBack;
 
@@ -49,17 +49,17 @@ namespace App.Core.Master
 		{
 			try
 			{
-				Socket socket = socketTcp.EndAccept(ar);
-				T session = new T();
-				session.StartRcvData(socket, delegate
+				var socket = socketTcp.EndAccept(ar);
+				var sessionTcpBase = new T();
+				sessionTcpBase.StartRcvData(socket, delegate
 				{
-					if (sessionList.Contains(session))
+					if (sessionList.Contains(sessionTcpBase))
 					{
-						sessionList.Remove(session);
+						sessionList.Remove(sessionTcpBase);
 						SocketTools.LogMsg("客户端断开连接......", LogLevel.Info);
 					}
 				});
-				sessionList.Add(session);
+				sessionList.Add(sessionTcpBase);
 				SocketTools.LogMsg("Tcp连接客户端成功！正在接收数据......", LogLevel.Info);
 			}
 			catch (Exception ex)
@@ -76,9 +76,9 @@ namespace App.Core.Master
 			try
 			{
 				clientCallBack = cb;
-				IAsyncResult asyncResult = socketTcp.BeginConnect(new IPEndPoint(IPAddress.Parse(ip), port),
+				var asyncResult = socketTcp.BeginConnect(new IPEndPoint(IPAddress.Parse(ip), port),
 					ServerConnectCallBack, socketTcp);
-				bool flag = asyncResult.AsyncWaitHandle.WaitOne(overtime, exitContext: true);
+				var flag = asyncResult.AsyncWaitHandle.WaitOne(overtime, exitContext: true);
 				if (!flag)
 				{
 					Close();
@@ -98,9 +98,9 @@ namespace App.Core.Master
 			try
 			{
 				clientCallBack = cb;
-				IAsyncResult asyncResult = socketTcp.BeginConnect(
+				var asyncResult = socketTcp.BeginConnect(
 					new IPEndPoint(Dns.GetHostEntry(name).AddressList[0], port), ServerConnectCallBack, socketTcp);
-				bool flag = asyncResult.AsyncWaitHandle.WaitOne(overtime, exitContext: true);
+				var flag = asyncResult.AsyncWaitHandle.WaitOne(overtime, exitContext: true);
 				if (!flag)
 				{
 					Close();

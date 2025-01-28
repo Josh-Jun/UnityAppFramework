@@ -13,51 +13,48 @@ namespace App.Editor.Tools
     {
         private static LogEditor m_Instance;
 
-        public static LogEditor GetInstacne()
+        private static LogEditor GetInstacne()
         {
-            if (m_Instance == null)
-            {
-                m_Instance = new LogEditor();
-            }
-
-            return m_Instance;
+            return m_Instance ??= new LogEditor();
         }
 
         private const string LogCSName = "Log";
         private const string LogCS = "Log.cs";
-        private int m_DebugerFileInstanceId;
-        private Type m_ConsoleWindowType = null;
-        private FieldInfo m_ActiveTextInfo;
-        private FieldInfo m_ConsoleWindowFileInfo;
+        private readonly int m_DebugerFileInstanceId;
+        private readonly FieldInfo m_ActiveTextInfo;
+        private readonly FieldInfo m_ConsoleWindowFileInfo;
 
         private LogEditor()
         {
-            UnityEngine.Object debuggerFile =
+            var debuggerFile =
                 AssetDatabase.LoadAssetAtPath(GetPath(LogCSName), typeof(UnityEngine.Object));
             m_DebugerFileInstanceId = debuggerFile.GetInstanceID();
-            m_ConsoleWindowType = Type.GetType("UnityEditor.ConsoleWindow,UnityEditor");
-            m_ActiveTextInfo =
-                m_ConsoleWindowType.GetField("m_ActiveText", BindingFlags.Instance | BindingFlags.NonPublic);
-            m_ConsoleWindowFileInfo =
-                m_ConsoleWindowType.GetField("ms_ConsoleWindow", BindingFlags.Static | BindingFlags.NonPublic);
+            var mConsoleWindowType = Type.GetType("UnityEditor.ConsoleWindow,UnityEditor");
+            if (mConsoleWindowType != null)
+            {
+                m_ActiveTextInfo =
+                    mConsoleWindowType.GetField("m_ActiveText", BindingFlags.Instance | BindingFlags.NonPublic);
+                m_ConsoleWindowFileInfo =
+                    mConsoleWindowType.GetField("ms_ConsoleWindow", BindingFlags.Static | BindingFlags.NonPublic);
+            }
         }
 
-        static string GetPath(string _scriptName)
+        private static string GetPath(string _scriptName)
         {
-            string[] path = AssetDatabase.FindAssets(_scriptName);
+            var path = AssetDatabase.FindAssets(_scriptName);
             if (path.Length == 0)
             {
                 Debug.LogError("无法找到文件" + _scriptName + "获取路径失败");
                 return null;
             }
 
-            string _path = path[0];
+            var _path = path[0];
             if (path.Length > 1)
             {
                 _path = string.Empty;
-                for (var i = 0; i < path.Length; i++)
+                foreach (var t in path)
                 {
-                    string guid2path = AssetDatabase.GUIDToAssetPath(path[i]);
+                    var guid2path = AssetDatabase.GUIDToAssetPath(t);
                     if (guid2path.EndsWith($"/{_scriptName}.cs"))
                     {
                         _path = guid2path;
@@ -81,7 +78,7 @@ namespace App.Editor.Tools
         [OnOpenAsset(0)]
         private static bool OnOpenAsset(int instanceID, int line)
         {
-            string path = AssetDatabase.GetAssetPath(instanceID);
+            var path = AssetDatabase.GetAssetPath(instanceID);
 
             if (instanceID == LogEditor.GetInstacne().m_DebugerFileInstanceId)
             {
@@ -91,38 +88,38 @@ namespace App.Editor.Tools
             return false;
         }
 
-        public bool FindCode()
+        private bool FindCode()
         {
             var windowInstance = m_ConsoleWindowFileInfo.GetValue(null);
             var activeText = m_ActiveTextInfo.GetValue(windowInstance);
-            string[] contentStrings = activeText.ToString().Split('\n');
-            List<string> filePath = new List<string>();
-            int openIndex = -1;
-            for (int index = 0; index < contentStrings.Length; index++)
+            var contentStrings = activeText.ToString().Split('\n');
+            var filePath = new List<string>();
+            var openIndex = -1;
+            foreach (var t in contentStrings)
             {
-                if (contentStrings[index].Contains("at"))
+                if (t.Contains("at"))
                 {
-                    filePath.Add(contentStrings[index]);
-                    if (contentStrings[index].Contains(LogCS))
+                    filePath.Add(t);
+                    if (t.Contains(LogCS))
                     {
                         openIndex = filePath.Count;
                     }
                 }
             }
 
-            string fileContext = filePath[openIndex];
-            bool success = PingAndOpen(fileContext);
+            var fileContext = filePath[openIndex];
+            var success = PingAndOpen(fileContext);
             return success;
         }
 
-        public bool PingAndOpen(string fileContext)
+        private bool PingAndOpen(string fileContext)
         {
-            string regexRule = @"at ([\w\W]*):(\d+)\)";
-            Match match = Regex.Match(fileContext, regexRule);
+            var regexRule = @"at ([\w\W]*):(\d+)\)";
+            var match = Regex.Match(fileContext, regexRule);
             if (match.Groups.Count > 1)
             {
-                string path = match.Groups[1].Value;
-                string line = match.Groups[2].Value;
+                var path = match.Groups[1].Value;
+                var line = match.Groups[2].Value;
                 InternalEditorUtility.OpenFileAtLineExternal(path, int.Parse(line));
                 return true;
             }

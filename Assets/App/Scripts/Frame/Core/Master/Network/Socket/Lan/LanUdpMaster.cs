@@ -36,18 +36,21 @@ namespace App.Core.Master
 
         #endregion
 
-        private Queue<string> msgQueue = new Queue<string>(); //消息队列
+        private readonly Queue<string> msgQueue = new Queue<string>(); //消息队列
         private static readonly string lockNetUdp = "lockNetUdp"; //加锁
 
         #region 客户端接收消息
 
         private void Update(float time)
         {
-            if (msgQueue.Count > 0)
+            lock (lockNetUdp)
             {
-                lock (lockNetUdp)
+                if (msgQueue.Count > 0)
                 {
-                    HandOutMsg(msgQueue.Dequeue()); //取消息包 进行分发
+                    lock (lockNetUdp)
+                    {
+                        HandOutMsg(msgQueue.Dequeue()); //取消息包 进行分发
+                    }
                 }
             }
         }

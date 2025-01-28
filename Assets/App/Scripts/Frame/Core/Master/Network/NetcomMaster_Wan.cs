@@ -2,11 +2,11 @@ using Google.Protobuf;
 using System;
 using App.Core.Tools;
 
-/// <summary>
-/// Socket广域网
-/// </summary>
 namespace App.Core.Master
 {
+    /// <summary>
+    /// Socket广域网
+    /// </summary>
     public partial class NetcomMaster : SingletonMonoEvent<NetcomMaster>
     {
         #region TCP

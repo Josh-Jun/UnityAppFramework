@@ -19,9 +19,9 @@ namespace App.Core.Tools
     public class EventController
     {
         //事件订阅列表, 两层Hashtable，第一层：key，事件类型字符串；第二层：key,EventListenerData转化成的字符串，value，结构体EventListenerData
-        private Hashtable EventSubscription_Table = new Hashtable();
+        private readonly Hashtable EventSubscription_Table = new Hashtable();
 
-        private List<string> designateRemoveEventLst = new List<string>(); //指定移除的事件
+        private readonly List<string> designateRemoveEventLst = new List<string>(); //指定移除的事件
 
         //接口，添加某个类型事件的监听
         public bool AddEventListener(string eventType, Action handler, bool isDesignateRemove,
@@ -83,9 +83,9 @@ namespace App.Core.Tools
             EventDispatcherMode eventDispatcherMode)
         {
             //返回值，是否插入成功
-            bool isSuccess = false;
+            var isSuccess = false;
             //获取建立监听的对象
-            object listenerObject = GetListenerObject(handler);
+            var listenerObject = GetListenerObject(handler);
 
             if (listenerObject != null && eventType != null)
             {
@@ -100,14 +100,14 @@ namespace App.Core.Tools
                 }
 
                 //添加事件的监听
-                Hashtable event_table = EventSubscription_Table[eventType] as Hashtable;
+                var event_table = EventSubscription_Table[eventType] as Hashtable;
                 //创建一个事件监听的相关数据对象
-                EventListenerData eventListenerData =
+                var eventListenerData =
                     new EventListenerData(listenerObject, eventType, handler, eventDispatcherMode);
                 //转化为字符串  
-                string eventListenerData_string = EventListenerData_To_String(eventListenerData);
+                var eventListenerData_string = EventListenerData_To_String(eventListenerData);
                 //判断该事件是否有这个类中这个函数的监听
-                if (!event_table.Contains(eventListenerData_string))
+                if (event_table != null && !event_table.Contains(eventListenerData_string))
                 {
                     event_table.Add(eventListenerData_string, eventListenerData);
                     isSuccess = true;
@@ -121,19 +121,19 @@ namespace App.Core.Tools
         public bool HasEventListener(string eventType, Delegate handler)
         {
             //返回结果
-            bool isSuccess = false;
+            var isSuccess = false;
             //获取建立监听的对象
-            object listenerObject = GetListenerObject(handler);
+            var listenerObject = GetListenerObject(handler);
             //外层
             if (EventSubscription_Table.ContainsKey(eventType))
             {
                 //内层
-                Hashtable event_table = EventSubscription_Table[eventType] as Hashtable;
-                EventListenerData eventListenerData = new EventListenerData(listenerObject, eventType, handler,
+                var event_table = EventSubscription_Table[eventType] as Hashtable;
+                var eventListenerData = new EventListenerData(listenerObject, eventType, handler,
                     EventDispatcherMode.DEFAULT);
-                string eventListenerData_string = EventListenerData_To_String(eventListenerData);
+                var eventListenerData_string = EventListenerData_To_String(eventListenerData);
                 //
-                if (event_table.Contains(eventListenerData_string))
+                if (event_table != null && event_table.Contains(eventListenerData_string))
                 {
                     isSuccess = true;
                 }
@@ -152,17 +152,17 @@ namespace App.Core.Tools
         public bool RemoveEventListener(string eventType, Delegate handler)
         {
             //返回结果
-            bool isSuccess = false;
+            var isSuccess = false;
             if (HasEventListener(eventType, handler))
             {
                 //外层
-                Hashtable event_table = EventSubscription_Table[eventType] as Hashtable;
+                var event_table = EventSubscription_Table[eventType] as Hashtable;
                 //获取建立监听的对象
-                object listenerObject = GetListenerObject(handler);
+                var listenerObject = GetListenerObject(handler);
                 //内层
-                string eventListenerData_string = EventListenerData_To_String(
+                var eventListenerData_string = EventListenerData_To_String(
                     new EventListenerData(listenerObject, eventType, handler, EventDispatcherMode.DEFAULT));
-                event_table.Remove(eventListenerData_string);
+                if (event_table != null) event_table.Remove(eventListenerData_string);
                 isSuccess = true;
             }
 
@@ -178,11 +178,11 @@ namespace App.Core.Tools
         //移除指定的事件
         public void RemoveDesignateEvent()
         {
-            for (int i = 0; i < designateRemoveEventLst.Count; i++)
+            foreach (var t in designateRemoveEventLst)
             {
-                if (EventSubscription_Table.ContainsKey(designateRemoveEventLst[i]))
+                if (EventSubscription_Table.ContainsKey(t))
                 {
-                    EventSubscription_Table.Remove(designateRemoveEventLst[i]);
+                    EventSubscription_Table.Remove(t);
                 }
             }
 
@@ -193,18 +193,18 @@ namespace App.Core.Tools
         public bool DispatchEvent(string eventType)
         {
             //返回值
-            bool isSuccess = false;
-            List<Delegate> handlerList = new List<Delegate>();
+            var isSuccess = false;
+            var handlerList = new List<Delegate>();
             if (OnDispatchEvent(eventType, ref handlerList))
             {
                 if (handlerList != null)
                 {
-                    foreach (Delegate temp in handlerList)
+                    foreach (var temp in handlerList)
                     {
-                        Action action = temp as Action;
+                        var action = temp as Action;
                         try
                         {
-                            action();
+                            if (action != null) action();
                         }
                         catch (Exception e)
                         {
@@ -223,18 +223,18 @@ namespace App.Core.Tools
         public bool DispatchEvent<T>(string eventType, T arg)
         {
             //返回值
-            bool isSuccess = false;
-            List<Delegate> handlerList = new List<Delegate>();
+            var isSuccess = false;
+            var handlerList = new List<Delegate>();
             if (OnDispatchEvent(eventType, ref handlerList))
             {
                 if (handlerList != null)
                 {
-                    foreach (Delegate temp in handlerList)
+                    foreach (var temp in handlerList)
                     {
-                        Action<T> action = temp as Action<T>;
+                        var action = temp as Action<T>;
                         try
                         {
-                            action(arg);
+                            if (action != null) action(arg);
                         }
                         catch (Exception e)
                         {
@@ -253,18 +253,18 @@ namespace App.Core.Tools
         public bool DispatchEvent<T0, T1>(string eventType, T0 arg0, T1 arg1)
         {
             //返回值
-            bool isSuccess = false;
-            List<Delegate> handlerList = new List<Delegate>();
+            var isSuccess = false;
+            var handlerList = new List<Delegate>();
             if (OnDispatchEvent(eventType, ref handlerList))
             {
                 if (handlerList != null)
                 {
-                    foreach (Delegate temp in handlerList)
+                    foreach (var temp in handlerList)
                     {
-                        Action<T0, T1> action = temp as Action<T0, T1>;
+                        var action = temp as Action<T0, T1>;
                         try
                         {
-                            action(arg0, arg1);
+                            if (action != null) action(arg0, arg1);
                         }
                         catch (Exception e)
                         {
@@ -283,18 +283,18 @@ namespace App.Core.Tools
         public bool DispatchEvent<T0, T1, T2>(string eventType, T0 arg0, T1 arg1, T2 arg2)
         {
             //返回值
-            bool isSuccess = false;
-            List<Delegate> handlerList = new List<Delegate>();
+            var isSuccess = false;
+            var handlerList = new List<Delegate>();
             if (OnDispatchEvent(eventType, ref handlerList))
             {
                 if (handlerList != null)
                 {
-                    foreach (Delegate temp in handlerList)
+                    foreach (var temp in handlerList)
                     {
-                        Action<T0, T1, T2> action = temp as Action<T0, T1, T2>;
+                        var action = temp as Action<T0, T1, T2>;
                         try
                         {
-                            action(arg0, arg1, arg2);
+                            if (action != null) action(arg0, arg1, arg2);
                         }
                         catch (Exception e)
                         {
@@ -313,18 +313,18 @@ namespace App.Core.Tools
         public bool DispatchEvent<T0, T1, T2, T3>(string eventType, T0 arg0, T1 arg1, T2 arg2, T3 arg3)
         {
             //返回值
-            bool isSuccess = false;
-            List<Delegate> handlerList = new List<Delegate>();
+            var isSuccess = false;
+            var handlerList = new List<Delegate>();
             if (OnDispatchEvent(eventType, ref handlerList))
             {
                 if (handlerList != null)
                 {
-                    foreach (Delegate temp in handlerList)
+                    foreach (var temp in handlerList)
                     {
-                        Action<T0, T1, T2, T3> action = temp as Action<T0, T1, T2, T3>;
+                        var action = temp as Action<T0, T1, T2, T3>;
                         try
                         {
-                            action(arg0, arg1, arg2, arg3);
+                            if (action != null) action(arg0, arg1, arg2, arg3);
                         }
                         catch (Exception e)
                         {
@@ -343,18 +343,18 @@ namespace App.Core.Tools
         public bool DispatchEvent<T0, T1, T2, T3, T4>(string eventType, T0 arg0, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
             //返回值
-            bool isSuccess = false;
-            List<Delegate> handlerList = new List<Delegate>();
+            var isSuccess = false;
+            var handlerList = new List<Delegate>();
             if (OnDispatchEvent(eventType, ref handlerList))
             {
                 if (handlerList != null)
                 {
-                    foreach (Delegate temp in handlerList)
+                    foreach (var temp in handlerList)
                     {
-                        Action<T0, T1, T2, T3, T4> action = temp as Action<T0, T1, T2, T3, T4>;
+                        var action = temp as Action<T0, T1, T2, T3, T4>;
                         try
                         {
-                            action(arg0, arg1, arg2, arg3, arg4);
+                            if (action != null) action(arg0, arg1, arg2, arg3, arg4);
                         }
                         catch (Exception e)
                         {
@@ -373,18 +373,18 @@ namespace App.Core.Tools
         public bool DispatchEvent<T0, T1, T2, T3, T4, T5>(string eventType, T0 arg0, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
             //返回值
-            bool isSuccess = false;
-            List<Delegate> handlerList = new List<Delegate>();
+            var isSuccess = false;
+            var handlerList = new List<Delegate>();
             if (OnDispatchEvent(eventType, ref handlerList))
             {
                 if (handlerList != null)
                 {
-                    foreach (Delegate temp in handlerList)
+                    foreach (var temp in handlerList)
                     {
-                        Action<T0, T1, T2, T3, T4, T5> action = temp as Action<T0, T1, T2, T3, T4, T5>;
+                        var action = temp as Action<T0, T1, T2, T3, T4, T5>;
                         try
                         {
-                            action(arg0, arg1, arg2, arg3, arg4, arg5);
+                            if (action != null) action(arg0, arg1, arg2, arg3, arg4, arg5);
                         }
                         catch (Exception e)
                         {
@@ -403,18 +403,18 @@ namespace App.Core.Tools
         public bool DispatchEvent<T0, T1, T2, T3, T4, T5, T6>(string eventType, T0 arg0, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
         {
             //返回值
-            bool isSuccess = false;
-            List<Delegate> handlerList = new List<Delegate>();
+            var isSuccess = false;
+            var handlerList = new List<Delegate>();
             if (OnDispatchEvent(eventType, ref handlerList))
             {
                 if (handlerList != null)
                 {
-                    foreach (Delegate temp in handlerList)
+                    foreach (var temp in handlerList)
                     {
-                        Action<T0, T1, T2, T3, T4, T5, T6> action = temp as Action<T0, T1, T2, T3, T4, T5, T6>;
+                        var action = temp as Action<T0, T1, T2, T3, T4, T5, T6>;
                         try
                         {
-                            action(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+                            if (action != null) action(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
                         }
                         catch (Exception e)
                         {
@@ -433,18 +433,18 @@ namespace App.Core.Tools
         public bool DispatchEvent<T0, T1, T2, T3, T4, T5, T6, T7>(string eventType, T0 arg0, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
         {
             //返回值
-            bool isSuccess = false;
-            List<Delegate> handlerList = new List<Delegate>();
+            var isSuccess = false;
+            var handlerList = new List<Delegate>();
             if (OnDispatchEvent(eventType, ref handlerList))
             {
                 if (handlerList != null)
                 {
-                    foreach (Delegate temp in handlerList)
+                    foreach (var temp in handlerList)
                     {
-                        Action<T0, T1, T2, T3, T4, T5, T6, T7> action = temp as Action<T0, T1, T2, T3, T4, T5, T6, T7>;
+                        var action = temp as Action<T0, T1, T2, T3, T4, T5, T6, T7>;
                         try
                         {
-                            action(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+                            if (action != null) action(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
                         }
                         catch (Exception e)
                         {
@@ -468,32 +468,39 @@ namespace App.Core.Tools
             if (EventSubscription_Table.ContainsKey(eventType))
             {
                 //内层
-                Hashtable event_table = EventSubscription_Table[eventType] as Hashtable;
-                IEnumerator event_table_itor = event_table.GetEnumerator();
-                DictionaryEntry dictionaryEntry; //外层某一对
-                EventListenerData eventListenerData; //内层某一个元素
-                ArrayList toBeRemoved_arraylist = new ArrayList(); //记录该事件需要单次调用的监听
-                //循环该类型事件的所有监听
-                while (event_table_itor.MoveNext())
+                var event_table = EventSubscription_Table[eventType] as Hashtable;
+                if (event_table != null)
                 {
-                    dictionaryEntry = (DictionaryEntry)event_table_itor.Current;
-                    eventListenerData = dictionaryEntry.Value as EventListenerData;
-                    handlerList.Add(eventListenerData.EventDelegate);
-                    //单次
-                    if (eventListenerData.EventListeningMode == EventDispatcherMode.SINGLE_SHOT)
+                    IEnumerator event_table_itor = event_table.GetEnumerator();
+                    using var eventTableItor = event_table_itor as IDisposable;
+                    var toBeRemoved_arraylist = new ArrayList(); //记录该事件需要单次调用的监听
+                    //循环该类型事件的所有监听
+                    while (event_table_itor.MoveNext())
                     {
-                        toBeRemoved_arraylist.Add(eventListenerData);
+                        if (event_table_itor.Current != null)
+                        {
+                            var dictionaryEntry = (DictionaryEntry)event_table_itor.Current; //外层某一对
+                            var eventListenerData = dictionaryEntry.Value as EventListenerData; //内层某一个元素
+                            if (eventListenerData != null)
+                            {
+                                handlerList.Add(eventListenerData.EventDelegate);
+                                //单次
+                                if (eventListenerData.EventListeningMode == EventDispatcherMode.SINGLE_SHOT)
+                                {
+                                    toBeRemoved_arraylist.Add(eventListenerData);
+                                }
+                            }
+                        }
+
+                        isSuccess = true;
                     }
 
-                    isSuccess = true;
-                }
-
-                EventListenerData toBeRemoved_eventlistenerdata;
-                for (int count_int = toBeRemoved_arraylist.Count - 1; count_int >= 0; count_int--)
-                {
-                    toBeRemoved_eventlistenerdata = toBeRemoved_arraylist[count_int] as EventListenerData;
-                    RemoveEventListener(toBeRemoved_eventlistenerdata.EventName,
-                        toBeRemoved_eventlistenerdata.EventDelegate);
+                    for (var count_int = toBeRemoved_arraylist.Count - 1; count_int >= 0; count_int--)
+                    {
+                        if (toBeRemoved_arraylist[count_int] is EventListenerData toBeRemoved_eventlistenerdata)
+                            RemoveEventListener(toBeRemoved_eventlistenerdata.EventName,
+                                toBeRemoved_eventlistenerdata.EventDelegate);
+                    }
                 }
             }
 

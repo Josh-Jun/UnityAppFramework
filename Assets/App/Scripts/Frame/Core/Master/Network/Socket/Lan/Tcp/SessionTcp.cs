@@ -14,8 +14,8 @@ namespace App.Core.Master
         //收到数据
         protected override void OnReciveMsg(string msg)
         {
-            byte[] data = Encoding.UTF8.GetBytes(msg.ToCharArray());
-            GameMsg gameMsg = SocketTools.DeSerialize<GameMsg>(data);
+            var data = Encoding.UTF8.GetBytes(msg.ToCharArray());
+            var gameMsg = SocketTools.DeSerialize<GameMsg>(data);
             LanTcpMaster.Instance.AddMsgQueue(this, gameMsg); //服务端=>加入队列
             LanTcpMaster.Instance.AddMsgQueue(gameMsg); //客户端=>加入队列
         }

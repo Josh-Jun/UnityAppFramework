@@ -14,11 +14,11 @@ namespace App.Core.Master
 
 		private Thread thread;
 
-		public void StartReceiveData(Socket socketUdp, EndPoint ep, Thread thread)
+		public void StartReceiveData(Socket socket, EndPoint endPoint, Thread _thread)
 		{
-			this.socketUdp = socketUdp;
-			this.ep = ep;
-			this.thread = thread;
+			this.socketUdp = socket;
+			this.ep = endPoint;
+			this.thread = _thread;
 			OnConnected();
 		}
 
@@ -28,9 +28,9 @@ namespace App.Core.Master
 			{
 				try
 				{
-					byte[] array = new byte[1024];
-					int count = socketUdp.ReceiveFrom(array, ref ep);
-					string @string = Encoding.UTF8.GetString(array, 0, count);
+					var array = new byte[1024];
+					var count = socketUdp.ReceiveFrom(array, ref ep);
+					var @string = Encoding.UTF8.GetString(array, 0, count);
 					OnReciveMsg(@string);
 					Thread.Sleep(100);
 				}
@@ -45,8 +45,7 @@ namespace App.Core.Master
 		{
 			try
 			{
-				byte[] array = Encoding.UTF8.GetBytes(msg);
-				array = Encoding.UTF8.GetBytes(msg);
+				var array = Encoding.UTF8.GetBytes(msg);
 				socketUdp.SendTo(array, array.Length, SocketFlags.None, ep);
 			}
 			catch (Exception ex)

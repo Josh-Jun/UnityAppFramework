@@ -75,41 +75,22 @@ namespace App.Core.Master
         public GameObject Canvas3D; // Canvas3D游戏对象
         
         /// <summary> Canvas3D组件 </summary>
-        public Canvas UI3DCanvas
-        {
-            get { return Canvas3D.GetComponent<Canvas>(); }
-            private set { }
-        }
+        public Canvas UI3DCanvas => Canvas3D.GetComponent<Canvas>();
 
         /// <summary> 获取Canvas3D根RectTransform </summary>
-        public RectTransform UI3DRectTransform
-        {
-            get { return Canvas3D.GetComponent<RectTransform>(); }
-            private set { }
-        }
+        public RectTransform UI3DRectTransform => Canvas3D.GetComponent<RectTransform>();
 
         /// <summary> 获取Canvas2DScaler组件 </summary>
-        public CanvasScaler UI3DCanvasScaler
-        {
-            get { return Canvas3D.GetComponent<CanvasScaler>(); }
-            private set { }
-        }
+        public CanvasScaler UI3DCanvasScaler => Canvas3D.GetComponent<CanvasScaler>();
 
         /// <summary> 获取Canvas3D GraphicRaycaster组件 </summary>
-        public GraphicRaycaster UI3DGraphicRaycaster
-        {
-            get { return Canvas3D.GetComponent<GraphicRaycaster>(); }
-            private set { }
-        }
+        public GraphicRaycaster UI3DGraphicRaycaster => Canvas3D.GetComponent<GraphicRaycaster>();
 
         #endregion
 
         /// <summary> 获取3D游戏对象根对象(全局) </summary>
-        public Transform GoRoot
-        {
-            get { return GameObjectRoot.transform; }
-            private set { }
-        }
+        public Transform GoRoot => GameObjectRoot.transform;
+
         #endregion
 
         /// <summary>

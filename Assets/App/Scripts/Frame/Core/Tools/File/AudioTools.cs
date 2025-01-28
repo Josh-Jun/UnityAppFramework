@@ -15,21 +15,20 @@ namespace App.Core.Tools
         /// <returns></returns>
         public static byte[] ClipToBytes(AudioClip audioClip)
         {
-            float[] samples = new float[audioClip.samples];
+            var samples = new float[audioClip.samples];
 
             audioClip.GetData(samples, 0);
 
-            short[] intData = new short[samples.Length];
+            var intData = new short[samples.Length];
 
-            byte[] bytesData = new byte[samples.Length * 2];
+            var bytesData = new byte[samples.Length * 2];
 
-            int rescaleFactor = 32767;
+            var rescaleFactor = 32767;
 
-            for (int i = 0; i < samples.Length; i++)
+            for (var i = 0; i < samples.Length; i++)
             {
                 intData[i] = (short)(samples[i] * rescaleFactor);
-                byte[] byteArr = new byte[2];
-                byteArr = BitConverter.GetBytes(intData[i]);
+                var byteArr = BitConverter.GetBytes(intData[i]);
                 byteArr.CopyTo(bytesData, i * 2);
             }
 
@@ -44,19 +43,17 @@ namespace App.Core.Tools
         /// <returns></returns>
         public static AudioClip BytesToClip(byte[] rawData, int frequency = 16000)
         {
-            float[] samples = new float[rawData.Length / 2];
+            var samples = new float[rawData.Length / 2];
             float rescaleFactor = 32767;
-            short st = 0;
-            float ft = 0;
 
-            for (int i = 0; i < rawData.Length; i += 2)
+            for (var i = 0; i < rawData.Length; i += 2)
             {
-                st = BitConverter.ToInt16(rawData, i);
-                ft = st / rescaleFactor;
+                var st = BitConverter.ToInt16(rawData, i);
+                var ft = st / rescaleFactor;
                 samples[i / 2] = ft;
             }
 
-            AudioClip audioClip = AudioClip.Create("audioClip", samples.Length, 1, frequency, false);
+            var audioClip = AudioClip.Create("audioClip", samples.Length, 1, frequency, false);
             audioClip.SetData(samples, 0);
 
             return audioClip;

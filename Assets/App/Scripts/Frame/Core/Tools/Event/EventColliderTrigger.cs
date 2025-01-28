@@ -20,8 +20,8 @@ namespace App.Core.Tools
 
         public TriggerEvent onTriggerEnter
         {
-            get { return m_OnEnter; }
-            set { m_OnEnter = value; }
+            get => m_OnEnter;
+            set => m_OnEnter = value;
         }
 
         // Event delegates triggered.
@@ -30,8 +30,8 @@ namespace App.Core.Tools
 
         public TriggerEvent onTriggerStay
         {
-            get { return m_OnStay; }
-            set { m_OnStay = value; }
+            get => m_OnStay;
+            set => m_OnStay = value;
         }
 
         // Event delegates triggered.
@@ -40,26 +40,26 @@ namespace App.Core.Tools
 
         public TriggerEvent onTriggerExit
         {
-            get { return m_OnExit; }
-            set { m_OnExit = value; }
+            get => m_OnExit;
+            set => m_OnExit = value;
         }
 
         // 进入触发器
-        void OnTriggerEnter(Collider collider)
+        private void OnTriggerEnter(Collider trigger)
         {
-            m_OnEnter.Invoke(collider.gameObject);
+            m_OnEnter.Invoke(trigger.gameObject);
         }
 
         // 停留触发器
-        void OnTriggerStay(Collider collider)
+        private void OnTriggerStay(Collider trigger)
         {
-            m_OnStay.Invoke(collider.gameObject);
+            m_OnStay.Invoke(trigger.gameObject);
         }
 
         // 退出触发器
-        void OnTriggerExit(Collider collider)
+        private void OnTriggerExit(Collider trigger)
         {
-            m_OnExit.Invoke(collider.gameObject);
+            m_OnExit.Invoke(trigger.gameObject);
         }
     }
 }

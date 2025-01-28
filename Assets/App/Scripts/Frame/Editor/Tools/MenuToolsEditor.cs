@@ -102,7 +102,7 @@ namespace App.Editor.Tools
         public static void CopyTemplateScripts()
         {
             var template_script_path = $"{Application.dataPath}/{EditorHelper.BaseEditorPath()}/Tools/ScriptTemplates";
-            var base_path = string.Empty;
+            var base_path = $"{AppDomain.CurrentDomain.BaseDirectory}/Data";
 #if UNITY_EDITOR_WIN
             base_path = $"{AppDomain.CurrentDomain.BaseDirectory}/Data";
 #elif UNITY_EDITOR_OSX
@@ -175,19 +175,18 @@ namespace App.Editor.Tools
             AssetDatabase.Refresh();
         }
 
-        public static void GetConst(string folder, ref StringBuilder stringBuilder)
+        private static void GetConst(string folder, ref StringBuilder stringBuilder)
         {
-            var files = new List<FileInfo>();
-            files = GetFiles(folder);
-            for (int i = 0; i < files.Count; i++)
+            var files = GetFiles(folder);
+            foreach (var t in files)
             {
-                var key = files[i].Name.Split('.')[0];
-                var value = files[i].FullName.Replace(Application.dataPath, "Assets");
+                var key = t.Name.Split('.')[0];
+                var value = t.FullName.Replace(Application.dataPath, "Assets");
                 stringBuilder.AppendLine($"    public const string {key} = \"{value}\";");
             }
         }
         
-        private static string[] IgnoreExtensions = { ".dll", ".shader", ".shadergraph", ".shadervariants", ".meta", ".meta", ".DS_Store", ".bytes" };
+        private static readonly string[] IgnoreExtensions = { ".dll", ".shader", ".shadergraph", ".shadervariants", ".meta", ".meta", ".DS_Store", ".bytes" };
         private static List<FileInfo> GetFiles(string folder)
         {
             var path = $"{Application.dataPath}/Bundles/{folder}";
@@ -196,10 +195,10 @@ namespace App.Editor.Tools
             {
                 var direction = new DirectoryInfo(path);
                 var files = direction.GetFiles("*", SearchOption.AllDirectories);
-                for (var i = 0; i < files.Length; i++)
+                foreach (var t in files)
                 {
-                    if(IgnoreExtensions.Contains(files[i].Extension)) continue;
-                    fileInfos.Add(files[i]);
+                    if(IgnoreExtensions.Contains(t.Extension)) continue;
+                    fileInfos.Add(t);
                 }
             }
 
@@ -258,19 +257,19 @@ namespace App.Editor.Tools
         [MenuItem("Assets/复制文件夹(复制依赖关系) %#D", false, 0)]
         public static void CopyFolderKeepAssetsUsing()
         {
-            string oldFolderPath = AssetDatabase.GetAssetPath(Selection.objects[0]);
-            string[] s = oldFolderPath.Split('/');
-            string folderName = s[s.Length - 1];
+            var oldFolderPath = AssetDatabase.GetAssetPath(Selection.objects[0]);
+            var s = oldFolderPath.Split('/');
+            var folderName = s[^1];
             if (folderName.Contains("."))
             {
                 Debug.LogError("该索引不是文件夹名字");
                 return;
             }
 
-            string copyedFolderPath = Path.GetFullPath(".") + Path.DirectorySeparatorChar + oldFolderPath;
-            string tempFolderPath = Application.dataPath.Replace("Assets", "TempAssets") + SplitStr(oldFolderPath) +
-                                    "_Copy";
-            string newFoldrPath = tempFolderPath.Replace("TempAssets", "Assets");
+            var copyedFolderPath = Path.GetFullPath(".") + Path.DirectorySeparatorChar + oldFolderPath;
+            var tempFolderPath = Application.dataPath.Replace("Assets", "TempAssets") + SplitStr(oldFolderPath) +
+                                 "_Copy";
+            var newFoldrPath = tempFolderPath.Replace("TempAssets", "Assets");
 
             CopyDirectory(copyedFolderPath, tempFolderPath);
             //重新生成guids
@@ -284,12 +283,12 @@ namespace App.Editor.Tools
 
         private static string SplitStr(string path)
         {
-            string str = "";
-            for (int i = 0; i < path.Split('/').Length; i++)
+            var str = "";
+            for (var i = 0; i < path.Split('/').Length; i++)
             {
                 if (i != 0)
                 {
-                    string _str = "/" + path.Split('/')[i];
+                    var _str = "/" + path.Split('/')[i];
                     str += _str;
                 }
             }
@@ -367,16 +366,13 @@ namespace App.Editor.Tools
             "*.*"
         };
 
-        static public void RegenerateGuids(string _assetsPath, string[] regeneratedExtensions = null)
+        private static void RegenerateGuids(string _assetsPath, string[] regeneratedExtensions = null)
         {
-            if (regeneratedExtensions == null)
-            {
-                regeneratedExtensions = kDefaultFileExtensions;
-            }
+            regeneratedExtensions ??= kDefaultFileExtensions;
 
             // Get list of working files  
-            List<string> filesPaths = new List<string>();
-            foreach (string extension in regeneratedExtensions)
+            var filesPaths = new List<string>();
+            foreach (var extension in regeneratedExtensions)
             {
                 filesPaths.AddRange(
                     Directory.GetFiles(_assetsPath, extension, SearchOption.AllDirectories)
@@ -384,20 +380,20 @@ namespace App.Editor.Tools
             }
 
             // Create dictionary to hold old-to-new GUID map  
-            Dictionary<string, string> guidOldToNewMap = new Dictionary<string, string>();
-            Dictionary<string, List<string>> guidsInFileMap = new Dictionary<string, List<string>>();
+            var guidOldToNewMap = new Dictionary<string, string>();
+            var guidsInFileMap = new Dictionary<string, List<string>>();
 
             // We must only replace GUIDs for Resources present in Assets.   
             // Otherwise built-in resources (shader, meshes etc) get overwritten.  
-            HashSet<string> ownGuids = new HashSet<string>();
+            var ownGuids = new HashSet<string>();
 
             // Traverse all files, remember which GUIDs are in which files and generate new GUIDs  
-            int counter = 0;
-            foreach (string filePath in filesPaths)
+            var counter = 0;
+            foreach (var filePath in filesPaths)
             {
                 EditorUtility.DisplayProgressBar("Scanning Assets folder", MakeRelativePath(_assetsPath, filePath),
                     counter / (float)filesPaths.Count);
-                string contents = string.Empty;
+                string contents;
                 try
                 {
                     contents = File.ReadAllText(filePath);
@@ -410,9 +406,9 @@ namespace App.Editor.Tools
                     continue;
                 }
 
-                IEnumerable<string> guids = GetGuids(contents);
-                bool isFirstGuid = true;
-                foreach (string oldGuid in guids)
+                var guids = GetGuids(contents);
+                var isFirstGuid = true;
+                foreach (var oldGuid in guids)
                 {
                     // First GUID in .meta file is always the GUID of the asset itself  
                     if (isFirstGuid && Path.GetExtension(filePath) == ".meta")
@@ -424,7 +420,7 @@ namespace App.Editor.Tools
                     // Generate and save new GUID if we haven't added it before  
                     if (!guidOldToNewMap.ContainsKey(oldGuid))
                     {
-                        string newGuid = Guid.NewGuid().ToString("N");
+                        var newGuid = Guid.NewGuid().ToString("N");
                         guidOldToNewMap.Add(oldGuid, newGuid);
                     }
 
@@ -442,20 +438,20 @@ namespace App.Editor.Tools
 
             // Traverse the files again and replace the old GUIDs  
             counter = -1;
-            int guidsInFileMapKeysCount = guidsInFileMap.Keys.Count;
-            foreach (string filePath in guidsInFileMap.Keys)
+            var guidsInFileMapKeysCount = guidsInFileMap.Keys.Count;
+            foreach (var filePath in guidsInFileMap.Keys)
             {
                 EditorUtility.DisplayProgressBar("Regenerating GUIDs", MakeRelativePath(_assetsPath, filePath),
                     counter / (float)guidsInFileMapKeysCount);
                 counter++;
 
-                string contents = File.ReadAllText(filePath);
-                foreach (string oldGuid in guidsInFileMap[filePath])
+                var contents = File.ReadAllText(filePath);
+                foreach (var oldGuid in guidsInFileMap[filePath])
                 {
                     if (!ownGuids.Contains(oldGuid))
                         continue;
 
-                    string newGuid = guidOldToNewMap[oldGuid];
+                    var newGuid = guidOldToNewMap[oldGuid];
                     if (string.IsNullOrEmpty(newGuid))
                         throw new NullReferenceException("newGuid == null");
 
@@ -473,11 +469,11 @@ namespace App.Editor.Tools
         {
             const string guidStart = "guid: ";
             const int guidLength = 32;
-            int textLength = text.Length;
-            int guidStartLength = guidStart.Length;
-            List<string> guids = new List<string>();
+            var textLength = text.Length;
+            var guidStartLength = guidStart.Length;
+            var guids = new List<string>();
 
-            int index = 0;
+            var index = 0;
             while (index + guidStartLength + guidLength < textLength)
             {
                 index = text.IndexOf(guidStart, index, StringComparison.Ordinal);
@@ -485,7 +481,7 @@ namespace App.Editor.Tools
                     break;
 
                 index += guidStartLength;
-                string guid = text.Substring(index, guidLength);
+                var guid = text.Substring(index, guidLength);
                 index += guidLength;
 
                 if (IsGuid(guid))
@@ -499,9 +495,8 @@ namespace App.Editor.Tools
 
         private static bool IsGuid(string text)
         {
-            for (int i = 0; i < text.Length; i++)
+            foreach (var c in text)
             {
-                char c = text[i];
                 if (
                     !((c >= '0' && c <= '9') ||
                       (c >= 'a' && c <= 'z'))
@@ -514,11 +509,11 @@ namespace App.Editor.Tools
 
         private static string MakeRelativePath(string fromPath, string toPath)
         {
-            Uri fromUri = new Uri(fromPath);
-            Uri toUri = new Uri(toPath);
+            var fromUri = new Uri(fromPath);
+            var toUri = new Uri(toPath);
 
-            Uri relativeUri = fromUri.MakeRelativeUri(toUri);
-            string relativePath = Uri.UnescapeDataString(relativeUri.ToString());
+            var relativeUri = fromUri.MakeRelativeUri(toUri);
+            var relativePath = Uri.UnescapeDataString(relativeUri.ToString());
 
             return relativePath;
         }

@@ -45,41 +45,45 @@ namespace App.Core.Master
         /// <summary> 添加空的UI子物体(Image,RawImage,Text) </summary>
         public T AddChild<T>(GameObject parent) where T : Component
         {
-            GameObject go = new GameObject(typeof(T).ToString().Split('.').Last(), typeof(RectTransform),
+            var go = new GameObject(typeof(T).ToString().Split('.').Last(), typeof(RectTransform),
                 typeof(CanvasRenderer));
-            RectTransform rectParent = parent.transform as RectTransform;
-            RectTransform rectTransform = go.TryGetComponent<RectTransform>();
+            var rectParent = parent.transform as RectTransform;
+            var rectTransform = go.TryGetComponent<RectTransform>();
             rectTransform.SetParent(rectParent, false);
-            T t = go.TryGetComponent<T>();
+            var t = go.TryGetComponent<T>();
             return t;
         }
 
         /// <summary> 添加预制体，返回GameObject </summary>
         public GameObject AddChild(string path, GameObject parent = null)
         {
-            GameObject go = AddChild(path, parent.transform);
+            var go = AddChild(path, parent.transform);
             return go;
         }
 
         /// <summary> 添加预制体，返回GameObject </summary>
         public GameObject AddChild(string path, Transform parent = null)
         {
-            GameObject prefab = LoadAsset<GameObject>(path);
-            GameObject go = Instantiate(prefab, parent);
+            var prefab = LoadAsset<GameObject>(path);
+            var go = Instantiate(prefab, parent);
             return go;
         }
 
         /// <summary> 添加预制体，返回GameObject </summary>
         public GameObject AddChild(GameObject prefab, GameObject parent = null)
         {
-            GameObject go = AddChild(prefab, parent.transform);
-            return go;
+            if (parent != null)
+            {
+                var go = AddChild(prefab, parent.transform);
+                return go;
+            }
+            return null;
         }
 
         /// <summary> 添加预制体，返回GameObject </summary>
         public GameObject AddChild(GameObject prefab, Transform parent = null)
         {
-            GameObject go = Instantiate(prefab, parent);
+            var go = Instantiate(prefab, parent);
             return go;
         }
         #endregion

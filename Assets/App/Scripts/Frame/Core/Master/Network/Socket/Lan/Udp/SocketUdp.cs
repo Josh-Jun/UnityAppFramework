@@ -7,21 +7,15 @@ namespace App.Core.Master
 {
 	public class SocketUdp<T> where T : SessionUdpBase, new()
 	{
-		public T session;
+		public readonly T session = new();
 
-		private Socket socketUdp;
+		private readonly Socket socketUdp = new(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
 		private IPEndPoint iep;
 
 		private EndPoint ep;
 
 		private Thread thread;
-
-		public SocketUdp()
-		{
-			session = new T();
-			socketUdp = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-		}
 
 		public void StartAsServer(int port, Action<bool> cb = null)
 		{

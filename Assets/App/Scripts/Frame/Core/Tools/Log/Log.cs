@@ -15,7 +15,7 @@ public class Log
     private const string FormatStr    = " \"{0}\" : \"{1}\" ,";
     private const string FormatStrEnd = " \"{0}\" : \"{1}\"";
 
-    private static StringBuilder cacheStringBuilder = new StringBuilder(1024);
+    private static readonly StringBuilder cacheStringBuilder = new StringBuilder(1024);
 
     #region Info
 

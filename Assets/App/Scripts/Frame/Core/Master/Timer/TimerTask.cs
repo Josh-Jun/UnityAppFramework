@@ -9,24 +9,24 @@ namespace App.Core.Master
     {
         private Action<Action, int> taskHandle; //任务委托
         private DateTime startDateTime; //开始日期计算机元年
-        private Timer timer; //开启时间线程
+        private readonly Timer timer; //开启时间线程
 
         private int idIdex; //当前id下标
         private static readonly string lockIndex = "lockIndex"; //下标锁
-        private List<int> idList; //存储当前已创建id
-        private List<int> tmpIdList; //缓存的id
+        private readonly List<int> idList; //存储当前已创建id
+        private readonly List<int> tmpIdList; //缓存的id
 
         private double currentTime; //当前时间
         private static readonly string lockTime = "lockTime"; //时间任务锁
-        private List<TimeTask> taskTimeList; //计时任务列表
-        private List<TimeTask> tmpTimeList; //缓存的定时任务列表
-        private List<int> tmpDeleteTimeList; //缓存的删除定时任务
+        private readonly List<TimeTask> taskTimeList; //计时任务列表
+        private readonly List<TimeTask> tmpTimeList; //缓存的定时任务列表
+        private readonly List<int> tmpDeleteTimeList; //缓存的删除定时任务
 
         private int currentFrame; //当前帧
         private static readonly string lockFrame = "lockFrame"; //帧任务锁
-        private List<FrameTask> taskFrameList; //帧任务列表
-        private List<FrameTask> tmpFrameList; //缓存的区帧任务
-        private List<int> tmpDeleteFrameList; //缓存的删除帧任务
+        private readonly List<FrameTask> taskFrameList; //帧任务列表
+        private readonly List<FrameTask> tmpFrameList; //缓存的区帧任务
+        private readonly List<int> tmpDeleteFrameList; //缓存的删除帧任务
 
         public TimerTask(int interval = 0)
         {
@@ -52,7 +52,7 @@ namespace App.Core.Master
             }
         }
 
-        public void Update()
+        private void Update()
         {
             CheckTimeTask();
             DeleteTimeTask();
@@ -70,10 +70,9 @@ namespace App.Core.Master
             {
                 lock (lockIndex)
                 {
-                    for (int i = 0; i < tmpIdList.Count; i++)
+                    foreach (var id in tmpIdList)
                     {
-                        int id = tmpIdList[i];
-                        for (int j = 0; j < idList.Count; j++)
+                        for (var j = 0; j < idList.Count; j++)
                         {
                             if (idList[j] == id)
                             {
@@ -98,9 +97,9 @@ namespace App.Core.Master
                 lock (lockTime)
                 {
                     //获取缓存区的定时任务到计时列表
-                    for (int i = 0; i < tmpTimeList.Count; i++)
+                    foreach (var t in tmpTimeList)
                     {
-                        taskTimeList.Add(tmpTimeList[i]);
+                        taskTimeList.Add(t);
                     }
 
                     tmpTimeList.Clear();
@@ -109,9 +108,9 @@ namespace App.Core.Master
 
             currentTime = GetUTCMillisecond(); //获取当前时间
             //遍历检测任务是否达到条件
-            for (int i = 0; i < taskTimeList.Count; i++)
+            for (var i = 0; i < taskTimeList.Count; i++)
             {
-                TimeTask timeTask = taskTimeList[i];
+                var timeTask = taskTimeList[i];
                 if (currentTime.CompareTo(timeTask.endTime) < 0)
                 {
                     continue;
@@ -160,11 +159,11 @@ namespace App.Core.Master
             {
                 lock (lockTime)
                 {
-                    for (int i = 0; i < tmpDeleteTimeList.Count; i++)
+                    foreach (var t in tmpDeleteTimeList)
                     {
-                        bool isDelete = false;
-                        int id = tmpDeleteTimeList[i];
-                        for (int j = 0; j < taskTimeList.Count; j++)
+                        var isDelete = false;
+                        var id = t;
+                        for (var j = 0; j < taskTimeList.Count; j++)
                         {
                             if (taskTimeList[j].id == id)
                             {
@@ -180,7 +179,7 @@ namespace App.Core.Master
                             continue;
                         }
 
-                        for (int j = 0; j < tmpTimeList.Count; j++)
+                        for (var j = 0; j < tmpTimeList.Count; j++)
                         {
                             if (tmpTimeList[j].id == id)
                             {
@@ -189,7 +188,6 @@ namespace App.Core.Master
                                 break;
                             }
                         }
-
                     }
 
                     tmpDeleteTimeList.Clear();
@@ -201,13 +199,13 @@ namespace App.Core.Master
         /// 添加时间任务(默认:毫秒)
         /// </summary>
         /// <param name="action">方法</param>
-        /// <param name="destTime">时间</param>
+        /// <param name="delayTime">时间</param>
         /// <param name="timeUnit">时间类型</param>
         /// <param name="count">执行次数</param>
         public int AddTimeTask(Action action, double delayTime, TimeUnit timeUnit = TimeUnit.Millisecond, int count = 1)
         {
-            double Millisecond = GetMillisecond(delayTime, timeUnit); //换算同一单位(毫秒)
-            int idIndex = GetIdIndex(); //获取唯一下标
+            var Millisecond = GetMillisecond(delayTime, timeUnit); //换算同一单位(毫秒)
+            var idIndex = GetIdIndex(); //获取唯一下标
             lock (lockTime)
             {
                 //定时任务加入缓存区
@@ -238,12 +236,16 @@ namespace App.Core.Master
         /// 替换计时任务
         /// </summary>
         /// <param name="id">所替换的id</param>
+        /// <param name="action"></param>
+        /// <param name="delayTime"></param>
+        /// <param name="timeUnit"></param>
+        /// <param name="count"></param>
         /// <returns></returns>
         public bool ReplaceTimeTask(int id, Action action, double delayTime, TimeUnit timeUnit = TimeUnit.Millisecond,
             int count = 1)
         {
-            double Millisecond = GetMillisecond(delayTime, timeUnit);
-            TimeTask timeTask = new TimeTask()
+            var Millisecond = GetMillisecond(delayTime, timeUnit);
+            var timeTask = new TimeTask()
             {
                 id = id,
                 endTime = GetUTCMillisecond() + Millisecond,
@@ -251,8 +253,8 @@ namespace App.Core.Master
                 delayTime = Millisecond,
                 count = count,
             };
-            bool isSuccess = false;
-            for (int i = 0; i < taskTimeList.Count; i++)
+            var isSuccess = false;
+            for (var i = 0; i < taskTimeList.Count; i++)
             {
                 if (taskTimeList[i].id == id)
                 {
@@ -265,7 +267,7 @@ namespace App.Core.Master
 
             if (!isSuccess)
             {
-                for (int i = 0; i < tmpTimeList.Count; i++)
+                for (var i = 0; i < tmpTimeList.Count; i++)
                 {
                     if (tmpTimeList[i].id == id)
                     {
@@ -291,9 +293,9 @@ namespace App.Core.Master
                 lock (lockFrame)
                 {
                     //获取缓存区的帧任务到计时列表
-                    for (int i = 0; i < tmpFrameList.Count; i++)
+                    foreach (var t in tmpFrameList)
                     {
-                        taskFrameList.Add(tmpFrameList[i]);
+                        taskFrameList.Add(t);
                     }
 
                     tmpFrameList.Clear();
@@ -302,9 +304,9 @@ namespace App.Core.Master
 
             currentFrame += 1; //按每秒60帧(可运行400多天达到int最大值)
             //遍历检测任务是否达到条件
-            for (int i = 0; i < taskFrameList.Count; i++)
+            for (var i = 0; i < taskFrameList.Count; i++)
             {
-                FrameTask frameTask = taskFrameList[i];
+                var frameTask = taskFrameList[i];
                 if (currentFrame < frameTask.endFrame)
                 {
                     continue;
@@ -353,11 +355,11 @@ namespace App.Core.Master
             {
                 lock (lockFrame)
                 {
-                    for (int i = 0; i < tmpDeleteFrameList.Count; i++)
+                    foreach (var t in tmpDeleteFrameList)
                     {
-                        bool isDelete = false;
-                        int id = tmpDeleteFrameList[i];
-                        for (int j = 0; j < taskFrameList.Count; j++)
+                        var isDelete = false;
+                        var id = t;
+                        for (var j = 0; j < taskFrameList.Count; j++)
                         {
                             if (taskFrameList[j].id == id)
                             {
@@ -373,7 +375,7 @@ namespace App.Core.Master
                             continue;
                         }
 
-                        for (int j = 0; j < tmpFrameList.Count; j++)
+                        for (var j = 0; j < tmpFrameList.Count; j++)
                         {
                             if (tmpFrameList[j].id == id)
                             {
@@ -382,7 +384,6 @@ namespace App.Core.Master
                                 break;
                             }
                         }
-
                     }
 
                     tmpDeleteFrameList.Clear();
@@ -394,11 +395,11 @@ namespace App.Core.Master
         /// 添加帧任务
         /// </summary>
         /// <param name="action">方法</param>
-        /// <param name="destTime">时间</param>
+        /// <param name="delayFrame">时间</param>
         /// <param name="count">执行次数</param>
         public int AddFrameTask(Action action, int delayFrame, int count = 1)
         {
-            int idIndex = GetIdIndex(); //获取唯一下标
+            var idIndex = GetIdIndex(); //获取唯一下标
             lock (lockFrame)
             {
                 //帧任务加入缓存区
@@ -469,10 +470,13 @@ namespace App.Core.Master
         /// 替换帧任务
         /// </summary>
         /// <param name="id">所替换的id</param>
+        /// <param name="action"></param>
+        /// <param name="delayFrame"></param>
+        /// <param name="count"></param>
         /// <returns></returns>
         public bool ReplaceFrameTask(int id, Action action, int delayFrame, int count = 1)
         {
-            FrameTask frameTask = new FrameTask()
+            var frameTask = new FrameTask()
             {
                 id = id,
                 endFrame = currentFrame + delayFrame,
@@ -480,8 +484,8 @@ namespace App.Core.Master
                 delayFrame = delayFrame,
                 count = count,
             };
-            bool isSuccess = false;
-            for (int i = 0; i < taskFrameList.Count; i++)
+            var isSuccess = false;
+            for (var i = 0; i < taskFrameList.Count; i++)
             {
                 if (taskFrameList[i].id == id)
                 {
@@ -494,7 +498,7 @@ namespace App.Core.Master
 
             if (!isSuccess)
             {
-                for (int i = 0; i < tmpFrameList.Count; i++)
+                for (var i = 0; i < tmpFrameList.Count; i++)
                 {
                     if (tmpFrameList[i].id == id)
                     {

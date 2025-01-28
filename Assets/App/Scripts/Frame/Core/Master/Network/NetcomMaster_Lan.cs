@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using App.Core.Tools;
 
-/// <summary>
-/// Socket局域网
-/// </summary>
 namespace App.Core.Master
 {
+    /// <summary>
+    /// Socket局域网
+    /// </summary>
     public partial class NetcomMaster : SingletonMonoEvent<NetcomMaster>
     {
         #region Tcp

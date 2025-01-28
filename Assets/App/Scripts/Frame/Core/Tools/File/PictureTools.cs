@@ -19,7 +19,7 @@ namespace App.Core.Tools
         public static Texture2D CreateTexture(byte[] bytes, int width, int height)
         {
             //设置头像   
-            Texture2D tex2d = new Texture2D(width, height);
+            var tex2d = new Texture2D(width, height);
             tex2d.LoadImage(bytes);
             return tex2d;
         }
@@ -28,8 +28,8 @@ namespace App.Core.Tools
         public static Sprite CreateSprite(byte[] bytes, int width, int height)
         {
             //设置头像   
-            Texture2D tex2d = CreateTexture(bytes, width, height);
-            Sprite sprite =
+            var tex2d = CreateTexture(bytes, width, height);
+            var sprite =
                 Sprite.Create(tex2d, new Rect(0, 0, tex2d.width, tex2d.height),
                     new Vector2(0.5f, 0.5f)); //后面Vector2就是你Anchors的Pivot的x/y属性值
             return sprite;
@@ -39,7 +39,7 @@ namespace App.Core.Tools
         public static Sprite CreateSprite(Texture2D texture)
         {
             //设置头像  
-            Sprite sprite =
+            var sprite =
                 Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height),
                     new Vector2(0.5f, 0.5f)); //后面Vector2就是你Anchors的Pivot的x/y属性值
             return sprite;
@@ -80,20 +80,20 @@ namespace App.Core.Tools
         /// <returns></returns>
         public static Vector2 AdaptSize(Vector2 limitRange, Vector2 textureSize)
         {
-            Vector2 size = textureSize;
-            float standard_ratio = limitRange.x / limitRange.y;
-            float ratio = size.x / size.y;
+            var size = textureSize;
+            var standard_ratio = limitRange.x / limitRange.y;
+            var ratio = size.x / size.y;
             if (ratio > standard_ratio)
             {
                 //宽于标准宽度，宽固定
-                float scale = size.x / limitRange.x;
+                var scale = size.x / limitRange.x;
                 size.x = limitRange.x;
                 size.y /= scale;
             }
             else
             {
                 //高于标准宽度，高固定
-                float scale = size.y / limitRange.y;
+                var scale = size.y / limitRange.y;
                 size.y = limitRange.y;
                 size.x /= scale;
             }

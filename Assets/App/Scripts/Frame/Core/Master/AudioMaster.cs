@@ -19,9 +19,9 @@ namespace App.Core.Master
 
         private AudioSource CreateAudioSource(bool playOnAwake = false)
         {
-            AudioSource audio = gameObject.AddComponent<AudioSource>();
-            audio.playOnAwake = playOnAwake;
-            return audio;
+            var audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = playOnAwake;
+            return audioSource;
         }
 
         /// <summary>
@@ -77,6 +77,7 @@ namespace App.Core.Master
         /// <param name="clip"></param>
         /// <param name="callback"></param>
         /// <param name="isLoop"></param>
+        /// <param name="overlap"></param>
         private void PlayAudio(AudioSource _audio, AudioClip clip, UnityAction callback = null, bool isLoop = false,
             bool overlap = false)
         {

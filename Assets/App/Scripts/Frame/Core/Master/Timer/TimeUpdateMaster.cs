@@ -10,7 +10,7 @@ namespace App.Core.Master
     public class TimeUpdateMaster : SingletonMono<TimeUpdateMaster>
     {
         private int timeId = 0; //下标
-        private Dictionary<UpdateMold, List<TimerData>> timerPairs = new Dictionary<UpdateMold, List<TimerData>>();
+        private readonly Dictionary<UpdateMold, List<TimerData>> timerPairs = new Dictionary<UpdateMold, List<TimerData>>();
 
         public float GameTime
         {
@@ -90,7 +90,7 @@ namespace App.Core.Master
         public int StartTimer(Action<float> cb, UpdateMold updateMold = UpdateMold.Update)
         {
             timeId += 1;
-            TimerData timer = new TimerData
+            var timer = new TimerData
             {
                 id = timeId,
                 isTime = true,
@@ -98,14 +98,13 @@ namespace App.Core.Master
                 cb = cb,
             };
             
-            if (timerPairs.ContainsKey(updateMold))
+            if (timerPairs.TryGetValue(updateMold, value: out var pair))
             {
-                timerPairs[updateMold].Add(timer);
+                pair.Add(timer);
             }
             else
             {
-                var data = new List<TimerData>();
-                data.Add(timer);
+                var data = new List<TimerData> { timer };
                 timerPairs.Add(updateMold, data);
             }
             return timeId;
@@ -116,11 +115,11 @@ namespace App.Core.Master
         {
             foreach (var data in timerPairs.Values)
             {
-                for (int i = 0; i < data.Count; i++)
+                foreach (var t in data)
                 {
-                    if (data[i].id == id)
+                    if (t.id == id)
                     {
-                        data[i].isTime = false;
+                        t.isTime = false;
                         break;
                     }
                 }
@@ -132,11 +131,11 @@ namespace App.Core.Master
         {
             foreach (var data in timerPairs.Values)
             {
-                for (int i = 0; i < data.Count; i++)
+                foreach (var t in data)
                 {
-                    if (data[i].id == id)
+                    if (t.id == id)
                     {
-                        data[i].isTime = true;
+                        t.isTime = true;
                         break;
                     }
                 }
@@ -148,7 +147,7 @@ namespace App.Core.Master
         {
             foreach (var data in timerPairs.Values)
             {
-                for (int i = 0; i < data.Count; i++)
+                for (var i = 0; i < data.Count; i++)
                 {
                     if (data[i].id == id)
                     {
@@ -171,37 +170,37 @@ namespace App.Core.Master
         /// <summary>获取秒</summary>
         public string GetSecond(float time)
         {
-            int s = Mathf.FloorToInt(time);
+            var s = Mathf.FloorToInt(time);
             return s.ToString();
         }
 
         /// <summary>获取分钟</summary>
         public string GetMinute(float time)
         {
-            int m = Mathf.FloorToInt(time / 60f);
-            int s = Mathf.FloorToInt(time - m * 60f);
-            return string.Format("{0:00}:{1:00}", m, s);
+            var m = Mathf.FloorToInt(time / 60f);
+            var s = Mathf.FloorToInt(time - m * 60f);
+            return $"{m:00}:{s:00}";
         }
 
         /// <summary>获取小时</summary>
         public string GetHour(float time)
         {
-            int h = Mathf.FloorToInt(time / 3600f);
-            int m = Mathf.FloorToInt(time / 60f - h * 60f);
-            int s = Mathf.FloorToInt(time - m * 60f - h * 3600f);
-            return string.Format("{0:00}:{1:00}:{2:00}", h, m, s);
+            var h = Mathf.FloorToInt(time / 3600f);
+            var m = Mathf.FloorToInt(time / 60f - h * 60f);
+            var s = Mathf.FloorToInt(time - m * 60f - h * 3600f);
+            return $"{h:00}:{m:00}:{s:00}";
         }
 
         public string GetTime(float time)
         {
-            int h = Mathf.FloorToInt(time / 3600f);
-            int m = Mathf.FloorToInt(time / 60f - h * 60f);
+            var h = Mathf.FloorToInt(time / 3600f);
+            var m = Mathf.FloorToInt(time / 60f - h * 60f);
             if (m <= 0)
             {
                 m = 1;
             }
 
-            return string.Format("{0}<size=70>小时</size>{1}<size=70>分</size>", h, m);
+            return $"{h}<size=70>小时</size>{m}<size=70>分</size>";
         }
 
         /// <summary>获取倒计时-秒</summary>
@@ -213,7 +212,7 @@ namespace App.Core.Master
                 time = 0;
             }
 
-            int s = Mathf.FloorToInt(time);
+            var s = Mathf.FloorToInt(time);
             return s.ToString();
         }
 
@@ -226,9 +225,9 @@ namespace App.Core.Master
                 time = 0;
             }
 
-            int m = Mathf.FloorToInt(time / 60f);
-            int s = Mathf.FloorToInt(time - m * 60f);
-            return string.Format("{0:00}:{1:00}", m, s);
+            var m = Mathf.FloorToInt(time / 60f);
+            var s = Mathf.FloorToInt(time - m * 60f);
+            return $"{m:00}:{s:00}";
         }
 
         /// <summary>获取倒计时-小时</summary>
@@ -240,10 +239,10 @@ namespace App.Core.Master
                 time = 0;
             }
 
-            int h = Mathf.FloorToInt(time / 3600f);
-            int m = Mathf.FloorToInt(time / 60f - h * 60f);
-            int s = Mathf.FloorToInt(time - m * 60f - h * 3600f);
-            return string.Format("{0:00}:{1:00}:{2:00}", h, m, s);
+            var h = Mathf.FloorToInt(time / 3600f);
+            var m = Mathf.FloorToInt(time / 60f - h * 60f);
+            var s = Mathf.FloorToInt(time - m * 60f - h * 3600f);
+            return $"{h:00}:{m:00}:{s:00}";
         }
     }
 }

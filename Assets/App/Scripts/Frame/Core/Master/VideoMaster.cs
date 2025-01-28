@@ -9,7 +9,7 @@ namespace App.Core.Master
     public class VideoMaster : SingletonMono<VideoMaster>
     {
         private RenderTexture movie;
-        public VideoPlayer VideoPlayer { get; private set; }
+        private VideoPlayer VideoPlayer { get; set; }
 
         protected override void OnSingletonMonoInit()
         {
@@ -75,16 +75,19 @@ namespace App.Core.Master
         {
             if (frameIdx == frameIndex)
             {
-                RenderTexture renderTexture = source.texture as RenderTexture;
-                Texture2D texture = new Texture2D(renderTexture.width, renderTexture.height);
-                RenderTexture.active = renderTexture;
-                texture.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
-                texture.Apply();
-                RenderTexture.active = null;
-                VideoPlayer.frameReady -= OnFrameReadyEvent;
-                VideoPlayer.sendFrameReadyEvents = false;
-                VideoPlayer.Stop();
-                callback?.Invoke(texture);
+                var renderTexture = source.texture as RenderTexture;
+                if (renderTexture != null)
+                {
+                    var texture = new Texture2D(renderTexture.width, renderTexture.height);
+                    RenderTexture.active = renderTexture;
+                    texture.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
+                    texture.Apply();
+                    RenderTexture.active = null;
+                    VideoPlayer.frameReady -= OnFrameReadyEvent;
+                    VideoPlayer.sendFrameReadyEvents = false;
+                    VideoPlayer.Stop();
+                    callback?.Invoke(texture);
+                }
             }
         }
     }

@@ -17,7 +17,7 @@ namespace App.Core.Master
                 this.socketTcp = socket;
                 this.closeCallBack = closeCallBack;
                 OnConnected();
-                SocketPackage pEPkg = new SocketPackage();
+                var pEPkg = new SocketPackage();
                 socket.BeginReceive(pEPkg.headBuffer, 0, pEPkg.headLength, SocketFlags.None, ReceiveHeadData, pEPkg);
             }
             catch (Exception ex)
@@ -30,7 +30,7 @@ namespace App.Core.Master
         {
             try
             {
-                SocketPackage package = (SocketPackage)ar.AsyncState;
+                var package = (SocketPackage)ar.AsyncState;
                 if (socketTcp.Available == 0)
                 {
                     OnDisConnected();
@@ -38,7 +38,7 @@ namespace App.Core.Master
                 }
                 else
                 {
-                    int num = socketTcp.EndReceive(ar);
+                    var num = socketTcp.EndReceive(ar);
                     if (num > 0)
                     {
                         package.headIndex += num;
@@ -71,8 +71,8 @@ namespace App.Core.Master
         {
             try
             {
-                SocketPackage package = (SocketPackage)ar.AsyncState;
-                int num = socketTcp.EndReceive(ar);
+                var package = (SocketPackage)ar.AsyncState;
+                var num = socketTcp.EndReceive(ar);
                 if (num > 0)
                 {
                     package.bodyIndex += num;
@@ -83,7 +83,7 @@ namespace App.Core.Master
                     }
                     else
                     {
-                        string msg = Encoding.UTF8.GetString(package.bodyBuffer);
+                        var msg = Encoding.UTF8.GetString(package.bodyBuffer);
                         OnReciveMsg(msg);
                         package.ResetData();
                         socketTcp.BeginReceive(package.headBuffer, 0, package.headLength, SocketFlags.None,
@@ -104,11 +104,10 @@ namespace App.Core.Master
 
         public void SendMsg(string msg)
         {
-            byte[] data = SocketTools.PackageLengthInfo(msg);
-            NetworkStream networkStream = null;
+            var data = SocketTools.PackageLengthInfo(msg);
             try
             {
-                networkStream = new NetworkStream(socketTcp);
+                var networkStream = new NetworkStream(socketTcp);
                 if (networkStream.CanWrite)
                 {
                     networkStream.BeginWrite(data, 0, data.Length, SendCallBack, networkStream);
@@ -122,11 +121,10 @@ namespace App.Core.Master
 
         public void SendMsg(byte[] _data)
         {
-            byte[] data = SocketTools.PackageLengthInfo(_data);
-            NetworkStream networkStream = null;
+            var data = SocketTools.PackageLengthInfo(_data);
             try
             {
-                networkStream = new NetworkStream(socketTcp);
+                var networkStream = new NetworkStream(socketTcp);
                 if (networkStream.CanWrite)
                 {
                     networkStream.BeginWrite(data, 0, data.Length, SendCallBack, networkStream);
@@ -140,7 +138,7 @@ namespace App.Core.Master
 
         private void SendCallBack(IAsyncResult ar)
         {
-            NetworkStream networkStream = (NetworkStream)ar.AsyncState;
+            using var networkStream = (NetworkStream)ar.AsyncState;
             try
             {
                 networkStream.EndWrite(ar);

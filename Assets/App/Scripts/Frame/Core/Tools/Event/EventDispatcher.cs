@@ -2,9 +2,9 @@
 
 namespace App.Core.Tools
 {
-    public class EventDispatcher
+    public static class EventDispatcher
     {
-        private static EventController m_eventController = new EventController();
+        private static readonly EventController m_eventController = new EventController();
 
         //判断是否有该监听
         public static bool HasEventListener(string eventType, Delegate handler)

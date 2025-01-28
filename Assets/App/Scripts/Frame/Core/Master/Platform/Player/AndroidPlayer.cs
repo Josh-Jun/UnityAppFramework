@@ -8,18 +8,11 @@ namespace App.Core.Master
     {
         private const string AppMainPackage = "com.unity3d.player.UnityPlayer";
         private const string AppToolsPackage = "com.debug.tools.AndroidHelper";
-        private AndroidJavaObject MainJavaObject
-        {
-            get {
-                return JavaObject(AppMainPackage).GetStatic<AndroidJavaObject>("currentActivity");
-            }
-        }
+        private AndroidJavaObject MainJavaObject => JavaObject(AppMainPackage).GetStatic<AndroidJavaObject>("currentActivity");
         public override bool IsEditor { get; } = false;
         public override string Name { get; } = "Android";
-        public override string PlatformName
-        {
-            get { return Global.AppConfig.ChannelPackage == ChannelPackage.Mobile ? "android" : Global.AppConfig.ChannelPackage.ToString().ToLower(); }
-        } 
+        public override string PlatformName => Global.AppConfig.ChannelPackage == ChannelPackage.Mobile ? "android" : Global.AppConfig.ChannelPackage.ToString().ToLower();
+
         public AndroidPlayer()
         {
             PlatformMsgReceiver.Instance.Init();
