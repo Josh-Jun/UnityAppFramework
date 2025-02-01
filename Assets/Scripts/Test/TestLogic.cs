@@ -13,9 +13,11 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Video;
 using System.Threading.Tasks;
+using App.Core;
 using App.Core.Helper;
 using App.Core.Master;
 using App.Core.Tools;
+using Modules.SceneLoader;
 
 namespace App.Modules.Test
 {
@@ -159,9 +161,9 @@ namespace App.Modules.Test
         private void ButtonEvent()
         {
             // view.SetText("触发不带参数事件");
-            SendEventMsg("ShowTips", "触发不带参数事件", 1.2f);
+            // SendEventMsg("ShowTips", "触发不带参数事件", 1.2f);
             // Root.GetLogicScript<Ask.AskLogic>().ShowTips("123");
-            // Root.GetLogicScript<Loading.LoadingLogic>().LoadScene(AssetPath.MainScene, true);
+            Root.GetLogicScript<SceneLoaderLogic>().LoadScene(AssetPath.MainScene);
         }
 
         

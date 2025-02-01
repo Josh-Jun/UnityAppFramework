@@ -29,9 +29,10 @@ namespace App.Core
             AssetsMaster.Instance.LoadConfigs();
             // 初始化Logic脚本
             InitLogicScripts();
-            // 初始化AppScene的所有Logic的Begin方法
-            CurrentScene = AssetPath.AppScene;
-            ExecuteSceneMethods(CurrentScene, "Begin");
+            // 初始化Scene的所有Logic的Begin方法
+            SceneManager.sceneLoaded += (scene, _) => { ExecuteSceneMethods(scene.path, "Begin"); };
+            // 初始化Scene的所有Logic的End方法
+            SceneManager.sceneUnloaded += (scene) => { ExecuteSceneMethods(scene.path, "End"); };
         }
         
         private static void OutputAppInfo()
@@ -56,7 +57,7 @@ namespace App.Core
             ViewMaster.Instance.InitViewScripts();
             // 初始化Global的Logic脚本的Begin方法
             ExecuteSceneMethods(AssetPath.Global, "Begin");
-            LoadScene(AssetPath.MainScene);
+            Assets.LoadSceneAsync(AssetPath.MainScene, AssetPackage.HotfixPackage);
         }
         /// <summary>
         /// 初始化所有Logic脚本
@@ -80,29 +81,6 @@ namespace App.Core
                     pair.Add(logic);
                 }
             }
-        }
-        /// <summary>
-        /// 加载场景（只能通过这个方法加载场景，否则Logic脚本不能正常实用Begin和End方法）
-        /// </summary>
-        /// <param name="targetScene"></param>
-        /// <param name="loadingEvent"></param>
-        /// <param name="mode"></param>
-        public static void LoadScene(string targetScene, Action<float> loadingEvent = null, LoadSceneMode mode = LoadSceneMode.Single)
-        {
-            ExecuteSceneMethods(CurrentScene, "End");
-            CurrentScene = targetScene;
-            var handle = Assets.LoadSceneAsync(targetScene, AssetPackage.HotfixPackage, mode);
-            var time_id = TimeUpdateMaster.Instance.StartTimer((time) =>
-            {
-                if (handle == null) return;
-                loadingEvent?.Invoke(handle.Progress);
-            });
-            handle.Completed += sceneHandle =>
-            {
-                TimeUpdateMaster.Instance.EndTimer(time_id);
-                ExecuteSceneMethods(CurrentScene, "Begin");
-                loadingEvent?.Invoke(1);
-            };
         }
         
         /// <summary>

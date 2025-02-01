@@ -12,11 +12,12 @@ using App.Core;
 using App.Core.Helper;
 using App.Core.Master;
 using App.Core.Tools;
+using Modules.SceneLoader;
 using UnityEngine.SceneManagement;
 
 namespace App.Modules.Loading
 {
-    [LogicOf(AssetPath.Global)]
+    [LogicOf(AssetPath.LoadingScene)]
     public class LoadingLogic : SingletonEvent<LoadingLogic>, ILogic
     {
         private LoadingView view;
@@ -27,19 +28,24 @@ namespace App.Modules.Loading
         public void Begin()
         {
             view = ViewMaster.Instance.GetView<LoadingView>();
+            LoadScene();
         }
 
-        public void LoadScene(string sceneName, bool isLoading = false, Action callback = null, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
+        private void LoadScene()
         {
-            view.SetViewActive(isLoading);
-            Root.LoadScene(sceneName, progress =>
+            view.SetViewActive(true);
+            var targetScene = SceneLoaderLogic.Instance.CurrentScene;
+            var handle = Assets.LoadSceneAsync(targetScene, AssetPackage.HotfixPackage);
+            var time_id = TimeUpdateMaster.Instance.StartTimer((time) =>
             {
-                view.SetLoadingSliderValue(progress, () =>
-                {
-                    callback?.Invoke();
-                    view.SetViewActive(false);
-                });
-            }, loadSceneMode);
+                if (handle == null) return;
+                view.SetLoadingSliderValue(handle.Progress);
+            });
+            handle.Completed += sceneHandle =>
+            {
+                TimeUpdateMaster.Instance.EndTimer(time_id);
+                view.SetLoadingSliderValue(handle.Progress);
+            };
         }
         public void End()
         {
