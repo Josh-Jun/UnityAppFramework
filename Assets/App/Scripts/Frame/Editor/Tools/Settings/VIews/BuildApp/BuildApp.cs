@@ -193,10 +193,13 @@ namespace App.Editor.View
         private void Build()
         {
             Apply();
+            var package = PlayerSettings.applicationIdentifier.ToLower();
+            var channel = AppConfig.ChannelPackage.ToString().ToLower();
             var version = PlayerSettings.bundleVersion;
+            var develop =  AppConfig.DevelopmentMold.ToString().ToLower();
             var date = $"{DateTime.Now.Year}{DateTime.Now.Month:00}{DateTime.Now.Day:00}";
-            var suffix = NativeApp || EditorUserBuildSettings.activeBuildTarget == BuildTarget.iOS ? "" : ".apk";
-            var name = $"{PlayerSettings.applicationIdentifier.ToLower()}_{ChannelPackage.Mobile}_v{version}_{DevelopmentMold.Release}_{date}{suffix}";
+            var suffix = AppConfig.NativeApp || EditorUserBuildSettings.activeBuildTarget == BuildTarget.iOS ? "" : ".apk";
+            var name = $"{package}_{channel}_v{version}_{develop}_{date}{suffix}";
 
             EditorUserBuildSettings.SwitchActiveBuildTarget(EditorUserBuildSettings.selectedBuildTargetGroup,
                 EditorUserBuildSettings.activeBuildTarget);
@@ -214,7 +217,7 @@ namespace App.Editor.View
 
             var BuildPath = $"{outputPath}/{name}";
             var buildOption = BuildOptions.None;
-            if (DevelopmentMold != DevelopmentMold.Release)
+            if (AppConfig.DevelopmentMold != DevelopmentMold.Release)
             {
                 buildOption |= BuildOptions.Development;
             }
@@ -315,7 +318,7 @@ namespace App.Editor.View
             var dir = new DirectoryInfo(buildParameters.GetPackageOutputDirectory());
             var files = dir.GetFiles(); // 获取所有文件
             
-            foreach (FileInfo file in files)
+            foreach (var file in files)
             {
                 if (file.Name.StartsWith("PackageManifest_") && !file.Name.EndsWith(".json"))
                 {
