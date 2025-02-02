@@ -1,9 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:VisualElement name="ChangePrefabsFont" style="flex-grow: 1; margin-top: 5px; display: flex;">
-        <uie:ObjectField label="Font" focusable="true" allow-scene-objects="true" name="object_font" />
-        <ui:TextField picking-mode="Ignore" label="Prefab Path" name="text_prefab_path">
-            <ui:Button text="Browse" display-tooltip-when-elided="true" name="prefab_path_browse" style="margin-right: 0; margin-top: 0; margin-bottom: 0;" />
-        </ui:TextField>
-        <ui:Button text="Apply" display-tooltip-when-elided="true" name="change_font_apply" />
-    </ui:VisualElement>
-</ui:UXML>

@@ -1,6 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <ui:VisualElement style="flex-direction: row; justify-content: flex-start; min-width: auto; margin-left: 0; margin-right: 0; margin-top: 0; background-color: rgb(56, 56, 56); border-top-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-width: 0;">
-        <ui:Label text="1" display-tooltip-when-elided="true" name="Count" style="-unity-text-align: middle-left; white-space: nowrap; margin-left: 10px; margin-right: 5px; flex-direction: row; align-items: center; justify-content: flex-start; padding-left: 0; padding-right: 0; max-width: 50px; min-width: 50px;" />
-        <ui:DropdownField index="-1" choices="System.Collections.Generic.List`1[System.String]" name="UIComponent" style="min-width: 200px; max-width: 200px; -unity-text-align: middle-left; align-items: center; justify-content: center; white-space: nowrap;" />
-    </ui:VisualElement>
-</ui:UXML>
