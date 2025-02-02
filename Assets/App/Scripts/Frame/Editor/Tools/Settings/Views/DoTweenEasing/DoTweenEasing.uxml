@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:VisualElement name="DoTweenEasing" style="flex-grow: 1; display: flex; margin-top: 5px; justify-content: flex-start; align-self: auto;">
+        <ui:VisualElement>
+            <ui:EnumField label="Easing" name="Easing" type="DG.Tweening.Ease, DOTween" value="InOutQuad" />
+            <ui:FloatField label="Duration" value="5" name="Duration" />
+        </ui:VisualElement>
+        <ui:VisualElement style="align-self: auto; justify-content: flex-start; align-items: auto; margin-top: 5px; margin-bottom: 0; margin-right: 0; margin-left: 0; flex-direction: column; height: auto; flex-grow: 1;">
+            <ui:VisualElement style="flex-direction: row; width: auto; min-width: auto; min-height: 35px; height: auto; align-items: center; align-self: center; flex-grow: 1; margin-left: 5px; margin-right: 5px; justify-content: space-around; max-height: 35px;">
+                <ui:Slider picking-mode="Ignore" value="0" high-value="1.5" name="Animation" low-value="-0.5" show-input-field="false" inverted="false" focusable="true" direction="Horizontal" style="margin-bottom: 0; height: auto; flex-direction: row; align-items: auto; justify-content: space-between; align-self: center; width: auto; flex-wrap: nowrap; opacity: 1; flex-shrink: 1; margin-left: 5px; margin-right: 0; padding-right: 0; flex-grow: 1; margin-top: 0;" />
+                <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="Play" style="align-items: flex-start; flex-direction: row; align-self: center; justify-content: flex-start; cursor: initial; background-image: none; padding-right: 0; padding-bottom: 0; padding-top: 0; padding-left: 0; margin-left: 10px; margin-bottom: 0; margin-right: 5px; margin-top: 0; flex-shrink: 1; flex-grow: 0; width: 20px; height: 20px; position: relative; white-space: nowrap; -unity-text-align: upper-center; -unity-background-scale-mode: stretch-to-fill;" />
+            </ui:VisualElement>
+            <uie:CurveField name="Curve" focusable="true" style="overflow: hidden; visibility: visible; display: flex; height: auto; width: auto; justify-content: flex-start; align-self: stretch; align-items: stretch; flex-direction: row; flex-shrink: 1; flex-grow: 1; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; min-height: 360px; max-height: 360px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:VisualElement name="sheet_item" style="flex-direction: row; justify-content: space-between; align-self: auto; align-items: auto; position: relative; flex-wrap: nowrap;">
+        <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SheetName" style="align-items: auto; flex-direction: row; justify-content: center; align-self: center; margin-left: 10px; margin-right: 50px;" />
+        <ui:Button text="Build" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BuildSheet" />
+    </ui:VisualElement>
+</ui:UXML>

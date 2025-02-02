@@ -1,0 +1,41 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using App.Core.Helper;
+using App.Core.Master;
+using App.Core.Tools;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace Modules.#NAMESPACE#
+{
+    [ViewOf(ViewMold.#VIEWMOLD#, AssetPath.#SCRIPTNAME#, #ACTIVE#, #LAYER#)]
+    public class #SCRIPTNAME# : ViewBase
+    {
+#VARIABLE#
+#GETSET#
+        protected override void InitView()
+        {
+            base.InitView();
+#INIT#
+        }
+
+        protected override void RegisterEvent()
+        {
+            base.RegisterEvent();
+#REGISTER#
+        }
+
+        protected override void OpenView()
+        {
+            base.OpenView();
+#OPEN#
+        }
+
+        protected override void CloseView()
+        {
+            base.CloseView();
+#CLOSE#
+        }
+    }
+}
