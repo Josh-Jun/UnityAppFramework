@@ -171,10 +171,10 @@ namespace App.Modules.Test
         private void ButtonParamsEvent(string value)
         {
             view.SetText(value);
-            string filePath = PlatformMaster.Instance.GetDataPath("App/meta.apk");
-            UnityWebRequester requester = NetcomMaster.Uwr;
+            // string filePath = PlatformMaster.Instance.GetDataPath("App/meta.apk");
+            // UnityWebRequester requester = NetcomMaster.Uwr;
             
-            int id = -1;
+            // int id = -1;
             // if (FileTools.FileExist(filePath))
             // {
             //     PlatformManager.Instance.InstallApp(filePath);
@@ -195,20 +195,20 @@ namespace App.Modules.Test
             //     });
             // }
 
-            requester.DownloadFile("https://meta-oss.genimous.com/vr-ota/App/meta.apk", filePath, (totalLength, fileLength) =>
-            {
-                id = TimeUpdateMaster.Instance.StartTimer((time) =>
-                {
-                    float progress = (float)((long)requester.DownloadedLength + fileLength) / (float)totalLength;
-                    view.SetText(progress.ToString("F2"));
-                    if (progress >= 1)
-                    {
-                        PlatformMaster.Instance.InstallApp(filePath);
-                        TimeUpdateMaster.Instance.EndTimer(id);
-                        requester.Destory();
-                    }
-                });
-            });
+            // requester.DownloadFile("https://meta-oss.genimous.com/vr-ota/App/meta.apk", filePath, (totalLength, fileLength) =>
+            // {
+            //     id = TimeUpdateMaster.Instance.StartTimer((time) =>
+            //     {
+            //         float progress = (float)((long)requester.DownloadedLength + fileLength) / (float)totalLength;
+            //         view.SetText(progress.ToString("F2"));
+            //         if (progress >= 1)
+            //         {
+            //             PlatformMaster.Instance.InstallApp(filePath);
+            //             TimeUpdateMaster.Instance.EndTimer(id);
+            //             requester.Destory();
+            //         }
+            //     });
+            // });
         }
 
         public void AppPause(bool pause)
