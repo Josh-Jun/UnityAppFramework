@@ -152,7 +152,6 @@ namespace App.Core.Tools
             camera.targetTexture = bak_cam_targetTexture;
             RenderTexture.active = bak_RenderTexture_active;
             RenderTexture.ReleaseTemporary(render_texture);
-            Object.Destroy(tex_transparent);
             return (tex_transparent, pngShot);
         }
     }
