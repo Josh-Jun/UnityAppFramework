@@ -163,7 +163,7 @@ namespace App.Modules.Test
             // view.SetText("触发不带参数事件");
             // SendEventMsg("ShowTips", "触发不带参数事件", 1.2f);
             // Root.GetLogicScript<Ask.AskLogic>().ShowTips("123");
-            Root.GetLogicScript<SceneLoaderLogic>().LoadScene(AssetPath.MainScene);
+            SceneLoaderLogic.Instance.LoadScene(AssetPath.MainScene);
         }
 
         

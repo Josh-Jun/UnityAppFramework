@@ -13,7 +13,6 @@ namespace App.Core
     public static class Root
     {
         private static readonly Dictionary<string, List<ILogic>> SceneLogicPairs = new Dictionary<string, List<ILogic>>();
-        private static string CurrentScene;
 
         public static void Init()
         {
