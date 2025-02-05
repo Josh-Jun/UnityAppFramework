@@ -8,7 +8,8 @@ namespace App.Editor.Tools
     [InitializeOnLoad]
     public class SceneToolsEditor
     {
-        private const string MENU_PATH = "App/Launcher/AutoLoad";
+        private const int MENU_LEVEL = 0;
+        private const string MENU_PATH = "App/Editor/Launcher/AutoPLay";
         private const string MENU_VALUE = "MENU_VALUE";
         private const string TEMP_SCENE = "TEMP_SCENE";
         static SceneToolsEditor()
@@ -21,7 +22,7 @@ namespace App.Editor.Tools
             Menu.SetChecked(MENU_PATH, PlayerPrefs.GetInt(MENU_VALUE) == 1);
         }
         
-        [MenuItem(MENU_PATH, false, 10)]
+        [MenuItem(MENU_PATH, false, MENU_LEVEL)]
         public static void AutoOpenScene()
         {
             Menu.SetChecked(MENU_PATH, PlayerPrefs.GetInt(MENU_VALUE) != 1);

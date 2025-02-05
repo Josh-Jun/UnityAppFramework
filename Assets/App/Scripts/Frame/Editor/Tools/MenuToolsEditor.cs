@@ -16,6 +16,8 @@ namespace App.Editor.Tools
 {
     public class MenuToolsEditor : AssetModificationProcessor
     {
+        private const int MENU_LEVEL = 1;
+        
         #region 脚本模板导入修改命名空间
 
         private static string[] temps = { "Logic", "View" };
@@ -78,7 +80,7 @@ namespace App.Editor.Tools
         private static StringBuilder sb = new StringBuilder(1024);
         private static string target_path = $"{Application.dataPath}/App/Scripts/Runtime/Helper/Asset";
 
-        [MenuItem("App/Editor/UpdateAssetPackage", false, 0)]
+        [MenuItem("App/Editor/UpdateAssetPackage", false, MENU_LEVEL)]
         private static void UpdateAssetPackage()
         {
             sb.Length = 0;
@@ -98,7 +100,7 @@ namespace App.Editor.Tools
 
         #region 拷贝模板脚本到Unity脚本模板路径
 
-        [MenuItem("App/Editor/CopyTemplateScripts", false, 0)]
+        [MenuItem("App/Editor/CopyTemplateScripts", false, MENU_LEVEL)]
         public static void CopyTemplateScripts()
         {
             var template_script_path = $"{Application.dataPath}/{EditorHelper.BaseEditorPath()}/Tools/ScriptTemplates";
@@ -125,7 +127,7 @@ namespace App.Editor.Tools
         #region Protobuf2CS
 
         
-        [MenuItem("App/Editor/Protobuf2CS", false, 0)]
+        [MenuItem("App/Editor/Protobuf2CS", false, MENU_LEVEL)]
         public static void Protobuf2CS()
         {
             var cdPath = Application.dataPath.Replace("Assets", "Data/protobuf");
@@ -158,7 +160,7 @@ namespace App.Editor.Tools
         #region 更新资源路径配置文件（自动/手动）
         
         [DidReloadScripts]
-        [MenuItem("App/Editor/UpdateAssetPath", false, 0)]
+        [MenuItem("App/Editor/UpdateAssetPath", false, MENU_LEVEL)]
         public static void UpdateAssetPath()
         {
             sb.Length = 0;
