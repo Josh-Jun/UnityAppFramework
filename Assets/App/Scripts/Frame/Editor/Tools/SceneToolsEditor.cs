@@ -11,7 +11,7 @@ namespace App.Editor.Tools
         private const string AUTO_KEY = "EDITOR_AUTO";
         static SceneToolsEditor()
         {
-            EditorApplication.playModeStateChanged += EditorApplication_playModeStateChanged;
+            EditorApplication.playModeStateChanged += EditorApplication_PlayModeStateChanged;
             if (!PlayerPrefs.HasKey(AUTO_KEY))
             {
                 PlayerPrefs.SetInt(AUTO_KEY, 0);
@@ -27,19 +27,19 @@ namespace App.Editor.Tools
             PlayerPrefs.SetInt(AUTO_KEY, value);
         }
 
-        private static void OpenScene(string name = "Launcher")
+        private static void OpenScene(int index = 0)
         {
-            var path = SceneManager.GetSceneByName(name).path;
-            if(path == null) return;
-            var isCurScene = SceneManager.GetActiveScene().name.Equals(name); //是否为当前场景
+            var scene = EditorBuildSettings.scenes[index];
+            if(scene == null) return;
+            var isCurScene = SceneManager.GetActiveScene().path.Equals(scene.path); //是否为当前场景
             if (Application.isPlaying) return;
             if (!isCurScene)
             {
-                EditorSceneManager.OpenScene(path);
+                EditorSceneManager.OpenScene(scene.path);
             }
         }
         
-        private static void EditorApplication_playModeStateChanged(PlayModeStateChange obj)
+        private static void EditorApplication_PlayModeStateChanged(PlayModeStateChange obj)
         {
             switch (obj)
             {
