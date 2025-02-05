@@ -8,23 +8,25 @@ namespace App.Editor.Tools
     [InitializeOnLoad]
     public class SceneToolsEditor
     {
-        private const string AUTO_KEY = "EDITOR_AUTO";
+        private const string MENU_PATH = "App/Launcher/AutoLoad";
+        private const string MENU_VALUE = "MENU_VALUE";
+        private const string TEMP_SCENE = "TEMP_SCENE";
         static SceneToolsEditor()
         {
             EditorApplication.playModeStateChanged += EditorApplication_PlayModeStateChanged;
-            if (!PlayerPrefs.HasKey(AUTO_KEY))
+            if (!PlayerPrefs.HasKey(MENU_VALUE))
             {
-                PlayerPrefs.SetInt(AUTO_KEY, 0);
+                PlayerPrefs.SetInt(MENU_VALUE, 0);
             }
-            Menu.SetChecked("App/AutoOpenScene", PlayerPrefs.GetInt(AUTO_KEY) == 1);
+            Menu.SetChecked(MENU_PATH, PlayerPrefs.GetInt(MENU_VALUE) == 1);
         }
         
-        [MenuItem("App/AutoOpenScene", false, 10)]
+        [MenuItem(MENU_PATH, false, 10)]
         public static void AutoOpenScene()
         {
-            Menu.SetChecked("App/AutoOpenScene", PlayerPrefs.GetInt(AUTO_KEY) != 1);
-            var value = Menu.GetChecked("App/AutoOpenScene") ? 1 : 0;
-            PlayerPrefs.SetInt(AUTO_KEY, value);
+            Menu.SetChecked(MENU_PATH, PlayerPrefs.GetInt(MENU_VALUE) != 1);
+            var value = Menu.GetChecked(MENU_PATH) ? 1 : 0;
+            PlayerPrefs.SetInt(MENU_VALUE, value);
         }
 
         private static void OpenScene(int index = 0)
@@ -45,22 +47,22 @@ namespace App.Editor.Tools
             {
                 case PlayModeStateChange.EnteredEditMode: //停止播放事件监听后被监听
                     // Debug.Log("如果编辑器应用程序处于编辑模式而之前处于播放模式，则在编辑器应用程序的下一次更新期间发生。");
-                    if (Menu.GetChecked("App/AutoOpenScene"))
+                    if (Menu.GetChecked(MENU_PATH))
                     {
-                        if (PlayerPrefs.HasKey("TEMP_SCENE_PATH"))
+                        if (PlayerPrefs.HasKey(TEMP_SCENE))
                         {
-                            EditorSceneManager.OpenScene(PlayerPrefs.GetString("TEMP_SCENE_PATH"));
-                            PlayerPrefs.DeleteKey("TEMP_SCENE_PATH");
+                            EditorSceneManager.OpenScene(PlayerPrefs.GetString(TEMP_SCENE));
+                            PlayerPrefs.DeleteKey(TEMP_SCENE);
                         }
                     }
                     break;
                 case PlayModeStateChange.ExitingEditMode: //编辑转播放时监听(播放之前)
                     // Debug.Log("在退出编辑模式时，在编辑器处于播放模式之前发生。");
-                    if (Menu.GetChecked("App/AutoOpenScene"))
+                    if (Menu.GetChecked(MENU_PATH))
                     {
                         if (SceneManager.GetActiveScene().path != string.Empty)
                         {
-                            PlayerPrefs.SetString("TEMP_SCENE_PATH", SceneManager.GetActiveScene().path);
+                            PlayerPrefs.SetString(TEMP_SCENE, SceneManager.GetActiveScene().path);
                             EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
                         }
                         OpenScene();
