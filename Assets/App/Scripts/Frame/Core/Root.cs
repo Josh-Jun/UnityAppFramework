@@ -41,8 +41,7 @@ namespace App.Core
             stringBuilder.AppendLine($"操作系统 : {SystemInfo.operatingSystem}");
             stringBuilder.AppendLine($"运行内存 : {SystemInfo.systemMemorySize/1000f}G");
             stringBuilder.AppendLine($"设备标识 : {SystemInfo.deviceUniqueIdentifier}");
-            var enable = Global.AppConfig.EnableLog ? "开" : "关";
-            stringBuilder.AppendLine($"日志开关 : {enable}");
+            stringBuilder.AppendLine($"日志开关 : {Global.AppConfig.EnableLog}");
             stringBuilder.AppendLine($"开发环境 : {Global.AppConfig.DevelopmentMold}");
             stringBuilder.AppendLine($"运行模式 : {Global.AppConfig.AssetPlayMode}");
             stringBuilder.AppendLine($"默认帧率 : {Global.AppConfig.AppFrameRate}");
