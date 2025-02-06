@@ -110,7 +110,7 @@ namespace App.Core.Tools
         /// <param name="callback"></param>
         public static void TakePhoto(Camera camera, string path, Action<Texture2D, string> callback = null)
         {
-            var filePath = $"{path}/Image{Utils.GetTimeStamp}.png";
+            var filePath = $"{path}/Image_{DateTime.Now.ToTimeStamp()}.png";
             var item = TakeTransparentCapture(camera, camera.pixelWidth, camera.pixelHeight, filePath);
             callback?.Invoke(item.Item1, filePath);
         }

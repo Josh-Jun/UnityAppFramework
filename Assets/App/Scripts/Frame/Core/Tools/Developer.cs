@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using App.Core.Master;
 using UnityEngine;
@@ -10,6 +11,27 @@ namespace App.Core.Tools
 {
     public static class Developer
     {
+        #region 时间戳
+
+        /// <summary> DateTime2TimeStamp </summary>
+        public static long ToTimeStamp(this DateTime target, bool ms = true)
+        {
+            var from = new DateTime(1970, 1, 1, 0, 0, 0);
+            var ts = new TimeSpan(target.ToUniversalTime().Ticks - from.Ticks);
+            var timestamp = ms ? Convert.ToInt64(ts.TotalMilliseconds) : Convert.ToInt64(ts.TotalSeconds);
+            return timestamp;
+        }
+
+        /// <summary> TimeStamp2DateTime </summary>
+        public static DateTime ToDateTime(this long timestamp, bool ms = true)
+        {
+            var from = new DateTime(1970, 1, 1, 0, 0, 0);
+            var target = ms ? from.AddMilliseconds(timestamp) : from.AddSeconds(timestamp);
+            return target;
+        }
+
+        #endregion
+        
         #region AnimationCLip
         
         public static void AddAnimationClipEvent<T>(this AnimationClip clip, int frame, T parameter)
@@ -34,7 +56,7 @@ namespace App.Core.Tools
                 _event.functionName = "AnimationEventFloatCallback";
                 _event.floatParameter = parameter as float? ?? 0;
             }
-            else if (type == typeof(Object))
+            else if (type == typeof(UnityEngine.Object))
             {
                 _event.functionName = "AnimationEventObjectCallback";
                 _event.objectReferenceParameter = parameter as UnityEngine.Object;
@@ -1199,7 +1221,7 @@ namespace App.Core.Tools
 
             var eventTrigger = com.TryGetComponent<EventTrigger>();
             eventTrigger.triggers.Clear();
-            Object.Destroy(eventTrigger);
+            UnityEngine.Object.Destroy(eventTrigger);
         }
 
         #endregion
