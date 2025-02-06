@@ -5,7 +5,7 @@ namespace App.Core.Tools
     public class Singleton<T> : ISingleton where T : class, ISingleton, new()
     {
         private static T _Instance;
-        private static readonly object SingletonLock = "Lock";
+        private const string SingletonLock = "Lock";
 
         public static T Instance
         {

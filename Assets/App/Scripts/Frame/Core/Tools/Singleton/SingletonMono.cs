@@ -5,7 +5,7 @@ namespace App.Core.Tools
     public class SingletonMono<T> : MonoBehaviour where T : SingletonMono<T>
     {
         private static T _Instance;
-        private static readonly object SingletonLock = "MonoLock";
+        private const string SingletonLock = "MonoLock";
         private const string GoName = "Master";
         public static T Instance
         {

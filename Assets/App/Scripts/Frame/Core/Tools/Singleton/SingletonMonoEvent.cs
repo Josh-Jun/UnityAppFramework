@@ -5,7 +5,7 @@ namespace App.Core.Tools
     public class SingletonMonoEvent<T> : EventBaseMono where T : SingletonMonoEvent<T>
     {
         private static T _Instance;
-        private static readonly object SingletonLock = "MonoEventLock";
+        private const string SingletonLock = "MonoEventLock";
         private const string GoName = "Master";
         public static T Instance
         {

@@ -36,7 +36,7 @@ namespace App.Core.Tools
         /// <summary> 删除指定单例 </summary>
         public void Delete(ISingleton obj)
         {
-            string name = obj.ToString();
+            var name = obj.ToString();
             if (SingletonPool.ContainsKey(name))
             {
                 SingletonPool[name].Clear();

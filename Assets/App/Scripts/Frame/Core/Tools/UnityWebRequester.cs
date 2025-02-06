@@ -192,7 +192,7 @@ namespace App.Core.Tools
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
 
-            DownloadHandlerTexture downloadHandlerTexture = new DownloadHandlerTexture();
+            var downloadHandlerTexture = new DownloadHandlerTexture();
             uwr.downloadHandler = downloadHandlerTexture;
             uwrao = uwr.SendWebRequest();
             uwrao.completed += (ao) =>
@@ -223,7 +223,7 @@ namespace App.Core.Tools
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
 
-            DownloadHandlerAssetBundle downloadHandlerAssetBundle = new DownloadHandlerAssetBundle(uwr.url, 0);
+            var downloadHandlerAssetBundle = new DownloadHandlerAssetBundle(uwr.url, 0);
             uwr.downloadHandler = downloadHandlerAssetBundle;
             uwrao = uwr.SendWebRequest();
             uwrao.completed += (ao) =>
@@ -255,7 +255,7 @@ namespace App.Core.Tools
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
 
-            DownloadHandlerAudioClip downloadHandlerAudioClip = new DownloadHandlerAudioClip(uwr.url, audioType);
+            var downloadHandlerAudioClip = new DownloadHandlerAudioClip(uwr.url, audioType);
             uwr.downloadHandler = downloadHandlerAudioClip;
             uwrao = uwr.SendWebRequest();
             uwrao.completed += (ao) =>
@@ -321,7 +321,7 @@ namespace App.Core.Tools
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
 
-            byte[] bodyRaw = Encoding.UTF8.GetBytes(postData);
+            var bodyRaw = Encoding.UTF8.GetBytes(postData);
             uwr.uploadHandler = new UploadHandlerRaw(bodyRaw);
             uwr.downloadHandler = new DownloadHandlerBuffer();
             uwrao = uwr.SendWebRequest();
@@ -354,7 +354,7 @@ namespace App.Core.Tools
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
 
-            WWWForm form = new WWWForm();
+            var form = new WWWForm();
             foreach (var item in formFields)
             {
                 form.AddField(item.Key, item.Value);
@@ -424,7 +424,7 @@ namespace App.Core.Tools
                 uwr.SetRequestHeader(header.Key, header.Value);
             }
 
-            byte[] contentBytes = Encoding.UTF8.GetBytes(content);
+            var contentBytes = Encoding.UTF8.GetBytes(content);
             uwr.uploadHandler = new UploadHandlerRaw(contentBytes);
             uwr.downloadHandler = new DownloadHandlerBuffer();
             uwrao = uwr.SendWebRequest();

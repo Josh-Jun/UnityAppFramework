@@ -5,7 +5,7 @@ namespace App.Core.Tools
     public class SingletonEvent<T> : EventBase, ISingleton where T : EventBase, ISingleton, new()
     {
         private static T _Instance;
-        private static readonly object SingletonLock = "EventLock";
+        private const string SingletonLock = "EventLock";
 
         public static T Instance
         {
