@@ -34,6 +34,7 @@ namespace App.Core
             SceneManager.sceneUnloaded += (scene) => { ExecuteSceneMethods(scene.path, "End"); };
         }
         
+        /// <summary>输出App配置信息</summary>
         private static void OutputAppInfo()
         {
             var stringBuilder = new StringBuilder(1024);
@@ -49,6 +50,7 @@ namespace App.Core
             Log.I(stringBuilder.ToString());
         }
 
+        /// <summary>启动App</summary>
         public static void StartApp()
         {
             // 加载所有view
@@ -57,9 +59,8 @@ namespace App.Core
             ExecuteSceneMethods(AssetPath.Global, "Begin");
             Assets.LoadSceneAsync(AssetPath.MainScene, AssetPackage.HotfixPackage);
         }
-        /// <summary>
-        /// 初始化所有Logic脚本
-        /// </summary>
+        
+        /// <summary>初始化所有Logic脚本</summary>
         private static void InitLogicScripts()
         {
             var types = Utils.GetAssemblyTypes<ILogic>();
@@ -96,6 +97,12 @@ namespace App.Core
             return null;
         }
 
+        /// <summary>
+        /// 执行Scene的Logic脚本的指定方法
+        /// </summary>
+        /// <param name="sceneName"></param>
+        /// <param name="methodName"></param>
+        /// <param name="args"></param>
         private static void ExecuteSceneMethods(string sceneName, string methodName, params object[] args)
         {
             var types = Utils.GetObjsType(args);
@@ -107,6 +114,11 @@ namespace App.Core
             }
         }
 
+        /// <summary>
+        /// 执行所有Logic脚本的指定方法
+        /// </summary>
+        /// <param name="methodName"></param>
+        /// <param name="args"></param>
         public static void ExecuteMethods(string methodName, params object[] args)
         {
             var types = Utils.GetObjsType(args);

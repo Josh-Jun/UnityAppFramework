@@ -38,15 +38,17 @@ namespace App.Core
         /// <summary>
         /// 当玩家获取或失去焦点的时候发送给所有游戏对象.
         /// </summary>
-        /// <param name="focus">是否暂停</param>
+        /// <param name="focus">是否失去焦点</param>
         private void OnApplicationFocus(bool focus)
         {
             Root.ExecuteMethods("AppFocus", focus);
         }
 
+        /// <summary>
+        /// 程序退出接口实现
+        /// </summary>
         private void OnApplicationQuit()
         {
-            //程序退出接口实现
             Root.ExecuteMethods("AppQuit");
         }
     }
