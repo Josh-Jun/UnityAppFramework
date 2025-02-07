@@ -13,66 +13,46 @@ namespace App.Core.Master
         #region Private Variable
         private GameObject GameObjectRoot; //3D游戏对象父物体
 
-        private static Dictionary<string, ViewBase> ViewPairs = new Dictionary<string, ViewBase>();
-        private Dictionary<string, Transform> GoNodePairs = new Dictionary<string, Transform>();
-        private List<RectTransform> UIPanels = new List<RectTransform>();
+        private static readonly Dictionary<string, ViewBase> ViewPairs = new Dictionary<string, ViewBase>();
+        private readonly Dictionary<string, Transform> GoNodePairs = new Dictionary<string, Transform>();
+        private readonly List<RectTransform> UIPanels = new List<RectTransform>();
+        
+        private GameObject Canvas2D; // Canvas2D游戏对象
+        private GameObject SafeArea2D; // 2DUI安全区对象
+        private GameObject Background; // 背景图片对象
 
+        private Image BackgroundImage => Background.GetComponent<Image>();
+        private AspectRatioFitter AspectRatioFitter => Background.GetComponent<AspectRatioFitter>();
+        
+        private GameObject Canvas3D; // Canvas3D游戏对象
+        
         #endregion
 
         #region Public Variable
 
         #region Canvas2D
-        
-        public GameObject Canvas2D; // Canvas2D游戏对象
-        public GameObject SafeArea2D; // 2DUI安全区对象
 
         /// <summary> Canvas2D组件 </summary>
-        public Canvas UI2DCanvas
-        {
-            get { return Canvas2D.GetComponent<Canvas>(); }
-            private set { }
-        }
+        public Canvas UI2DCanvas => Canvas2D.GetComponent<Canvas>();
 
         /// <summary> 获取Canvas2D根RectTransform </summary>
-        public RectTransform UI2DRectTransform
-        {
-            get { return Canvas2D.GetComponent<RectTransform>(); }
-            private set { }
-        }
+        public RectTransform UI2DRectTransform => Canvas2D.GetComponent<RectTransform>();
 
         /// <summary> 获取Canvas2DScaler组件 </summary>
-        public CanvasScaler UI2DCanvasScaler
-        {
-            get { return Canvas2D.GetComponent<CanvasScaler>(); }
-            private set { }
-        }
+        public CanvasScaler UI2DCanvasScaler => Canvas2D.GetComponent<CanvasScaler>();
 
         /// <summary> 获取Canvas2D GraphicRaycaster组件 </summary>
-        public GraphicRaycaster UI2DGraphicRaycaster
-        {
-            get { return Canvas2D.GetComponent<GraphicRaycaster>(); }
-            private set { }
-        }
+        public GraphicRaycaster UI2DGraphicRaycaster => Canvas2D.GetComponent<GraphicRaycaster>();
 
         /// <summary> 获取UIRoot </summary>
-        public RectTransform UISafeArea2D
-        {
-            get { return SafeArea2D.GetComponent<RectTransform>(); }
-            private set { }
-        }
-        
+        public RectTransform UISafeArea2D => SafeArea2D.GetComponent<RectTransform>();
+
         /// <summary> 获取UIPanels </summary>
-        public List<RectTransform> UI2DPanels
-        {
-            get { return UIPanels; }
-            private set { }
-        }
+        public List<RectTransform> UI2DPanels => UIPanels;
 
         #endregion
 
         #region Canvas3D
-
-        public GameObject Canvas3D; // Canvas3D游戏对象
         
         /// <summary> Canvas3D组件 </summary>
         public Canvas UI3DCanvas => Canvas3D.GetComponent<Canvas>();
@@ -99,6 +79,7 @@ namespace App.Core.Master
         private void Awake()
         {
             Canvas2D = this.FindGameObject("UI Root/2D Canvas");
+            Background = this.FindGameObject("UI Root/2D Canvas/Background/Image");
             Canvas3D = this.FindGameObject("UI Root/3D Canvas");
             
             SafeArea2D = this.FindGameObject("UI Root/2D Canvas/Safe Area");
@@ -143,6 +124,17 @@ namespace App.Core.Master
         #endregion
 
         #region Public Function
+
+        public void InitBackgroundImage(Sprite sprite = null)
+        {
+            Background.SetActive(sprite != null);
+            if (sprite == null) return;
+            BackgroundImage.sprite = sprite;
+            var ratio = Screen.width < Screen.height ? 
+                sprite.rect.height / sprite.rect.width : 
+                sprite.rect.width / sprite.rect.height;
+            AspectRatioFitter.aspectRatio = ratio;
+        }
         
         public void InitViewScripts()
         {
@@ -191,6 +183,8 @@ namespace App.Core.Master
 
             UISafeArea2D.offsetMin = new Vector2(leftPixels, bottomPixels);
             UISafeArea2D.offsetMax = new Vector2(rightPixel, topPixel);
+
+            InitBackgroundImage(BackgroundImage.sprite);
         }
         
         /// <summary> UGUI坐标 mousePosition</summary>
