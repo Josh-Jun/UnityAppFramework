@@ -32,7 +32,7 @@ namespace App.Core
         /// <param name="pause">是否暂停</param>
         private void OnApplicationPause(bool pause)
         {
-            Root.AppPause(pause);
+            Root.ExecuteMethods("AppPause", pause);
         }
 
         /// <summary>
@@ -41,13 +41,13 @@ namespace App.Core
         /// <param name="focus">是否暂停</param>
         private void OnApplicationFocus(bool focus)
         {
-            Root.AppFocus(focus);
+            Root.ExecuteMethods("AppFocus", focus);
         }
 
         private void OnApplicationQuit()
         {
             //程序退出接口实现
-            Root.AppQuit();
+            Root.ExecuteMethods("AppQuit");
         }
     }
 }

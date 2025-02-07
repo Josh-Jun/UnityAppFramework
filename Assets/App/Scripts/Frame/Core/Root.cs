@@ -107,7 +107,7 @@ namespace App.Core
             }
         }
 
-        private static void ExecuteMethods(string methodName, params object[] args)
+        public static void ExecuteMethods(string methodName, params object[] args)
         {
             var types = Utils.GetObjsType(args);
             foreach (var logics in SceneLogicPairs.Values)
@@ -118,21 +118,6 @@ namespace App.Core
                     method?.Invoke(logic, args);
                 }
             }
-        }
-        
-        public static void AppPause(bool isPause)
-        {
-            ExecuteMethods("AppPause", isPause);
-        }
-
-        public static void AppFocus(bool isFocus)
-        {
-            ExecuteMethods("AppFocus", isFocus);
-        }
-
-        public static void AppQuit()
-        {
-            ExecuteMethods("AppQuit");
         }
     }
 }
