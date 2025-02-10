@@ -11,7 +11,7 @@ namespace App.Core.Tools
 {
     public static class Developer
     {
-        #region 时间戳
+        #region TimeStamp
 
         /// <summary> DateTime2TimeStamp </summary>
         public static long ToTimeStamp(this DateTime target, bool ms = true)
@@ -1525,7 +1525,7 @@ namespace App.Core.Tools
 
         #region String
 
-        public static Vector3 StringToVector3(this string str, char separator = ',')
+        public static Vector3 ToVector3(this string str, char separator = ',')
         {
             if(string.IsNullOrEmpty(str)) return Vector3.zero;
             var split = str.Split(separator);
@@ -1536,27 +1536,49 @@ namespace App.Core.Tools
             return new Vector3(x, y, z);
         }
         
-        public static Vector3[] StringToVector3Array(this string str, char separator1 = '|', char separator2 = ',')
+        public static Vector3[] ToVector3Array(this string str, char separator1 = '|', char separator2 = ',')
         {
             if(string.IsNullOrEmpty(str)) return null;
             var split = str.Split(separator1);
             var arr = new Vector3[split.Length];
             for (var i = 0; i < split.Length; i++)
             {
-                var v = split[i].StringToVector3(separator2);
+                var v= Vector3.zero;
+                var splits = split[i].Split(separator2);
+                if (splits.Length == 3)
+                {
+                    float.TryParse(splits[0], out var x);
+                    float.TryParse(splits[1], out var y);
+                    float.TryParse(splits[2], out var z);
+                    v = new Vector3(x, y, z);
+                }
                 arr[i] = v;
             }
             return arr;
         }
 
-        public static List<Vector3> StringToVector3List(this string str, char separator1 = '|', char separator2 = ',')
+        public static List<Vector3> ToVector3List(this string str, char separator1 = '|', char separator2 = ',')
         {
             if(string.IsNullOrEmpty(str)) return null;
             var split = str.Split(separator1);
-            return split.Select(t => t.StringToVector3(separator2)).ToList();
+            var list = new List<Vector3>();
+            foreach (var t in split)
+            {
+                var v= Vector3.zero;
+                var s = t.Split(separator2);
+                if (s.Length == 3)
+                {
+                    float.TryParse(s[0], out var x);
+                    float.TryParse(s[1], out var y);
+                    float.TryParse(s[2], out var z);
+                    v = new Vector3(x, y, z);
+                }
+                list.Add(v);
+            }
+            return list;
         }
 
-        public static int[] StringToInt32Array(this string str, char separator = '|')
+        public static int[] ToInt32Array(this string str, char separator = '|')
         {
             if(string.IsNullOrEmpty(str)) return null;
             var split = str.Split(separator);
@@ -1571,7 +1593,7 @@ namespace App.Core.Tools
             return arr;
         }
 
-        public static float[] StringToFloatArray(this string str, char separator = '|')
+        public static float[] ToFloatArray(this string str, char separator = '|')
         {
             if(string.IsNullOrEmpty(str)) return null;
             var split = str.Split(separator);
@@ -1586,7 +1608,7 @@ namespace App.Core.Tools
             return arr;
         }
         
-        public static long[] StringToInt64Array(this string str, char separator = '|')
+        public static long[] ToInt64Array(this string str, char separator = '|')
         {
             if(string.IsNullOrEmpty(str)) return null;
             var split = str.Split(separator);
@@ -1601,7 +1623,7 @@ namespace App.Core.Tools
             return arr;
         }
         
-        public static List<int> StringToInt32List(this string str, char separator = '|')
+        public static List<int> ToInt32List(this string str, char separator = '|')
         {
             if(string.IsNullOrEmpty(str)) return null;
             var split = str.Split(separator);
@@ -1609,7 +1631,7 @@ namespace App.Core.Tools
             return list;
         }
 
-        public static List<float> StringToFloatList(this string str, char separator = '|')
+        public static List<float> ToFloatList(this string str, char separator = '|')
         {
             if(string.IsNullOrEmpty(str)) return null;
             var split = str.Split(separator);
@@ -1617,7 +1639,7 @@ namespace App.Core.Tools
             return list;
         }
         
-        public static List<long> StringToInt64List(this string str, char separator = '|')
+        public static List<long> ToInt64List(this string str, char separator = '|')
         {
             
             if(string.IsNullOrEmpty(str)) return null;
