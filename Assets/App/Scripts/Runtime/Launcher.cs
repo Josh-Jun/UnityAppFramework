@@ -92,22 +92,19 @@ namespace App.Runtime
 
         private void LoadMetadataForAOTAssemblies()
         {
-            foreach (var textAsset in Global.AOTMetaAssemblyNames.Select(aotDllName => $"{Global.DllBasePath}/{aotDllName}")
-                         .Select(assetPath => builtinPackage.LoadAssetAsync(assetPath).AssetObject as TextAsset))
+            foreach (var aotName in Global.AOTMetaAssemblyNames)
             {
-                RuntimeApi.LoadMetadataForAOTAssembly(textAsset?.bytes, HomologousImageMode.SuperSet);
+                var ta = builtinPackage.LoadAssetAsync($"{Global.DllBasePath}/{aotName}").AssetObject as TextAsset;
+                if (ta != null) RuntimeApi.LoadMetadataForAOTAssembly(ta.bytes, HomologousImageMode.SuperSet);
             }
         }
 
         private void LoadHotfixAssemblies()
         {
-            var package = YooAssets.GetPackage($"{AssetPackage.BuiltinPackage}");
-            foreach (var ta in Global.HotfixAssemblyNames
-                         .Select(assemblyName =>
-                             builtinPackage.LoadAssetAsync($"{Global.DllBasePath}/{assemblyName}").AssetObject)
-                         .OfType<TextAsset>())
+            foreach (var assemblyName in Global.HotfixAssemblyNames)
             {
-                System.Reflection.Assembly.Load(ta.bytes);
+                var ta = builtinPackage.LoadAssetAsync($"{Global.DllBasePath}/{assemblyName}").AssetObject as TextAsset;
+                if (ta != null) System.Reflection.Assembly.Load(ta.bytes);
             }
         }
     }
