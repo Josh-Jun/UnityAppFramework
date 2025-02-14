@@ -6,9 +6,9 @@ public class Log
 {
     public static bool Enabled = true;
 
-    private const string Info = "<color=#ffffff>[Info] </color>";
-    private const string Warning = "<color=#ffff00>[Warning] </color>";
-    private const string Error = "<color=#ff0000>[Error] </color>";
+    private const string Info = "<b><color=#ffffff>[Info] </color></b>";
+    private const string Warning = "<b><color=#ffff00>[Warning] </color></b>";
+    private const string Error = "<b><color=#ff0000>[Error] </color></b>";
 
     private const string Space = " => ";
 
