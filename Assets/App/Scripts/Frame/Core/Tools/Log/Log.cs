@@ -34,11 +34,12 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Info);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(Space);
         for (var i = 0; i < args.Length - 1; i++)
         {
+            cacheStringBuilder.Append(Space);
             cacheStringBuilder.AppendFormat(FormatStr, args[i].Item1, args[i].Item2);
         }
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStrEnd, args[^1].Item1, args[^1].Item2);
         Debug.Log(cacheStringBuilder.ToString());
     }
@@ -62,11 +63,12 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Warning);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(Space);
         for (var i = 0; i < args.Length - 1; i++)
         {
+            cacheStringBuilder.Append(Space);
             cacheStringBuilder.AppendFormat(FormatStr, args[i].Item1, args[i].Item2);
         }
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStrEnd, args[^1].Item1, args[^1].Item2);
         Debug.LogWarning(cacheStringBuilder.ToString());
     }
@@ -90,11 +92,12 @@ public class Log
         cacheStringBuilder.Length = 0;
         cacheStringBuilder.Append(Warning);
         cacheStringBuilder.Append(msg);
-        cacheStringBuilder.Append(Space);
         for (var i = 0; i < args.Length - 1; i++)
         {
+            cacheStringBuilder.Append(Space);
             cacheStringBuilder.AppendFormat(FormatStr, args[i].Item1, args[i].Item2);
         }
+        cacheStringBuilder.Append(Space);
         cacheStringBuilder.AppendFormat(FormatStrEnd, args[^1].Item1, args[^1].Item2);
         Debug.LogError(cacheStringBuilder.ToString());
     }
