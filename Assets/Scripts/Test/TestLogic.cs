@@ -78,7 +78,7 @@ namespace App.Modules.Test
             //         }
             //     }
             // }
-            Log.I("123", ("Test", this));
+            Log.I("123", ("Test", this), ("111", 111), ("222", "222"));
             string formula= "20*(30-10)";
             var result = new System.Data.DataTable().Compute(formula, "");
             Log.W(result);
