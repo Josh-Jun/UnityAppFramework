@@ -110,7 +110,7 @@ namespace App.Editor.View
         private void Init()
         {
             outputPath = Application.dataPath.Replace("Assets", "App");
-            AppConfig = Resources.Load<AppConfig>("App/AppConfig");
+            AppConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
             if (AppConfig != null)
             {
                 EnableLog = AppConfig.EnableLog;
@@ -193,6 +193,7 @@ namespace App.Editor.View
         private void Build()
         {
             Apply();
+            AppConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
             var package = PlayerSettings.applicationIdentifier.ToLower();
             var channel = AppConfig.ChannelPackage.ToString().ToLower();
             var version = PlayerSettings.bundleVersion;
@@ -234,6 +235,7 @@ namespace App.Editor.View
 
         private void BuildAssets()
         {
+            AppConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
             YooAssetBuild(EditorUserBuildSettings.activeBuildTarget, AssetPackage.BuiltinPackage, EBuildinFileCopyOption.ClearAndCopyAll);
             switch (AppConfig.AssetPlayMode)
             {
