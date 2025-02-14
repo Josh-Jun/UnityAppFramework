@@ -81,8 +81,8 @@ namespace App.Modules.Test
             Log.I("123", ("Test", this));
             string formula= "20*(30-10)";
             var result = new System.Data.DataTable().Compute(formula, "");
-            Log.I(result);
-            Log.I(UserJsonConfig.Instance.Get(2).Test1[1]);
+            Log.W(result);
+            Log.E(UserJsonConfig.Instance.Get(2).Test1[1]);
         }
 
         public async void LogText()
