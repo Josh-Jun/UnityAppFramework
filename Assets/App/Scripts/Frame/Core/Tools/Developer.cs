@@ -1523,7 +1523,7 @@ namespace App.Core.Tools
 
         #endregion
 
-        #region String
+        #region String2Vector3
 
         public static Vector3 ToVector3(this string str, char separator = ',')
         {
@@ -1577,7 +1577,11 @@ namespace App.Core.Tools
             }
             return list;
         }
+        
+        #endregion
 
+        #region String2Int32
+        
         public static int[] ToInt32Array(this string str, char separator = '|')
         {
             if(string.IsNullOrEmpty(str)) return null;
@@ -1592,6 +1596,18 @@ namespace App.Core.Tools
             }
             return arr;
         }
+        
+        public static List<int> ToInt32List(this string str, char separator = '|')
+        {
+            if(string.IsNullOrEmpty(str)) return null;
+            var split = str.Split(separator);
+            var list = split.Select(t => int.TryParse(t, out var value) ? value : 0).ToList();
+            return list;
+        }
+
+        #endregion
+        
+        #region String2Float
 
         public static float[] ToFloatArray(this string str, char separator = '|')
         {
@@ -1608,6 +1624,18 @@ namespace App.Core.Tools
             return arr;
         }
         
+        public static List<float> ToFloatList(this string str, char separator = '|')
+        {
+            if(string.IsNullOrEmpty(str)) return null;
+            var split = str.Split(separator);
+            var list = split.Select(t => float.TryParse(t, out var value) ? value : 0).ToList();
+            return list;
+        }
+        
+        #endregion
+        
+        #region String2Int64
+
         public static long[] ToInt64Array(this string str, char separator = '|')
         {
             if(string.IsNullOrEmpty(str)) return null;
@@ -1623,22 +1651,6 @@ namespace App.Core.Tools
             return arr;
         }
         
-        public static List<int> ToInt32List(this string str, char separator = '|')
-        {
-            if(string.IsNullOrEmpty(str)) return null;
-            var split = str.Split(separator);
-            var list = split.Select(t => int.TryParse(t, out var value) ? value : 0).ToList();
-            return list;
-        }
-
-        public static List<float> ToFloatList(this string str, char separator = '|')
-        {
-            if(string.IsNullOrEmpty(str)) return null;
-            var split = str.Split(separator);
-            var list = split.Select(t => float.TryParse(t, out var value) ? value : 0).ToList();
-            return list;
-        }
-        
         public static List<long> ToInt64List(this string str, char separator = '|')
         {
             
@@ -1646,6 +1658,24 @@ namespace App.Core.Tools
             var split = str.Split(separator);
             var list = split.Select(t => long.TryParse(t, out var value) ? value : 0).ToList();
             return list;
+        }
+
+        #endregion
+
+        #region Color
+        
+        public static string SetColor(this string str, Color color)
+        {
+            return $"<color=#{ColorUtility.ToHtmlStringRGB(color)}>{str}</color>";
+        }
+
+        public static Color ToColor(this string str)
+        {
+            if (ColorUtility.TryParseHtmlString(str, out var color))
+            {
+                return color;
+            }
+            return Color.black;
         }
 
         #endregion
