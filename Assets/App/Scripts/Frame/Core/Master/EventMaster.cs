@@ -23,7 +23,7 @@ namespace App.Core.Master
     }
     public class EventMaster : SingletonMono<EventMaster>
     {
-        private Dictionary<string, EventData> Events = new Dictionary<string, EventData>();
+        private readonly Dictionary<string, EventData> Events = new Dictionary<string, EventData>();
         protected override void OnSingletonMonoInit()
         {
             InitEventMethods();
@@ -49,7 +49,7 @@ namespace App.Core.Master
                         Log.W($"{{{type.FullName}}} 未继承 ISingleton 使用Event特性标记的方法{{{method.Name}}}不起作用");
                         continue;
                     }
-                    EventData data = new EventData()
+                    var data = new EventData()
                     {
                         method = method,
                     };

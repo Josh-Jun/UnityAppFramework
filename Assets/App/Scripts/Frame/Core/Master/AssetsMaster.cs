@@ -57,7 +57,8 @@ namespace App.Core.Master
         /// <summary> 添加预制体，返回GameObject </summary>
         public GameObject AddChild(string path, GameObject parent = null)
         {
-            var go = AddChild(path, parent.transform);
+            var prefab = LoadAsset<GameObject>(path);
+            var go = Instantiate(prefab, parent?.transform);
             return go;
         }
 
@@ -72,12 +73,8 @@ namespace App.Core.Master
         /// <summary> 添加预制体，返回GameObject </summary>
         public GameObject AddChild(GameObject prefab, GameObject parent = null)
         {
-            if (parent != null)
-            {
-                var go = AddChild(prefab, parent.transform);
-                return go;
-            }
-            return null;
+            var go = Instantiate(prefab, parent?.transform);
+            return go;
         }
 
         /// <summary> 添加预制体，返回GameObject </summary>
