@@ -36,7 +36,7 @@ namespace App.Core.Master
         /// <summary>打开窗口</summary>
         protected virtual void OpenView()
         {
-            SetAsLastSibling();
+            transform.SetAsLastSibling();
         }
 
         /// <summary>关闭窗口</summary>

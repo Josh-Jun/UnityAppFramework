@@ -55,7 +55,7 @@ namespace App.Core.Master
                     };
                     if (type.IsSubclassOf(typeof(MonoBehaviour)))
                     {
-                        var instances = FindObjectOfType(type);
+                        var instances = FindObjectsOfType(type, true).First(obj => obj.GetType() == type);
                         data.obj = instances;
                     }
                     else

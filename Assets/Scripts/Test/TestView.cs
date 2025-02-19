@@ -61,7 +61,7 @@ namespace App.Modules.Test
         }
 
         [Event("TestViewEvent")]
-        public void TestEvent(string param)
+        public void TestViewEvent(string param)
         {
             Log.I("TestViewEvent", ("Test", param));
         }
