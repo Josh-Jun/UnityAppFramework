@@ -144,12 +144,12 @@ namespace App.Modules.Test
 
         private void TakePhoto()
         {
-            PictureTools.TakePhoto(Camera.main, PlatformMaster.Instance.GetDataPath("Screenshots"),
-                (Texture2D texture, string filePath) =>
-                {
-                    PlatformMaster.Instance.SavePhoto(filePath);
-                    view.SetRawImage(texture);
-                });
+            // PictureTools.TakePhoto(Camera.main, PlatformMaster.Instance.GetDataPath("Screenshots"),
+            //     (Texture2D texture, string filePath) =>
+            //     {
+            //         PlatformMaster.Instance.SavePhoto(filePath);
+            //         view.SetRawImage(texture);
+            //     });
         }
 
         private void ButtonQuitEvent()
@@ -158,19 +158,25 @@ namespace App.Modules.Test
             SendEventMsg<string, Action, Action>("ShowAskView", "确定退出程序?", PlatformMaster.Instance.QuitUnityPlayer, null);
         }
 
+        private int count1 = 0;
         private void ButtonEvent()
         {
-            // view.SetText("触发不带参数事件");
+            view.SetText("触发不带参数事件");
             // SendEventMsg("ShowTips", "触发不带参数事件", 1.2f);
             // Root.GetLogicScript<Ask.AskLogic>().ShowTips("123");
-            SceneLoaderLogic.Instance.LoadScene(AssetPath.MainScene);
+            // SceneLoaderLogic.Instance.LoadScene(AssetPath.MainScene);
+            count1++;
+            ViewMaster.Instance.RefreshRedDotCount(RedDotMold.SystemMail, count1);
         }
 
         
 
+        private int count2 = 0;
         private void ButtonParamsEvent(string value)
         {
             view.SetText(value);
+            count2++;
+            ViewMaster.Instance.RefreshRedDotCount(RedDotMold.FriendMail, count2);
             // string filePath = PlatformMaster.Instance.GetDataPath("App/meta.apk");
             // UnityWebRequester requester = NetcomMaster.Uwr;
             

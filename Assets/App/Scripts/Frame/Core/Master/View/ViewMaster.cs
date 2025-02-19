@@ -17,6 +17,9 @@ namespace App.Core.Master
         private readonly Dictionary<string, Transform> GoNodePairs = new Dictionary<string, Transform>();
         private readonly List<RectTransform> UIPanels = new List<RectTransform>();
         
+        private readonly Dictionary<RedDotMold, int> _redDotMap = new Dictionary<RedDotMold, int>();
+        private readonly Dictionary<RedDotMold, RedDotView> _redDotViewMap = new Dictionary<RedDotMold, RedDotView>();
+        
         private GameObject Canvas2D; // Canvas2D游戏对象
         private GameObject SafeArea2D; // 2DUI安全区对象
         private GameObject Background; // 背景图片对象
@@ -120,6 +123,15 @@ namespace App.Core.Master
             EventDispatcher.TriggerEvent(view.name, attribute.Active);
             return vb;
         }
+
+        private void RefreshRedDotView()
+        {
+            foreach (var kvp in _redDotViewMap)
+            {
+                var count = _redDotMap.Where(data=>(kvp.Key & data.Key) != 0).Sum(data=> data.Value);
+                kvp.Value.Refresh(count);
+            }
+        }
         
         #endregion
 
@@ -147,6 +159,25 @@ namespace App.Core.Master
                 var view = CreateView(type, attribute);
                 ViewPairs.Add(type.FullName!, view);
             }
+            InitRedDotView();
+        }
+        
+        public void InitRedDotView()
+        {
+            var redDotViews = gameObject.GetComponentsInChildren<RedDotView>(true);
+            foreach (var redDotView in redDotViews)
+            {
+                Log.I(redDotView);
+                _redDotViewMap.TryAdd(redDotView.RedDotMold, redDotView);
+            }
+        }
+
+        public void AddRedDotView(GameObject target, RedDotMold mold = RedDotMold.MainMail, bool showCount = true)
+        {
+            var view = target.TryGetComponent<RedDotView>();
+            view.RedDotMold = mold;
+            view.ShowCount = showCount;
+            _redDotViewMap.TryAdd(view.RedDotMold, view);
         }
 
         public T AddView<T>(GameObject go, ViewMold mold = ViewMold.UI2D, int layer = 0, bool state = false) where T : Component
@@ -243,6 +274,12 @@ namespace App.Core.Master
             EventDispatcher.RemoveEventListener(go.name);
             Destroy(go);
             ViewPairs.Remove(scriptName);
+        }
+
+        public void RefreshRedDotCount(RedDotMold mold, int count)
+        {
+            _redDotMap[mold] = count;
+            RefreshRedDotView();
         }
 
         /// <summary> 添加3D对象预制体，返回GameObject </summary>

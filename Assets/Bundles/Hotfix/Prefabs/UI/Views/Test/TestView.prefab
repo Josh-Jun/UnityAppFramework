@@ -342,6 +342,7 @@ GameObject:
   - component: {fileID: 1364948495545719940}
   - component: {fileID: 4097867460772619183}
   - component: {fileID: 7437997257742005126}
+  - component: {fileID: 2912689258799125140}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -451,6 +452,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2912689258799125140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3240686731310915887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 265af0a8b0c97443e83cc8a13f293a28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RedDotMold: 2
 --- !u!1 &3862039125287045722
 GameObject:
   m_ObjectHideFlags: 0
@@ -742,6 +756,7 @@ GameObject:
   - component: {fileID: 8443540181423849469}
   - component: {fileID: 823721939492596964}
   - component: {fileID: 4849551395622281295}
+  - component: {fileID: 4041898194967490928}
   m_Layer: 5
   m_Name: ButtonParams
   m_TagString: Untagged
@@ -851,6 +866,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4041898194967490928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5620201374968482620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 265af0a8b0c97443e83cc8a13f293a28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RedDotMold: 8
 --- !u!1 &5838344187853514020
 GameObject:
   m_ObjectHideFlags: 0
@@ -991,6 +1019,7 @@ GameObject:
   - component: {fileID: 7692074837981793254}
   - component: {fileID: 6014218045264015487}
   - component: {fileID: 1942794453450680000}
+  - component: {fileID: 7372990455861935747}
   m_Layer: 5
   m_Name: BtnTakePhoto
   m_TagString: Untagged
@@ -1100,6 +1129,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7372990455861935747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6718571161513601327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 265af0a8b0c97443e83cc8a13f293a28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RedDotMold: 11
 --- !u!1 &7283066202391165282
 GameObject:
   m_ObjectHideFlags: 0

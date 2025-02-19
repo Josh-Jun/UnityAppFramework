@@ -45,13 +45,8 @@ namespace App.Core.Helper
     }
 
     [AttributeUsage(AttributeTargets.Class)]
-    public class ConfigAttribute : System.Attribute
-    {
-        public ConfigAttribute()
-        {
-        }
-    }
-
+    public class ConfigAttribute : System.Attribute { public ConfigAttribute() { } }
+    
     [AttributeUsage(AttributeTargets.Method)]
     public class EventAttribute : System.Attribute
     {
