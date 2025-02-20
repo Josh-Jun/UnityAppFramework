@@ -6,8 +6,7 @@
  * function    : 
  * ===============================================
  * */
-using System.Collections;
-using System.Collections.Generic;
+
 using App.Core.Helper;
 using UnityEngine;
 using UnityEngine.UI;
