@@ -37,32 +37,6 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-    - GroupName: Scenes
-      GroupDesc: 
-      AssetTags: scene
-      ActiveRuleName: EnableGroup
-      Collectors:
-      - CollectPath: Assets/Bundles/Builtin/Scenes
-        CollectorGUID: 8553d7bcd7e799b4b83b9492288591c3
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackSeparately
-        FilterRuleName: CollectScene
-        AssetTags: 
-        UserData: 
-    - GroupName: Audios
-      GroupDesc: 
-      AssetTags: audio
-      ActiveRuleName: EnableGroup
-      Collectors:
-      - CollectPath: Assets/Bundles/Builtin/Audios
-        CollectorGUID: 85bb02ed6e4ba4448b61d1d8f3494139
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
     - GroupName: Shaders
       GroupDesc: 
       AssetTags: shader
@@ -99,6 +73,19 @@ MonoBehaviour:
       Collectors:
       - CollectPath: Assets/Bundles/Builtin/Configs
         CollectorGUID: c48567d7fc01e430095630281cd08efe
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: Audios
+      GroupDesc: 
+      AssetTags: audio
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Bundles/Builtin/Audios
+        CollectorGUID: 85bb02ed6e4ba4448b61d1d8f3494139
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
@@ -142,6 +129,19 @@ MonoBehaviour:
         AddressRuleName: AddressByFileName
         PackRuleName: PackSeparately
         FilterRuleName: CollectPrefab
+        AssetTags: 
+        UserData: 
+    - GroupName: Scenes
+      GroupDesc: 
+      AssetTags: scene
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Bundles/Builtin/Scenes
+        CollectorGUID: 8553d7bcd7e799b4b83b9492288591c3
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectScene
         AssetTags: 
         UserData: 
     - GroupName: Videos
