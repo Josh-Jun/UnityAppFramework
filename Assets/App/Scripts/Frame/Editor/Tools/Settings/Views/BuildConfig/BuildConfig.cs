@@ -295,6 +295,7 @@ namespace App.Editor.View
             for (var c = 3; c < data.datas.GetLength(1); c++)
             {
                 if ($"{data.datas[1, c]}".Contains("#") || $"{data.datas[2, c]}".Contains("#")) continue;
+                stringBuilder.AppendLine($"        /// <summary>{data.datas[3, c]}</summary>");
                 stringBuilder.AppendLine($"        public {data.datas[5, c]} {data.datas[4, c]};");
             }
 
@@ -320,6 +321,7 @@ namespace App.Editor.View
             for (var c = 3; c < data.datas.GetLength(1); c++)
             {
                 if ($"{data.datas[1, c]}".Contains("#") || $"{data.datas[2, c]}".Contains("#")) continue;
+                stringBuilder.AppendLine($"        /// <summary>{data.datas[3, c]}</summary>");
                 stringBuilder.AppendLine($"        [XmlAttribute(\"{data.datas[4, c]}\")]");
                 stringBuilder.AppendLine($"        public {data.datas[5, c]} {data.datas[4, c]};");
             }
@@ -329,6 +331,7 @@ namespace App.Editor.View
 
         private static void CreateJsonConfig(ExcelData data)
         {
+            var ids = new List<string>();
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("{");
             stringBuilder.AppendLine($"  \"{data.sheetName}s\": [");
@@ -340,8 +343,20 @@ namespace App.Editor.View
                 for (var c = 3; c < data.datas.GetLength(1); c++)
                 {
                     if ($"{data.datas[1, c]}".Contains("#") || $"{data.datas[2, c]}".Contains("#")) continue;
-                    var dataStr = data.datas[r, c].ToString();
+                    var dataStr = data.datas[r, c] == null ? "" : data.datas[r, c].ToString();
                     var typeStr = data.datas[5, c].ToString();
+                    if ($"{data.datas[4, c]}" == "Id")
+                    {
+                        if (!ids.Contains(dataStr))
+                        {
+                            ids.Add(dataStr);
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"{data.sheetName}表中ID重复,重复ID为:{dataStr}");
+                            continue;
+                        }
+                    }
                     stringBuilder.AppendLine($"      \"{data.datas[4, c]}\": {GetJsonData(dataStr, typeStr)}");
                 }
 
@@ -374,23 +389,32 @@ namespace App.Editor.View
                 }
                 else if(typeStr.Contains("Vector3"))
                 {
-                    var str = value.Split(',');
-                    sb.Append($"{{\"x\":{str[0]},\"y\":{str[1]},\"z\":{str[2]}}},");
+                    if (string.IsNullOrEmpty(value))
+                    {
+                        sb.Append("{{\"x\":{0},\"y\":{0},\"z\":{0}}},");
+                    }
+                    else
+                    {
+                        var str = value.Split(',');
+                        sb.Append($"{{\"x\":{str[0]},\"y\":{str[1]},\"z\":{str[2]}}},");
+                    }
                 }
                 else
                 {
-                    sb.Append($"{value},");
+                    var str = string.IsNullOrEmpty(value) ? "0" : $"{value}";
+                    sb.Append($"{str},");
                 }
             }
 
             if (!typeStr.Contains("[]")) return sb.ToString();
-            sb.Remove(sb.Length - 1, 1);
+            if (sb.Length > 0) sb.Remove(sb.Length - 1, 1);
             sb.Append("],");
             return sb.ToString();
         }
 
         private static void CreateXmlConfig(ExcelData data)
         {
+            var ids = new List<string>();
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             stringBuilder.AppendLine($"<{data.sheetName}XmlData>");
@@ -402,6 +426,24 @@ namespace App.Editor.View
                 for (var c = 3; c < data.datas.GetLength(1); c++)
                 {
                     if ($"{data.datas[1, c]}".Contains("#") || $"{data.datas[2, c]}".Contains("#")) continue;
+                    
+                    if (data.datas[5, c].ToString().Contains("int") || data.datas[5, c].ToString().Contains("long") || data.datas[5, c].ToString().Contains("float"))
+                    {
+                        data.datas[r, c] ??= 0;
+                    }
+                    
+                    if ($"{data.datas[4, c]}" == "Id")
+                    {
+                        if (!ids.Contains($"{data.datas[r, c]}"))
+                        {
+                            ids.Add($"{data.datas[r, c]}");
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"{data.sheetName}表中ID重复,重复ID为:{data.datas[r, c]}");
+                            continue;
+                        }
+                    }
                     stringBuilder.Append($" {data.datas[4, c]}=\"{data.datas[r, c]}\"");
                 }
 
