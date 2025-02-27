@@ -174,7 +174,7 @@ namespace App.Core.Master
 
         public void AddRedDotView(GameObject target, RedDotMold mold = RedDotMold.MainMail, bool showCount = true)
         {
-            var view = target.TryGetComponent<RedDotView>();
+            var view = target.GetOrAddComponent<RedDotView>();
             view.RedDotMold = mold;
             view.ShowCount = showCount;
             _redDotViewMap.TryAdd(view.RedDotMold, view);

@@ -33,7 +33,7 @@ namespace App.Core.Master
 
         public static ViewBase Fade(this ViewBase view, float from, float to, float duration)
         {
-            var canvasGroup = view.TryGetComponent<CanvasGroup>();
+            var canvasGroup = view.GetOrAddComponent<CanvasGroup>();
             canvasGroup.alpha = from;
             Tweeners.Add(canvasGroup.DOFade(to, duration).SetEase(Ease.Linear).Pause());
             return view;

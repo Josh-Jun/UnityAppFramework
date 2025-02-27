@@ -14,7 +14,7 @@ namespace App.Core.Master
         protected override void OnSingletonMonoInit()
         {
             base.OnSingletonMonoInit();
-            VideoPlayer = this.TryGetComponent<VideoPlayer>();
+            VideoPlayer = this.GetOrAddComponent<VideoPlayer>();
             VideoPlayer.sendFrameReadyEvents = true;
         }
 

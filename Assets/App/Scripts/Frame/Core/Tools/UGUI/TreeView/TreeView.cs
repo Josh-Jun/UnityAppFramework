@@ -296,7 +296,7 @@ namespace UnityEngine.UI
                 return;
             }
 
-            EventTrigger eventTrigger = obj.TryGetComponent<EventTrigger>();
+            EventTrigger eventTrigger = obj.GetOrAddComponent<EventTrigger>();
             //eventTrigger.triggers = new List<EventTrigger.Entry>();
 
             UnityAction<BaseEventData> callback = new UnityAction<BaseEventData>(ua);

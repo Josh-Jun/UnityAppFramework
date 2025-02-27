@@ -117,11 +117,11 @@ namespace App.Modules.Test
             timeid2 = TimeTaskMaster.Instance.AddTimeTask(() => { }, 1f, TimeUnit.Second, 1); //1秒后执行一次
             TimeTaskMaster.Instance.DeleteTimeTask(timeid2);
             //Animator动画播放
-            Animator animator = view.TryGetComponent<Animator>(); //获取脚本组件，没有就自动添加
+            Animator animator = view.GetOrAddComponent<Animator>(); //获取脚本组件，没有就自动添加
             animator.Play("动画名", () => { }); //播放动画
             animator.PlayBack("动画名", () => { }); //倒放动画
             //序列帧动画
-            Image image = view.TryGetComponent<Image>(); //获取脚本组件，没有就自动添加
+            Image image = view.GetOrAddComponent<Image>(); //获取脚本组件，没有就自动添加
             image.PlayFrames(new List<Sprite>());
             //gameobject对象和脚本显隐
             view.SetGameObjectActive();
@@ -129,7 +129,7 @@ namespace App.Modules.Test
             //点击事件
             view.OnClick(() => { });
             view.gameObject.OnClick(() => { });
-            view.TryGetComponent<Button>().BtnOnClick(() => { });
+            view.GetOrAddComponent<Button>().BtnOnClick(() => { });
             view.gameObject.AddEventTrigger(EventTriggerType.PointerClick, (arg) => { });
             view.AddEventTrigger(EventTriggerType.PointerClick, (arg) => { });
             //平台管理类,不同平台对应的原生方法和属性

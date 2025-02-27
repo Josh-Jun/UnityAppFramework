@@ -330,7 +330,7 @@ namespace App.Core.Tools
 
         #endregion
 
-        #region Try Get Component
+        #region Get Or Add Component
 
         /// <summary>
         /// 获取GameObject上的组件
@@ -338,7 +338,7 @@ namespace App.Core.Tools
         /// <typeparam name="T"></typeparam>
         /// <param name="go"></param>
         /// <returns></returns>
-        public static T TryGetComponent<T>(this GameObject go) where T : Component
+        public static T GetOrAddComponent<T>(this GameObject go) where T : Component
         {
             if (go == null)
             {
@@ -361,7 +361,7 @@ namespace App.Core.Tools
         /// <typeparam name="T"></typeparam>
         /// <param name="com"></param>
         /// <returns></returns>
-        public static T TryGetComponent<T>(this Component com) where T : Component
+        public static T GetOrAddComponent<T>(this Component com) where T : Component
         {
             if (com == null)
             {
@@ -1056,7 +1056,7 @@ namespace App.Core.Tools
                 return;
             }
 
-            var eventTrigger = obj.TryGetComponent<EventTrigger>();
+            var eventTrigger = obj.GetOrAddComponent<EventTrigger>();
 
             var callback = new UnityAction<BaseEventData>(ua);
 
@@ -1079,7 +1079,7 @@ namespace App.Core.Tools
                 return;
             }
 
-            var eventTrigger = obj.TryGetComponent<EventTrigger>();
+            var eventTrigger = obj.GetOrAddComponent<EventTrigger>();
             var entry = eventTrigger.triggers.Find(s => s.eventID == triggerType);
 
             if (entry != null)
@@ -1103,7 +1103,7 @@ namespace App.Core.Tools
                 return;
             }
 
-            var eventTrigger = obj.TryGetComponent<EventTrigger>();
+            var eventTrigger = obj.GetOrAddComponent<EventTrigger>();
             var entry = eventTrigger.triggers.Find(s => s.eventID == eventType);
 
             if (entry != null)
@@ -1128,7 +1128,7 @@ namespace App.Core.Tools
                 return;
             }
 
-            var eventTrigger = obj.TryGetComponent<EventTrigger>();
+            var eventTrigger = obj.GetOrAddComponent<EventTrigger>();
             eventTrigger.triggers.Clear();
             UnityEngine.Object.Destroy(eventTrigger);
         }
@@ -1147,7 +1147,7 @@ namespace App.Core.Tools
                 return;
             }
 
-            var eventTrigger = com.TryGetComponent<EventTrigger>();
+            var eventTrigger = com.GetOrAddComponent<EventTrigger>();
 
             var callback = new UnityAction<BaseEventData>(ua);
 
@@ -1170,7 +1170,7 @@ namespace App.Core.Tools
                 return;
             }
 
-            var eventTrigger = obj.TryGetComponent<EventTrigger>();
+            var eventTrigger = obj.GetOrAddComponent<EventTrigger>();
             var entry = eventTrigger.triggers.Find(s => s.eventID == eventType);
 
             if (entry != null)
@@ -1194,7 +1194,7 @@ namespace App.Core.Tools
                 return;
             }
 
-            var eventTrigger = obj.TryGetComponent<EventTrigger>();
+            var eventTrigger = obj.GetOrAddComponent<EventTrigger>();
             var entry = eventTrigger.triggers.Find(s => s.eventID == eventType);
 
             if (entry != null)
@@ -1219,7 +1219,7 @@ namespace App.Core.Tools
                 return;
             }
 
-            var eventTrigger = com.TryGetComponent<EventTrigger>();
+            var eventTrigger = com.GetOrAddComponent<EventTrigger>();
             eventTrigger.triggers.Clear();
             UnityEngine.Object.Destroy(eventTrigger);
         }

@@ -48,9 +48,9 @@ namespace App.Core.Master
             var go = new GameObject(typeof(T).ToString().Split('.').Last(), typeof(RectTransform),
                 typeof(CanvasRenderer));
             var rectParent = parent.transform as RectTransform;
-            var rectTransform = go.TryGetComponent<RectTransform>();
+            var rectTransform = go.GetOrAddComponent<RectTransform>();
             rectTransform.SetParent(rectParent, false);
-            var t = go.TryGetComponent<T>();
+            var t = go.GetOrAddComponent<T>();
             return t;
         }
 

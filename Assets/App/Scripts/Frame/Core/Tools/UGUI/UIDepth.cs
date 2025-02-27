@@ -14,7 +14,7 @@ namespace UnityEngine.UI
         {
             if (isUI)
             {
-                Canvas canvas = this.TryGetComponent<Canvas>();
+                Canvas canvas = this.GetOrAddComponent<Canvas>();
                 canvas.overrideSorting = true;
                 canvas.sortingOrder = order;
             }
