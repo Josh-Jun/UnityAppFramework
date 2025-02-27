@@ -32,7 +32,7 @@ namespace App.Core.Tools
 
         #endregion
         
-        #region AnimationCLip
+        #region AnimationClip
         
         public static void AddAnimationClipEvent<T>(this AnimationClip clip, int frame, T parameter)
         {
