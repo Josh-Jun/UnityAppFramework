@@ -18,7 +18,7 @@ namespace App.Editor.Tools
 {
     public static class AppEditorSettingsProvider
     {
-        [MenuItem("App/Settings", false, 1)]
+        [MenuItem("App/Settings _F6", false, 1)]
         public static void OpenSettings() => SettingsService.OpenProjectSettings("Project/AppToolkit");
         
         [SettingsProvider]

@@ -9,7 +9,7 @@ namespace App.Editor.Tools
     public class SceneToolsEditor
     {
         private const int MENU_LEVEL = 0;
-        private const string MENU_PATH = "App/Editor/Launcher/AutoPLay";
+        private const string MENU_PATH = "App/Editor/Launcher/AutoPLay _F8";
         private const string MENU_VALUE = "MENU_VALUE";
         private const string TEMP_SCENE = "TEMP_SCENE";
         static SceneToolsEditor()

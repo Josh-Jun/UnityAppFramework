@@ -60,6 +60,10 @@ namespace App.Editor.Tools
                 }
             }
         }
+
+        #endregion
+        
+        #region 拷贝模板脚本到Unity脚本模板路径 Win(Ctrl+Shift+E) Mac(Cmd+Shift+E)
         
         private static string[] watchers = new[]
         {
@@ -80,7 +84,7 @@ namespace App.Editor.Tools
         private static StringBuilder sb = new StringBuilder(1024);
         private static string target_path = $"{Application.dataPath}/App/Scripts/Runtime/Helper/Asset";
 
-        [MenuItem("App/Editor/UpdateAssetPackage", false, MENU_LEVEL)]
+        [MenuItem("App/Editor/UpdateAssetPackage %#E", false, MENU_LEVEL)]
         private static void UpdateAssetPackage()
         {
             sb.Length = 0;
@@ -98,13 +102,13 @@ namespace App.Editor.Tools
 
         #endregion
 
-        #region 拷贝模板脚本到Unity脚本模板路径
+        #region 拷贝模板脚本到Unity脚本模板路径 Win(Ctrl+Shift+T) Mac(Cmd+Shift+T)
 
-        [MenuItem("App/Editor/CopyTemplateScripts", false, MENU_LEVEL)]
+        [MenuItem("App/Editor/CopyTemplateScripts %#T", false, MENU_LEVEL)]
         public static void CopyTemplateScripts()
         {
             var template_script_path = $"{Application.dataPath}/{EditorHelper.BaseEditorPath()}/Tools/ScriptTemplates";
-            var base_path = $"{AppDomain.CurrentDomain.BaseDirectory}/Data";
+            var base_path = "";
 #if UNITY_EDITOR_WIN
             base_path = $"{AppDomain.CurrentDomain.BaseDirectory}/Data";
 #elif UNITY_EDITOR_OSX
@@ -124,10 +128,10 @@ namespace App.Editor.Tools
 
         #endregion
 
-        #region Protobuf2CS
+        #region Protobuf2CS Win(Ctrl+Shift+Y) Mac(Cmd+Shift+Y)
 
         
-        [MenuItem("App/Editor/Protobuf2CS", false, MENU_LEVEL)]
+        [MenuItem("App/Editor/Protobuf2CS %#Y", false, MENU_LEVEL)]
         public static void Protobuf2CS()
         {
             var cdPath = Application.dataPath.Replace("Assets", "Data/protobuf");
@@ -157,10 +161,10 @@ namespace App.Editor.Tools
 
         #endregion
         
-        #region 更新资源路径配置文件（自动/手动）
+        #region 更新资源路径配置文件（自动/手动）Win(Ctrl+Shift+R) Mac(Cmd+Shift+R)
         
         [DidReloadScripts]
-        [MenuItem("App/Editor/UpdateAssetPath", false, MENU_LEVEL)]
+        [MenuItem("App/Editor/UpdateAssetPath %#R", false, MENU_LEVEL)]
         public static void UpdateAssetPath()
         {
             sb.Length = 0;
@@ -254,7 +258,7 @@ namespace App.Editor.Tools
         
         #endregion
 
-        #region 复制文件依赖关系
+        #region 复制文件依赖关系 Win(Ctrl+Shift+D) Mac(Cmd+Shift+D)
 
         [MenuItem("Assets/复制文件夹(复制依赖关系) %#D", false, 0)]
         public static void CopyFolderKeepAssetsUsing()
