@@ -87,18 +87,11 @@ namespace App.Core.Tools
         }
 
         /// <summary> 判断角度 </summary>
-        public static float PointToAngle(Vector2 p1, Vector2 p2)
+        public static float CalculateAngle(Vector2 a, Vector2 b)
         {
-            var angle = Mathf.Atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Mathf.PI;
-
-            if (angle is >= 0 and <= 180)
-            {
-                return angle;
-            }
-            else
-            {
-                return 360 + angle;
-            }
+            var direction = b - a;
+            var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            return angle;
         }
 
         /// <summary> 清理内存 </summary>
