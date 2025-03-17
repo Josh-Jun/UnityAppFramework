@@ -6,6 +6,10 @@
  * function    : 
  * ===============================================
  * */
+
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+
 namespace UnityEngine.UI
 {
     public class ImagePro : Image
@@ -34,7 +38,14 @@ namespace UnityEngine.UI
             {
                 if (_shader == null)
                 {
-                    _shader = Shader.Find($"Shader Graphs/RoundedRectangle");
+                    if (GraphicsSettings.renderPipelineAsset == null)
+                    {
+                        _shader = Shader.Find($"Shader Graphs/RoundedRectangle");
+                    }
+                    else if (GraphicsSettings.renderPipelineAsset is UniversalRenderPipelineAsset)
+                    {
+                        _shader = Shader.Find($"Shader Graphs/URPRoundedRectangle");
+                    }
                 }
 
                 if (_material == null)
