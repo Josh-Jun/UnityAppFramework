@@ -7,61 +7,88 @@
  * ===============================================
  * */
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEditor.AnimatedValues;
 using UnityEditor.SceneManagement;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 namespace UnityEditor.UI
 {
     [CustomEditor(typeof(ImagePro), true)]
-    public class ImageProEditor : Editor
+    [CanEditMultipleObjects]
+    public class ImageProEditor : ImageEditor
     {
-        private ImagePro targetComponent;
-        private SerializedProperty sprite;
-        private SerializedProperty color;
-        private SerializedProperty material;
-        private SerializedProperty raycastTarget;
-        
         private SerializedProperty radius;
-
-        private void OnEnable()
+        private ImagePro targetComponent;
+        
+        SerializedProperty m_Sprite;
+        SerializedProperty m_PreserveAspect;
+        SerializedProperty m_UseSpriteMesh;
+        SerializedProperty m_Type;
+        AnimBool m_ShowTypePro;
+        bool m_bIsDrivenPro;
+        protected override void OnEnable()
         {
+            base.OnEnable();
             EditorApplication.update += Excute;
             targetComponent = target as ImagePro;
-            sprite = serializedObject.FindProperty("m_Sprite");
-            color = serializedObject.FindProperty("m_Color");
-            material = serializedObject.FindProperty("m_Material");
-            raycastTarget = serializedObject.FindProperty("m_RaycastTarget");
             radius = serializedObject.FindProperty("_Radius");
+            
+            m_Sprite                = serializedObject.FindProperty("m_Sprite");
+            m_Type                  = serializedObject.FindProperty("m_Type");
+            m_PreserveAspect        = serializedObject.FindProperty("m_PreserveAspect");
+            m_UseSpriteMesh         = serializedObject.FindProperty("m_UseSpriteMesh");
+            
+            m_ShowTypePro = new AnimBool(m_Sprite.objectReferenceValue != null);
+            m_ShowTypePro.valueChanged.AddListener(Repaint);
         }
 
-        [MenuItem("GameObject/UI/ImagePro")]
-        public static void ImagePro()
+        protected override void OnDisable()
         {
-            GameObject parent = GetOrCreateCanvasGameObject();
-
-            GameObject go = new GameObject("ImagePro");
-            go.transform.SetParent(parent.transform, false);
-            go.AddComponent<RectTransform>();
-            go.AddComponent<CanvasRenderer>();
-            go.AddComponent<ImagePro>();
-            go.layer = 5;
-            Selection.activeGameObject = go;
+            base.OnDisable();
+            EditorApplication.update -= Excute;
         }
 
-        // Update is called once per frame
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
 
-            EditorGUILayout.PropertyField(sprite);
-            EditorGUILayout.PropertyField(color);
-            EditorGUILayout.PropertyField(material);
-            EditorGUILayout.PropertyField(raycastTarget);
+            var rect = targetComponent.GetComponent<RectTransform>();
+            m_bIsDrivenPro = (rect.drivenByObject as Slider)?.fillRect == rect;
 
+            SpriteGUI();
+            AppearanceControlsGUI();
+            RaycastControlsGUI();
             EditorGUILayout.PropertyField(radius);
+            MaskableControlsGUI();
+
+            m_ShowTypePro.target = m_Sprite.objectReferenceValue != null;
+            if (EditorGUILayout.BeginFadeGroup(m_ShowTypePro.faded))
+                TypeGUI();
+            EditorGUILayout.EndFadeGroup();
+
+            SetShowNativeSize(false);
+            if (EditorGUILayout.BeginFadeGroup(m_ShowNativeSize.faded))
+            {
+                EditorGUI.indentLevel++;
+
+                if ((Image.Type)m_Type.enumValueIndex == Image.Type.Simple)
+                    EditorGUILayout.PropertyField(m_UseSpriteMesh);
+
+                EditorGUILayout.PropertyField(m_PreserveAspect);
+                EditorGUI.indentLevel--;
+            }
+            EditorGUILayout.EndFadeGroup();
+            NativeSizeButtonGUI();
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private void SetShowNativeSize(bool instant)
+        {
+            var type = (Image.Type)m_Type.enumValueIndex;
+            var showNativeSize = (type == Image.Type.Simple || type == Image.Type.Filled) && m_Sprite.objectReferenceValue != null;
+            base.SetShowNativeSize(showNativeSize, instant);
         }
 
         private void Excute()
@@ -77,6 +104,20 @@ namespace UnityEditor.UI
             }
         }
 
+        [MenuItem("GameObject/UI/ImagePro")]
+        public static void ImagePro()
+        {
+            var parent = GetOrCreateCanvasGameObject();
+
+            var go = new GameObject("ImagePro");
+            go.transform.SetParent(parent.transform, false);
+            go.AddComponent<RectTransform>();
+            go.AddComponent<CanvasRenderer>();
+            go.AddComponent<ImagePro>();
+            go.layer = 5;
+            Selection.activeGameObject = go;
+        }
+        
         private static bool IsValidCanvas(Canvas canvas)
         {
             if (canvas == null || !canvas.gameObject.activeInHierarchy)
@@ -95,19 +136,19 @@ namespace UnityEditor.UI
 
         private static GameObject GetOrCreateCanvasGameObject()
         {
-            GameObject selected = Selection.activeGameObject;
+            var selected = Selection.activeGameObject;
 
             // Try to find a gameobject that is the selected GO or one if its parents.
-            Canvas canvas = selected?.GetComponentInParent<Canvas>();
+            var canvas = selected?.GetComponentInParent<Canvas>();
             if (IsValidCanvas(canvas))
                 return selected;
 
             // No canvas in selection or its parents? Then use any valid canvas.
             // We have to find all loaded Canvases, not just the ones in main scenes.
-            Canvas[] canvasArray = StageUtility.GetCurrentStageHandle().FindComponentsOfType<Canvas>();
-            for (int i = 0; i < canvasArray.Length; i++)
-                if (IsValidCanvas(canvasArray[i]))
-                    return canvasArray[i].gameObject;
+            var canvasArray = StageUtility.GetCurrentStageHandle().FindComponentsOfType<Canvas>();
+            foreach (var t in canvasArray)
+                if (IsValidCanvas(t))
+                    return t.gameObject;
 
             // No canvas in the scene at all? Then create a new one.
             return CreateNewUI();
@@ -116,17 +157,19 @@ namespace UnityEditor.UI
         private static GameObject CreateNewUI()
         {
             // Root for the UI
-            var root = new GameObject("Canvas");
-            root.layer = LayerMask.NameToLayer("UI");
-            Canvas canvas = root.AddComponent<Canvas>();
+            var root = new GameObject("Canvas")
+            {
+                layer = LayerMask.NameToLayer("UI")
+            };
+            var canvas = root.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             root.AddComponent<CanvasScaler>();
             root.AddComponent<GraphicRaycaster>();
 
             // Works for all stages.
             StageUtility.PlaceGameObjectInCurrentStage(root);
-            bool customScene = false;
-            PrefabStage prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
+            var customScene = false;
+            var prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
             if (prefabStage != null)
             {
                 root.transform.SetParent(prefabStage.prefabContentsRoot.transform, false);
@@ -146,7 +189,7 @@ namespace UnityEditor.UI
 
         private static void CreateEventSystem(bool select, GameObject parent)
         {
-            StageHandle stage =
+            var stage =
                 parent == null ? StageUtility.GetCurrentStageHandle() : StageUtility.GetStageHandle(parent);
             var esys = stage.FindComponentOfType<EventSystem>();
             if (esys == null)
