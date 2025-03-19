@@ -58,6 +58,7 @@ namespace UnityEngine.UI
 
         protected override void UpdateMaterial()
         {
+            Refresh();
             if (sprite == null)
             {
                 canvasRenderer.materialCount = 1;
