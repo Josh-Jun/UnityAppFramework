@@ -56,6 +56,8 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
             input = new Vector2(x, y);
             _x = x; _y = y;
             SetHandlerPos();
+            if (joystickType != JoystickType.Fixed)
+                background.gameObject.SetActive(true);
         }
         if ((_x != 0 || _y != 0) && x == 0 && y == 0)
         {
@@ -63,6 +65,8 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
             input = Vector2.zero;
             _x = 0; _y = 0;
             SetHandlerPos();
+            if (joystickType != JoystickType.Fixed)
+                background.gameObject.SetActive(false);
         }
 #endif
         if (isDragging)
