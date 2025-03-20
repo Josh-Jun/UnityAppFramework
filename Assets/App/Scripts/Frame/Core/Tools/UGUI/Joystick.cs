@@ -6,9 +6,8 @@
  * function    : 
  * ===============================================
  * */
+
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -32,6 +31,7 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     private Canvas canvas;
 
     private bool isDragging = false;
+    private Vector2 radius;
     private void Awake()
     {
         background = transform.Find("Background").GetComponent<RectTransform>();
@@ -40,10 +40,31 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         self = GetComponent<RectTransform>();
         if (joystickType != JoystickType.Fixed)
             background.gameObject.SetActive(false);
+        radius = background.sizeDelta / 2;
     }
-
+#if UNITY_EDITOR
+    private float x, y, _x, _y;
+#endif
     public void Update()
     {
+#if UNITY_EDITOR
+        x = Input.GetAxis("Horizontal");
+        y= Input.GetAxis("Vertical");
+        if (x != 0 || y != 0)
+        {
+            isDragging = true;
+            input = new Vector2(x, y);
+            _x = x; _y = y;
+            SetHandlerPos();
+        }
+        if ((_x != 0 || _y != 0) && x == 0 && y == 0)
+        {
+            isDragging = false;
+            input = Vector2.zero;
+            _x = 0; _y = 0;
+            SetHandlerPos();
+        }
+#endif
         if (isDragging)
         {
             OnJoystickMoveEvent?.Invoke(input);
@@ -63,7 +84,6 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     public void OnDrag(PointerEventData eventData)
     {
         isDragging = true;
-        var radius = background.sizeDelta / 2;
         //将屏幕中的触点和background的距离映射到ui空间下实际的距离
         var eventPostion = ScreenPointToAnchoredPosition(eventData.position);
         input = (eventPostion - background.anchoredPosition) / (radius * canvas.scaleFactor);
@@ -73,6 +93,12 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
             var difference = input.normalized * (input.magnitude - 1) * radius;
             background.anchoredPosition += difference;
         }
+
+        SetHandlerPos();
+    }
+
+    private void SetHandlerPos()
+    {
         //计算摇杆坐标
         var magnitude = input.magnitude;
         magnitude = Mathf.Clamp(magnitude, 0, 1);
