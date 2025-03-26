@@ -81,7 +81,6 @@ namespace UnityEngine.UI
             {
                 material = Material;
             }
-            base.Awake();
             var maxRadius = Mathf.Min(rectTransform.rect.size.x, rectTransform.rect.size.y) / 2;
             material.SetFloat(RadiusID, Radius * maxRadius);
             material.SetVector(SizeID, rectTransform.rect.size);
