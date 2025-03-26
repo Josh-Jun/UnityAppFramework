@@ -138,14 +138,9 @@ namespace App.Core.Master
 
         private void OnApplicationQuit()
         {
+            Application.logMessageReceived -= HandleLogMsg;
             WriteLogToFile(LogBuilder);
             CloseLog();
         }
-
-        private void OnDisable()
-        {
-            Application.logMessageReceived -= HandleLogMsg;
-        }
-
     }
 }
