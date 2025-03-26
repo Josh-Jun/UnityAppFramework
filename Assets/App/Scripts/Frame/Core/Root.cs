@@ -24,8 +24,6 @@ namespace App.Core
             Application.targetFrameRate = Global.AppConfig.AppFrameRate;
             // 输出App信息
             OutputAppInfo();
-            // 加载所有配置表
-            AssetsMaster.Instance.LoadConfigs();
             // 初始化Logic脚本
             InitLogicScripts();
             // 初始化Scene的所有Logic的Begin方法

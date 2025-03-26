@@ -9,12 +9,12 @@ namespace App.Core.Master
 {
     public class AssetsMaster : SingletonMono<AssetsMaster>
     {
-        protected override void OnSingletonMonoInit()
+        private void Awake()
         {
-            base.OnSingletonMonoInit();
+            LoadConfigs();
         }
 
-        public void LoadConfigs()
+        private void LoadConfigs()
         {
             var types = Utils.GetAssemblyTypes<IConfig>("App.Core");
             foreach (var type in types)
