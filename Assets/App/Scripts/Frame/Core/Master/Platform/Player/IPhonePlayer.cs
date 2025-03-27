@@ -4,7 +4,7 @@ namespace App.Core.Master
 {
     public class IPhonePlayer : PlatformMaster
     {
-#if UNITY_IPHONE
+#if UNITY_IPHONE && !UNITY_EDITOR
         [DllImport("__Internal")]
         private static extern string GetAppData(string key);
         [DllImport("__Internal")]
@@ -35,14 +35,14 @@ namespace App.Core.Master
         public override void SendMsgToNative(string msg)
         {
             Log.I("SendMsgToNative", ("Data", msg));
-#if UNITY_IPHONE
+#if UNITY_IPHONE && !UNITY_EDITOR
             ReceiveUnityMsg(msg);
 #endif
         }
         public override void OpenAppSetting()
         {
             Log.I("OpenAppSetting IPhone");
-#if UNITY_IPHONE
+#if UNITY_IPHONE && !UNITY_EDITOR
             OpenAppSettings();
 #endif
         }
@@ -50,7 +50,7 @@ namespace App.Core.Master
         public override void RequestUserPermission(string permission)
         {
             Log.I("RequestUserPermission", ("Permission", permission));
-#if UNITY_IPHONE
+#if UNITY_IPHONE && !UNITY_EDITOR
             if(!HasUserAuthorizedPermission(permission))
             {
                 RequestUserPermission(permission);

@@ -52,7 +52,8 @@ namespace App.Core.Master
 
         public override void RequestUserPermission(string permission)
         {
-#if UNITY_ANDROID
+            Log.I("RequestUserPermission", ("Permission", permission));
+#if UNITY_ANDROID && !UNITY_EDITOR
             if (!Permission.HasUserAuthorizedPermission(permission))
             {
                 Permission.RequestUserPermission(permission, PermissionCallbacks);
@@ -63,14 +64,14 @@ namespace App.Core.Master
         public override void OpenAppSetting()
         {
             Log.I("OpenAppSetting Android");
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
             JavaObject(AppToolsPackage).CallStatic("openAppSetting");
 #endif
         }
 
         public override int GetNetSignal()
         {
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
             if (Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork)
             {
                 return JavaObject(AppToolsPackage).CallStatic<int>("getMonetSignal");
