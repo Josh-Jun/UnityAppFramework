@@ -16,12 +16,16 @@ namespace App.Core.Master
         
         public override void OpenAppSetting()
         {
-            
+            Log.I("OpenAppSetting Editor");
+        }
+        public override void SendMsgToNative(string msg)
+        {
+            Log.I("SendMsgToNative", ("Data", msg));
         }
 
         public override void RequestUserPermission(string permission)
         {
-            
+            Log.I("RequestUserPermission", ("Permission", permission));
         }
 
         public override string GetDataPath(string folder)
@@ -34,17 +38,15 @@ namespace App.Core.Master
         }
         public override void SavePhoto(string imagePath)
         {
-            Log.I("SavePhoto");
+            Log.I("SavePhoto", ("ImagePath", imagePath));
         }
         public override void InstallApp(string appPath)
         {
-            
+            Log.I("InstallApp", ("AppPath", appPath));
         }
         public override void Vibrate()
         {
-#if UNITY_EDITOR
             Log.I("Vibrate Editor");
-#endif
         }
         public override void QuitUnityPlayer()
         {

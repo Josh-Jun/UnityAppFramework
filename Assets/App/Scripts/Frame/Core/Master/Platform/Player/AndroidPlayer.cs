@@ -62,7 +62,7 @@ namespace App.Core.Master
 
         public override void OpenAppSetting()
         {
-            
+            Log.I("OpenAppSetting Android");
 #if UNITY_ANDROID
             JavaObject(AppToolsPackage).CallStatic("openAppSetting");
 #endif
@@ -90,28 +90,38 @@ namespace App.Core.Master
         {
             return $"{Application.streamingAssetsPath}/{folder}";
         }
+        public override void SendMsgToNative(string msg)
+        {
+            Log.I("SendMsgToNative", ("Data", msg));
+#if UNITY_ANDROID && !UNITY_EDITOR
+            JavaObject(AppToolsPackage).CallStatic("receiveUnityMsg", msg);
+#endif
+        }
         public override void InstallApp(string appPath)
         {
-#if UNITY_ANDROID
+            Log.I("InstallApp", ("AppPath", appPath));
+#if UNITY_ANDROID && !UNITY_EDITOR
             JavaObject(AppToolsPackage).CallStatic("installApp", appPath);
 #endif
         }
         public override void Vibrate()
         {
-#if UNITY_ANDROID
+            Log.I("Vibrate Android");
+#if UNITY_ANDROID && !UNITY_EDITOR
             var mpattern = new long[] { 0, 150 };
             JavaObject(AppToolsPackage).CallStatic("vibrate", mpattern, -1);
 #endif
         }
         public override void SavePhoto(string imagePath)
         {
-#if UNITY_ANDROID
+            Log.I("SavePhoto", ("ImagePath", imagePath));
+#if UNITY_ANDROID && !UNITY_EDITOR
             JavaObject(AppToolsPackage).CallStatic("savePhoto", imagePath);
 #endif
         }
         public override string GetAppData(string key)
         {
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
             return JavaObject(AppToolsPackage).CallStatic<string>("getAppData", key);
 #else
             return "";
@@ -119,7 +129,8 @@ namespace App.Core.Master
         }
         public override void QuitUnityPlayer()
         {
-#if UNITY_ANDROID
+            Log.I("Quit Android");
+#if UNITY_ANDROID && !UNITY_EDITOR
         JavaObject(AppToolsPackage).CallStatic("quitUnityActivity");
 #endif
         }

@@ -19,6 +19,8 @@ namespace App.Core.Master
         private static extern bool HasUserAuthorizedPermission(string permission);
         [DllImport("__Internal")]
         private static extern void RequestUserPermission(string permission);
+        [DllImport("__Internal")]
+        private static extern void ReceiveUnityMsg(string msg);
 #endif
 
         public override bool IsEditor { get; } = false;
@@ -30,8 +32,16 @@ namespace App.Core.Master
             PlatformMsgReceiver.Instance.Init();
         }
         
+        public override void SendMsgToNative(string msg)
+        {
+            Log.I("SendMsgToNative", ("Data", msg));
+#if UNITY_IPHONE
+            ReceiveUnityMsg(msg);
+#endif
+        }
         public override void OpenAppSetting()
         {
+            Log.I("OpenAppSetting IPhone");
 #if UNITY_IPHONE
             OpenAppSettings();
 #endif
@@ -39,7 +49,7 @@ namespace App.Core.Master
 
         public override void RequestUserPermission(string permission)
         {
-            
+            Log.I("RequestUserPermission", ("Permission", permission));
 #if UNITY_IPHONE
             if(!HasUserAuthorizedPermission(permission))
             {
@@ -62,25 +72,28 @@ namespace App.Core.Master
         }
         public override void Vibrate()
         {
-#if UNITY_IPHONE
+            Log.I("Vibrate IPhone");
+#if UNITY_IPHONE && !UNITY_EDITOR
             Vibrate();
 #endif
         }
         public override void SavePhoto(string imagePath)
         {
-#if UNITY_IPHONE
+            Log.I("SavePhoto", ("ImagePath", imagePath));
+#if UNITY_IPHONE && !UNITY_EDITOR
             SavePhoto(imagePath);
 #endif
         }
         public override void InstallApp(string appPath)
         {
-#if UNITY_IPHONE
+            Log.I("InstallApp", ("AppPath", appPath));
+#if UNITY_IPHONE && !UNITY_EDITOR
             
 #endif
         }
         public override string GetAppData(string key)
         {
-#if UNITY_IPHONE
+#if UNITY_IPHONE && !UNITY_EDITOR
             return GetAppData(key);
 #else
             return null;
@@ -88,7 +101,8 @@ namespace App.Core.Master
         }
         public override void QuitUnityPlayer()
         {
-#if UNITY_IPHONE
+            Log.I("Quit IPhone");
+#if UNITY_IPHONE && !UNITY_EDITOR
             ShowHostMainWindow("");
 #endif
         }

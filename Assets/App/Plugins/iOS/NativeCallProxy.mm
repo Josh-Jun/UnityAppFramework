@@ -114,4 +114,8 @@ extern "C" {
     void SendMsg(char* methodName, char* msg){
         UnitySendMessage("Master", methodName, msg);
     }
+   
+    void ReceiveUnityMsg(char* msg){
+        
+    }
 }
