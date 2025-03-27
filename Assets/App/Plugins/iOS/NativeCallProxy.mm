@@ -112,6 +112,6 @@ extern "C" {
         SendMsg("iOSPermissionCallback", permission+"-"+msg);
     }
     void SendMsg(char* methodName, char* msg){
-        UnitySendMessage("PlatformMsgReceiver", methodName, msg);
+        UnitySendMessage("Master", methodName, msg);
     }
 }
