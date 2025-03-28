@@ -36,6 +36,7 @@ namespace App.Core.Master
             StringBuilderPool = new ObjectPool<StringBuilder>(() => new StringBuilder());
             LogBuilder = StringBuilderPool.Get();
             Application.logMessageReceived += HandleLogMsg;
+            OutputAppInfo();
         }
 
         private void HandleLogMsg(string msg, string stacktrace, LogType type)
@@ -134,6 +135,23 @@ namespace App.Core.Master
                     // ignored
                 }
             }
+        }
+        
+        /// <summary>输出App配置信息</summary>
+        private void OutputAppInfo()
+        {
+            var stringBuilder = StringBuilderPool.Get();
+            stringBuilder.AppendLine("App配置信息:");
+            stringBuilder.AppendLine($"操作系统 : {SystemInfo.operatingSystem}");
+            stringBuilder.AppendLine($"运行内存 : {SystemInfo.systemMemorySize/1000f}G");
+            stringBuilder.AppendLine($"设备标识 : {SystemInfo.deviceUniqueIdentifier}");
+            stringBuilder.AppendLine($"日志开关 : {Global.AppConfig.EnableLog}");
+            stringBuilder.AppendLine($"开发环境 : {Global.AppConfig.DevelopmentMold}");
+            stringBuilder.AppendLine($"运行模式 : {Global.AppConfig.AssetPlayMode}");
+            stringBuilder.AppendLine($"默认帧率 : {Global.AppConfig.AppFrameRate}");
+            stringBuilder.AppendLine($"资源版本 : {Global.AppConfig.CDNVersion}");
+            Log.I(stringBuilder.ToString());
+            StringBuilderPool.GiveBack(stringBuilder, sb => sb.Length = 0);
         }
 
         private void OnApplicationQuit()

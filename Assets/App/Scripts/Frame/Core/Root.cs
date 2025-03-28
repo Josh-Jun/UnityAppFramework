@@ -22,30 +22,12 @@ namespace App.Core
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
             // 设置程序帧率
             Application.targetFrameRate = Global.AppConfig.AppFrameRate;
-            // 输出App信息
-            OutputAppInfo();
             // 初始化Logic脚本
             InitLogicScripts();
             // 初始化Scene的所有Logic的Begin方法
             SceneManager.sceneLoaded += (scene, _) => { ExecuteSceneMethods(scene.path, "Begin"); };
             // 初始化Scene的所有Logic的End方法
             SceneManager.sceneUnloaded += (scene) => { ExecuteSceneMethods(scene.path, "End"); };
-        }
-        
-        /// <summary>输出App配置信息</summary>
-        private static void OutputAppInfo()
-        {
-            var stringBuilder = new StringBuilder(1024);
-            stringBuilder.AppendLine("App配置信息:");
-            stringBuilder.AppendLine($"操作系统 : {SystemInfo.operatingSystem}");
-            stringBuilder.AppendLine($"运行内存 : {SystemInfo.systemMemorySize/1000f}G");
-            stringBuilder.AppendLine($"设备标识 : {SystemInfo.deviceUniqueIdentifier}");
-            stringBuilder.AppendLine($"日志开关 : {Global.AppConfig.EnableLog}");
-            stringBuilder.AppendLine($"开发环境 : {Global.AppConfig.DevelopmentMold}");
-            stringBuilder.AppendLine($"运行模式 : {Global.AppConfig.AssetPlayMode}");
-            stringBuilder.AppendLine($"默认帧率 : {Global.AppConfig.AppFrameRate}");
-            stringBuilder.AppendLine($"资源版本 : {Global.AppConfig.CDNVersion}");
-            Log.I(stringBuilder.ToString());
         }
 
         /// <summary>启动App</summary>
