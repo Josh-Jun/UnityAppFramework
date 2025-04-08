@@ -13,11 +13,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Video;
 using System.Threading.Tasks;
-using App.Core;
 using App.Core.Helper;
 using App.Core.Master;
 using App.Core.Tools;
-using Modules.SceneLoader;
 
 namespace App.Modules.Test
 {
@@ -164,9 +162,9 @@ namespace App.Modules.Test
             view.SetText("触发不带参数事件");
             // SendEventMsg("ShowTips", "触发不带参数事件", 1.2f);
             // Root.GetLogicScript<Ask.AskLogic>().ShowTips("123");
-            // SceneLoaderLogic.Instance.LoadScene(AssetPath.MainScene);
-            count1++;
-            ViewMaster.Instance.RefreshRedDotCount(RedDotMold.SystemMail, count1);
+            SceneMaster.Instance.LoadScene(AssetPath.MainScene);
+            // count1++;
+            // ViewMaster.Instance.RefreshRedDotCount(RedDotMold.SystemMail, count1);
         }
 
         

@@ -7,13 +7,9 @@
  * ===============================================
  * */
 
-using System;
-using App.Core;
 using App.Core.Helper;
 using App.Core.Master;
 using App.Core.Tools;
-using Modules.SceneLoader;
-using UnityEngine.SceneManagement;
 
 namespace App.Modules.Loading
 {
@@ -23,7 +19,7 @@ namespace App.Modules.Loading
         private LoadingView view;
         public LoadingLogic()
         {
-
+            
         }
         public void Begin()
         {
@@ -34,8 +30,8 @@ namespace App.Modules.Loading
         private void LoadScene()
         {
             view.SetViewActive(true);
-            var targetScene = SceneLoaderLogic.Instance.CurrentScene;
-            var handle = Assets.LoadSceneAsync(targetScene, AssetPackage.HotfixPackage);
+            SendEventMsg("BeforeLoadSceneEvent", SceneMaster.Instance.CurrentScene);
+            var handle = Assets.LoadSceneAsync(SceneMaster.Instance.TargetScene, AssetPackage.HotfixPackage);
             var time_id = TimeUpdateMaster.Instance.StartTimer((time) =>
             {
                 if (handle == null) return;
@@ -45,6 +41,7 @@ namespace App.Modules.Loading
             {
                 TimeUpdateMaster.Instance.EndTimer(time_id);
                 view.SetLoadingSliderValue(handle.Progress);
+                SendEventMsg("AfterLoadSceneEvent", SceneMaster.Instance.TargetScene);
             };
         }
         public void End()
