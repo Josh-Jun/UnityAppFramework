@@ -141,6 +141,12 @@ namespace App.Core.Tools
 
             return isSuccess;
         }
+        
+        //接口，判断是否有该监听
+        public bool HasEventListener(string eventType)
+        {
+            return EventSubscription_Table.ContainsKey(eventType);
+        }
 
         //删除某个事件的一个监听
         public void RemoveEventListener(string eventType)

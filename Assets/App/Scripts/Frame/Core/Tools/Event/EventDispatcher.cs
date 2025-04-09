@@ -11,6 +11,11 @@ namespace App.Core.Tools
         {
             return m_eventController.HasEventListener(eventType, handler);
         }
+        //判断是否有该监听
+        public static bool HasEventListener(string eventType)
+        {
+            return m_eventController.HasEventListener(eventType);
+        }
 
         #region 注册消息
 

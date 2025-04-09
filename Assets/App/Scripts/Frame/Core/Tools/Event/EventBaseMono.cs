@@ -118,6 +118,7 @@ namespace App.Core.Tools
         {
             EventDispatcher.TriggerEvent(msg, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
         }
+        
         #endregion
 
         #region 移除事件
@@ -192,6 +193,16 @@ namespace App.Core.Tools
         public void RemoveEvent<T0, T1, T2, T3, T4, T5, T6, T7>(string msg, Action<T0, T1, T2, T3, T4, T5, T6, T7> cb)
         {
             EventDispatcher.RemoveEventListener(msg, cb);
+        }
+        
+        #endregion
+
+        #region 判断是否有该监听
+        
+        /// <summary>判断是否有该监听-带参数</summary>
+        public bool HasEvent<T>(string msg)
+        {
+            return EventDispatcher.HasEventListener(msg);
         }
 
         /// <summary>判断是否有该监听-带参数</summary>
