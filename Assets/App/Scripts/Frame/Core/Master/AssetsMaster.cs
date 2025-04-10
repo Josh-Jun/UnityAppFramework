@@ -56,7 +56,23 @@ namespace App.Core.Master
         }
 
         /// <summary> 添加预制体，返回GameObject </summary>
-        public GameObject AddChild(string path, GameObject parent = null)
+        public async Task<GameObject> AddChildAsync(string path, GameObject parent = null)
+        {
+            var prefab = await LoadAssetAsync<GameObject>(path);
+            var go = Instantiate(prefab, parent?.transform);
+            return go;
+        }
+
+        /// <summary> 添加预制体，返回GameObject </summary>
+        public async Task<GameObject> AddChildAsync(string path, Transform parent = null)
+        {
+            var prefab = await LoadAssetAsync<GameObject>(path);
+            var go = Instantiate(prefab, parent);
+            return go;
+        }
+
+        /// <summary> 添加预制体，返回GameObject </summary>
+        public GameObject AddChildSync(string path, GameObject parent = null)
         {
             var prefab = LoadAssetSync<GameObject>(path);
             var go = Instantiate(prefab, parent?.transform);
@@ -64,7 +80,7 @@ namespace App.Core.Master
         }
 
         /// <summary> 添加预制体，返回GameObject </summary>
-        public GameObject AddChild(string path, Transform parent = null)
+        public GameObject AddChildSync(string path, Transform parent = null)
         {
             var prefab = LoadAssetSync<GameObject>(path);
             var go = Instantiate(prefab, parent);
