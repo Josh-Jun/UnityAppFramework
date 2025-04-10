@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Linq;
+using System.Threading.Tasks;
 using App.Core.Helper;
 using App.Core.Tools;
 using UnityEngine.SceneManagement;
@@ -57,7 +58,7 @@ namespace App.Core.Master
         /// <summary> 添加预制体，返回GameObject </summary>
         public GameObject AddChild(string path, GameObject parent = null)
         {
-            var prefab = LoadAsset<GameObject>(path);
+            var prefab = LoadAssetSync<GameObject>(path);
             var go = Instantiate(prefab, parent?.transform);
             return go;
         }
@@ -65,7 +66,7 @@ namespace App.Core.Master
         /// <summary> 添加预制体，返回GameObject </summary>
         public GameObject AddChild(string path, Transform parent = null)
         {
-            var prefab = LoadAsset<GameObject>(path);
+            var prefab = LoadAssetSync<GameObject>(path);
             var go = Instantiate(prefab, parent);
             return go;
         }
@@ -88,9 +89,9 @@ namespace App.Core.Master
         #region 加载资源
 
         /// <summary> 
-        /// 加载资源，返回T
+        /// 同步加载资源，返回T
         /// </summary>
-        public T LoadAsset<T>(string location) where T : UnityEngine.Object
+        public T LoadAssetSync<T>(string location) where T : UnityEngine.Object
         {
             var assetPackage = AssetPackage.HotfixPackage;
             if (location.Split('/').Length >= 3)
@@ -102,6 +103,24 @@ namespace App.Core.Master
                 Log.W("location.Split('/').Length not long enough");
             }
             return Assets.LoadAssetSync<T>(location, assetPackage);
+        }
+
+        /// <summary> 
+        /// 异步加载资源，返回T
+        /// </summary>
+        public async Task<T> LoadAssetAsync<T>(string location) where T : UnityEngine.Object
+        {
+            var assetPackage = AssetPackage.HotfixPackage;
+            if (location.Split('/').Length >= 3)
+            {
+                assetPackage = (AssetPackage)System.Enum.Parse(typeof(AssetPackage), $"{location.Split('/')[2]}Package");
+            }
+            else
+            {
+                Log.W("location.Split('/').Length not long enough");
+            }
+            var t = await Assets.LoadAssetAsync<T>(location, assetPackage);
+            return t;
         }
 
         #endregion

@@ -30,7 +30,7 @@ namespace App.Modules.Update
         {
             try
             {
-                var view_prefab = AssetsMaster.Instance.LoadAsset<GameObject>(AssetPath.UpdateView);
+                var view_prefab = AssetsMaster.Instance.LoadAssetSync<GameObject>(AssetPath.UpdateView);
                 view = ViewMaster.Instance.AddView<UpdateView>(view_prefab);
                 await Assets.CreatePackageAsync(AssetPackage.HotfixPackage);
                 // 请求资源清单的版本信息

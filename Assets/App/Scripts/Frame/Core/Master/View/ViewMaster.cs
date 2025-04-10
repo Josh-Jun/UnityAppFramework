@@ -106,7 +106,7 @@ namespace App.Core.Master
         
         private ViewBase CreateView(Type type, ViewOfAttribute attribute)
         {
-            var go = AssetsMaster.Instance.LoadAsset<GameObject>(attribute.Location);
+            var go = AssetsMaster.Instance.LoadAssetSync<GameObject>(attribute.Location);
             if (go == null) return null;
             var parent = attribute.View switch
             {

@@ -14,7 +14,7 @@ namespace App.Core.Master
         private readonly Dictionary<int, Admin> _dict = new Dictionary<int, Admin>();
         public void Load()
         {
-            var textAsset = AssetsMaster.Instance.LoadAsset<TextAsset>(AssetPath.AdminXmlData);
+            var textAsset = AssetsMaster.Instance.LoadAssetSync<TextAsset>(AssetPath.AdminXmlData);
             _data = XmlTools.ProtoDeSerialize<AdminXmlData>(textAsset.bytes);
             foreach (var data in _data.Admins)
             {

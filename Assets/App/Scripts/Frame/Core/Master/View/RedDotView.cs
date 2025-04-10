@@ -22,7 +22,7 @@ namespace App.Core.Master
         private Text _redDotText;
         private void Awake()
         {
-            var prefab = AssetsMaster.Instance.LoadAsset<GameObject>(AssetPath.RedDot);
+            var prefab = AssetsMaster.Instance.LoadAssetSync<GameObject>(AssetPath.RedDot);
             _redDot = Instantiate(prefab, transform, false);
             _redDotText = _redDot.GetComponentInChildren<Text>();
             _redDot.SetActive(false);

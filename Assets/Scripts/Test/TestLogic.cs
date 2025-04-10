@@ -97,12 +97,12 @@ namespace App.Modules.Test
         {
             //音频播放
             string audio_path = "";
-            AudioClip audio = AssetsMaster.Instance.LoadAsset<AudioClip>(audio_path);
+            AudioClip audio = AssetsMaster.Instance.LoadAssetSync<AudioClip>(audio_path);
             AudioMaster.Instance.PlayBackgroundAudio(audio); //背景音乐，循环播放
             AudioMaster.Instance.PlayEffectAudio(audio); //特效音乐，播放一次，可叠加播放
             //视频播放（unity自带视频播放器）
             string vidio_path = "";
-            VideoClip video = AssetsMaster.Instance.LoadAsset<VideoClip>(vidio_path);
+            VideoClip video = AssetsMaster.Instance.LoadAssetSync<VideoClip>(vidio_path);
             VideoMaster.Instance.PlayVideo(null, video); //播放视频
             VideoMaster.Instance.PlayVideo(null, "视频地址", () => { }); //播放视频
             //获取配置表

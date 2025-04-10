@@ -14,7 +14,7 @@ namespace App.Core.Master
         private readonly Dictionary<int, User> _dict = new Dictionary<int, User>();
         public void Load()
         {
-            var textAsset = AssetsMaster.Instance.LoadAsset<TextAsset>(AssetPath.UserJsonData);
+            var textAsset = AssetsMaster.Instance.LoadAssetSync<TextAsset>(AssetPath.UserJsonData);
             _data = JsonUtility.FromJson<UserJsonData>(textAsset.text);
             foreach (var data in _data.Users)
             {
