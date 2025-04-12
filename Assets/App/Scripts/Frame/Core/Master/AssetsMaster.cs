@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEngine;
 using System.Linq;
-using System.Threading.Tasks;
 using App.Core.Helper;
 using App.Core.Tools;
+using Cysharp.Threading.Tasks;
 using UnityEngine.SceneManagement;
 
 namespace App.Core.Master
@@ -56,7 +56,7 @@ namespace App.Core.Master
         }
 
         /// <summary> 添加预制体，返回GameObject </summary>
-        public async Task<GameObject> AddChildAsync(string path, GameObject parent = null)
+        public async UniTask<GameObject> AddChildAsync(string path, GameObject parent = null)
         {
             var prefab = await LoadAssetAsync<GameObject>(path);
             var go = Instantiate(prefab, parent?.transform);
@@ -64,7 +64,7 @@ namespace App.Core.Master
         }
 
         /// <summary> 添加预制体，返回GameObject </summary>
-        public async Task<GameObject> AddChildAsync(string path, Transform parent = null)
+        public async UniTask<GameObject> AddChildAsync(string path, Transform parent = null)
         {
             var prefab = await LoadAssetAsync<GameObject>(path);
             var go = Instantiate(prefab, parent);
@@ -124,7 +124,7 @@ namespace App.Core.Master
         /// <summary> 
         /// 异步加载资源，返回T
         /// </summary>
-        public async Task<T> LoadAssetAsync<T>(string location) where T : UnityEngine.Object
+        public async UniTask<T> LoadAssetAsync<T>(string location) where T : UnityEngine.Object
         {
             var assetPackage = AssetPackage.HotfixPackage;
             if (location.Split('/').Length >= 3)

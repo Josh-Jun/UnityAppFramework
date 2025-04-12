@@ -1,6 +1,6 @@
 using System;
-using System.Linq;
 using App.Runtime.Helper;
+using Cysharp.Threading.Tasks;
 using HybridCLR;
 using UnityEngine;
 using YooAsset;
@@ -12,44 +12,41 @@ namespace App.Runtime
         private bool isNeedRestart;
         private ResourcePackage builtinPackage = null;
         private Hotfix hotfix = null;
-        
-        private async void Awake()
+
+        private void Awake()
         {
-            try
+            Init().Forget();
+        }
+        private async UniTask Init()
+        {
+            hotfix = transform.Find("Canvas").GetComponent<Hotfix>();
+            Global.AppConfig = Resources.Load<AppConfig>("App/AppConfig");
+            // YooAssets初始化
+            YooAssets.Initialize();
+            // 创建默认包
+            builtinPackage = await Assets.CreatePackageAsync(AssetPackage.BuiltinPackage, true);
+            // 请求资源清单的版本信息
+            var (request_result, version) = await Assets.RequestPackageVersionAsync(AssetPackage.BuiltinPackage);
+            if (request_result)
             {
-                hotfix = transform.Find("Canvas").GetComponent<Hotfix>();
-                Global.AppConfig = Resources.Load<AppConfig>("App/AppConfig");
-                // YooAssets初始化
-                YooAssets.Initialize();
-                // 创建默认包
-                builtinPackage = await Assets.CreatePackageAsync(AssetPackage.BuiltinPackage, true);
-                // 请求资源清单的版本信息
-                var (request_result, version) = await Assets.RequestPackageVersionAsync(AssetPackage.BuiltinPackage);
-                if (request_result)
+                var update_result = await Assets.UpdatePackageManifestAsync(AssetPackage.BuiltinPackage, version);
+                if (update_result)
                 {
-                    var update_result = await Assets.UpdatePackageManifestAsync(AssetPackage.BuiltinPackage, version);
-                    if (update_result)
-                    {
-                        await Assets.DownloadPackageAsync(AssetPackage.BuiltinPackage,
-                            OnDownloaderResult,
-                            OnDownloadFinishFunction,
-                            OnDownloadErrorCallback,
-                            OnDownloadProgressCallback,
-                            OnStartDownloadFileCallback);
-                    }
-                    else
-                    {
-                        Debug.LogError($"Failed to update package manifest: {version}");
-                    }
+                    await Assets.DownloadPackageAsync(AssetPackage.BuiltinPackage,
+                        OnDownloaderResult,
+                        OnDownloadFinishFunction,
+                        OnDownloadErrorCallback,
+                        OnDownloadProgressCallback,
+                        OnStartDownloadFileCallback);
                 }
                 else
                 {
-                    Debug.LogError($"Failed to load package manifest: {AssetPackage.BuiltinPackage}");
+                    Debug.LogError($"Failed to update package manifest: {version}");
                 }
             }
-            catch (Exception e)
+            else
             {
-                Debug.LogException(e);
+                Debug.LogError($"Failed to load package manifest: {AssetPackage.BuiltinPackage}");
             }
         }
 
