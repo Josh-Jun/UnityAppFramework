@@ -184,10 +184,10 @@ namespace App.Editor.Tools
         private static void GetConst(string folder, ref StringBuilder stringBuilder)
         {
             var files = GetFiles(folder);
-            foreach (var t in files)
+            foreach (var file in files)
             {
-                var key = t.Name.Split('.')[0];
-                var value = t.FullName.Replace(Application.dataPath, "Assets");
+                var key = file.Name.Split('.')[0];
+                var value = file.FullName.Replace("\\", "/").Replace(Application.dataPath, "Assets");
                 stringBuilder.AppendLine($"    public const string {key} = \"{value}\";");
             }
         }
