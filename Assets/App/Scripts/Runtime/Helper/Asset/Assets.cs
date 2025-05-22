@@ -96,7 +96,7 @@ public static class Assets
                     Debug.LogError($"资源包初始化失败：{initBuiltinOperation.Error}");
                 break;
             case EPlayMode.HostPlayMode:
-                var remoteHostServices = new RemoteServices(GetCDNServerAddress(), GetCDNServerAddress());
+                var remoteHostServices = new RemoteServices(GetCdnServerAddress(), GetCdnServerAddress());
                 var cacheFileSystemParams =
                     FileSystemParameters.CreateDefaultCacheFileSystemParameters(remoteHostServices);
                 var hostFileSystemParams = FileSystemParameters.CreateDefaultBuildinFileSystemParameters();
@@ -116,7 +116,7 @@ public static class Assets
                     Debug.LogError($"资源包初始化失败：{initHostOperation.Error}");
                 break;
             case EPlayMode.WebPlayMode:
-                var remoteWebServices = new RemoteServices(GetCDNServerAddress(), GetCDNServerAddress());
+                var remoteWebServices = new RemoteServices(GetCdnServerAddress(), GetCdnServerAddress());
                 var webServerFileSystemParams = FileSystemParameters.CreateDefaultWebServerFileSystemParameters();
                 var webRemoteFileSystemParams =
                     FileSystemParameters.CreateDefaultWebRemoteFileSystemParameters(remoteWebServices); //支持跨域下载
@@ -142,9 +142,9 @@ public static class Assets
         return package;
     }
 
-    private static string GetCDNServerAddress()
+    private static string GetCdnServerAddress()
     {
-        return $"{Global.CDNServer}/CDN/{Platform}/{Global.AppConfig.CDNVersion}";
+        return $"{Global.CdnServer}/CDN/{Platform}/{Global.AppConfig.CDNVersion}";
     }
 
     public static async UniTask<(bool, string)> RequestPackageVersionAsync(AssetPackage assetPackage)

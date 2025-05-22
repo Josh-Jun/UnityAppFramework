@@ -196,10 +196,6 @@ namespace App.Editor.View
             {
                 File.Delete(view_script_path);
             }
-            if (File.Exists(logic_script_path))
-            {
-                File.Delete(logic_script_path);
-            }
 
             File.WriteAllText(view_script_path, view_script);
             if (isCreateLogic)
