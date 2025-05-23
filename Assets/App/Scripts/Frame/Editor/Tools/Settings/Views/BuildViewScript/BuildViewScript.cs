@@ -362,7 +362,7 @@ namespace App.Editor.View
                     type = component.GetType().Name,
                     fullname = component.GetType().FullName,
                     eventType = IsEvent(component) ? component is UnityEngine.UI.Button ? 1 : 2 : 0,
-                    isPublic = IsPublic(component)
+                    isPublic = true,
                 };
                 if (cds != null)
                 {
@@ -471,24 +471,6 @@ namespace App.Editor.View
             }
 
             return _str;
-        }
-
-        private bool IsPublic(Component component)
-        {
-            return component is 
-                UnityEngine.UI.Text or 
-                UnityEngine.UI.InputField or 
-                UnityEngine.UI.Dropdown or 
-                UnityEngine.UI.Slider or 
-                UnityEngine.UI.Toggle or 
-                UnityEngine.UI.Image or 
-                UnityEngine.UI.RawImage or 
-                UnityEngine.UI.GridLayoutGroup or 
-                UnityEngine.UI.HorizontalLayoutGroup or 
-                UnityEngine.UI.VerticalLayoutGroup or 
-                UnityEngine.UI.ContentSizeFitter or 
-                UnityEngine.CanvasGroup or 
-                UnityEngine.Canvas;
         }
 
         private bool IsEvent(Component component)
