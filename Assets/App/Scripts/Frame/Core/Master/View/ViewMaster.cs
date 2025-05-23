@@ -139,10 +139,10 @@ namespace App.Core.Master
 
         public void InitBackgroundImage(Sprite sprite = null)
         {
-            Background.SetActive(sprite != null);
-            if (sprite == null) return;
+            Background.SetActive(sprite);
+            if (!sprite) return;
             BackgroundImage.sprite = sprite;
-            var ratio = Screen.width < Screen.height ? 
+            var ratio = Screen.width > Screen.height ? 
                 sprite.rect.height / sprite.rect.width : 
                 sprite.rect.width / sprite.rect.height;
             AspectRatioFitter.aspectRatio = ratio;
