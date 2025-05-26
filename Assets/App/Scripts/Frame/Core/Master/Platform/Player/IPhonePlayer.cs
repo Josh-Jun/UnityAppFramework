@@ -10,8 +10,6 @@ namespace App.Core.Master
         [DllImport("__Internal")]
         private static extern void ShowHostMainWindow(string msg);
         [DllImport("__Internal")]
-        private static extern void SavePhoto(string path);
-        [DllImport("__Internal")]
         private static extern void Vibrate();
         [DllImport("__Internal")]
         private static extern void OpenAppSettings();
@@ -75,13 +73,6 @@ namespace App.Core.Master
             Log.I("Vibrate IPhone");
 #if UNITY_IPHONE && !UNITY_EDITOR
             Vibrate();
-#endif
-        }
-        public override void SavePhoto(string imagePath)
-        {
-            Log.I("SavePhoto", ("ImagePath", imagePath));
-#if UNITY_IPHONE && !UNITY_EDITOR
-            SavePhoto(imagePath);
 #endif
         }
         public override void InstallApp(string appPath)

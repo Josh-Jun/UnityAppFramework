@@ -35,10 +35,6 @@ namespace App.Core.Master
         {
             return $"{Application.streamingAssetsPath}/{folder}";
         }
-        public override void SavePhoto(string imagePath)
-        {
-            Log.I("SavePhoto", ("ImagePath", imagePath));
-        }
         public override void InstallApp(string appPath)
         {
             Log.I("InstallApp", ("AppPath", appPath));

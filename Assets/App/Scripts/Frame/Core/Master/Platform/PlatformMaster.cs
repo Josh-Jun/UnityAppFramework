@@ -50,7 +50,6 @@ namespace App.Core.Master
         public abstract string GetDataPath(string folder);
         public abstract string GetAssetsPath(string folder);
         public abstract void InstallApp(string appPath);
-        public abstract void SavePhoto(string imagePath);
         public abstract string GetAppData(string key);
         public abstract void QuitUnityPlayer();
     }

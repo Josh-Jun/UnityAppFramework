@@ -18,17 +18,6 @@ id<NativeCallsProtocol> api = NULL;
 
 @end
 
-@implementation PhotoManager
-- ( void ) imageSaved: ( UIImage *) image didFinishSavingWithError:( NSError *)error
-          contextInfo: ( void *) contextInfo
-{
-    NSLog(@"保存结束");
-    if (error != nil) {
-        NSLog(@"有错误");
-    }
-}
-@end
-
 extern "C" {
     //退出unity显示原生界面
     void ShowHostMainWindow(const char* msg) {
@@ -40,13 +29,6 @@ extern "C" {
         NSString* data = [api getAppData:[NSString stringWithUTF8String:key]];
         return strdup([data cStringUsingEncoding:NSUTF8StringEncoding]);
     }
-    //保存图片到相册
-	void SavePhoto(char *readAddr) {
-		NSString *strReadAddr = [NSString stringWithUTF8String:readAddr];
-		UIImage *img = [UIImage imageWithContentsOfFile:strReadAddr];
-		PhotoManager *instance = [PhotoManager alloc];
-		UIImageWriteToSavedPhotosAlbum(img, instance, @selector(imageSaved:didFinishSavingWithError:contextInfo:), nil);
-	}
 	//震动效果
 	void Vibrate() {
 	    AudioServicesPlaySystemSound(1520);

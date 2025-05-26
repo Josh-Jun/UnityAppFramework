@@ -113,13 +113,6 @@ namespace App.Core.Master
             JavaObject(AppToolsPackage).CallStatic("vibrate", mpattern, -1);
 #endif
         }
-        public override void SavePhoto(string imagePath)
-        {
-            Log.I("SavePhoto", ("ImagePath", imagePath));
-#if UNITY_ANDROID && !UNITY_EDITOR
-            JavaObject(AppToolsPackage).CallStatic("savePhoto", imagePath);
-#endif
-        }
         public override string GetAppData(string key)
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
