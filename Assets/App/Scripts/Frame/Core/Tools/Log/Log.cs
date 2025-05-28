@@ -191,7 +191,7 @@ public class Log
     {
         var msg = builder.ToString();
 #if !UNITY_EDITOR
-        msg = Regex.Replace(msg, Pattern, string.Empty);
+        var msg = Regex.Replace(msg, Pattern, string.Empty);
 #endif
         Debug.Log(msg);
     }
@@ -369,7 +369,7 @@ public class Log
     {
         var msg = builder.ToString();
 #if !UNITY_EDITOR
-        msg = Regex.Replace(msg, Pattern, string.Empty);
+        var msg = Regex.Replace(msg, Pattern, string.Empty);
 #endif
         Debug.LogWarning(msg);
     }
@@ -538,7 +538,7 @@ public class Log
     {
         var msg = builder.ToString();
 #if !UNITY_EDITOR
-        msg = Regex.Replace(msg, Pattern, string.Empty);
+        var msg = Regex.Replace(msg, Pattern, string.Empty);
 #endif
         Debug.LogError(msg);
     }
