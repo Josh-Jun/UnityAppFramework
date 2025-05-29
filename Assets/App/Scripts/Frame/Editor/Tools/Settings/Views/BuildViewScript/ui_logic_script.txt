@@ -14,7 +14,7 @@ namespace Modules.#NAMESPACE#
         
         public #SCRIPTNAME#()
         {
-            
+#EVENT#
         }
         public void Begin()
         {

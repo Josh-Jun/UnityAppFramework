@@ -186,6 +186,7 @@ namespace App.Editor.View
 
             logic_script = logic_script.Replace("#NAMESPACE#", folder_name);
             logic_script = logic_script.Replace("#SCRIPTNAME#", logic_script_name);
+            logic_script = logic_script.Replace("#EVENT#", CreateEvent());
             
             if (!Directory.Exists(script_path))
             {
@@ -382,7 +383,7 @@ namespace App.Editor.View
                 for (int i = 0; i < uiViewData.components.Count; i++)
                 {
                     var type = uiViewData.components[i].type;
-                    var name = $"{uiViewData.name.ToLower()}{type}";
+                    var name = $"{uiViewData.name}{type}".ToLower();
                     string str = $"\t\tprivate {type} {name};";
                     sb.AppendLine(str);
                 }
@@ -400,9 +401,8 @@ namespace App.Editor.View
                 {
                     if (t.isPublic)
                     {
-                        var name = $"{t.name.ToLower()}{t.type}";
-                        var nameUpperCase = $"{ToUpperCase(name)}";
-                        string str = $"\t\tpublic {t.type} {nameUpperCase} {{ get {{ return {name}; }} }}";
+                        var name = $"{t.name}{t.type}";
+                        string str = $"\t\tpublic {t.type} {name} {{ get {{ return {name.ToLower()}; }} }}";
                         sb.AppendLine(str);
                     }
                 }
@@ -420,13 +420,13 @@ namespace App.Editor.View
                 {
                     var str = "";
                     var tName = t.type;
-                    var name = $"{uiViewData.name.ToLower()}{tName}";
+                    var name = $"{uiViewData.name}{tName}";
                     str = t.eventType switch
                     {
                         1 =>
-                            $"\t\t\t{name}.onClick.AddListener(() => {{ SendEventMsg(\"{ToUpperCase(name)}Event\"); }});",
+                            $"\t\t\t{name}.onClick.AddListener(() => {{ SendEventMsg(\"{name}Event\"); }});",
                         2 =>
-                            $"\t\t\t{name}.onValueChanged.AddListener((arg) => {{ SendEventMsg(\"{ToUpperCase(name)}Event\", arg); }});",
+                            $"\t\t\t{name}.onValueChanged.AddListener((arg) => {{ SendEventMsg(\"{name}Event\", arg); }});",
                         _ => str
                     };
                     if (!string.IsNullOrEmpty(str))
@@ -446,9 +446,9 @@ namespace App.Editor.View
             {
                 foreach (var t in uiViewData.components)
                 {
-                    var name = $"{t.name.ToLower()}{t.type}";
+                    var name = $"{t.name}{t.type}";
                     var path = $"\"{uiViewData.path}\"";
-                    var str = $"\t\t\t{name} = this.FindComponent<{t.type}>({path});";
+                    var str = $"\t\t\t{name.ToLower()} = this.FindComponent<{t.type}>({path});";
                     sb.AppendLine(str);
                 }
             }
@@ -456,21 +456,36 @@ namespace App.Editor.View
             return sb.ToString();
         }
 
-        private string ToUpperCase(string str)
+        private string CreateEvent()
         {
-            var _str = "";
-            for (int i = 0; i < str.Length; i++)
+            var sb = new StringBuilder();
+            foreach (var uiViewData in _viewScriptData.views)
             {
-                var s = str[i].ToString();
-                if (i == 0)
+                foreach (var t in uiViewData.components)
                 {
-                    s = s.ToUpper();
+                    if(t.eventType == 0) continue;
+                    var eventType = GetEventType(t.type);
+                    var tName = t.type;
+                    var name = $"{uiViewData.name}{tName}";
+                    var str = string.IsNullOrEmpty(eventType) ? "" : "arg";
+                    sb.AppendLine($"\t\t\tAddEventMsg{eventType}(\"{name}Event\", ({str})=>{{ }});");
                 }
-
-                _str += s;
             }
+        
+            return sb.ToString();
+        }
 
-            return _str;
+        private string GetEventType(string typeName)
+        {
+            return typeName switch
+            {
+                "InputField" => "<string>",
+                "Dropdown" => "<int>",
+                "Slider" or "Scrollbar" => "<float>",
+                "Toggle" => "<bool>",
+                "ScrollRect" => "<Vector2>",
+                _ => ""
+            };
         }
 
         private bool IsEvent(Component component)

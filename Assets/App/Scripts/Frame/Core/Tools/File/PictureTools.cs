@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using Object = UnityEngine.Object;
 
 namespace App.Core.Tools
@@ -77,55 +80,113 @@ namespace App.Core.Tools
         /// </summary>
         /// <param name="limitRange"></param>
         /// <param name="textureSize"></param>
+        /// <param name="inside"></param>
         /// <returns></returns>
-        public static Vector2 AdaptSize(Vector2 limitRange, Vector2 textureSize)
+        public static Vector2 AdaptSize(Vector2 limitRange, Vector2 textureSize, bool inside = true)
         {
             var size = textureSize;
-            var standard_ratio = limitRange.x / limitRange.y;
+            var standardRatio = limitRange.x / limitRange.y;
             var ratio = size.x / size.y;
-            if (ratio > standard_ratio)
+            if (inside)
             {
-                //宽于标准宽度，宽固定
-                var scale = size.x / limitRange.x;
-                size.x = limitRange.x;
-                size.y /= scale;
+                if (ratio > standardRatio)
+                {
+                    //宽于标准宽度，宽固定
+                    var scale = size.x / limitRange.x;
+                    size.x = limitRange.x;
+                    size.y /= scale;
+                }
+                else
+                {
+                    //高于标准宽度，高固定
+                    var scale = size.y / limitRange.y;
+                    size.y = limitRange.y;
+                    size.x /= scale;
+                }
             }
             else
             {
-                //高于标准宽度，高固定
-                var scale = size.y / limitRange.y;
-                size.y = limitRange.y;
-                size.x /= scale;
+                if (ratio > standardRatio)
+                {
+                    //宽于标准宽度，高固定
+                    var scale = size.y/ limitRange.y;
+                    size.y = limitRange.y;
+                    size.x /= scale;
+                }
+                else
+                {
+                    //高于标准宽度，宽固定
+                    var scale = size.x / limitRange.x;
+                    size.x = limitRange.x;
+                    size.y /= scale;
+                }
             }
 
             return size;
         }
 
         /// <summary>
-        /// 相机截图
+        /// 相机截图(全屏)
         /// </summary>
-        /// <param name="camera"></param>
-        /// <param name="path"></param>
-        /// <param name="size"></param>
         /// <param name="callback"></param>
-        public static void TakePhoto(Camera camera, string path, Action<Texture2D, string> callback = null)
+        /// <param name="autoSave"></param>
+        public static void TakePhoto(Action<byte[], string> callback = null, bool autoSave = true)
         {
-            var filePath = $"{path}/Image_{DateTime.Now.ToTimeStamp()}.png";
-            var item = TakeTransparentCapture(camera, camera.pixelWidth, camera.pixelHeight, filePath);
-            callback?.Invoke(item.Item1, filePath);
+            var filePath = $"{Application.persistentDataPath}/Screenshot/Image_{DateTime.Now.ToTimeStamp()}.png";
+            var captureCamera = new GameObject("CaptureCamera", typeof(Camera));
+            var camera = captureCamera.GetComponent<Camera>();
+            var rect = new Rect(0, 0, camera.pixelWidth, camera.pixelWidth);
+            var textureBytes = TakeTransparentCapture(camera, rect);
+            if (autoSave)
+            {
+                var array = filePath.Split('/');
+                var directory = filePath.Replace(array[^1], "");
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+                File.WriteAllBytes(filePath, textureBytes);
+            }
+            callback?.Invoke(textureBytes, filePath);
+            Object.Destroy(captureCamera);
         }
-        
-        public static (Texture2D, byte[]) TakeTransparentCapture(Camera camera, int width, int height, string savePath)
+
+        /// <summary>
+        /// 相机截图(区域大小)
+        /// </summary>
+        /// <param name="rect"></param>
+        /// <param name="callback"></param>
+        /// <param name="autoSave"></param>
+        public static void TakePhoto(Rect rect, Action<byte[], string> callback = null, bool autoSave = true)
+        {
+            var filePath = $"{Application.persistentDataPath}/Screenshot/Image_{DateTime.Now.ToTimeStamp()}.png";
+            var captureCamera = new GameObject("CaptureCamera", typeof(Camera));
+            var camera = captureCamera.GetComponent<Camera>();
+            var textureBytes = TakeTransparentCapture(camera, rect);
+            if (autoSave)
+            {
+                var array = filePath.Split('/');
+                var directory = filePath.Replace(array[^1], "");
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+                File.WriteAllBytes(filePath, textureBytes); 
+            }
+            callback?.Invoke(textureBytes, filePath);
+            Object.Destroy(captureCamera);
+        }
+
+        public static byte[] TakeTransparentCapture(Camera camera, Rect rect)
         {
             // Depending on your render pipeline, this may not work.
             var bak_cam_targetTexture = camera.targetTexture;
             var bak_cam_clearFlags = camera.clearFlags;
             var bak_RenderTexture_active = RenderTexture.active;
 
-            var tex_transparent = new Texture2D(width, height, TextureFormat.ARGB32, false);
+            var tex_transparent = new Texture2D((int)rect.width, (int)rect.height, TextureFormat.ARGB32, false);
             // Must use 24-bit depth buffer to be able to fill background.
-            var render_texture = RenderTexture.GetTemporary(width, height, 24, RenderTextureFormat.ARGB32);
-            var grab_area = new Rect(0, 0, width, height);
+            var render_texture = RenderTexture.GetTemporary(camera.pixelWidth, camera.pixelHeight, 24, RenderTextureFormat.ARGB32);
 
             RenderTexture.active = render_texture;
             camera.targetTexture = render_texture;
@@ -134,25 +195,17 @@ namespace App.Core.Tools
             // Simple: use a clear background
             camera.backgroundColor = Color.clear;
             camera.Render();
-            tex_transparent.ReadPixels(grab_area, 0, 0);
+            tex_transparent.ReadPixels(rect, 0, 0);
             tex_transparent.Apply();
 
             // Encode the resulting output texture to a byte array then write to the file
             var pngShot = tex_transparent.EncodeToPNG();
-            
-            var array = savePath.Split('/');
-            var directory = savePath.Replace(array[^1], "");
-            if (!Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
-            File.WriteAllBytes(savePath, pngShot);
 
             camera.clearFlags = bak_cam_clearFlags;
             camera.targetTexture = bak_cam_targetTexture;
             RenderTexture.active = bak_RenderTexture_active;
             RenderTexture.ReleaseTemporary(render_texture);
-            return (tex_transparent, pngShot);
+            return pngShot;
         }
     }
 }
