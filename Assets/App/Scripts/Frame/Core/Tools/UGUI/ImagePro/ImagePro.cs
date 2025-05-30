@@ -3,9 +3,11 @@
  * author      : Josh@macbook
  * e-mail      : shijun_z@163.com
  * create time : 2025年3月17 16:44
- * function    : 
+ * function    :
  * ===============================================
  * */
+
+using System;
 
 namespace UnityEngine.UI
 {
@@ -33,12 +35,12 @@ namespace UnityEngine.UI
         {
             get
             {
-                if (_shader == null)
+                if (!_shader)
                 {
-                    _shader = Shader.Find($"Shader Graphs/RoundedRectangle");
+                    _shader = Shader.Find($"UI/RoundedRectangle");
                 }
 
-                if (_material == null)
+                if (!_material)
                 {
                     _material = new Material(_shader)
                     {
@@ -55,20 +57,7 @@ namespace UnityEngine.UI
             base.Awake();
             Refresh();
         }
-
-        protected override void UpdateMaterial()
-        {
-            Refresh();
-            if (sprite == null)
-            {
-                canvasRenderer.materialCount = 1;
-                canvasRenderer.SetMaterial(material, 0);
-                canvasRenderer.SetTexture(Texture2D.whiteTexture);
-                return;
-            }
-            base.UpdateMaterial();
-        }
-
+        
         protected override void OnRectTransformDimensionsChange()
         {
             base.OnRectTransformDimensionsChange();

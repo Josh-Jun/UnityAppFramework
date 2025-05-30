@@ -6,6 +6,8 @@
  * function    : 
  * ===============================================
  * */
+
+using System;
 using UnityEngine;
 using UnityEditor.AnimatedValues;
 using UnityEditor.SceneManagement;
@@ -26,7 +28,7 @@ namespace UnityEditor.UI
         SerializedProperty m_UseSpriteMesh;
         SerializedProperty m_Type;
         AnimBool m_ShowTypePro;
-        bool m_bIsDrivenPro;
+        // bool m_bIsDrivenPro;
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -54,7 +56,7 @@ namespace UnityEditor.UI
             serializedObject.Update();
 
             var rect = targetComponent.GetComponent<RectTransform>();
-            m_bIsDrivenPro = (rect.drivenByObject as Slider)?.fillRect == rect;
+            // m_bIsDrivenPro = (rect.drivenByObject as Slider)?.fillRect == rect;
 
             SpriteGUI();
             AppearanceControlsGUI();
@@ -93,14 +95,12 @@ namespace UnityEditor.UI
 
         private void Excute()
         {
-            if (targetComponent != null)
+            if (!targetComponent) return;
+            var method = targetComponent.GetType().GetMethod("Refresh",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (method != null)
             {
-                var method = targetComponent.GetType().GetMethod("Refresh",
-                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                if (method != null)
-                {
-                    method.Invoke(targetComponent, null);
-                }
+                method.Invoke(targetComponent, null);
             }
         }
 
