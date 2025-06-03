@@ -479,8 +479,8 @@ namespace App.Editor.View
         {
             return typeName switch
             {
-                "InputField" => "<string>",
-                "Dropdown" => "<int>",
+                "InputField" or "TMP_InputField" => "<string>",
+                "Dropdown" or "TMP_Dropdown" => "<int>",
                 "Slider" or "Scrollbar" => "<float>",
                 "Toggle" => "<bool>",
                 "ScrollRect" => "<Vector2>",
@@ -497,7 +497,9 @@ namespace App.Editor.View
                 UnityEngine.UI.Slider or 
                 UnityEngine.UI.Toggle or 
                 UnityEngine.UI.ScrollRect or 
-                UnityEngine.UI.Scrollbar;
+                UnityEngine.UI.Scrollbar or 
+                TMPro.TMP_InputField or 
+                TMPro.TMP_Dropdown;
         }
     }
 }
