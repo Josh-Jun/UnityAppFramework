@@ -23,8 +23,8 @@ namespace App.Core.Master
             }
 
             var basePath = PlatformMaster.Instance.GetDataPath(TextureCachePath);
-            var suffix = url.Split('.')[url.Split('.').Length - 1];
-            var localPath = $"{basePath}{url.GetHashCode()}.{suffix}";
+            var filename = url.Split('?')[0].Split('/')[^1];
+            var localPath = $"{basePath}{filename}";
             var uwr = Uwr;
             if (FileTools.FileExist(localPath))
             {
@@ -50,8 +50,8 @@ namespace App.Core.Master
             }
 
             var basePath = PlatformMaster.Instance.GetDataPath(TextureCachePath);
-            var suffix = url.Split('.')[url.Split('.').Length - 1];
-            var localPath = $"{basePath}{url.GetHashCode()}.{suffix}";
+            var filename = url.Split('?')[0].Split('/')[^1];
+            var localPath = $"{basePath}{filename}";
             var uwr = Uwr;
             if (FileTools.FileExist(localPath))
             {
@@ -86,8 +86,8 @@ namespace App.Core.Master
             }
 
             var basePath = PlatformMaster.Instance.GetDataPath(AudioCachePath);
-            var suffix = url.Split('.')[url.Split('.').Length - 1];
-            var localPath = $"{basePath}{url.GetHashCode()}.{suffix}";
+            var filename = url.Split('?')[0].Split('/')[^1];
+            var localPath = $"{basePath}{filename}";
             var uwr = Uwr;
             if (FileTools.FileExist(localPath))
             {
