@@ -4,6 +4,7 @@ using App.Core.Helper;
 using App.Core.Master;
 using App.Core.Tools;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Modules.#NAMESPACE#
 {
@@ -14,8 +15,12 @@ namespace Modules.#NAMESPACE#
         
         public #SCRIPTNAME#()
         {
+	        AddEventMsg("Open#NAMESPACE#ViewLogic", Open#NAMESPACE#ViewLogic);
+	        AddEventMsg("Close#NAMESPACE#ViewLogic", Close#NAMESPACE#ViewLogic);
 #EVENT#
         }
+        
+#region Life Cycle
         public void Begin()
         {
             view = ViewMaster.Instance.GetView<#NAMESPACE#View>();
@@ -24,6 +29,7 @@ namespace Modules.#NAMESPACE#
         {
             
         }
+        
         public void AppPause(bool pause)
         {
             
@@ -36,5 +42,17 @@ namespace Modules.#NAMESPACE#
         {
             
         }
+#endregion
+
+#region View Logic
+        private void Open#NAMESPACE#ViewLogic()
+        {
+            
+        }
+        private void Close#NAMESPACE#ViewLogic()
+        {
+	        
+        }
+#endregion
     }
 }

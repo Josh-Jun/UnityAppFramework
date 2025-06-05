@@ -28,12 +28,14 @@ namespace Modules.#NAMESPACE#
         protected override void OpenView()
         {
             base.OpenView();
+	        SendEventMsg("Open#SCRIPTNAME#Logic");
             #NOTRIM#
         }
 
         protected override void CloseView()
         {
             base.CloseView();
+	        SendEventMsg("Close#SCRIPTNAME#Logic");
             #NOTRIM#
         }
     }
