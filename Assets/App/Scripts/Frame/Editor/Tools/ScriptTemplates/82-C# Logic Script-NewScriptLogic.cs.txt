@@ -21,7 +21,8 @@ namespace Modules.#NAMESPACE#
             #NOTRIM#
         }
         
-#region Life Cycle
+        #region Logic Life Cycle
+        
         public void Begin()
         {
             view = ViewMaster.Instance.GetView<#NAMESPACE#View>();
@@ -43,9 +44,17 @@ namespace Modules.#NAMESPACE#
         {
             #NOTRIM#
         }
-#endregion
+        
+        #endregion
 
-#region View Logic
+        #region Logic
+        
+        
+        
+        #endregion
+
+        #region View
+        
         private void Open#NAMESPACE#ViewLogic()
         {
             
@@ -54,6 +63,7 @@ namespace Modules.#NAMESPACE#
         {
 	        
         }
-#endregion
+        
+        #endregion
     }
 }
