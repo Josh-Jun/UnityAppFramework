@@ -8,6 +8,7 @@
  * */
 
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using App.Core.Master;
 using SQLite4Unity3d;
@@ -20,7 +21,14 @@ namespace App.Core.Tools
 
         public DataBase(string dbName)
         {
+            if (!Directory.Exists(PlatformMaster.Instance.GetDataPath("DataBase")))
+            {
+                Directory.CreateDirectory(PlatformMaster.Instance.GetDataPath("DataBase"));
+            }
             var dbPath = $"{PlatformMaster.Instance.GetDataPath("DataBase")}/{dbName}";
+            #if !UNITY_ANDROID
+            dbPath = $"URI=file:{PlatformMaster.Instance.GetDataPath("DataBase")}/{dbName}";
+            #endif
             _connection = new SQLiteConnection(dbPath, SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite);
         }
 
@@ -42,6 +50,13 @@ namespace App.Core.Tools
         public int DropTable<T>()
         {
             return _connection.DropTable<T>();
+        }
+
+        public int ExistTable<T>()
+        {
+            var mapping = _connection.GetMapping<T>();
+            var query = $"SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='{mapping.TableName}';";
+            return _connection.ExecuteScalar<int>(query);
         }
 
         public int Insert<T>(T entity)
