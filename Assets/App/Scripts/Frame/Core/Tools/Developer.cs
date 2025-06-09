@@ -17,7 +17,7 @@ namespace App.Core.Tools
         public static long ToTimeStamp(this DateTime target, bool ms = true)
         {
             var from = new DateTime(1970, 1, 1, 0, 0, 0);
-            var ts = new TimeSpan(target.ToUniversalTime().Ticks - from.Ticks);
+            var ts = target.ToUniversalTime() - TimeZoneInfo.ConvertTimeToUtc(from, TimeZoneInfo.Local);
             var timestamp = ms ? Convert.ToInt64(ts.TotalMilliseconds) : Convert.ToInt64(ts.TotalSeconds);
             return timestamp;
         }
