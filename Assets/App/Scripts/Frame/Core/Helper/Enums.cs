@@ -35,4 +35,17 @@ namespace App.Core.Helper
         FriendMail = 1 << 3,
         GiftMail = 1 << 4,
     }
+    
+    public enum RedDotAnchor
+    {
+        UpperLeft,
+        UpperCenter,
+        UpperRight,
+        MiddleLeft,
+        MiddleCenter,
+        MiddleRight,
+        LowerLeft,
+        LowerCenter,
+        LowerRight,
+    }
 }

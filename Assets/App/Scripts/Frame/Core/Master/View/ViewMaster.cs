@@ -172,7 +172,7 @@ namespace App.Core.Master
             }
         }
 
-        public void AddRedDotView(GameObject target, RedDotMold mold = RedDotMold.MainMail, bool showCount = true)
+        public void AddRedDotView(GameObject target, RedDotMold mold = RedDotMold.SystemMail, bool showCount = true, RedDotAnchor anchor = RedDotAnchor.UpperRight, Vector2 offset = default, int size = 30)
         {
             var view = target.GetOrAddComponent<RedDotView>();
             view.RedDotMold = mold;
@@ -278,7 +278,31 @@ namespace App.Core.Master
 
         public void RefreshRedDotCount(RedDotMold mold, int count)
         {
+            _redDotMap.TryAdd(mold, count);
             _redDotMap[mold] = count;
+            RefreshRedDotView();
+        }
+        
+        public void AddRedDotCount(RedDotMold mold, int count)
+        {
+            if (!_redDotMap.TryAdd(mold, count))
+            {
+                _redDotMap[mold] += count;
+            }
+            RefreshRedDotView();
+        }
+        
+        public void SubRedDotCount(RedDotMold mold, int count)
+        {
+            _redDotMap.TryAdd(mold, count);
+            if(_redDotMap[mold] < count)
+            {
+                _redDotMap[mold] = 0;
+            }
+            else
+            {
+                _redDotMap[mold] -= count;
+            }
             RefreshRedDotView();
         }
 
