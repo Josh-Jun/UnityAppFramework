@@ -46,7 +46,9 @@ namespace App.Core.Master
         }
         public override void QuitUnityPlayer()
         {
+#if UNITY_EDITOR
             EditorApplication.isPlaying = false;
+#endif
             Log.I("Quit Editor");
         }
         public override string GetAppData(string key)
