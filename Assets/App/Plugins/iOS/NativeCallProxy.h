@@ -16,3 +16,4 @@ __attribute__ ((visibility("default")))
 +(void) registerAPIforNativeCalls:(id<NativeCallsProtocol>) aApi;
 
 @end
+
