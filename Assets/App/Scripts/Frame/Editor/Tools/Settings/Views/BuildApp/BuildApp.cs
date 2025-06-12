@@ -271,7 +271,7 @@ namespace App.Editor.View
             {
                 BuildOutputRoot = buildOutputRoot,
                 BuildinFileRoot = streamingAssetsRoot,
-                BuildPipeline = EBuildPipeline.BuiltinBuildPipeline.ToString(),
+                BuildPipeline = $"{EBuildPipeline.ScriptableBuildPipeline}",
                 BuildBundleType = 2, //必须指定资源包类型
                 BuildTarget = buildTarget,
                 PackageName = $"{package}",
