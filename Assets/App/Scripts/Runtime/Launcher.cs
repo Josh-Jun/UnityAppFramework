@@ -68,7 +68,7 @@ namespace App.Runtime
                 LoadMetadataForAOTAssemblies();
                 LoadHotfixAssemblies();
             }
-
+            Debug.Log("加载AppScene场景");
             // 加载AppScene
             Assets.LoadSceneAsync(AssetPath.AppScene);
         }
@@ -91,7 +91,7 @@ namespace App.Runtime
         {
             foreach (var aotName in Global.AOTMetaAssemblyNames)
             {
-                var ta = builtinPackage.LoadAssetAsync($"{Global.DllBasePath}/{aotName}").AssetObject as TextAsset;
+                var ta = builtinPackage.LoadAssetAsync($"{Global.DllBasePath}/{aotName}.bytes").AssetObject as TextAsset;
                 if (ta != null) RuntimeApi.LoadMetadataForAOTAssembly(ta.bytes, HomologousImageMode.SuperSet);
             }
         }
@@ -100,7 +100,7 @@ namespace App.Runtime
         {
             foreach (var assemblyName in Global.HotfixAssemblyNames)
             {
-                var ta = builtinPackage.LoadAssetAsync($"{Global.DllBasePath}/{assemblyName}").AssetObject as TextAsset;
+                var ta = builtinPackage.LoadAssetAsync($"{Global.DllBasePath}/{assemblyName}.bytes").AssetObject as TextAsset;
                 if (ta != null) System.Reflection.Assembly.Load(ta.bytes);
             }
         }
