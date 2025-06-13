@@ -246,9 +246,6 @@ namespace App.Editor.View
                 {
                     var buildParameters = YooAssetBuild(EditorUserBuildSettings.activeBuildTarget, AssetPackage.HotfixPackage, EBuildinFileCopyOption.ClearAndCopyAll);
                     OnlyCopyPackageManifestFile(buildParameters);
-                    AppConfig.CDNVersion = buildParameters.PackageVersion;
-                    EditorUtility.SetDirty(AppConfig);
-                    AssetDatabase.Refresh();
                     break;
                 }
                 case EPlayMode.EditorSimulateMode:
@@ -293,6 +290,11 @@ namespace App.Editor.View
             if (buildResult.Success)
             {
                 Debug.Log($"构建成功 : {buildResult.OutputPackageDirectory}");
+                
+                var config = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
+                config.CDNVersion = buildParameters.PackageVersion;
+                EditorUtility.SetDirty(config);
+                AssetDatabase.Refresh();
             }
             else
             {
