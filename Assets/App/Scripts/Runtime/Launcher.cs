@@ -25,6 +25,7 @@ namespace App.Runtime
             YooAssets.Initialize();
             // 创建默认包
             builtinPackage = await Assets.CreatePackageAsync(AssetPackage.BuiltinPackage, true);
+            YooAssets.SetDefaultPackage(builtinPackage);
             // 请求资源清单的版本信息
             var (request_result, version) = await Assets.RequestPackageVersionAsync(AssetPackage.BuiltinPackage);
             if (request_result)

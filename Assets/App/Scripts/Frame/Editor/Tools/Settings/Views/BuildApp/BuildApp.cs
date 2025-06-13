@@ -236,15 +236,16 @@ namespace App.Editor.View
         private void BuildAssets()
         {
             AppConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
-            YooAssetBuild(EditorUserBuildSettings.activeBuildTarget, AssetPackage.BuiltinPackage, EBuildinFileCopyOption.ClearAndCopyAll);
+            var version = GetDefaultPackageVersion();
+            YooAssetBuild(EditorUserBuildSettings.activeBuildTarget, AssetPackage.BuiltinPackage, version);
             switch (AppConfig.AssetPlayMode)
             {
                 case EPlayMode.OfflinePlayMode:
-                    YooAssetBuild(EditorUserBuildSettings.activeBuildTarget, AssetPackage.HotfixPackage, EBuildinFileCopyOption.ClearAndCopyAll);
+                    YooAssetBuild(EditorUserBuildSettings.activeBuildTarget, AssetPackage.HotfixPackage, version);
                     break;
                 case EPlayMode.HostPlayMode:
                 {
-                    var buildParameters = YooAssetBuild(EditorUserBuildSettings.activeBuildTarget, AssetPackage.HotfixPackage, EBuildinFileCopyOption.ClearAndCopyAll);
+                    var buildParameters = YooAssetBuild(EditorUserBuildSettings.activeBuildTarget, AssetPackage.HotfixPackage, version);
                     OnlyCopyPackageManifestFile(buildParameters);
                     break;
                 }
@@ -256,7 +257,7 @@ namespace App.Editor.View
             }
         }
 
-        private static ScriptableBuildParameters YooAssetBuild(BuildTarget buildTarget, AssetPackage package, EBuildinFileCopyOption copyOption)
+        private static ScriptableBuildParameters YooAssetBuild(BuildTarget buildTarget, AssetPackage package, string version, EBuildinFileCopyOption copyOption = EBuildinFileCopyOption.ClearAndCopyAll)
         {
             Debug.Log($"开始构建 : {buildTarget}");
 
@@ -272,7 +273,7 @@ namespace App.Editor.View
                 BuildBundleType = 2, //必须指定资源包类型
                 BuildTarget = buildTarget,
                 PackageName = $"{package}",
-                PackageVersion = GetDefaultPackageVersion(),
+                PackageVersion = version,
                 VerifyBuildingResult = true,
                 EnableSharePackRule = true, //启用共享资源构建模式，兼容1.5x版本
                 FileNameStyle = EFileNameStyle.HashName,
