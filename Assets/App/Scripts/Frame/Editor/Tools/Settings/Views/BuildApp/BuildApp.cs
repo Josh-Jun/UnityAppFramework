@@ -191,20 +191,21 @@ namespace App.Editor.View
             AssetDatabase.Refresh();
         }
 
-        private void Build()
+        public static void Build()
         {
-            Apply();
-            AppConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
+            var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
             var package = PlayerSettings.applicationIdentifier.ToLower();
-            var channel = AppConfig.ChannelPackage.ToString().ToLower();
+            var channel = appConfig.ChannelPackage.ToString().ToLower();
             var version = PlayerSettings.bundleVersion;
-            var develop =  AppConfig.DevelopmentMold.ToString().ToLower();
+            var develop =  appConfig.DevelopmentMold.ToString().ToLower();
             var date = $"{DateTime.Now.Year}{DateTime.Now.Month:00}{DateTime.Now.Day:00}";
-            var suffix = AppConfig.NativeApp || EditorUserBuildSettings.activeBuildTarget == BuildTarget.iOS ? "" : ".apk";
+            var suffix = appConfig.NativeApp || EditorUserBuildSettings.activeBuildTarget == BuildTarget.iOS ? "" : ".apk";
             var name = $"{package}_{channel}_v{version}_{develop}_{date}{suffix}";
 
             EditorUserBuildSettings.SwitchActiveBuildTarget(EditorUserBuildSettings.selectedBuildTargetGroup,
                 EditorUserBuildSettings.activeBuildTarget);
+
+            var outputPath = Application.dataPath.Replace("Assets", "App");;
             if (Directory.Exists(outputPath))
             {
                 if (File.Exists(name))
@@ -217,9 +218,9 @@ namespace App.Editor.View
                 Directory.CreateDirectory(outputPath);
             }
 
-            var BuildPath = $"{outputPath}/{name}";
+            var buildPath = $"{outputPath}/{name}";
             var buildOption = BuildOptions.None;
-            if (AppConfig.EnableLog)
+            if (appConfig.EnableLog)
             {
                 buildOption |= BuildOptions.Development;
             }
@@ -227,12 +228,12 @@ namespace App.Editor.View
             buildOption |= BuildOptions.CleanBuildCache;
             buildOption |= BuildOptions.BuildScriptsOnly;
             buildOption |= BuildOptions.CompressWithLz4;
-            var report = BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, BuildPath, EditorUserBuildSettings.activeBuildTarget, buildOption);
+            var report = BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, buildPath, EditorUserBuildSettings.activeBuildTarget, buildOption);
 
             if (report.summary.result == BuildResult.Succeeded)
             {
-                EditorUtility.RevealInFinder(BuildPath);
-                Debug.Log($"GenericBuild Success Path = {BuildPath}");
+                EditorUtility.RevealInFinder(buildPath);
+                Debug.Log($"GenericBuild Success Path = {buildPath}");
             }
             else
             {
@@ -242,12 +243,12 @@ namespace App.Editor.View
 
         #region YooAssetBuild
 
-        private void BuildAssets()
+        public static void BuildAssets()
         {
-            AppConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
+            var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
             var version = GetDefaultPackageVersion();
             YooAssetBuild(EditorUserBuildSettings.activeBuildTarget, AssetPackage.BuiltinPackage, version);
-            switch (AppConfig.AssetPlayMode)
+            switch (appConfig.AssetPlayMode)
             {
                 case EPlayMode.OfflinePlayMode:
                     YooAssetBuild(EditorUserBuildSettings.activeBuildTarget, AssetPackage.HotfixPackage, version);
@@ -346,7 +347,7 @@ namespace App.Editor.View
         
         #region GenerateAndCopyDll
         
-        private static void GenerateAndCopyDll()
+        public static void GenerateAndCopyDll()
         {
             var buildTarget = EditorUserBuildSettings.activeBuildTarget;
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
