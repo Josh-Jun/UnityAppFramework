@@ -218,11 +218,13 @@ namespace App.Editor.View
 
             var BuildPath = $"{outputPath}/{name}";
             var buildOption = BuildOptions.None;
-            if (AppConfig.DevelopmentMold != DevelopmentMold.Release)
+            if (AppConfig.EnableLog)
             {
                 buildOption |= BuildOptions.Development;
             }
 
+            buildOption |= BuildOptions.CleanBuildCache;
+            buildOption |= BuildOptions.BuildScriptsOnly;
             buildOption |= BuildOptions.CompressWithLz4;
             BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, BuildPath, EditorUserBuildSettings.activeBuildTarget, buildOption);
 
