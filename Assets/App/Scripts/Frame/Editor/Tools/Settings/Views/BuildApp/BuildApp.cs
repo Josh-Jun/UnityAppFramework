@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using YooAsset;
 using YooAsset.Editor;
+using BuildResult = UnityEditor.Build.Reporting.BuildResult;
 #if PICO_XR_SETTING
 using UnityEditor.XR.Management;
 using UnityEditor.XR.Management.Metadata;
@@ -226,11 +227,17 @@ namespace App.Editor.View
             buildOption |= BuildOptions.CleanBuildCache;
             buildOption |= BuildOptions.BuildScriptsOnly;
             buildOption |= BuildOptions.CompressWithLz4;
-            BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, BuildPath, EditorUserBuildSettings.activeBuildTarget, buildOption);
+            var report = BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, BuildPath, EditorUserBuildSettings.activeBuildTarget, buildOption);
 
-            EditorUtility.RevealInFinder(BuildPath);
-
-            Debug.Log($"GenericBuild Success Path = {BuildPath}");
+            if (report.summary.result == BuildResult.Succeeded)
+            {
+                EditorUtility.RevealInFinder(BuildPath);
+                Debug.Log($"GenericBuild Success Path = {BuildPath}");
+            }
+            else
+            {
+                Debug.Log($"Build Failed {report.SummarizeErrors()}");
+            }
         }
 
         #region YooAssetBuild
