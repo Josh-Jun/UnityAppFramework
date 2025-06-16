@@ -50,6 +50,22 @@ namespace App.Core.Master
             PlatformMsgReceiver.Instance.AndroidPermissionCallbacks(permission, -1);
         }
 
+        public override int KeyboardHeight
+        {
+            get
+            {
+#if UNITY_ANDROID && !UNITY_EDITOR
+                using var unityClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+                var getView = unityClass.GetStatic<AndroidJavaObject>("currentActivity")
+                    .Get<AndroidJavaObject>("mUnityPlayer").Call<AndroidJavaObject>("getView");
+                using var rct = new AndroidJavaObject("android.graphics.Rect");
+                getView.Call<AndroidJavaObject>("getWindowVisibleDisplayFrame", rct);
+                return Screen.height - rct.Call<int>("height");
+#endif
+                return 0;
+            }
+        }
+
         public override void RequestUserPermission(string permission)
         {
             Log.I("RequestUserPermission", ("Permission", permission));

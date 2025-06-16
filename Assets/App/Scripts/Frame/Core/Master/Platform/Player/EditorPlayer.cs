@@ -2,6 +2,7 @@
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+
 namespace App.Core.Master
 {
     public class EditorPlayer : PlatformMaster
@@ -9,15 +10,19 @@ namespace App.Core.Master
         public override bool IsEditor { get; } = true;
         public override string Name { get; } = "Android";
         public override string PlatformName { get; } = "android";
+
         public override int GetNetSignal()
         {
             return 0;
         }
-        
+
+        public override int KeyboardHeight => 0;
+
         public override void OpenAppSetting()
         {
             Log.I("OpenAppSetting Editor");
         }
+
         public override void SendMsgToNative(string msg)
         {
             Log.I("SendMsgToNative", ("Data", msg));
@@ -32,18 +37,22 @@ namespace App.Core.Master
         {
             return $"{Application.persistentDataPath}/{folder}";
         }
+
         public override string GetAssetsPath(string folder)
         {
             return $"{Application.streamingAssetsPath}/{folder}";
         }
+
         public override void InstallApp(string appPath)
         {
             Log.I("InstallApp", ("AppPath", appPath));
         }
+
         public override void Vibrate()
         {
             Log.I("Vibrate Editor");
         }
+
         public override void QuitUnityPlayer()
         {
 #if UNITY_EDITOR
@@ -51,6 +60,7 @@ namespace App.Core.Master
 #endif
             Log.I("Quit Editor");
         }
+
         public override string GetAppData(string key)
         {
             return "";

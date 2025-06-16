@@ -7,6 +7,7 @@ namespace App.Core.Master
         public override bool IsEditor { get; } = false;
         public override string Name { get; } = "StandaloneOSX";
         public override string PlatformName { get; } = "macos";
+        public override int KeyboardHeight => 0;
         public override int GetNetSignal()
         {
             return 0;
