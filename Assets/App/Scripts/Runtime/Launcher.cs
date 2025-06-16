@@ -58,6 +58,9 @@ namespace App.Runtime
 
         private void OnDownloadFinishFunction(bool isSucceed)
         {
+#if !UNITY_EDITOR
+            Shader.WarmupAllShaders();
+#endif
             if (isNeedRestart)
             {
                 hotfix.SetUpdateCompletePanelActive(true);
