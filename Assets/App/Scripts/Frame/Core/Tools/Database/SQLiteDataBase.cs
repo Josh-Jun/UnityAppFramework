@@ -133,10 +133,10 @@ namespace App.Core.Tools
             }
 
             // string queryString = "INSERT INTO " + tableName + " VALUES (" + values[0];
-            string queryString = "INSERT INTO " + tableName + " (";
-            foreach (string colName in colNames)
+            string queryString = "INSERT INTO " + tableName + " (" + colNames[0];
+            for (int i = 1; i < colNames.Length; i++)
             {
-                queryString += ", " + colName;
+                queryString += ", " + colNames[i];
             }
             queryString += ") VALUES (" + values[0];
             for (int i = 1; i < values.Length; i++)
@@ -145,6 +145,7 @@ namespace App.Core.Tools
             }
 
             queryString += " )";
+            Log.W(queryString);
             return ExecuteQuery(queryString);
         }
 
