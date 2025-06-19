@@ -5,10 +5,13 @@ import time
 static_func = 'App.Editor.View.BuildApp.OneKeyBuild'
 # 调用unity中我们封装的静态函数
 def call_unity_static_func():
+    os.system('git reset HEAD^')
+    os.system('git pull')
 	log_file = sys.argv[2] + '/unity_build.log'
 	cmd = 'start %s -quit -batchmode -projectPath %s -logFile %s -executeMethod %s --version:%s --development:%s --assetplaymold:%s'%(sys.argv[1], sys.argv[2], log_file, static_func, sys.argv[3], sys.argv[4], sys.argv[5])
 	print('run cmd:  ' + cmd)
 	os.system(cmd)
+    os.system('git reset HEAD^')
 
 
 def monitor_unity_log(target_log):
