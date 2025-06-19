@@ -4,7 +4,7 @@ using App.Core.Tools;
 
 namespace App.Core.Master
 {
-    public class LanUdpMaster : SingletonEvent<LanUdpMaster>
+    public class UdpMaster : SingletonEvent<UdpMaster>
     {
         private SocketUdp<SessionUdp> server;
         private SocketUdp<SessionUdp> client;
@@ -67,7 +67,7 @@ namespace App.Core.Master
         /// <summary>消息分发 </summary>
         private void HandOutMsg(string msg)
         {
-            NetcomMaster.Instance.ReceiveMsg(msg);
+            SocketMaster.Instance.ReceiveMsg(msg);
         }
 
         #endregion

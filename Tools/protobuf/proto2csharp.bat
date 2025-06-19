@@ -6,8 +6,6 @@ for %%i in (proto/*.proto) do (
 	echo From %%i To %%~ni.cs is Successfully!
 )
 rem step2 copy
-set target_dir=../../Assets/App/Scripts/Frame/Core/Master/Network/Data/Protobuf/
-for %%i in (output/*.cs) do (
-	copy ./output/%%i %target_dir%
-)
+set target_dir=..\..\Assets\App\Scripts\Frame\Core\Master\Network\Data\Protobuf
+copy .\output %target_dir%
 pause

@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace App.Core.Master
 {
-    public partial class NetcomMaster : SingletonMonoEvent<NetcomMaster>
+    public partial class HttpsMaster : SingletonMonoEvent<HttpsMaster>
     {
         private const string TextureCachePath = "Cache/Textures/";
         private const string AudioCachePath = "Cache/Audios/";

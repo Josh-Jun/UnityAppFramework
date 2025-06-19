@@ -413,7 +413,54 @@ namespace App.Editor.View
             }
         }
 
-        #endregion 
-        
+        #endregion
+
+
+        // Jenkins打包掉用
+        public static void OneKeyBuild()
+        {
+            // 解析命令行参数
+            var args = Environment.GetCommandLineArgs();
+            var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
+            // 设置相关参数
+            foreach (var arg in args)
+            {
+                Debug.Log($"解析到的命令行参数:[{arg}]");
+                if (arg.Contains("--version:"))
+                {
+                    var version = arg.Split(':')[^1];
+                    var code = version.Replace(".", "");
+                    PlayerSettings.bundleVersion = version;
+                    PlayerSettings.Android.bundleVersionCode = int.Parse(code);
+                    PlayerSettings.iOS.buildNumber = code;
+                }
+                else if (arg.Contains("--development:"))
+                {
+                    var development = arg.Split(':')[^1];
+                    var mold = (DevelopmentMold)Enum.Parse(typeof(DevelopmentMold), development);
+                    appConfig.DevelopmentMold = mold;
+                }
+                else if (arg.Contains("--assetplaymold:"))
+                {
+                    var assetplaymold = arg.Split(':')[^1];
+                    var mold = (EPlayMode)Enum.Parse(typeof(EPlayMode), assetplaymold);
+                    appConfig.AssetPlayMode = mold;
+                }
+            }
+            
+            // 保存AppConfig
+            EditorUtility.SetDirty(appConfig);
+            AssetDatabase.Refresh();
+            
+            // 开始构建
+            Debug.Log("=============================================Start Build HybridCLR=============================================");
+            GenerateAndCopyDll();
+            Debug.Log("=============================================Start Build AssetBundle=============================================");
+            BuildAssets();
+            Debug.Log("=============================================Start Build App=============================================");
+            Build();
+            
+            Debug.Log("Build Complete!!!");
+        }
     }
 }

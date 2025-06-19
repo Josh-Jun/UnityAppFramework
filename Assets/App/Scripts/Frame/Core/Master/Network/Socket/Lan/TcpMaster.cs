@@ -4,7 +4,7 @@ using App.Core.Tools;
 
 namespace App.Core.Master
 {
-    public class LanTcpMaster : SingletonEvent<LanTcpMaster>
+    public class TcpMaster : SingletonEvent<TcpMaster>
     {
         private static readonly string lockNetTcp = "lockNetTcp"; //加锁
 
@@ -59,6 +59,7 @@ namespace App.Core.Master
         /// <summary>网络服务初始化</summary>
         public void InitClientNet(string ip, int port, Action<bool> cb = null)
         {
+            TIME_ID = TimeUpdateMaster.Instance.StartTimer(Update);
             client = new SocketTcp<SessionTcp>();
 
             #region 网络日志
@@ -180,19 +181,19 @@ namespace App.Core.Master
                 case (int)LAN_CMD.SCMsg_UnSelf:
                     break;
                 case (int)LAN_CMD.CSMsg:
-                    NetcomMaster.Instance.ReceiveMsg((GameMsg)msgPack.msg);
+                    SocketMaster.Instance.ReceiveMsg((GameMsg)msgPack.msg);
                     break;
                 case (int)LAN_CMD.CCMsg_All:
-                    NetcomMaster.Instance.CCPushMsg_All((GameMsg)msgPack.msg);
+                    SocketMaster.Instance.CCPushMsg_All((GameMsg)msgPack.msg);
                     break;
                 case (int)LAN_CMD.CCMsg_One:
-                    NetcomMaster.Instance.CCPushMsg_One((GameMsg)msgPack.msg);
+                    SocketMaster.Instance.CCPushMsg_One((GameMsg)msgPack.msg);
                     break;
                 case (int)LAN_CMD.CCMsg_List:
-                    NetcomMaster.Instance.CCPushMsg_List((GameMsg)msgPack.msg);
+                    SocketMaster.Instance.CCPushMsg_List((GameMsg)msgPack.msg);
                     break;
                 case (int)LAN_CMD.CCMsg_UnSelf:
-                    NetcomMaster.Instance.CCPushMsg_UnSelf(msgPack.session, (GameMsg)msgPack.msg);
+                    SocketMaster.Instance.CCPushMsg_UnSelf(msgPack.session, (GameMsg)msgPack.msg);
                     break;
                 default:
                     break;
@@ -421,7 +422,7 @@ namespace App.Core.Master
         /// <summary>消息分发</summary>
         public void HandOutMsg(SocketMsg msg)
         {
-            NetcomMaster.Instance.ReceiveMsg((GameMsg)msg);
+            SocketMaster.Instance.ReceiveMsg((GameMsg)msg);
         }
 
         #endregion

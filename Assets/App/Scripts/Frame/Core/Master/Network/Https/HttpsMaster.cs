@@ -2,7 +2,7 @@
 
 namespace App.Core.Master
 {
-    public partial class NetcomMaster : SingletonMonoEvent<NetcomMaster>
+    public partial class HttpsMaster : SingletonMonoEvent<HttpsMaster>
     {
         protected override void OnSingletonMonoInit()
         {

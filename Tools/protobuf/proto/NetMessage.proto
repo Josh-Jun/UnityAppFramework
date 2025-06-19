@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+// 心跳
+message CSHeartBeat
+{
+	int64 clientTime = 1;//客户端时间 毫秒
+}
+// 心跳回调
+message SCHeartBeat
+{
+	int64 clientTime = 1;//客户端时间 毫秒
+	int64 serverTime = 2;//客户端时间 毫秒
+}

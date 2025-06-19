@@ -7,7 +7,7 @@ namespace App.Core.Master
     /// <summary>
     /// Socket局域网
     /// </summary>
-    public partial class NetcomMaster : SingletonMonoEvent<NetcomMaster>
+    public partial class SocketMaster : SingletonMonoEvent<SocketMaster>
     {
         #region Tcp
 
@@ -16,51 +16,51 @@ namespace App.Core.Master
         /// <summary> 开启Tcp服务端 </summary>
         public void StartLanTcpServer(string ip, Action<bool> cb = null)
         {
-            LanTcpMaster.Instance.InitServerNet(ip, Global.SocketPort, cb);
+            TcpMaster.Instance.InitServerNet(ip, Global.SocketPort, cb);
         }
 
         /// <summary> 给所有客户端发送消息 </summary>
         public void ServerSendToClientMsg_All(string eventName, string data)
         {
             GameMsg gameMsg = GetServerGameMsg(LAN_CMD.SCMsg_All, eventName, data);
-            LanTcpMaster.Instance.SendMsgAll(gameMsg);
+            TcpMaster.Instance.SendMsgAll(gameMsg);
         }
 
         /// <summary> 给客户端列表发送消息 </summary>
         public void ServerSendToClientMsg_List(string eventName, List<string> list, string data)
         {
             GameMsg gameMsg = GetServerGameMsg(LAN_CMD.SCMsg_List, eventName, data);
-            LanTcpMaster.Instance.SendMsgAll(gameMsg, list);
+            TcpMaster.Instance.SendMsgAll(gameMsg, list);
         }
 
         /// <summary> 给单个客户端发送消息 </summary>
         public void ServerSendToClientMsg_One(string eventName, SessionTcp session, string data)
         {
             GameMsg gameMsg = GetServerGameMsg(LAN_CMD.SCMsg_One, eventName, data);
-            LanTcpMaster.Instance.SendMsg(session, gameMsg);
+            TcpMaster.Instance.SendMsg(session, gameMsg);
         }
 
         /// <summary> 给单个客户端发送消息 </summary>
         public void ServerSendToClientMsg_One(string eventName, string deviceId, string data)
         {
-            SessionTcp session = LanTcpMaster.Instance.GetStudentSessionByDeviceId(deviceId);
+            SessionTcp session = TcpMaster.Instance.GetStudentSessionByDeviceId(deviceId);
             GameMsg gameMsg = GetServerGameMsg(LAN_CMD.SCMsg_One, eventName, data);
-            LanTcpMaster.Instance.SendMsg(session, gameMsg);
+            TcpMaster.Instance.SendMsg(session, gameMsg);
         }
 
         /// <summary> 给客户端发送消息(移除自己) </summary>
         public void ServerSendToClientMsg_Unself(string eventName, string deviceId, string data)
         {
-            SessionTcp session = LanTcpMaster.Instance.GetStudentSessionByDeviceId(deviceId);
+            SessionTcp session = TcpMaster.Instance.GetStudentSessionByDeviceId(deviceId);
             GameMsg gameMsg = GetServerGameMsg(LAN_CMD.SCMsg_UnSelf, eventName, data);
-            LanTcpMaster.Instance.SendMsgAll(session, gameMsg);
+            TcpMaster.Instance.SendMsgAll(session, gameMsg);
         }
 
         /// <summary> 给客户端发送消息(移除自己) </summary>
         public void ServerSendToClientMsg_Unself(string eventName, SessionTcp session, string data)
         {
             GameMsg gameMsg = GetServerGameMsg(LAN_CMD.SCMsg_UnSelf, eventName, data);
-            LanTcpMaster.Instance.SendMsgAll(session, gameMsg);
+            TcpMaster.Instance.SendMsgAll(session, gameMsg);
         }
 
         /// <summary> 获取消息包 </summary>
@@ -84,42 +84,42 @@ namespace App.Core.Master
         /// <summary> 开启Tcp客户端 </summary>
         public void StartLanTcpClient(string ip, Action<bool> cb = null)
         {
-            LanTcpMaster.Instance.InitServerNet(ip, Global.SocketPort, cb);
+            TcpMaster.Instance.InitClientNet(ip, Global.SocketPort, cb);
         }
 
         /// <summary> 给服务端发送消息 </summary>
         public void ClientSendToServerMsg(string eventName, string data)
         {
             GameMsg gameMsg = GetClientGameMsg(LAN_CMD.CSMsg, null, eventName, data);
-            LanTcpMaster.Instance.SendMsg(gameMsg);
+            TcpMaster.Instance.SendMsg(gameMsg);
         }
 
         /// <summary> 给客户端发送消息(包含自己) </summary>
         public void ClientSendToClientMsg_All(string eventName, string data)
         {
             GameMsg gameMsg = GetClientGameMsg(LAN_CMD.CCMsg_All, null, eventName, data);
-            LanTcpMaster.Instance.SendMsg(gameMsg);
+            TcpMaster.Instance.SendMsg(gameMsg);
         }
 
         /// <summary> 给客户端发送消息(客户端列表) </summary>
         public void ClientSendToClientMsg_List(string eventName, List<string> list, string data)
         {
             GameMsg gameMsg = GetClientGameMsg(LAN_CMD.CCMsg_List, list, eventName, data);
-            LanTcpMaster.Instance.SendMsg(gameMsg);
+            TcpMaster.Instance.SendMsg(gameMsg);
         }
 
         /// <summary> 给客户端发送消息(一个客户端) </summary>
         public void ClientSendToClientMsg_One(string eventName, string deviceId, string data)
         {
             GameMsg gameMsg = GetClientGameMsg(LAN_CMD.CCMsg_One, deviceId, eventName, data);
-            LanTcpMaster.Instance.SendMsg(gameMsg);
+            TcpMaster.Instance.SendMsg(gameMsg);
         }
 
         /// <summary> 给客户端发送消息(移除自己) </summary>
         public void ClientSendToClientMsg_UnSelf(string eventName, string data)
         {
             GameMsg gameMsg = GetClientGameMsg(LAN_CMD.CCMsg_UnSelf, null, eventName, data);
-            LanTcpMaster.Instance.SendMsg(gameMsg);
+            TcpMaster.Instance.SendMsg(gameMsg);
         }
 
         /// <summary> 获取消息包 </summary>
@@ -166,9 +166,9 @@ namespace App.Core.Master
         public void CCPushMsg_One(GameMsg gameMsg)
         {
             string deviceId = (string)gameMsg.pushMsg.Param;
-            SessionTcp session = LanTcpMaster.Instance.GetStudentSessionByDeviceId(deviceId);
+            SessionTcp session = TcpMaster.Instance.GetStudentSessionByDeviceId(deviceId);
             gameMsg.pushMsg.Param = null;
-            LanTcpMaster.Instance.SendMsg(session, gameMsg);
+            TcpMaster.Instance.SendMsg(session, gameMsg);
         }
 
         /// <summary> 客户端转发客户端(多人) </summary>
@@ -176,19 +176,19 @@ namespace App.Core.Master
         {
             List<string> list = (List<string>)gameMsg.pushMsg.Param;
             gameMsg.pushMsg.Param = null;
-            LanTcpMaster.Instance.SendMsgAll(gameMsg, list);
+            TcpMaster.Instance.SendMsgAll(gameMsg, list);
         }
 
         /// <summary> 客户端转发客户端(移除自己) </summary>
         public void CCPushMsg_UnSelf(SessionTcp session, GameMsg gameMsg)
         {
-            LanTcpMaster.Instance.SendMsgAll(session, gameMsg);
+            TcpMaster.Instance.SendMsgAll(session, gameMsg);
         }
 
         /// <summary> 客户端转发客户端(所有人) </summary>
         public void CCPushMsg_All(GameMsg gameMsg)
         {
-            LanTcpMaster.Instance.SendMsgAll(gameMsg);
+            TcpMaster.Instance.SendMsgAll(gameMsg);
         }
 
         #endregion
@@ -205,7 +205,7 @@ namespace App.Core.Master
 
         public void StartLanUdpServer(Action<bool> cb = null)
         {
-            LanUdpMaster.Instance.InitServerNet(Global.SocketPort, cb);
+            UdpMaster.Instance.InitServerNet(Global.SocketPort, cb);
         }
 
         #endregion
@@ -214,14 +214,14 @@ namespace App.Core.Master
 
         public void StartLanUdpClient(Action<bool> cb = null)
         {
-            LanUdpMaster.Instance.InitClientNet(Global.SocketPort, cb);
+            UdpMaster.Instance.InitClientNet(Global.SocketPort, cb);
         }
 
         #endregion
 
         public void SendMsg(string msg)
         {
-            LanUdpMaster.Instance.SendMsg(msg);
+            UdpMaster.Instance.SendMsg(msg);
         }
 
         public void ReceiveMsg(string msg)

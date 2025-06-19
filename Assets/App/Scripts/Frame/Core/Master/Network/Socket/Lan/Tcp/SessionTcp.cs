@@ -16,14 +16,14 @@ namespace App.Core.Master
         {
             var data = Encoding.UTF8.GetBytes(msg.ToCharArray());
             var gameMsg = SocketTools.DeSerialize<GameMsg>(data);
-            LanTcpMaster.Instance.AddMsgQueue(this, gameMsg); //服务端=>加入队列
-            LanTcpMaster.Instance.AddMsgQueue(gameMsg); //客户端=>加入队列
+            TcpMaster.Instance.AddMsgQueue(this, gameMsg); //服务端=>加入队列
+            TcpMaster.Instance.AddMsgQueue(gameMsg); //客户端=>加入队列
         }
 
         //断开连接
         protected override void OnDisConnected()
         {
-            LanTcpMaster.Instance.AddOffLine(this);
+            TcpMaster.Instance.AddOffLine(this);
         }
     }
 }

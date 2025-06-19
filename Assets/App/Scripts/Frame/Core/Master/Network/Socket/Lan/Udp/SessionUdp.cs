@@ -12,7 +12,7 @@ namespace App.Core.Master
         //收到数据
         protected override void OnReciveMsg(string msg)
         {
-            LanUdpMaster.Instance.AddMsgQueue(msg); //加入队列
+            UdpMaster.Instance.AddMsgQueue(msg); //加入队列
         }
 
         //断开连接

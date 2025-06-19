@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+// 命令
+enum PB_MSG_CMD
+{
+	C2S_HEART_BEAT =0;
+	S2C_HEART_BEAT =1;
+}

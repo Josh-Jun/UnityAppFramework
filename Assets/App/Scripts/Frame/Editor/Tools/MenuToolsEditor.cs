@@ -134,7 +134,7 @@ namespace App.Editor.Tools
         [MenuItem("App/Editor/Protobuf2CS %#Y", false, MENU_LEVEL)]
         public static void Protobuf2CS()
         {
-            var cdPath = Application.dataPath.Replace("Assets", "Data/protobuf");
+            var cdPath = Application.dataPath.Replace("Assets", "Tools/protobuf");
 #if UNITY_EDITOR_WIN
             var file = $"cmd.exe";
             var arguments = $"/C cd /D {cdPath} && proto2csharp.bat"; //非得cd到某目录,再调用下bat文件,不能直接使用全目录
