@@ -34,8 +34,6 @@ def monitor_unity_log(target_log):
 					start_output = False
 					break
 			time.sleep(0.5)
-	os.system('cd ' + sys.argv[2])
-	os.system('git reset HEAD^')
 	print('End Output Unity Log')
 
 
