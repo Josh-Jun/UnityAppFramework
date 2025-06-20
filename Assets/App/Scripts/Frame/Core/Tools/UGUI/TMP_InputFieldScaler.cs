@@ -1,11 +1,3 @@
-/* *
- * ===============================================
- * author      : Josh@win
- * e-mail      : shijun_z@163.com
- * create time : 2025年6月11 13:33
- * function    : 
- * ===============================================
- * */
 using TMPro;
 
 namespace UnityEngine.UI
@@ -47,7 +39,7 @@ namespace UnityEngine.UI
         }
         
         private float _originalWidth;
-        // private float _originalHeight;
+        private float _originalHeight;
         private TMP_InputField _inputField;
 
         private TMP_InputField InputField => _inputField ??= this.GetComponent<TMP_InputField>();
@@ -57,11 +49,9 @@ namespace UnityEngine.UI
             TextComponent.fontSize = fontSize;
             InputField.placeholder.GetComponent<TMP_Text>().fontSize = fontSize;
             this._originalWidth = this.GetComponent<RectTransform>().sizeDelta.x - Mathf.Abs(ViewRect.offsetMax.x) - Mathf.Abs(ViewRect.offsetMin.x);
-            // this._originalHeight = this.GetComponent<RectTransform>().sizeDelta.y - Mathf.Abs(ViewRect.offsetMax.y) - Mathf.Abs(ViewRect.offsetMin.y);
+            this._originalHeight = this.GetComponent<RectTransform>().sizeDelta.y;
             InputField.lineType = fixedWidth ? TMP_InputField.LineType.MultiLineNewline : TMP_InputField.LineType.SingleLine;
             RectTransform.SetSizeWithCurrentAnchors((RectTransform.Axis)1, LayoutUtility.GetPreferredHeight(_mRect));
-            Debug.LogWarning(ViewRect.offsetMax);
-            Debug.LogWarning(ViewRect.offsetMin);
         }
 
         private string Text => this.GetComponent<TMP_InputField>().text;
@@ -110,16 +100,21 @@ namespace UnityEngine.UI
             {
                 if (string.IsNullOrEmpty(Text))
                 {
-                    return RectTransform.sizeDelta.y;
+                    return _originalHeight;
                 }
                 var offset = Mathf.Abs(ViewRect.offsetMax.y) + Mathf.Abs(ViewRect.offsetMin.y);
+                float height = 0;
                 if (fixedWidth)
                 {
-                    return fixedWidth ? 
+                    height = fixedWidth ? 
                         TextComponent.GetPreferredValues(Text, _originalWidth, TextComponent.preferredHeight).y + offset : 
                         TextComponent.GetPreferredValues(Text, TextComponent.preferredWidth, TextComponent.preferredHeight).y + offset;
                 }
-                return TextComponent.preferredHeight + offset;
+                else
+                {
+                    height = TextComponent.preferredHeight + offset;
+                }
+                return Mathf.Clamp(height, _originalHeight, int.MaxValue);
             }
         }
 
