@@ -109,6 +109,8 @@ namespace App.Editor.View
 
             //获取按钮，并添加按钮事件
             root.Q<Button>("BtnBuild").clicked += BuildEvent;
+            root.Q<Button>("BtnSaveData").clicked += SaveData;
+            root.Q<Button>("BtnClearData").clicked += ClearData;
             treeView = root.Q<TreeView>("TreeView");
             
             //删除和添加按钮设置图标和添加事件
@@ -157,6 +159,25 @@ namespace App.Editor.View
         {
             
         }
+        
+        private void SaveData()
+        {
+            var view_script_name = rootFoldout.text;
+            
+            var json = JsonUtility.ToJson(_viewScriptData, true);
+            File.WriteAllText($"{cachePath}/{view_script_name}.json", json);
+        }
+        
+        private void ClearData()
+        {
+            var view_script_name = rootFoldout.text;
+            var file = $"{cachePath}/{view_script_name}.json";
+            if (File.Exists(file))
+            {
+                File.Delete(file);
+            }
+            OnObjectFieldChange(rootGameObject);
+        }
 
         private void BuildEvent()
         {
@@ -204,7 +225,7 @@ namespace App.Editor.View
                 File.WriteAllText(logic_script_path, logic_script);
             }
             
-            var json = JsonUtility.ToJson(_viewScriptData);
+            var json = JsonUtility.ToJson(_viewScriptData, true);
             File.WriteAllText($"{cachePath}/{view_script_name}.json", json);
             
             AssetDatabase.Refresh();

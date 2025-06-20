@@ -46,9 +46,9 @@ namespace App.Modules.Ask
             base.RegisterEvent();
         }
 
-        protected override void OpenView()
+        protected override void OpenView(object obj = null)
         {
-            base.OpenView();
+            base.OpenView(obj);
             askPanel.SetActive(false);
             tipsPanel.SetActive(false);
         }

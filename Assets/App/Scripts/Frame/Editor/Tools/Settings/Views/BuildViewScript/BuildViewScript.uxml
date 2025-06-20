@@ -34,6 +34,8 @@
                 <ui:VisualElement name="Child" style="flex-grow: 1; border-top-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:Button text="Build" display-tooltip-when-elided="true" name="BtnBuild" style="display: flex;" />
+        <ui:Button text="BuildScript" display-tooltip-when-elided="true" name="BtnBuild" style="display: flex;" />
+        <ui:Button text="SaveData" display-tooltip-when-elided="true" name="BtnSaveData" style="display: flex;" />
+        <ui:Button text="ClearData" display-tooltip-when-elided="true" name="BtnClearData" style="display: flex;" />
     </ui:VisualElement>
 </ui:UXML>

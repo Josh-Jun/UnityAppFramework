@@ -25,10 +25,10 @@ namespace Modules.#NAMESPACE#
             #NOTRIM#
         }
 
-        protected override void OpenView()
+        protected override void OpenView(object obj = null)
         {
-            base.OpenView();
-	        SendEventMsg("Open#SCRIPTNAME#Logic");
+            base.OpenView(obj);
+	        SendEventMsg("Open#SCRIPTNAME#Logic", obj);
             #NOTRIM#
         }
 

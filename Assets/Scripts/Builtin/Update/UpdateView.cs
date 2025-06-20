@@ -49,9 +49,9 @@ namespace App.Modules.Update
             btn_NextTime.onClick.AddListener(() => { Application.Quit(); });
             btn_UpdateNow.onClick.AddListener(() => { SendEventMsg("UpdateNow"); });
         }
-        protected override void OpenView()
+        protected override void OpenView(object obj = null)
         {
-            base.OpenView();
+            base.OpenView(obj);
             
             updateTipsPanel.SetGameObjectActive(false);
             progressBarPanel.SetGameObjectActive(false);

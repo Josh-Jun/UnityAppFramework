@@ -16,7 +16,7 @@ namespace Modules.#NAMESPACE#
         
         public #SCRIPTNAME#()
         {
-	        AddEventMsg("Open#NAMESPACE#ViewLogic", Open#NAMESPACE#ViewLogic);
+	        AddEventMsg<object>("Open#NAMESPACE#ViewLogic", Open#NAMESPACE#ViewLogic);
 	        AddEventMsg("Close#NAMESPACE#ViewLogic", Close#NAMESPACE#ViewLogic);
             #NOTRIM#
         }
@@ -55,7 +55,7 @@ namespace Modules.#NAMESPACE#
 
         #region View
         
-        private void Open#NAMESPACE#ViewLogic()
+        private void Open#NAMESPACE#ViewLogic(object obj)
         {
             
         }
