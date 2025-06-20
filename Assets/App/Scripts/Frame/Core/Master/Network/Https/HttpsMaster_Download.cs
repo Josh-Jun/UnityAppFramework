@@ -1,12 +1,12 @@
 using System;
 using App.Core.Tools;
 using UnityEngine;
-/// <summary>
-/// Https
-/// </summary>
 
 namespace App.Core.Master
 {
+    /// <summary>
+    /// Download
+    /// </summary>
     public partial class HttpsMaster : SingletonMonoEvent<HttpsMaster>
     {
         private const string TextureCachePath = "Cache/Textures/";
@@ -28,7 +28,7 @@ namespace App.Core.Master
             var uwr = Uwr;
             if (FileTools.FileExist(localPath))
             {
-                uwr.GetTexture(localPath, callback);
+                uwr.GetTexture($"file://{localPath}", callback);
             }
             else
             {
@@ -36,7 +36,7 @@ namespace App.Core.Master
                 {
                     FileTools.CreateFile(localPath, bytes);
                     uwr = Uwr;
-                    uwr.GetTexture(localPath, callback);
+                    uwr.GetTexture($"file://{localPath}", callback);
                 });
             }
         }
@@ -55,7 +55,7 @@ namespace App.Core.Master
             var uwr = Uwr;
             if (FileTools.FileExist(localPath))
             {
-                uwr.GetTexture(localPath, (texture) =>
+                uwr.GetTexture($"file://{localPath}", (texture) =>
                 {
                     var sprite = PictureTools.CreateSprite(texture);
                     callback?.Invoke(sprite);
@@ -67,7 +67,7 @@ namespace App.Core.Master
                 {
                     FileTools.CreateFile(localPath, bytes);
                     uwr = Uwr;
-                    uwr.GetTexture(localPath, texture =>
+                    uwr.GetTexture($"file://{localPath}", texture =>
                     {
                         var sprite = PictureTools.CreateSprite(texture);
                         callback?.Invoke(sprite);
@@ -91,7 +91,7 @@ namespace App.Core.Master
             var uwr = Uwr;
             if (FileTools.FileExist(localPath))
             {
-                uwr.GetAudioClip(localPath, callback, audioType);
+                uwr.GetAudioClip($"file://{localPath}", callback, audioType);
             }
             else
             {
@@ -99,7 +99,7 @@ namespace App.Core.Master
                 {
                     FileTools.CreateFile(localPath, bytes);
                     uwr = Uwr;
-                    uwr.GetAudioClip(localPath, callback, audioType);
+                    uwr.GetAudioClip($"file://{localPath}", callback, audioType);
                 });
             }
         }
