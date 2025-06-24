@@ -13,13 +13,13 @@ namespace App.Core.Master
         private const string AudioCachePath = "Cache/Audios/";
 
 
-        public void DownloadTexture(string url, Action<Texture2D> callback)
+        public string DownloadTexture(string url, Action<Texture2D> callback)
         {
             if (string.IsNullOrEmpty(url))
             {
                 Log.I($"DownloadTexture : url = {url}");
                 callback?.Invoke(null);
-                return;
+                return null;
             }
 
             var basePath = PlatformMaster.Instance.GetDataPath(TextureCachePath);
@@ -39,14 +39,15 @@ namespace App.Core.Master
                     uwr.GetTexture($"file://{localPath}", callback);
                 });
             }
+            return localPath;
         }
-        public void DownloadSprite(string url, Action<Sprite> callback)
+        public string DownloadSprite(string url, Action<Sprite> callback)
         {
             if (string.IsNullOrEmpty(url))
             {
                 Log.I($"DownloadSprite : url = {url}");
                 callback?.Invoke(null);
-                return;
+                return null;
             }
 
             var basePath = PlatformMaster.Instance.GetDataPath(TextureCachePath);
@@ -74,15 +75,16 @@ namespace App.Core.Master
                     });
                 });
             }
+            return localPath;
         }
         
-        public void DownloadAudio(string url, AudioType audioType, Action<AudioClip> callback)
+        public string DownloadAudio(string url, AudioType audioType, Action<AudioClip> callback)
         {
             if (string.IsNullOrEmpty(url))
             {
                 Log.I($"DownloadAudio : url = {url}");
                 callback?.Invoke(null);
-                return;
+                return null;
             }
 
             var basePath = PlatformMaster.Instance.GetDataPath(AudioCachePath);
@@ -102,6 +104,7 @@ namespace App.Core.Master
                     uwr.GetAudioClip($"file://{localPath}", callback, audioType);
                 });
             }
+            return localPath;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using App.Core.Helper;
 using App.Core.Tools;
+using UnityEngine;
 
 namespace App.Core.Master
 {
@@ -75,6 +76,11 @@ namespace App.Core.Master
         public void SetSiblingIndex(int index)
         {
             transform.SetSiblingIndex(index);
+        }
+
+        public void SetParent(Transform parent)
+        {
+            transform.SetParent(parent);
         }
     }
 }

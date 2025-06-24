@@ -200,6 +200,21 @@ namespace App.Core.Master
             ViewPairs.Add(typeof(T).FullName!, t as ViewBase);
             return t;
         }
+
+        public T AddView<T>(GameObject go, Transform parent, bool state = false) where T : Component
+        {
+            if (!go) return null;
+            var viewparent = !parent ? UIPanels[0] : parent;
+            var view = Instantiate(go, viewparent);
+            view.transform.localEulerAngles = Vector3.zero;
+            view.transform.localScale = Vector3.one;
+            view.name = view.name.Replace("(Clone)", "");
+            var t =  view.AddComponent(typeof(T)) as T;
+
+            EventDispatcher.TriggerEvent(view.name, state);
+            ViewPairs.Add(typeof(T).FullName!, t as ViewBase);
+            return t;
+        }
         
         public void SafeAreaAdjuster()
         {
