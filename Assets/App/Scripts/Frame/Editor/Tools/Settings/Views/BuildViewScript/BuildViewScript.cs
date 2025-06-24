@@ -208,17 +208,26 @@ namespace App.Editor.View
             logic_script = logic_script.Replace("#NAMESPACE#", folder_name);
             logic_script = logic_script.Replace("#SCRIPTNAME#", logic_script_name);
             logic_script = logic_script.Replace("#EVENT#", CreateEvent());
-            
-            if (!Directory.Exists(script_path))
-            {
-                Directory.CreateDirectory(script_path);
-            }
 
+            var files = EditorHelper.GetFiles(Path.Combine(Application.dataPath, $"Scripts"), "cs");
+            var logic = files.FirstOrDefault(f => f.Name == $"{logic_script_name}.cs");
+            if (logic != null) logic_script_path = logic.FullName;
+            var view = files.FirstOrDefault(f => f.Name == $"{view_script_name}.cs");
+            if (view != null) view_script_path = view.FullName;
+
+            if (view == null)
+            {
+                if (!Directory.Exists(script_path))
+                {
+                    Directory.CreateDirectory(script_path);
+                }
+            }
+            
             if (File.Exists(view_script_path))
             {
                 File.Delete(view_script_path);
             }
-
+            
             File.WriteAllText(view_script_path, view_script);
             if (isCreateLogic)
             {

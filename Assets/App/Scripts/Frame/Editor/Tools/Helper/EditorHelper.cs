@@ -111,7 +111,7 @@ namespace App.Editor.Helper
         {
             if (!Directory.Exists(basePath)) return new List<FileInfo>();
             var directoryInfo = new DirectoryInfo(basePath);
-            var files = directoryInfo.GetFiles($"*.{extension}");
+            var files = directoryInfo.GetFiles($"*.{extension}", SearchOption.AllDirectories);
             return files.ToList();
         }
     }
