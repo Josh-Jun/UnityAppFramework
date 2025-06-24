@@ -139,18 +139,18 @@ namespace App.Editor.View
             AppConfig.CDNVersion = CDNVersion;
 
             EditorUtility.SetDirty(AppConfig);
+        }
 
+        private static void SetBuildSetting()
+        {
+            var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
             if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android)
             {
                 // PlayerSettings.Android.keystorePass = "";
                 // PlayerSettings.Android.keyaliasName = "";
                 // PlayerSettings.Android.keyaliasPass = "";
-
-                PlayerSettings.Android.minSdkVersion = ChannelPackage == ChannelPackage.PicoXR
-                    ? AndroidSdkVersions.AndroidApiLevel26
-                    : AndroidSdkVersions.AndroidApiLevel23;
-
-                EditorUserBuildSettings.exportAsGoogleAndroidProject = NativeApp;
+                EditorUserBuildSettings.exportAsGoogleAndroidProject = appConfig.NativeApp;
+                
 #if PICO_XR_SETTING
                 //此段代码依赖PicoXR的UPM 和 PicoTools的UPM
                 XRGeneralSettings androidXRSettings =
@@ -187,11 +187,10 @@ namespace App.Editor.View
                 EditorUtility.SetDirty(androidXRSettings); // Make sure this gets picked up for serialization later.
 #endif
             }
-
             AssetDatabase.Refresh();
         }
 
-        public static void Build()
+        private static void Build()
         {
             var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
             var package = PlayerSettings.applicationIdentifier.ToLower();
@@ -201,9 +200,11 @@ namespace App.Editor.View
             var date = $"{DateTime.Now.Year}{DateTime.Now.Month:00}{DateTime.Now.Day:00}";
             var suffix = appConfig.NativeApp || EditorUserBuildSettings.activeBuildTarget == BuildTarget.iOS ? "" : ".apk";
             var name = $"{package}_{channel}_v{version}_{develop}_{date}{suffix}";
-
+            
             EditorUserBuildSettings.SwitchActiveBuildTarget(EditorUserBuildSettings.selectedBuildTargetGroup,
                 EditorUserBuildSettings.activeBuildTarget);
+            
+            SetBuildSetting();
 
             var outputPath = Application.dataPath.Replace("Assets", "App");;
             if (Directory.Exists(outputPath))
@@ -243,7 +244,7 @@ namespace App.Editor.View
 
         #region YooAssetBuild
 
-        public static void BuildAssets()
+        private static void BuildAssets()
         {
             var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
             var version = GetDefaultPackageVersion();
@@ -346,8 +347,8 @@ namespace App.Editor.View
         #endregion
         
         #region GenerateAndCopyDll
-        
-        public static void GenerateAndCopyDll()
+
+        private static void GenerateAndCopyDll()
         {
             var buildTarget = EditorUserBuildSettings.activeBuildTarget;
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
@@ -414,7 +415,6 @@ namespace App.Editor.View
         }
 
         #endregion
-
 
         // Jenkins打包掉用
         public static void OneKeyBuild()
