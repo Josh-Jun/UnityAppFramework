@@ -22,7 +22,7 @@ namespace App.Core.Master
             unityWebRequesters[pointer] = uwr;
         }
         
-        private static UnityWebRequester Uwr
+        public static UnityWebRequester Uwr
         {
             get
             {

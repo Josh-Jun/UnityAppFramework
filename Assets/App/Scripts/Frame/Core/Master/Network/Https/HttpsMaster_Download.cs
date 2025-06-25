@@ -11,6 +11,7 @@ namespace App.Core.Master
     {
         private const string TextureCachePath = "Cache/Textures/";
         private const string AudioCachePath = "Cache/Audios/";
+        private const string AssetBundleCachePath = "Cache/AssetBundles/";
 
 
         public string DownloadTexture(string url, Action<Texture2D> callback)
@@ -102,6 +103,35 @@ namespace App.Core.Master
                     FileTools.CreateFile(localPath, bytes);
                     uwr = Uwr;
                     uwr.GetAudioClip($"file://{localPath}", callback, audioType);
+                });
+            }
+            return localPath;
+        }
+
+        public string DownloadAssetBundle(string url, Action<AssetBundle> callback)
+        {
+            if (string.IsNullOrEmpty(url))
+            {
+                Log.I($"DownloadAssetBundle : url = {url}");
+                callback?.Invoke(null);
+                return null;
+            }
+
+            var basePath = PlatformMaster.Instance.GetDataPath(AssetBundleCachePath);
+            var filename = url.Split('?')[0].Split('/')[^1];
+            var localPath = $"{basePath}{filename}";
+            var uwr = Uwr;
+            if (FileTools.FileExist(localPath))
+            {
+                uwr.GetAssetBundle($"file://{localPath}", callback);
+            }
+            else
+            {
+                uwr.GetBytes(url, bytes =>
+                {
+                    FileTools.CreateFile(localPath, bytes);
+                    uwr = Uwr;
+                    uwr.GetAssetBundle($"file://{localPath}", callback);
                 });
             }
             return localPath;

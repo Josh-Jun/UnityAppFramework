@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 namespace App.Core.Tools
 {
@@ -1676,6 +1677,71 @@ namespace App.Core.Tools
                 return color;
             }
             return Color.black;
+        }
+
+        #endregion
+
+        #region Transform & GameObject
+        
+        public static void Clear(this GameObject go, bool deleteActive = true)
+        {
+            foreach (Transform child in go.transform)
+            {
+                if (deleteActive)
+                {
+                    if (!child.gameObject.activeSelf) continue;
+                }
+                Object.Destroy(child.gameObject);
+            }
+        }
+
+        public static void Clear(this Transform transform, bool deleteActive = true)
+        {
+            foreach (Transform child in transform)
+            {
+                if (deleteActive)
+                {
+                    if (!child.gameObject.activeSelf) continue;
+                }
+                Object.Destroy(child.gameObject);
+            }
+        }
+        
+        public static void SetLayer(this GameObject go, string layerName, bool containsChildren = true)
+        {
+            var layer = LayerMask.NameToLayer(layerName);
+            go.layer = layer;
+            if (!containsChildren) return;
+            var children = go.GetComponentsInChildren<Transform>();
+            foreach (var child in children)
+            {
+                child.gameObject.layer = layer;
+            }
+        }
+
+        public static void SetLayer(this GameObject go, int layer, bool containsChildren = true)
+        {
+            go.layer = layer;
+            if (!containsChildren) return;
+            var children = go.GetComponentsInChildren<Transform>();
+            foreach (var child in children)
+            {
+                child.gameObject.layer = layer;
+            }
+        }
+
+        public static void Reset(this GameObject go)
+        {
+            go.transform.localPosition = Vector3.zero;
+            go.transform.localRotation = Quaternion.identity;
+            go.transform.localScale = Vector3.one;
+        }
+
+        public static void Reset(this Transform transform)
+        {
+            transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.identity;
+            transform.localScale = Vector3.one;
         }
 
         #endregion
