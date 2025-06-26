@@ -3,7 +3,16 @@ using UnityEngine.EventSystems;
 
 namespace App.Core.Tools
 {
-    public class EventListener : EventTrigger
+    public class EventListener : 
+        MonoBehaviour, 
+        IPointerEnterHandler, 
+        IPointerExitHandler,
+        IPointerDownHandler,
+        IPointerUpHandler,
+        IPointerClickHandler,
+        IBeginDragHandler,
+        IDragHandler,
+        IEndDragHandler
     {
         public delegate void VoidDelegate(GameObject go);
         public delegate void VectorDelegate(GameObject go, Vector2 screenPosition);
@@ -18,59 +27,59 @@ namespace App.Core.Tools
 
         public static EventListener Get(GameObject go)
         {
-            if (Camera.main != null)
+            foreach (var camera in Camera.allCameras)
             {
-                var raycaster = Camera.main.gameObject.GetComponent<PhysicsRaycaster>();
-                if (raycaster == null) raycaster = Camera.main.gameObject.AddComponent<PhysicsRaycaster>();
+                var raycaster = camera.gameObject.GetComponent<PhysicsRaycaster>();
+                if (!raycaster) camera.gameObject.AddComponent<PhysicsRaycaster>();
             }
 
             var listener = go.GetComponent<EventListener>();
-            if (listener == null) listener = go.AddComponent<EventListener>();
+            if (!listener) listener = go.AddComponent<EventListener>();
             return listener;
         }
         public static EventListener Get(Component com)
         {
-            if (Camera.main != null)
+            foreach (var camera in Camera.allCameras)
             {
-                var raycaster = Camera.main.gameObject.GetComponent<PhysicsRaycaster>();
-                if (raycaster == null) raycaster = Camera.main.gameObject.AddComponent<PhysicsRaycaster>();
+                var raycaster = camera.gameObject.GetComponent<PhysicsRaycaster>();
+                if (!raycaster) camera.gameObject.AddComponent<PhysicsRaycaster>();
             }
 
             var listener = com.GetComponent<EventListener>();
-            if (listener == null) listener = com.gameObject.AddComponent<EventListener>();
+            if (!listener) listener = com.gameObject.AddComponent<EventListener>();
             return listener;
         }
-        public override void OnPointerClick(PointerEventData eventData)
+        public void OnPointerClick(PointerEventData eventData)
         {
-            if (onClick != null) onClick.Invoke(gameObject);
+            onClick?.Invoke(gameObject);
         }
-        public override void OnPointerDown(PointerEventData eventData)
+        public void OnPointerDown(PointerEventData eventData)
         {
-            if (onDown != null) onDown.Invoke(gameObject);
+            onDown?.Invoke(gameObject);
         }
-        public override void OnPointerUp(PointerEventData eventData)
+        public void OnPointerUp(PointerEventData eventData)
         {
-            if (onUp != null) onUp.Invoke(gameObject);
+            onUp?.Invoke(gameObject);
         }
-        public override void OnPointerEnter(PointerEventData eventData)
+        public void OnPointerEnter(PointerEventData eventData)
         {
-            if (onHover != null) onHover.Invoke(gameObject, true);
+            onHover?.Invoke(gameObject, true);
         }
-        public override void OnPointerExit(PointerEventData eventData)
+        public void OnPointerExit(PointerEventData eventData)
         {
-            if (onHover != null) onHover.Invoke(gameObject, false);
+            onHover?.Invoke(gameObject, false);
         }
-        public override void OnBeginDrag(PointerEventData eventData)
+        public void OnBeginDrag(PointerEventData eventData)
         {
-            if (onBeginDrag != null) onBeginDrag.Invoke(gameObject, eventData.position);
+            onBeginDrag?.Invoke(gameObject, eventData.position);
         }
-        public override void OnDrag(PointerEventData eventData)
+        public void OnDrag(PointerEventData eventData)
         {
-            if (onDrag != null) onDrag.Invoke(gameObject, eventData.position);
+            onDrag?.Invoke(gameObject, eventData.delta);
         }
-        public override void OnEndDrag(PointerEventData eventData)
+        public  void OnEndDrag(PointerEventData eventData)
         {
-            if (onEndDrag != null) onEndDrag.Invoke(gameObject, eventData.position);
+            onEndDrag?.Invoke(gameObject, eventData.position);
         }
     }
 }

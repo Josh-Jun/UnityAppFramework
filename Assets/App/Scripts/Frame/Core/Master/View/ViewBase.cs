@@ -78,9 +78,9 @@ namespace App.Core.Master
             transform.SetSiblingIndex(index);
         }
 
-        public void SetParent(Transform parent)
+        public void SetParent(Transform parent, bool worldPositionStays = false)
         {
-            transform.SetParent(parent);
+            transform.SetParent(parent, worldPositionStays);
         }
     }
 }
