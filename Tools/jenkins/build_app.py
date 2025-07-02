@@ -40,7 +40,7 @@ def monitor_unity_log(target_log):
 
 def run_git_cmd():
     print('Run Git Cmd Start')
-    os.system('cd ' + sys.argv[2])
+    os.system('cd ../../')
     os.system('git reset HEAD^')
     os.system('git checkout ' + sys.argv[6])
     os.system('git pull')
