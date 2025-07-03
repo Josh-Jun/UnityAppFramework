@@ -246,6 +246,7 @@ namespace App.Editor.View
 
         private static void BuildAssets()
         {
+            FileUtil.DeleteFileOrDirectory(Application.streamingAssetsPath + "/AssetBundles");
             var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
             var version = GetDefaultPackageVersion();
             YooAssetBuild(EditorUserBuildSettings.activeBuildTarget, AssetPackage.BuiltinPackage, version);
