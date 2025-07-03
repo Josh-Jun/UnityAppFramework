@@ -15,7 +15,7 @@ userName = 'streamlab'  #用户名
 password = 'streamlab'  #密码
 #飞书webhook地址 和 签名校验密钥,可在自定义机器人上面获取
 url = 'https://open.feishu.cn/open-apis/bot/v2/hook/b39b5f49-c052-4466-b626-c59a7a856170'
-secret = 'secret'
+secret = 'a3L6e1sqk7OfDCECet7Z1f'
 timestamp = int(time.time()) #秒级
 
 #通过类的方式实现
@@ -25,6 +25,14 @@ class Assistant():
         self.server = jenkins.Jenkins(jenkinsUrl, userName, password)
         #获取外部部署项目名称
         self.jobName = sys.argv[1]
+        #获取分支名
+        self.branchName = sys.argv[2]
+        #获取版本号
+        self.version = sys.argv[3]
+        #获取发布版本
+        self.development = sys.argv[4]
+        #获取资源模式
+        self.assetPlayMode = sys.argv[5]
         #获取部署项目版本，即第几次部署
         self.buildNumber = self.server.get_job_info(self.jobName)['nextBuildNumber'] - 1
         #项目部署后的信息
@@ -37,17 +45,6 @@ class Assistant():
         self.startTime = self.getTime('startTime')
         #部署经历时间
         self.duration = self.getTime('duration')
-        #获取git提交人姓名，即这个分支功能是谁做的
-        self.fullName = ''
-        nameList = []
-        if len(self.jobInfo['culprits']):
-            for item in self.jobInfo['culprits']:
-                nameList.append(item['fullName'])
-            self.fullName = ','.join(nameList)
-        #获取分支名    
-        for item in self.jobInfo['actions']:
-            if item.get('lastBuiltRevision'):
-                self.branchName = item['lastBuiltRevision']['branch'][0]['name']
     # 获取时间相关数据的函数
     def getTime(self,value): 
         jobTime = self.jobInfo['timestamp'] 
@@ -69,8 +66,8 @@ class Assistant():
         return sign 
     # 消息发送函数
     def sendNotificate(self):
-        conStr = '项目名称：{0} \n分支名：{1}\n构建编号：第{2}次构建\n开始时间：{3}\n构建持续时间：{4}秒\n构建结果：{5}\n最近git提交人：{6}'
-        content = conStr.format(self.jobName,self.branchName,self.buildNumber,self.startTime,self.duration,self.result,self.fullName);
+        conStr = '项目名称：{0} \n分支名称：{1}\n版本编号：v{2}\n发布版本：{3}\n资源模式：{4}\n构建编号：第{5}次构建\n开始时间：{6}\n持续时间：{7}秒\n构建结果：{8}\n'
+        content = conStr.format(self.jobName,self.branchName,self.version,self.development,self.assetPlayMode,self.buildNumber,self.startTime,self.duration,self.result);
         method = 'post'
         headers = {
             'Content-Type': 'application/json',
