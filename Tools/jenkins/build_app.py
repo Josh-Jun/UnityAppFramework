@@ -35,6 +35,8 @@ def monitor_unity_log(target_log):
                     start_output = False
                     break
             time.sleep(0.5)
+    if os.path.isfile(path):
+        os.remove(path)
     print('Output Unity Log End')
 
 
