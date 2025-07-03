@@ -38,18 +38,6 @@ def monitor_unity_log(target_log):
     print('Output Unity Log End')
 
 
-def run_git_cmd():
-    print('Run Git Cmd Start')
-    os.system('cd ../../')
-    os.system('git reset HEAD^')
-    os.system('git checkout ' + sys.argv[6])
-    os.system('git pull')
-    print('Run Git Cmd End')
-
-
 if __name__ == '__main__':
-    print('BuildApp Start')
-    run_git_cmd()
     call_unity_static_func()
     monitor_unity_log('Build Complete!!!')
-    print('BuildApp End')
