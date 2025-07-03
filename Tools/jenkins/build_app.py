@@ -35,8 +35,15 @@ def monitor_unity_log(target_log):
                     start_output = False
                     break
             time.sleep(0.5)
-    if os.path.isfile(path):
-        os.remove(path)
+    while True:
+        if os.path.isfile(path):
+            try:
+                os.remove(path)
+                break
+            except PermissionError:
+                time.sleep(1)
+        else:
+            break
     print('Output Unity Log End')
 
 
