@@ -42,6 +42,11 @@ namespace App.Core.Tools
             return reader.Decode(colorData, texture.width, texture.height);
         }
         
+        public static Result Read(Color32[] colorData, int width, int height)
+        {
+            return reader.Decode(colorData, width, height);
+        }
+        
         private static Color32[] Encode(string textForEncoding, int width, int height)
         {
             var hints = new Dictionary<EncodeHintType, object> { { EncodeHintType.CHARACTER_SET, "UTF-8" } };

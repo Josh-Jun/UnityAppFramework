@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using App.Core.Helper;
 using App.Core.Tools;
+using Cysharp.Threading.Tasks;
 
 namespace App.Core.Master
 {
@@ -16,19 +17,19 @@ namespace App.Core.Master
         private static readonly Dictionary<string, ViewBase> ViewPairs = new Dictionary<string, ViewBase>();
         private readonly Dictionary<string, Transform> GoNodePairs = new Dictionary<string, Transform>();
         private readonly List<RectTransform> UIPanels = new List<RectTransform>();
-        
+
         private readonly Dictionary<RedDotMold, int> _redDotMap = new Dictionary<RedDotMold, int>();
         private readonly Dictionary<RedDotMold, RedDotView> _redDotViewMap = new Dictionary<RedDotMold, RedDotView>();
-        
+
         private GameObject Canvas2D; // Canvas2D游戏对象
         private GameObject SafeArea2D; // 2DUI安全区对象
         private GameObject Background; // 背景图片对象
 
         private Image BackgroundImage => Background.GetComponent<Image>();
         private AspectRatioFitter AspectRatioFitter => Background.GetComponent<AspectRatioFitter>();
-        
+
         private GameObject Canvas3D; // Canvas3D游戏对象
-        
+
         #endregion
 
         #region Public Variable
@@ -56,7 +57,7 @@ namespace App.Core.Master
         #endregion
 
         #region Canvas3D
-        
+
         /// <summary> Canvas3D组件 </summary>
         public Canvas UI3DCanvas => Canvas3D.GetComponent<Canvas>();
 
@@ -84,13 +85,13 @@ namespace App.Core.Master
             Canvas2D = this.FindGameObject("UI Root/2D Canvas");
             Background = this.FindGameObject("UI Root/2D Canvas/Background/Image");
             Canvas3D = this.FindGameObject("UI Root/3D Canvas");
-            
+
             SafeArea2D = this.FindGameObject("UI Root/2D Canvas/Safe Area");
 
             GameObjectRoot = this.FindGameObject("Go Root");
-            
+
             InitUIPanels();
-            
+
             SafeAreaAdjuster();
         }
 
@@ -103,11 +104,11 @@ namespace App.Core.Master
                 UIPanels.Add(panel);
             }
         }
-        
+
         private ViewBase CreateView(Type type, ViewOfAttribute attribute)
         {
             var go = AssetsMaster.Instance.LoadAssetSync<GameObject>(attribute.Location);
-            if (go == null) return null;
+            if (!go) return null;
             var parent = attribute.View switch
             {
                 ViewMold.UI2D => UIPanels[attribute.Layer],
@@ -128,40 +129,90 @@ namespace App.Core.Master
         {
             foreach (var kvp in _redDotViewMap)
             {
-                var count = _redDotMap.Where(data=>(kvp.Key & data.Key) != 0).Sum(data=> data.Value);
+                var count = _redDotMap.Where(data => (kvp.Key & data.Key) != 0).Sum(data => data.Value);
                 kvp.Value.Refresh(count);
             }
         }
-        
+
         #endregion
 
         #region Public Function
+
+        /// <summary>
+        /// 切换屏幕方向
+        /// </summary>
+        /// <param name="orientation">0: Portrait, 1: LandscapeLeft, 2: LandscapeLeft(AutoRotation)</param>
+        public async UniTask SwitchScreen(int orientation)
+        {
+#if UNITY_EDITOR
+            ChangeGameViewResolution(orientation);
+#endif
+            switch (orientation)
+            {
+                case 0:
+                    Screen.orientation = ScreenOrientation.Portrait;
+                    break;
+                case 1:
+                    Screen.orientation = ScreenOrientation.LandscapeLeft;
+                    break;
+                case 2:
+                    Screen.orientation = ScreenOrientation.LandscapeLeft;
+                    Screen.orientation = ScreenOrientation.AutoRotation;
+                    Screen.autorotateToLandscapeLeft = true;
+                    Screen.autorotateToLandscapeRight = true;
+                    Screen.autorotateToPortrait = false;
+                    Screen.autorotateToPortraitUpsideDown = false;
+                    break;
+                default:
+                    Screen.orientation = ScreenOrientation.Portrait;
+                    break;
+            }
+            await UniTask.WaitForEndOfFrame(this);
+            SafeAreaAdjuster();
+        }
+
+#if UNITY_EDITOR
+        private static void ChangeGameViewResolution(int orientation)
+        {
+            var index = orientation == 0 ? 24 : 23;
+            var assembly = typeof (UnityEditor.EditorWindow).Assembly;
+            var type = assembly.GetType("UnityEditor.GameView");
+            var gameView = UnityEditor.EditorWindow.GetWindow(type);
+            var method = type.GetMethod("SizeSelectionCallback");
+
+            method?.Invoke(gameView, new object[2] { index, null });
+        }
+        private void OnDestroy()
+        {
+            ChangeGameViewResolution(0);
+        }
+#endif
 
         public void InitBackgroundImage(Sprite sprite = null)
         {
             Background.SetActive(sprite);
             if (!sprite) return;
             BackgroundImage.sprite = sprite;
-            var ratio = Screen.width > Screen.height ? 
-                sprite.rect.height / sprite.rect.width : 
+            var ratio = Screen.width > Screen.height ?
+                sprite.rect.height / sprite.rect.width :
                 sprite.rect.width / sprite.rect.height;
             AspectRatioFitter.aspectRatio = ratio;
         }
-        
+
         public void InitViewScripts()
         {
             var types = Utils.GetAssemblyTypes<ViewBase>();
             foreach (var type in types)
             {
                 if (ViewPairs.ContainsKey(type.FullName!)) continue;
-                var obj = type.GetCustomAttributes(typeof(ViewOfAttribute), false).First();
+                var obj = type.GetCustomAttributes(typeof(ViewOfAttribute), false).FirstOrDefault();
                 if (obj is not ViewOfAttribute attribute) continue;
                 var view = CreateView(type, attribute);
                 ViewPairs.Add(type.FullName!, view);
             }
             InitRedDotView();
         }
-        
+
         public void InitRedDotView()
         {
             var redDotViews = gameObject.GetComponentsInChildren<RedDotView>(true);
@@ -182,7 +233,7 @@ namespace App.Core.Master
 
         public T AddView<T>(GameObject go, ViewMold mold = ViewMold.UI2D, int layer = 0, bool state = false) where T : Component
         {
-            if (go == null) return null;
+            if (!go) return null;
             var parent = mold switch
             {
                 ViewMold.UI2D => UIPanels[layer],
@@ -194,7 +245,7 @@ namespace App.Core.Master
             view.transform.localEulerAngles = Vector3.zero;
             view.transform.localScale = Vector3.one;
             view.name = view.name.Replace("(Clone)", "");
-            var t =  view.AddComponent(typeof(T)) as T;
+            var t = view.AddComponent(typeof(T)) as T;
 
             EventDispatcher.TriggerEvent(view.name, state);
             ViewPairs.Add(typeof(T).FullName!, t as ViewBase);
@@ -209,18 +260,18 @@ namespace App.Core.Master
             view.transform.localEulerAngles = Vector3.zero;
             view.transform.localScale = Vector3.one;
             view.name = view.name.Replace("(Clone)", "");
-            var t =  view.AddComponent(typeof(T)) as T;
+            var t = view.AddComponent(typeof(T)) as T;
 
             EventDispatcher.TriggerEvent(view.name, state);
             ViewPairs.Add(typeof(T).FullName!, t as ViewBase);
             return t;
         }
-        
+
         public void SafeAreaAdjuster()
         {
             UI2DCanvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
             UI2DCanvasScaler.matchWidthOrHeight = Screen.width < Screen.height ? 0 : 1;
-            
+
             var bottomPixels = Screen.safeArea.y;
             var leftPixels = Screen.safeArea.x;
 
@@ -232,7 +283,7 @@ namespace App.Core.Master
 
             InitBackgroundImage(BackgroundImage.sprite);
         }
-        
+
         /// <summary> UGUI坐标 mousePosition</summary>
         public Vector2 ScreenPointInRectangle(Vector2 mousePosition)
         {
@@ -251,7 +302,7 @@ namespace App.Core.Master
             }
             view.SetViewActive();
         }
-        
+
         public void OpenView<T>(object obj) where T : ViewBase
         {
             var view = GetView<T>();
@@ -262,7 +313,7 @@ namespace App.Core.Master
             }
             view.SetViewActive();
         }
-        
+
         public void CLoseView<T>(bool isClear = false) where T : ViewBase
         {
             var view = GetView<T>();
@@ -286,7 +337,7 @@ namespace App.Core.Master
             var type = typeof(T);
             var scriptName = type.Namespace == string.Empty ? type.Name : type.FullName;
             if (ViewPairs.ContainsKey(scriptName!)) return ViewPairs[scriptName] as T;
-            var obj = type.GetCustomAttributes(typeof(ViewOfAttribute), false).First();
+            var obj = type.GetCustomAttributes(typeof(ViewOfAttribute), false).FirstOrDefault();
             if (obj is ViewOfAttribute attribute) return CreateView(type, attribute) as T;
             Log.W($"View {type.FullName} has no {nameof(T)}");
             return null;
@@ -308,7 +359,7 @@ namespace App.Core.Master
             _redDotMap[mold] = count;
             RefreshRedDotView();
         }
-        
+
         public void AddRedDotCount(RedDotMold mold, int count)
         {
             if (!_redDotMap.TryAdd(mold, count))
@@ -317,11 +368,11 @@ namespace App.Core.Master
             }
             RefreshRedDotView();
         }
-        
+
         public void SubRedDotCount(RedDotMold mold, int count)
         {
             _redDotMap.TryAdd(mold, count);
-            if(_redDotMap[mold] < count)
+            if (_redDotMap[mold] < count)
             {
                 _redDotMap[mold] = 0;
             }

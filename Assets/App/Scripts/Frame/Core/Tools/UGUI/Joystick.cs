@@ -20,11 +20,11 @@ public enum JoystickType
 public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
     public JoystickType joystickType;
-    
+
     public Vector2 input = Vector2.zero;
-    
+
     public Action<Vector2> OnJoystickMoveEvent;
-    
+
     private RectTransform background;
     private RectTransform handler;
     private RectTransform self = null;
@@ -48,8 +48,9 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     public void Update()
     {
 #if UNITY_EDITOR
+        if (!background.gameObject.activeSelf) return;
         x = Input.GetAxis("Horizontal");
-        y= Input.GetAxis("Vertical");
+        y = Input.GetAxis("Vertical");
         if (x != 0 || y != 0)
         {
             isDragging = true;
@@ -108,7 +109,7 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         magnitude = Mathf.Clamp(magnitude, 0, 1);
         input = input.normalized * magnitude;
         //实时计算handle的位置
-        handler.anchoredPosition = input * radius ;
+        handler.anchoredPosition = input * radius;
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -124,6 +125,8 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     {
         var _camera = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(self, postion, _camera, out var point);
-        return point;
+        // 根据self的pivot计算偏移量
+        var offset = new Vector2((self.pivot.x + 0.5f) * self.sizeDelta.x, (self.pivot.y + 0.5f) * self.sizeDelta.y);
+        return point - offset;
     }
 }
