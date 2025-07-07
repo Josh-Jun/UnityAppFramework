@@ -126,7 +126,7 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         var _camera = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(self, postion, _camera, out var point);
         // 根据self的pivot计算偏移量
-        var offset = new Vector2((self.pivot.x + 0.5f) * self.sizeDelta.x, (self.pivot.y + 0.5f) * self.sizeDelta.y);
+        var offset = new Vector2((self.pivot.x + 0.5f) * self.sizeDelta.x, (self.pivot.y - 0.5f) * self.sizeDelta.y);
         return point - offset;
     }
 }
