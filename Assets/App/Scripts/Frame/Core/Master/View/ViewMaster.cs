@@ -174,10 +174,6 @@ namespace App.Core.Master
 #if UNITY_EDITOR
         private void ChangeGameViewResolution(int orientation)
         {
-            ClearGameViewCustomSize();
-            AddGameViewCustomSize(1170, 2532, "1170x2532 Portrait");
-            AddGameViewCustomSize(2532, 1170, "2532x1170 Landscape");
-
             var width = orientation == 0 ? 1170 : 2532;
             var height = orientation == 0 ? 2532 : 1170;
             SetGameViewSize(width, height);
@@ -260,10 +256,9 @@ namespace App.Core.Master
 
             var getTotalCount = currentGroup.GetType().GetMethod("GetTotalCount");
             int totalCount = (int)getTotalCount.Invoke(currentGroup, null);
-
+            var index = -1;
             for (int i = 0; i < totalCount; i++)
             {
-                var index = i;
                 var getGameViewSize = currentGroup.GetType().GetMethod("GetGameViewSize");
                 var gameViewSize = getGameViewSize.Invoke(currentGroup, new object[] { i });
 
@@ -272,12 +267,19 @@ namespace App.Core.Master
 
                 if (sizeWidth == width && sizeHeight == height)
                 {
-                    // 找到匹配的分辨率，切换到它
-                    var setSizeMethod = gameViewType.GetMethod("SizeSelectionCallback");
-                    setSizeMethod.Invoke(gameView, new object[] { index, null });
+                    // 找到匹配的分辨率
+                    index = i;
                     break;
                 }
             }
+            if (index == -1)
+            {
+                var str = width > height ? "Landscape" : "Portrait";
+                AddGameViewCustomSize(width, height, $"{width}x{height} {str}");
+            }
+
+            var setSizeMethod = gameViewType.GetMethod("SizeSelectionCallback");
+            setSizeMethod.Invoke(gameView, new object[] { index, null });
         }
         private void OnDestroy()
         {
