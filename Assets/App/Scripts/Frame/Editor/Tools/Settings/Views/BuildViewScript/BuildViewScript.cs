@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using App.Core.Helper;
+using App.Core.Tools;
 using App.Editor.Helper;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -389,7 +390,7 @@ namespace App.Editor.View
                 
                 var data = new ComponentData
                 {
-                    name = go.name,
+                    name = go.name.TrimAll(),
                     type = component.GetType().Name,
                     fullname = component.GetType().FullName,
                     eventType = IsEvent(component) ? component is UnityEngine.UI.Button ? 1 : 2 : 0,

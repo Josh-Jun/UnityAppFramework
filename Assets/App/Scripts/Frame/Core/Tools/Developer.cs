@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using App.Core.Master;
 using UnityEngine;
 using UnityEngine.Events;
@@ -38,132 +39,126 @@ namespace App.Core.Tools
         public static void AddAnimationClipEvent<T>(this AnimationClip clip, int frame, T parameter)
         {
             var type = typeof(T);
-            var _event  = new AnimationEvent
+            var @event  = new AnimationEvent
             {
                 time = frame / clip.frameRate,
             };
             if (type == typeof(string))
             {
-                _event.functionName = "AnimationEventStringCallback";
-                _event.stringParameter = parameter as string;
+                @event.functionName = "AnimationEventStringCallback";
+                @event.stringParameter = parameter as string;
             }
             else if (type == typeof(int))
             {
-                _event.functionName = "AnimationEventIntCallback";
-                _event.intParameter = parameter as int? ?? 0;
+                @event.functionName = "AnimationEventIntCallback";
+                @event.intParameter = parameter as int? ?? 0;
             }
             else if (type == typeof(float))
             {
-                _event.functionName = "AnimationEventFloatCallback";
-                _event.floatParameter = parameter as float? ?? 0;
+                @event.functionName = "AnimationEventFloatCallback";
+                @event.floatParameter = parameter as float? ?? 0;
             }
             else if (type == typeof(UnityEngine.Object))
             {
-                _event.functionName = "AnimationEventObjectCallback";
-                _event.objectReferenceParameter = parameter as UnityEngine.Object;
+                @event.functionName = "AnimationEventObjectCallback";
+                @event.objectReferenceParameter = parameter as UnityEngine.Object;
             }
             else
             {
                 Log.W($"AnimationEvent type is not support!!! type:{type}");
             }
-            clip.AddEvent(_event);
+            clip.AddEvent(@event);
         }
 
         #endregion
         
         #region Animator Event
 
-        private static int DEVELOP_ANIMATOR_TIME_ID = -1; //动画时间任务id
-        private static int DEVELOP_FRAMES_TIME_ID = -1; //动画时间任务id
+        private static int _developAnimatorTimeID = -1; //动画时间任务id
+        private static int _developFramesTimeID = -1; //动画时间任务id
 
-        public static void PlayBack(this Animator _animator, string stateName, UnityAction callback = null)
+        public static void PlayBack(this Animator animator, string stateName, UnityAction callback = null)
         {
-            var AnimationClips = _animator.runtimeAnimatorController.animationClips;
-            float _time = 0;
-            foreach (var t in AnimationClips)
+            var animationClips = animator.runtimeAnimatorController.animationClips;
+            float length = 0;
+            foreach (var t in animationClips)
             {
                 if (t.name == stateName)
                 {
-                    _time = t.length;
+                    length = t.length;
                 }
             }
 
-            _animator.enabled = true;
-            _animator.StartPlayback();
-            _animator.speed = -1;
-            _animator.Play(stateName, 0, 1);
-            DEVELOP_ANIMATOR_TIME_ID = TimeUpdateMaster.Instance.StartTimer((float time) =>
+            animator.enabled = true;
+            animator.StartPlayback();
+            animator.speed = -1;
+            animator.Play(stateName, 0, 1);
+            _developAnimatorTimeID = TimeUpdateMaster.Instance.StartTimer((float time) =>
             {
-                if (time >= _time)
-                {
-                    callback?.Invoke();
-                    TimeUpdateMaster.Instance.EndTimer(DEVELOP_ANIMATOR_TIME_ID);
-                }
+                if (!(time >= length)) return;
+                callback?.Invoke();
+                TimeUpdateMaster.Instance.EndTimer(_developAnimatorTimeID);
             });
         }
 
-        public static void Play(this Animator _animator, string stateName, UnityAction callback = null)
+        public static void Play(this Animator animator, string stateName, UnityAction callback = null)
         {
-            var AnimationClips = _animator.runtimeAnimatorController.animationClips;
-            float _time = 0;
-            foreach (var t in AnimationClips)
+            var animationClips = animator.runtimeAnimatorController.animationClips;
+            float length = 0;
+            foreach (var t in animationClips)
             {
                 if (t.name == stateName)
                 {
-                    _time = t.length;
+                    length = t.length;
                 }
             }
 
-            _animator.enabled = true;
-            _animator.StartPlayback();
-            _animator.speed = 1;
-            _animator.Play(stateName, 0, 0);
-            DEVELOP_ANIMATOR_TIME_ID = TimeUpdateMaster.Instance.StartTimer((float time) =>
+            animator.enabled = true;
+            animator.StartPlayback();
+            animator.speed = 1;
+            animator.Play(stateName, 0, 0);
+            _developAnimatorTimeID = TimeUpdateMaster.Instance.StartTimer((float time) =>
             {
-                if (time >= _time)
-                {
-                    callback?.Invoke();
-                    TimeUpdateMaster.Instance.EndTimer(DEVELOP_ANIMATOR_TIME_ID);
-                }
+                if (!(time >= length)) return;
+                callback?.Invoke();
+                TimeUpdateMaster.Instance.EndTimer(_developAnimatorTimeID);
             });
         }
 
         /// <summary>
         /// 播放动画
         /// </summary>
-        /// <param name="_animator"></param>
+        /// <param name="animator"></param>
         /// <param name="stateName"></param>
         /// <param name="speed"></param>
         /// <param name="callback"></param>
-        public static void Play(this Animator _animator, string stateName, float speed, UnityAction callback = null)
+        public static void Play(this Animator animator, string stateName, float speed, UnityAction callback = null)
         {
-            var AnimationClips = _animator.runtimeAnimatorController.animationClips;
-            float _time = 0;
-            foreach (var t in AnimationClips)
+            var animationClips = animator.runtimeAnimatorController.animationClips;
+            float length = 0;
+            foreach (var t in animationClips)
             {
                 if (t.name == stateName)
                 {
-                    _time = t.length;
+                    length = t.length;
                 }
             }
 
-            _animator.enabled = true;
-            _animator.StartPlayback();
-            _animator.speed = speed;
-            _animator.Play(stateName, 0, speed < 0 ? 1 : 0);
-            DEVELOP_ANIMATOR_TIME_ID = TimeUpdateMaster.Instance.StartTimer((float time) =>
+            animator.enabled = true;
+            animator.StartPlayback();
+            animator.speed = speed;
+            animator.Play(stateName, 0, speed < 0 ? 1 : 0);
+            _developAnimatorTimeID = TimeUpdateMaster.Instance.StartTimer((float time) =>
             {
-                if (time >= _time)
-                {
-                    callback?.Invoke();
-                    TimeUpdateMaster.Instance.EndTimer(DEVELOP_ANIMATOR_TIME_ID);
-                }
+                if (!(time >= length)) return;
+                callback?.Invoke();
+                TimeUpdateMaster.Instance.EndTimer(_developAnimatorTimeID);
             });
         }
 
         public static void PlayFrames(this Image image, List<Sprite> sequenceFrames, float time = 0.05f, UnityAction callback = null, bool loop = false, bool isNativeSize = false)
         {
-            if (image == null)
+            if (!image)
             {
                 Log.E("Image is null!!!");
                 return;
@@ -171,32 +166,30 @@ namespace App.Core.Tools
             
             var index = 0; //可以用来控制起始播放的动画帧索引
             float recordTime = 0;
-            DEVELOP_FRAMES_TIME_ID = TimeUpdateMaster.Instance.StartTimer((float currentTime) =>
+            _developFramesTimeID = TimeUpdateMaster.Instance.StartTimer((float currentTime) =>
             {
-                if (currentTime - recordTime >= time)
+                if (!(currentTime - recordTime >= time)) return;
+                recordTime = currentTime;
+                //当我们需要在整个动画播放完之后  重复播放后面的部分 就可以展现我们纯代码播放的自由性
+                if (index > sequenceFrames.Count - 1)
                 {
-                    recordTime = currentTime;
-                    //当我们需要在整个动画播放完之后  重复播放后面的部分 就可以展现我们纯代码播放的自由性
-                    if (index > sequenceFrames.Count - 1)
+                    callback?.Invoke();
+                    if (loop)
                     {
-                        callback?.Invoke();
-                        if (loop)
-                        {
-                            index = 0;
-                        }
-                        else
-                        {
-                            TimeUpdateMaster.Instance.EndTimer(DEVELOP_FRAMES_TIME_ID);
-                        }
+                        index = 0;
                     }
                     else
                     {
-                        image.sprite = sequenceFrames[index];
-                        index++;
-                        if (isNativeSize)
-                        {
-                            image.SetNativeSize();
-                        }
+                        TimeUpdateMaster.Instance.EndTimer(_developFramesTimeID);
+                    }
+                }
+                else
+                {
+                    image.sprite = sequenceFrames[index];
+                    index++;
+                    if (isNativeSize)
+                    {
+                        image.SetNativeSize();
                     }
                 }
             });
@@ -204,7 +197,7 @@ namespace App.Core.Tools
 
         public static void PlayFrames(this Image image, Sprite[] sequenceFrames, float time = 0.05f, UnityAction callback = null, bool loop = false, bool isNativeSize = false)
         {
-            if (image == null)
+            if (!image)
             {
                 Log.E("Image is null!!!");
                 return;
@@ -212,32 +205,30 @@ namespace App.Core.Tools
 
             var index = 0; //可以用来控制起始播放的动画帧索引
             float recordTime = 0;
-            DEVELOP_FRAMES_TIME_ID = TimeUpdateMaster.Instance.StartTimer((float currentTime) =>
+            _developFramesTimeID = TimeUpdateMaster.Instance.StartTimer((float currentTime) =>
             {
-                if (currentTime - recordTime >= time)
+                if (!(currentTime - recordTime >= time)) return;
+                recordTime = currentTime;
+                //当我们需要在整个动画播放完之后  重复播放后面的部分 就可以展现我们纯代码播放的自由性
+                if (index > sequenceFrames.Length - 1)
                 {
-                    recordTime = currentTime;
-                    //当我们需要在整个动画播放完之后  重复播放后面的部分 就可以展现我们纯代码播放的自由性
-                    if (index > sequenceFrames.Length - 1)
+                    callback?.Invoke();
+                    if (loop)
                     {
-                        callback?.Invoke();
-                        if (loop)
-                        {
-                            index = 0;
-                        }
-                        else
-                        {
-                            TimeUpdateMaster.Instance.EndTimer(DEVELOP_FRAMES_TIME_ID);
-                        }
+                        index = 0;
                     }
                     else
                     {
-                        image.sprite = sequenceFrames[index];
-                        index++;
-                        if (isNativeSize)
-                        {
-                            image.SetNativeSize();
-                        }
+                        TimeUpdateMaster.Instance.EndTimer(_developFramesTimeID);
+                    }
+                }
+                else
+                {
+                    image.sprite = sequenceFrames[index];
+                    index++;
+                    if (isNativeSize)
+                    {
+                        image.SetNativeSize();
                     }
                 }
             });
@@ -332,6 +323,11 @@ namespace App.Core.Tools
         #endregion
 
         #region Get Or Add Component
+
+        public static RectTransform RectTransform(this Component component)
+        {
+            return component.transform as RectTransform;
+        }
 
         /// <summary>
         /// 获取GameObject上的组件
@@ -1682,6 +1678,11 @@ namespace App.Core.Tools
         #endregion
 
         #region Transform & GameObject
+
+        public static RectTransform RectTransform(this GameObject go)
+        {
+            return go.transform as RectTransform;
+        }
         
         public static void Clear(this GameObject go, bool deleteActive = true)
         {
@@ -1742,6 +1743,15 @@ namespace App.Core.Tools
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.identity;
             transform.localScale = Vector3.one;
+        }
+
+        #endregion
+
+        #region String
+
+        public static string TrimAll(this string str)
+        {
+            return Regex.Replace(str, @"\s+", string.Empty);
         }
 
         #endregion

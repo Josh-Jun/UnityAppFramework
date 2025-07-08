@@ -63,7 +63,7 @@ namespace App.Editor.Tools
 
         #endregion
         
-        #region 拷贝模板脚本到Unity脚本模板路径 Win(Ctrl+Shift+E) Mac(Cmd+Shift+E)
+        #region 自动生成资源包枚举类型 Win(Ctrl+Shift+E) Mac(Cmd+Shift+E)
         
         private static string[] watchers = new[]
         {
@@ -188,11 +188,12 @@ namespace App.Editor.Tools
             {
                 var key = file.Name.Split('.')[0];
                 var value = file.FullName.Replace("\\", "/").Replace(Application.dataPath, "Assets");
-                stringBuilder.AppendLine($"    public const string {key} = \"{value}\";");
+                if(key.Contains("-")) continue;
+                stringBuilder.AppendLine($"    public const string {key.TrimAll()} = \"{value}\";");
             }
         }
         
-        private static readonly string[] IgnoreExtensions = { ".dll", ".shader", ".shadergraph", ".shadervariants", ".meta", ".meta", ".DS_Store", ".bytes" };
+        private static readonly string[] IgnoreExtensions = { ".dll", ".shader", ".shadergraph", ".shadervariants", ".meta", ".DS_Store", ".bytes", ".asset", ".lighting", ".exr" };
         private static List<FileInfo> GetFiles(string folder)
         {
             var path = $"{Application.dataPath}/Bundles/{folder}";
@@ -273,8 +274,7 @@ namespace App.Editor.Tools
             }
 
             var copyedFolderPath = Path.GetFullPath(".") + Path.DirectorySeparatorChar + oldFolderPath;
-            var tempFolderPath = Application.dataPath.Replace("Assets", "TempAssets") + SplitStr(oldFolderPath) +
-                                 "_Copy";
+            var tempFolderPath = Application.dataPath.Replace("Assets", "TempAssets") + SplitStr(oldFolderPath) + "_Copy";
             var newFoldrPath = tempFolderPath.Replace("TempAssets", "Assets");
 
             CopyDirectory(copyedFolderPath, tempFolderPath);
