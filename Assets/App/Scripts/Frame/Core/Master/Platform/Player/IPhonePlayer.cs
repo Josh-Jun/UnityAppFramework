@@ -1,24 +1,26 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Runtime.InteropServices;
+using UnityEngine;
 
 namespace App.Core.Master
 {
     public class IPhonePlayer : PlatformMaster
     {
 #if UNITY_IPHONE && !UNITY_EDITOR
-        [DllImport("__Internal")]
-        private static extern string GetAppData(string key);
-        [DllImport("__Internal")]
-        private static extern void ShowHostMainWindow(string msg);
-        [DllImport("__Internal")]
-        private static extern void Vibrate();
-        [DllImport("__Internal")]
-        private static extern void OpenAppSettings();
-        [DllImport("__Internal")]
-        private static extern bool HasUserAuthorizedPermission(string permission);
-        [DllImport("__Internal")]
-        private static extern void RequestUserPermission(string permission);
-        [DllImport("__Internal")]
-        private static extern void ReceiveUnityMsg(string msg);
+        [System.Runtime.InteropServices.DllImport("__Internal")]
+        private static extern IntPtr GetNativeData(IntPtr key);
+        [System.Runtime.InteropServices.DllImport("__Internal")]
+        private static extern void ShowHostMainWindow(IntPtr msg);
+        [System.Runtime.InteropServices.DllImport("__Internal")]
+        private static extern void NativeVibrate();
+        [System.Runtime.InteropServices.DllImport("__Internal")]
+        private static extern void OpenNativeSettings();
+        [System.Runtime.InteropServices.DllImport("__Internal")]
+        private static extern bool HasNativeUserAuthorizedPermission(IntPtr permission);
+        [System.Runtime.InteropServices.DllImport("__Internal")]
+        private static extern void RequestNativeUserPermission(IntPtr permission);
+        [System.Runtime.InteropServices.DllImport("__Internal")]
+        private static extern void ReceiveUnityMsg(IntPtr msg);
 #endif
 
         public override bool IsEditor { get; } = false;
@@ -30,7 +32,7 @@ namespace App.Core.Master
             get
             {
 #if UNITY_IPHONE && !UNITY_EDITOR
-                return (int)TouchScreenKeyboard.area.height;
+                return (int)TouchScreenKeyboard.area.height * Display.main.systemHeight / Screen.height;
 #endif
                 return 0;
             }
@@ -45,14 +47,14 @@ namespace App.Core.Master
         {
             Log.I("SendMsgToNative", ("Data", msg));
 #if UNITY_IPHONE && !UNITY_EDITOR
-            ReceiveUnityMsg(msg);
+            ReceiveUnityMsg(Marshal.StringToHGlobalAnsi(msg));
 #endif
         }
         public override void OpenAppSetting()
         {
             Log.I("OpenAppSetting IPhone");
 #if UNITY_IPHONE && !UNITY_EDITOR
-            OpenAppSettings();
+            OpenNativeSettings();
 #endif
         }
 
@@ -60,9 +62,9 @@ namespace App.Core.Master
         {
             Log.I("RequestUserPermission", ("Permission", permission));
 #if UNITY_IPHONE && !UNITY_EDITOR
-            if(!HasUserAuthorizedPermission(permission))
+            if(!HasNativeUserAuthorizedPermission(Marshal.StringToHGlobalAnsi(permission)))
             {
-                RequestUserPermission(permission);
+                RequestNativeUserPermission(Marshal.StringToHGlobalAnsi(permission));
             }
 #endif
         }
@@ -83,7 +85,7 @@ namespace App.Core.Master
         {
             Log.I("Vibrate IPhone");
 #if UNITY_IPHONE && !UNITY_EDITOR
-            Vibrate();
+            NativeVibrate();
 #endif
         }
         public override void InstallApp(string appPath)
@@ -96,7 +98,10 @@ namespace App.Core.Master
         public override string GetAppData(string key)
         {
 #if UNITY_IPHONE && !UNITY_EDITOR
-            return GetAppData(key);
+            IntPtr ptr = GetNativeData(Marshal.StringToHGlobalAnsi(key));
+            string result = Marshal.PtrToStringAnsi(ptr);
+            // 这里如果 native 端有分配内存，记得释放
+            return result;
 #else
             return null;
 #endif
@@ -105,7 +110,7 @@ namespace App.Core.Master
         {
             Log.I("Quit IPhone");
 #if UNITY_IPHONE && !UNITY_EDITOR
-            ShowHostMainWindow("");
+            ShowHostMainWindow(Marshal.StringToHGlobalAnsi(""));
 #endif
         }
     }

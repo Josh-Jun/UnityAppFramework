@@ -251,6 +251,7 @@ namespace App.Core.Tools
                 return;
             }
 
+            if (go.activeSelf == enable) return;
             go.SetActive(enable);
         }
 
@@ -266,7 +267,7 @@ namespace App.Core.Tools
                 Log.E($"Component({com}) is null!!!");
                 return;
             }
-
+            if (com.gameObject.activeSelf == enable) return;
             com.gameObject.SetActive(enable);
         }
 
@@ -287,6 +288,7 @@ namespace App.Core.Tools
             T t = go.GetComponent<T>();
             if (t != null)
             {
+                if(t.enabled == enable) return;
                 t.enabled = enable;
             }
             else
@@ -312,6 +314,7 @@ namespace App.Core.Tools
             T t = com.gameObject.GetComponent<T>();
             if (t != null)
             {
+                if(t.enabled == enable) return;
                 t.enabled = enable;
             }
             else
@@ -1053,6 +1056,11 @@ namespace App.Core.Tools
                 return;
             }
 
+            if (obj.layer != LayerMask.NameToLayer("UI"))
+            {
+                obj.SetLayer("UI");
+            }
+
             var eventTrigger = obj.GetOrAddComponent<EventTrigger>();
 
             var callback = new UnityAction<BaseEventData>(ua);
@@ -1142,6 +1150,11 @@ namespace App.Core.Tools
             {
                 Log.E($"GameObject({com}) is null!!!");
                 return;
+            }
+
+            if (com.gameObject.layer != LayerMask.NameToLayer("UI"))
+            {
+                com.gameObject.SetLayer("UI");
             }
 
             var eventTrigger = com.GetOrAddComponent<EventTrigger>();

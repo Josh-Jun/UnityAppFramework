@@ -7,7 +7,7 @@ static_func = 'App.Editor.View.BuildApp.OneKeyBuild'
 def call_unity_static_func():
     print('Call Unity Static Func Start')
     log_file = sys.argv[2] + '/unity_build.log'
-    cmd = 'start %s -quit -batchmode -projectPath %s -logFile %s -executeMethod %s --version:%s --development:%s --assetplaymold:%s'%(sys.argv[1], sys.argv[2], log_file, static_func, sys.argv[3], sys.argv[4], sys.argv[5])
+    cmd = 'start %s -quit -batchmode -projectPath %s -logFile %s -executeMethod %s --version:%s --development:%s --assetplaymold:%s --channel:%s'%(sys.argv[1], sys.argv[2], log_file, static_func, sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6])
     print('run cmd:  ' + cmd)
     os.system(cmd)
     print('Call Unity Static Func End')

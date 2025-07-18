@@ -93,6 +93,8 @@ namespace App.Core.Master
             InitUIPanels();
 
             SafeAreaAdjuster();
+            
+            InitBackgroundImage(BackgroundImage.sprite);
         }
 
         #region Private Function
@@ -167,7 +169,7 @@ namespace App.Core.Master
                     Screen.orientation = ScreenOrientation.Portrait;
                     break;
             }
-            await UniTask.WaitForEndOfFrame(this);
+            await UniTask.Delay(200);
             SafeAreaAdjuster();
         }
 
@@ -289,12 +291,11 @@ namespace App.Core.Master
 
         public void InitBackgroundImage(Sprite sprite = null)
         {
+            Log.W($"InitBackgroundImage: {sprite}");
             Background.SetActive(sprite);
             if (!sprite) return;
             BackgroundImage.sprite = sprite;
-            var ratio = Screen.width > Screen.height ?
-                sprite.rect.height / sprite.rect.width :
-                sprite.rect.width / sprite.rect.height;
+            var ratio = sprite.rect.width / sprite.rect.height;
             AspectRatioFitter.aspectRatio = ratio;
         }
 
@@ -380,7 +381,8 @@ namespace App.Core.Master
             UISafeArea2D.offsetMin = new Vector2(leftPixels, bottomPixels);
             UISafeArea2D.offsetMax = new Vector2(rightPixel, topPixel);
 
-            InitBackgroundImage(BackgroundImage.sprite);
+            UIPanels[^1].offsetMin = new Vector2(-leftPixels, -bottomPixels);
+            UIPanels[^1].offsetMax = new Vector2(-rightPixel, -topPixel);
         }
 
         /// <summary> UGUI坐标 mousePosition</summary>
@@ -413,7 +415,7 @@ namespace App.Core.Master
             view.SetViewActive();
         }
 
-        public void CLoseView<T>(bool isClear = false) where T : ViewBase
+        public void CloseView<T>(bool isClear = false) where T : ViewBase
         {
             var view = GetView<T>();
             if (view == null)
@@ -428,6 +430,24 @@ namespace App.Core.Master
             else
             {
                 view.SetViewActive(false);
+            }
+        }
+
+        public void CloseAllView(bool isClear = false)
+        {
+            foreach (var view in ViewPairs)
+            {
+                if (isClear)
+                {
+                    RemoveView(view.Value);
+                }
+                else
+                {
+                    if (view.Value.ViewActive)
+                    {
+                        view.Value.SetViewActive(false);
+                    }
+                }
             }
         }
 

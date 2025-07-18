@@ -12,18 +12,21 @@ using App.Core.Helper;
 using App.Core.Master;
 using App.Core.Tools;
 using DG.Tweening;
+using TMPro;
 using UnityEngine.UI;
 
 namespace App.Modules.Loading
 {
-    [ViewOf(ViewMold.UI2D, AssetPath.LoadingView, false, 1)]
+    [ViewOf(ViewMold.UI2D, AssetPath.LoadingView, false, 2)]
     public class LoadingView : ViewBase
     {
         private Slider loadingSlider;
+        private TextMeshProUGUI loadingText;
         protected override void InitView()
         {
             base.InitView();
             loadingSlider = this.FindComponent<Slider>("LoadingSlider");
+            loadingText = transform.GetComponentInChildren<TextMeshProUGUI>();;
         }
 
         protected override void RegisterEvent()
@@ -49,6 +52,10 @@ namespace App.Modules.Loading
             var duration = value >= 1 ? 0.5f : 5f;
             var endValue = value >= 1 ? 1f : 0.9f;
             loadingSlider.DOValue(endValue, duration).SetEase(Ease.Linear).OnComplete(() => { callback?.Invoke(); });
+            if(loadingText != null)
+            {
+                loadingText.text = $"{loadingSlider.value * 100:F2}%";
+            }
         }
     }
 }

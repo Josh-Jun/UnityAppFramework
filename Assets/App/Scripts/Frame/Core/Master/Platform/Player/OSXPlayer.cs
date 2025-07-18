@@ -5,7 +5,7 @@ namespace App.Core.Master
     public class OSXPlayer : PlatformMaster
     {
         public override bool IsEditor { get; } = false;
-        public override string Name { get; } = "StandaloneOSX";
+        public override string Name { get; } = "MacOS";
         public override string PlatformName { get; } = "macos";
         public override int KeyboardHeight => 0;
         public override int GetNetSignal()

@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace App.Core.Master
 {
+    [System.Serializable]
     public class NativeData
     {
         public string Name;
@@ -32,7 +33,12 @@ namespace App.Core.Master
         public void ReceiveNativeMsg(string msg)
         {
             var data = JsonUtility.FromJson<NativeData>(msg);
-            SendEventMsg(data.Name, data.Data);
+            if(HasEvent(data.Name)){
+                SendEventMsg(data.Name, data.Data);
+            }
+            else{
+                Log.W($"PlatformMsgReceiver[SendEventMsg]: {data.Name} not found");
+            }
         }
     }
 }

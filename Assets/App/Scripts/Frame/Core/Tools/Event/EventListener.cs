@@ -27,11 +27,10 @@ namespace App.Core.Tools
 
         public static EventListener Get(GameObject go)
         {
-            foreach (var camera in Camera.allCameras)
-            {
-                var raycaster = camera.gameObject.GetComponent<PhysicsRaycaster>();
-                if (!raycaster) camera.gameObject.AddComponent<PhysicsRaycaster>();
-            }
+            // if (go.layer != LayerMask.NameToLayer("UI"))
+            //     go.layer = LayerMask.NameToLayer("UI");
+            // var raycaster = Camera.main?.gameObject.GetComponent<PhysicsRaycaster>();
+            // if (!raycaster) Camera.main?.gameObject.AddComponent<PhysicsRaycaster>();
 
             var listener = go.GetComponent<EventListener>();
             if (!listener) listener = go.AddComponent<EventListener>();
@@ -39,11 +38,10 @@ namespace App.Core.Tools
         }
         public static EventListener Get(Component com)
         {
-            foreach (var camera in Camera.allCameras)
-            {
-                var raycaster = camera.gameObject.GetComponent<PhysicsRaycaster>();
-                if (!raycaster) camera.gameObject.AddComponent<PhysicsRaycaster>();
-            }
+            // if (com.gameObject.layer != LayerMask.NameToLayer("UI"))
+            //     com.gameObject.layer = LayerMask.NameToLayer("UI");
+            // var raycaster = Camera.main?.gameObject.GetComponent<PhysicsRaycaster>();
+            // if (!raycaster) Camera.main?.gameObject.AddComponent<PhysicsRaycaster>();
 
             var listener = com.GetComponent<EventListener>();
             if (!listener) listener = com.gameObject.AddComponent<EventListener>();

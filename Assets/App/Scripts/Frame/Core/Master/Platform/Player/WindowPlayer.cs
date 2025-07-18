@@ -5,7 +5,7 @@ namespace App.Core.Master
     public class WindowPlayer : PlatformMaster
     {
         public override bool IsEditor { get; } = false;
-        public override string Name { get; } = "StandaloneWindows";
+        public override string Name { get; } = "Windows";
         public override string PlatformName { get; } = "window";
         public override int KeyboardHeight => 0;
         public override int GetNetSignal()

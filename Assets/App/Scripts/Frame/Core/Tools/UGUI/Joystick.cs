@@ -34,20 +34,24 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     private Vector2 radius;
     private void Awake()
     {
-        background = transform.Find("Background").GetComponent<RectTransform>();
-        handler = transform.Find("Background/Handler").GetComponent<RectTransform>();
+        background = transform.GetChild(0) as RectTransform;
+        handler = background.GetChild(0) as RectTransform;
         canvas = GetComponentInParent<Canvas>();
-        self = GetComponent<RectTransform>();
+        self = transform as RectTransform;
         if (joystickType != JoystickType.Fixed)
             background.gameObject.SetActive(false);
         radius = background.sizeDelta / 2;
     }
 #if UNITY_EDITOR
+    [Header("键盘控制")]
+    [Tooltip("是否使用键盘控制,只在编辑器下有效")]
+    public bool useKeyboard = true;
     private float x, y, _x, _y;
 #endif
     public void Update()
     {
 #if UNITY_EDITOR
+        if (!useKeyboard) return;
         if (!background.gameObject.activeSelf) return;
         x = Input.GetAxis("Horizontal");
         y = Input.GetAxis("Vertical");
@@ -66,6 +70,7 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
             input = Vector2.zero;
             _x = 0; _y = 0;
             SetHandlerPos();
+            OnJoystickMoveEvent?.Invoke(input);
             if (joystickType != JoystickType.Fixed)
                 background.gameObject.SetActive(false);
         }
@@ -100,6 +105,7 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         }
 
         SetHandlerPos();
+        EventSystem.current.SetSelectedGameObject(gameObject);
     }
 
     private void SetHandlerPos()
@@ -119,14 +125,14 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         input = Vector2.zero;
         handler.anchoredPosition = Vector2.zero;
         isDragging = false;
+        EventSystem.current.SetSelectedGameObject(null);
+        OnJoystickMoveEvent?.Invoke(input);
     }
 
     private Vector2 ScreenPointToAnchoredPosition(Vector2 postion)
     {
-        var _camera = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(self, postion, _camera, out var point);
-        // 根据self的pivot计算偏移量
-        var offset = new Vector2((self.pivot.x + 0.5f) * self.sizeDelta.x, (self.pivot.y - 0.5f) * self.sizeDelta.y);
-        return point - offset;
+        var uiCamera = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(background, postion, uiCamera, out var point);
+        return point + background.anchoredPosition;
     }
 }

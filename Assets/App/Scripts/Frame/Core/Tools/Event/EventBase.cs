@@ -196,6 +196,11 @@ namespace App.Core.Tools
         #endregion
 
         #region 判断是否有该监听
+        /// <summary>判断是否有该监听-带参数</summary>
+        public bool HasEvent(string msg)
+        {
+            return EventDispatcher.HasEventListener(msg);
+        }
 
         /// <summary>判断是否有该监听-带参数</summary>
         public bool HasEvent<T>(string msg)

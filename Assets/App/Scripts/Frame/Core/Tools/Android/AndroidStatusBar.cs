@@ -17,7 +17,6 @@ public class AndroidStatusBar
     // Constants
     private const uint DEFAULT_BACKGROUND_COLOR = 0xff000000;
     
-#if UNITY_ANDROID
     // Original Android flags
     private const int VIEW_SYSTEM_UI_FLAG_VISIBLE = 0;                                        // Added in API 14 (Android 4.0.x): Status bar visible (the default)
     private const int VIEW_SYSTEM_UI_FLAG_LOW_PROFILE = 1;                                    // Added in API 14 (Android 4.0.x): Low profile for games, book readers, and video players; the status bar and/or navigation icons are dimmed out (if visible)
@@ -39,7 +38,6 @@ public class AndroidStatusBar
     // Current values
     private static int systemUiVisibilityValue;
     private static int flagsValue;
-#endif
 
     //Properties
     private static States _statusBarState;

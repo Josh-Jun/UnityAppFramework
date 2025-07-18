@@ -11,7 +11,7 @@ namespace App.Core.Master
         private AndroidJavaObject MainJavaObject => JavaObject(AppMainPackage).GetStatic<AndroidJavaObject>("currentActivity");
         public override bool IsEditor { get; } = false;
         public override string Name { get; } = "Android";
-        public override string PlatformName => Global.AppConfig.ChannelPackage == ChannelPackage.Mobile ? "android" : Global.AppConfig.ChannelPackage.ToString().ToLower();
+        public override string PlatformName => Global.AppConfig.ChannelPackage == ChannelPackage.Default ? "android" : Global.AppConfig.ChannelPackage.ToString().ToLower();
 
         public AndroidPlayer()
         {
@@ -55,12 +55,7 @@ namespace App.Core.Master
             get
             {
 #if UNITY_ANDROID && !UNITY_EDITOR
-                using var unityClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-                var getView = unityClass.GetStatic<AndroidJavaObject>("currentActivity")
-                    .Get<AndroidJavaObject>("mUnityPlayer").Call<AndroidJavaObject>("getView");
-                using var rct = new AndroidJavaObject("android.graphics.Rect");
-                getView.Call<AndroidJavaObject>("getWindowVisibleDisplayFrame", rct);
-                return Screen.height - rct.Call<int>("height");
+                return JavaObject(AppToolsPackage).CallStatic<int>("getKeyboardHeight");
 #endif
                 return 0;
             }

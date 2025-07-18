@@ -26,7 +26,7 @@ namespace App.Editor.View
         private DevelopmentMold DevelopmentMold = DevelopmentMold.Sandbox;
         private EPlayMode AssetPlayMode = EPlayMode.EditorSimulateMode;
         private int AppFrameRate = 30;
-        private ChannelPackage ChannelPackage = ChannelPackage.Mobile;
+        private ChannelPackage ChannelPackage = ChannelPackage.Default;
         private bool NativeApp = false;
         private string CDNVersion = string.Empty;
         private string outputPath;
@@ -229,7 +229,10 @@ namespace App.Editor.View
             buildOption |= BuildOptions.CleanBuildCache;
             buildOption |= BuildOptions.BuildScriptsOnly;
             buildOption |= BuildOptions.CompressWithLz4;
-            var report = BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, buildPath, EditorUserBuildSettings.activeBuildTarget, buildOption);
+            // 只构建Launcher场景
+            var scenes = new EditorBuildSettingsScene[1];
+            scenes[0] = EditorBuildSettings.scenes[0];
+            var report = BuildPipeline.BuildPlayer(scenes, buildPath, EditorUserBuildSettings.activeBuildTarget, buildOption);
 
             if (report.summary.result == BuildResult.Succeeded)
             {
@@ -249,15 +252,15 @@ namespace App.Editor.View
             FileUtil.DeleteFileOrDirectory(Application.streamingAssetsPath + "/AssetBundles");
             var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
             var version = GetDefaultPackageVersion();
-            YooAssetBuild(EditorUserBuildSettings.activeBuildTarget, AssetPackage.BuiltinPackage, version);
+            YooAssetBuild(EditorUserBuildSettings.activeBuildTarget, AssetPackage.BuiltinPackage, version, EBuildinFileCopyOption.ClearAndCopyAll);
             switch (appConfig.AssetPlayMode)
             {
                 case EPlayMode.OfflinePlayMode:
-                    YooAssetBuild(EditorUserBuildSettings.activeBuildTarget, AssetPackage.HotfixPackage, version);
+                    YooAssetBuild(EditorUserBuildSettings.activeBuildTarget, AssetPackage.HotfixPackage, version, EBuildinFileCopyOption.ClearAndCopyAll);
                     break;
                 case EPlayMode.HostPlayMode:
                 {
-                    var buildParameters = YooAssetBuild(EditorUserBuildSettings.activeBuildTarget, AssetPackage.HotfixPackage, version);
+                    var buildParameters = YooAssetBuild(EditorUserBuildSettings.activeBuildTarget, AssetPackage.HotfixPackage, version, EBuildinFileCopyOption.None);
                     OnlyCopyPackageManifestFile(buildParameters);
                     break;
                 }
@@ -269,7 +272,7 @@ namespace App.Editor.View
             }
         }
 
-        private static ScriptableBuildParameters YooAssetBuild(BuildTarget buildTarget, AssetPackage package, string version, EBuildinFileCopyOption copyOption = EBuildinFileCopyOption.ClearAndCopyAll)
+        private static ScriptableBuildParameters YooAssetBuild(BuildTarget buildTarget, AssetPackage package, string version, EBuildinFileCopyOption copyOption)
         {
             Debug.Log($"开始构建 : {buildTarget}");
 
@@ -337,7 +340,7 @@ namespace App.Editor.View
             
             foreach (var file in files)
             {
-                if (file.Name.StartsWith("PackageManifest_") && !file.Name.EndsWith(".json"))
+                if (file.Name.StartsWith(buildParameters.PackageName) && !file.Name.EndsWith(".json"))
                 {
                     File.Copy(file.FullName, Path.Combine(rootDirectory, file.Name));
                 }
@@ -446,6 +449,12 @@ namespace App.Editor.View
                     var assetplaymold = arg.Split(':')[^1];
                     var mold = (EPlayMode)Enum.Parse(typeof(EPlayMode), assetplaymold);
                     appConfig.AssetPlayMode = mold;
+                }
+                else if (arg.Contains("--channel:"))
+                {
+                    var channel = arg.Split(':')[^1];
+                    var mold = (ChannelPackage)Enum.Parse(typeof(ChannelPackage), channel);
+                    appConfig.ChannelPackage = mold;
                 }
             }
             

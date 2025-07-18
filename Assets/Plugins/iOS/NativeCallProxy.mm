@@ -25,16 +25,16 @@ extern "C" {
         return [api showHostMainWindow:[NSString stringWithUTF8String:msg]];
     }
     //获取原生界面数据
-    const char* GetAppData(const char* key) {
+    const char* GetNativeData(const char* key) {
         NSString* data = [api getAppData:[NSString stringWithUTF8String:key]];
         return strdup([data cStringUsingEncoding:NSUTF8StringEncoding]);
     }
 	//震动效果
-	void Vibrate() {
+	void NativeVibrate() {
 	    AudioServicesPlaySystemSound(1520);
 	}
 	//打开应用设置
-	void OpenAppSettings()
+	void OpenNativeSettings()
     {
         NSURL*url=[NSURL URLWithString:UIApplicationOpenSettingsURLString];
         if([[UIApplication sharedApplication]canOpenURL:url]){
@@ -48,7 +48,7 @@ extern "C" {
         }
     }
     //判断是否有相关权限
-    bool HasAuthorizedPermission(char* permission){
+    bool HasNativeAuthorizedPermission(char* permission){
         if(permission == "Networking"){
             CTCellularData *cellularData = [[CTCellularData alloc]init];
             CTCellularDataRestrictedState status = cellularData.restrictedState;
@@ -68,7 +68,7 @@ extern "C" {
         }
     }
     //请求相关权限
-    void RequestUserPermission(char* permission){
+    void RequestNativeUserPermission(char* permission){
         char* code;
         if(permission == "Networking"){
             //应用首次启动自动请求

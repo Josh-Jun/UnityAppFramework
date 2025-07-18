@@ -29,8 +29,14 @@ namespace App.Runtime.Helper
     /// <summary>App渠道包</summary>
     public enum ChannelPackage
     {
-        Mobile = 0,
+        Default = 0,
         PicoXR = 1,
+        Xiaomi = 2,
+        Huawei = 3,
+        Vivo = 4,
+        Oppo = 5,
+        Meizu = 6,
+        Honor = 7,
     }
 
     /// <summary>开发环境</summary>

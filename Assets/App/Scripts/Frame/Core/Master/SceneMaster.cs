@@ -9,16 +9,28 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using App.Core.Tools;
 
 namespace App.Core.Master
 {
+    public enum LoadSceneMold
+    {
+        YAScene,
+        ABScene,
+    }
+    public class LoadSceneData
+    {
+        public string Location;
+        public string Name;
+        public LoadSceneMold Mold;
+    }
     public class SceneMaster : SingletonMonoEvent<SceneMaster>
     {
-        private readonly Queue<string> LoadedSceneQueue = new Queue<string>();
-        public string TargetScene { get; private set; }
-        public string CurrentScene { get; private set; }
-        
+        private readonly Queue<LoadSceneData> LoadedSceneQueue = new();
+        public LoadSceneData TargetScene { get; private set; }
+        public LoadSceneData CurrentScene { get; private set; }
+
         public delegate void LoadSceneEvent(string location);
 
         public LoadSceneEvent BeforeLoadScene;
@@ -41,14 +53,19 @@ namespace App.Core.Master
             Log.W($"已经无路可退了：{LoadedSceneQueue.Count}");
         }
 
-        public void LoadScene(string location)
+        public void LoadScene(string location, LoadSceneMold mold = LoadSceneMold.YAScene)
         {
-            if (!string.IsNullOrEmpty(TargetScene))
+            if (TargetScene != null)
             {
                 CurrentScene = TargetScene;
                 LoadedSceneQueue.Enqueue(CurrentScene);
             }
-            TargetScene = location;
+            TargetScene = new LoadSceneData
+            {
+                Location = location,
+                Name = location.Split('/').Last().Split('.').First(),
+                Mold = mold,
+            };
             Assets.LoadSceneAsync(AssetPath.LoadingScene);
         }
     }

@@ -144,7 +144,7 @@ public static class Assets
 
     private static string GetCdnServerAddress()
     {
-        return $"{Global.CdnServer}/CDN/{Platform}/{Global.AppConfig.CDNVersion}";
+        return $"{Global.CdnServer}/AssetBundles/{Platform}/v{Application.version}";
     }
 
     public static async UniTask<(bool, string)> RequestPackageVersionAsync(AssetPackage assetPackage)
