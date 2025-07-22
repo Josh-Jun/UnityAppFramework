@@ -144,6 +144,7 @@ namespace App.Editor.View
         private static void SetBuildSetting()
         {
             var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
+            EditorUserBuildSettings.development = appConfig.DevelopmentMold != DevelopmentMold.Release;
             if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android)
             {
                 PlayerSettings.Android.keystorePass = "123456";
@@ -200,6 +201,7 @@ namespace App.Editor.View
             var date = $"{DateTime.Now.Year}{DateTime.Now.Month:00}{DateTime.Now.Day:00}";
             var suffix = appConfig.NativeApp ? "" : ".apk";
             var name = $"{package}_{channel}_v{version}_{develop}_{date}{suffix}";
+            
             if(EditorUserBuildSettings.activeBuildTarget == BuildTarget.iOS)
             {
                 name = $"{package}_{channel}_v{version}_{develop}";
