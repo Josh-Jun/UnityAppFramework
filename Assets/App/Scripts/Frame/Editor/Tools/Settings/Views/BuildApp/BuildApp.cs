@@ -146,9 +146,9 @@ namespace App.Editor.View
             var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
             if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android)
             {
-                // PlayerSettings.Android.keystorePass = "";
-                // PlayerSettings.Android.keyaliasName = "";
-                // PlayerSettings.Android.keyaliasPass = "";
+                PlayerSettings.Android.keystorePass = "123456";
+                PlayerSettings.Android.keyaliasName = "1";
+                PlayerSettings.Android.keyaliasPass = "123456";
                 EditorUserBuildSettings.exportAsGoogleAndroidProject = appConfig.NativeApp;
                 
 #if PICO_XR_SETTING
@@ -198,8 +198,12 @@ namespace App.Editor.View
             var version = PlayerSettings.bundleVersion;
             var develop =  appConfig.DevelopmentMold.ToString().ToLower();
             var date = $"{DateTime.Now.Year}{DateTime.Now.Month:00}{DateTime.Now.Day:00}";
-            var suffix = appConfig.NativeApp || EditorUserBuildSettings.activeBuildTarget == BuildTarget.iOS ? "" : ".apk";
+            var suffix = appConfig.NativeApp ? "" : ".apk";
             var name = $"{package}_{channel}_v{version}_{develop}_{date}{suffix}";
+            if(EditorUserBuildSettings.activeBuildTarget == BuildTarget.iOS)
+            {
+                name = $"{package}_{channel}_v{version}_{develop}";
+            }
             
             EditorUserBuildSettings.SwitchActiveBuildTarget(EditorUserBuildSettings.selectedBuildTargetGroup,
                 EditorUserBuildSettings.activeBuildTarget);
@@ -207,14 +211,7 @@ namespace App.Editor.View
             SetBuildSetting();
 
             var outputPath = Application.dataPath.Replace("Assets", "App");;
-            if (Directory.Exists(outputPath))
-            {
-                if (File.Exists(name))
-                {
-                    File.Delete(name);
-                }
-            }
-            else
+            if (!Directory.Exists(outputPath))
             {
                 Directory.CreateDirectory(outputPath);
             }
