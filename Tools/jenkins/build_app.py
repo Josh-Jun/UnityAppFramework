@@ -17,10 +17,10 @@ def call_unity_static_func():
     # 6. 渠道号
     if sys.platform.startswith('win'):
         # win(cmd)
-        cmd = 'start %s -quit -batchmode -projectPath %s -logFile %s -executeMethod %s --version:%s --development:%s --assetplaymold:%s --channel:%s'%(sys.argv[1], sys.argv[2], log_file, static_func, sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6])
+        cmd = 'start %s -quit -batchmode -projectPath %s -logFile %s -executeMethod %s --version:%s --development:%s --assetplaymold:%s --channel:%s --onlybuildasset:%s'%(sys.argv[1], sys.argv[2], log_file, static_func, sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7])
     else:
         # mac(shell)
-        cmd = '%s/Contents/MacOS/Unity -quit -batchmode -projectPath %s -logFile %s -executeMethod %s --version:%s --development:%s --assetplaymold:%s --channel:%s'%(sys.argv[1], sys.argv[2], log_file, static_func, sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6])
+        cmd = '%s/Contents/MacOS/Unity -quit -batchmode -projectPath %s -logFile %s -executeMethod %s --version:%s --development:%s --assetplaymold:%s --channel:%s --onlybuildasset:%s'%(sys.argv[1], sys.argv[2], log_file, static_func, sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7])
 
     print('run cmd:  ' + cmd)
     os.system(cmd)

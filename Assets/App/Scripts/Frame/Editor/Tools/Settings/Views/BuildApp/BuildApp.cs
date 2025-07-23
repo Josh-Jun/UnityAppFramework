@@ -144,7 +144,7 @@ namespace App.Editor.View
         private static void SetBuildSetting()
         {
             var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
-            EditorUserBuildSettings.development = appConfig.DevelopmentMold != DevelopmentMold.Release;
+            // EditorUserBuildSettings.development = appConfig.DevelopmentMold != DevelopmentMold.Release;
             if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android)
             {
                 PlayerSettings.Android.keystorePass = "123456";
@@ -425,6 +425,7 @@ namespace App.Editor.View
             // 解析命令行参数
             var args = Environment.GetCommandLineArgs();
             var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
+            bool onlyBuildAsset = false;
             // 设置相关参数
             foreach (var arg in args)
             {
@@ -455,6 +456,10 @@ namespace App.Editor.View
                     var mold = (ChannelPackage)Enum.Parse(typeof(ChannelPackage), channel);
                     appConfig.ChannelPackage = mold;
                 }
+                else if (arg.Contains("--onlybuildasset:"))
+                {
+                    onlyBuildAsset = bool.Parse(arg.Split(':')[^1]);
+                }
             }
             
             // 保存AppConfig
@@ -466,8 +471,11 @@ namespace App.Editor.View
             GenerateAndCopyDll();
             Debug.Log("=============================================Start Build AssetBundle=============================================");
             BuildAssets();
-            Debug.Log("=============================================Start Build App=============================================");
-            Build();
+            if (!onlyBuildAsset)
+            {
+                Debug.Log("=============================================Start Build App=============================================");
+                Build();
+            }
             
             Debug.Log("Build Complete!!!");
         }
