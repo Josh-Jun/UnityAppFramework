@@ -170,7 +170,7 @@ public static class Assets
         return downloader;
     }
 
-    public static void BeginDownloadPackage(ResourceDownloaderOperation downloader,
+    public static async UniTask BeginDownloadPackage(ResourceDownloaderOperation downloader,
         DownloaderOperation.OnDownloadOver OnDownloadFinishFunction,
         DownloaderOperation.OnDownloadError OnDownloadErrorCallback,
         DownloaderOperation.OnDownloadProgress OnDownloadProgressCallback,
@@ -184,6 +184,7 @@ public static class Assets
 
         //开启下载
         downloader.BeginDownload();
+        await downloader.Task;
     }
 
     public static async UniTask DownloadPackageAsync(AssetPackage assetPackage,

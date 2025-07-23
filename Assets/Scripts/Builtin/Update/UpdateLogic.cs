@@ -38,6 +38,7 @@ namespace App.Modules.Update
         {
             var view_prefab = AssetsMaster.Instance.LoadAssetSync<GameObject>(AssetPath.UpdateView);
             view = ViewMaster.Instance.AddView<UpdateView>(view_prefab);
+            view.SetViewActive(true);
             await Assets.CreatePackageAsync(AssetPackage.HotfixPackage);
             // 请求资源清单的版本信息
             var (request_result, version) = await Assets.RequestPackageVersionAsync(AssetPackage.HotfixPackage);
@@ -49,7 +50,6 @@ namespace App.Modules.Update
                     downloader = Assets.CreatePackageDownloader(AssetPackage.HotfixPackage);
                     if (downloader.TotalDownloadCount > 0)
                     {
-                        view.SetViewActive(true);
                         // 需要下载,弹出更新界面
                         view.SetContentText($"");
                         view.SetUpdateTipsActive(true);
@@ -81,7 +81,7 @@ namespace App.Modules.Update
                 OnDownloadFinishFunction,
                 OnDownloadErrorCallback,
                 OnDownloadProgressCallback,
-                OnStartDownloadFileCallback);
+                OnStartDownloadFileCallback).Forget();
         }
 
         private void OnDownloadFinishFunction(bool isSucceed)

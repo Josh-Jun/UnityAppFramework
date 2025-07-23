@@ -53,7 +53,7 @@ public class Hotfix : MonoBehaviour
         }
         var progress = currentDownloadBytes / (float)totalDownloadBytes;
         slider.value = Mathf.Clamp(progress, min, 1);
-        progressText.text = $"{(progress * 100):0000}%";
+        progressText.text = $"{(progress * 100):F1}%";
         text.text = $"{(currentDownloadBytes / 1024f / 1024f):F}M/{(totalDownloadBytes / 1024f / 1024f):F}M  {currentDownloadCount}/{totalDownloadCount}";
     }
 }
