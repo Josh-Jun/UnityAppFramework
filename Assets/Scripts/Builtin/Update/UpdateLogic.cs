@@ -49,6 +49,7 @@ namespace App.Modules.Update
                     downloader = Assets.CreatePackageDownloader(AssetPackage.HotfixPackage);
                     if (downloader.TotalDownloadCount > 0)
                     {
+                        view.SetViewActive(true);
                         // 需要下载,弹出更新界面
                         view.SetContentText($"");
                         view.SetUpdateTipsActive(true);
@@ -109,7 +110,7 @@ namespace App.Modules.Update
             }
             else
             {
-                speed = (currentDownloadBytes - historyDownload) / (Time.time - time);
+                speed = (currentDownloadBytes - historyDownload) / 1024f / 1024f / (Time.time - time);
                 historyDownload = currentDownloadBytes;
                 time = Time.time;
             }
