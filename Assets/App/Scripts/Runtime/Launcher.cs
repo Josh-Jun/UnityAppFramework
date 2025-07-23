@@ -9,7 +9,6 @@ namespace App.Runtime
 {
     public class Launcher : MonoBehaviour
     {
-        private bool isNeedRestart;
         private ResourcePackage builtinPackage = null;
         private Hotfix hotfix = null;
 
@@ -53,16 +52,11 @@ namespace App.Runtime
 
         private void OnDownloaderResult(int totalDownloadCount, long totalDownloadBytes)
         {
-            isNeedRestart = totalDownloadCount > 0; 
+            
         }
 
         private void OnDownloadFinishFunction(bool isSucceed)
         {
-            if (isNeedRestart)
-            {
-                hotfix.SetUpdateCompletePanelActive(true);
-                return;
-            }
             if (!isSucceed) return;
             if (Global.AppConfig.AssetPlayMode != EPlayMode.EditorSimulateMode)
             {
@@ -92,7 +86,7 @@ namespace App.Runtime
         {
             foreach (var aotName in Global.AOTMetaAssemblyNames)
             {
-                var ta = builtinPackage.LoadAssetAsync($"{Global.DllBasePath}/{aotName}.bytes").AssetObject as TextAsset;
+                var ta = builtinPackage.LoadAssetSync($"{Global.DllBasePath}/{aotName}.bytes").AssetObject as TextAsset;
                 if (ta != null) RuntimeApi.LoadMetadataForAOTAssembly(ta.bytes, HomologousImageMode.SuperSet);
             }
         }
@@ -101,7 +95,7 @@ namespace App.Runtime
         {
             foreach (var assemblyName in Global.HotfixAssemblyNames)
             {
-                var ta = builtinPackage.LoadAssetAsync($"{Global.DllBasePath}/{assemblyName}.bytes").AssetObject as TextAsset;
+                var ta = builtinPackage.LoadAssetSync($"{Global.DllBasePath}/{assemblyName}.bytes").AssetObject as TextAsset;
                 if (ta != null) System.Reflection.Assembly.Load(ta.bytes);
             }
         }
