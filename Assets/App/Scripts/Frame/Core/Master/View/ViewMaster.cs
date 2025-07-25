@@ -123,7 +123,8 @@ namespace App.Core.Master
             view.transform.localScale = Vector3.one;
             view.name = view.name.Replace("(Clone)", "");
             var vb = view.AddComponent(type) as ViewBase;
-            EventDispatcher.TriggerEvent(view.name, attribute.Active);
+            vb?.CloseView();
+            if(attribute.Active) vb?.OpenView();
             return vb;
         }
 
@@ -347,7 +348,8 @@ namespace App.Core.Master
             view.transform.localScale = Vector3.one;
             view.name = view.name.Replace("(Clone)", "");
             var vb = view.AddComponent(type) as ViewBase;
-            EventDispatcher.TriggerEvent(view.name, state);
+            vb?.CloseView();
+            if(state) vb?.OpenView();
             ViewPairs.Add(type.FullName!, vb);
             return vb as T;
         }
@@ -383,7 +385,7 @@ namespace App.Core.Master
             return position;
         }
 
-        public void OpenView<T>() where T : ViewBase
+        public void OpenView<T>(object obj = null) where T : ViewBase
         {
             var view = GetView<T>();
             if (view == null)
@@ -391,7 +393,7 @@ namespace App.Core.Master
                 Log.W($"View {typeof(T).FullName} has no view");
                 return;
             }
-            view.SetViewActive();
+            view.OpenView(obj);
         }
 
         public void CloseView<T>(bool isClear = false) where T : ViewBase
@@ -408,7 +410,7 @@ namespace App.Core.Master
             }
             else
             {
-                view.SetViewActive(false);
+                view.CloseView();
             }
         }
 
@@ -424,7 +426,7 @@ namespace App.Core.Master
                 {
                     if (view.Value.ViewActive)
                     {
-                        view.Value.SetViewActive(false);
+                        view.Value.CloseView();
                     }
                 }
             }

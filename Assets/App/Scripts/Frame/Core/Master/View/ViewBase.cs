@@ -30,37 +30,27 @@ namespace App.Core.Master
         /// <summary>注册消息事件,默认删除此事件</summary>
         protected virtual void RegisterEvent()
         {
-            //显隐
-            AddEventMsg<bool, object>(name, SetViewActive);
+            //显示View
+            AddEventMsg<object>($"Open{name}",OpenView);
+            //隐藏View
+            AddEventMsg($"Close{name}", CloseView);
         }
 
         /// <summary>打开窗口</summary>
-        protected virtual void OpenView(object obj = null)
+        public void OpenView(object obj = null)
         {
             transform.SetAsLastSibling();
+            if (gameObject.activeSelf) return;
+            gameObject.SetActive(true);
+            SendEventMsg($"Open{name}", obj);
         }
 
         /// <summary>关闭窗口</summary>
-        protected virtual void CloseView()
+        public void CloseView()
         {
-        }
-
-        /// <summary>设置窗体显/隐</summary>
-        public void SetViewActive(bool isActive = true, object obj = null)
-        {
-            if (this == null) return;
-
-            if (!isActive) CloseView();
-
-            if (gameObject != null)
-            {
-                if (gameObject.activeSelf != isActive)
-                {
-                    gameObject.SetActive(isActive);
-                }
-            }
-
-            if (isActive) OpenView(obj);
+            if (!gameObject.activeSelf) return;
+            gameObject.SetActive(false);
+            SendEventMsg($"Close{name}");
         }
 
         public void SetAsLastSibling()

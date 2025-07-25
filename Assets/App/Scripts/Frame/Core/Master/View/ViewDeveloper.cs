@@ -41,7 +41,7 @@ namespace App.Core.Master
 
         public static void Play(this ViewBase view, bool isOpenView)
         {
-            if(isOpenView) view.SetViewActive(true);
+            if(isOpenView) view.OpenView();
             TweenSequence = DOTween.Sequence();
             foreach (var tweener in Tweeners)
             {
@@ -50,7 +50,7 @@ namespace App.Core.Master
             TweenSequence.OnComplete(() =>
             {
                 Tweeners.Clear();
-                if(!isOpenView) view.SetViewActive(false);
+                if(!isOpenView) view.CloseView();
             });
             TweenSequence.Play();
         }

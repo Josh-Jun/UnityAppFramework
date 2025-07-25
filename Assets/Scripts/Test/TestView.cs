@@ -50,16 +50,6 @@ namespace App.Modules.Test
             btn_quit.onClick.AddListener(() => { SendEventMsg("BtnQuitEvent"); });
         }
 
-        protected override void OpenView(object obj = null)
-        {
-            base.OpenView(obj);
-        }
-
-        protected override void CloseView()
-        {
-            base.CloseView();
-        }
-
         [Event("TestViewEvent")]
         public void TestViewEvent(string param)
         {

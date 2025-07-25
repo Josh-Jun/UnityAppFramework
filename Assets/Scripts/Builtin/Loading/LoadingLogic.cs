@@ -31,7 +31,7 @@ namespace App.Modules.Loading
 
         private void LoadScene()
         {
-            view.SetViewActive(true);
+            view.OpenView();
             switch (SceneMaster.Instance.TargetScene.Mold)
             {
                 case LoadSceneMold.YAScene:
@@ -99,7 +99,7 @@ namespace App.Modules.Loading
 
         public void End()
         {
-            view.SetViewActive(false);
+            view.CloseView();
         }
         public void AppPause(bool pause)
         {

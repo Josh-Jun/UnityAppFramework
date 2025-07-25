@@ -26,25 +26,23 @@ namespace App.Modules.Ask
         public void Begin()
         {
             view = ViewMaster.Instance.GetView<AskView>();
+            view.OpenView();
         }
         public void End()
         {
-            view.SetViewActive(false);
+            view.CloseView();
         }
         public void ShowAskView(string content, Action confirm_callback, Action cancel_callback, string confirm, string cancel)
         {
-            view.SetViewActive();
             view.SetViewInfo(content, confirm_callback, cancel_callback, confirm, cancel);
         }
         public void ShowAskView(string content, Action confirm_callback, Action cancel_callback)
         {
-            view.SetViewActive();
             view.SetViewInfo(content, confirm_callback, cancel_callback);
         }
 
         public void ShowTips(string content, float time = 2f)
         {
-            view.SetViewActive();
             view.SetTips(content, time);
         }
         public void AppPause(bool pause)

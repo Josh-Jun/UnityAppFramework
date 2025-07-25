@@ -24,19 +24,5 @@ namespace Modules.#NAMESPACE#
             base.RegisterEvent();
             #NOTRIM#
         }
-
-        protected override void OpenView(object obj = null)
-        {
-            base.OpenView(obj);
-	        SendEventMsg("Open#SCRIPTNAME#Logic", obj);
-            #NOTRIM#
-        }
-
-        protected override void CloseView()
-        {
-            base.CloseView();
-	        SendEventMsg("Close#SCRIPTNAME#Logic");
-            #NOTRIM#
-        }
     }
 }

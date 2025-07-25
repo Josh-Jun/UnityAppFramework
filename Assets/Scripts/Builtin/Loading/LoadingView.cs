@@ -34,18 +34,7 @@ namespace App.Modules.Loading
             base.RegisterEvent();
 
         }
-
-        protected override void OpenView(object obj = null)
-        {
-            base.OpenView(obj);
-        }
-
-        protected override void CloseView()
-        {
-            base.CloseView();
-
-        }
-
+        
         public void SetLoadingSliderValue(float value, Action callback = null)
         {
             loadingSlider.DOKill();

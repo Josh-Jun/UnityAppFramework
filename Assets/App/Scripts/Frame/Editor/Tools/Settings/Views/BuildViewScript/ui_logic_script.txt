@@ -15,8 +15,8 @@ namespace Modules.#NAMESPACE#
         
         public #SCRIPTNAME#()
         {
-	        AddEventMsg<object>("Open#NAMESPACE#ViewLogic", Open#NAMESPACE#ViewLogic);
-	        AddEventMsg("Close#NAMESPACE#ViewLogic", Close#NAMESPACE#ViewLogic);
+	        AddEventMsg<object>("Open#NAMESPACE#View", Open#NAMESPACE#View);
+	        AddEventMsg("Close#NAMESPACE#View", Close#NAMESPACE#View);
 #EVENT#
         }
         
@@ -54,11 +54,11 @@ namespace Modules.#NAMESPACE#
 
         #region View Logic
         
-        private void Open#NAMESPACE#ViewLogic(object obj)
+        private void Open#NAMESPACE#View(object obj)
         {
             
         }
-        private void Close#NAMESPACE#ViewLogic()
+        private void Close#NAMESPACE#View()
         {
 	        
         }

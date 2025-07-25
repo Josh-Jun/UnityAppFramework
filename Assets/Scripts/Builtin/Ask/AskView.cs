@@ -46,18 +46,8 @@ namespace App.Modules.Ask
             base.RegisterEvent();
         }
 
-        protected override void OpenView(object obj = null)
+        public void Init()
         {
-            base.OpenView(obj);
-            askPanel.SetActive(false);
-            tipsPanel.SetActive(false);
-        }
-
-        protected override void CloseView()
-        {
-            base.CloseView();
-            askPanel.SetActive(false);
-            tipsPanel.SetActive(false);
         }
 
         public void SetTips(string tips, float time)
@@ -65,7 +55,7 @@ namespace App.Modules.Ask
             if (tipsPanel.activeSelf) return;
             tipsPanel.SetActive(true);
             tipsText.text = tips;
-            TimeTaskMaster.Instance.AddTimeTask(() => { SetViewActive(false); }, time);
+            TimeTaskMaster.Instance.AddTimeTask(CloseView, time);
         }
         public void SetViewInfo(string content, Action confirm_callback, Action cancel_callback, string confirm = null, string cancel = null)
         {
@@ -80,7 +70,7 @@ namespace App.Modules.Ask
         }
         private void OnClickEvent(Action callback)
         {
-            SetViewActive(false);
+            CloseView();
             callback?.Invoke();
         }
     }
