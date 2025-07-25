@@ -28,6 +28,8 @@ namespace App.Core
             SceneManager.sceneLoaded += (scene, _) => { ExecuteSceneMethods(scene.path, "Begin"); };
             // 初始化Scene的所有Logic的End方法
             SceneManager.sceneUnloaded += (scene) => { ExecuteSceneMethods(scene.path, "End"); };
+            // 启动App
+            StartApp();
         }
 
         /// <summary>启动App</summary>

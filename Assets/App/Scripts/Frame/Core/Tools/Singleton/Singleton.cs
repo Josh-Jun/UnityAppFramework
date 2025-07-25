@@ -13,7 +13,12 @@ namespace App.Core.Tools
             {
                 lock (SingletonLock)
                 {
-                    return _Instance ??= new T();
+                    if (_Instance == null)
+                    {
+                        _Instance = new T();
+                        SingletonManager.Instance.Add(_Instance);
+                    }
+                    return _Instance;
                 }
             }
         }
@@ -21,7 +26,6 @@ namespace App.Core.Tools
         protected Singleton()
         {
             _Instance = this as T;
-            SingletonManager.Instance.Add(_Instance);
         }
 
         public virtual void Clear()

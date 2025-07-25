@@ -11,7 +11,7 @@ namespace App.Core.Helper
         {
             if(Global.AppConfig.AssetPlayMode != YooAsset.EPlayMode.EditorSimulateMode)
             {
-                var assembly = Global.AssemblyPairs[$"{assemblyString}.dll"];
+                var assembly = Global.AssemblyPairs[$"{assemblyString}"];
                 var types = assembly.GetTypes();
                 return types.Where(type => type.Name != typeof(T).Name && typeof(T).IsAssignableFrom(type)).ToList();
             }
@@ -27,7 +27,7 @@ namespace App.Core.Helper
         {
             if(Global.AppConfig.AssetPlayMode != YooAsset.EPlayMode.EditorSimulateMode)
             {
-                return Global.AssemblyPairs[$"{assemblyString}.dll"].GetType(typeof(T).FullName!);
+                return Global.AssemblyPairs[$"{assemblyString}"].GetType(typeof(T).FullName!);
             }   
             else
             {

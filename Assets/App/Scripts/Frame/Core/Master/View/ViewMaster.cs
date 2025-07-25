@@ -318,7 +318,6 @@ namespace App.Core.Master
             var redDotViews = gameObject.GetComponentsInChildren<RedDotView>(true);
             foreach (var redDotView in redDotViews)
             {
-                Log.I(redDotView);
                 _redDotViewMap.TryAdd(redDotView.RedDotMold, redDotView);
             }
         }
@@ -393,17 +392,6 @@ namespace App.Core.Master
                 return;
             }
             view.SetViewActive();
-        }
-
-        public void OpenView<T>(object obj) where T : ViewBase
-        {
-            var view = GetView<T>();
-            if (view == null)
-            {
-                Log.W($"View {typeof(T).FullName} has no view");
-                return;
-            }
-            view.SetViewActive(true, obj);
         }
 
         public void CloseView<T>(bool isClear = false) where T : ViewBase

@@ -21,8 +21,8 @@ public class Global
 
     public static List<string> HotfixAssemblyNames { get; } = new List<string>()
     {
-        "App.Core.dll",
-        "App.Module.dll",
+        "App.Core",
+        "App.Module",
     };
     
     public static Dictionary<string, Assembly> AssemblyPairs = new();
