@@ -12,9 +12,11 @@ using App.Core;
 using App.Core.Helper;
 using App.Core.Master;
 using App.Core.Tools;
+using App.Runtime.Hotfix;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using YooAsset;
+using Object = UnityEngine.Object;
 
 namespace App.Modules.Update
 {
@@ -23,10 +25,12 @@ namespace App.Modules.Update
     {
         private UpdateView view;
         private ResourceDownloaderOperation downloader;
+        private const int downloadingMaxNum = 10;
+        private const int failedTryAgain = 3;
 
         public UpdateLogic()
         {
-            AddEventMsg("UpdateNow", UpdateNow);
+            
         }
 
         public void Begin()
@@ -36,18 +40,20 @@ namespace App.Modules.Update
 
         private async UniTask BeginHotfix()
         {
-            var view_prefab = AssetsMaster.Instance.LoadAssetSync<GameObject>(AssetPath.UpdateView);
-            view = ViewMaster.Instance.AddView<UpdateView>(view_prefab);
-            view.SetViewActive(true);
-            await Assets.CreatePackageAsync(AssetPackage.HotfixPackage);
+            var go = AssetsMaster.Instance.AddChildSync(AssetPath.UpdateView, ViewMaster.Instance.UI2DPanels[0]);
+            view = go.GetComponent<UpdateView>();
+            view.Init(UpdateNow);
+            var hotfixPackage = await Assets.CreatePackageAsync(AssetPackage.HotfixPackage);
             // 请求资源清单的版本信息
-            var (request_result, version) = await Assets.RequestPackageVersionAsync(AssetPackage.HotfixPackage);
-            if (request_result)
+            var request = hotfixPackage.RequestPackageVersionAsync();
+            await request.Task;
+            if (request.Status == EOperationStatus.Succeed)
             {
-                var update_result = await Assets.UpdatePackageManifestAsync(AssetPackage.HotfixPackage, version);
-                if (update_result)
+                var update = hotfixPackage.UpdatePackageManifestAsync(request.PackageVersion);
+                await update.Task;
+                if (update.Status == EOperationStatus.Succeed)
                 {
-                    downloader = Assets.CreatePackageDownloader(AssetPackage.HotfixPackage);
+                    downloader = hotfixPackage.CreateResourceDownloader(10, 3);
                     if (downloader.TotalDownloadCount > 0)
                     {
                         // 需要下载,弹出更新界面
@@ -56,19 +62,19 @@ namespace App.Modules.Update
                     }
                     else
                     {
-                        view.SetViewActive(false);
+                        Object.Destroy(view.gameObject);
                         // 不需要下载,直接进入App
                         Root.StartApp();
                     }
                 }
                 else
                 {
-                    Debug.LogError($"Failed to update package manifest: {version}");
+                    Debug.LogError($"Failed to update package manifest: {update.Error}");
                 }
             }
             else
             {
-                Debug.LogError($"Failed to load package manifest: {AssetPackage.HotfixPackage}");
+                Debug.LogError($"Failed to load package manifest: {request.Error}");
             }
         }
 
@@ -77,17 +83,21 @@ namespace App.Modules.Update
             view.SetUpdateTipsActive(false);
             view.SetProgressBarActive(true);
             view.SetTipsText("下载中...");
-            Assets.BeginDownloadPackage(downloader,
-                OnDownloadFinishFunction,
-                OnDownloadErrorCallback,
-                OnDownloadProgressCallback,
-                OnStartDownloadFileCallback).Forget();
+            downloader.OnDownloadOverCallback = OnDownloadOverCallback;
+            downloader.OnDownloadErrorCallback += OnDownloadErrorCallback;
+            downloader.OnDownloadProgressCallback += OnDownloadProgressCallback;
+            downloader.OnStartDownloadFileCallback += OnStartDownloadFileCallback;
+            downloader.BeginDownload();
         }
 
-        private void OnDownloadFinishFunction(bool isSucceed)
+        private void OnDownloadOverCallback(bool isSucceed)
         {
-            if (!isSucceed) return;
-            view.SetViewActive(false);
+            if (!isSucceed)
+            {
+                Debug.LogError($"{AssetPackage.HotfixPackage}下载失败");
+                return;
+            }
+            Object.Destroy(view.gameObject);
             Root.StartApp();
         }
 

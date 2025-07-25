@@ -15,14 +15,10 @@ namespace App.Core.Tools
                 {
                     if (_Instance == null)
                     {
-                        _Instance = FindObjectOfType<T>();
+                        var go = GameObject.Find(GoName) ?? new GameObject(GoName);
+                        _Instance = go.GetComponent<T>();
                         if (_Instance == null)
                         {
-                            var go = GameObject.Find(GoName);
-                            if (go == null)
-                            {
-                                go = new GameObject(GoName);
-                            }
                             _Instance = go.AddComponent<T>();
                         }
                         _Instance.OnSingletonMonoInit();

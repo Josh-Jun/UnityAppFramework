@@ -146,67 +146,6 @@ public static class Assets
     {
         return $"{Global.CdnServer}/AssetBundles/{Platform}/v{Application.version}";
     }
-
-    public static async UniTask<(bool, string)> RequestPackageVersionAsync(AssetPackage assetPackage)
-    {
-        var package = YooAssets.GetPackage($"{assetPackage}");
-        var operation = package.RequestPackageVersionAsync();
-        await operation.Task;
-        return (operation.Status == EOperationStatus.Succeed, operation.PackageVersion);
-    }
-
-    public static async UniTask<bool> UpdatePackageManifestAsync(AssetPackage assetPackage, string packageVersion)
-    {
-        var package = YooAssets.GetPackage($"{assetPackage}");
-        var operation = package.UpdatePackageManifestAsync(packageVersion);
-        await operation.Task;
-        return operation.Status == EOperationStatus.Succeed;
-    }
-
-    public static ResourceDownloaderOperation CreatePackageDownloader(AssetPackage assetPackage)
-    {
-        var package = YooAssets.GetPackage($"{assetPackage}");
-        var downloader = package.CreateResourceDownloader(downloadingMaxNum, failedTryAgain);
-        return downloader;
-    }
-
-    public static async UniTask BeginDownloadPackage(ResourceDownloaderOperation downloader,
-        DownloaderOperation.OnDownloadOver OnDownloadFinishFunction,
-        DownloaderOperation.OnDownloadError OnDownloadErrorCallback,
-        DownloaderOperation.OnDownloadProgress OnDownloadProgressCallback,
-        DownloaderOperation.OnStartDownloadFile OnStartDownloadFileCallback)
-    {
-        //注册回调方法
-        downloader.OnDownloadOverCallback = OnDownloadFinishFunction; //当下载器结束（无论成功或失败）
-        downloader.OnDownloadErrorCallback = OnDownloadErrorCallback; //当下载器发生错误
-        downloader.OnDownloadProgressCallback = OnDownloadProgressCallback; //当下载进度发生变化
-        downloader.OnStartDownloadFileCallback = OnStartDownloadFileCallback; //当开始下载某个文件
-
-        //开启下载
-        downloader.BeginDownload();
-        await downloader.Task;
-    }
-
-    public static async UniTask DownloadPackageAsync(AssetPackage assetPackage,
-        Action<int, long> callback,
-        DownloaderOperation.OnDownloadOver OnDownloadFinishFunction,
-        DownloaderOperation.OnDownloadError OnDownloadErrorCallback,
-        DownloaderOperation.OnDownloadProgress OnDownloadProgressCallback,
-        DownloaderOperation.OnStartDownloadFile OnStartDownloadFileCallback)
-    {
-        var package = YooAssets.GetPackage($"{assetPackage}");
-        var downloader = package.CreateResourceDownloader(downloadingMaxNum, failedTryAgain);
-        callback?.Invoke(downloader.TotalDownloadCount, downloader.TotalDownloadBytes);
-        //注册回调方法
-        downloader.OnDownloadOverCallback = OnDownloadFinishFunction; //当下载器结束（无论成功或失败）
-        downloader.OnDownloadErrorCallback = OnDownloadErrorCallback; //当下载器发生错误
-        downloader.OnDownloadProgressCallback = OnDownloadProgressCallback; //当下载进度发生变化
-        downloader.OnStartDownloadFileCallback = OnStartDownloadFileCallback; //当开始下载某个文件
-
-        //开启下载
-        downloader.BeginDownload();
-        await downloader.Task;
-    }
     
     public static async UniTask ClearPackageAllCacheBundleFiles(AssetPackage assetPackage = AssetPackage.BuiltinPackage)
     {
@@ -258,6 +197,15 @@ public static class Assets
             //清理失败
             Debug.LogError(operation.Error);
         }
+    }
+
+    public static SceneHandle LoadSceneSync(string location,
+        AssetPackage assetPackage = AssetPackage.BuiltinPackage,
+        LoadSceneMode loadSceneMode = LoadSceneMode.Single)
+    {
+        var package = YooAssets.GetPackage($"{assetPackage}");
+        var handle = package.LoadSceneSync(location, loadSceneMode, default);
+        return handle;
     }
 
     public static SceneHandle LoadSceneAsync(string location,

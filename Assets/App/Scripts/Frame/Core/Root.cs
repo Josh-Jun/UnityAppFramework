@@ -43,7 +43,7 @@ namespace App.Core
         /// <summary>初始化所有Logic脚本</summary>
         private static void InitLogicScripts()
         {
-            var types = Utils.GetAssemblyTypes<ILogic>();
+            var types = AppHelper.GetAssemblyTypes<ILogic>();
             foreach (var type in types)
             {
                 var la = type.GetCustomAttributes(typeof(LogicOfAttribute), false).First();

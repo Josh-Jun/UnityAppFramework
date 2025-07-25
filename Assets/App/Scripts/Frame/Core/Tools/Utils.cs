@@ -100,16 +100,10 @@ namespace App.Core.Tools
             GC.Collect();
             Resources.UnloadUnusedAssets();
         }
-        
-        public static List<Type> GetAssemblyTypes<T>(string assemblyString = "App.Module")
-        {
-            var assembly = Assembly.Load(assemblyString);
-            var types = assembly.GetTypes();
-            return types.Where(type => type != typeof(T) && typeof(T).IsAssignableFrom(type)).ToList();
-        }
 
         public static Type[] GetObjsType(object[] args)
         {
+            if (args == null || args.Length == 0) return null;
             var types = new Type[args.Length];
             for (var i = 0; i < args.Length; i++)
             {

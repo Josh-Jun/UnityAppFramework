@@ -31,7 +31,7 @@ namespace App.Core.Master
         protected virtual void RegisterEvent()
         {
             //显隐
-            AddEventMsg<bool>(name, SetViewActive);
+            AddEventMsg<bool, object>(name, SetViewActive);
         }
 
         /// <summary>打开窗口</summary>
@@ -46,7 +46,7 @@ namespace App.Core.Master
         }
 
         /// <summary>设置窗体显/隐</summary>
-        public void SetViewActive(bool isActive = true)
+        public void SetViewActive(bool isActive = true, object obj = null)
         {
             if (this == null) return;
 
@@ -60,7 +60,7 @@ namespace App.Core.Master
                 }
             }
 
-            if (isActive) OpenView();
+            if (isActive) OpenView(obj);
         }
 
         public void SetAsLastSibling()

@@ -344,7 +344,7 @@ namespace App.Editor.View
                     File.Copy(file.FullName, Path.Combine(rootDirectory, file.Name));
                 }
             }
-
+            AssetDatabase.Refresh();
         }
         
         #endregion

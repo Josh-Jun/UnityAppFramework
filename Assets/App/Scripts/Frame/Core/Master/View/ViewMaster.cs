@@ -301,7 +301,7 @@ namespace App.Core.Master
 
         public void InitViewScripts()
         {
-            var types = Utils.GetAssemblyTypes<ViewBase>();
+            var types = AppHelper.GetAssemblyTypes<ViewBase>();
             foreach (var type in types)
             {
                 if (ViewPairs.ContainsKey(type.FullName!)) continue;
@@ -331,8 +331,10 @@ namespace App.Core.Master
             _redDotViewMap.TryAdd(view.RedDotMold, view);
         }
 
-        public T AddView<T>(GameObject go, ViewMold mold = ViewMold.UI2D, int layer = 0, bool state = false) where T : Component
+        public T AddView<T>(string location, ViewMold mold, int layer, bool state) where T : ViewBase
         {
+            var type = AppHelper.GetAssemblyType<T>();
+            var go = AssetsMaster.Instance.LoadAssetSync<GameObject>(location);
             if (!go) return null;
             var parent = mold switch
             {
@@ -342,29 +344,18 @@ namespace App.Core.Master
                 _ => throw new ArgumentOutOfRangeException(nameof(mold), mold, null)
             };
             var view = Instantiate(go, parent);
-            view.transform.localEulerAngles = Vector3.zero;
+            view.transform.localPosition = Vector3.zero;
             view.transform.localScale = Vector3.one;
             view.name = view.name.Replace("(Clone)", "");
-            var t = view.AddComponent(typeof(T)) as T;
-
+            var vb = view.AddComponent(type) as ViewBase;
             EventDispatcher.TriggerEvent(view.name, state);
-            ViewPairs.Add(typeof(T).FullName!, t as ViewBase);
-            return t;
+            ViewPairs.Add(type.FullName!, vb);
+            return vb as T;
         }
 
-        public T AddView<T>(GameObject go, Transform parent, bool state = false) where T : Component
+        public List<ViewBase> GetAllView()
         {
-            if (!go) return null;
-            var viewparent = !parent ? UIPanels[0] : parent;
-            var view = Instantiate(go, viewparent);
-            view.transform.localEulerAngles = Vector3.zero;
-            view.transform.localScale = Vector3.one;
-            view.name = view.name.Replace("(Clone)", "");
-            var t = view.AddComponent(typeof(T)) as T;
-
-            EventDispatcher.TriggerEvent(view.name, state);
-            ViewPairs.Add(typeof(T).FullName!, t as ViewBase);
-            return t;
+            return ViewPairs.Values.ToList();
         }
 
         public void SafeAreaAdjuster()
@@ -412,7 +403,7 @@ namespace App.Core.Master
                 Log.W($"View {typeof(T).FullName} has no view");
                 return;
             }
-            view.SetViewActive();
+            view.SetViewActive(true, obj);
         }
 
         public void CloseView<T>(bool isClear = false) where T : ViewBase
@@ -453,7 +444,7 @@ namespace App.Core.Master
 
         public T GetView<T>() where T : ViewBase
         {
-            var type = typeof(T);
+            var type = AppHelper.GetAssemblyType<T>();
             var scriptName = type.Namespace == string.Empty ? type.Name : type.FullName;
             if (ViewPairs.ContainsKey(scriptName!)) return ViewPairs[scriptName] as T;
             var obj = type.GetCustomAttributes(typeof(ViewOfAttribute), false).FirstOrDefault();

@@ -17,7 +17,7 @@ namespace App.Core.Master
 
         private void LoadConfigs()
         {
-            var types = Utils.GetAssemblyTypes<IConfig>("App.Core");
+            var types = AppHelper.GetAssemblyTypes<IConfig>("App.Core");
             foreach (var type in types)
             {
                 var la = type.GetCustomAttributes(typeof(ConfigAttribute), false).First();

@@ -1,5 +1,6 @@
 using System;
 using App.Runtime.Helper;
+using App.Runtime.Hotfix;
 using Cysharp.Threading.Tasks;
 using HybridCLR;
 using UnityEngine;
@@ -10,7 +11,9 @@ namespace App.Runtime
     public class Launcher : MonoBehaviour
     {
         private ResourcePackage builtinPackage = null;
-        private Hotfix hotfix = null;
+        private HotfixView hotfix = null;
+        private const int downloadingMaxNum = 10;
+        private const int failedTryAgain = 3;
 
         private void Awake()
         {
@@ -18,46 +21,49 @@ namespace App.Runtime
         }
         private async UniTask Init()
         {
-            hotfix = transform.Find("Canvas").GetComponent<Hotfix>();
+            hotfix = transform.Find("Canvas").GetComponent<HotfixView>();
             Global.AppConfig = Resources.Load<AppConfig>("App/AppConfig");
             // YooAssets初始化
             YooAssets.Initialize();
             // 创建默认包
             builtinPackage = await Assets.CreatePackageAsync(AssetPackage.BuiltinPackage, true);
-            YooAssets.SetDefaultPackage(builtinPackage);
             // 请求资源清单的版本信息
-            var (request_result, version) = await Assets.RequestPackageVersionAsync(AssetPackage.BuiltinPackage);
-            if (request_result)
+            var request = builtinPackage.RequestPackageVersionAsync();
+            await request.Task;
+            if (request.Status == EOperationStatus.Succeed)
             {
-                var update_result = await Assets.UpdatePackageManifestAsync(AssetPackage.BuiltinPackage, version);
-                if (update_result)
+                var update = builtinPackage.UpdatePackageManifestAsync(request.PackageVersion);
+                await update.Task;
+                if (update.Status == EOperationStatus.Succeed)
                 {
-                    await Assets.DownloadPackageAsync(AssetPackage.BuiltinPackage,
-                        OnDownloaderResult,
-                        OnDownloadFinishFunction,
-                        OnDownloadErrorCallback,
-                        OnDownloadProgressCallback,
-                        OnStartDownloadFileCallback);
+                    var downloader = builtinPackage.CreateResourceDownloader(downloadingMaxNum, failedTryAgain);
+                    //没有需要下载的资源
+                    if (downloader.TotalDownloadCount == 0)
+                    {        
+                        Debug.Log("没有需要下载的资源");
+                        EnterApp();
+                        return;
+                    }
+                    downloader.OnDownloadOverCallback = OnDownloadOverCallback;
+                    downloader.OnDownloadErrorCallback += OnDownloadErrorCallback;
+                    downloader.OnDownloadProgressCallback += OnDownloadProgressCallback;
+                    downloader.OnStartDownloadFileCallback += OnStartDownloadFileCallback;
+                    downloader.BeginDownload();
                 }
                 else
                 {
-                    Debug.LogError($"Failed to update package manifest: {version}");
+                    Debug.LogError($"Failed to update package manifest: {update.Error}");
                 }
             }
             else
             {
-                Debug.LogError($"Failed to load package manifest: {AssetPackage.BuiltinPackage}");
+                Debug.LogError($"Failed to load package manifest: {request.Error}");
             }
         }
 
-        private void OnDownloaderResult(int totalDownloadCount, long totalDownloadBytes)
+        private void EnterApp()
         {
-            
-        }
-
-        private void OnDownloadFinishFunction(bool isSucceed)
-        {
-            if (!isSucceed) return;
+            Debug.Log("加载热更dll");
             if (Global.AppConfig.AssetPlayMode != EPlayMode.EditorSimulateMode)
             {
                 LoadMetadataForAOTAssemblies();
@@ -66,6 +72,16 @@ namespace App.Runtime
             Debug.Log("加载AppScene场景");
             // 加载AppScene
             Assets.LoadSceneAsync(AssetPath.AppScene);
+        }
+
+        private void OnDownloadOverCallback(bool isSucceed)
+        {
+            if (!isSucceed)
+            {
+                Debug.LogError($"{AssetPackage.BuiltinPackage}下载失败");
+                return;
+            }
+            EnterApp();
         }
 
         private void OnDownloadErrorCallback(string fileName, string error)
@@ -96,7 +112,11 @@ namespace App.Runtime
             foreach (var assemblyName in Global.HotfixAssemblyNames)
             {
                 var ta = builtinPackage.LoadAssetSync($"{Global.DllBasePath}/{assemblyName}.bytes").AssetObject as TextAsset;
-                if (ta != null) System.Reflection.Assembly.Load(ta.bytes);
+                if (ta != null)
+                {
+                    var assembly = System.Reflection.Assembly.Load(ta.bytes);
+                    Global.AssemblyPairs.Add(assemblyName, assembly);
+                }
             }
         }
     }

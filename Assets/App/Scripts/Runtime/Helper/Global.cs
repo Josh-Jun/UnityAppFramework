@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Reflection;
 using App.Runtime.Helper;
 
 public class Global
@@ -23,6 +24,8 @@ public class Global
         "App.Core.dll",
         "App.Module.dll",
     };
+    
+    public static Dictionary<string, Assembly> AssemblyPairs = new();
     
     public const string DllBasePath = "Assets/Bundles/Builtin/Dlls";
     
