@@ -402,7 +402,7 @@ namespace App.Editor.View
             list.AddRange(Global.HotfixAssemblyNames);
             foreach (var dll in list)
             {
-                var srcDllPath = $"{aotAssembliesSrcDir}/{dll}";
+                var srcDllPath = $"{aotAssembliesSrcDir}/{dll}.dll";
                 if (!File.Exists(srcDllPath))
                 {
                     Debug.LogError(
@@ -410,7 +410,7 @@ namespace App.Editor.View
                     continue;
                 }
 
-                var dllBytesPath = $"{targetDstDir}/{dll}.bytes";
+                var dllBytesPath = $"{targetDstDir}/{dll}.dll.bytes";
 
                 Debug.Log($"[CopyMyAssembliesToSourceData] copy AOT dll {srcDllPath} -> {dllBytesPath}");
                 File.Copy(srcDllPath, dllBytesPath, true);
