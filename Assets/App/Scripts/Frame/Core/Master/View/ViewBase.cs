@@ -30,10 +30,6 @@ namespace App.Core.Master
         /// <summary>注册消息事件,默认删除此事件</summary>
         protected virtual void RegisterEvent()
         {
-            //显示View
-            AddEventMsg<object>($"Open{name}",OpenView);
-            //隐藏View
-            AddEventMsg($"Close{name}", CloseView);
         }
 
         /// <summary>打开窗口</summary>
@@ -42,7 +38,8 @@ namespace App.Core.Master
             transform.SetAsLastSibling();
             if (gameObject.activeSelf) return;
             gameObject.SetActive(true);
-            SendEventMsg($"Open{name}", obj);
+            if (HasEvent($"Open{name}"))
+                SendEventMsg($"Open{name}", obj);
         }
 
         /// <summary>关闭窗口</summary>
@@ -50,7 +47,8 @@ namespace App.Core.Master
         {
             if (!gameObject.activeSelf) return;
             gameObject.SetActive(false);
-            SendEventMsg($"Close{name}");
+            if (HasEvent($"Close{name}"))
+                SendEventMsg($"Close{name}");
         }
 
         public void SetAsLastSibling()
