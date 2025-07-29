@@ -437,7 +437,12 @@ namespace App.Core.Master
             var scriptName = type.Namespace == string.Empty ? type.Name : type.FullName;
             if (ViewPairs.ContainsKey(scriptName!)) return ViewPairs[scriptName] as T;
             var obj = type.GetCustomAttributes(typeof(ViewOfAttribute), false).FirstOrDefault();
-            if (obj is ViewOfAttribute attribute) return CreateView(type, attribute) as T;
+            if (obj is ViewOfAttribute attribute)
+            {
+                var view = CreateView(type, attribute);
+                ViewPairs.Add(scriptName!, view);
+                return view as T;
+            }
             Log.W($"View {type.FullName} has no {nameof(T)}");
             return null;
         }
