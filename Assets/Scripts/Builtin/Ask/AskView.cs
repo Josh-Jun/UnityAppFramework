@@ -15,7 +15,7 @@ using UnityEngine.UI;
 
 namespace App.Modules.Ask
 {
-    [ViewOf(ViewMold.UI2D, AssetPath.AskView)]
+    [ViewOf(ViewMold.UI2D, AssetPath.AskView, true, 1)]
     public class AskView : ViewBase
     {
         private GameObject askPanel;
@@ -48,6 +48,7 @@ namespace App.Modules.Ask
 
         public void Init()
         {
+            CloseAllPanel();
         }
 
         public void SetTips(string tips, float time)
@@ -55,7 +56,7 @@ namespace App.Modules.Ask
             if (tipsPanel.activeSelf) return;
             tipsPanel.SetActive(true);
             tipsText.text = tips;
-            TimeTaskMaster.Instance.AddTimeTask(CloseView, time);
+            TimeTaskMaster.Instance.AddTimeTask(CloseAllPanel, time);
         }
         public void SetViewInfo(string content, Action confirm_callback, Action cancel_callback, string confirm = null, string cancel = null)
         {
@@ -70,8 +71,16 @@ namespace App.Modules.Ask
         }
         private void OnClickEvent(Action callback)
         {
-            CloseView();
+            CloseAllPanel();
             callback?.Invoke();
+        }
+
+        private void CloseAllPanel()
+        {
+            foreach (Transform child in transform)
+            {
+                child.SetGameObjectActive(false);
+            }
         }
     }
 }

@@ -292,7 +292,6 @@ namespace App.Core.Master
 
         public void InitBackgroundImage(Sprite sprite = null)
         {
-            Log.W($"InitBackgroundImage: {sprite}");
             Background.SetActive(sprite);
             if (!sprite) return;
             BackgroundImage.sprite = sprite;

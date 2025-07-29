@@ -103,7 +103,6 @@ namespace App.Core.Tools
 
         public static Type[] GetObjsType(object[] args)
         {
-            if (args == null || args.Length == 0) return null;
             var types = new Type[args.Length];
             for (var i = 0; i < args.Length; i++)
             {

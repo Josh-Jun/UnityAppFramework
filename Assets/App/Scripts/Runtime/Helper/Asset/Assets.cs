@@ -15,8 +15,9 @@ using YooAsset;
 
 public static class Assets
 {
-    private const int downloadingMaxNum = 10;
-    private const int failedTryAgain = 3;
+    
+    private const int DownloadingMaxNum = 10;
+    private const int FailedTryAgain = 3;
     private static string Platform
     {
         get
@@ -45,6 +46,79 @@ public static class Assets
                 _ => string.Empty
             };
 #endif
+        }
+    }
+
+    public static async UniTask<ResourceDownloaderOperation> UpdatePackage(AssetPackage assetPackage)
+    {
+        var package = await CreatePackageAsync(assetPackage, false);
+        // 请求资源清单的版本信息
+        var request = package.RequestPackageVersionAsync();
+        await request.Task;
+        if (request.Status == EOperationStatus.Succeed)
+        {
+            var update = package.UpdatePackageManifestAsync(request.PackageVersion);
+            await update.Task;
+            if (update.Status == EOperationStatus.Succeed)
+            {
+                var downloader = package.CreateResourceDownloader(DownloadingMaxNum, FailedTryAgain);
+                return downloader;
+            }
+            else
+            {
+                Debug.LogError($"Failed to update package manifest: {update.Error}");
+            }
+        }
+        else
+        {
+            Debug.LogError($"Failed to load package manifest: {request.Error}");
+        }
+        return null;
+    }
+
+    public static async UniTask UpdatePackage(AssetPackage assetPackage, DownloaderOperation.OnDownloadProgress onDownloadProgress, bool isBuiltinPackage = false)
+    {
+        var package = await CreatePackageAsync(assetPackage, isBuiltinPackage);
+        // 请求资源清单的版本信息
+        var request = package.RequestPackageVersionAsync();
+        await request.Task;
+        if (request.Status == EOperationStatus.Succeed)
+        {
+            var update = package.UpdatePackageManifestAsync(request.PackageVersion);
+            await update.Task;
+            if (update.Status == EOperationStatus.Succeed)
+            {
+                var downloader = package.CreateResourceDownloader(DownloadingMaxNum, FailedTryAgain);
+                //没有需要下载的资源
+                if (downloader.TotalDownloadCount == 0)
+                {
+                    Debug.Log("没有需要下载的资源");
+                    return;
+                }
+                downloader.OnDownloadOverCallback = (succeed) =>
+                {
+                    UniTask.Void(async () =>
+                    {
+                        await ClearPackageUnusedCacheBundleFiles(assetPackage);
+                    });
+                };
+                downloader.OnDownloadErrorCallback = (fileName, error) =>
+                {
+                    Debug.Log($"YooAssets DownloadError:[{fileName}][{error}]");
+                };
+                downloader.OnDownloadProgressCallback = onDownloadProgress;
+                downloader.OnStartDownloadFileCallback += (fileName, error) => { };
+                downloader.BeginDownload();
+                await downloader.Task;
+            }
+            else
+            {
+                Debug.LogError($"Failed to update package manifest: {update.Error}");
+            }
+        }
+        else
+        {
+            Debug.LogError($"Failed to load package manifest: {request.Error}");
         }
     }
 

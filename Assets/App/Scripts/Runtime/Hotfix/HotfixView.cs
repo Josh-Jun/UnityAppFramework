@@ -40,7 +40,7 @@ namespace App.Runtime.Hotfix
             var progress = currentDownloadBytes / (float)totalDownloadBytes;
             slider.value = Mathf.Clamp(progress, min, 1);
             progressText.text = $"{(progress * 100):00}%";
-            text.text = $"{(currentDownloadBytes / 1024f / 1024f):F}M/{(totalDownloadBytes / 1024f / 1024f):F}M\n{currentDownloadCount}/{totalDownloadCount}";
+            text.text = $"{(currentDownloadBytes / 1048576f):F}M/{(totalDownloadBytes / 1048576f):F}M\n{currentDownloadCount}/{totalDownloadCount}";
         }
     }
 }
