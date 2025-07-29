@@ -11,25 +11,13 @@ public class Global
     public static string CdnServer => DevelopmentEnvironments[AppConfig.DevelopmentMold].CdnServer;
     public static int SocketPort => DevelopmentEnvironments[AppConfig.DevelopmentMold].SocketPort;
     
-    public static List<string> AOTMetaAssemblyNames { get; } = new List<string>()
-    {
-        "mscorlib.dll",
-        "System.dll",
-        "System.Core.dll",
-        "UnityEngine.CoreModule.dll",
-    };
+    public static List<string> AOTMetaAssemblyNames { get; } = new () { "mscorlib.dll", "System.dll", "System.Core.dll", "UnityEngine.CoreModule.dll", };
 
-    public static List<string> HotfixAssemblyNames { get; } = new List<string>()
-    {
-        "App.Core",
-        "App.Module",
-    };
-    
-    public static Dictionary<string, Assembly> AssemblyPairs = new();
-    
-    public const string DllBasePath = "Assets/Bundles/Builtin/Dlls";
-    
-    private static readonly Dictionary<DevelopmentMold, DevelopmentEnvironment> DevelopmentEnvironments = new Dictionary<DevelopmentMold, DevelopmentEnvironment>()
+    public static List<string> HotfixAssemblyNames { get; } = new () { "App.Core", "App.Module", };
+
+    public static Dictionary<string, Assembly> AssemblyPairs { get; } = new();
+
+    private static readonly Dictionary<DevelopmentMold, DevelopmentEnvironment> DevelopmentEnvironments = new ()
     {
         {
             DevelopmentMold.Test,

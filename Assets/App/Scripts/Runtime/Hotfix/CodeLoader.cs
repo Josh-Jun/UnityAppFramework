@@ -33,7 +33,8 @@ namespace App.Runtime.Code
             foreach (var aotName in Global.AOTMetaAssemblyNames)
             {
 #if !UNITY_EDITOR
-                var textAsset = Assets.LoadAssetSync($"{Global.DllBasePath}/{aotName}.bytes").AssetObject as TextAsset;
+                var location = $"Assets/Bundles/Builtin/Dlls/{aotName}.bytes";
+                var textAsset = Assets.LoadAssetSync(location).AssetObject as TextAsset;
                 if (textAsset) RuntimeApi.LoadMetadataForAOTAssembly(textAsset.bytes, HomologousImageMode.SuperSet);
 #endif
             }
@@ -44,7 +45,8 @@ namespace App.Runtime.Code
             foreach (var assemblyName in Global.HotfixAssemblyNames)
             {
 #if !UNITY_EDITOR
-                var textAsset = Assets.LoadAssetSync($"{Global.DllBasePath}/{assemblyName}.dll.bytes").AssetObject as TextAsset;
+                var location = $"Assets/Bundles/Builtin/Dlls/{assemblyName}.dll.bytes";
+                var textAsset = Assets.LoadAssetSync(location).AssetObject as TextAsset;
                 if (!textAsset) continue;
                 var assembly = System.Reflection.Assembly.Load(textAsset.bytes);
                 Global.AssemblyPairs.Add(assemblyName, assembly);
