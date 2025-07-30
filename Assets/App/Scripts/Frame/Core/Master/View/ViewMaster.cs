@@ -434,17 +434,17 @@ namespace App.Core.Master
         public T GetView<T>() where T : ViewBase
         {
             var type = AppHelper.GetAssemblyType<T>();
+            var obj = type.GetCustomAttributes(typeof(ViewOfAttribute), false).FirstOrDefault();
+            if (obj is not ViewOfAttribute attribute)
+            {
+                Log.W($"Get View {type.FullName} is not extends ViewBase");
+                return null;
+            }
             var scriptName = type.Namespace == string.Empty ? type.Name : type.FullName;
             if (ViewPairs.ContainsKey(scriptName!)) return ViewPairs[scriptName] as T;
-            var obj = type.GetCustomAttributes(typeof(ViewOfAttribute), false).FirstOrDefault();
-            if (obj is ViewOfAttribute attribute)
-            {
-                var view = CreateView(type, attribute);
-                ViewPairs.Add(scriptName!, view);
-                return view as T;
-            }
-            Log.W($"View {type.FullName} has no {nameof(T)}");
-            return null;
+            var view = CreateView(type, attribute);
+            ViewPairs.Add(scriptName!, view);
+            return view as T;
         }
 
         public void RemoveView(ViewBase view)
