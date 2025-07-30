@@ -425,7 +425,7 @@ namespace App.Editor.View
             // 解析命令行参数
             var args = Environment.GetCommandLineArgs();
             var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
-            bool onlyBuildAsset = false;
+            var buildMold = BuildMold.All;
             // 设置相关参数
             foreach (var arg in args)
             {
@@ -456,22 +456,27 @@ namespace App.Editor.View
                     var mold = (ChannelPackage)Enum.Parse(typeof(ChannelPackage), channel);
                     appConfig.ChannelPackage = mold;
                 }
-                else if (arg.Contains("--onlybuildasset:"))
+                else if (arg.Contains("--buildmold:"))
                 {
-                    onlyBuildAsset = bool.Parse(arg.Split(':')[^1]);
+                    var build = arg.Split(':')[^1];
+                    buildMold = (BuildMold)Enum.Parse(typeof(BuildMold), build);
                 }
             }
             
             // 保存AppConfig
             EditorUtility.SetDirty(appConfig);
             AssetDatabase.Refresh();
-            
+
             // 开始构建
-            Debug.Log("=============================================Start Build HybridCLR=============================================");
-            GenerateAndCopyDll();
-            Debug.Log("=============================================Start Build AssetBundle=============================================");
-            BuildAssets();
-            if (!onlyBuildAsset)
+            if (buildMold is BuildMold.All or BuildMold.Assets)
+            {
+                Debug.Log("=============================================Start Build HybridCLR=============================================");
+                GenerateAndCopyDll();
+                Debug.Log("=============================================Start Build AssetBundle=============================================");
+                BuildAssets();
+            }
+
+            if (buildMold is BuildMold.All or BuildMold.App)
             {
                 Debug.Log("=============================================Start Build App=============================================");
                 Build();
@@ -479,5 +484,12 @@ namespace App.Editor.View
             
             Debug.Log("Build Complete!!!");
         }
+    }
+
+    public enum BuildMold
+    {
+        App,
+        Assets,
+        All,
     }
 }
