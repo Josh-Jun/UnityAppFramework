@@ -15,7 +15,7 @@ using UnityEngine.UI;
 
 namespace App.Modules.Ask
 {
-    [ViewOf(ViewMold.UI2D, AssetPath.AskView, true, 1)]
+    [ViewOf(ViewMold.UI2D, AssetPath.AskView, true, 2)]
     public class AskView : ViewBase
     {
         private GameObject askPanel;
