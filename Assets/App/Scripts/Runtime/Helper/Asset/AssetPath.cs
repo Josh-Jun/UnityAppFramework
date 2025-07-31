@@ -12,6 +12,7 @@ public class AssetPath
     public const string UpdateView = "Assets/Bundles/Builtin/Prefabs/UI/Views/Update/UpdateView.prefab";
     public const string MainScene = "Assets/Bundles/Hotfix/Scenes/MainScene.unity";
     public const string Snowflake = "Assets/Bundles/Hotfix/Videos/Snowflake.mp4";
+    public const string DatePicker = "Assets/Bundles/Hotfix/Prefabs/UI/Items/DatePicker.prefab";
     public const string PanelView = "Assets/Bundles/Hotfix/Prefabs/UI/Views/Panel/PanelView.prefab";
     public const string TestView = "Assets/Bundles/Hotfix/Prefabs/UI/Views/Test/TestView.prefab";
 }

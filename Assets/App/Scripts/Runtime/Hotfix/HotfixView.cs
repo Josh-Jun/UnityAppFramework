@@ -7,40 +7,163 @@
  * ===============================================
  * */
 
+using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System.Collections;
+using UnityEngine.Networking;
+using System.Runtime.InteropServices;
+
+
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace App.Runtime.Hotfix
 {
     public class HotfixView : MonoBehaviour
     {
-        private Slider slider;
-        private TextMeshProUGUI text;
-        private TextMeshProUGUI progressText;
+        public bool ShowAgree = true;
+        #region Hotfix
 
-        private float min;
+        private Slider _slider;
+        private TextMeshProUGUI _text;
+        private TextMeshProUGUI _progressText;
+        private float _min;
+
+        #endregion
+
+        #region Agree
+
+        private const string Agreement = "ARGEEMENT";
+        private Action _callback;
+        private GameObject _agree;
+        private TextMeshProUGUI _connect;
+        private Button _agreeButton;
+        private Button _unAgreeButton;
+
+        private GameObject agreePanel;
+        private TextMeshProUGUI agreeTitle;
+        private TextMeshProUGUI agreeText;
+
+        #endregion
 
         private void Awake()
         {
-            slider = transform.Find("Slider").GetComponent<Slider>();
-            text = transform.Find("Slider/Text").GetComponent<TextMeshProUGUI>();
-            progressText = transform.Find("Slider/Fill Area/Fill/Progress").GetComponent<TextMeshProUGUI>();
-            if (slider.gameObject.activeSelf)
-                slider.gameObject.SetActive(false);
-            min = slider.value;
+            #region Hotfix
+            _slider = transform.Find("Slider").GetComponent<Slider>();
+            _text = transform.Find("Slider/Text").GetComponent<TextMeshProUGUI>();
+            _progressText = transform.Find("Slider/Fill Area/Fill/Progress").GetComponent<TextMeshProUGUI>();
+            if (_slider.gameObject.activeSelf)
+                _slider.gameObject.SetActive(false);
+            _min = _slider.value;
+            #endregion
+
+            #region Agree
+            _agree = transform.Find("Agree").gameObject;
+            _connect = _agree.transform.Find("Connect").GetComponent<TextMeshProUGUI>();
+            _agreeButton = _agree.transform.Find("Agree").GetComponent<Button>();
+            _unAgreeButton = _agree.transform.Find("UnAgree").GetComponent<Button>();
+            _unAgreeButton.onClick.AddListener(() =>
+            {
+#if UNITY_EDITOR
+                EditorApplication.isPlaying = false;
+#else
+                Application.Quit();
+#endif
+            });
+            _agreeButton.onClick.AddListener(() =>
+            {
+                PlayerPrefs.SetInt(Agreement, 1);
+                _callback?.Invoke();
+            });
+            var trigger = _connect.gameObject.AddComponent<EventTrigger>();
+            var callback = new UnityAction<BaseEventData>(OnTextLinkClick);
+            var entry = new EventTrigger.Entry
+            {
+                eventID = EventTriggerType.PointerClick
+            };
+            entry.callback.AddListener(callback);
+            trigger.triggers.Add(entry);
+
+            if (_agree.activeSelf)
+                _agree.SetActive(false);
+
+            agreePanel = transform.Find("AgreePanel").gameObject;
+            agreeTitle = agreePanel.transform.Find("Title").GetComponent<TextMeshProUGUI>();
+            agreeText = agreePanel.transform.Find("ScrollView/Viewport/Content/Text").GetComponent<TextMeshProUGUI>();
+
+            if (agreePanel.activeSelf)
+                agreePanel.SetActive(false);
+
+            #endregion
         }
 
+        public void Startup(Action callback)
+        {
+            if (PlayerPrefs.HasKey(Agreement) || !ShowAgree)
+            {
+                callback?.Invoke();
+                return;
+            }
+            _agree.SetActive(true);
+            _callback = callback;
+        }
+
+        #region Hotfix
         public void SetDownloadProgress(int totalDownloadCount, int currentDownloadCount, long totalDownloadBytes, long currentDownloadBytes)
         {
-            if (!slider.gameObject.activeSelf)
+            if (!_slider.gameObject.activeSelf)
             {
-                slider.gameObject.SetActive(true);
+                _slider.gameObject.SetActive(true);
             }
             var progress = currentDownloadBytes / (float)totalDownloadBytes;
-            slider.value = Mathf.Clamp(progress, min, 1);
-            progressText.text = $"{(progress * 100):00}%";
-            text.text = $"{(currentDownloadBytes / 1048576f):F}M/{(totalDownloadBytes / 1048576f):F}M\n{currentDownloadCount}/{totalDownloadCount}";
+            _slider.value = Mathf.Clamp(progress, _min, 1);
+            _progressText.text = $"{(progress * 100):00}%";
+            _text.text = $"{(currentDownloadBytes / 1048576f):F}M/{(totalDownloadBytes / 1048576f):F}M\n{currentDownloadCount}/{totalDownloadCount}";
         }
+        #endregion
+
+        #region Agree
+
+        private void OnTextLinkClick(BaseEventData eventData)
+        {
+            if (eventData is not PointerEventData pointerEventData) return;
+            // If you are not in a Canvas using Screen Overlay, put your camera instead of null
+            var linkIndex = TMP_TextUtilities.FindIntersectingLink(_connect, pointerEventData.position, Camera.main);
+            Debug.Log("linkIndex: " + linkIndex);
+            if (linkIndex == -1) return;
+            // was a link clicked?
+            StartCoroutine(OpenAgreePanel(linkIndex));
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param> 0:用户协议 1:隐私政策 <summary>
+        private IEnumerator OpenAgreePanel(int index)
+        {
+            agreePanel.SetActive(true);
+            var title = index == 0 ? "用户协议" : "隐私政策";
+            var api = index == 0 ? "/common/user_agreement" : "/common/privacy_policy";
+            agreeTitle.text = title;
+            using UnityWebRequest request = UnityWebRequest.Get(Global.HttpServer + api);
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                agreeText.text = request.downloadHandler.text;
+            }
+            else
+            {
+                Debug.LogError($"Error fetching agreement: {request.error}");
+                agreeText.text = $"获取{title}失败，请检查网络连接后重试。";
+            }
+        }
+
+        #endregion
     }
 }

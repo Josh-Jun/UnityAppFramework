@@ -32,7 +32,7 @@ namespace App.Modules.Update
         }
         public void Begin()
         {
-            _view = ViewMaster.Instance.AddView<UpdateView>(AssetPath.UpdateView, ViewMold.UI2D, 1, false);
+            _view = ViewMaster.Instance.AddView<UpdateView>(AssetPath.UpdateView, ViewMold.UI2D, 2, false);
             UniTask.Void(async () =>
             {
                 _downloader = await Assets.UpdatePackage(AssetPackage.HotfixPackage);

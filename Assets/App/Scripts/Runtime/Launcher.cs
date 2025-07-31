@@ -18,6 +18,11 @@ namespace App.Runtime
         {
             _hotfix = transform.Find("Canvas").GetComponent<HotfixView>();
             Global.AppConfig = Resources.Load<AppConfig>("App/AppConfig");
+            _hotfix.Startup(InitBuiltinPackage);
+        }
+
+        private void InitBuiltinPackage()
+        {
             // YooAssets初始化
             YooAssets.Initialize();
             UniTask.Void(async () =>
