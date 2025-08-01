@@ -1,0 +1,3 @@
+-assumenosideeffects class android.telephony.TelephonyManager {
+    void listen(android.telephony.PhoneStateListener, int);
+}
