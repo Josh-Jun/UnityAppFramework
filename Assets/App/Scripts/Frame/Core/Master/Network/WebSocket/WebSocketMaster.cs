@@ -37,10 +37,6 @@ namespace App.Core.Master
             {
                 callback?.Invoke();
                 _isConnecting = true;
-                TimeTaskMaster.Instance.AddTimeTask(() =>
-                {
-                    Send("ping");
-                }, 5, TimeUnit.Second, 0);
                 await Receive();
             });
         }
