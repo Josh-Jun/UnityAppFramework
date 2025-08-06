@@ -20,18 +20,15 @@ namespace App.Core.Master
 {
     public class WebSocketMaster : SingletonMonoEvent<WebSocketMaster>
     {
-        private readonly ClientWebSocket _clientWebSocket;
-        private CancellationTokenSource _cancellationToken = new CancellationTokenSource();
+        private ClientWebSocket _clientWebSocket;
+        private CancellationTokenSource _cancellationToken;
         private bool _isConnecting = false;
         public Action<string> OnReceiveMessage { get; set; }
 
-        public WebSocketMaster()
-        {
-            _clientWebSocket = new ClientWebSocket();
-        }
-
         public void Connect(string url, Action callback = null)
         {
+            _clientWebSocket = new ClientWebSocket();
+            _cancellationToken = new CancellationTokenSource();
             var uri = new Uri(url);
             _clientWebSocket.ConnectAsync(uri, _cancellationToken.Token).ContinueWith(async t =>
             {
