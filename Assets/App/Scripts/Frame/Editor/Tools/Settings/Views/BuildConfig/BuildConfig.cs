@@ -357,13 +357,13 @@ namespace App.Editor.View
                             continue;
                         }
                     }
-                    stringBuilder.AppendLine($"      \"{data.datas[4, c]}\": {GetJsonData(dataStr, typeStr)}");
+                    var _str = c == data.datas.GetLength(1) -1 ? "" : ",";
+                    stringBuilder.AppendLine($"      \"{data.datas[4, c]}\": {GetJsonData(dataStr, typeStr)}{_str}");
                 }
 
-                stringBuilder.Remove(stringBuilder.Length - 2, 1);
-                stringBuilder.AppendLine("    },");
+                var str = data.datas.GetLength(0) - 1 == r ? "    }" : "    },";
+                stringBuilder.AppendLine(str);
             }
-            stringBuilder.Remove(stringBuilder.Length - 2, 1);
 
             stringBuilder.AppendLine("  ]");
 
@@ -385,30 +385,29 @@ namespace App.Editor.View
             {
                 if (typeStr.Contains("string"))
                 {
-                    sb.Append($"\"{value}\",");
+                    sb.Append($"\"{value}\"");
                 }
                 else if(typeStr.Contains("Vector3"))
                 {
                     if (string.IsNullOrEmpty(value))
                     {
-                        sb.Append("{{\"x\":{0},\"y\":{0},\"z\":{0}}},");
+                        sb.Append("{{\"x\":{0},\"y\":{0},\"z\":{0}}}");
                     }
                     else
                     {
                         var str = value.Split(',');
-                        sb.Append($"{{\"x\":{str[0]},\"y\":{str[1]},\"z\":{str[2]}}},");
+                        sb.Append($"{{\"x\":{str[0]},\"y\":{str[1]},\"z\":{str[2]}}}");
                     }
                 }
                 else
                 {
                     var str = string.IsNullOrEmpty(value) ? "0" : $"{value}";
-                    sb.Append($"{str},");
+                    sb.Append($"{str}");
                 }
             }
 
             if (!typeStr.Contains("[]")) return sb.ToString();
-            if (sb.Length > 0) sb.Remove(sb.Length - 1, 1);
-            sb.Append("],");
+            sb.Append("]");
             return sb.ToString();
         }
 
