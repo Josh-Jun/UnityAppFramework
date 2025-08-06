@@ -13,10 +13,10 @@ public class Log
 
     private const string Space = "<color=#00ff00> \u25ba </color>";
 
-    private const string FormatStr    = " \"{0}\" : \"{1}\" ,";
-    private const string FormatStrEnd = " \"{0}\" : \"{1}\"";
+    private const string FormatStr    = " \"{0}\" : {1},";
+    private const string FormatStrEnd = " \"{0}\" : {1}";
 
-    private static readonly StringBuilder cacheStringBuilder = new StringBuilder(1024);
+    private static readonly StringBuilder cacheStringBuilder = new(1024);
 
     private const string Pattern = @"<([a-zA-Z/][^>]*)>";
     

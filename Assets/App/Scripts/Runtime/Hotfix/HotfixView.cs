@@ -46,9 +46,9 @@ namespace App.Runtime.Hotfix
         private Button _agreeButton;
         private Button _unAgreeButton;
 
-        private GameObject agreePanel;
-        private TextMeshProUGUI agreeTitle;
-        private TextMeshProUGUI agreeText;
+        private GameObject _agreePanel;
+        private TextMeshProUGUI _agreeTitle;
+        private TextMeshProUGUI _agreeText;
 
         #endregion
 
@@ -93,12 +93,12 @@ namespace App.Runtime.Hotfix
             if (_agree.activeSelf)
                 _agree.SetActive(false);
 
-            agreePanel = transform.Find("AgreePanel").gameObject;
-            agreeTitle = agreePanel.transform.Find("Title").GetComponent<TextMeshProUGUI>();
-            agreeText = agreePanel.transform.Find("ScrollView/Viewport/Content/Text").GetComponent<TextMeshProUGUI>();
+            _agreePanel = transform.Find("AgreePanel").gameObject;
+            _agreeTitle = _agreePanel.transform.Find("Title").GetComponent<TextMeshProUGUI>();
+            _agreeText = _agreePanel.transform.Find("ScrollView/Viewport/Content/Text").GetComponent<TextMeshProUGUI>();
 
-            if (agreePanel.activeSelf)
-                agreePanel.SetActive(false);
+            if (_agreePanel.activeSelf)
+                _agreePanel.SetActive(false);
 
             #endregion
         }
@@ -140,27 +140,28 @@ namespace App.Runtime.Hotfix
             // was a link clicked?
             StartCoroutine(OpenAgreePanel(linkIndex));
         }
+
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="index"></param> 0:用户协议 1:隐私政策 <summary>
+        /// <param name="index"></param> 0:用户协议 1:隐私政策 <summary />
         private IEnumerator OpenAgreePanel(int index)
         {
-            agreePanel.SetActive(true);
+            _agreePanel.SetActive(true);
             var title = index == 0 ? "用户协议" : "隐私政策";
             var api = index == 0 ? "/common/user_agreement" : "/common/privacy_policy";
-            agreeTitle.text = title;
-            using UnityWebRequest request = UnityWebRequest.Get(Global.HttpServer + api);
+            _agreeTitle.text = title;
+            using var request = UnityWebRequest.Get(Global.HttpServer + api);
             yield return request.SendWebRequest();
 
             if (request.result == UnityWebRequest.Result.Success)
             {
-                agreeText.text = request.downloadHandler.text;
+                _agreeText.text = request.downloadHandler.text;
             }
             else
             {
                 Debug.LogError($"Error fetching agreement: {request.error}");
-                agreeText.text = $"获取{title}失败，请检查网络连接后重试。";
+                _agreeText.text = $"获取{title}失败，请检查网络连接后重试。";
             }
         }
 

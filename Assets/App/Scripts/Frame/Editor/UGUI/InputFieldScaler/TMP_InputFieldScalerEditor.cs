@@ -3,7 +3,7 @@
  * author      : Josh@win
  * e-mail      : shijun_z@163.com
  * create time : 2025年6月11 13:33
- * function    : 
+ * function    :
  * ===============================================
  * */
 using UnityEngine;
@@ -19,6 +19,7 @@ namespace UnityEditor.UI
 
         private SerializedProperty fontSize;
         private SerializedProperty fixedWidth;
+        private SerializedProperty maxHeight;
 
         private SerializedProperty keepInitWidthSize;
 
@@ -29,6 +30,7 @@ namespace UnityEditor.UI
             _target = new SerializedObject(target);
 
             fontSize = _target.FindProperty("fontSize");
+            maxHeight = _target.FindProperty("maxHeight");
             fixedWidth = _target.FindProperty("fixedWidth");
             keepInitWidthSize = _target.FindProperty("keepInitWidthSize");
         }
@@ -39,6 +41,7 @@ namespace UnityEditor.UI
             Undo.RecordObject(InputFieldScaler, "object change");
 
             EditorGUILayout.PropertyField(fontSize);
+            EditorGUILayout.PropertyField(maxHeight);
             EditorGUILayout.PropertyField(fixedWidth);
             if (!InputFieldScaler.fixedWidth)
             {

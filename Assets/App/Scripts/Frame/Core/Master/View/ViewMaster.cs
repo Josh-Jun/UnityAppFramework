@@ -170,7 +170,7 @@ namespace App.Core.Master
                     Screen.orientation = ScreenOrientation.Portrait;
                     break;
             }
-            await UniTask.Delay(200);
+            await UniTask.Delay(500);
             SafeAreaAdjuster();
         }
 

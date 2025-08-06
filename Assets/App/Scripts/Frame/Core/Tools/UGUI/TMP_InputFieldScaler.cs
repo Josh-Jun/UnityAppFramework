@@ -27,10 +27,10 @@ namespace UnityEngine.UI
         {
             if (!fixedWidth)
             {
-                RectTransform.SetSizeWithCurrentAnchors((RectTransform.Axis)0, LayoutUtility.GetPreferredWidth(_mRect));
+                RectTransform.SetSizeWithCurrentAnchors((RectTransform.Axis)0, preferredWidth);
             }
 
-            RectTransform.SetSizeWithCurrentAnchors((RectTransform.Axis)1, LayoutUtility.GetPreferredHeight(_mRect));
+            RectTransform.SetSizeWithCurrentAnchors((RectTransform.Axis)1, preferredHeight);
         }
 
         private void OnEnable()
@@ -103,18 +103,17 @@ namespace UnityEngine.UI
                     return _originalHeight;
                 }
                 var offset = Mathf.Abs(ViewRect.offsetMax.y) + Mathf.Abs(ViewRect.offsetMin.y);
-                float height = 0;
+                float height;
                 if (fixedWidth)
                 {
-                    height = fixedWidth ? 
-                        TextComponent.GetPreferredValues(Text, _originalWidth, TextComponent.preferredHeight).y + offset : 
-                        TextComponent.GetPreferredValues(Text, TextComponent.preferredWidth, TextComponent.preferredHeight).y + offset;
+                    height = TextComponent.GetPreferredValues(Text, _originalWidth, TextComponent.preferredHeight).y + offset;
                 }
                 else
                 {
                     height = TextComponent.preferredHeight + offset;
                 }
-                return Mathf.Clamp(height, _originalHeight, int.MaxValue);
+                var result = Mathf.Clamp(height, _originalHeight, maxHeight);
+                return result;
             }
         }
 
@@ -122,6 +121,7 @@ namespace UnityEngine.UI
 
         //[Tooltip("输入框的字体大小，InputField的大小会随字体大小改变高度")]
         [HideInInspector] public int fontSize = 36;
+        [HideInInspector] public int maxHeight = 300;
 
         //[Tooltip("是否保持InputField的宽度不变")]
         [HideInInspector] public bool fixedWidth = true;

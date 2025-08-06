@@ -11,10 +11,11 @@ namespace App.Core.Master
         private RenderTexture movie;
         private VideoPlayer VideoPlayer { get; set; }
 
-        protected override void OnSingletonMonoInit()
+        private void Awake()
         {
-            base.OnSingletonMonoInit();
-            VideoPlayer = this.GetOrAddComponent<VideoPlayer>();
+            var video = new GameObject("VideoPlayer", typeof(VideoPlayer));
+            video.transform.SetParent(transform);
+            VideoPlayer = video.GetOrAddComponent<VideoPlayer>();
             VideoPlayer.sendFrameReadyEvents = true;
         }
 

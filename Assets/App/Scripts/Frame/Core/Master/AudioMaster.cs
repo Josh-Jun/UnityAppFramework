@@ -10,18 +10,16 @@ namespace App.Core.Master
         private AudioSource backgroundAudio;
         private AudioSource effectAudio;
 
-        protected override void OnSingletonMonoInit()
+        private void Awake()
         {
-            base.OnSingletonMonoInit();
-            backgroundAudio = CreateAudioSource();
-            effectAudio = CreateAudioSource();
-        }
-
-        private AudioSource CreateAudioSource(bool playOnAwake = false)
-        {
-            var audioSource = gameObject.AddComponent<AudioSource>();
-            audioSource.playOnAwake = playOnAwake;
-            return audioSource;
+            var effect = new GameObject("AudioSourceEffect", typeof(AudioSource));
+            var background = new GameObject("AudioSourceBackground", typeof(AudioSource));
+            effect.transform.SetParent(transform);
+            background.transform.SetParent(transform);
+            effectAudio = effect.GetOrAddComponent<AudioSource>();
+            backgroundAudio = background.GetOrAddComponent<AudioSource>();
+            effectAudio.playOnAwake = false;
+            backgroundAudio.playOnAwake = false;
         }
 
         /// <summary>
