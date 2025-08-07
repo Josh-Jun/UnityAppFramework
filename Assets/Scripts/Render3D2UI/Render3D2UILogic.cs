@@ -26,9 +26,9 @@ namespace Modules.Render3D2UI
     [LogicOf(AssetPath.Global)]
     public class Render3D2UILogic : SingletonEvent<Render3D2UILogic>, ILogic
     {
-        private Render3D2UIView view;
+        private Render3D2UIView View => ViewMaster.Instance.GetView<Render3D2UIView>();
 
-        public RenderTexture RenderTexture { get; private set; }
+        private RenderTexture RenderTexture { get; set; }
 
         public Render3D2UILogic()
         {
@@ -41,7 +41,7 @@ namespace Modules.Render3D2UI
 
         public void Begin()
         {
-            view = ViewMaster.Instance.GetView<Render3D2UIView>();
+            
         }
         public void End()
         {
@@ -65,11 +65,12 @@ namespace Modules.Render3D2UI
 
         #region Logic
 
-        private readonly float rotateSpeed = 40;
+        private const float RotateSpeed = 40;
+
         private void AddModel(GameObject prefab, RawImage image)
         {
-            view.OpenView();
-            var model = Object.Instantiate(prefab, view.ModelTransform);
+            View.OpenView();
+            var model = Object.Instantiate(prefab, View.ModelTransform);
             model.transform.localPosition = Vector3.zero;
             model.transform.localRotation = Quaternion.identity;
             model.transform.localScale = Vector3.one;
@@ -78,7 +79,7 @@ namespace Modules.Render3D2UI
         }
         private void OnDragModel(GameObject model, Vector2 delta)
         {
-            model.transform.Rotate(0, -delta.x * rotateSpeed * Time.deltaTime, 0);
+            model.transform.Rotate(0, -delta.x * RotateSpeed * Time.deltaTime, 0);
         }
 
         #endregion
@@ -87,13 +88,13 @@ namespace Modules.Render3D2UI
 
         private void OpenRender3D2UIView(object obj)
         {
-            view.RenderCamera.SetGameObjectActive();
+            View.RenderCamera.SetGameObjectActive();
             RenderTexture = RenderTexture.GetTemporary(Screen.width, Screen.height, 24, RenderTextureFormat.ARGB32);
             RenderTexture.active = RenderTexture;
-            view.RenderCamera.targetTexture = RenderTexture;
-            view.RenderCamera.clearFlags = CameraClearFlags.SolidColor;
-            view.RenderCamera.backgroundColor = Color.clear;
-            view.RenderCamera.Render();
+            View.RenderCamera.targetTexture = RenderTexture;
+            View.RenderCamera.clearFlags = CameraClearFlags.SolidColor;
+            View.RenderCamera.backgroundColor = Color.clear;
+            View.RenderCamera.Render();
 
             if (obj is RenderData data)
             {
@@ -106,11 +107,11 @@ namespace Modules.Render3D2UI
         }
         private void CloseRender3D2UIView()
         {
-            if (view == null) return;
-            view.RenderCamera.SetGameObjectActive(false);
-            view.RenderCamera.targetTexture = null;
+            if (!View) return;
+            View.RenderCamera.SetGameObjectActive(false);
+            View.RenderCamera.targetTexture = null;
             RenderTexture.ReleaseTemporary(RenderTexture);
-            foreach (Transform child in view.ModelTransform)
+            foreach (Transform child in View.ModelTransform)
             {
                 Object.Destroy(child.gameObject);
             }

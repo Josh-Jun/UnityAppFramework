@@ -7,6 +7,7 @@
  * ===============================================
  * */
 
+using System;
 using App.Core.Helper;
 using App.Core.Master;
 using App.Core.Tools;
@@ -18,88 +19,88 @@ namespace App.Modules.Loading
     [LogicOf(AssetPath.LoadingScene)]
     public class LoadingLogic : SingletonEvent<LoadingLogic>, ILogic
     {
-        private LoadingView view;
+        private LoadingView View => ViewMaster.Instance.GetView<LoadingView>();
         public LoadingLogic()
         {
 
         }
         public void Begin()
         {
-            view = ViewMaster.Instance.GetView<LoadingView>();
             LoadScene();
         }
 
         private void LoadScene()
         {
-            view.OpenView();
+            View.OpenView();
             switch (SceneMaster.Instance.TargetScene.Mold)
             {
                 case LoadSceneMold.YAScene:
-                    LoadYAScene();
+                    LoadYaScene();
                     break;
                 case LoadSceneMold.ABScene:
-                    LoadABScene().Forget();
+                    LoadAbScene().Forget();
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
         }
-        private int timeId;
-        private void LoadYAScene()
+        private int _timeId;
+        private void LoadYaScene()
         {
             if (SceneMaster.Instance.CurrentScene != null)
             {
                 SendEventMsg("BeforeLoadSceneEvent", SceneMaster.Instance.CurrentScene.Location);
             }
             var handle = Assets.LoadSceneAsync(SceneMaster.Instance.TargetScene.Location, AssetPackage.HotfixPackage);
+            _timeId = TimeUpdateMaster.Instance.StartTimer((time) =>
+            {
+                if (handle == null) return;
+                View.SetLoadingSliderValue(handle.Progress, LoadingSceneEvent);
+            });
+            return;
+
             void LoadingSceneEvent()
             {
                 SendEventMsg("AfterLoadSceneEvent", SceneMaster.Instance.TargetScene.Location);
-                TimeUpdateMaster.Instance.EndTimer(timeId);
+                TimeUpdateMaster.Instance.EndTimer(_timeId);
             }
-            timeId = TimeUpdateMaster.Instance.StartTimer((time) =>
-            {
-                if (handle == null) return;
-                view.SetLoadingSliderValue(handle.Progress, LoadingSceneEvent);
-            });
         }
 
-        private async UniTask LoadABScene()
+        private async UniTask LoadAbScene()
         {
             if (SceneMaster.Instance.CurrentScene != null)
             {
                 SendEventMsg("BeforeLoadSceneEvent", SceneMaster.Instance.CurrentScene.Name);
             }
             var async = SceneManager.LoadSceneAsync(SceneMaster.Instance.TargetScene.Name);
-            async.allowSceneActivation = false;
-            void LoadSceneCompleted()
+            if (async != null)
             {
-                SendEventMsg("AfterLoadSceneEvent", SceneMaster.Instance.TargetScene.Name);
-            }
-            float progressValue = 0;
-            while (!async.isDone)
-            {
-                await UniTask.DelayFrame(1);
-                if (async.progress < 0.9f)
-                {
-                    progressValue = async.progress;
-                }
-                else
-                {
-                    progressValue = 1.0f;
+                async.allowSceneActivation = false;
 
-                }
-                // TODO 更新加载进度 
-                view.SetLoadingSliderValue(progressValue, LoadSceneCompleted);
-                if (progressValue >= 0.9f)
+                void LoadSceneCompleted()
                 {
-                    async.allowSceneActivation = true;
+                    SendEventMsg("AfterLoadSceneEvent", SceneMaster.Instance.TargetScene.Name);
+                }
+
+                while (!async.isDone)
+                {
+                    await UniTask.DelayFrame(1);
+                    var progressValue = async.progress < 0.9f ? async.progress : 1.0f;
+
+                    // TODO 更新加载进度 
+                    View.SetLoadingSliderValue(progressValue, LoadSceneCompleted);
+                    if (progressValue >= 0.9f)
+                    {
+                        async.allowSceneActivation = true;
+                    }
                 }
             }
         }
 
         public void End()
         {
-            view.CloseView();
+            View.CloseView();
         }
         public void AppPause(bool pause)
         {

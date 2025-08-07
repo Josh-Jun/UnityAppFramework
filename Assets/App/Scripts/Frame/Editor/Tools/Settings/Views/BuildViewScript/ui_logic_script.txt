@@ -11,7 +11,7 @@ namespace Modules.#NAMESPACE#
     [LogicOf(AssetPath.Global)]
     public class #SCRIPTNAME# : SingletonEvent<#SCRIPTNAME#>, ILogic
     {
-        private #NAMESPACE#View view;
+        private #NAMESPACE#View View => ViewMaster.Instance.GetView<#NAMESPACE#View>();
         
         public #SCRIPTNAME#()
         {
@@ -24,7 +24,7 @@ namespace Modules.#NAMESPACE#
         
         public void Begin()
         {
-            view = ViewMaster.Instance.GetView<#NAMESPACE#View>();
+            
         }
         public void End()
         {

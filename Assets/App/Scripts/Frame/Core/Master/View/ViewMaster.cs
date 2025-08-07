@@ -123,7 +123,7 @@ namespace App.Core.Master
             view.transform.localScale = Vector3.one;
             view.name = view.name.Replace("(Clone)", "");
             var vb = view.AddComponent(type) as ViewBase;
-            vb?.CloseView();
+            view.SetActive(false);
             if(attribute.Active) vb?.OpenView();
             return vb;
         }
@@ -347,7 +347,7 @@ namespace App.Core.Master
             view.transform.localScale = Vector3.one;
             view.name = view.name.Replace("(Clone)", "");
             var vb = view.AddComponent(type) as ViewBase;
-            vb?.CloseView();
+            view.SetActive(false);
             if(state) vb?.OpenView();
             ViewPairs.Add(type.FullName!, vb);
             return vb as T;
