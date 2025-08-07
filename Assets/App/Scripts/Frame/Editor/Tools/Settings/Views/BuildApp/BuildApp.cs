@@ -144,7 +144,7 @@ namespace App.Editor.View
         private static void SetBuildSetting()
         {
             var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
-            // EditorUserBuildSettings.development = appConfig.DevelopmentMold != DevelopmentMold.Release;
+            EditorUserBuildSettings.development = appConfig.DevelopmentMold != DevelopmentMold.Release;
             if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android)
             {
                 PlayerSettings.Android.keystorePass = "123456";
