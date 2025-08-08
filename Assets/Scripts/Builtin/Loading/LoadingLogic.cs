@@ -14,7 +14,7 @@ using App.Core.Tools;
 using Cysharp.Threading.Tasks;
 using UnityEngine.SceneManagement;
 
-namespace App.Modules.Loading
+namespace App.Modules
 {
     [LogicOf(AssetPath.LoadingScene)]
     public class LoadingLogic : SingletonEvent<LoadingLogic>, ILogic

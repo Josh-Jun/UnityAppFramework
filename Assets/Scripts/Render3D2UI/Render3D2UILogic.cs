@@ -15,7 +15,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Modules.Render3D2UI
+namespace App.Modules
 {
     public class RenderData
     {

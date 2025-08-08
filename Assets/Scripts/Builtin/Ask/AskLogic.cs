@@ -11,7 +11,7 @@ using App.Core.Helper;
 using App.Core.Master;
 using App.Core.Tools;
 
-namespace App.Modules.Ask
+namespace App.Modules
 {
     [LogicOf(AssetPath.Global)]
     public class AskLogic : SingletonEvent<AskLogic>, ILogic

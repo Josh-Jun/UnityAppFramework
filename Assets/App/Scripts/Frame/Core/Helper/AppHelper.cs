@@ -34,5 +34,17 @@ namespace App.Core.Helper
                 return Assembly.Load(assemblyString).GetType(typeof(T).FullName!);
             }
         }
+
+        public static Type GetAssemblyType(string scriptName, string assemblyString = "App.Module")
+        {
+            if(Global.AppConfig.AssetPlayMode != YooAsset.EPlayMode.EditorSimulateMode)
+            {
+                return Global.AssemblyPairs[$"{assemblyString}"].GetType(scriptName);
+            }   
+            else
+            {
+                return Assembly.Load(assemblyString).GetType(scriptName);
+            }
+        }
     }
 }

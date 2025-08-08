@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-namespace Modules.#NAMESPACE#
+namespace App.Modules
 {
     [ViewOf(ViewMold.UI2D, AssetPath.#SCRIPTNAME#, false, 0)]
     public class #SCRIPTNAME# : ViewBase

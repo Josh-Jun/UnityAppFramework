@@ -72,8 +72,8 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treaming[Aa]ssets/aa.meta
 /[Aa]ssets/[Ss]treaming[Aa]ssets/aa/*
 #/[Pp]roject[Ss]ettings/*.txt
-/[Aa]sset[Bb]undle/
-/[Bb]undles/
+/[Aa]sset[Bb]undles/*
+/[Bb]undles/*
 /Assets/AppFramework/Libraries/XLua/Gen
 /Assets/AppFramework/Libraries/XLua/Gen.meta
 .vsconfig
@@ -83,3 +83,4 @@ Assets/UnityDefaultRuntimeTheme.tss
 Assets/UnityDefaultRuntimeTheme.tss.meta
 .DS_Store
 /.vscode
+/[Aa]ssets/[Ss]treaming[Aa]ssets/[Aa]sset[Bb]undles/*

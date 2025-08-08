@@ -17,7 +17,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using YooAsset;
 
-namespace App.Modules.Update
+namespace App.Modules
 {
     [LogicOf(AssetPath.AppScene)]
     public class UpdateLogic : SingletonEvent<UpdateLogic>, ILogic

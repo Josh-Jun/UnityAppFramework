@@ -15,7 +15,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine.UI;
 
-namespace App.Modules.Loading
+namespace App.Modules
 {
     [ViewOf(ViewMold.UI2D, AssetPath.LoadingView, false, 2)]
     public class LoadingView : ViewBase

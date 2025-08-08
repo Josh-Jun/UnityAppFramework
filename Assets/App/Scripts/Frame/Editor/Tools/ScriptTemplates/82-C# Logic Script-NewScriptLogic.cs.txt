@@ -7,7 +7,7 @@ using App.Core.Tools;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Modules.#NAMESPACE#
+namespace App.Modules
 {
     [LogicOf(AssetPath.Global)]
     public class #SCRIPTNAME# : SingletonEvent<#SCRIPTNAME#>, ILogic

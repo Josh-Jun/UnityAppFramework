@@ -13,7 +13,7 @@ using App.Core.Tools;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace App.Modules.Ask
+namespace App.Modules
 {
     [ViewOf(ViewMold.UI2D, AssetPath.AskView, true, 2)]
     public class AskView : ViewBase

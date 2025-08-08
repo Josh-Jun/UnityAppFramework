@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16d00b7005a47ef47802a8421dc6baf6, type: 3}
   m_Name: Settings
   m_EditorClassIdentifier: 
-  _isEnabled: 0
+  _isEnabled: 1
   _uiInputMode: 0
   _defaultTab: 2
   _triggerEnableMode: 0
-  _triggerBehaviour: 0
+  _triggerBehaviour: 2
   _errorNotification: 1
   _enableKeyboardShortcuts: 1
   _keyboardShortcuts: []
@@ -70,5 +70,5 @@ MonoBehaviour:
   _maximumConsoleEntries: 1500
   _enableEventSystemCreation: 1
   _automaticShowCursor: 1
-  _uiScale: 1
+  _uiScale: 3
   _unloadOnClose: 0

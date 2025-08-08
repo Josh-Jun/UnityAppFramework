@@ -395,6 +395,17 @@ namespace App.Core.Master
             view.OpenView(obj);
         }
 
+        public void OpenView(string scriptName, object obj = null)
+        {
+            var view = GetView(scriptName);
+            if (view == null)
+            {
+                Log.W($"View {scriptName} has no view");
+                return;
+            }
+            view.OpenView(obj);
+        }
+
         public void CloseView<T>(bool isClear = false) where T : ViewBase
         {
             var view = GetView<T>();
@@ -406,6 +417,24 @@ namespace App.Core.Master
             if (isClear)
             {
                 RemoveView(view);
+            }
+            else
+            {
+                view.CloseView();
+            }
+        }
+
+        public void CloseView(string scriptName, bool isClear = false)
+        {
+            var view = GetView(scriptName);
+            if (view == null)
+            {
+                Log.W($"View {scriptName} has no view");
+                return;
+            }
+            if (isClear)
+            {
+                RemoveView(scriptName);
             }
             else
             {
@@ -434,6 +463,7 @@ namespace App.Core.Master
         public T GetView<T>() where T : ViewBase
         {
             var type = AppHelper.GetAssemblyType<T>();
+            if(type == null) return null;
             var obj = type.GetCustomAttributes(typeof(ViewOfAttribute), false).FirstOrDefault();
             if (obj is not ViewOfAttribute attribute)
             {
@@ -447,9 +477,34 @@ namespace App.Core.Master
             return view as T;
         }
 
+        public ViewBase GetView(string scriptName)
+        {
+            var type = AppHelper.GetAssemblyType(scriptName);
+            if(type == null) return null;
+            var obj = type.GetCustomAttributes(typeof(ViewOfAttribute), false).FirstOrDefault();
+            if (obj is not ViewOfAttribute attribute)
+            {
+                Log.W($"Get View {scriptName} is not extends ViewBase");
+                return null;
+            }
+            if (ViewPairs.ContainsKey(scriptName!)) return ViewPairs[scriptName];
+            var view = CreateView(type, attribute);
+            ViewPairs.Add(scriptName!, view);
+            return view;
+        }
+
         public void RemoveView(ViewBase view)
         {
             var scriptName = view.GetType().FullName;
+            if (!ViewPairs.TryGetValue(scriptName!, out var pair)) return;
+            var go = pair.gameObject;
+            EventDispatcher.RemoveEventListener(go.name);
+            Destroy(go);
+            ViewPairs.Remove(scriptName);
+        }
+
+        public void RemoveView(string scriptName)
+        {
             if (!ViewPairs.TryGetValue(scriptName!, out var pair)) return;
             var go = pair.gameObject;
             EventDispatcher.RemoveEventListener(go.name);

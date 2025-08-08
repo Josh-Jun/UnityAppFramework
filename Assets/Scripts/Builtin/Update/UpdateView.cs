@@ -14,7 +14,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace App.Modules.Update
+namespace App.Modules
 {
     public class UpdateView : ViewBase
     {
