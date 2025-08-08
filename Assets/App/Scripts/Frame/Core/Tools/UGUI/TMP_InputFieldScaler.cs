@@ -50,7 +50,6 @@ namespace UnityEngine.UI
             InputField.placeholder.GetComponent<TMP_Text>().fontSize = fontSize;
             this._originalWidth = this.GetComponent<RectTransform>().sizeDelta.x - Mathf.Abs(ViewRect.offsetMax.x) - Mathf.Abs(ViewRect.offsetMin.x);
             this._originalHeight = this.GetComponent<RectTransform>().sizeDelta.y;
-            InputField.lineType = fixedWidth ? TMP_InputField.LineType.MultiLineNewline : TMP_InputField.LineType.SingleLine;
             RectTransform.SetSizeWithCurrentAnchors((RectTransform.Axis)1, LayoutUtility.GetPreferredHeight(_mRect));
         }
 
