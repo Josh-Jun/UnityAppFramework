@@ -22,7 +22,7 @@ namespace App.Modules
         public GameObject prefab;
         public RawImage image;
     }
-    
+
     [LogicOf(AssetPath.Global)]
     public class Render3D2UILogic : SingletonEvent<Render3D2UILogic>, ILogic
     {
@@ -41,7 +41,7 @@ namespace App.Modules
 
         public void Begin()
         {
-            
+
         }
         public void End()
         {
@@ -89,15 +89,17 @@ namespace App.Modules
         private void OpenRender3D2UIView(object obj)
         {
             View.RenderCamera.SetGameObjectActive();
-            RenderTexture = RenderTexture.GetTemporary(Screen.width, Screen.height, 24, RenderTextureFormat.ARGB32);
-            RenderTexture.active = RenderTexture;
-            View.RenderCamera.targetTexture = RenderTexture;
-            View.RenderCamera.clearFlags = CameraClearFlags.SolidColor;
-            View.RenderCamera.backgroundColor = Color.clear;
-            View.RenderCamera.Render();
 
             if (obj is RenderData data)
             {
+                var width = (int)data.image.rectTransform.rect.width;
+                var height = (int)data.image.rectTransform.rect.height;
+                RenderTexture = RenderTexture.GetTemporary(width, height, 24, RenderTextureFormat.ARGB32);
+                RenderTexture.active = RenderTexture;
+                View.RenderCamera.targetTexture = RenderTexture;
+                View.RenderCamera.clearFlags = CameraClearFlags.SolidColor;
+                View.RenderCamera.backgroundColor = Color.clear;
+                View.RenderCamera.Render();
                 AddModel(data.prefab, data.image);
             }
             else
