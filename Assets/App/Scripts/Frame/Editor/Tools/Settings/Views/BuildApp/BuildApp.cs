@@ -5,6 +5,7 @@ using App.Editor.Helper;
 using App.Runtime.Helper;
 using HybridCLR.Editor;
 using HybridCLR.Editor.Commands;
+using SRDebugger;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -145,10 +146,12 @@ namespace App.Editor.View
         {
             var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
             EditorUserBuildSettings.development = appConfig.DevelopmentMold != DevelopmentMold.Release;
+            var debugConfig = AssetDatabase.LoadAssetAtPath<Settings>("Assets/App/Packages/StompyRobot/SRDebugger/usr/Resources/SRDebugger/Settings.asset");
+            debugConfig.IsEnabled = appConfig.DevelopmentMold != DevelopmentMold.Release;
             if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android)
             {
                 PlayerSettings.Android.keystorePass = "123456";
-                PlayerSettings.Android.keyaliasName = "1";
+                PlayerSettings.Android.keyaliasName = "debug";
                 PlayerSettings.Android.keyaliasPass = "123456";
                 EditorUserBuildSettings.exportAsGoogleAndroidProject = appConfig.NativeApp;
                 

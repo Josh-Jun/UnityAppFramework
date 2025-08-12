@@ -116,7 +116,7 @@ namespace App.Editor.View
             {
                 if (file.Name.Contains("~$")) continue;
                 if (datas.ContainsKey(file.Name)) continue;
-                var excelDatas = ExcelTools.ReadExcel(file.FullName);
+                var excelDatas = ExcelHelper.ReadExcel(file.FullName);
                 var list = (from data in excelDatas
                     where !data.sheetName.Contains("#")
                     select new ConfigData

@@ -12,6 +12,7 @@ using App.Core.Helper;
 using App.Core.Master;
 using App.Core.Tools;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine.SceneManagement;
 
 namespace App.Modules
@@ -20,43 +21,55 @@ namespace App.Modules
     public class LoadingLogic : SingletonEvent<LoadingLogic>, ILogic
     {
         private LoadingView View => ViewMaster.Instance.GetView<LoadingView>();
+
         public LoadingLogic()
         {
-
+            AddEventMsg<object>("OpenLoadingView", OpenLoadingView);
+            AddEventMsg("CloseLoadingView", CloseLoadingView);
         }
+
+        #region Life Cycle
+        
         public void Begin()
         {
-            LoadScene();
-        }
-
-        private void LoadScene()
-        {
             View.OpenView();
-            switch (SceneMaster.Instance.TargetScene.Mold)
-            {
-                case LoadSceneMold.YAScene:
-                    LoadYaScene();
-                    break;
-                case LoadSceneMold.ABScene:
-                    LoadAbScene().Forget();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
         }
+
+        public void End()
+        {
+            View.CloseView();
+        }
+
+        public void AppPause(bool pause)
+        {
+        }
+
+        public void AppFocus(bool focus)
+        {
+        }
+
+        public void AppQuit()
+        {
+        }
+        
+        #endregion
+
+        #region Logic
+        
         private int _timeId;
+
         private void LoadYaScene()
         {
             if (SceneMaster.Instance.CurrentScene != null)
             {
                 SendEventMsg("BeforeLoadSceneEvent", SceneMaster.Instance.CurrentScene.Location);
             }
+
             var handle = Assets.LoadSceneAsync(SceneMaster.Instance.TargetScene.Location, AssetPackage.HotfixPackage);
             _timeId = TimeUpdateMaster.Instance.StartTimer((time) =>
             {
                 if (handle == null) return;
-                View.SetLoadingSliderValue(handle.Progress, LoadingSceneEvent);
+                SetLoadingSliderValue(handle.Progress, LoadingSceneEvent);
             });
             return;
 
@@ -73,6 +86,7 @@ namespace App.Modules
             {
                 SendEventMsg("BeforeLoadSceneEvent", SceneMaster.Instance.CurrentScene.Name);
             }
+
             var async = SceneManager.LoadSceneAsync(SceneMaster.Instance.TargetScene.Name);
             if (async != null)
             {
@@ -89,7 +103,7 @@ namespace App.Modules
                     var progressValue = async.progress < 0.9f ? async.progress : 1.0f;
 
                     // TODO 更新加载进度 
-                    View.SetLoadingSliderValue(progressValue, LoadSceneCompleted);
+                    SetLoadingSliderValue(progressValue, LoadSceneCompleted);
                     if (progressValue >= 0.9f)
                     {
                         async.allowSceneActivation = true;
@@ -97,22 +111,42 @@ namespace App.Modules
                 }
             }
         }
-
-        public void End()
+        private void SetLoadingSliderValue(float value, Action callback = null)
         {
-            View.CloseView();
+            View.LoadingSliderSlider.DOKill();
+            var duration = value >= 1 ? 0.5f : 5f;
+            var endValue = value >= 1 ? 1f : 0.9f;
+            View.LoadingSliderSlider.DOValue(endValue, duration).SetEase(Ease.Linear).OnComplete(() => { callback?.Invoke(); });
+            if(View.ProgressTextMeshProUGUI)
+            {
+                View.ProgressTextMeshProUGUI.text = $"{View.LoadingSliderSlider.value * 100:F2}%";
+            }
         }
-        public void AppPause(bool pause)
-        {
+        
+        #endregion
 
-        }
-        public void AppFocus(bool focus)
-        {
+        #region View Logic
 
-        }
-        public void AppQuit()
+        private void OpenLoadingView(object obj)
         {
-
+            switch (SceneMaster.Instance.TargetScene.Mold)
+            {
+                case LoadSceneMold.YAScene:
+                    LoadYaScene();
+                    break;
+                case LoadSceneMold.ABScene:
+                    LoadAbScene().Forget();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
+
+        private void CloseLoadingView()
+        {
+            
+        }
+
+        #endregion
     }
 }

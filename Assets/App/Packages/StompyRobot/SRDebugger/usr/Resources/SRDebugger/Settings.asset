@@ -70,5 +70,5 @@ MonoBehaviour:
   _maximumConsoleEntries: 1500
   _enableEventSystemCreation: 1
   _automaticShowCursor: 1
-  _uiScale: 3
+  _uiScale: 1
   _unloadOnClose: 0

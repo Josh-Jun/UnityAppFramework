@@ -1,0 +1,63 @@
+{
+    "mold": 0,
+    "layer": 2,
+    "active": false,
+    "views": [
+        {
+            "name": "Background",
+            "path": "Background",
+            "components": []
+        },
+        {
+            "name": "Background",
+            "path": "LoadingSlider/Background",
+            "components": []
+        },
+        {
+            "name": "Progress",
+            "path": "LoadingSlider/Fill Area/Fill/Progress",
+            "components": [
+                {
+                    "name": "Progress",
+                    "type": "TextMeshProUGUI",
+                    "fullname": "TMPro.TextMeshProUGUI",
+                    "eventType": 0,
+                    "isPublic": true
+                }
+            ]
+        },
+        {
+            "name": "Fill",
+            "path": "LoadingSlider/Fill Area/Fill",
+            "components": []
+        },
+        {
+            "name": "Fill Area",
+            "path": "LoadingSlider/Fill Area",
+            "components": []
+        },
+        {
+            "name": "Handle",
+            "path": "LoadingSlider/Handle Slide Area/Handle",
+            "components": []
+        },
+        {
+            "name": "Handle Slide Area",
+            "path": "LoadingSlider/Handle Slide Area",
+            "components": []
+        },
+        {
+            "name": "LoadingSlider",
+            "path": "LoadingSlider",
+            "components": [
+                {
+                    "name": "LoadingSlider",
+                    "type": "Slider",
+                    "fullname": "UnityEngine.UI.Slider",
+                    "eventType": 2,
+                    "isPublic": true
+                }
+            ]
+        }
+    ]
+}

@@ -333,24 +333,8 @@ namespace App.Core.Master
         public T AddView<T>(string location, ViewMold mold, int layer, bool state) where T : ViewBase
         {
             var type = AppHelper.GetAssemblyType<T>();
-            var go = AssetsMaster.Instance.LoadAssetSync<GameObject>(location);
-            if (!go) return null;
-            var parent = mold switch
-            {
-                ViewMold.UI2D => UIPanels[layer],
-                ViewMold.UI3D => UI3DRectTransform,
-                ViewMold.Go3D => GoRoot,
-                _ => throw new ArgumentOutOfRangeException(nameof(mold), mold, null)
-            };
-            var view = Instantiate(go, parent);
-            view.transform.localPosition = Vector3.zero;
-            view.transform.localScale = Vector3.one;
-            view.name = view.name.Replace("(Clone)", "");
-            var vb = view.AddComponent(type) as ViewBase;
-            view.SetActive(false);
-            if(state) vb?.OpenView();
-            ViewPairs.Add(type.FullName!, vb);
-            return vb as T;
+            var attribute = new ViewOfAttribute(mold, location, state, layer);
+            return CreateView(type, attribute) as T;
         }
 
         public List<ViewBase> GetAllView()
