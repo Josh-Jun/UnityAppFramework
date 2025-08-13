@@ -18,7 +18,7 @@ public class Global
 
     public static Dictionary<string, Assembly> AssemblyPairs { get; } = new();
     
-    public static CloudCtrl CloudCtrl;
+    public static CloudCtrl CloudCtrl = new();
     
     public static string PlatformName
     {
