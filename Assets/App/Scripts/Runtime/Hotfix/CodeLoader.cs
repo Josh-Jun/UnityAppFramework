@@ -17,7 +17,7 @@ using YooAsset;
 
 namespace App.Runtime.Code
 {
-    public class CodeLoader
+    public static class CodeLoader
     {
         public static void Start()
         {

@@ -10,7 +10,7 @@ using TMPro;
 
 namespace App.Modules
 {
-    [ViewOf(ViewMold.Go3D, AssetPath.Render3D2UIView, false, 0)]
+    [ViewOf("Render3D2UI", ViewMold.Go3D, AssetPath.Render3D2UIView, false, 0)]
     public class Render3D2UIView : ViewBase
     {
 		private Transform modeltransform;

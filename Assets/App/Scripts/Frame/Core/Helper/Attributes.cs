@@ -14,18 +14,21 @@ namespace App.Core.Helper
     [AttributeUsage(AttributeTargets.Class)]
     public class LogicOfAttribute : System.Attribute
     {
+        public string Name { get; private set; }
         // Logic脚本所属的场景的路径
         public string Scene { get; private set; }
 
-        public LogicOfAttribute(string Scene)
+        public LogicOfAttribute(string Name, string Scene)
         {
             this.Scene = Scene;
+            this.Name = Name;
         }
     }
 
     [AttributeUsage(AttributeTargets.Class)]
     public class ViewOfAttribute : System.Attribute
     {
+        public string Name { get; private set; }
         // View类型
         public ViewMold View { get; private set; }
         // 2D UI层级
@@ -35,8 +38,9 @@ namespace App.Core.Helper
         // 默认显隐状态，默认关闭
         public bool Active { get; private set; }
 
-        public ViewOfAttribute(ViewMold View, string Location, bool Active = false, int Layer = 0)
+        public ViewOfAttribute(string Name, ViewMold View, string Location, bool Active = false, int Layer = 0)
         {
+            this.Name = Name;
             this.View = View;
             this.Layer = Layer;
             this.Active = Active;

@@ -1,4 +1,4 @@
-// #define ENABLE_TEST
+#define ENABLE_TEST
 
 using System;
 using System.Collections;
@@ -39,8 +39,8 @@ namespace App.Modules
         public int pos;
     }
 
-    [LogicOf(AssetPath.Global)]
-    public class AskLogic : SingletonEvent<AskLogic>, ILogic
+    [LogicOf("Ask", AssetPath.Global)]
+    public class AskLogic : EventBase, ILogic
     {
         private AskView View => ViewMaster.Instance.GetView<AskView>();
 

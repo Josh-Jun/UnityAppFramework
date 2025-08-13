@@ -197,7 +197,7 @@ namespace App.Editor.View
             view_script = view_script.Replace("#VIEWMOLD#", $"{_viewScriptData.mold}");
             view_script = view_script.Replace("#ACTIVE#", $"{_viewScriptData.active}".ToLower());
             view_script = view_script.Replace("#LAYER#", $"{_viewScriptData.layer}");
-            view_script = view_script.Replace("#NAMESPACE#", folder_name);
+            view_script = view_script.Replace("#NAME#", folder_name);
             view_script = view_script.Replace("#SCRIPTNAME#", view_script_name);
             view_script = view_script.Replace("#VARIABLE#", CreatePrivateVariableContent());
             view_script = view_script.Replace("#GETSET#", CreatePublicVariableContent());
@@ -206,7 +206,7 @@ namespace App.Editor.View
             view_script = view_script.Replace("#OPEN#", "");
             view_script = view_script.Replace("#CLOSE#", "");
 
-            logic_script = logic_script.Replace("#NAMESPACE#", folder_name);
+            logic_script = logic_script.Replace("#NAME#", folder_name);
             logic_script = logic_script.Replace("#SCRIPTNAME#", logic_script_name);
             logic_script = logic_script.Replace("#EVENT#", CreateEvent());
 

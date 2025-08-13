@@ -18,36 +18,6 @@ public static class Assets
     
     private const int DownloadingMaxNum = 10;
     private const int FailedTryAgain = 3;
-    private static string Platform
-    {
-        get
-        {
-#if UNITY_EDITOR
-            return UnityEditor.EditorUserBuildSettings.activeBuildTarget switch
-            {
-                UnityEditor.BuildTarget.iOS or
-                    UnityEditor.BuildTarget.WebGL or
-                    UnityEditor.BuildTarget.Android or
-                    UnityEditor.BuildTarget.VisionOS => $"{UnityEditor.EditorUserBuildSettings.activeBuildTarget}",
-                UnityEditor.BuildTarget.StandaloneWindows or
-                    UnityEditor.BuildTarget.StandaloneWindows64 => $"Windows",
-                UnityEditor.BuildTarget.StandaloneOSX => $"MacOS",
-                _ => string.Empty
-            };
-#else
-            return Application.platform switch
-            {
-                RuntimePlatform.VisionOS or
-                    RuntimePlatform.Android => $"{Application.platform}",
-                RuntimePlatform.IPhonePlayer => $"iOS",
-                RuntimePlatform.OSXPlayer => $"MacOS",
-                RuntimePlatform.WindowsPlayer => $"Windows",
-                RuntimePlatform.WebGLPlayer => $"WebGL",
-                _ => string.Empty
-            };
-#endif
-        }
-    }
 
     public static async UniTask<ResourceDownloaderOperation> UpdatePackage(AssetPackage assetPackage)
     {
@@ -170,7 +140,7 @@ public static class Assets
                     Debug.LogError($"资源包初始化失败：{initBuiltinOperation.Error}");
                 break;
             case EPlayMode.HostPlayMode:
-                var remoteHostServices = new RemoteServices(GetCdnServerAddress(), GetCdnServerAddress());
+                var remoteHostServices = new RemoteServices(CdnServerAddress, CdnServerAddress);
                 var cacheFileSystemParams =
                     FileSystemParameters.CreateDefaultCacheFileSystemParameters(remoteHostServices);
                 var hostFileSystemParams = FileSystemParameters.CreateDefaultBuildinFileSystemParameters();
@@ -190,7 +160,7 @@ public static class Assets
                     Debug.LogError($"资源包初始化失败：{initHostOperation.Error}");
                 break;
             case EPlayMode.WebPlayMode:
-                var remoteWebServices = new RemoteServices(GetCdnServerAddress(), GetCdnServerAddress());
+                var remoteWebServices = new RemoteServices(CdnServerAddress, CdnServerAddress);
                 var webServerFileSystemParams = FileSystemParameters.CreateDefaultWebServerFileSystemParameters();
                 var webRemoteFileSystemParams =
                     FileSystemParameters.CreateDefaultWebRemoteFileSystemParameters(remoteWebServices); //支持跨域下载
@@ -216,10 +186,7 @@ public static class Assets
         return package;
     }
 
-    private static string GetCdnServerAddress()
-    {
-        return $"{Global.CdnServer}/AssetBundles/{Platform}/v{Application.version}";
-    }
+    private static string CdnServerAddress => $"{Global.CdnServer}/App/{Application.identifier}/AssetBundles/{Global.PlatformName}/v{Application.version}";
     
     public static async UniTask ClearPackageAllCacheBundleFiles(AssetPackage assetPackage = AssetPackage.BuiltinPackage)
     {

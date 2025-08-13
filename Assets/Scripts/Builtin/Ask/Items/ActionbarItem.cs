@@ -8,6 +8,7 @@
  * */
 using System.Collections;
 using System.Collections.Generic;
+using App.Core.Master;
 using App.Core.Tools;
 using TMPro;
 using UnityEngine;
@@ -30,6 +31,7 @@ namespace App.Modules
         public override void Show(AskData data)
         {
             base.Show(data);
+            transform.RectTransform().anchoredPosition = Vector2.up * ViewMaster.Instance.UISafeArea2D.offsetMin.y;
             foreach (var item in data.Events)
             {
                 var go = Instantiate(_prefab, transform);

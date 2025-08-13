@@ -307,6 +307,7 @@ namespace App.Core.Master
                 if (ViewPairs.ContainsKey(type.FullName!)) continue;
                 var obj = type.GetCustomAttributes(typeof(ViewOfAttribute), false).FirstOrDefault();
                 if (obj is not ViewOfAttribute attribute) continue;
+                if (!AppHelper.GetBoolData(attribute.Name)) continue;
                 var view = CreateView(type, attribute);
                 ViewPairs.Add(type.FullName!, view);
             }
@@ -330,11 +331,14 @@ namespace App.Core.Master
             _redDotViewMap.TryAdd(view.RedDotMold, view);
         }
 
-        public T AddView<T>(string location, ViewMold mold, int layer, bool state) where T : ViewBase
+        public T AddView<T>(string viewName, string location, ViewMold mold, int layer, bool state) where T : ViewBase
         {
             var type = AppHelper.GetAssemblyType<T>();
-            var attribute = new ViewOfAttribute(mold, location, state, layer);
-            return CreateView(type, attribute) as T;
+            var attribute = new ViewOfAttribute(viewName, mold, location, state, layer);
+            if (!AppHelper.GetBoolData(attribute.Name)) return null;
+            var view = CreateView(type, attribute);
+            ViewPairs.Add(type.FullName!, view);
+            return view as T;
         }
 
         public List<ViewBase> GetAllView()
@@ -454,6 +458,7 @@ namespace App.Core.Master
                 Log.W($"Get View {type.FullName} is not extends ViewBase");
                 return null;
             }
+            if (!AppHelper.GetBoolData(attribute.Name)) return null;
             var scriptName = type.Namespace == string.Empty ? type.Name : type.FullName;
             if (ViewPairs.ContainsKey(scriptName!)) return ViewPairs[scriptName] as T;
             var view = CreateView(type, attribute);
@@ -471,6 +476,7 @@ namespace App.Core.Master
                 Log.W($"Get View {scriptName} is not extends ViewBase");
                 return null;
             }
+            if (!AppHelper.GetBoolData(attribute.Name)) return null;
             if (ViewPairs.ContainsKey(scriptName!)) return ViewPairs[scriptName];
             var view = CreateView(type, attribute);
             ViewPairs.Add(scriptName!, view);

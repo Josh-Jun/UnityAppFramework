@@ -19,8 +19,8 @@ using YooAsset;
 
 namespace App.Modules
 {
-    [LogicOf(AssetPath.AppScene)]
-    public class UpdateLogic : SingletonEvent<UpdateLogic>, ILogic
+    [LogicOf("Update", AssetPath.AppScene)]
+    public class UpdateLogic : EventBase, ILogic
     {
         private UpdateView _view;
         private ResourceDownloaderOperation _downloader;
@@ -32,7 +32,7 @@ namespace App.Modules
         }
         public void Begin()
         {
-            _view = ViewMaster.Instance.AddView<UpdateView>(AssetPath.UpdateView, ViewMold.UI2D, 2, false);
+            _view = ViewMaster.Instance.AddView<UpdateView>("Update", AssetPath.UpdateView, ViewMold.UI2D, 2, false);
             UniTask.Void(async () =>
             {
                 _downloader = await Assets.UpdatePackage(AssetPackage.HotfixPackage);

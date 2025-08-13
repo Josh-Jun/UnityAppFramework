@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using App.Runtime.CloudCtrl;
 using App.Runtime.Code;
 using App.Runtime.Helper;
 using App.Runtime.Hotfix;
@@ -18,6 +19,7 @@ namespace App.Runtime
         {
             _hotfix = transform.Find("Canvas").GetComponent<HotfixView>();
             Global.AppConfig = Resources.Load<AppConfig>("App/AppConfig");
+            CloudCtrlRequester.Post();
             _hotfix.Startup(InitBuiltinPackage);
         }
 

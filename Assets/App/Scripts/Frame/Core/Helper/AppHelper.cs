@@ -46,5 +46,25 @@ namespace App.Core.Helper
                 return Assembly.Load(assemblyString).GetType(scriptName);
             }
         }
+
+        public static int GetIntData(string name)
+        {
+            return Global.CloudCtrl.IntData.Exists(i => i.name == name) ? Global.CloudCtrl.IntData.Find(i => i.name == name).value : 0;
+        }
+
+        public static float GetFloatData(string name)
+        {
+            return Global.CloudCtrl.FloatData.Exists(f => f.name == name) ? Global.CloudCtrl.FloatData.Find(f => f.name == name).value : 0;
+        }
+
+        public static string GetStringData(string name)
+        {
+            return Global.CloudCtrl.StringData.Exists(s => s.name == name) ? Global.CloudCtrl.StringData.Find(s => s.name == name).value : "";
+        }
+
+        public static bool GetBoolData(string name)
+        {
+            return !Global.CloudCtrl.BoolData.Exists(b => b.name == name) || Global.CloudCtrl.BoolData.Find(b => b.name == name).value;
+        }
     }
 }

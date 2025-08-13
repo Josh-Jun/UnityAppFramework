@@ -17,8 +17,8 @@ using UnityEngine.SceneManagement;
 
 namespace App.Modules
 {
-    [LogicOf(AssetPath.LoadingScene)]
-    public class LoadingLogic : SingletonEvent<LoadingLogic>, ILogic
+    [LogicOf("Loading", AssetPath.LoadingScene)]
+    public class LoadingLogic : EventBase, ILogic
     {
         private LoadingView View => ViewMaster.Instance.GetView<LoadingView>();
 

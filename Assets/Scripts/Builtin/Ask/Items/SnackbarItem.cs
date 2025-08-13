@@ -29,6 +29,7 @@ namespace App.Modules
         public override void Show(AskData data)
         {
             base.Show(data);
+            transform.RectTransform().anchoredPosition = Vector2.up * ViewMaster.Instance.UISafeArea2D.offsetMax.y;
             var time = 2f;
             _title.text = data.title;
             _connect.text = data.connect;

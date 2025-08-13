@@ -10,7 +10,7 @@ using TMPro;
 
 namespace App.Modules
 {
-    [ViewOf(ViewMold.#VIEWMOLD#, AssetPath.#SCRIPTNAME#, #ACTIVE#, #LAYER#)]
+    [ViewOf("#NAME#", ViewMold.#VIEWMOLD#, AssetPath.#SCRIPTNAME#, #ACTIVE#, #LAYER#)]
     public class #SCRIPTNAME# : ViewBase
     {
 #VARIABLE#

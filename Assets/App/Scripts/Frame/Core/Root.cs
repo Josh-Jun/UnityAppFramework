@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using System.Text;
 using App.Core.Helper;
 using App.Core.Master;
 using App.Core.Tools;
@@ -12,7 +11,7 @@ namespace App.Core
 {
     public static class Root
     {
-        private static readonly Dictionary<string, List<ILogic>> SceneLogicPairs = new Dictionary<string, List<ILogic>>();
+        private static readonly Dictionary<string, List<ILogic>> SceneLogicPairs = new();
 
         public static void Init()
         {
@@ -28,7 +27,6 @@ namespace App.Core
             SceneManager.sceneLoaded += (scene, _) => { ExecuteSceneMethods(scene.path, "Begin"); };
             // 初始化Scene的所有Logic的End方法
             SceneManager.sceneUnloaded += (scene) => { ExecuteSceneMethods(scene.path, "End"); };
-            
         }
 
         /// <summary>启动App</summary>
@@ -40,7 +38,7 @@ namespace App.Core
             ExecuteSceneMethods(AssetPath.Global, "Begin");
             Assets.LoadSceneAsync(AssetPath.MainScene, AssetPackage.HotfixPackage);
         }
-        
+
         /// <summary>初始化所有Logic脚本</summary>
         private static void InitLogicScripts()
         {
@@ -49,6 +47,7 @@ namespace App.Core
             {
                 var la = type.GetCustomAttributes(typeof(LogicOfAttribute), false).First();
                 if (la is not LogicOfAttribute attribute) continue;
+                if (!AppHelper.GetBoolData(attribute.Name)) continue;
                 var obj = Activator.CreateInstance(type);
                 var logic = obj as ILogic;
                 if (!SceneLogicPairs.TryGetValue(attribute.Scene, out var pair))
@@ -61,21 +60,6 @@ namespace App.Core
                     pair.Add(logic);
                 }
             }
-        }
-        
-        /// <summary>
-        /// 获取对应Logic脚本
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public static T GetLogicScript<T>() where T : class
-        {
-            var type = typeof(T);
-            foreach (var logics in SceneLogicPairs.Values)
-            {
-                if (logics.FirstOrDefault(logic => logic.GetType() == type) is T t) return t;
-            }
-            return null;
         }
 
         /// <summary>

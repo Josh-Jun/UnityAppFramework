@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Reflection;
+using App.Runtime.CloudCtrl;
 using App.Runtime.Helper;
 
 public class Global
@@ -16,6 +17,39 @@ public class Global
     public static List<string> HotfixAssemblyNames { get; } = new () { "App.Core", "App.Module", };
 
     public static Dictionary<string, Assembly> AssemblyPairs { get; } = new();
+    
+    public static CloudCtrl CloudCtrl;
+    
+    public static string PlatformName
+    {
+        get
+        {
+#if UNITY_EDITOR
+            return UnityEditor.EditorUserBuildSettings.activeBuildTarget switch
+            {
+                UnityEditor.BuildTarget.iOS or
+                    UnityEditor.BuildTarget.WebGL or
+                    UnityEditor.BuildTarget.Android or
+                    UnityEditor.BuildTarget.VisionOS => $"{UnityEditor.EditorUserBuildSettings.activeBuildTarget}",
+                UnityEditor.BuildTarget.StandaloneWindows or
+                    UnityEditor.BuildTarget.StandaloneWindows64 => $"Windows",
+                UnityEditor.BuildTarget.StandaloneOSX => $"MacOS",
+                _ => string.Empty
+            };
+#else
+            return Application.platform switch
+            {
+                RuntimePlatform.VisionOS or
+                    RuntimePlatform.Android => $"{Application.platform}",
+                RuntimePlatform.IPhonePlayer => $"iOS",
+                RuntimePlatform.OSXPlayer => $"MacOS",
+                RuntimePlatform.WindowsPlayer => $"Windows",
+                RuntimePlatform.WebGLPlayer => $"WebGL",
+                _ => string.Empty
+            };
+#endif
+        }
+    }
 
     private static readonly Dictionary<DevelopmentMold, DevelopmentEnvironment> DevelopmentEnvironments = new ()
     {

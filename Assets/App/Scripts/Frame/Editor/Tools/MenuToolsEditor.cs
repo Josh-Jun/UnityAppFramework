@@ -21,6 +21,7 @@ namespace App.Editor.Tools
         #region 脚本模板导入修改命名空间
 
         private static StringBuilder head = new StringBuilder(1024);
+        private static string[] temps = { "Logic", "View" };
         /// <summary>  
         /// 此函数在asset被创建完，文件已经生成到磁盘上，但是没有生成.meta文件和import之前被调用  
         /// </summary>  
@@ -45,6 +46,14 @@ namespace App.Editor.Tools
                 {
                     var scriptContent = File.ReadAllText(realPath);
                     // 这里实现自定义的一些规则
+                    // scriptContent = scriptContent.Replace("#SCRIPTNAME#", Path.GetFileNameWithoutExtension(newFilePath));
+                    var name = Path.GetFileNameWithoutExtension(newFilePath);
+                    for (int i = 0; i < temps.Length; i++)
+                    {
+                        name = name.Replace(temps[i], "");
+                    }
+
+                    scriptContent = scriptContent.Replace("#NAME#", name);
                     scriptContent = scriptContent.Insert(0, head.ToString());
 
                     File.WriteAllText(realPath, scriptContent);

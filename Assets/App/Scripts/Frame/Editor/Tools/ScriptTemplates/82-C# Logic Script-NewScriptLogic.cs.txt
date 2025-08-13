@@ -9,15 +9,15 @@ using UnityEngine.UI;
 
 namespace App.Modules
 {
-    [LogicOf(AssetPath.Global)]
-    public class #SCRIPTNAME# : SingletonEvent<#SCRIPTNAME#>, ILogic
+    [LogicOf("#NAME#", AssetPath.Global)]
+    public class #SCRIPTNAME# : EventBase, ILogic
     {
-        private #NAMESPACE#View View => ViewMaster.Instance.GetView<#NAMESPACE#View>();
+        private #NAME#View View => ViewMaster.Instance.GetView<#NAME#View>();
         
         public #SCRIPTNAME#()
         {
-	        AddEventMsg<object>("Open#NAMESPACE#View", Open#NAMESPACE#View);
-	        AddEventMsg("Close#NAMESPACE#View", Close#NAMESPACE#View);
+	        AddEventMsg<object>("Open#NAME#View", Open#NAME#View);
+	        AddEventMsg("Close#NAME#View", Close#NAME#View);
             #NOTRIM#
         }
         

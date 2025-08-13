@@ -23,8 +23,8 @@ namespace App.Modules
         public RawImage image;
     }
 
-    [LogicOf(AssetPath.Global)]
-    public class Render3D2UILogic : SingletonEvent<Render3D2UILogic>, ILogic
+    [LogicOf("Render3D2UI", AssetPath.Global)]
+    public class Render3D2UILogic : EventBase, ILogic
     {
         private Render3D2UIView View => ViewMaster.Instance.GetView<Render3D2UIView>();
 
