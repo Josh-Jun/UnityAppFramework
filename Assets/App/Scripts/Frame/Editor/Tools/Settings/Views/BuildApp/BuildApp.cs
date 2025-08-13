@@ -98,6 +98,11 @@ namespace App.Editor.View
             root.Q<Button>("GenerateAndCopyDll").clicked += GenerateAndCopyDll;
             root.Q<Button>("BuildAsset").clicked += BuildAssets;
             root.Q<Button>("BuildApp").clicked += Build;
+            root.Q<Button>("OnlyBuildAsset").clicked += () =>
+            {
+                GenerateAndCopyDll();
+                BuildAssets();
+            };
             root.Q<Button>("OneKeyBuild").clicked += () =>
             {
                 GenerateAndCopyDll();

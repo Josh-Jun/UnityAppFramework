@@ -14,6 +14,7 @@
         <ui:Button text="GenerateAndCopyDll" display-tooltip-when-elided="true" name="GenerateAndCopyDll" />
         <ui:Button text="Build Asset" display-tooltip-when-elided="true" name="BuildAsset" />
         <ui:Button text="Build App" display-tooltip-when-elided="true" name="BuildApp" />
+        <ui:Button text="GenerateAndCopyDll&amp;Build Asset" display-tooltip-when-elided="true" name="OnlyBuildAsset" />
         <ui:Button text="One Key Build" display-tooltip-when-elided="true" name="OneKeyBuild" />
     </ui:VisualElement>
 </ui:UXML>
