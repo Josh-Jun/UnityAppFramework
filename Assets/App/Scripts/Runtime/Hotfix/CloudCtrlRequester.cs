@@ -62,7 +62,7 @@ namespace App.Runtime.CloudCtrl
 
         public static void Get()
         {
-            var url = $"{Global.CdnServer}/App/{Application.identifier}/CloudCtrl/{Global.PlatformName}/v{Application.version}/config.json?timestamp={DateTime.Now.Ticks}";
+            var url = $"{Global.CdnServer}/App/{Application.identifier}/{Global.PlatformName}/v{Application.version}/app.json?timestamp={DateTime.Now.Ticks}";
             UniTask.Void(async () =>
             {
                 using var request = new UnityWebRequest();

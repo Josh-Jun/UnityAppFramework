@@ -186,7 +186,7 @@ public static class Assets
         return package;
     }
 
-    private static string CdnServerAddress => $"{Global.CdnServer}/App/{Application.identifier}/AssetBundles/{Global.PlatformName}/v{Application.version}";
+    private static string CdnServerAddress => $"{Global.CdnServer}/App/{Application.identifier}/{Global.PlatformName}/v{Application.version}/AssetBundles";
     
     public static async UniTask ClearPackageAllCacheBundleFiles(AssetPackage assetPackage = AssetPackage.BuiltinPackage)
     {
