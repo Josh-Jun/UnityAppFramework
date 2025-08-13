@@ -23,6 +23,8 @@ namespace App.Editor.Helper
         private const string FileName = "App.Editor";
         private const string Extension = "asmdef";
         
+        public const string AppConfigPath = "Assets/Resources/AppConfig.asset";
+        
         public static string BaseEditorPath(string filename = FileName, string extension = Extension)
         {
             var path = AssetDatabase.FindAssets(FileName);

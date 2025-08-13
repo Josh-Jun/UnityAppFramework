@@ -98,6 +98,12 @@ namespace App.Editor.View
             root.Q<Button>("GenerateAndCopyDll").clicked += GenerateAndCopyDll;
             root.Q<Button>("BuildAsset").clicked += BuildAssets;
             root.Q<Button>("BuildApp").clicked += Build;
+            root.Q<Button>("OneKeyBuild").clicked += () =>
+            {
+                GenerateAndCopyDll();
+                BuildAssets();
+                Build();
+            };
         }
 
         public void OnUpdate()
@@ -112,7 +118,7 @@ namespace App.Editor.View
         private void Init()
         {
             outputPath = Application.dataPath.Replace("Assets", "App");
-            AppConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
+            AppConfig = AssetDatabase.LoadAssetAtPath<AppConfig>(EditorHelper.AppConfigPath);
             if (AppConfig != null)
             {
                 EnableLog = AppConfig.EnableLog;
@@ -142,11 +148,12 @@ namespace App.Editor.View
             EditorUtility.SetDirty(AppConfig);
         }
 
+        private const string DebugConfigPath = "Assets/App/Packages/StompyRobot/SRDebugger/usr/Resources/SRDebugger/Settings.asset";
         private static void SetBuildSetting()
         {
-            var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
+            var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>(EditorHelper.AppConfigPath);
             EditorUserBuildSettings.development = appConfig.DevelopmentMold != DevelopmentMold.Release;
-            var debugConfig = AssetDatabase.LoadAssetAtPath<Settings>("Assets/App/Packages/StompyRobot/SRDebugger/usr/Resources/SRDebugger/Settings.asset");
+            var debugConfig = AssetDatabase.LoadAssetAtPath<Settings>(DebugConfigPath);
             debugConfig.IsEnabled = appConfig.DevelopmentMold != DevelopmentMold.Release;
             if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android)
             {
@@ -196,7 +203,7 @@ namespace App.Editor.View
 
         private static void Build()
         {
-            var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
+            var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>(EditorHelper.AppConfigPath);
             var package = PlayerSettings.applicationIdentifier.ToLower();
             var channel = appConfig.ChannelPackage.ToString().ToLower();
             var version = PlayerSettings.bundleVersion;
@@ -252,7 +259,7 @@ namespace App.Editor.View
         private static void BuildAssets()
         {
             FileUtil.DeleteFileOrDirectory(Application.streamingAssetsPath + "/AssetBundles");
-            var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
+            var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>(EditorHelper.AppConfigPath);
             var version = GetDefaultPackageVersion();
             YooAssetBuild(EditorUserBuildSettings.activeBuildTarget, AssetPackage.BuiltinPackage, version, EBuildinFileCopyOption.ClearAndCopyAll);
             switch (appConfig.AssetPlayMode)
@@ -309,7 +316,7 @@ namespace App.Editor.View
             {
                 Debug.Log($"构建成功 : {buildResult.OutputPackageDirectory}");
                 
-                var config = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
+                var config = AssetDatabase.LoadAssetAtPath<AppConfig>(EditorHelper.AppConfigPath);
                 config.CDNVersion = buildParameters.PackageVersion;
                 EditorUtility.SetDirty(config);
                 AssetDatabase.Refresh();
@@ -427,7 +434,7 @@ namespace App.Editor.View
         {
             // 解析命令行参数
             var args = Environment.GetCommandLineArgs();
-            var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>("Assets/Resources/App/AppConfig.asset");
+            var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>(EditorHelper.AppConfigPath);
             var buildMold = BuildMold.All;
             // 设置相关参数
             foreach (var arg in args)

@@ -18,7 +18,7 @@ namespace App.Runtime
         private void Awake()
         {
             _hotfix = transform.Find("Canvas").GetComponent<HotfixView>();
-            Global.AppConfig = Resources.Load<AppConfig>("App/AppConfig");
+            Global.AppConfig = Resources.Load<AppConfig>("AppConfig");
             CloudCtrlRequester.Post();
             _hotfix.Startup(InitBuiltinPackage);
         }
