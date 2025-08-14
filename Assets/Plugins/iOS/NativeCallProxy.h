@@ -4,7 +4,7 @@
 #import <Foundation/Foundation.h>
 
 // NativeCallsProtocol defines protocol with methods you want to be called from managed
-@protocol NativeCallsProtocol
+@protocol NativeCallsProtocol <NSObject> 
 @required
 - (void) showHostMainWindow:(NSString*)msg;
 - (NSString*) getAppData:(NSString*)key;
@@ -16,4 +16,3 @@ __attribute__ ((visibility("default")))
 +(void) registerAPIforNativeCalls:(id<NativeCallsProtocol>) aApi;
 
 @end
-
