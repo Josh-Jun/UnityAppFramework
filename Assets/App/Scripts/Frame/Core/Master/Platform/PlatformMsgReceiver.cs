@@ -18,16 +18,23 @@ namespace App.Core.Master
 
         public void Init()
         {
-            
+            #if UNITY_IOS && !UNITY_EDITOR
+            AddEventMsg<string>(iOSPermissions.Camera, code => { PermissionCallbacks(iOSPermissions.Camera, int.Parse(code)); });
+            AddEventMsg<string>(iOSPermissions.Photo, code => { PermissionCallbacks(iOSPermissions.Photo, int.Parse(code)); });
+            AddEventMsg<string>(iOSPermissions.Microphone, code => { PermissionCallbacks(iOSPermissions.Microphone, int.Parse(code)); });
+            AddEventMsg<string>(iOSPermissions.Networking, code => { PermissionCallbacks(iOSPermissions.Networking, int.Parse(code)); });
+            #endif
         }
-
-        public void AndroidPermissionCallbacks(string permission, int code)
+        public void PermissionCallbacks(string permission, int code)
         {
-            
-        }
-        public void iOSPermissionCallbacks(string msg)
-        {
-            
+            if (HasEvent(permission))
+            {
+                SendEventMsg(permission, code);
+            }
+            else
+            {
+                Log.W($"PermissionCallbacks: not found permission event: {permission}, code: {code}");
+            }
         }
 
         public void ReceiveNativeMsg(string msg)

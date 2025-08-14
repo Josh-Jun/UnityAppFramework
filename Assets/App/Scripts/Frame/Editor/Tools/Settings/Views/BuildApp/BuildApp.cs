@@ -5,7 +5,7 @@ using App.Editor.Helper;
 using App.Runtime.Helper;
 using HybridCLR.Editor;
 using HybridCLR.Editor.Commands;
-using SRDebugger;
+using SRDebugger.Editor;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -153,13 +153,11 @@ namespace App.Editor.View
             EditorUtility.SetDirty(AppConfig);
         }
 
-        private const string DebugConfigPath = "Assets/App/Packages/StompyRobot/SRDebugger/usr/Resources/SRDebugger/Settings.asset";
         private static void SetBuildSetting()
         {
             var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>(EditorHelper.AppConfigPath);
             EditorUserBuildSettings.development = appConfig.DevelopmentMold != DevelopmentMold.Release;
-            var debugConfig = AssetDatabase.LoadAssetAtPath<Settings>(DebugConfigPath);
-            debugConfig.IsEnabled = appConfig.DevelopmentMold != DevelopmentMold.Release;
+            SRDebugEditor.SetEnabled(appConfig.DevelopmentMold != DevelopmentMold.Release);
             if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android)
             {
                 PlayerSettings.Android.keystorePass = "123456";
