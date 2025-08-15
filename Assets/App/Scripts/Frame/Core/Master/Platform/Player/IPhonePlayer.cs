@@ -32,7 +32,6 @@ namespace App.Core.Master
             get
             {
 #if UNITY_IOS && !UNITY_EDITOR
-                if(!TouchScreenKeyboard.visible) return 0;
                 return (int)TouchScreenKeyboard.area.height;
 #endif
                 return 0;
