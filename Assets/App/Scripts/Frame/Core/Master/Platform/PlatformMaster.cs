@@ -43,7 +43,6 @@ namespace App.Core.Master
         public abstract string Name { get; }
         public abstract string PlatformName { get; }
         public abstract void SendMsgToNative(string msg);
-        public abstract int KeyboardHeight { get; }
         public abstract int GetNetSignal();
         public abstract void Vibrate();
         public abstract void RequestUserPermission(string permission);

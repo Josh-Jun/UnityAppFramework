@@ -50,17 +50,6 @@ namespace App.Core.Master
             PlatformMsgReceiver.Instance.PermissionCallbacks(permission, -1);
         }
 
-        public override int KeyboardHeight
-        {
-            get
-            {
-#if UNITY_ANDROID && !UNITY_EDITOR
-                return JavaObject(AppToolsPackage).CallStatic<int>("getKeyboardHeight");
-#endif
-                return 0;
-            }
-        }
-
         public override void RequestUserPermission(string permission)
         {
             Log.I("RequestUserPermission", ("Permission", permission));

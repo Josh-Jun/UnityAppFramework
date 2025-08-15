@@ -16,8 +16,6 @@ namespace App.Core.Master
             return 0;
         }
 
-        public override int KeyboardHeight => 0;
-
         public override void OpenAppSetting()
         {
             Log.I("OpenAppSetting Editor");

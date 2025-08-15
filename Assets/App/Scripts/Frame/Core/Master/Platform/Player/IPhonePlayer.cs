@@ -27,17 +27,6 @@ namespace App.Core.Master
         public override string Name { get; } = "iOS";
         public override string PlatformName { get; } = "ios";
 
-        public override int KeyboardHeight
-        {
-            get
-            {
-#if UNITY_IOS && !UNITY_EDITOR
-                return (int)TouchScreenKeyboard.area.height;
-#endif
-                return 0;
-            }
-        }
-
         public IPhonePlayer()
         {
             PlatformMsgReceiver.Instance.Init();
