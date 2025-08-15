@@ -111,9 +111,10 @@ namespace App.Core.Master
         {
             var go = AssetsMaster.Instance.LoadAssetSync<GameObject>(attribute.Location);
             if (!go) return null;
+            var layer = Mathf.Clamp(attribute.Layer, 0, UIPanels.Count - 1);
             var parent = attribute.View switch
             {
-                ViewMold.UI2D => UIPanels[attribute.Layer],
+                ViewMold.UI2D => UIPanels[layer],
                 ViewMold.UI3D => UI3DRectTransform,
                 ViewMold.Go3D => GoRoot,
                 _ => throw new ArgumentOutOfRangeException(nameof(attribute.View), attribute.View, null)
@@ -346,6 +347,12 @@ namespace App.Core.Master
             return ViewPairs.Values.ToList();
         }
 
+        /// <summary>
+        /// 0:上下左右
+        /// 1:左右
+        /// 2:上下
+        /// 3:无
+        /// </summary>
         public void SafeAreaAdjuster()
         {
             UI2DCanvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
@@ -359,7 +366,16 @@ namespace App.Core.Master
 
             UISafeArea2D.offsetMin = new Vector2(leftPixels, bottomPixels);
             UISafeArea2D.offsetMax = new Vector2(rightPixel, topPixel);
+            
+            // 左右匹配安全区域
+            UIPanels[^3].offsetMin = new Vector2(leftPixels, -bottomPixels);
+            UIPanels[^3].offsetMax = new Vector2(rightPixel, -topPixel);
+            
+            // 上下匹配安全区域
+            UIPanels[^2].offsetMin = new Vector2(-leftPixels, bottomPixels);
+            UIPanels[^2].offsetMax = new Vector2(-rightPixel, topPixel);
 
+            // 不匹配安全区域
             UIPanels[^1].offsetMin = new Vector2(-leftPixels, -bottomPixels);
             UIPanels[^1].offsetMax = new Vector2(-rightPixel, -topPixel);
         }

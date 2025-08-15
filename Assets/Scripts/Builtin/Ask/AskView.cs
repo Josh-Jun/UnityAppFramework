@@ -10,7 +10,7 @@ using TMPro;
 
 namespace App.Modules
 {
-    [ViewOf("Ask", ViewMold.UI2D, AssetPath.AskView, false, 2)]
+    [ViewOf("Ask", ViewMold.UI2D, AssetPath.AskView, false, 3)]
     public class AskView : ViewBase
     {
 		private RectTransform backgroundrecttransform;
