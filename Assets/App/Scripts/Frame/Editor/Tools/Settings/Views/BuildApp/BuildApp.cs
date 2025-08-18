@@ -95,16 +95,26 @@ namespace App.Editor.View
                 outputPath = output_path.value;
             };
             root.Q<Button>("ApplyConfig").clicked += Apply;
-            root.Q<Button>("GenerateAndCopyDll").clicked += GenerateAndCopyDll;
+            root.Q<Button>("GenerateAndCopyDll").clicked += () =>
+            {
+                SetBuildSetting();
+                GenerateAndCopyDll();
+            };
             root.Q<Button>("BuildAsset").clicked += BuildAssets;
-            root.Q<Button>("BuildApp").clicked += Build;
+            root.Q<Button>("BuildApp").clicked += () =>
+            {
+                SetBuildSetting();
+                Build();
+            };
             root.Q<Button>("OnlyBuildAsset").clicked += () =>
             {
+                SetBuildSetting();
                 GenerateAndCopyDll();
                 BuildAssets();
             };
             root.Q<Button>("OneKeyBuild").clicked += () =>
             {
+                SetBuildSetting();
                 GenerateAndCopyDll();
                 BuildAssets();
                 Build();
@@ -364,7 +374,6 @@ namespace App.Editor.View
 
         private static void GenerateAndCopyDll()
         {
-            SetBuildSetting();
             var buildTarget = EditorUserBuildSettings.activeBuildTarget;
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
             PrebuildCommand.GenerateAll();
