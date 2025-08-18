@@ -222,8 +222,6 @@ namespace App.Editor.View
             
             EditorUserBuildSettings.SwitchActiveBuildTarget(EditorUserBuildSettings.selectedBuildTargetGroup,
                 EditorUserBuildSettings.activeBuildTarget);
-            
-            SetBuildSetting();
 
             var outputPath = Application.dataPath.Replace("Assets", "App");;
             if (!Directory.Exists(outputPath))
@@ -366,6 +364,7 @@ namespace App.Editor.View
 
         private static void GenerateAndCopyDll()
         {
+            SetBuildSetting();
             var buildTarget = EditorUserBuildSettings.activeBuildTarget;
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
             PrebuildCommand.GenerateAll();
@@ -479,6 +478,8 @@ namespace App.Editor.View
             // 保存AppConfig
             EditorUtility.SetDirty(appConfig);
             AssetDatabase.Refresh();
+            
+            SetBuildSetting();
 
             // 开始构建
             if (buildMold is BuildMold.All or BuildMold.Assets)
