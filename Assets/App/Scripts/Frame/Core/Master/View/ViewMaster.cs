@@ -125,6 +125,7 @@ namespace App.Core.Master
             view.name = view.name.Replace("(Clone)", "");
             var vb = view.AddComponent(type) as ViewBase;
             view.SetActive(false);
+            ViewPairs.Add(type.FullName!, vb);
             if(attribute.Active) vb?.OpenView();
             return vb;
         }
@@ -309,8 +310,7 @@ namespace App.Core.Master
                 var obj = type.GetCustomAttributes(typeof(ViewOfAttribute), false).FirstOrDefault();
                 if (obj is not ViewOfAttribute attribute) continue;
                 if (!AppHelper.GetBoolData(attribute.Name)) continue;
-                var view = CreateView(type, attribute);
-                ViewPairs.Add(type.FullName!, view);
+                CreateView(type, attribute);
             }
             InitRedDotView();
         }
@@ -338,7 +338,6 @@ namespace App.Core.Master
             var attribute = new ViewOfAttribute(viewName, mold, location, state, layer);
             if (!AppHelper.GetBoolData(attribute.Name)) return null;
             var view = CreateView(type, attribute);
-            ViewPairs.Add(type.FullName!, view);
             return view as T;
         }
 
@@ -478,7 +477,6 @@ namespace App.Core.Master
             var scriptName = type.Namespace == string.Empty ? type.Name : type.FullName;
             if (ViewPairs.ContainsKey(scriptName!)) return ViewPairs[scriptName] as T;
             var view = CreateView(type, attribute);
-            ViewPairs.Add(scriptName!, view);
             return view as T;
         }
 
@@ -495,7 +493,6 @@ namespace App.Core.Master
             if (!AppHelper.GetBoolData(attribute.Name)) return null;
             if (ViewPairs.ContainsKey(scriptName!)) return ViewPairs[scriptName];
             var view = CreateView(type, attribute);
-            ViewPairs.Add(scriptName!, view);
             return view;
         }
 
