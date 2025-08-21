@@ -8,15 +8,15 @@ using UnityEngine.UI;
 
 namespace App.Modules
 {
-    [LogicOf("#NAME#", AssetPath.Global)]
+    [LogicOf("#MODULE#", AssetPath.Global)]
     public class #SCRIPTNAME# : EventBase, ILogic
     {
-        private #NAME#View View => ViewMaster.Instance.GetView<#NAME#View>();
+        private #MODULE#View View => ViewMaster.Instance.GetView<#MODULE#View>();
         
         public #SCRIPTNAME#()
         {
-	        AddEventMsg<object>("Open#NAME#View", Open#NAME#View);
-	        AddEventMsg("Close#NAME#View", Close#NAME#View);
+	        AddEventMsg<object>("Open#MODULE#View", Open#MODULE#View);
+	        AddEventMsg("Close#MODULE#View", Close#MODULE#View);
 #EVENT#
         }
         
@@ -54,11 +54,11 @@ namespace App.Modules
 
         #region View Logic
         
-        private void Open#NAMESPACE#View(object obj)
+        private void Open#MODULE#View(object obj)
         {
             
         }
-        private void Close#NAMESPACE#View()
+        private void Close#MODULE#View()
         {
 	        
         }

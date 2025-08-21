@@ -10,7 +10,7 @@ using TMPro;
 
 namespace App.Modules
 {
-    [ViewOf("#NAME#", ViewMold.UI2D, AssetPath.#SCRIPTNAME#, false, 0)]
+    [ViewOf("#MODULE#", ViewMold.UI2D, AssetPath.#SCRIPTNAME#, false, 0)]
     public class #SCRIPTNAME# : ViewBase
     {
         protected override void InitView()

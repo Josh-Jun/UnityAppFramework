@@ -53,7 +53,7 @@ namespace App.Editor.Tools
                         name = name.Replace(temps[i], "");
                     }
 
-                    scriptContent = scriptContent.Replace("#NAME#", name);
+                    scriptContent = scriptContent.Replace("#MODULE#", name);
                     scriptContent = scriptContent.Insert(0, head.ToString());
 
                     File.WriteAllText(realPath, scriptContent);
