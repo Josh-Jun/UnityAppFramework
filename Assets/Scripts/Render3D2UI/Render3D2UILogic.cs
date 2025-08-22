@@ -22,10 +22,6 @@ namespace App.Modules
     {
         public GameObject gameObject;
         public RawImage image;
-
-        public Vector3 position; // 模型位置
-        public Quaternion rotation; // 模型旋转
-
         public Vector3 cameraOffset; // 相机偏移
         public Vector3 cameraAngle; // 相机角度
 
@@ -52,7 +48,7 @@ namespace App.Modules
 
         public void Begin()
         {
-
+            
         }
         public void End()
         {
@@ -108,7 +104,7 @@ namespace App.Modules
                     if (_renderData.isOffsetY)
                     {
                         model.transform.localPosition -= Vector3.up * difference * 0.15f;
-                        model.transform.localPosition = Vector3.up * Mathf.Clamp(model.transform.localPosition.y, -1003f, -1000f);
+                        model.transform.localPosition = Vector3.up * Mathf.Clamp(model.transform.localPosition.y, -3f, 0f);
                     }
                 }
             }
@@ -126,7 +122,7 @@ namespace App.Modules
                 if (_renderData.isOffsetY)
                 {
                     View.ModelTransform.GetChild(0).localPosition -= Vector3.up * scale * 1.5f;
-                    View.ModelTransform.GetChild(0).localPosition = Vector3.up * Mathf.Clamp(View.ModelTransform.GetChild(0).localPosition.y, -1003f, -1000f);
+                    View.ModelTransform.GetChild(0).localPosition = Vector3.up * Mathf.Clamp(View.ModelTransform.GetChild(0).localPosition.y, -3f, -0f);
                 }
             }
         }
@@ -142,6 +138,7 @@ namespace App.Modules
 
         private void OpenRender3D2UIView(object obj)
         {
+            View.transform.localPosition = Vector3.down * 1000f;
             View.RenderCamera.SetGameObjectActive();
 
             if (obj is RenderData data)
@@ -156,12 +153,12 @@ namespace App.Modules
                 View.RenderCamera.clearFlags = CameraClearFlags.SolidColor;
                 View.RenderCamera.backgroundColor = Color.clear;
                 View.RenderCamera.orthographic = data.orthographic;
-                View.RenderCamera.transform.SetLocalPositionAndRotation(data.position + data.cameraOffset, Quaternion.Euler(data.cameraAngle));
+                View.RenderCamera.transform.SetLocalPositionAndRotation(data.cameraOffset, Quaternion.Euler(data.cameraAngle));
                 View.RenderCamera.Render();
                 View.OpenView();
                 // 模型设置位置
                 data.gameObject.transform.SetParent(View.ModelTransform);
-                data.gameObject.transform.SetLocalPositionAndRotation(data.position, data.rotation);
+                data.gameObject.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
                 data.image.texture = RenderTexture;
                 // 事件绑定
                 EventListener.Get(data.image).onDrag = (go, delta) => { OnDragModel(data.gameObject, delta); };
