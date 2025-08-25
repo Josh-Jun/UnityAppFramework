@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using App.Core.Helper;
-using App.Core.Tools;
 using App.Editor.Helper;
 using UnityEditor;
 using UnityEngine;
@@ -391,7 +390,7 @@ namespace App.Editor.View
                 {
                     if (string.IsNullOrEmpty(value))
                     {
-                        sb.Append("{{\"x\":{0},\"y\":{0},\"z\":{0}}}");
+                        sb.Append("{\"x\":0,\"y\":0,\"z\":0}");
                     }
                     else
                     {
