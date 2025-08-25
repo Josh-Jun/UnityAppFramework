@@ -37,7 +37,7 @@ namespace UnityEngine.UI
         {
             this.InputField.onValueChanged.AddListener(OnValueChanged);
         }
-        
+
         private float _originalWidth;
         private float _originalHeight;
         private TMP_InputField _inputField;
@@ -51,6 +51,7 @@ namespace UnityEngine.UI
             this._originalWidth = this.GetComponent<RectTransform>().sizeDelta.x - Mathf.Abs(ViewRect.offsetMax.x) - Mathf.Abs(ViewRect.offsetMin.x);
             this._originalHeight = this.GetComponent<RectTransform>().sizeDelta.y;
             RectTransform.SetSizeWithCurrentAnchors((RectTransform.Axis)1, LayoutUtility.GetPreferredHeight(_mRect));
+            InputField.verticalScrollbar.gameObject.SetActive(false);
         }
 
         private string Text => this.GetComponent<TMP_InputField>().text;
@@ -99,6 +100,8 @@ namespace UnityEngine.UI
             {
                 if (string.IsNullOrEmpty(Text))
                 {
+                    if (InputField.verticalScrollbar)
+                        InputField.verticalScrollbar.gameObject.SetActive(false);
                     return _originalHeight;
                 }
                 var offset = Mathf.Abs(ViewRect.offsetMax.y) + Mathf.Abs(ViewRect.offsetMin.y);
@@ -112,6 +115,8 @@ namespace UnityEngine.UI
                     height = TextComponent.preferredHeight + offset;
                 }
                 var result = Mathf.Clamp(height, _originalHeight, maxHeight);
+                if (InputField.verticalScrollbar)
+                    InputField.verticalScrollbar.gameObject.SetActive(result >= maxHeight);
                 return result;
             }
         }

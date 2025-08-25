@@ -7,7 +7,7 @@ namespace App.Core.Master
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [Serializable]
-    public class HttpsRequestResult<T>
+    public class HttpsResponse<T>
     {
         public int code; // 请求状态码
         public string msg; // 请求状态消息
