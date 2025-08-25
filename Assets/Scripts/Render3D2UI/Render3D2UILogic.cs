@@ -27,6 +27,7 @@ namespace App.Modules
 
         public bool orthographic; // 相机是否是2D相机
 
+        public bool canRotate; // 是否可以旋转
         public bool canScale; // 是否可以缩放
         public bool isOffsetY; // 是否偏移Y轴
     }
@@ -42,6 +43,9 @@ namespace App.Modules
         {
             AddEventMsg<object>("OpenRender3D2UIView", OpenRender3D2UIView);
             AddEventMsg("CloseRender3D2UIView", CloseRender3D2UIView);
+
+            AddEventMsg<bool>("SetRotationEnable", SetRotationEnable);
+            AddEventMsg<bool>("SetScaleEnable", SetScaleEnable);
         }
 
         #region Life Cycle
@@ -72,6 +76,16 @@ namespace App.Modules
 
         #region Logic
 
+        public void SetRotationEnable(bool enable)
+        {
+            _renderData.canRotate = enable;
+        }
+
+        public void SetScaleEnable(bool enable)
+        {
+            _renderData.canScale = enable;
+        }
+
         private RenderData _renderData;
 
         private const float RotateSpeed = 40;
@@ -85,7 +99,10 @@ namespace App.Modules
             // 单指旋转
             if (touchCount == 1)
             {
-                model.transform.Rotate(0, -delta.x * RotateSpeed * Time.deltaTime, 0);
+                if (_renderData.canRotate)
+                {
+                    model.transform.Rotate(0, -delta.x * RotateSpeed * Time.deltaTime, 0);
+                }
             }
             // 双指缩放
             if (touchCount == 2)
@@ -99,11 +116,11 @@ namespace App.Modules
                     var prevMagnitude = (touchZeroPrev - touchOnePrev).magnitude;
                     var currentMagnitude = (touchZero.position - touchOne.position).magnitude;
                     var difference = currentMagnitude - prevMagnitude;
-                    model.transform.localScale += Vector3.one * difference * 0.1f;
+                    model.transform.localScale += Vector3.one * difference * 0.005f;
                     model.transform.localScale = Vector3.one * Mathf.Clamp(model.transform.localScale.x, 1f, 3f);
                     if (_renderData.isOffsetY)
                     {
-                        model.transform.localPosition -= Vector3.up * difference * 0.15f;
+                        model.transform.localPosition -= Vector3.up * difference * 0.0075f;
                         model.transform.localPosition = Vector3.up * Mathf.Clamp(model.transform.localPosition.y, -3f, 0f);
                     }
                 }
