@@ -32,8 +32,8 @@ namespace App.Core.Master
             var uri = new Uri(url);
             _clientWebSocket.ConnectAsync(uri, _cancellationToken.Token).ContinueWith(async t =>
             {
-                callback?.Invoke();
                 _isConnecting = true;
+                callback?.Invoke();
                 await Receive();
             });
         }
@@ -51,7 +51,6 @@ namespace App.Core.Master
             UniTask.Void(async () =>
             {
                 if (!_isConnecting) return;
-                if (_clientWebSocket.State != WebSocketState.Open) return;
                 var bytes = Encoding.UTF8.GetBytes(msg);
                 var array = new ArraySegment<byte>(bytes);
                 await _clientWebSocket.SendAsync(array, WebSocketMessageType.Text, true, _cancellationToken.Token);
@@ -63,7 +62,6 @@ namespace App.Core.Master
             UniTask.Void(async () =>
             {
                 if (!_isConnecting) return;
-                if (_clientWebSocket.State != WebSocketState.Open) return;
                 if (bytes == null || bytes.Length <= 0) return;
                 var array = new ArraySegment<byte>(bytes);
                 await _clientWebSocket.SendAsync(array, WebSocketMessageType.Binary, true, _cancellationToken.Token);
