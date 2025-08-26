@@ -23,64 +23,50 @@ namespace App.Core.Master
             base.OnSingletonMonoInit();
         }
 
-        private TimerData timeData;
-
         private void Update()
         {
             if (timerPairs.ContainsKey(UpdateMold.Update))
             {
-                if (timerPairs[UpdateMold.Update].Count > 0)
+                var timers = timerPairs[UpdateMold.Update];
+                foreach (var timer in timers)
                 {
-                    for (int i = 0, length = timerPairs[UpdateMold.Update].Count; i < length; i++)
+                    if (timer.isTime)
                     {
-                        timeData = timerPairs[UpdateMold.Update][i];
-                        if (timeData.isTime)
-                        {
-                            timeData.addTime += Time.deltaTime;
-                            timeData.cb(timeData.addTime);
-                        }
+                        timer.addTime += Time.deltaTime;
+                        timer.cb(timer.addTime);
                     }
                 }
             }
         }
-
-        private TimerData fixedTimerData;
 
         private void FixedUpdate()
         {
             if (timerPairs.ContainsKey(UpdateMold.FixedUpdate))
             {
-                if (timerPairs[UpdateMold.FixedUpdate].Count > 0)
+                var timers = timerPairs[UpdateMold.FixedUpdate];
+                foreach (var timer in timers)
                 {
-                    for (int i = 0, length = timerPairs[UpdateMold.FixedUpdate].Count; i < length; i++)
+                    if (timer.isTime)
                     {
-                        fixedTimerData = timerPairs[UpdateMold.FixedUpdate][i];
-                        if (fixedTimerData.isTime)
-                        {
-                            fixedTimerData.addTime += Time.fixedDeltaTime;
-                            var time = (float)Math.Round(fixedTimerData.addTime, 2, MidpointRounding.AwayFromZero);
-                            fixedTimerData.cb(time);
-                        }
+                        timer.addTime += Time.fixedDeltaTime;
+                        var time = (float)Math.Round(timer.addTime, 2, MidpointRounding.AwayFromZero);
+                        timer.cb(time);
                     }
                 }
             }
         }
 
-        private TimerData lateTimeData;
         private void LateUpdate()
         {
             if (timerPairs.ContainsKey(UpdateMold.LateUpdate))
             {
-                if (timerPairs[UpdateMold.LateUpdate].Count > 0)
+                var timers = timerPairs[UpdateMold.LateUpdate];
+                foreach (var timer in timers)
                 {
-                    for (int i = 0, length = timerPairs[UpdateMold.LateUpdate].Count; i < length; i++)
+                    if (timer.isTime)
                     {
-                        lateTimeData = timerPairs[UpdateMold.LateUpdate][i];
-                        if (lateTimeData.isTime)
-                        {
-                            lateTimeData.addTime += Time.deltaTime;
-                            lateTimeData.cb(timeData.addTime);
-                        }
+                        timer.addTime += Time.deltaTime;
+                        timer.cb(timer.addTime);
                     }
                 }
             }
@@ -97,7 +83,7 @@ namespace App.Core.Master
                 addTime = 0,
                 cb = cb,
             };
-            
+
             if (timerPairs.TryGetValue(updateMold, value: out var pair))
             {
                 pair.Add(timer);
