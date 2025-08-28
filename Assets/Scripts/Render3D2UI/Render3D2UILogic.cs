@@ -30,6 +30,7 @@ namespace App.Modules
         public bool canRotate; // 是否可以旋转
         public bool canScale; // 是否可以缩放
         public bool isOffsetY; // 是否偏移Y轴
+        public bool isClear = true; // 是否删除
     }
 
     [LogicOf("Render3D2UI", AssetPath.Global)]
@@ -194,9 +195,12 @@ namespace App.Modules
             View.RenderCamera.SetGameObjectActive(false);
             View.RenderCamera.targetTexture = null;
             RenderTexture.ReleaseTemporary(RenderTexture);
-            foreach (Transform child in View.ModelTransform)
+            if (_renderData.isClear)
             {
-                UnityEngine.Object.Destroy(child.gameObject);
+                foreach (Transform child in View.ModelTransform)
+                {
+                    UnityEngine.Object.Destroy(child.gameObject);
+                }
             }
 #if UNITY_EDITOR
             TimeUpdateMaster.Instance.EndTimer(_timeId);
