@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using App.Core.Helper;
 using App.Core.Master;
 using App.Core.Tools;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -45,15 +46,18 @@ namespace App.Modules
             AddEventMsg<object>("OpenRender3D2UIView", OpenRender3D2UIView);
             AddEventMsg("CloseRender3D2UIView", CloseRender3D2UIView);
 
-            AddEventMsg<bool>("SetRotationEnable", SetRotationEnable);
-            AddEventMsg<bool>("SetScaleEnable", SetScaleEnable);
+            AddEventMsg<bool>("SetRenderRotationEnable", SetRenderRotationEnable);
+            AddEventMsg<bool>("SetRenderScaleEnable", SetRenderScaleEnable);
+
+            AddEventMsg<Vector3, float, Action>("SetRenderCameraOffsetAnimation", SetRenderCameraOffsetAnimation);
+            AddEventMsg<Vector3>("SetRenderCameraOffset", SetRenderCameraOffset);
         }
 
         #region Life Cycle
 
         public void Begin()
         {
-            
+
         }
         public void End()
         {
@@ -77,12 +81,22 @@ namespace App.Modules
 
         #region Logic
 
-        public void SetRotationEnable(bool enable)
+        public void SetRenderCameraOffsetAnimation(Vector3 offset, float time, Action callback)
+        {
+            View.RenderCamera.transform.DOLocalMove(offset, time).SetEase(Ease.OutExpo).OnComplete(() => { callback?.Invoke(); });
+        }
+
+        public void SetRenderCameraOffset(Vector3 offset)
+        {
+            View.RenderCamera.transform.localPosition = offset;
+        }
+
+        public void SetRenderRotationEnable(bool enable)
         {
             _renderData.canRotate = enable;
         }
 
-        public void SetScaleEnable(bool enable)
+        public void SetRenderScaleEnable(bool enable)
         {
             _renderData.canScale = enable;
         }
@@ -133,6 +147,7 @@ namespace App.Modules
         {
             if (_renderData.canScale)
             {
+                if (View.ModelTransform.childCount <= 0) return;
                 var scale = Input.GetAxis("Mouse ScrollWheel");
                 View.ModelTransform.GetChild(0).localScale += Vector3.one * scale * 1f;
                 View.ModelTransform.GetChild(0).localScale = Vector3.one * Mathf.Clamp(View.ModelTransform.GetChild(0).localScale.x, 1f, 3f);
@@ -156,7 +171,7 @@ namespace App.Modules
 
         private void OpenRender3D2UIView(object obj)
         {
-            View.transform.localPosition = Vector3.down * 1000f;
+            // View.transform.localPosition = Vector3.down * 1000f;
             View.RenderCamera.SetGameObjectActive();
 
             if (obj is RenderData data)
