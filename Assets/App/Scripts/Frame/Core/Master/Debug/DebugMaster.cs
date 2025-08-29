@@ -13,7 +13,9 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using App.Core.Tools;
+#if DEVELOPMENT_BUILD
 using SRF.Service;
+#endif
 using UnityEngine;
 
 namespace App.Core.Master
@@ -33,7 +35,9 @@ namespace App.Core.Master
         
         private void Awake()
         {
+#if DEVELOPMENT_BUILD
             SRServiceManager.GetService<SRDebugger.Internal.InternalOptionsRegistry>().AddOptionContainer(GM.Current);
+#endif
             LogFilePath = PlatformMaster.Instance.GetDataPath("Logs");
             StringBuilderPool = new ObjectPool<StringBuilder>(() => new StringBuilder());
             LogBuilder = StringBuilderPool.Get();

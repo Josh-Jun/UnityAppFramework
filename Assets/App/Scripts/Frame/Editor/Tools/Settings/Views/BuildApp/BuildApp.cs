@@ -168,6 +168,26 @@ namespace App.Editor.View
             var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>(EditorHelper.AppConfigPath);
             EditorUserBuildSettings.development = appConfig.DevelopmentMold != DevelopmentMold.Release;
             SRDebugEditor.SetEnabled(appConfig.DevelopmentMold != DevelopmentMold.Release);
+            
+            PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup, out var defines);
+            var list = new List<string>();
+            list.AddRange(defines);
+            if (appConfig.DevelopmentMold != DevelopmentMold.Release)
+            {
+                if (!list.Contains("DEVELOPMENT_BUILD"))
+                {
+                    list.Add("DEVELOPMENT_BUILD");
+                }
+            }
+            else
+            {
+                if (list.Contains("DEVELOPMENT_BUILD"))
+                {
+                    list.Remove("DEVELOPMENT_BUILD");
+                }
+            }
+            
+            PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup, list.ToArray());
             if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android)
             {
                 PlayerSettings.Android.keystorePass = "123456";

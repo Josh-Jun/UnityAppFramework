@@ -7,6 +7,7 @@
  * ===============================================
  * */
 
+# if DEVELOPMENT_BUILD
 using System.ComponentModel;
 using App.Core.Master;
 
@@ -27,3 +28,4 @@ public partial class GM
         ViewMaster.Instance.CloseView($"App.Modules.{ViewName}View");
     }
 }
+#endif
