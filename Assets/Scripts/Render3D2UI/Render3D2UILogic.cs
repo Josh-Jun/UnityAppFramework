@@ -3,9 +3,10 @@
  * author      : Josh@win
  * e-mail      : shijun_z@163.com
  * create time : 2025年8月4 13:31
- * function    : 
+ * function    :
  * ===============================================
  * */
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,22 +17,19 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 namespace App.Modules
 {
     public class RenderData
     {
-        public GameObject gameObject;
-        public RawImage image;
-        public Vector3 cameraOffset; // 相机偏移
-        public Vector3 cameraAngle; // 相机角度
+        public GameObject Target;
+        public RawImage Image;
+        public Vector3 CameraOffset; // 相机偏移
 
-        public bool orthographic; // 相机是否是2D相机
-
-        public bool canRotate; // 是否可以旋转
-        public bool canScale; // 是否可以缩放
-        public bool isOffsetY; // 是否偏移Y轴
-        public bool isClear = true; // 是否删除
+        public bool CanRotate; // 是否可以旋转
+        public bool CanScale; // 是否可以缩放
+        public bool PreserveComposition; // 保持中间显示
     }
 
     [LogicOf("Render3D2UI", AssetPath.Global)]
@@ -48,57 +46,42 @@ namespace App.Modules
 
             AddEventMsg<bool>("SetRenderRotationEnable", SetRenderRotationEnable);
             AddEventMsg<bool>("SetRenderScaleEnable", SetRenderScaleEnable);
-
-            AddEventMsg<Vector3, float, Action>("SetRenderCameraOffsetAnimation", SetRenderCameraOffsetAnimation);
-            AddEventMsg<Vector3>("SetRenderCameraOffset", SetRenderCameraOffset);
         }
 
         #region Life Cycle
 
         public void Begin()
         {
-
         }
+
         public void End()
         {
-
         }
 
         public void AppPause(bool pause)
         {
-
         }
+
         public void AppFocus(bool focus)
         {
-
         }
+
         public void AppQuit()
         {
-
         }
 
         #endregion
 
         #region Logic
 
-        public void SetRenderCameraOffsetAnimation(Vector3 offset, float time, Action callback)
+        private void SetRenderRotationEnable(bool enable)
         {
-            View.RenderCamera.transform.DOLocalMove(offset, time).SetEase(Ease.OutExpo).OnComplete(() => { callback?.Invoke(); });
+            _renderData.CanRotate = enable;
         }
 
-        public void SetRenderCameraOffset(Vector3 offset)
+        private void SetRenderScaleEnable(bool enable)
         {
-            View.RenderCamera.transform.localPosition = offset;
-        }
-
-        public void SetRenderRotationEnable(bool enable)
-        {
-            _renderData.canRotate = enable;
-        }
-
-        public void SetRenderScaleEnable(bool enable)
-        {
-            _renderData.canScale = enable;
+            _renderData.CanScale = enable;
         }
 
         private RenderData _renderData;
@@ -107,55 +90,55 @@ namespace App.Modules
 
         private void OnDragModel(GameObject model, Vector2 delta)
         {
-            var touchCount = 1;
 #if !UNITY_EDITOR
-            touchCount = Input.touchCount;
-#endif
-            // 单指旋转
-            if (touchCount == 1)
+            switch (Input.touchCount)
             {
-                if (_renderData.canRotate)
-                {
-                    model.transform.Rotate(0, -delta.x * RotateSpeed * Time.deltaTime, 0);
-                }
-            }
-            // 双指缩放
-            if (touchCount == 2)
-            {
-                if (_renderData.canScale)
-                {
-                    var touchZero = Input.GetTouch(0);
-                    var touchOne = Input.GetTouch(1);
-                    var touchZeroPrev = touchZero.position - touchZero.deltaPosition;
-                    var touchOnePrev = touchOne.position - touchOne.deltaPosition;
-                    var prevMagnitude = (touchZeroPrev - touchOnePrev).magnitude;
-                    var currentMagnitude = (touchZero.position - touchOne.position).magnitude;
-                    var difference = currentMagnitude - prevMagnitude;
-                    model.transform.localScale += Vector3.one * difference * 0.005f;
-                    model.transform.localScale = Vector3.one * Mathf.Clamp(model.transform.localScale.x, 1f, 3f);
-                    if (_renderData.isOffsetY)
+                // 单指旋转
+                case 1:
+                    if (_renderData.CanRotate)
                     {
-                        model.transform.localPosition -= Vector3.up * difference * 0.0075f;
-                        model.transform.localPosition = Vector3.up * Mathf.Clamp(model.transform.localPosition.y, -3f, 0f);
+                        model.transform.Rotate(0, -delta.x * RotateSpeed * Time.deltaTime, 0);
                     }
-                }
+                    break;
+                // 双指缩放
+                case 2:
+                    if (_renderData.CanScale)
+                    {
+                        var touchZero = Input.GetTouch(0);
+                        var touchOne = Input.GetTouch(1);
+                        var touchZeroPrev = touchZero.position - touchZero.deltaPosition;
+                        var touchOnePrev = touchOne.position - touchOne.deltaPosition;
+                        var prevMagnitude = (touchZeroPrev - touchOnePrev).magnitude;
+                        var currentMagnitude = (touchZero.position - touchOne.position).magnitude;
+                        var difference = currentMagnitude - prevMagnitude;
+
+                        View.CinemachineCinemachineFollowZoom.m_Width -= difference * 0.0005f;
+                        View.CinemachineCinemachineFollowZoom.m_Width =
+                            Mathf.Clamp(View.CinemachineCinemachineFollowZoom.m_Width, 3.5f, 11.5f);
+                    }
+
+                    break;
             }
+#endif
         }
 
 #if UNITY_EDITOR
         private void Update(float time)
         {
-            if (_renderData.canScale)
+            if (_renderData.CanScale)
             {
-                if (View.ModelTransform.childCount <= 0) return;
                 var scale = Input.GetAxis("Mouse ScrollWheel");
-                View.ModelTransform.GetChild(0).localScale += Vector3.one * scale * 1f;
-                View.ModelTransform.GetChild(0).localScale = Vector3.one * Mathf.Clamp(View.ModelTransform.GetChild(0).localScale.x, 1f, 3f);
+                View.CinemachineCinemachineFollowZoom.m_Width -= scale * 10f;
+                View.CinemachineCinemachineFollowZoom.m_Width =
+                    Mathf.Clamp(View.CinemachineCinemachineFollowZoom.m_Width, 3.5f, 11.5f);
+            }
 
-                if (_renderData.isOffsetY)
+            if (_renderData.CanRotate)
+            {
+                if (Input.GetMouseButton(0))
                 {
-                    View.ModelTransform.GetChild(0).localPosition -= Vector3.up * scale * 1.5f;
-                    View.ModelTransform.GetChild(0).localPosition = Vector3.up * Mathf.Clamp(View.ModelTransform.GetChild(0).localPosition.y, -3f, -0f);
+                    var delta = Input.GetAxis("Mouse X") * 10f;
+                    _renderData.Target.transform.Rotate(0, -delta * RotateSpeed * Time.deltaTime, 0);
                 }
             }
         }
@@ -171,30 +154,32 @@ namespace App.Modules
 
         private void OpenRender3D2UIView(object obj)
         {
-            // View.transform.localPosition = Vector3.down * 1000f;
             View.RenderCamera.SetGameObjectActive();
-
+            View.CinemachineCinemachineFollowZoom.m_Width = 11.5f;
             if (obj is RenderData data)
             {
                 _renderData = data;
                 // 相机设置
-                var width = (int)data.image.rectTransform.rect.width;
-                var height = (int)data.image.rectTransform.rect.height;
+                var width = (int)data.Image.rectTransform.rect.width;
+                var height = (int)data.Image.rectTransform.rect.height;
                 RenderTexture = RenderTexture.GetTemporary(width, height, 24, RenderTextureFormat.ARGB32);
                 RenderTexture.active = RenderTexture;
+                View.RenderCamera.depth = -99;
                 View.RenderCamera.targetTexture = RenderTexture;
                 View.RenderCamera.clearFlags = CameraClearFlags.SolidColor;
                 View.RenderCamera.backgroundColor = Color.clear;
-                View.RenderCamera.orthographic = data.orthographic;
-                View.RenderCamera.transform.SetLocalPositionAndRotation(data.cameraOffset, Quaternion.Euler(data.cameraAngle));
                 View.RenderCamera.Render();
                 View.OpenView();
-                // 模型设置位置
-                data.gameObject.transform.SetParent(View.ModelTransform);
-                data.gameObject.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-                data.image.texture = RenderTexture;
+                // 设置相机偏移
+                View.CinemachineCinemachineCameraOffset.m_Offset = data.CameraOffset;
+                View.CinemachineCinemachineCameraOffset.m_PreserveComposition = data.PreserveComposition;
+                // 设置相机目标
+                View.CinemachineCinemachineVirtualCamera.Follow = data.Target.transform;
+                View.CinemachineCinemachineVirtualCamera.LookAt = data.Target.transform;
+                // 设置RawImage
+                data.Image.texture = RenderTexture;
                 // 事件绑定
-                EventListener.Get(data.image).onDrag = (go, delta) => { OnDragModel(data.gameObject, delta); };
+                EventListener.Get(data.Image).onDrag = (go, delta) => { OnDragModel(data.Target, delta); };
             }
             else
             {
@@ -204,19 +189,13 @@ namespace App.Modules
             _timeId = TimeUpdateMaster.Instance.StartTimer(Update);
 #endif
         }
+
         private void CloseRender3D2UIView()
         {
             if (!View) return;
             View.RenderCamera.SetGameObjectActive(false);
             View.RenderCamera.targetTexture = null;
             RenderTexture.ReleaseTemporary(RenderTexture);
-            if (_renderData.isClear)
-            {
-                foreach (Transform child in View.ModelTransform)
-                {
-                    UnityEngine.Object.Destroy(child.gameObject);
-                }
-            }
 #if UNITY_EDITOR
             TimeUpdateMaster.Instance.EndTimer(_timeId);
 #endif
