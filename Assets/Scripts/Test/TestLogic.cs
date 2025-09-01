@@ -38,7 +38,8 @@ namespace App.Modules
             {
                 Target = target,
                 Image = View.RawImageRawImage,
-                CameraOffset = Vector3.up,
+                FollowOffset = Vector3.back * 10,
+                LookAtOffset = Vector3.up,
                 CanRotate = true,
                 CanScale = true,
                 PreserveComposition = false,

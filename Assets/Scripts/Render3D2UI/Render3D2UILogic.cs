@@ -25,7 +25,8 @@ namespace App.Modules
     {
         public GameObject Target;
         public RawImage Image;
-        public Vector3 CameraOffset; // 相机偏移
+        public Vector3 FollowOffset; // 跟随偏移
+        public Vector3 LookAtOffset; // 看向偏移
 
         public bool CanRotate; // 是否可以旋转
         public bool CanScale; // 是否可以缩放
@@ -113,8 +114,6 @@ namespace App.Modules
                         var difference = currentMagnitude - prevMagnitude;
 
                         View.CinemachineCinemachineFollowZoom.m_Width -= difference * 0.0005f;
-                        View.CinemachineCinemachineFollowZoom.m_Width =
-                            Mathf.Clamp(View.CinemachineCinemachineFollowZoom.m_Width, 3.5f, 11.5f);
                     }
 
                     break;
@@ -129,8 +128,6 @@ namespace App.Modules
             {
                 var scale = Input.GetAxis("Mouse ScrollWheel");
                 View.CinemachineCinemachineFollowZoom.m_Width -= scale * 10f;
-                View.CinemachineCinemachineFollowZoom.m_Width =
-                    Mathf.Clamp(View.CinemachineCinemachineFollowZoom.m_Width, 3.5f, 11.5f);
             }
 
             if (_renderData.CanRotate)
@@ -171,7 +168,8 @@ namespace App.Modules
                 View.RenderCamera.Render();
                 View.OpenView();
                 // 设置相机偏移
-                View.CinemachineCinemachineCameraOffset.m_Offset = data.CameraOffset;
+                View.CinemachineCinemachineVirtualCamera.GetCinemachineComponent<Cinemachine.CinemachineTransposer>().m_FollowOffset = data.FollowOffset;
+                View.CinemachineCinemachineCameraOffset.m_Offset = data.LookAtOffset;
                 View.CinemachineCinemachineCameraOffset.m_PreserveComposition = data.PreserveComposition;
                 // 设置相机目标
                 View.CinemachineCinemachineVirtualCamera.Follow = data.Target.transform;
