@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using App.Core.Tools;
-#if DEVELOPMENT_BUILD
+#if !DISABLE_SRDEBUGGER
 using SRF.Service;
 #endif
 using UnityEngine;
@@ -35,7 +35,7 @@ namespace App.Core.Master
         
         private void Awake()
         {
-#if DEVELOPMENT_BUILD
+#if !DISABLE_SRDEBUGGER
             SRServiceManager.GetService<SRDebugger.Internal.InternalOptionsRegistry>().AddOptionContainer(GM.Current);
 #endif
             LogFilePath = PlatformMaster.Instance.GetDataPath("Logs");

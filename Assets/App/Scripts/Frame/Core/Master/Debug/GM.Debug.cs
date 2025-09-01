@@ -7,7 +7,7 @@
  * ===============================================
  * */
 
-# if DEVELOPMENT_BUILD
+#if !DISABLE_SRDEBUGGER
 using System.ComponentModel;
 using App.Core.Master;
 

@@ -792,7 +792,7 @@ PlayerSettings:
   webGLPowerPreference: 2
   scriptingDefineSymbols:
     : HOTFIX_ENABLE
-    Android: DOTWEEN
+    Android: DOTWEEN;DEVELOPMENT_BUILD
     EmbeddedLinux: DOTWEEN
     GameCoreScarlett: DOTWEEN
     GameCoreXboxOne: DOTWEEN
