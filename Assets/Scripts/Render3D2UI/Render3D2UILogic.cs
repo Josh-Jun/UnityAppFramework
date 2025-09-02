@@ -47,6 +47,9 @@ namespace App.Modules
 
             AddEventMsg<bool>("SetRenderRotationEnable", SetRenderRotationEnable);
             AddEventMsg<bool>("SetRenderScaleEnable", SetRenderScaleEnable);
+
+            AddEventMsg<Vector3>("SetRenderFollowOffset", SetFollowOffset);
+            AddEventMsg<Vector3>("SetRenderLookAtOffset", SetLookAtOffset);
         }
 
         #region Life Cycle
@@ -74,6 +77,26 @@ namespace App.Modules
         #endregion
 
         #region Logic
+
+        private void SetFollowOffset(Vector3 offset)
+        {
+            _renderData.FollowOffset = offset;
+            var followOffset = View.CinemachineCinemachineVirtualCamera.GetCinemachineComponent<Cinemachine.CinemachineTransposer>().m_FollowOffset;
+            DOTween.To(() => followOffset, x => followOffset = x, offset, 0.3f).OnUpdate(() =>
+            {
+                View.CinemachineCinemachineVirtualCamera.GetCinemachineComponent<Cinemachine.CinemachineTransposer>().m_FollowOffset = followOffset;
+            });
+        }
+
+        private void SetLookAtOffset(Vector3 offset)
+        {
+            _renderData.LookAtOffset = offset;
+            var lookAtOffset = View.CinemachineCinemachineCameraOffset.m_Offset;
+            DOTween.To(() => lookAtOffset, x => lookAtOffset = x, offset, 0.3f).OnUpdate(() =>
+            {
+                View.CinemachineCinemachineCameraOffset.m_Offset = lookAtOffset;
+            });
+        }
 
         private void SetRenderRotationEnable(bool enable)
         {
