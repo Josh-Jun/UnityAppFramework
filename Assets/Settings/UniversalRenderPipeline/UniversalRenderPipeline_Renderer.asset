@@ -87,6 +87,7 @@ MonoBehaviour:
   downsample: 2
   iterations: 6
   scale: 0.5
+  colorPower: 1
   scaleBlurWith: 0
   scaleReferenceSize: 1080
   shader: {fileID: 4800000, guid: bb11bdc2e8aaf4c80b5315f3778d7ad4, type: 3}
