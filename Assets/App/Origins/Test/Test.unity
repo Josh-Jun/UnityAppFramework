@@ -1481,6 +1481,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Render3D2UIView
       objectReference: {fileID: 0}
+    - target: {fileID: 3080910948601912163, guid: 756f575144edde94ea0b25e34ca5597a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5313004112224378707, guid: 756f575144edde94ea0b25e34ca5597a,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -3869,7 +3874,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1628091437}
   m_CullTransparentMesh: 1
---- !u!21 &1690890522
+--- !u!21 &1699974947
 Material:
   serializedVersion: 8
   m_ObjectHideFlags: 0
@@ -4183,7 +4188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41439ebecaba340f98ddae1f9be0f044, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 1690890522}
+  m_Material: {fileID: 1699974947}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -4680,7 +4685,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2088480741
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4859,6 +4864,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TestView
+      objectReference: {fileID: 0}
+    - target: {fileID: 1922364087646628214, guid: 4fef6634dbecb6b48a208d809169028e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8934849071788219152, guid: 4fef6634dbecb6b48a208d809169028e,
         type: 3}

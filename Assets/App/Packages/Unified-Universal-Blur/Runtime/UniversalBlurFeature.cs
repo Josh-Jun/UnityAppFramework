@@ -24,6 +24,7 @@ namespace Unified.UniversalBlur.Runtime
         [Range(1f, 10f)] [SerializeField] private float downsample = 2.0f;
         [Range(1, 20)] [SerializeField] private int iterations = 6;
         [Range(0f, 5f)] [SerializeField] private float scale = .5f;
+        [Range(1f, 20f)] [SerializeField] private float colorPower = 1.0f;
         [SerializeField] private ScaleBlurWith scaleBlurWith;
         [SerializeField] private float scaleReferenceSize = 1080f;
         
@@ -125,6 +126,7 @@ namespace Unified.UniversalBlur.Runtime
             return new BlurPassData
             {
                 Scale = CalculateScale(),
+                ColorPower = colorPower,
                 Descriptor = GetDescriptor(renderingData),
                 
                 EffectMaterial = _material,

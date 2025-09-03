@@ -13,5 +13,7 @@ namespace Unified.UniversalBlur.Runtime
         public int Iterations;
 
         public RenderTextureDescriptor Descriptor;
+
+        public float ColorPower;
     }
 }

@@ -11,6 +11,7 @@ namespace Unified.UniversalBlur.Runtime
         
         private static readonly int m_KawaseOffsetID = Shader.PropertyToID("_KawaseOffset");
         private static readonly int m_globalFullScreenBlurTexture = Shader.PropertyToID("_GlobalFullScreenBlurTexture");
+        private static readonly int m_ColorPower = Shader.PropertyToID("_ColorPower");
         
         private ProfilingSampler m_ProfilingSampler = new(k_PassName);
         
@@ -48,6 +49,7 @@ namespace Unified.UniversalBlur.Runtime
         {
             var passMaterial = blurPassData.EffectMaterial;
             var scale = blurPassData.Scale;
+            var colorPower = blurPassData.ColorPower;
             
             // should not happen as we check it in feature
             if (passMaterial == null)
@@ -104,6 +106,7 @@ namespace Unified.UniversalBlur.Runtime
                         var offset = (0.5f + i * scale) * (blurPassData.Intensity / blurPassData.Downsample);
                         
                         SetBlurOffset(offset);
+                        SetColorPower(colorPower);
                         Blit1To2();
                         SwapRTs();
                     }
@@ -132,6 +135,11 @@ namespace Unified.UniversalBlur.Runtime
             void SwapRTs()
             {
                 (renderTextureId1, renderTextureId2) = (renderTextureId2, renderTextureId1);
+            }
+
+            void SetColorPower(float colorPower)
+            {
+                cmd.SetGlobalFloat(m_ColorPower, colorPower);
             }
         }
     }

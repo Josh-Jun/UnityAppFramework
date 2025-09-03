@@ -1,4 +1,4 @@
-Shader "Unify/UniversalBlurForUI"
+Shader "Unify/UniversalBlurForUICustom"
 {
     Properties
     {
@@ -13,6 +13,8 @@ Shader "Unify/UniversalBlurForUI"
         _ColorMask ("Color Mask", Float) = 15
 
         [Toggle(UNITY_UI_ALPHACLIP)] _UseUIAlphaClip ("Use Alpha Clip", Float) = 0
+        
+        _FinalPower("FinalPower",float) = 1
     }
 
     SubShader
@@ -79,7 +81,7 @@ Shader "Unify/UniversalBlurForUI"
             fixed4 _TextureSampleAdd;
             float4 _ClipRect;
             float4 _MainTex_ST;
-            float _ColorPower;
+            float _FinalColor;
 
             v2f vert(appdata_t v)
             {
@@ -112,7 +114,7 @@ Shader "Unify/UniversalBlurForUI"
                 #endif
                 
                 color *= mainTexColor;
-                color *= _ColorPower;
+                color *= _FinalColor;
 
 
 
