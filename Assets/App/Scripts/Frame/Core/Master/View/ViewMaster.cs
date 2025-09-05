@@ -99,11 +99,22 @@ namespace App.Core.Master
 
         #region Private Function
 
+        private const int PanelCount = 8;
+
         private void InitUIPanels()
         {
+            var item = UISafeArea2D.GetChild(0).gameObject;
             foreach (RectTransform panel in UISafeArea2D)
             {
                 UIPanels.Add(panel);
+            }
+            
+            for (var i = UISafeArea2D.childCount; i < PanelCount; i++)
+            {
+                var go = Instantiate(item, UISafeArea2D);
+                var p = go.GetComponent<RectTransform>();
+                UIPanels.Add(p);
+                go.name = $"Panel{i}";
             }
         }
 
@@ -362,21 +373,24 @@ namespace App.Core.Master
 
             var topPixel = Screen.safeArea.y + Screen.safeArea.height - Screen.height;
             var rightPixel = Screen.safeArea.x + Screen.safeArea.width - Screen.width;
-
+            
             UISafeArea2D.offsetMin = new Vector2(leftPixels, bottomPixels);
             UISafeArea2D.offsetMax = new Vector2(rightPixel, topPixel);
             
-            // 左右匹配安全区域
-            UIPanels[^3].offsetMin = new Vector2(leftPixels, -bottomPixels);
-            UIPanels[^3].offsetMax = new Vector2(rightPixel, -topPixel);
-            
-            // 上下匹配安全区域
-            UIPanels[^2].offsetMin = new Vector2(-leftPixels, bottomPixels);
-            UIPanels[^2].offsetMax = new Vector2(-rightPixel, topPixel);
+            List<(Vector2 min, Vector2 max)> safeAreas = new()
+            {
+                (Vector2.zero, Vector2.zero),
+                (Vector2.down * bottomPixels, Vector2.down * topPixel),
+                (Vector2.left * leftPixels, Vector2.left * rightPixel),
+                (new Vector2(-leftPixels, -bottomPixels), new Vector2(-rightPixel, -topPixel)),
+            };
 
-            // 不匹配安全区域
-            UIPanels[^1].offsetMin = new Vector2(-leftPixels, -bottomPixels);
-            UIPanels[^1].offsetMax = new Vector2(-rightPixel, -topPixel);
+            for (var i = 0; i < UIPanels.Count; i++)
+            {
+                var index = i % 4;
+                UIPanels[i].offsetMin = safeAreas[index].min;
+                UIPanels[i].offsetMax = safeAreas[index].max;
+            }
         }
 
         /// <summary> UGUI坐标 mousePosition</summary>

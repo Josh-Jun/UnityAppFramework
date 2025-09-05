@@ -10,7 +10,7 @@ using TMPro;
 
 namespace App.Modules
 {
-    [ViewOf("Loading", ViewMold.UI2D, AssetPath.LoadingView, false, 3)]
+    [ViewOf("Loading", ViewMold.UI2D, AssetPath.LoadingView, false, 7)]
     public class LoadingView : ViewBase
     {
 		private TextMeshProUGUI progresstextmeshprougui;

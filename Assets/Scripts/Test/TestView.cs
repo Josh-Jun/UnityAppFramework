@@ -18,7 +18,7 @@ using TMPro;
 
 namespace App.Modules
 {
-    [ViewOf("Test", ViewMold.UI2D, AssetPath.TestView, false, 0)]
+    [ViewOf("Test", ViewMold.UI2D, AssetPath.TestView, false, 3)]
     public class TestView : ViewBase
     {
 		private RawImage rawimagerawimage;
