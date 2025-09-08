@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using App.Core.Tools;
 using UnityEngine;
@@ -13,6 +14,12 @@ namespace App.Core.Master
         private AudioSource defaultEffectAudio;
         private Dictionary<string, AudioSource> effectAudios = new();
 
+
+        private int _timeIdStream;
+        private string _streamSourceName;
+        private int _streamSampleRate;
+        private Queue<float[]> _audioQueue = new Queue<float[]>();
+
         private void Awake()
         {
             background = new GameObject("AudioSource", typeof(AudioSource));
@@ -24,6 +31,60 @@ namespace App.Core.Master
             defaultEffect.transform.SetParent(background.transform);
             defaultEffectAudio = defaultEffect.GetOrAddComponent<AudioSource>();
             defaultEffectAudio.playOnAwake = false;
+
+            _timeIdStream = TimeUpdateMaster.Instance.StartTimer(PlayStreamAudio);
+        }
+
+        private void OnDestroy()
+        {
+            TimeUpdateMaster.Instance.EndTimer(_timeIdStream);
+        }
+
+        public void InitStreamAudio(string sourceName, int sampleRate = 16000)
+        {
+            _streamSourceName = sourceName;
+            _streamSampleRate = sampleRate;
+        }
+
+        public void PushAudioBase64(string base64Chunk)
+        {
+            byte[] wavBytes = Convert.FromBase64String(base64Chunk);
+            // 转成 short[]
+            short[] pcm16 = new short[wavBytes.Length / 2];
+            Buffer.BlockCopy(wavBytes, 0, pcm16, 0, wavBytes.Length);
+            // 转 float [-1,1]
+            float[] samples = new float[pcm16.Length];
+            for (int i = 0; i < pcm16.Length; i++)
+                samples[i] = pcm16[i] / 32768f;
+            lock (_audioQueue)
+            {
+                _audioQueue.Enqueue(samples);
+            }
+        }
+
+        public void PushAudio(float[] samples)
+        {
+            lock (_audioQueue)
+            {
+                _audioQueue.Enqueue(samples);
+            }
+        }
+
+        private void PlayStreamAudio(float time)
+        {
+            if (_audioQueue.Count > 0 && !GetEffectAudio(_streamSourceName).isPlaying)
+            {
+                float[] samples;
+                lock (_audioQueue)
+                {
+                    samples = _audioQueue.Dequeue();
+                }
+
+                AudioClip clip = AudioClip.Create("tts", samples.Length, 1, _streamSampleRate, false);
+                clip.SetData(samples, 0);
+                GetEffectAudio(_streamSourceName).clip = clip;
+                GetEffectAudio(_streamSourceName).Play();
+            }
         }
 
         public void CreateEffectAudio(string sourceName)
@@ -36,7 +97,7 @@ namespace App.Core.Master
             effectAudios[sourceName].playOnAwake = false;
         }
 
-        private AudioSource GetEffectAudio(string sourceName = null)
+        public AudioSource GetEffectAudio(string sourceName = null)
         {
             if (string.IsNullOrEmpty(sourceName)) return defaultEffectAudio;
             if (effectAudios.ContainsKey(sourceName)) return effectAudios[sourceName];
