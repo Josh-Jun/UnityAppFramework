@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using App.Core.Tools;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -19,6 +20,8 @@ namespace App.Core.Master
         private string _streamSourceName;
         private int _streamSampleRate;
         private Queue<float[]> _audioQueue = new Queue<float[]>();
+
+        private Action _streamAudioCallback;
 
         private void Awake()
         {
@@ -40,10 +43,11 @@ namespace App.Core.Master
             TimeUpdateMaster.Instance.EndTimer(_timeIdStream);
         }
 
-        public void InitStreamAudio(string sourceName, int sampleRate = 16000)
+        public void InitStreamAudio(string sourceName, int sampleRate = 16000, Action callback = null)
         {
             _streamSourceName = sourceName;
             _streamSampleRate = sampleRate;
+            _streamAudioCallback = callback;
         }
 
         public void PushAudioBase64(string base64Chunk)
@@ -70,10 +74,13 @@ namespace App.Core.Master
             }
         }
 
+        private bool isStreamAudioPlaying = false;
+
         private void PlayStreamAudio(float time)
         {
             if (_audioQueue.Count > 0 && !GetEffectAudio(_streamSourceName).isPlaying)
             {
+                isStreamAudioPlaying = true;
                 float[] samples;
                 lock (_audioQueue)
                 {
@@ -84,6 +91,11 @@ namespace App.Core.Master
                 clip.SetData(samples, 0);
                 GetEffectAudio(_streamSourceName).clip = clip;
                 GetEffectAudio(_streamSourceName).Play();
+            }
+            else if (isStreamAudioPlaying && _audioQueue.Count == 0 && !GetEffectAudio(_streamSourceName).isPlaying)
+            {
+                isStreamAudioPlaying = false;
+                _streamAudioCallback?.Invoke();
             }
         }
 
