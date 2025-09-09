@@ -6,7 +6,7 @@
         <ui:TextField picking-mode="Ignore" label="App FrameRate" name="AppFrameRate" />
         <uie:EnumField label="Channel Package" name="ChannelPackage" type="App.Runtime.Helper.ChannelPackage, App.Runtime" />
         <ui:Toggle label="Export Project" name="ExportProject" />
-        <ui:TextField picking-mode="Ignore" label="CDN Version" name="CDNVersion" />
+        <ui:TextField picking-mode="Ignore" label="CloudCtrl Code" name="CloudCtrlCode" />
         <ui:Button text="Apply Config" display-tooltip-when-elided="true" name="ApplyConfig" />
         <ui:TextField picking-mode="Ignore" label="Output Path" name="BuildAppOutputPath">
             <ui:Button text="Browse" display-tooltip-when-elided="true" name="BuildAppOutputPathBrowse" style="margin-top: 0;" />

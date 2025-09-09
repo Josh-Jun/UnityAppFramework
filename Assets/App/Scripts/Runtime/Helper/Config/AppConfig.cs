@@ -22,8 +22,8 @@ namespace App.Runtime.Helper
         public ChannelPackage ChannelPackage;
         [Tooltip("App原生")]
         public bool NativeApp;
-        [Tooltip("CDN资源版本")]
-        public string CDNVersion;
+        [Tooltip("云控Code")]
+        public string CloudCtrlCode;
     }
 
     /// <summary>App渠道包</summary>

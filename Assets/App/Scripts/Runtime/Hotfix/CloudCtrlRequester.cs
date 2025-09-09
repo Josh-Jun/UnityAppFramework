@@ -27,9 +27,9 @@ namespace App.Runtime.CloudCtrl
             var data = new CloudCtrlData()
             {
                 bundleId = Application.identifier,
-                platform = $"{Application.platform.ToString().ToLower()}",
+                platform = $"{Global.PlatformName.ToLower()}",
                 version = Application.version,
-                versioncode = Application.version.Replace(".", "")
+                versioncode = Global.AppConfig.CloudCtrlCode
             };
             var json = JsonUtility.ToJson(data);
             UniTask.Void(async () =>

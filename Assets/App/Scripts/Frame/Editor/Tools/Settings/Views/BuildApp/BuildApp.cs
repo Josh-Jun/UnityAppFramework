@@ -29,7 +29,7 @@ namespace App.Editor.View
         private int AppFrameRate = 30;
         private ChannelPackage ChannelPackage = ChannelPackage.Default;
         private bool NativeApp = false;
-        private string CDNVersion = string.Empty;
+        private string CloudCtrlCode = string.Empty;
         private string outputPath;
 
         public void OnCreate(VisualElement root)
@@ -41,7 +41,7 @@ namespace App.Editor.View
             var app_frame_rate = root.Q<TextField>("AppFrameRate");
             var channel_package = root.Q<EnumField>("ChannelPackage");
             var export_project = root.Q<Toggle>("ExportProject");
-            var cdn_version = root.Q<TextField>("CDNVersion");
+            var cloud_ctrl_code = root.Q<TextField>("CloudCtrlCode");
             var output_path = root.Q<TextField>("BuildAppOutputPath");
 
             enable_log.value = EnableLog;
@@ -50,7 +50,7 @@ namespace App.Editor.View
             app_frame_rate.value = AppFrameRate.ToString();
             channel_package.Init(ChannelPackage);
             export_project.value = NativeApp;
-            cdn_version.value = CDNVersion;
+            cloud_ctrl_code.value = CloudCtrlCode;
             output_path.value = outputPath;
             
             channel_package.style.display = 
@@ -86,7 +86,7 @@ namespace App.Editor.View
             
             export_project.RegisterCallback<ChangeEvent<bool>>((evt) => { NativeApp = evt.newValue; });
             
-            cdn_version.RegisterCallback<ChangeEvent<string>>((evt) => { CDNVersion = evt.newValue; });
+            cloud_ctrl_code.RegisterCallback<ChangeEvent<string>>((evt) => { CloudCtrlCode = evt.newValue; });
 
             output_path.RegisterCallback<ChangeEvent<string>>((evt) => { outputPath = evt.newValue; });
             root.Q<Button>("BuildAppOutputPathBrowse").clicked += () =>
@@ -142,7 +142,7 @@ namespace App.Editor.View
                 AppFrameRate = AppConfig.AppFrameRate;
                 ChannelPackage = AppConfig.ChannelPackage;
                 NativeApp = AppConfig.NativeApp;
-                CDNVersion = AppConfig.CDNVersion;
+                CloudCtrlCode = AppConfig.CloudCtrlCode;
             }
             else
             {
@@ -158,7 +158,7 @@ namespace App.Editor.View
             AppConfig.AppFrameRate = AppFrameRate;
             AppConfig.ChannelPackage = ChannelPackage;
             AppConfig.NativeApp = NativeApp;
-            AppConfig.CDNVersion = CDNVersion;
+            AppConfig.CloudCtrlCode = CloudCtrlCode;
 
             EditorUtility.SetDirty(AppConfig);
         }
@@ -327,11 +327,6 @@ namespace App.Editor.View
             if (buildResult.Success)
             {
                 Debug.Log($"构建成功 : {buildResult.OutputPackageDirectory}");
-                
-                var config = AssetDatabase.LoadAssetAtPath<AppConfig>(EditorHelper.AppConfigPath);
-                config.CDNVersion = buildParameters.PackageVersion;
-                EditorUtility.SetDirty(config);
-                AssetDatabase.Refresh();
             }
             else
             {

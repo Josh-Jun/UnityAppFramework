@@ -155,7 +155,7 @@ namespace App.Core.Master
             stringBuilder.AppendLine($"开发环境 : {Global.AppConfig.DevelopmentMold}");
             stringBuilder.AppendLine($"运行模式 : {Global.AppConfig.AssetPlayMode}");
             stringBuilder.AppendLine($"默认帧率 : {Global.AppConfig.AppFrameRate}");
-            stringBuilder.AppendLine($"资源版本 : {Global.AppConfig.CDNVersion}");
+            stringBuilder.AppendLine($"云控版本 : {Global.AppConfig.CloudCtrlCode}");
             Log.I(stringBuilder.ToString());
             StringBuilderPool.GiveBack(stringBuilder, sb => sb.Length = 0);
         }
