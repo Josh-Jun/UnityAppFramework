@@ -70,6 +70,7 @@ namespace App.Runtime.Hotfix
             _unAgreeButton = _agree.transform.Find("UnAgree").GetComponent<Button>();
             _unAgreeButton.onClick.AddListener(() =>
             {
+                _agree.SetActive(false);
 #if UNITY_EDITOR
                 EditorApplication.isPlaying = false;
 #else
@@ -78,6 +79,7 @@ namespace App.Runtime.Hotfix
             });
             _agreeButton.onClick.AddListener(() =>
             {
+                _agree.SetActive(false);
                 PlayerPrefs.SetInt(Agreement, 1);
                 _callback?.Invoke();
             });
