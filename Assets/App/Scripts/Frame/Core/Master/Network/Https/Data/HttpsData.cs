@@ -2,6 +2,7 @@ using System;
 
 namespace App.Core.Master
 {
+    // 请求RequestData，请求结果ResponseData
     /// <summary>
     /// Https请求结果
     /// </summary>

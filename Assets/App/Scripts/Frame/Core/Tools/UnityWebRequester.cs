@@ -147,6 +147,56 @@ namespace App.Core.Tools
             };
         }
 
+        public void Get(string url, string data, Action<string> callback)
+        {
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbGET;
+            uwr.SetRequestHeader("Content-Type", "application/json;charset=utf-8");
+            foreach (var header in headerPairs)
+            {
+                uwr.SetRequestHeader(header.Key, header.Value);
+            }
+            uwr.downloadHandler = new DownloadHandlerBuffer();
+            uwr.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(data));
+            uwrao = uwr.SendWebRequest();
+            uwrao.completed += (ao) =>
+            {
+                if (string.IsNullOrEmpty(uwr.error))
+                {
+                    callback?.Invoke(uwr.downloadHandler.text);
+                }
+                else
+                {
+                    Debug.LogError($"[Error:Get String] {uwr.error}");
+                }
+            };
+        }
+
+        public void Get(string url, string data, Action<byte[]> callback)
+        {
+            uwr.url = url;
+            uwr.method = UnityWebRequest.kHttpVerbGET;
+            uwr.SetRequestHeader("Content-Type", "application/json;charset=utf-8");
+            foreach (var header in headerPairs)
+            {
+                uwr.SetRequestHeader(header.Key, header.Value);
+            }
+            uwr.downloadHandler = new DownloadHandlerBuffer();
+            uwr.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(data));
+            uwrao = uwr.SendWebRequest();
+            uwrao.completed += (ao) =>
+            {
+                if (string.IsNullOrEmpty(uwr.error))
+                {
+                    callback?.Invoke(uwr.downloadHandler.data);
+                }
+                else
+                {
+                    Debug.LogError($"[Error:Get String] {uwr.error}");
+                }
+            };
+        }
+
         /// <summary>
         /// 请求byte数据
         /// </summary>

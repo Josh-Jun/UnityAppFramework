@@ -28,8 +28,10 @@ namespace App.Core.Master
             if (timerPairs.ContainsKey(UpdateMold.Update))
             {
                 var timers = timerPairs[UpdateMold.Update];
-                foreach (var timer in timers)
+                int count = timers.Count;
+                for (int i = 0; i < count; i++)
                 {
+                    var timer = timers[i];
                     if (timer.isTime)
                     {
                         timer.addTime += Time.deltaTime;
@@ -44,8 +46,10 @@ namespace App.Core.Master
             if (timerPairs.ContainsKey(UpdateMold.FixedUpdate))
             {
                 var timers = timerPairs[UpdateMold.FixedUpdate];
-                foreach (var timer in timers)
+                int count = timers.Count;
+                for (int i = 0; i < count; i++)
                 {
+                    var timer = timers[i];
                     if (timer.isTime)
                     {
                         timer.addTime += Time.fixedDeltaTime;
@@ -61,8 +65,10 @@ namespace App.Core.Master
             if (timerPairs.ContainsKey(UpdateMold.LateUpdate))
             {
                 var timers = timerPairs[UpdateMold.LateUpdate];
-                foreach (var timer in timers)
+                int count = timers.Count;
+                for (int i = 0; i < count; i++)
                 {
+                    var timer = timers[i];
                     if (timer.isTime)
                     {
                         timer.addTime += Time.deltaTime;
