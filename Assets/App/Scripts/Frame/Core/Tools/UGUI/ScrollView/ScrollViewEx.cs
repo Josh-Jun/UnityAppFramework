@@ -30,6 +30,19 @@ namespace UnityEngine.UI
                 canNextPage = true;
         }
 
+        public override void SetInitFunc(Action<int, RectTransform> func)
+        {
+            if (func != null)
+            {
+                var f = func;
+                func = (index, rect) =>
+                {
+                    f(index + startOffset, rect);
+                };
+            }
+            base.SetInitFunc(func);
+        }
+
         public override void SetUpdateFunc(Action<int, RectTransform> func)
         {
             if (func != null)

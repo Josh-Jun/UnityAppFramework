@@ -72,6 +72,7 @@ namespace UnityEngine.UI
         public Func<int> itemCountFunc;
         public Func<int, RectTransform> itemGetFunc;
         public Action<RectTransform> itemRecycleFunc;
+        public Action onRectTransformChange;
 
         // status
         private bool initialized = false;
@@ -95,6 +96,17 @@ namespace UnityEngine.UI
         public virtual void SetItemCountFunc(Func<int> func)
         {
             itemCountFunc = func;
+        }
+
+        public void SetOnRectTransformChangeFunc(Action func)
+        {
+            onRectTransformChange = func;
+        }
+
+        protected override void OnRectTransformDimensionsChange()
+        {
+            base.OnRectTransformDimensionsChange();
+            onRectTransformChange?.Invoke();
         }
 
         public void SetItemGetAndRecycleFunc(Func<int, RectTransform> getFunc, Action<RectTransform> recycleFunc)
