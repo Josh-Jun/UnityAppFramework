@@ -24,7 +24,7 @@ namespace App.Modules
         private TextMeshProUGUI text_Progress;
 
         private RectTransform updateTipsPanel;
-        private Text text_Content;
+        private TextMeshProUGUI text_Content;
         private Button btn_NextTime;
         private Button btn_UpdateNow;
         protected override void InitView()
@@ -37,7 +37,7 @@ namespace App.Modules
             text_Progress = this.FindComponent<TextMeshProUGUI>("ProgressBarPanel/ProgressSlider/Fill Area/Fill/Progress");
 
             updateTipsPanel = this.FindComponent<RectTransform>("UpdateTipsPanel");
-            text_Content = this.FindComponent<Text>("UpdateTipsPanel/Scroll View Tips/Viewport/ContentText");
+            text_Content = this.FindComponent<TextMeshProUGUI>("UpdateTipsPanel/Scroll View Tips/Viewport/ContentText");
             btn_NextTime = this.FindComponent<Button>("UpdateTipsPanel/NextTime");
             btn_UpdateNow = this.FindComponent<Button>("UpdateTipsPanel/UpdateNow");
         }
