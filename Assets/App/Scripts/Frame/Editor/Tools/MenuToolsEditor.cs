@@ -63,6 +63,24 @@ namespace App.Editor.Tools
 
         #endregion
         
+        #region 自动更新签名文件设置
+
+        [MenuItem("App/Editor/UpdateKeystore %#K", false, MENU_LEVEL)]
+        public static void UpdateKeystore()
+        {
+            if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.Android)
+            {
+                Debug.LogError("当前不是Android平台");
+                return;
+            }
+            PlayerSettings.Android.keystorePass = "123456";
+            PlayerSettings.Android.keyaliasName = "debug";
+            PlayerSettings.Android.keyaliasPass = "123456";
+            AssetDatabase.Refresh();
+        }
+
+        #endregion
+        
         #region 自动生成资源包枚举类型 Win(Ctrl+Shift+E) Mac(Cmd+Shift+E)
         
         private static string[] watchers = new[]

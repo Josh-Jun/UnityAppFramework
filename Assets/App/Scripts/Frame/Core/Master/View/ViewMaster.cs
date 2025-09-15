@@ -16,7 +16,6 @@ namespace App.Core.Master
 
         private static readonly Dictionary<string, ViewBase> ViewPairs = new Dictionary<string, ViewBase>();
         private readonly Dictionary<string, Transform> GoNodePairs = new Dictionary<string, Transform>();
-        private readonly List<RectTransform> UIPanels = new List<RectTransform>();
 
         private readonly Dictionary<RedDotMold, int> _redDotMap = new Dictionary<RedDotMold, int>();
         private readonly Dictionary<RedDotMold, RedDotView> _redDotViewMap = new Dictionary<RedDotMold, RedDotView>();
@@ -35,6 +34,8 @@ namespace App.Core.Master
         #region Public Variable
 
         #region Canvas2D
+        
+        private readonly List<RectTransform> UIPanels2D = new ();
 
         /// <summary> Canvas2D组件 </summary>
         public Canvas UI2DCanvas => Canvas2D.GetComponent<Canvas>();
@@ -52,11 +53,13 @@ namespace App.Core.Master
         public RectTransform UISafeArea2D => SafeArea2D.GetComponent<RectTransform>();
 
         /// <summary> 获取UIPanels </summary>
-        public List<RectTransform> UI2DPanels => UIPanels;
+        public List<RectTransform> UI2DPanels => UIPanels2D;
 
         #endregion
 
         #region Canvas3D
+        
+        private readonly List<RectTransform> UIPanels3D = new ();
 
         /// <summary> Canvas3D组件 </summary>
         public Canvas UI3DCanvas => Canvas3D.GetComponent<Canvas>();
@@ -69,6 +72,9 @@ namespace App.Core.Master
 
         /// <summary> 获取Canvas3D GraphicRaycaster组件 </summary>
         public GraphicRaycaster UI3DGraphicRaycaster => Canvas3D.GetComponent<GraphicRaycaster>();
+
+        /// <summary> 获取UIPanels </summary>
+        public List<RectTransform> UI3DPanels => UIPanels3D;
 
         #endregion
 
@@ -106,15 +112,20 @@ namespace App.Core.Master
             var item = UISafeArea2D.GetChild(0).gameObject;
             foreach (RectTransform panel in UISafeArea2D)
             {
-                UIPanels.Add(panel);
+                UIPanels2D.Add(panel);
             }
             
             for (var i = UISafeArea2D.childCount; i < PanelCount; i++)
             {
                 var go = Instantiate(item, UISafeArea2D);
                 var p = go.GetComponent<RectTransform>();
-                UIPanels.Add(p);
+                UIPanels2D.Add(p);
                 go.name = $"Panel{i}";
+            }
+
+            foreach (RectTransform panel in UI3DRectTransform)
+            {
+                UIPanels3D.Add(panel);
             }
         }
 
@@ -122,11 +133,11 @@ namespace App.Core.Master
         {
             var go = AssetsMaster.Instance.LoadAssetSync<GameObject>(attribute.Location);
             if (!go) return null;
-            var layer = Mathf.Clamp(attribute.Layer, 0, UIPanels.Count - 1);
+            var layer = Mathf.Clamp(attribute.Layer, 0, UIPanels2D.Count - 1);
             var parent = attribute.View switch
             {
-                ViewMold.UI2D => UIPanels[layer],
-                ViewMold.UI3D => UI3DRectTransform,
+                ViewMold.UI2D => UI2DPanels[layer],
+                ViewMold.UI3D => UI3DPanels[layer],
                 ViewMold.Go3D => GoRoot,
                 _ => throw new ArgumentOutOfRangeException(nameof(attribute.View), attribute.View, null)
             };
@@ -134,6 +145,14 @@ namespace App.Core.Master
             view.transform.localPosition = Vector3.zero;
             view.transform.localScale = Vector3.one;
             view.name = view.name.Replace("(Clone)", "");
+            var layerName = attribute.View switch
+            {
+                ViewMold.UI2D => "UI",
+                ViewMold.UI3D => "UI3D",
+                ViewMold.Go3D => "Default",
+                _ => throw new ArgumentOutOfRangeException(nameof(attribute.View), attribute.View, null)
+            };
+            view.SetLayer(layerName);
             var vb = view.AddComponent(type) as ViewBase;
             view.SetActive(false);
             ViewPairs.Add(type.FullName!, vb);
@@ -299,7 +318,7 @@ namespace App.Core.Master
         }
         private void OnDestroy()
         {
-            ChangeGameViewResolution(0);
+            // ChangeGameViewResolution(0);
         }
 #endif
 
@@ -385,11 +404,11 @@ namespace App.Core.Master
                 (new Vector2(-leftPixels, -bottomPixels), new Vector2(-rightPixel, -topPixel)),
             };
 
-            for (var i = 0; i < UIPanels.Count; i++)
+            for (var i = 0; i < UIPanels2D.Count; i++)
             {
                 var index = i % 4;
-                UIPanels[i].offsetMin = safeAreas[index].min;
-                UIPanels[i].offsetMax = safeAreas[index].max;
+                UIPanels2D[i].offsetMin = safeAreas[index].min;
+                UIPanels2D[i].offsetMax = safeAreas[index].max;
             }
         }
 
