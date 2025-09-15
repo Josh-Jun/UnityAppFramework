@@ -14,6 +14,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using App.Core.Tools;
 #if !DISABLE_SRDEBUGGER
+using SRDebugger.Services;
+using SRDebugger.Internal;
 using SRF.Service;
 #endif
 using UnityEngine;
@@ -36,7 +38,7 @@ namespace App.Core.Master
         private void Awake()
         {
 #if !DISABLE_SRDEBUGGER
-            SRServiceManager.GetService<SRDebugger.Internal.InternalOptionsRegistry>().AddOptionContainer(GM.Current);
+            SRServiceManager.GetService<InternalOptionsRegistry>().AddOptionContainer(GM.Current);
 #endif
             LogFilePath = PlatformMaster.Instance.GetDataPath("Logs");
             StringBuilderPool = new ObjectPool<StringBuilder>(() => new StringBuilder());
@@ -44,6 +46,24 @@ namespace App.Core.Master
             Application.logMessageReceived += HandleLogMsg;
             OutputAppInfo();
         }
+
+#if !DISABLE_SRDEBUGGER
+        /// <summary>
+        /// 启用SRDebugger的世界空间模式
+        /// </summary>
+        public void EnableWorldSpaceSRDebugger()
+        {
+            if (Global.AppConfig.ChannelPackage == Runtime.Helper.ChannelPackage.PicoXR)
+            {
+                var rectTransform = SRServiceManager.GetService<IDebugService>().EnableWorldSpaceMode();
+                rectTransform.localPosition = Vector3.forward * 10;
+                rectTransform.localRotation = Quaternion.identity;
+                rectTransform.localScale = Vector3.one * 0.005f;
+                rectTransform.sizeDelta = new Vector2(1920, 1080);
+                SRServiceManager.GetService<IDebugPanelService>().IsVisible = true;
+            }
+        }
+#endif
 
         private void HandleLogMsg(string msg, string stacktrace, LogType type)
         {
