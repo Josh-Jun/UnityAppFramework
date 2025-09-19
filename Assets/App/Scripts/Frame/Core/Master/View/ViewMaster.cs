@@ -12,69 +12,85 @@ namespace App.Core.Master
     public class ViewMaster : SingletonMono<ViewMaster>
     {
         #region Private Variable
-        private GameObject GameObjectRoot; //3D游戏对象父物体
 
         private static readonly Dictionary<string, ViewBase> ViewPairs = new Dictionary<string, ViewBase>();
+
+        #region Go3D
+
+        private GameObject GameObjectRoot; //3D游戏对象父物体
         private readonly Dictionary<string, Transform> GoNodePairs = new Dictionary<string, Transform>();
+
+        #endregion
+
+        #region UI2D
 
         private readonly Dictionary<RedDotMold, int> _redDotMap = new Dictionary<RedDotMold, int>();
         private readonly Dictionary<RedDotMold, RedDotView> _redDotViewMap = new Dictionary<RedDotMold, RedDotView>();
 
         private GameObject Canvas2D; // Canvas2D游戏对象
         private GameObject SafeArea2D; // 2DUI安全区对象
-        private GameObject Background; // 背景图片对象
+        private GameObject Background2D; // 背景图片对象
 
-        private Image BackgroundImage => Background.GetComponent<Image>();
-        private AspectRatioFitter AspectRatioFitter => Background.GetComponent<AspectRatioFitter>();
+        private readonly List<RectTransform> UIPanels = new();
+
+        private Image BackgroundImage2D => Background2D.GetComponent<Image>();
+        private AspectRatioFitter AspectRatioFitter => Background2D.GetComponent<AspectRatioFitter>();
+
+        #endregion
+
+        #region UI3D
 
         private GameObject Canvas3D; // Canvas3D游戏对象
+
+        private readonly List<RectTransform> RectTransform3Ds = new();
+        private readonly List<Canvas> Canvas3Ds = new();
+        private readonly List<CanvasScaler> CanvasScaler3Ds = new();
+        private readonly List<GraphicRaycaster> GraphicRaycaster3Ds = new();
+
+        #endregion
+
 
         #endregion
 
         #region Public Variable
 
         #region Canvas2D
-        
-        private readonly List<RectTransform> UIPanels2D = new ();
 
+        public Camera UICamera2D => UICanvas2D.worldCamera;
         /// <summary> Canvas2D组件 </summary>
-        public Canvas UI2DCanvas => Canvas2D.GetComponent<Canvas>();
+        public Canvas UICanvas2D => Canvas2D.GetComponent<Canvas>();
 
         /// <summary> 获取Canvas2D根RectTransform </summary>
-        public RectTransform UI2DRectTransform => Canvas2D.GetComponent<RectTransform>();
+        public RectTransform UIRectTransform2D => Canvas2D.GetComponent<RectTransform>();
 
         /// <summary> 获取Canvas2DScaler组件 </summary>
-        public CanvasScaler UI2DCanvasScaler => Canvas2D.GetComponent<CanvasScaler>();
+        public CanvasScaler UICanvasScaler2D => Canvas2D.GetComponent<CanvasScaler>();
 
         /// <summary> 获取Canvas2D GraphicRaycaster组件 </summary>
-        public GraphicRaycaster UI2DGraphicRaycaster => Canvas2D.GetComponent<GraphicRaycaster>();
+        public GraphicRaycaster UIGraphicRaycaster2D => Canvas2D.GetComponent<GraphicRaycaster>();
 
         /// <summary> 获取UIRoot </summary>
         public RectTransform UISafeArea2D => SafeArea2D.GetComponent<RectTransform>();
 
         /// <summary> 获取UIPanels </summary>
-        public List<RectTransform> UI2DPanels => UIPanels2D;
+        public List<RectTransform> UIPanels2Ds => UIPanels;
 
         #endregion
 
         #region Canvas3D
-        
-        private readonly List<RectTransform> UIPanels3D = new ();
 
-        /// <summary> Canvas3D组件 </summary>
-        public Canvas UI3DCanvas => Canvas3D.GetComponent<Canvas>();
-
-        /// <summary> 获取Canvas3D根RectTransform </summary>
-        public RectTransform UI3DRectTransform => Canvas3D.GetComponent<RectTransform>();
-
-        /// <summary> 获取Canvas2DScaler组件 </summary>
-        public CanvasScaler UI3DCanvasScaler => Canvas3D.GetComponent<CanvasScaler>();
-
-        /// <summary> 获取Canvas3D GraphicRaycaster组件 </summary>
-        public GraphicRaycaster UI3DGraphicRaycaster => Canvas3D.GetComponent<GraphicRaycaster>();
-
-        /// <summary> 获取UIPanels </summary>
-        public List<RectTransform> UI3DPanels => UIPanels3D;
+        /// <summary> Canvas3D父物体 </summary>
+        public Transform UIRoot3D => Canvas3D.transform;
+        /// <summary> UI3D相机（一般为主相机） </summary>
+        public Camera UICamera3D => UICanvas3Ds[0].worldCamera;
+        /// <summary> 所有Canvas3D根RectTransform </summary>
+        public List<RectTransform> UIRectTransform3Ds => RectTransform3Ds;
+        /// <summary> 所有Canvas3D组件 </summary>
+        public List<Canvas> UICanvas3Ds => Canvas3Ds;
+        /// <summary> 所有Canvas3D CanvasScaler组件 </summary>
+        public List<CanvasScaler> UICanvasScaler3Ds => CanvasScaler3Ds;
+        /// <summary> 所有Canvas3D GraphicRaycaster组件 </summary>
+        public List<GraphicRaycaster> UIGraphicRaycaster3Ds => GraphicRaycaster3Ds;
 
         #endregion
 
@@ -89,55 +105,85 @@ namespace App.Core.Master
         private void Awake()
         {
             Canvas2D = this.FindGameObject("UI Root/2D Canvas");
-            Background = this.FindGameObject("UI Root/2D Canvas/Background/Image");
+            Background2D = this.FindGameObject("UI Root/2D Canvas/Background/Image");
             Canvas3D = this.FindGameObject("UI Root/3D Canvas");
 
             SafeArea2D = this.FindGameObject("UI Root/2D Canvas/Safe Area");
 
             GameObjectRoot = this.FindGameObject("Go Root");
 
-            InitUIPanels();
+            InitUICanvas();
 
             SafeAreaAdjuster();
-            
-            InitBackgroundImage(BackgroundImage.sprite);
+
+            InitBackgroundImage(BackgroundImage2D.sprite);
         }
 
         #region Private Function
 
-        private const int PanelCount = 8;
+        private const int Panel2DCount = 8;
+        private const int Canvas3DCount = 2;
 
-        private void InitUIPanels()
+        private void InitUICanvas()
         {
-            var item = UISafeArea2D.GetChild(0).gameObject;
+            #region UI2D
+
+            var item2D = UISafeArea2D.GetChild(0).gameObject;
             foreach (RectTransform panel in UISafeArea2D)
             {
-                UIPanels2D.Add(panel);
-            }
-            
-            for (var i = UISafeArea2D.childCount; i < PanelCount; i++)
-            {
-                var go = Instantiate(item, UISafeArea2D);
-                var p = go.GetComponent<RectTransform>();
-                UIPanels2D.Add(p);
-                go.name = $"Panel{i}";
+                UIPanels.Add(panel);
             }
 
-            foreach (RectTransform panel in UI3DRectTransform)
+            for (var i = UISafeArea2D.childCount; i < Panel2DCount; i++)
             {
-                UIPanels3D.Add(panel);
+                var go = Instantiate(item2D, UISafeArea2D);
+                var p = go.GetComponent<RectTransform>();
+                UIPanels.Add(p);
+                go.name = $"Panel[{i}]";
             }
+
+            #endregion
+
+            #region UI3D
+
+            var item3D = UIRoot3D.GetChild(0).gameObject;
+            foreach (RectTransform rectTransform in UIRoot3D)
+            {
+                RectTransform3Ds.Add(rectTransform);
+                var canvas = rectTransform.GetComponent<Canvas>();
+                Canvas3Ds.Add(canvas);
+                var canvasScaler = rectTransform.GetComponent<CanvasScaler>();
+                CanvasScaler3Ds.Add(canvasScaler);
+                var graphicRaycaster = rectTransform.GetComponent<GraphicRaycaster>();
+                GraphicRaycaster3Ds.Add(graphicRaycaster);
+            }
+
+            for (var i = UIRoot3D.childCount; i < Canvas3DCount; i++)
+            {
+                var go = Instantiate(item3D, UIRoot3D);
+                var rectTransform = go.GetComponent<RectTransform>();
+                RectTransform3Ds.Add(rectTransform);
+                go.name = $"Canvas[{i}]";
+                var canvas = go.GetComponent<Canvas>();
+                Canvas3Ds.Add(canvas);
+                var canvasScaler = go.GetComponent<CanvasScaler>();
+                CanvasScaler3Ds.Add(canvasScaler);
+                var graphicRaycaster = go.GetComponent<GraphicRaycaster>();
+                GraphicRaycaster3Ds.Add(graphicRaycaster);
+            }
+
+            #endregion
         }
 
         private ViewBase CreateView(Type type, ViewOfAttribute attribute)
         {
             var go = AssetsMaster.Instance.LoadAssetSync<GameObject>(attribute.Location);
             if (!go) return null;
-            var layer = Mathf.Clamp(attribute.Layer, 0, UIPanels2D.Count - 1);
+            var layer = Mathf.Clamp(attribute.Layer, 0, UIPanels.Count - 1);
             var parent = attribute.View switch
             {
-                ViewMold.UI2D => UI2DPanels[layer],
-                ViewMold.UI3D => UI3DPanels[layer],
+                ViewMold.UI2D => UIPanels2Ds[layer],
+                ViewMold.UI3D => UIRectTransform3Ds[layer],
                 ViewMold.Go3D => GoRoot,
                 _ => throw new ArgumentOutOfRangeException(nameof(attribute.View), attribute.View, null)
             };
@@ -156,7 +202,7 @@ namespace App.Core.Master
             var vb = view.AddComponent(type) as ViewBase;
             view.SetActive(false);
             ViewPairs.Add(type.FullName!, vb);
-            if(attribute.Active) vb?.OpenView();
+            if (attribute.Active) vb?.OpenView();
             return vb;
         }
 
@@ -172,6 +218,18 @@ namespace App.Core.Master
         #endregion
 
         #region Public Function
+
+        public void PutUICanvas3D(GameObject canvas3D)
+        {
+            var rectTransform = canvas3D.GetComponent<RectTransform>();
+            RectTransform3Ds.Add(rectTransform);
+            var canvas = canvas3D.GetComponent<Canvas>();
+            Canvas3Ds.Add(canvas);
+            var canvasScaler = canvas3D.GetComponent<CanvasScaler>();
+            CanvasScaler3Ds.Add(canvasScaler);
+            var graphicRaycaster = canvas3D.GetComponent<GraphicRaycaster>();
+            GraphicRaycaster3Ds.Add(graphicRaycaster);
+        }
 
         /// <summary>
         /// 切换屏幕方向
@@ -202,6 +260,7 @@ namespace App.Core.Master
                     Screen.orientation = ScreenOrientation.Portrait;
                     break;
             }
+
             await UniTask.Delay(500);
             SafeAreaAdjuster();
         }
@@ -213,52 +272,52 @@ namespace App.Core.Master
             var height = orientation == 0 ? 2532 : 1170;
             SetGameViewSize(width, height);
         }
+
         private void ClearGameViewCustomSize()
         {
             // 获取 GameViewSizes 单例实例
             var gameViewSizesType = typeof(UnityEditor.EditorWindow).Assembly.GetType("UnityEditor.GameViewSizes");
             var scriptableSingletonType = typeof(UnityEditor.ScriptableSingleton<>).MakeGenericType(gameViewSizesType);
             var instanceProp = scriptableSingletonType.GetProperty("instance");
-            var gameViewSizesInstance = instanceProp.GetValue(null, null);
+            var gameViewSizesInstance = instanceProp?.GetValue(null, null);
 
             // 获取当前分组
-            var currentGroupProp = gameViewSizesInstance.GetType().GetProperty("currentGroup");
-            var currentGroup = currentGroupProp.GetValue(gameViewSizesInstance, null);
+            var currentGroupProp = gameViewSizesInstance?.GetType().GetProperty("currentGroup");
+            var currentGroup = currentGroupProp?.GetValue(gameViewSizesInstance, null);
 
             // 获取所有尺寸
-            var getTotalCount = currentGroup.GetType().GetMethod("GetTotalCount");
-            var getBuiltinCount = currentGroup.GetType().GetMethod("GetBuiltinCount");
-            int totalCount = (int)getTotalCount.Invoke(currentGroup, null);
-            int builtinCount = (int)getBuiltinCount.Invoke(currentGroup, null);
+            var getTotalCount = currentGroup?.GetType().GetMethod("GetTotalCount");
+            var getBuiltinCount = currentGroup?.GetType().GetMethod("GetBuiltinCount");
+            var totalCount = (int)getTotalCount?.Invoke(currentGroup, null)!;
+            var builtinCount = (int)getBuiltinCount!.Invoke(currentGroup, null);
 
             // 反向遍历并删除自定义尺寸
-            for (int i = totalCount - 1; i >= builtinCount; i--)
+            for (var i = totalCount - 1; i >= builtinCount; i--)
             {
                 var getGameViewSize = currentGroup.GetType().GetMethod("GetGameViewSize");
-                var size = getGameViewSize.Invoke(currentGroup, new object[] { i });
+                var size = getGameViewSize?.Invoke(currentGroup, new object[] { i });
 
-                var sizeType = size.GetType().GetProperty("sizeType");
-                var typeValue = (int)sizeType.GetValue(size, null);
+                var sizeType = size?.GetType().GetProperty("sizeType");
+                var typeValue = (int)sizeType?.GetValue(size, null)!;
 
                 // 类型1是自定义分辨率
-                if (typeValue == 1)
-                {
-                    var removeCustomSize = currentGroup.GetType().GetMethod("RemoveCustomSize");
-                    removeCustomSize.Invoke(currentGroup, new object[] { i });
-                }
+                if (typeValue != 1) continue;
+                var removeCustomSize = currentGroup.GetType().GetMethod("RemoveCustomSize");
+                removeCustomSize?.Invoke(currentGroup, new object[] { i });
             }
         }
+
         private void AddGameViewCustomSize(int width, int height, string displayName)
         {
             // 获取 GameViewSizes 单例实例
             var gameViewSizesType = typeof(UnityEditor.EditorWindow).Assembly.GetType("UnityEditor.GameViewSizes");
             var scriptableSingletonType = typeof(UnityEditor.ScriptableSingleton<>).MakeGenericType(gameViewSizesType);
             var instanceProp = scriptableSingletonType.GetProperty("instance");
-            var gameViewSizesInstance = instanceProp.GetValue(null, null);
+            var gameViewSizesInstance = instanceProp?.GetValue(null, null);
 
             // 获取当前分组
-            var currentGroupProp = gameViewSizesInstance.GetType().GetProperty("currentGroup");
-            var currentGroup = currentGroupProp.GetValue(gameViewSizesInstance, null);
+            var currentGroupProp = gameViewSizesInstance?.GetType().GetProperty("currentGroup");
+            var currentGroup = currentGroupProp?.GetValue(gameViewSizesInstance, null);
 
             // 创建新的 GameViewSize
             var gameViewSizeType = typeof(UnityEditor.EditorWindow).Assembly.GetType("UnityEditor.GameViewSize");
@@ -267,13 +326,14 @@ namespace App.Core.Master
                 new Type[] { sizeTypeEnum, typeof(int), typeof(int), typeof(string) });
 
             // 1 表示自定义分辨率类型
-            var newSize = ctor.Invoke(new object[] { 1, width, height, displayName });
+            var newSize = ctor?.Invoke(new object[] { 1, width, height, displayName });
 
             // 添加新尺寸
-            var addCustomSize = currentGroup.GetType().GetMethod("AddCustomSize");
-            addCustomSize.Invoke(currentGroup, new object[] { newSize });
+            var addCustomSize = currentGroup?.GetType().GetMethod("AddCustomSize");
+            addCustomSize?.Invoke(currentGroup, new object[] { newSize });
             UnityEditor.EditorUtility.RequestScriptReload();
         }
+
         private void SetGameViewSize(int width, int height)
         {
             var gameViewType = typeof(UnityEditor.EditorWindow).Assembly.GetType("UnityEditor.GameView");
@@ -282,31 +342,30 @@ namespace App.Core.Master
             // 查找匹配的分辨率索引
             var gameViewSizesInstance = typeof(UnityEditor.ScriptableSingleton<>)
                 .MakeGenericType(typeof(UnityEditor.EditorWindow).Assembly.GetType("UnityEditor.GameViewSizes"))
-                .GetProperty("instance")
+                .GetProperty("instance")!
                 .GetValue(null, null);
 
             var currentGroup = gameViewSizesInstance.GetType()
-                .GetProperty("currentGroup")
+                .GetProperty("currentGroup")!
                 .GetValue(gameViewSizesInstance);
 
             var getTotalCount = currentGroup.GetType().GetMethod("GetTotalCount");
-            int totalCount = (int)getTotalCount.Invoke(currentGroup, null);
+            var totalCount = (int)getTotalCount?.Invoke(currentGroup, null)!;
             var index = -1;
-            for (int i = 0; i < totalCount; i++)
+            for (var i = 0; i < totalCount; i++)
             {
                 var getGameViewSize = currentGroup.GetType().GetMethod("GetGameViewSize");
-                var gameViewSize = getGameViewSize.Invoke(currentGroup, new object[] { i });
+                var gameViewSize = getGameViewSize?.Invoke(currentGroup, new object[] { i });
 
-                var sizeWidth = (int)gameViewSize.GetType().GetProperty("width").GetValue(gameViewSize);
-                var sizeHeight = (int)gameViewSize.GetType().GetProperty("height").GetValue(gameViewSize);
+                var sizeWidth = (int)gameViewSize?.GetType().GetProperty("width")?.GetValue(gameViewSize)!;
+                var sizeHeight = (int)gameViewSize.GetType().GetProperty("height")?.GetValue(gameViewSize)!;
 
-                if (sizeWidth == width && sizeHeight == height)
-                {
-                    // 找到匹配的分辨率
-                    index = i;
-                    break;
-                }
+                if (sizeWidth != width || sizeHeight != height) continue;
+                // 找到匹配的分辨率
+                index = i;
+                break;
             }
+
             if (index == -1)
             {
                 var str = width > height ? "Landscape" : "Portrait";
@@ -314,8 +373,9 @@ namespace App.Core.Master
             }
 
             var setSizeMethod = gameViewType.GetMethod("SizeSelectionCallback");
-            setSizeMethod.Invoke(gameView, new object[] { index, null });
+            setSizeMethod?.Invoke(gameView, new object[] { index, null });
         }
+
         private void OnDestroy()
         {
             // ChangeGameViewResolution(0);
@@ -324,9 +384,9 @@ namespace App.Core.Master
 
         public void InitBackgroundImage(Sprite sprite = null)
         {
-            Background.SetActive(sprite);
+            Background2D.SetActive(sprite);
             if (!sprite) return;
-            BackgroundImage.sprite = sprite;
+            BackgroundImage2D.sprite = sprite;
             var ratio = sprite.rect.width / sprite.rect.height;
             AspectRatioFitter.aspectRatio = ratio;
         }
@@ -342,6 +402,7 @@ namespace App.Core.Master
                 if (!AppHelper.GetBoolData(attribute.Name)) continue;
                 CreateView(type, attribute);
             }
+
             InitRedDotView();
         }
 
@@ -354,7 +415,8 @@ namespace App.Core.Master
             }
         }
 
-        public void AddRedDotView(GameObject target, RedDotMold mold = RedDotMold.SystemMail, bool showCount = true, RedDotAnchor anchor = RedDotAnchor.UpperRight, Vector2 offset = default, int size = 30)
+        public void AddRedDotView(GameObject target, RedDotMold mold = RedDotMold.SystemMail, bool showCount = true,
+            RedDotAnchor anchor = RedDotAnchor.UpperRight, Vector2 offset = default, int size = 30)
         {
             var view = target.GetOrAddComponent<RedDotView>();
             view.RedDotMold = mold;
@@ -384,18 +446,18 @@ namespace App.Core.Master
         /// </summary>
         public void SafeAreaAdjuster()
         {
-            UI2DCanvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
-            UI2DCanvasScaler.matchWidthOrHeight = Screen.width < Screen.height ? 0 : 1;
+            UICanvasScaler2D.referenceResolution = new Vector2(Screen.width, Screen.height);
+            UICanvasScaler2D.matchWidthOrHeight = Screen.width < Screen.height ? 0 : 1;
 
             var bottomPixels = Screen.safeArea.y;
             var leftPixels = Screen.safeArea.x;
 
             var topPixel = Screen.safeArea.y + Screen.safeArea.height - Screen.height;
             var rightPixel = Screen.safeArea.x + Screen.safeArea.width - Screen.width;
-            
+
             UISafeArea2D.offsetMin = new Vector2(leftPixels, bottomPixels);
             UISafeArea2D.offsetMax = new Vector2(rightPixel, topPixel);
-            
+
             List<(Vector2 min, Vector2 max)> safeAreas = new()
             {
                 (Vector2.zero, Vector2.zero),
@@ -404,52 +466,56 @@ namespace App.Core.Master
                 (new Vector2(-leftPixels, -bottomPixels), new Vector2(-rightPixel, -topPixel)),
             };
 
-            for (var i = 0; i < UIPanels2D.Count; i++)
+            for (var i = 0; i < UIPanels.Count; i++)
             {
                 var index = i % 4;
-                UIPanels2D[i].offsetMin = safeAreas[index].min;
-                UIPanels2D[i].offsetMax = safeAreas[index].max;
+                UIPanels[i].offsetMin = safeAreas[index].min;
+                UIPanels[i].offsetMax = safeAreas[index].max;
             }
         }
 
         /// <summary> UGUI坐标 mousePosition</summary>
         public Vector2 ScreenPointInRectangle(Vector2 mousePosition)
         {
-            var cam = UI2DCanvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : UI2DCanvas.worldCamera;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(UI2DRectTransform, mousePosition, cam, out var position);
+            var cam = UICanvas2D.renderMode == RenderMode.ScreenSpaceOverlay ? null : UICanvas2D.worldCamera;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(UIRectTransform2D, mousePosition, cam,
+                out var position);
             return position;
         }
 
         public void OpenView<T>(object obj = null) where T : ViewBase
         {
             var view = GetView<T>();
-            if (view == null)
+            if (!view)
             {
                 Log.W($"View {typeof(T).FullName} has no view");
                 return;
             }
+
             view.OpenView(obj);
         }
 
         public void OpenView(string scriptName, object obj = null)
         {
             var view = GetView(scriptName);
-            if (view == null)
+            if (!view)
             {
                 Log.W($"View {scriptName} has no view");
                 return;
             }
+
             view.OpenView(obj);
         }
 
         public void CloseView<T>(bool isClear = false) where T : ViewBase
         {
             var view = GetView<T>();
-            if (view == null)
+            if (!view)
             {
                 Log.W($"View {typeof(T).FullName} has no view");
                 return;
             }
+
             if (isClear)
             {
                 RemoveView(view);
@@ -463,11 +529,12 @@ namespace App.Core.Master
         public void CloseView(string scriptName, bool isClear = false)
         {
             var view = GetView(scriptName);
-            if (view == null)
+            if (!view)
             {
                 Log.W($"View {scriptName} has no view");
                 return;
             }
+
             if (isClear)
             {
                 RemoveView(scriptName);
@@ -499,13 +566,14 @@ namespace App.Core.Master
         public T GetView<T>() where T : ViewBase
         {
             var type = AppHelper.GetAssemblyType<T>();
-            if(type == null) return null;
+            if (type == null) return null;
             var obj = type.GetCustomAttributes(typeof(ViewOfAttribute), false).FirstOrDefault();
             if (obj is not ViewOfAttribute attribute)
             {
                 Log.W($"Get View {type.FullName} is not extends ViewBase");
                 return null;
             }
+
             if (!AppHelper.GetBoolData(attribute.Name)) return null;
             var scriptName = type.Namespace == string.Empty ? type.Name : type.FullName;
             if (ViewPairs.ContainsKey(scriptName!)) return ViewPairs[scriptName] as T;
@@ -516,13 +584,14 @@ namespace App.Core.Master
         public ViewBase GetView(string scriptName)
         {
             var type = AppHelper.GetAssemblyType(scriptName);
-            if(type == null) return null;
+            if (type == null) return null;
             var obj = type.GetCustomAttributes(typeof(ViewOfAttribute), false).FirstOrDefault();
             if (obj is not ViewOfAttribute attribute)
             {
                 Log.W($"Get View {scriptName} is not extends ViewBase");
                 return null;
             }
+
             if (!AppHelper.GetBoolData(attribute.Name)) return null;
             if (ViewPairs.ContainsKey(scriptName!)) return ViewPairs[scriptName];
             var view = CreateView(type, attribute);
@@ -561,6 +630,7 @@ namespace App.Core.Master
             {
                 _redDotMap[mold] += count;
             }
+
             RefreshRedDotView();
         }
 
@@ -575,6 +645,7 @@ namespace App.Core.Master
             {
                 _redDotMap[mold] -= count;
             }
+
             RefreshRedDotView();
         }
 
