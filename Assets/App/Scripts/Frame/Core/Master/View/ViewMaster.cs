@@ -237,9 +237,7 @@ namespace App.Core.Master
         /// <param name="orientation">0: Portrait, 1: LandscapeLeft, 2: LandscapeLeft(AutoRotation)</param>
         public async UniTask SwitchScreen(int orientation)
         {
-#if UNITY_EDITOR
             ChangeGameViewResolution(orientation);
-#endif
             switch (orientation)
             {
                 case 0:
@@ -265,14 +263,16 @@ namespace App.Core.Master
             SafeAreaAdjuster();
         }
 
-#if UNITY_EDITOR
+        private int Orientation;
         private void ChangeGameViewResolution(int orientation)
         {
+#if UNITY_EDITOR
+            Orientation = Screen.width < Screen.height ? 0 : 1;
             var width = orientation == 0 ? 1170 : 2532;
             var height = orientation == 0 ? 2532 : 1170;
             SetGameViewSize(width, height);
         }
-
+        
         private void ClearGameViewCustomSize()
         {
             // 获取 GameViewSizes 单例实例
@@ -374,13 +374,13 @@ namespace App.Core.Master
 
             var setSizeMethod = gameViewType.GetMethod("SizeSelectionCallback");
             setSizeMethod?.Invoke(gameView, new object[] { index, null });
+#endif
         }
 
         private void OnDestroy()
         {
-            // ChangeGameViewResolution(0);
+            ChangeGameViewResolution(Orientation);
         }
-#endif
 
         public void InitBackgroundImage(Sprite sprite = null)
         {

@@ -13,19 +13,26 @@ public class PostAssetEditor : AssetPostprocessor
 {
     private void OnPreprocessTexture()
     {
-        if (assetImporter is not TextureImporter texImpoter) return;
-        if (texImpoter.assetPath.Contains("@sprite"))
+        if (assetImporter is not TextureImporter importer) return;
+        if (importer.assetPath.Contains("@sprite"))
         {
-            if (texImpoter.textureType != TextureImporterType.Sprite)
+            if (importer.textureType != TextureImporterType.Sprite)
             {
-                texImpoter.textureType = TextureImporterType.Sprite;
+                importer.textureType = TextureImporterType.Sprite;
             }
         }
-        else if (texImpoter.assetPath.Contains("@normalmap"))
+        else if (importer.assetPath.Contains("@normalmap"))
         {
-            if (texImpoter.textureType != TextureImporterType.NormalMap)
+            if (importer.textureType != TextureImporterType.NormalMap)
             {
-                texImpoter.textureType = TextureImporterType.NormalMap;
+                importer.textureType = TextureImporterType.NormalMap;
+            }
+        }
+        else if (importer.assetPath.Contains("@cubemap"))
+        {
+            if (importer.textureShape != TextureImporterShape.TextureCube)
+            {
+                importer.textureShape = TextureImporterShape.TextureCube;
             }
         }
     }
