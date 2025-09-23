@@ -179,7 +179,13 @@ namespace App.Core.Master
         {
             var go = AssetsMaster.Instance.LoadAssetSync<GameObject>(attribute.Location);
             if (!go) return null;
-            var layer = Mathf.Clamp(attribute.Layer, 0, UIPanels.Count - 1);
+            var layer = attribute.View switch
+            {
+                ViewMold.UI2D => Mathf.Clamp(attribute.Layer, 0, UIPanels2Ds.Count - 1),
+                ViewMold.UI3D => Mathf.Clamp(attribute.Layer, 0, UIRectTransform3Ds.Count - 1),
+                ViewMold.Go3D => attribute.Layer,
+                _ => throw new ArgumentOutOfRangeException(nameof(attribute.View), attribute.View, null)
+            };
             var parent = attribute.View switch
             {
                 ViewMold.UI2D => UIPanels2Ds[layer],
