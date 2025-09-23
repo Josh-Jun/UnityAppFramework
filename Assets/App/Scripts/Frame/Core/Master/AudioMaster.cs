@@ -13,13 +13,13 @@ namespace App.Core.Master
         private GameObject background;
         private AudioSource backgroundAudio;
         private AudioSource defaultEffectAudio;
-        private Dictionary<string, AudioSource> effectAudios = new();
+        private readonly Dictionary<string, AudioSource> effectAudios = new();
 
 
         private int _timeIdStream;
         private string _streamSourceName;
         private int _streamSampleRate;
-        private Queue<float[]> _audioQueue = new Queue<float[]>();
+        private readonly Queue<float[]> _audioQueue = new Queue<float[]>();
 
         private Action _streamAudioCallback;
 
@@ -52,13 +52,13 @@ namespace App.Core.Master
 
         public void PushAudioBase64(string base64Chunk)
         {
-            byte[] wavBytes = Convert.FromBase64String(base64Chunk);
+            var wavBytes = Convert.FromBase64String(base64Chunk);
             // 转成 short[]
-            short[] pcm16 = new short[wavBytes.Length / 2];
+            var pcm16 = new short[wavBytes.Length / 2];
             Buffer.BlockCopy(wavBytes, 0, pcm16, 0, wavBytes.Length);
             // 转 float [-1,1]
-            float[] samples = new float[pcm16.Length];
-            for (int i = 0; i < pcm16.Length; i++)
+            var samples = new float[pcm16.Length];
+            for (var i = 0; i < pcm16.Length; i++)
                 samples[i] = pcm16[i] / 32768f;
             lock (_audioQueue)
             {
@@ -78,25 +78,41 @@ namespace App.Core.Master
 
         private void PlayStreamAudio(float time)
         {
-            if (_audioQueue.Count > 0 && !GetEffectAudio(_streamSourceName).isPlaying)
+            lock (_audioQueue)
             {
-                isStreamAudioPlaying = true;
-                float[] samples;
-                lock (_audioQueue)
+                if (_audioQueue.Count > 0 && !GetEffectAudio(_streamSourceName).isPlaying)
                 {
-                    samples = _audioQueue.Dequeue();
-                }
+                    isStreamAudioPlaying = true;
+                    float[] samples;
+                    lock (_audioQueue)
+                    {
+                        samples = _audioQueue.Dequeue();
+                    }
 
-                AudioClip clip = AudioClip.Create("tts", samples.Length, 1, _streamSampleRate, false);
-                clip.SetData(samples, 0);
-                GetEffectAudio(_streamSourceName).clip = clip;
-                GetEffectAudio(_streamSourceName).Play();
+                    var clip = AudioClip.Create("tts", samples.Length, 1, _streamSampleRate, false);
+                    clip.SetData(samples, 0);
+                    GetEffectAudio(_streamSourceName).clip = clip;
+                    GetEffectAudio(_streamSourceName).Play();
+                }
+                else if (isStreamAudioPlaying && _audioQueue.Count == 0 && !GetEffectAudio(_streamSourceName).isPlaying)
+                {
+                    isStreamAudioPlaying = false;
+                    _streamAudioCallback?.Invoke();
+                }
             }
-            else if (isStreamAudioPlaying && _audioQueue.Count == 0 && !GetEffectAudio(_streamSourceName).isPlaying)
+        }
+        
+        public void StopStreamAudio(string sourceName)
+        {
+            if(string.IsNullOrEmpty(sourceName)) return;
+            lock (_audioQueue)
             {
-                isStreamAudioPlaying = false;
-                _streamAudioCallback?.Invoke();
+                _audioQueue.Clear();
             }
+            isStreamAudioPlaying = false;
+            GetEffectAudio(sourceName).clip = null;
+            GetEffectAudio(sourceName).Stop();
+            _streamAudioCallback?.Invoke();
         }
 
         public void CreateEffectAudio(string sourceName)
@@ -111,18 +127,14 @@ namespace App.Core.Master
 
         public AudioSource GetEffectAudio(string sourceName = null)
         {
-            if (string.IsNullOrEmpty(sourceName)) return defaultEffectAudio;
-            if (effectAudios.ContainsKey(sourceName)) return effectAudios[sourceName];
-            return defaultEffectAudio;
+            return string.IsNullOrEmpty(sourceName) ? defaultEffectAudio : effectAudios.GetValueOrDefault(sourceName, defaultEffectAudio);
         }
 
         public void RemoveEffectAudio(string sourceName)
         {
-            if (effectAudios.ContainsKey(sourceName))
-            {
-                Destroy(effectAudios[sourceName].gameObject);
-                effectAudios.Remove(sourceName);
-            }
+            if (!effectAudios.TryGetValue(sourceName, out var effectAudio)) return;
+            Destroy(effectAudio.gameObject);
+            effectAudios.Remove(sourceName);
         }
 
         /// <summary>
@@ -139,7 +151,9 @@ namespace App.Core.Master
         /// 播放特效音乐
         /// </summary>
         /// <param name="clip"></param>
+        /// <param name="sourceName"></param>
         /// <param name="cb"></param>
+        /// <param name="overlap"></param>
         public void PlayEffectAudio(AudioClip clip, string sourceName = null, UnityAction cb = null,
             bool overlap = false)
         {
@@ -159,6 +173,7 @@ namespace App.Core.Master
         /// 设置特效音乐音量
         /// </summary>
         /// <param name="volume"></param>
+        /// <param name="sourceName"></param>
         public void SetEffectVolume(float volume, string sourceName = null)
         {
             GetEffectAudio(sourceName).volume = volume;
@@ -236,8 +251,8 @@ namespace App.Core.Master
         private string _deviceName;
 
         // 音频相关参数
-        private int targetSampleRate = 16000; // 目标采样率 (8000或16000)
-        private int bufferSizeSeconds = 1; // 音频缓冲区大小(秒)
+        private const int targetSampleRate = 16000; // 目标采样率 (8000或16000)
+        private const int bufferSizeSeconds = 1; // 音频缓冲区大小(秒)
         private bool isRecording = false; // 是否正在录制
         private int lastSamplePosition = 0;
         private float[] audioBuffer;
@@ -368,13 +383,13 @@ namespace App.Core.Master
             // 如果原始音频是立体声，转换为单声道（取平均值）
             if (_audioClip.channels > 1)
             {
-                int monoCount = sampleCount / _audioClip.channels;
-                float[] monoBuffer = new float[monoCount];
+                var monoCount = sampleCount / _audioClip.channels;
+                var monoBuffer = new float[monoCount];
 
-                for (int i = 0; i < monoCount; i++)
+                for (var i = 0; i < monoCount; i++)
                 {
                     float sum = 0;
-                    for (int c = 0; c < _audioClip.channels; c++)
+                    for (var c = 0; c < _audioClip.channels; c++)
                     {
                         sum += buffer[i * _audioClip.channels + c];
                     }
@@ -387,12 +402,12 @@ namespace App.Core.Master
             }
 
             // 将浮点音频数据转换为16位PCM
-            byte[] pcmData = new byte[sampleCount * 2]; // 16位 = 2字节/样本
+            var pcmData = new byte[sampleCount * 2]; // 16位 = 2字节/样本
 
-            for (int i = 0; i < sampleCount; i++)
+            for (var i = 0; i < sampleCount; i++)
             {
                 // 将浮点音频(-1.0到1.0)转换为16位整数(-32768到32767)
-                short pcmValue = (short)(buffer[i] * short.MaxValue);
+                var pcmValue = (short)(buffer[i] * short.MaxValue);
 
                 // 小端字节序
                 pcmData[i * 2] = (byte)(pcmValue & 0xFF);
