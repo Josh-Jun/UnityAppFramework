@@ -244,9 +244,12 @@ namespace App.Core.Master
         public async UniTask SwitchScreen(int orientation)
         {
 #if UNITY_EDITOR
-            var type = AppHelper.GetAssemblyType("App.Editor.Helper.EditorHelper", "App.Editor");
+            const string script = "App.Editor.Helper.EditorHelper";
+            const string assembly = "App.Editor";
+            const string function = "ChangeGameViewResolution";
+            var type = AppHelper.GetAssemblyType(script, assembly);
             var helper = Activator.CreateInstance(type);
-            var method = type.GetMethod("ChangeGameViewResolution");
+            var method = type.GetMethod(function);
             method?.Invoke(helper, new object[] { orientation });
 #endif
             switch (orientation)
