@@ -167,6 +167,7 @@ namespace App.Editor.View
         {
             var appConfig = AssetDatabase.LoadAssetAtPath<AppConfig>(EditorHelper.AppConfigPath);
             EditorUserBuildSettings.development = appConfig.DevelopmentMold != DevelopmentMold.Release;
+            appConfig.EnableLog = appConfig.DevelopmentMold != DevelopmentMold.Release;
             SRDebugEditor.SetEnabled(appConfig.DevelopmentMold != DevelopmentMold.Release);
             
             if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android)
@@ -454,6 +455,7 @@ namespace App.Editor.View
                     PlayerSettings.bundleVersion = version;
                     PlayerSettings.Android.bundleVersionCode = int.Parse(code);
                     PlayerSettings.iOS.buildNumber = code;
+                    appConfig.CloudCtrlCode = code;
                 }
                 else if (arg.Contains("--development:"))
                 {
