@@ -243,7 +243,12 @@ namespace App.Core.Master
         /// <param name="orientation">0: Portrait, 1: LandscapeLeft, 2: LandscapeLeft(AutoRotation)</param>
         public async UniTask SwitchScreen(int orientation)
         {
-            ChangeGameViewResolution(orientation);
+#if UNITY_EDITOR
+            var type = AppHelper.GetAssemblyType("App.Editor.Helper.EditorHelper", "App.Editor");
+            var helper = Activator.CreateInstance(type);
+            var method = type.GetMethod("ChangeGameViewResolution");
+            method?.Invoke(helper, new object[] { orientation });
+#endif
             switch (orientation)
             {
                 case 0:
@@ -267,125 +272,6 @@ namespace App.Core.Master
 
             await UniTask.Delay(500);
             SafeAreaAdjuster();
-        }
-
-        private int Orientation;
-        private void ChangeGameViewResolution(int orientation)
-        {
-#if UNITY_EDITOR
-            Orientation = Screen.width < Screen.height ? 0 : 1;
-            var width = orientation == 0 ? 1170 : 2532;
-            var height = orientation == 0 ? 2532 : 1170;
-            SetGameViewSize(width, height);
-        }
-        
-        private void ClearGameViewCustomSize()
-        {
-            // 获取 GameViewSizes 单例实例
-            var gameViewSizesType = typeof(UnityEditor.EditorWindow).Assembly.GetType("UnityEditor.GameViewSizes");
-            var scriptableSingletonType = typeof(UnityEditor.ScriptableSingleton<>).MakeGenericType(gameViewSizesType);
-            var instanceProp = scriptableSingletonType.GetProperty("instance");
-            var gameViewSizesInstance = instanceProp?.GetValue(null, null);
-
-            // 获取当前分组
-            var currentGroupProp = gameViewSizesInstance?.GetType().GetProperty("currentGroup");
-            var currentGroup = currentGroupProp?.GetValue(gameViewSizesInstance, null);
-
-            // 获取所有尺寸
-            var getTotalCount = currentGroup?.GetType().GetMethod("GetTotalCount");
-            var getBuiltinCount = currentGroup?.GetType().GetMethod("GetBuiltinCount");
-            var totalCount = (int)getTotalCount?.Invoke(currentGroup, null)!;
-            var builtinCount = (int)getBuiltinCount!.Invoke(currentGroup, null);
-
-            // 反向遍历并删除自定义尺寸
-            for (var i = totalCount - 1; i >= builtinCount; i--)
-            {
-                var getGameViewSize = currentGroup.GetType().GetMethod("GetGameViewSize");
-                var size = getGameViewSize?.Invoke(currentGroup, new object[] { i });
-
-                var sizeType = size?.GetType().GetProperty("sizeType");
-                var typeValue = (int)sizeType?.GetValue(size, null)!;
-
-                // 类型1是自定义分辨率
-                if (typeValue != 1) continue;
-                var removeCustomSize = currentGroup.GetType().GetMethod("RemoveCustomSize");
-                removeCustomSize?.Invoke(currentGroup, new object[] { i });
-            }
-        }
-
-        private void AddGameViewCustomSize(int width, int height, string displayName)
-        {
-            // 获取 GameViewSizes 单例实例
-            var gameViewSizesType = typeof(UnityEditor.EditorWindow).Assembly.GetType("UnityEditor.GameViewSizes");
-            var scriptableSingletonType = typeof(UnityEditor.ScriptableSingleton<>).MakeGenericType(gameViewSizesType);
-            var instanceProp = scriptableSingletonType.GetProperty("instance");
-            var gameViewSizesInstance = instanceProp?.GetValue(null, null);
-
-            // 获取当前分组
-            var currentGroupProp = gameViewSizesInstance?.GetType().GetProperty("currentGroup");
-            var currentGroup = currentGroupProp?.GetValue(gameViewSizesInstance, null);
-
-            // 创建新的 GameViewSize
-            var gameViewSizeType = typeof(UnityEditor.EditorWindow).Assembly.GetType("UnityEditor.GameViewSize");
-            var sizeTypeEnum = typeof(UnityEditor.EditorWindow).Assembly.GetType("UnityEditor.GameViewSizeType");
-            var ctor = gameViewSizeType.GetConstructor(
-                new Type[] { sizeTypeEnum, typeof(int), typeof(int), typeof(string) });
-
-            // 1 表示自定义分辨率类型
-            var newSize = ctor?.Invoke(new object[] { 1, width, height, displayName });
-
-            // 添加新尺寸
-            var addCustomSize = currentGroup?.GetType().GetMethod("AddCustomSize");
-            addCustomSize?.Invoke(currentGroup, new object[] { newSize });
-            UnityEditor.EditorUtility.RequestScriptReload();
-        }
-
-        private void SetGameViewSize(int width, int height)
-        {
-            var gameViewType = typeof(UnityEditor.EditorWindow).Assembly.GetType("UnityEditor.GameView");
-            var gameView = UnityEditor.EditorWindow.GetWindow(gameViewType);
-
-            // 查找匹配的分辨率索引
-            var gameViewSizesInstance = typeof(UnityEditor.ScriptableSingleton<>)
-                .MakeGenericType(typeof(UnityEditor.EditorWindow).Assembly.GetType("UnityEditor.GameViewSizes"))
-                .GetProperty("instance")!
-                .GetValue(null, null);
-
-            var currentGroup = gameViewSizesInstance.GetType()
-                .GetProperty("currentGroup")!
-                .GetValue(gameViewSizesInstance);
-
-            var getTotalCount = currentGroup.GetType().GetMethod("GetTotalCount");
-            var totalCount = (int)getTotalCount?.Invoke(currentGroup, null)!;
-            var index = -1;
-            for (var i = 0; i < totalCount; i++)
-            {
-                var getGameViewSize = currentGroup.GetType().GetMethod("GetGameViewSize");
-                var gameViewSize = getGameViewSize?.Invoke(currentGroup, new object[] { i });
-
-                var sizeWidth = (int)gameViewSize?.GetType().GetProperty("width")?.GetValue(gameViewSize)!;
-                var sizeHeight = (int)gameViewSize.GetType().GetProperty("height")?.GetValue(gameViewSize)!;
-
-                if (sizeWidth != width || sizeHeight != height) continue;
-                // 找到匹配的分辨率
-                index = i;
-                break;
-            }
-
-            if (index == -1)
-            {
-                var str = width > height ? "Landscape" : "Portrait";
-                AddGameViewCustomSize(width, height, $"{width}x{height} {str}");
-            }
-
-            var setSizeMethod = gameViewType.GetMethod("SizeSelectionCallback");
-            setSizeMethod?.Invoke(gameView, new object[] { index, null });
-#endif
-        }
-
-        private void OnDestroy()
-        {
-            ChangeGameViewResolution(Orientation);
         }
 
         public void InitBackgroundImage(Sprite sprite = null)
