@@ -12,22 +12,25 @@ namespace App.Core.Master
 
         public static ViewBase Move(this ViewBase view, Vector3 from, Vector3 to, float duration)
         {
-            view.transform.localPosition = from;
-            Tweeners.Add(view.transform.DOLocalMove(to, duration).SetEase(Ease.Linear).Pause());
+            view.transform.RectTransform().anchoredPosition = from;
+            var tweener = view.transform.RectTransform().DOAnchorPos(to, duration).SetEase(Ease.Linear).Pause();
+            Tweeners.Add(tweener);
             return view;
         }
 
         public static ViewBase Rotate(this ViewBase view, Vector3 from, Vector3 to, float duration)
         {
             view.transform.localEulerAngles = from;
-            Tweeners.Add(view.transform.DOLocalRotate(to, duration).SetEase(Ease.Linear).Pause());
+            var tweener = view.transform.DOLocalRotate(to, duration).SetEase(Ease.Linear).Pause();
+            Tweeners.Add(tweener);
             return view;
         }
 
         public static ViewBase Scale(this ViewBase view, Vector3 from, Vector3 to, float duration)
         {
             view.transform.localScale = from;
-            Tweeners.Add(view.transform.DOScale(to, duration).SetEase(Ease.Linear).Pause());
+            var tweener = view.transform.DOScale(to, duration).SetEase(Ease.Linear).Pause();
+            Tweeners.Add(tweener);
             return view;
         }
 
@@ -35,7 +38,8 @@ namespace App.Core.Master
         {
             var canvasGroup = view.GetOrAddComponent<CanvasGroup>();
             canvasGroup.alpha = from;
-            Tweeners.Add(canvasGroup.DOFade(to, duration).SetEase(Ease.Linear).Pause());
+            var tweener = canvasGroup.DOFade(to, duration).SetEase(Ease.Linear).Pause();
+            Tweeners.Add(tweener);
             return view;
         }
 
