@@ -6,14 +6,6 @@
  * function    : 
  * ===============================================
  * */
-/* *
- * ===============================================
- * author      : Josh@win
- * e-mail      : shijun_z@163.com
- * create time : 2025年5月26 16:58
- * function    : 
- * ===============================================
- * */
 using UnityEngine;
 using UnityEngine.EventSystems;
 
