@@ -44,6 +44,37 @@ namespace App.Modules
                 CanScale = true,
                 PreserveComposition = false,
             });
+            TimeUpdateMaster.Instance.StartTimer(time =>
+            {
+                if (Input.GetKeyDown(KeyCode.Q))
+                {
+                    View.Move(Vector3.zero, Vector3.right * Screen.width, 0.2f).Play(false);
+                }
+
+                if (Input.GetKeyDown(KeyCode.W))
+                {
+                    View.Move(Vector3.right * Screen.width, Vector3.zero, 0.2f).Play(true);
+                }
+                
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    View.Move(Vector3.zero, Vector3.left * Screen.width, 0.2f).Play(false);
+                }
+
+                if (Input.GetKeyDown(KeyCode.R))
+                {
+                    View.Move(Vector3.left * Screen.width, Vector3.zero, 0.2f).Play(true);
+                }
+
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    ViewMaster.Instance.OpenView<WebView>(new WebData()
+                    {
+                        title = "百度",
+                        url = "https://www.baidu.com"
+                    });
+                }
+            });
         }
         public void End()
         {

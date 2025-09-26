@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<style data-theme="core" type="text/css">
+		:root {
+			--keyMargin: 1px;
+			--keyWidth: calc(45px + var(--keyMargin) * 2);
+		}
+
+		html, body {
+			margin: 0; padding: 0;
+			color: black;
+			user-select: none;
+			font-size: 25px;
+		}
+
+		.keyHolder {
+			margin: 5px;
+			display: inline-block;
+		}
+
+		.key, .noShow {
+			display: inline-block;
+			box-sizing: border-box;
+			border: 1px solid black;
+			border-radius: 4px;
+			background: rgba(255, 255, 255, .7);
+			text-align: center;
+			cursor: pointer;
+			padding-top: 10px;
+			vertical-align: middle;
+
+			margin: var(--keyMargin);
+			width: calc(var(--keyWidth) - var(--keyMargin) * 2);
+			height: calc(var(--keyWidth) - var(--keyMargin) * 2);
+		}
+
+		.noShow {
+			border: none;
+			background: transparent !important;
+			cursor: inherit;
+		}
+
+		.key:hover {
+			background: #EEE;
+		}
+
+		.key.pressed, .key[data-pressed=true] {
+			background: #555;
+		}
+
+		.key.s1x1_25 { width: calc(var(--keyWidth) * 1.25 - var(--keyMargin) * 2); }
+		.key.s1x1_5 { width: calc(var(--keyWidth) * 1.5 - var(--keyMargin) * 2); }
+		.key.s1x2 { width: calc(var(--keyWidth) * 2 - var(--keyMargin) * 2); }
+		.key.s1x1_75 { width: calc(var(--keyWidth) * 1.75 - var(--keyMargin) * 2); }
+		.key.s1x2_25 { width: calc(var(--keyWidth) * 2.25 - var(--keyMargin) * 2); }
+		.key.s1x2_75 { width: calc(var(--keyWidth) * 2.75 - var(--keyMargin) * 2); }
+		.key.s1x3_75 { width: calc(var(--keyWidth) * 3.75 - var(--keyMargin) * 2); }
+		.key.s1x4_75 { width: calc(var(--keyWidth) * 4.75 - var(--keyMargin) * 2); }
+		.key.s1x6_5 { width: calc(var(--keyWidth) * 6.5 - var(--keyMargin) * 2); }
+
+		.key.s2x1 {
+			height: calc(var(--keyWidth) * 2 - var(--keyMargin) * 2);
+			float: right;
+			padding-top: 32px;
+		}
+
+		.smallText {
+			font-size: 50%;
+			padding-top: 15px;
+		}
+	</style>
+	<style data-theme="0" type="text/css">
+		.key {
+			border-radius: 6px;
+		}
+	</style>
+	<style data-theme="1" type="text/css">
+		body {
+			text-transform: uppercase;
+			color: white;
+			font-size: 20px;
+			font-family: monospace;
+		}
+		.key {
+			border-color: white;
+			background: rgba(0, 0, 0, .6);
+			padding-top: 10px;
+			border-radius: 0;
+		}
+		.key:hover {
+			background: #333;
+		}
+		.key.pressed, .key[data-pressed=true] {
+			background: #CCC;
+			position: relative;
+			top: 1px; left: 1px;
+
+		}
+		.smallText {
+			padding-top: 16px;
+		}
+		.s2x1 { padding-top: 32px; }
+		.s2x1.kpEnter { padding-top: 62px; }
+	</style>
+	<style data-theme="2" type="text/css">
+		:root {
+			--keyMargin: 1px;
+			--keyWidth: calc(46px + var(--keyMargin) * 2);
+		}
+		body {
+			font-family: sans-serif;
+		}
+		.keyHolder {
+			background: white;
+			margin: 1px;
+			padding: 4px;
+			border-radius: 7px;
+		}
+		.key {
+			padding-top: 9px;
+			border-color: #777;
+		}
+		.key:hover {
+			background: #FFFAE2;
+		}
+		.key.pressed, .key[data-pressed=true] {
+			background: rgba(146, 190, 255, 1);
+			position: relative;
+			top: 1px; left: 1px;
+		}
+		.smallText {
+			padding-top: 16px;
+		}
+	</style>
+	<style data-theme="3" type="text/css">
+		:root {
+			--keyMargin: 2px;
+			--keyWidth: calc(43px + var(--keyMargin) * 2);
+		}
+		body {
+			/*text-transform: uppercase;*/
+			color: #FFF;
+			font-size: 20px;
+			font-family: monospace;
+		}
+		.key {
+			border-color: #0F0;
+			background: rgba(0, 0, 0, 1);
+			padding-top: 10px;
+			box-shadow: 0 0 10px #0F0;
+		}
+		.key:hover {
+			background: #000;
+
+			border-width: 2px;
+
+		}
+		.key.pressed, .key[data-pressed=true] {
+			background: #0F0;
+			color: black;
+		}
+		.smallText {
+			padding-top: 16px;
+		}
+		.s2x1 { padding-top: 32px; }
+	</style>
+
+</head>
+<body>
+	<div id="mainKeys" class="keyHolder"></div>
+	<div id="navKeys" class="keyHolder"></div>
+	<div id="numberKeys" class="keyHolder"></div>
+
+	<script type="application/javascript">
+		//API funcs:
+		function textTyped(text) { console.log(`Typed: ${text} (u0x${text.charCodeAt(0).toString(16)})`)};
+		function commandEntered(action, shiftPressed) { console.log(`Command: ${action} Shift: ${shiftPressed}`)};
+
+
+
+		function capsLockPressed() {
+			shiftOn = capsLockOn = !capsLockOn;
+			setShifted(shiftOn);
+		}
+
+		function shiftPressed() {
+			capsLockOn = false;
+			shiftOn = !shiftOn;
+			setShifted(shiftOn);
+		}
+
+		var allKeys = [];
+		var shiftOn = false;
+		var capsLockOn = false;
+
+		function generateKeys(element, keys) {
+			var parent = document.getElementById(element);
+
+			for (var i = 0; i < keys.length; i++) {
+				for (var j = 0; j < keys[i].length; j++) {
+					var keyInfo = keys[i][j];
+
+					if (typeof keyInfo == "string") {
+						keyInfo = {
+							text: keyInfo[0],
+							upperText: keyInfo[1] || keyInfo[0].toUpperCase(),
+						};
+					}
+					keyInfo.label = keyInfo.label || keyInfo.text || '';
+					keyInfo.upperLabel = keyInfo.upperText ? keyInfo.upperText : keyInfo.label;
+					keyInfo.size = keyInfo.size || "1x1";
+					keyInfo.smallText = keyInfo.smallText === undefined ? keyInfo.label.length > 1 : keyInfo.smallText;
+
+					allKeys.push(keyInfo);
+
+					var keyEl = document.createElement("span");
+					keyEl.className = `${keyInfo.noShow ? "noShow" : "key"} s${keyInfo.size} ${keyInfo.smallText ? "smallText" : ""}`;
+					keyEl.setAttribute("data-keyId", allKeys.length - 1);
+					keyEl.textContent = keyInfo.label;
+					parent.appendChild(keyEl);
+					if (keyInfo.title) keyEl.title = keyInfo.title;
+
+					keyInfo.el = keyEl;
+					keyInfo.baseClass = keyEl.className;
+				}
+
+				var br = document.createElement("br");
+				parent.appendChild(br);
+			}
+		}
+
+		function setShifted(shifted) {
+			for (var i = 0; i < allKeys.length; i++) {
+				allKeys[i].el.textContent = shifted ? allKeys[i].upperLabel || allKeys[i].label : allKeys[i].label;
+				if (allKeys[i].isPressed) {
+					allKeys[i].el.setAttribute("data-pressed", allKeys[i].isPressed());
+				}
+			}
+		}
+
+		addEventListener("mousedown", ev => {
+			var keyId = ev.target.getAttribute("data-keyId");
+			if (keyId === null) return;
+
+			var keyInfo = allKeys[keyId];
+
+			var press = () => {
+				ev.preventDefault();
+				ev.target.className += " pressed";
+				setTimeout(() => ev.target.className = keyInfo.baseClass, 50);
+			};
+
+			if (keyInfo.action) {
+				keyInfo.action();
+				press();
+				return;
+			}
+
+			if (keyInfo.command) {
+				commandEntered(keyInfo.command, shiftOn);
+				press();
+				return;
+			}
+
+			if (keyInfo.text) {
+				var text = shiftOn ? keyInfo.upperText || keyInfo.text : keyInfo.text;
+
+				textTyped(text);
+				press();
+
+				if (shiftOn && !capsLockOn) {
+					shiftOn = false;
+					setShifted(shiftOn);
+				}
+				return;
+			}
+
+		}, true);
+
+		var currentScheme = 0;
+		function cycleColorScheme() {
+			currentScheme = (currentScheme + 1) % 4;
+			setColorScheme(currentScheme);
+		}
+
+		function setColorScheme(index) {
+			for (var el of document.getElementsByTagName("style")) {
+				if (el.getAttribute("data-theme") == "core") continue;
+				if (el.getAttribute("data-theme") == index) el.disabled = false;
+				else el.disabled = true;
+			}
+			currentScheme = +index;
+			localStorage.colorScheme = index;
+		}
+
+		setColorScheme(localStorage.colorScheme == undefined ? 2 : localStorage.colorScheme);
+
+
+		var mainKeys = [
+			["`~", "1!", "2@", "3#", "4$", "5%", "6^", "7&", "8*", "9(", "0)", "-_", "=+", {label: "←", command: "backspace", size: "1x2"}],
+			[
+				{label: "Tab", text: "\t", size: "1x1_5", smallText: false},
+				"q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[{", "]}",
+				{text: "\\", upperText: "|", size: "1x1_5"},
+			], [
+				{label: "Caps\nLock", size: "1x1_75 capsLock", action: capsLockPressed, isPressed: () => capsLockOn},
+				"a", "s", "d", "f", "g", "h", "j", "k", "l", ";:", "'\"",
+				{label: "↵", text: "\n", size: "1x2_25"},
+			], [
+				{label: "Shift", action: shiftPressed, size: "1x2_25", isPressed: () => shiftOn, smallText: false},
+				"z", "x", "c", "v", "b", "n", "m", ",<", ".>", "/?",
+				{label: "Shift", action: shiftPressed, size: "1x2_75", isPressed: () => shiftOn, smallText: false},
+			],
+			[
+				// {label: "", size: "1x3_75", noShow: true},
+
+				{label: "Sel All", size: "1x1_25", command: "selectAll"},
+				{label: "↶", size: "1x1_25", command: "undo", title: "Undo"},
+				{label: "↷", size: "1x1_25", command: "redo", title: "Redo"},
+
+				// {label: "Cut", size: "1x1_25", command: "cut"},
+				// {label: "Copy", size: "1x1_25", command: "copy"},
+				// {label: "Paste", size: "1x1_25", command: "paste"},
+
+				{label: "", size: "1x6_5", text: " "},//space
+
+				// {label: "Select All", size: "1x1_75", command: "selectAll"},
+				// {label: "↶", size: "1x1_5", command: "undo", title: "Undo"},
+				// {label: "↷", size: "1x1_5", command: "redo", title: "Redo"},
+
+				{label: "Cut", size: "1x1_5", command: "cut"},
+				{label: "Copy", size: "1x1_75", command: "copy"},
+				{label: "Paste", size: "1x1_5", command: "paste"},
+
+				// {label: "", size: "1x4_75", noShow: true},
+			]
+		];
+
+		var navKeys = [
+			[{label: "Insert", command: "insert"}, {label: "Home", command: "home"}, {label: "PgUp", command: "pageUp"}],
+			[{label: "Delete", command: "delete"}, {label: "End", command: "end"}, {label: "PgDn", command: "pageDown"}],
+			[{noShow: true}],
+			[
+				{label: "⇤", command: "wordLeft", title: "Move one word left"},
+				{label: "↑", command: "up"},
+				{label: "⇥", command: "wordRight", title: "Move one word right"}
+			],
+			[{label: "←", command: "left"}, {label: "↓", command: "down"}, {label: "→", command: "right"}],
+		];
+
+		var numberKeys = [
+			[
+				// {noShow: true},
+				{label: "✩", smallText: true, action: cycleColorScheme},
+				"/", "*", "-",
+			],
+			["7", "8", "9", {text: "+", size: "2x1"}],
+			["4", "5", "6"],
+			["1", "2", "3", {label: "↵", text: "\n", size: "2x1 kpEnter"}],
+			[{text: "0", size: "1x2"}, "."],
+		];
+
+		generateKeys("mainKeys", mainKeys);
+		generateKeys("navKeys", navKeys);
+		generateKeys("numberKeys", numberKeys);
+
+	</script>
+</body>
+</html>

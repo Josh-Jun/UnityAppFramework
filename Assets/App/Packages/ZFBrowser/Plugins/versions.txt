@@ -1,0 +1,5 @@
+# CEF 3.3282.1741.gcd94615 / Chromium 64.0.3282.119
+w32 cef_binary_3.3282.1741.gcd94615_windows32
+w64 cef_binary_3.3282.1741.gcd94615_windows64
+m64 cef_binary_3.3282.1741.gcd94615_macosx64
+l64 cef_binary_3.3282.1741.gcd94615_linux64
