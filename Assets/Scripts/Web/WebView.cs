@@ -18,7 +18,7 @@ using TMPro;
 
 namespace App.Modules
 {
-    [ViewOf("Web", ViewMold.UI2D, AssetPath.WebView, false, 4)]
+    [ViewOf("Web", ViewMold.UI2D, AssetPath.WebView, false, 3)]
     public class WebView : ViewBase
     {
 		private RectTransform webpanelrecttransform;
