@@ -44,7 +44,7 @@ namespace App.Modules
         {
             AddEventMsg<object>("OpenWebView", OpenWebView);
             AddEventMsg("CloseWebView", CloseWebView);
-            AddEventMsg("CloseWebButtonEvent", OnCloseWebButtonEvent);
+            AddEventMsg("CloseWebButtonEvent", View.CloseView);
         }
 
         #region Life Cycle
@@ -71,65 +71,51 @@ namespace App.Modules
 
         #endregion
 
-        #region Logic
-
-        private void OnCloseWebButtonEvent()
-        {
-            View.CloseView();
-        }
-        
-        private void LoadWebView(WebData data)
-        {
-            View.WebTitleTextMeshProUGUI.text = data.title;
-# if UNITY_EDITOR || UNITY_STANDALONE
-            if (!web)
-            {
-                var prefab = AssetsMaster.Instance.LoadAssetSync<GameObject>(AssetPath.Browser);
-                var go = Object.Instantiate(prefab, View.WebPanelRectTransform);
-                web = go.GetComponent<Browser>();
-            }
-            
-            if (!string.IsNullOrEmpty(data.url))
-            {
-                web.Url = data.url;
-            }
-            
-            if (!string.IsNullOrEmpty(data.html))
-            {
-                web.LoadHTML(data.html);
-            }
-#elif UNITY_ANDROID && !UNITY_EDITOR || UNITY_IOS && !UNITY_EDITOR
-            if (!web)
-            {
-                var prefab = AssetsMaster.Instance.LoadAssetSync<GameObject>(AssetPath.UniWebView);
-                var go = Object.Instantiate(prefab, View.WebPanelRectTransform);
-                web = go.GetComponent<UniWebView>();
-            }
-
-            if (!string.IsNullOrEmpty(data.url))
-            {
-                web.Load(data.url);
-            }
-
-            if (!string.IsNullOrEmpty(data.html))
-            {
-                web.LoadHTMLString(data.html, "text/html");
-            }
-
-            web.Show();
-#endif
-        }
-
-        #endregion
-
         #region View Logic
 
         private void OpenWebView(object obj)
         {
             if (obj is WebData data)
             {
-                LoadWebView(data);
                 isClear = data.isClear;
+                View.WebTitleTextMeshProUGUI.text = data.title;
+# if UNITY_EDITOR || UNITY_STANDALONE
+                if (!web)
+                {
+                    var prefab = AssetsMaster.Instance.LoadAssetSync<GameObject>(AssetPath.Browser);
+                    var go = Object.Instantiate(prefab, View.WebPanelRectTransform);
+                    web = go.GetComponent<Browser>();
+                }
+            
+                if (!string.IsNullOrEmpty(data.url))
+                {
+                    web.Url = data.url;
+                }
+            
+                if (!string.IsNullOrEmpty(data.html))
+                {
+                    web.LoadHTML(data.html);
+                }
+#elif UNITY_ANDROID && !UNITY_EDITOR || UNITY_IOS && !UNITY_EDITOR
+                if (!web)
+                {
+                    var prefab = AssetsMaster.Instance.LoadAssetSync<GameObject>(AssetPath.UniWebView);
+                    var go = Object.Instantiate(prefab, View.WebPanelRectTransform);
+                    web = go.GetComponent<UniWebView>();
+                }
+    
+                if (!string.IsNullOrEmpty(data.url))
+                {
+                    web.Load(data.url);
+                }
+    
+                if (!string.IsNullOrEmpty(data.html))
+                {
+                    web.LoadHTMLString(data.html, "text/html");
+                }
+    
+                web.Show();
+#endif
             }
             else
             {
@@ -142,6 +128,7 @@ namespace App.Modules
         private void CloseWebView()
         {
             if(!isClear) return;
+            if(!web) return;
             Object.Destroy(web.gameObject);
 # if UNITY_EDITOR || UNITY_STANDALONE
             web.CookieManager.ClearAll();
