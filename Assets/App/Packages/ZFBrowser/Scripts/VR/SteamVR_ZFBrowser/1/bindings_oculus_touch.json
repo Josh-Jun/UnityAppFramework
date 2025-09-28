@@ -1,0 +1,72 @@
+{
+  
+  "bindings": {
+    "/actions/ui": {
+      "poses": [{
+        "path": "/user/hand/left/pose/tip",
+        "output": "/actions/ui/in/uipointer"
+      }, {
+        "path": "/user/hand/right/pose/tip",
+        "output": "/actions/ui/in/uipointer"
+      }],
+      "sources": [{
+        "path": "/user/hand/left/input/trigger",
+        "mode": "button",
+        "inputs": {
+          "click": {
+            "output": "/actions/ui/in/interactmain"
+          }
+        }
+      }, {
+        "path": "/user/hand/right/input/trigger",
+        "mode": "button",
+        "inputs": {
+          "click": {
+            "output": "/actions/ui/in/interactmain"
+          }
+        }
+      }, {
+        "path": "/user/hand/left/input/joystick",
+        "mode": "joystick",
+        "inputs": {
+          "click": {
+            "output": "/actions/ui/in/interactmiddle"
+          },
+          "position": {
+            "output": "/actions/ui/in/joystickscroll"
+          }
+        }
+      }, {
+        "path": "/user/hand/right/input/joystick",
+        "mode": "joystick",
+        "inputs": {
+          "click": {
+            "output": "/actions/ui/in/interactmiddle"
+          },
+          "position": {
+            "output": "/actions/ui/in/joystickscroll"
+          }
+        }
+      }, {
+        "path": "/user/hand/left/input/grip",
+        "mode": "button",
+        "inputs": {
+          "click": {
+            "output": "/actions/ui/in/interactcontext"
+          }
+        }
+      }, {
+        "path": "/user/hand/right/input/grip",
+        "mode": "button",
+        "inputs": {
+          "click": {
+            "output": "/actions/ui/in/interactcontext"
+          }
+        }
+      }]
+    }
+  },
+  "controller_type": "oculus_touch",
+  "description": "",
+  "name": "oculus_touch"
+}

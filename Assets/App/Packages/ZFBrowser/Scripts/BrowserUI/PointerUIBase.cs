@@ -53,19 +53,32 @@ public abstract class PointerUIBase : MonoBehaviour, IBrowserUI {
 
 	public struct PointerState {
 		/// <summary>
-		/// Unique value for this pointer, to distinguish it by. Must be > 0.
+		/// Unique value for this pointer, to distinguish it by. Must be different for every
+		/// pointer input.
+		/// ids under 1000 are reserved for internal use.
 		/// </summary>
 		public int id;
+
 		/// <summary>
 		/// Is the pointer a 2d or 3d pointer?
 		/// </summary>
 		public bool is2D;
+
+		/// <summary>
+		/// Screen position of the pointer. Fill out only if is2D is true.
+		/// </summary>
 		public Vector2 position2D;
+
+		/// <summary>
+		/// World position of the pointer. Fill out only if is2D is false.
+		/// </summary>
 		public Ray position3D;
+
 		/// <summary>
 		/// Currently depressed "buttons" on this pointer.
 		/// </summary>
 		public MouseButton activeButtons;
+
 		/// <summary>
 		/// If the pointer can scroll, delta scrolling values since last frame.
 		/// </summary>
@@ -280,7 +293,7 @@ public abstract class PointerUIBase : MonoBehaviour, IBrowserUI {
 //		SetCursor(BrowserCursor);
 	}
 
-	private int focusForceCount = 0;
+	protected int focusForceCount = 0;
 
 	/// <summary>
 	/// Sets a flag to keep the keyboard focus on this browser, even if it has no pointers.

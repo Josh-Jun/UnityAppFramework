@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ZenFulcrum.EmbeddedBrowser {
 
@@ -25,7 +26,7 @@ public class ExternalKeyboard : MonoBehaviour {
 	[Tooltip("Browser to start as the focused browser for this keyboard. Not really needed if automaticFocus is on.")]
 	public Browser initialBrowser;
 
-	[Tooltip("Set to true to have the keyboard automatically hide when we don't have a text entry box to type into.")]
+	[Tooltip(@"Set to true to have the keyboard automatically hide when we don't have a text entry box to type into.")]
 	public bool hideWhenUnneeded = true;
 
 	protected PointerUIBase activeBrowserUI;
@@ -56,7 +57,7 @@ public class ExternalKeyboard : MonoBehaviour {
 		activeBrowserUI = ActiveBrowser.GetComponent<PointerUIBase>();
 		if (!activeBrowserUI) {
 			//We can't focus the browser when we type, so the typed letters won't appear as we type.
-			Debug.LogWarning("Browser does not haver a PointerUI, external keyboard may not work properly.");
+			Debug.LogWarning("Browser does not have a PointerUI, external keyboard may not work properly.");
 		}
 	}
 
@@ -72,7 +73,7 @@ public class ExternalKeyboard : MonoBehaviour {
 
 		keyboardBrowser = GetComponent<Browser>();
 
-		keyboardBrowser.onBrowserFocus += OnBrowserFocus;
+		keyboardBrowser.onBrowserFocus += OnKeyboardFocus;
 		keyboardBrowser.LoadHTML(keyboardPage);
 		keyboardBrowser.RegisterFunction("textTyped", TextTyped);
 		keyboardBrowser.RegisterFunction("commandEntered", CommandEntered);
@@ -80,25 +81,27 @@ public class ExternalKeyboard : MonoBehaviour {
 		if (initialBrowser) ActiveBrowser = initialBrowser;
 
 		if (automaticFocus) { 
-			StartCoroutine(FindAndListenForBrowsers());
+			foreach (var browser in FindObjectsOfType<Browser>()) {
+				ObserveBrowser(browser);
+			}
+			Browser.onAnyBrowserCreated += ObserveBrowser;
 		}
+
+		if (hideWhenUnneeded) SetVisible(false);
 	}
 
-	protected IEnumerator FindAndListenForBrowsers() {
-		yield return null;
-		foreach (var browser in FindObjectsOfType<Browser>()) {
-			if (browser == keyboardBrowser) continue;
-			ObserveBrowser(browser);
-		}
-		Browser.onAnyBrowserCreated += ObserveBrowser;
-		//in theory we shouldn't need to deal with browsers being destroyed since the whole callback chain should get cleaned up
-		//(might need some more work if you repeatedly destroy and recreate keyboards, though)
+	public void OnDisable() {
+		Browser.onAnyBrowserCreated -= ObserveBrowser;
 	}
 
 	protected void ObserveBrowser(Browser browser) {
+		if (browser == keyboardBrowser) return;//don't want to know about ourself
+
 		browser.onNodeFocus += (tagName, editable, value) => {
 			if (!this) return;
-			if (!browser.focusState.hasMouseFocus) return;
+			if (browser != ActiveBrowser && !browser.focusState.hasMouseFocus) {
+				return;
+			}
 
 			DoFocus(browser);
 		};
@@ -119,7 +122,8 @@ public class ExternalKeyboard : MonoBehaviour {
 		bool visible;
 		if (browser) visible = browser.focusState.focusedNodeEditable;
 		else visible = false;
-		SetVisible(visible);
+
+		if (hideWhenUnneeded) SetVisible(visible);
 		
 		onFocusChange(_activeBrowser, visible);
 	}
@@ -129,9 +133,14 @@ public class ExternalKeyboard : MonoBehaviour {
 		if (renderer) renderer.enabled = visible;
 		var collider = GetComponent<Collider>();
 		if (collider) collider.enabled = visible;
+
+		var image = GetComponent<RawImage>();
+		if (image) image.enabled = visible;
+		var keyboardInput = GetComponent<PointerUIGUI>();
+		if (keyboardInput) keyboardInput.enableInput = visible;
 	}
 
-	protected void OnBrowserFocus(bool mouseFocused, bool kbFocused) {
+	protected void OnKeyboardFocus(bool mouseFocused, bool kbFocused) {
 		//when our keyboard is focused, focus the browser we will be typing into.
 		if (!activeBrowserUI) return;
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -21,17 +21,44 @@ class PostBuildStandalone {
 		"icudtl.dat",
 	};
 
+	static readonly List<string> myDLLs = new List<string>() {
+		"ZFProxyWeb.dll",
+		"chrome_elf.dll",
+		"d3dcompiler_47.dll",
+		"libEGL.dll",
+		"libGLESv2.dll",
+		"zf_cef.dll",
+	};
+
 	[PostProcessBuild(10)]
+	public static void PostprocessBrowser(BuildTarget target, string buildFile) {
+		try {
+			PostprocessLinuxOrWindowsBuild(target, buildFile);
+			PostprocessMacBuild(target, buildFile);
+		} catch (Exception ex) {
+			EditorUtility.DisplayDialog("ZFBrowser build processing failed", ex.Message, "OK");
+			throw;
+		}
+	}
+
 	public static void PostprocessLinuxOrWindowsBuild(BuildTarget target, string buildFile) {
 		//prereq
 		var windows = target == BuildTarget.StandaloneWindows || target == BuildTarget.StandaloneWindows64;
-		var linux = target == BuildTarget.StandaloneLinux || target == BuildTarget.StandaloneLinuxUniversal || target == BuildTarget.StandaloneLinux64;
+		var linux = target == BuildTarget.StandaloneLinux64;
+
+		#if !UNITY_2019_2_OR_NEWER
+			if (target == BuildTarget.StandaloneLinux || target == BuildTarget.StandaloneLinuxUniversal) {
+				throw new Exception("ZFBrowser on Linux requires building for x86_64, not 32 bit or universal");
+			}
+		#endif
 
 		if (!windows && !linux) return;
 
-		if (target == BuildTarget.StandaloneLinux || target == BuildTarget.StandaloneLinuxUniversal) {
-			throw new Exception("ZFBrowser: Only x86_64 Linux is supported");
+		if (windows && buildFile.Contains(";")) {
+			//Because Windows magically can't load our .dlls if it does. What can be done about it? ¯\_(ツ)_/¯
+			throw new Exception("ZFBrowser: The build target (" + buildFile + ") may not contain a semicolon (;).");
 		}
+
 
 
 		//base info
@@ -52,7 +79,7 @@ class PostBuildStandalone {
 
 		//start copying
 
-		
+
 		//can't use FileLocations because we may not be building the same type as the editor
 		var platformPluginsSrc = ZFFolder + "/Plugins/" + buildType;
 
@@ -95,21 +122,26 @@ class PostBuildStandalone {
 
 		//Newer versions of Unity put the shared libs in the wrong place. Move them to where we expect them.
 		if (linux && File.Exists(pluginsPath + "x86_64/zf_cef.so")) {
-			foreach (var libFile in new[] {"zf_cef.so", "libEGL.so", "libGLESv2.so", "libwidevinecdmadapter.so", "libZFProxyWeb.so"}) {
+			foreach (var libFile in new[] {"zf_cef.so", "libEGL.so", "libGLESv2.so", "libZFProxyWeb.so"}) {
 				ForceMove(pluginsPath + "x86_64/" + libFile, pluginsPath + libFile);
 			}
+		}
+		if (windows && File.Exists(pluginsPath + "x86_64/zf_cef.dll")) {
+			foreach (var libFile in myDLLs) ForceMove(pluginsPath + "x86_64/" + libFile, pluginsPath + libFile);
+		}
+		if (windows && File.Exists(pluginsPath + "x86/zf_cef.dll")) {
+			foreach (var libFile in myDLLs) ForceMove(pluginsPath + "x86/" + libFile, pluginsPath + libFile);
 		}
 
 		WriteBrowserAssets(dataPath + "/" + StandaloneWebResources.DefaultPath);
 	}
 
-	[PostProcessBuild(10)]
 	public static void PostprocessMacBuild(BuildTarget target, string buildFile) {
 #if UNITY_2017_3_OR_NEWER
 		if (target != BuildTarget.StandaloneOSX) return;
 #else
 		if (target == BuildTarget.StandaloneOSXUniversal || target == BuildTarget.StandaloneOSXIntel) {
-			throw new Exception("Only x86_64 is supported");
+			throw new Exception("ZFBrowser: Only OS X builds for x86_64 are supported.");
 		}
 		if (target != BuildTarget.StandaloneOSXIntel64) return;
 #endif

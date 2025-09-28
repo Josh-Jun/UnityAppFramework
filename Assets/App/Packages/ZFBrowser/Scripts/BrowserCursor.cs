@@ -86,12 +86,23 @@ public class BrowserCursor {
 	public BrowserCursor() {
 		Load();
 
-		normalTexture = new Texture2D(size, size, TextureFormat.ARGB32, false);
-#if UNITY_EDITOR
-		normalTexture.alphaIsTransparency = true;
-#endif
+		normalTexture = CreateTexture(size, size);
 
 		SetActiveCursor(BrowserNative.CursorType.Pointer);
+	}
+
+	private Texture2D CreateTexture(int w, int h) {
+		#if UNITY_2018_3_OR_NEWER
+			var tex = new Texture2D(w, h, TextureFormat.RGBA32, false);
+		#else
+			var tex = new Texture2D(w, h, TextureFormat.ARGB32, false);
+		#endif
+
+		#if UNITY_EDITOR
+			tex.alphaIsTransparency = true;
+		#endif
+
+		return tex;
 	}
 
 	/// <summary>
@@ -149,10 +160,7 @@ public class BrowserCursor {
 
 		if (!customTexture || customTexture.width != cursor.width || customTexture.height != cursor.height) {
 			Object.Destroy(customTexture);
-			customTexture = new Texture2D(cursor.width, cursor.height, TextureFormat.ARGB32, false);
-#if UNITY_EDITOR
-			customTexture.alphaIsTransparency = true;
-#endif
+			customTexture = CreateTexture(cursor.width, cursor.height);
 		}
 
 		customTexture.SetPixels32(pixels);

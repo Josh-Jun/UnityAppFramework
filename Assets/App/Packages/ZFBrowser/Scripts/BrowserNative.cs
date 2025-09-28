@@ -1,5 +1,11 @@
+//Set up some defines for what we are running on or compiled for right
+//now - not what Editor will compile for later!
 #if UNITY_EDITOR_WIN || (UNITY_STANDALONE_WIN && !UNITY_EDITOR)
-#define ZF_WINDOWS
+	#define ON_WINDOWS
+#elif UNITY_EDITOR_OSX || (UNITY_STANDALONE_OSX && !UNITY_EDITOR)
+	#define ON_OS_X
+#elif UNITY_EDITOR_LINUX || (UNITY_STANDALONE_LINUX && !UNITY_EDITOR)
+	#define ON_LINUX
 #endif
 
 #define PROXY_BROWSER_API
@@ -89,7 +95,7 @@ public static class BrowserNative {
 		//(download at https://get.adobe.com/flashplayer/otherversions/)
 		"--enable-system-flash",
 		//For Linux use probably need something like this instead (see docs)
-		//"--ppapi-flash-version=29.0.0.113", "--ppapi-flash-path=/usr/lib/adobe-flashplugin/libpepflashplayer.so",
+		//"--ppapi-flash-version=32.0.0.223", "--ppapi-flash-path=/usr/lib/adobe-flashplugin/libpepflashplayer.so",
 
 		//getUserMedia (microphone/webcam).
 		//Turning this on has security implications, it appears there's no
@@ -102,9 +108,14 @@ public static class BrowserNative {
 		//If you want to specify a proxy by hand:
 		//"--proxy-server=localhost:8000",
 
+		//Allow videos to autoplay with sound.
+		//  See https://developers.google.com/web/updates/2017/09/autoplay-policy-changes
+		//  https://cs.chromium.org/chromium/src/media/base/media_switches.cc?l=182&gsn=kNoUserGestureRequiredPolicy
+		//  Ideally this enables it. Sometimes it doesn't seem to work.
+		//"--autoplay-policy=no-user-gesture-required",
 
 		//"--zf-log-cef-verbose",
-		//"--zf-log-internal", 
+		//"--zf-log-internal",
 	};
 
 	/**
@@ -181,7 +192,17 @@ public static class BrowserNative {
 
 		var dirs = FileLocations.Dirs;
 
-#if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
+		if (!dirs.logFileIsUnityLog) {
+			//Unity doesn't rotate this log file for us, so nix the old, if any.
+			var file = new FileInfo(dirs.logFile);
+			try {
+				if (file.Exists) file.Delete();
+			} catch {
+				//we'll just deal with it getting bigger
+			}
+		}
+
+#if ON_OS_X || ON_LINUX
 		FixProcessPermissions(dirs);
 #endif
 
@@ -279,11 +300,11 @@ public static class BrowserNative {
 		var coreType = "ZFEmbedWeb";
 #endif
 
-#if UNITY_EDITOR_OSX || (!UNITY_EDITOR && UNITY_STANDALONE_OSX)
+#if ON_OS_X
 		var libFile = binariesPath + "/lib" + coreType + ".dylib";
-#elif UNITY_EDITOR_LINUX || (!UNITY_EDITOR && UNITY_STANDALONE_LINUX)
+#elif ON_LINUX
 		var libFile = binariesPath + "/lib" + coreType + ".so";
-#elif UNITY_EDITOR_WIN || (!UNITY_EDITOR && UNITY_STANDALONE_WIN)
+#elif ON_WINDOWS
 		var libFile = binariesPath + "/" + coreType + ".dll";
 #else
 	#error Unknown OS.
@@ -329,7 +350,7 @@ public static class BrowserNative {
 
 
 	private static string GetLibError() {
-#if ZF_WINDOWS
+#if ON_WINDOWS
 		return new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error()).Message;
 #else
 		return Marshal.PtrToStringAnsi(dlerror());
@@ -337,7 +358,7 @@ public static class BrowserNative {
 	}
 
 	private static IntPtr OpenLib(string name) {
-#if ZF_WINDOWS
+#if ON_WINDOWS
 		var handle = LoadLibraryW(name);
 		if (handle == IntPtr.Zero) {
 //			throw new DllNotFoundException("ZFBrowser failed to load " + name + ": " + Marshal.GetLastWin32Error());
@@ -364,7 +385,7 @@ public static class BrowserNative {
 
 		ClearSymbols();
 
-#if ZF_WINDOWS
+#if ON_WINDOWS
 		var success = FreeLibrary(moduleHandle);
 #else
 		var success = dlclose(moduleHandle) == 0;
@@ -383,7 +404,7 @@ public static class BrowserNative {
 	}
 
 	private static IntPtr GetFunc(IntPtr libHandle, string fnName) {
-#if ZF_WINDOWS
+#if ON_WINDOWS
 		var addr = GetProcAddress(libHandle, fnName);
 		if (addr == IntPtr.Zero) {
 			throw new DllNotFoundException("ZFBrowser failed to load method " + fnName + ": " + Marshal.GetLastWin32Error());
@@ -398,7 +419,7 @@ public static class BrowserNative {
 #endif
 	}
 
-#if !ZF_WINDOWS
+#if !ON_WINDOWS
 	[Flags]
 	public enum DLFlags {
 		RTLD_LAZY = 1,
@@ -480,7 +501,7 @@ public static class BrowserNative {
 	 * Called when a browser opens a new window.
 	 * creatorBrowserId - id of the browser that cause the window to be created
 	 * newBrowserId - a newly created (as if by zfb_createBrowser) browser tab
-	 * 
+	 *
 	 * May be called on any thread.
 	 */
 	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -1110,7 +1131,7 @@ public static class BrowserNative {
 	public static Calltype_zfb_downloadCommand zfb_downloadCommand;
 
 
-#if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
+#if ON_OS_X
 	/**
 	 * Creates a new OS-native window in this process, returning an id.
 	 */

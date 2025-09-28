@@ -24,6 +24,11 @@ public class PointerUIMesh : PointerUIBase {
 
 	protected override Vector2 MapPointerToBrowser(Vector2 screenPosition, int pointerId) {
 		var camera = viewCamera ? viewCamera : Camera.main;
+		if (!camera) {
+			Debug.LogError("No main camera and no viewCamera specified. We can't map screen-space mouse clicks to the browser without a camera.", this);
+			enableMouseInput = false;
+			return new Vector2(float.NaN, float.NaN);
+		}
 		return MapRayToBrowser(camera.ScreenPointToRay(screenPosition), pointerId);
 	}
 

@@ -44,6 +44,7 @@ namespace App.Modules
             AddEventMsg<object>("OpenWebView", OpenWebView);
             AddEventMsg("CloseWebView", CloseWebView);
             AddEventMsg("CloseWebButtonEvent", OnCloseWebButtonEvent);
+            AddEventMsg("ResetWebViewOrientation", ResetWebViewOrientation);
         }
 
         #region Life Cycle
@@ -76,6 +77,15 @@ namespace App.Modules
         {
             View.CloseView();
         }
+        
+        private void ResetWebViewOrientation()
+        {
+# if UNITY_EDITOR || UNITY_STANDALONE
+            web.Resize((int)View.WebPanelRectTransform.sizeDelta.x, (int)View.WebPanelRectTransform.sizeDelta.y);
+#elif UNITY_ANDROID && !UNITY_EDITOR || UNITY_IOS && !UNITY_EDITOR
+            web.Frame = new Rect(0, 0, View.WebPanelRectTransform.sizeDelta.x, View.WebPanelRectTransform.sizeDelta.y);
+#endif
+        }
 
         private void LoadWebView(WebData data)
         {
@@ -87,12 +97,12 @@ namespace App.Modules
                 var go = Object.Instantiate(prefab, View.WebPanelRectTransform);
                 web = go.GetComponent<Browser>();
             }
-
+            
             if (!string.IsNullOrEmpty(data.url))
             {
                 web.Url = data.url;
             }
-
+            
             if (!string.IsNullOrEmpty(data.html))
             {
                 web.LoadHTML(data.html);
@@ -103,6 +113,7 @@ namespace App.Modules
                 var prefab = AssetsMaster.Instance.LoadAssetSync<GameObject>(AssetPath.UniWebView);
                 var go = Object.Instantiate(prefab, View.WebPanelRectTransform);
                 web = go.GetComponent<UniWebView>();
+                web.OnOrientationChanged += (view, orientation) => { ResetWebViewOrientation(); };
             }
 
             if (!string.IsNullOrEmpty(data.url))
@@ -137,6 +148,7 @@ namespace App.Modules
 
         private void CloseWebView()
         {
+            
         }
 
         #endregion

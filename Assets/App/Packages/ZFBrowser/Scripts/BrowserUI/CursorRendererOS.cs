@@ -21,14 +21,7 @@ public class CursorRendererOS : CursorRendererBase {
 				Cursor.visible = true;
 				Cursor.SetCursor(
 					cursor.Texture, cursor.Hotspot, 
-#if UNITY_STANDALONE_OSX
-					//Not sure why, but we get really ugly looking "garbled" shadows around the mouse cursor.
-					//I hate latency, but a software cursor is probably less irritating than looking at
-					//that ugly stuff.
-					CursorMode.ForceSoftware
-#else
 					CursorMode.Auto
-#endif
 				);
 			} else {
 				//browser, so no cursor

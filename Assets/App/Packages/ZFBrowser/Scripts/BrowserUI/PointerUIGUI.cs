@@ -71,6 +71,9 @@ public class PointerUIGUI :
 		);
 		pos.x = pos.x / rTransform.rect.width + rTransform.pivot.x;
 		pos.y = pos.y / rTransform.rect.height + rTransform.pivot.y;
+
+		if (pos.x < 0 || pos.x > 1) pos.x = float.NaN;
+		if (pos.y < 0 || pos.y > 1) pos.x = float.NaN;
 		return pos;
 	}
 
@@ -95,7 +98,13 @@ public class PointerUIGUI :
 		protected set { _mouseHasFocus = value; }
 	}
 	protected bool _keyboardHasFocus;
-	public override bool KeyboardHasFocus { get { return _keyboardHasFocus && enableInput; } }
+
+	public override bool KeyboardHasFocus {
+		get {
+			if (!enableInput) return false;
+			return _keyboardHasFocus || focusForceCount > 0;
+		}
+	}
 
 	public void OnSelect(BaseEventData eventData) {
 		_keyboardHasFocus = true;

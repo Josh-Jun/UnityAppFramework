@@ -1,0 +1,78 @@
+{
+  
+  "bindings": {
+    "/actions/ui": {
+      "poses": [{
+        "path": "/user/hand/left/pose/tip",
+        "output": "/actions/ui/in/uipointer"
+      }, {
+        "path": "/user/hand/right/pose/tip",
+        "output": "/actions/ui/in/uipointer"
+      }],
+      "sources": [{
+        "path": "/user/hand/left/input/grip",
+        "mode": "button",
+        "inputs": {
+          "click": {
+            "output": "/actions/ui/in/interactmiddle"
+          }
+        }
+      }, {
+        "path": "/user/hand/left/input/trigger",
+        "mode": "button",
+        "inputs": {
+          "click": {
+            "output": "/actions/ui/in/interactmain"
+          }
+        }
+      }, {
+        "path": "/user/hand/left/input/trackpad",
+        "mode": "trackpad",
+        "inputs": {
+          "click": {
+            "output": "/actions/ui/in/interactcontext"
+          },
+          "position": {
+            "output": "/actions/ui/in/touchpadscrollposition"
+          },
+          "touch": {
+            "output": "/actions/ui/in/touchpadscrolltouch"
+          }
+        }
+      }, {
+        "path": "/user/hand/right/input/grip",
+        "mode": "button",
+        "inputs": {
+          "click": {
+            "output": "/actions/ui/in/interactmiddle"
+          }
+        }
+      }, {
+        "path": "/user/hand/right/input/trackpad",
+        "mode": "trackpad",
+        "inputs": {
+          "click": {
+            "output": "/actions/ui/in/interactcontext"
+          },
+          "position": {
+            "output": "/actions/ui/in/touchpadscrollposition"
+          },
+          "touch": {
+            "output": "/actions/ui/in/touchpadscrolltouch"
+          }
+        }
+      }, {
+        "path": "/user/hand/right/input/trigger",
+        "mode": "button",
+        "inputs": {
+          "click": {
+            "output": "/actions/ui/in/interactmain"
+          }
+        }
+      }]
+    }
+  },
+  "controller_type": "vive_controller",
+  "description": "",
+  "name": "vive_controller"
+}

@@ -194,7 +194,7 @@ public partial class Browser {
 		var browser = GetBrowser(creatorBrowserId);
 		if (!browser) return;
 
-		#if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
+		#if UNITY_EDITOR_OSX || (UNITY_STANDALONE_OSX && !UNITY_EDITOR)
 			var url = Util.PtrToStringUTF8(urlPtr);
 			if (url == "about:inspector" || browser.newWindowAction == NewWindowAction.NewWindow) lock (browser.thingsToDo) {
 				browser.thingsToDo.Add(() => {

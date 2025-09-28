@@ -659,7 +659,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   manageAllBrowsers: 1
-  promptForFileNames: 1
+  promptForFileNames: 0
   saveFolder: 
   statusBar: {fileID: 508963193}
 --- !u!4 &608947672

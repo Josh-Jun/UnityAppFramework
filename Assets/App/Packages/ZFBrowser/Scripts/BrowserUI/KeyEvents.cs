@@ -35,10 +35,17 @@ public class KeyEvents {
 		KeyCode.LeftAlt,
 		KeyCode.RightAlt,
 		//KeyCode.CapsLock, unity refuses to inform us of this, so there's not much we can do
+		KeyCode.Insert,//we only get keyup, not key down
 #endif
 		//Unity consistently doesn't send events for shift across all platforms.
 		KeyCode.LeftShift,
 		KeyCode.RightShift,
+	};
+
+	private static readonly KeyCode[] keysToIgnore = {
+#if ZF_OSX
+		KeyCode.Insert,//we only get keyup, not key down
+#endif
 	};
 
 	/// <summary>
@@ -71,9 +78,11 @@ public class KeyEvents {
 	public void Feed(Event ev) {
 		if (ev.type != EventType.KeyDown && ev.type != EventType.KeyUp) return;
 
-		//		if (ev.character != 0) Debug.Log("ev >>> " + ev.character);
-		//		else if (ev.type == EventType.KeyUp) Debug.Log("ev ^^^ " + ev.keyCode);
-		//		else if (ev.type == EventType.KeyDown) Debug.Log("ev vvv " + ev.keyCode);
+		for (int i = 0; i < keysToIgnore.Length; i++) if (ev.keyCode == keysToIgnore[i]) return;
+
+//		if (ev.character != 0) Debug.Log("ev >>> " + ev.character);
+//		else if (ev.type == EventType.KeyUp) Debug.Log("ev ^^^ " + ev.keyCode);
+//		else if (ev.type == EventType.KeyDown) Debug.Log("ev vvv " + ev.keyCode);
 
 		keyEvents.Add(new Event(ev));
 	}
@@ -96,7 +105,7 @@ public class KeyEvents {
 	}
 
 	/// <summary>
-	/// Types the given text in. THis does not simulate pressing each key and releasing it.
+	/// Types the given text in. This does not simulate pressing each key and releasing it.
 	/// </summary>
 	/// <param name="text"></param>
 	public void Type(string text) {

@@ -94,6 +94,9 @@
     <li class="sidebar-header-2"><a href="#notes-1">Notes</a></li>
     <li class="sidebar-header-1"><a href="#input">Input</a></li>
     <li class="sidebar-header-2"><a href="#vr-input">VR Input</a></li>
+    <li class="sidebar-header-3"><a href="#steamvr">SteamVR</a></li>
+    <li class="sidebar-header-3"><a href="#oculus-vr">Oculus VR</a></li>
+    <li class="sidebar-header-3"><a href="#common">Common</a></li>
     <li class="sidebar-header-2"><a href="#external-keyboard">External Keyboard</a></li>
     <li class="sidebar-header-1"><a href="#customization">Customization</a></li>
     <li class="sidebar-header-1"><a href="#debugging">Debugging</a></li>
@@ -109,7 +112,6 @@
     <li class="sidebar-header-2"><a href="#do-i-need-it?">Do I need it?</a></li>
     <li class="sidebar-header-2"><a href="#for-myself-(manual-install)">For myself (manual install)</a></li>
     <li class="sidebar-header-2"><a href="#for-anyone-(distribute-flash)">For anyone (distribute Flash)</a></li>
-    <li class="sidebar-header-1"><a href="#known-issues">Known issues</a></li>
     <li class="sidebar-header-1"><a href="#get-help">Get Help</a></li>
 </ul>
 
@@ -118,15 +120,16 @@
 <div id="content"><h1 id="zfbrowser-documentation"><a class="header-link" href="#zfbrowser-documentation"></a>ZFBrowser Documentation</h1>
 <p>This asset allows you to embed a full copy of Chromium, the open-source core of Google Chrome, inside your game!</p>
 <p><a href="http://zenfulcrum.com/browser">Product Page</a> | <a href="https://www.assetstore.unity3d.com/#!/content/55459">Unity Asset Store</a> | <a href="Changelog.txt">Changelog</a> | <a href="#get-help">Get Help</a></p>
-<p>Documentation for v2.1.0.</p>
-<p><small>Copyright &copy; 2015-2018 Zen Fulcrum LLC</small></p>
+<p>Documentation for ZFBrowser v3.1.0.</p>
+<p><small>Uses CEF 74.1.19+gb62bacf+chromium-74.0.3729.157 / Chromium 74.0.3729.157.</small></p>
+<p><small>Copyright &copy; 2015-2019 Zen Fulcrum LLC</small></p>
 <h1 id="quick-start"><a class="header-link" href="#quick-start"></a>Quick Start</h1>
 <p>Basic Browser:</p>
 <ul class="list">
 <li>If you are using <a href="#linux-users">Linux</a> or <a href="#os-x-users">OS X</a> read the platform-specific notes.</li>
 <li>Import ZFBrowser into your project.</li>
 <li>Grab <code>ZFBrowser/Prefabs/Browser (Mouse)</code> and drop it into your scene.</li>
-<li>On this new object, set the URL to a site of your choice, such as <code>http://google.com/</code></li>
+<li>On this new object, set the URL to a site of your choice, such as <code>https://google.com/</code></li>
 <li>Fiddle with your camera so the quad fills most of the view.</li>
 <li>Hit play and interact with the web site.</li>
 </ul>
@@ -139,6 +142,7 @@
 <li>Hit play.</li>
 </ul>
 <p>Congratulations! You now have a browser in your game!</p>
+<p>See <a href="#vr-input">this section</a> if you want to use the browser in VR.</p>
 <h1 id="general"><a class="header-link" href="#general"></a>General</h1>
 <h2 id="important-note"><a class="header-link" href="#important-note"></a>Important Note</h2>
 <p>This library is made possible by a number of third-party open source software projects!</p>
@@ -153,6 +157,7 @@
 </li>
 <li>Linux Standalone, 64-bit (experimental) (Mono)<ul class="list">
 <li><small>The most recent Ubuntu LTS should work. Let me know if you find a mainstream, recent distro that has issues.</small></li>
+<li><small>Unity 2018.3.0, and probably certain other 2018.3.x versions, do not work. Try Unity 2018.3.8+.</small></li>
 </ul>
 </li>
 <li>OS X Standalone, 64-bit (Mono or il2cpp)<ul class="list">
@@ -161,16 +166,16 @@
 </li>
 </ul>
 <p>Except as noted, only building on the same platform as your target is supported. If you have troubles making a build or testing in the editor, try again with the Unity Editor running on your target platform.</p>
-<p>This Asset does not include licenses for <a href="http://ossguy.com/?p=233">proprietary or patent-encumbered codecs</a> such as h.264 and mp3. (Most streaming sites use patent-encumbered codecs and will not work. YouTube videos generally work, unless they are live.) Consider re-encoding your content with an open codec supported by stock Chromium such as WebM or Ogg Vorbis.</p>
+<p>This Asset does not include licenses for <a href="http://ossguy.com/?p=233">proprietary or patent-encumbered codecs</a> such as h.264. (Most streaming sites use patent-encumbered codecs and will not work. YouTube videos generally work, unless they are live.) Consider re-encoding your content with an open codec supported by stock Chromium such as WebM or Ogg Vorbis.</p>
 <h2 id="os-x-users"><a class="header-link" href="#os-x-users"></a>OS X Users</h2>
 <ul class="list">
 <li>(Pre-Unity 2017.3) By default, your new Unity project will target universal builds, you&#39;ll need to change it to x64 before you can build and run your application.</li>
-<li>At present, OS X builds must be made from OS X. Make sure that the <code>ZFGameBrowser</code> executable is marked executable when you distribute your application.</li>
+<li>You can make OS X builds from Windows, but make sure that correct files are marked executable once they reach an OS X filesystem: <code>chmod +x MyGame.app/Contents/MacOS/MyGame MyGame.app/Contents/Frameworks/ZFGameBrowser.app/Contents/MacOS/ZFGameBrowser</code></li>
 </ul>
 <h2 id="linux-users"><a class="header-link" href="#linux-users"></a>Linux Users</h2>
 <ul class="list">
 <li>Linux support is experimental.</li>
-<li>You can make Linux builds from Windows, but make sure that the <code>ZFGameBrowser</code> executable is marked executable when you distribute your application.</li>
+<li>You can make Linux builds from Windows, but make sure that correct files are marked executable once they reach a Linux filesystem: <code>chmod +x MyGame.x86_64 MyGame_Data/Plugins/ZFGameBrowser</code></li>
 <li>Newer versions of Ubuntu: You need to <code>sudo apt install libgconf2-4</code> as an installation dependency.</li>
 </ul>
 <h2 id="other-platforms"><a class="header-link" href="#other-platforms"></a>Other Platforms</h2>
@@ -216,10 +221,10 @@ Debug.<span class="hljs-keyword">Log</span>(<span class="hljs-string">"Document 
 </li>
 <li>You can also evaluate raw JavaScript in the browser by calling browser.EvalJS</li>
 <li>If the Browser isn&#39;t ready for commands or the page isn&#39;t loaded yet, it will queue your commands and execute them then the page is loaded.</li>
-<li>The JavaScript execution engine is V8. Not only is JavaScript support robust and complete, you can also use some <a href="http://es6-features.org/">es6 features</a>.</li>
+<li>The JavaScript execution engine is V8. Not only is JavaScript support robust and complete, you can also use <a href="http://es6-features.org/">es6 features</a> supported by the backing Chromium version.</li>
 <li>Note that functions you expose won&#39;t be available at the time of the HTML load event. If you need to know when the page loads, use browser.WhenLoaded (Unity side).</li>
 <li>Check out the included demo and examples for some example code and use cases.</li>
-<li>For pages that have Content Security Policies preventing use of eval, use <code>EvalJSCSP</code>. (&quot;Refused to execute inline script because it violates the following Content Security Policy ...&quot;) There&#39;s pitfalls, so read the function&#39;s documentation.</li>
+<li>For pages that have Content Security Policies preventing use of eval (&quot;Refused to execute inline script because it violates the following Content Security Policy ...&quot;), use <code>EvalJSCSP</code>.  There&#39;s pitfalls, so read the function&#39;s documentation.</li>
 </ul>
 <h2 id="promises"><a class="header-link" href="#promises"></a>Promises</h2>
 <p>ZFBrowser uses <a href="https://github.com/Real-Serious-Games/C-Sharp-Promise">this promise library</a> made by Real Serious Games with some small changes.</p>
@@ -271,25 +276,78 @@ Debug.<span class="hljs-keyword">Log</span>(<span class="hljs-string">"Document 
 </ul>
 <h2 id="vr-input"><a class="header-link" href="#vr-input"></a>VR Input</h2>
 <p>An input system is included for getting input from tracked VR controllers to point at and interact with a browser. Unity 2017.2 or newer is required.</p>
-<p>Basic setup:</p>
+<p>Unity&#39;s VR controller input is a bit of a mess right now (see comment in VRInput.cs). To get input data form the controllers we use the direct APIs, which may require some extra setup.</p>
+<p>First, do the usual setup to get VR running in your project (Player Settings » XR Settings). Then follow the instructions for the VR backend you are using below. Then look at the rest of this section.</p>
+<h3 id="steamvr"><a class="header-link" href="#steamvr"></a>SteamVR</h3>
+<p>Using the SteamVR runtime (and OpenVR API). This is for the HTC Vive, Oculus under SteamVR, and pretty much everything else.</p>
+<p>First:</p>
 <ul class="list">
-<li>First, do the usual setup to get VR running in your project (Player Settings » XR Settings).</li>
-<li>Unity&#39;s VR controller input is a bit of a mess right now (see comment in VRInput.cs). To get input data form the controllers we use the direct APIs. To get controller inputs working for:<ul class="list">
-<li><em>OpenVR</em> (Vive, Oculus under SteamVR): What you need is already included. <small>Their license is uncomplicated. ;-)</small></li>
-<li><em>Oculus VR</em> (Oculus standalone):<ul class="list">
-<li>Grab the <a href="https://developer.oculus.com/downloads/">Unity Oculus SDK</a> and import it into your project.</li>
+<li>If you are using Unity 2018.3+: Install the OpenVR package (Window → Package Manager → OpenVR → Install)</li>
+</ul>
+<p>Then you have a couple options:</p>
+<ul class="list">
+<li><strong>Option A</strong>: Using &quot;hardcoded&quot; input, SteamVR 1.x style. Fast+simple. Incompatible with SteamVR package and reduced controller support.<ul class="list">
+<li>Just...start using it. It should work right out of the box for a Vive wand or Oculus Touch.</li>
+<li>By default, trigger is left click, grip is right click, and you can use the touchpads/joysticks to scroll. Click the touchpad or joystick to middle click. Extend <code>VRBrowserHand</code> to adjust/remap the inputs.</li>
+</ul>
+</li>
+</ul>
+<p>or</p>
+<ul class="list">
+<li><strong>Option B</strong>: Using SteamVR 2.0+ and its remappable input system. Requires the SteamVR package.<ul class="list">
+<li>Open up <code>OpenVRConfig.cs</code> and change the mode to <code>InputMode.MappedActions</code>.</li>
+<li>Grab the <a href="https://assetstore.unity.com/packages/tools/integration/steamvr-plugin-32647">SteamVR SDK</a> and import it.<ul class="list">
+<li>SteamVR&#39;s Unity plugin has assorted bugs and issues so be prepared for some hitches.</li>
+</ul>
+</li>
+<li>SteamVR should detect the action maps included with ZFBrowser and prompt you to import them.<ul class="list">
+<li>If you already have any actions defined <strong>DON&#39;T IMPORT YET.</strong> Cancel the dialog repeatedly and close Unity.<ul class="list">
+<li>SteamVR Unity version 2.3.2 doesn&#39;t correctly import default action mappings when merging.</li>
+<li><a href="https://github.com/ValveSoftware/steamvr_unity_plugin/pull/494/files">Apply this patch</a>, then reopen Unity and import the ZFBrowser bindings.</li>
+</ul>
+</li>
+<li>If you don&#39;t have any actions defined you can import the ZFBrowser actions immediately.</li>
+</ul>
+</li>
+<li>More:<ul class="list">
+<li>If pointing works but buttons don&#39;t then something isn&#39;t set up right. Things to check:<ul class="list">
+<li>Is <code>OpenVRConfig.mode</code> set to <code>InputMode.MappedActions</code>?</li>
+<li>The actions named in <code>OpenVRConfig.cs</code> must exist. <code>PointPose</code> and <code>LeftClickAction</code> are critical, the rest less so.</li>
+<li>Is the action set active? (See below)</li>
+<li>Are mapping defined for your controller? Assuming the default inputs: In Unity go to Window → SteamVR Input → Open binding UI → Under <code>Current Binding</code> click <code>Edit</code> for your controller → select the <code>ui</code> tab<ul class="list">
+<li>Make sure <code>Mirror Mode</code> is on.</li>
+<li>Make sure something, usually a trigger, is bound as <code>Interact With UI</code></li>
+<li>Under <code>Edit Action Poses</code> make sure <code>UI Pointer</code> is bound to the controller&#39;s <code>Tip</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>You don&#39;t have to use the provided actions, you can set the browser to use whatever input names you want in <code>OpenVRConfig.cs</code>.<ul class="list">
+<li>You can also change, disable, or remap the inputs in this file.</li>
+</ul>
+</li>
+<li>If SteamVR doesn&#39;t prompt you try opening the SteamVR Input window and regenerating the bindings.</li>
+<li>Default bindings are included for Vive wands and Oculus Touch.</li>
+<li>If you have more than one action set you need to enable the Browser&#39;s actions set (<code>ui</code> by default) before browser inputs will work. You can use a <code>SteamVR_ActivateActionSetOnLoad</code> with the <code>Action Set</code> set to <code>\actions\ui</code> to enable it automatically.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="oculus-vr"><a class="header-link" href="#oculus-vr"></a>Oculus VR</h3>
+<ul class="list">
+<li>If you are using Unity 2018.3+: Install the Oculus (Standalone) package (Window → Package Manager → Oculus (Standalone) → Install)</li>
+<li>Grab the <a href="https://assetstore.unity.com/packages/tools/integration/oculus-integration-82022">Unity Oculus SDK</a> and import it.</li>
 <li>In Unity go to Edit » Project Settings » Player » Other Settings » Scripting Define Symbols and add <code>OCULUS_API</code> to let ZFBrowser know to use it. (Or just uncomment <code>#define OCULUS_SDK</code> in VRInput.cs.)</li>
-<li>Delete <code>ZFBrowser/Scripts/**.asmdef</code>.</li>
+<li>Delete <code>ZFBrowser/Scripts/**.asmdef</code> (2 files).</li>
+<li>This isn&#39;t specific to ZFBrowser, but you may want to call <code>XRDevice.SetTrackingSpaceType(TrackingSpaceType.RoomScale);</code> somewhere to make the Oculus API use the right coordinate system (y=0 at the floor). By default it will put y=0 at standing eye height which is...weird.</li>
 </ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>Once this is set up, you should be able to open up the <code>VR</code> demo scene and give it a try!</p>
-<p>To get things set up in your scene:</p>
+<h3 id="common"><a class="header-link" href="#common"></a>Common</h3>
+<p>Once that&#39;s set up, you should be able to open up the <code>VR</code> demo scene and give it a try! (Use the <code>VR (SteamVR 2.0)</code> demo scene if you&#39;re using the SteamVR package with the new input system.)</p>
+<p>To get things set up in your own scene:</p>
 <ul class="list">
 <li>Start by dropping a <code>Browser (VR)</code> prefab into the scene.</li>
-<li>Find the <code>VRBrowserHand</code> prefab and drop a couple into your scene next to your camera. Use the inspector to assign one of them to the right hand. You can clear the <code>visualization</code>s if you have something else rendering the hands already.<ul class="list">
+<li>Find the <code>VRBrowserHand</code> prefab and drop a couple into your scene next to your camera. (For SteamVR this would be just inside the <code>[CameraRig]</code> prefab.) Use the inspector to assign one of them to the right hand. You can clear the <code>visualization</code>s if you don&#39;t want to use the default &quot;laser pointer&quot;.<ul class="list">
 <li>Make sure the <code>VRBrowserHand</code>s have the same transform parent as the VR camera.</li>
 <li>Make sure the VR camera starts with no rotation at its local origin, or things may not line up!</li>
 </ul>
@@ -298,12 +356,9 @@ Debug.<span class="hljs-keyword">Log</span>(<span class="hljs-string">"Document 
 </ul>
 <p>Also:</p>
 <ul class="list">
-<li>By default, trigger is left click, grip is right click, and you can use the touchpad/joysticks to scroll. Extend <code>VRBrowserHand</code> to adjust/remap the inputs.</li>
-<li>The default prefab is set up to prevent accidental drags when clicking, which should make things a bit easier to interact with for those of us without surgeon hands. If you still find links hard to &quot;click&quot; on without holding your hand very still consider increasing the &quot;Drag Movement Threshold&quot; on the MeshPointerUI component.</li>
-<li>Oculus users: This isn&#39;t specific to ZFBrowser, but you may want to call <code>XRDevice.SetTrackingSpaceType(TrackingSpaceType.RoomScale);</code> to make the Oculus API use the right coordinate system (y=0 at the floor). By default it will put y=0 at standing eye height which is inconsistent with OpenVR and what you&#39;d expect these days.</li>
+<li>The default <code>Browser (VR)</code> prefab is set up to prevent accidental drags when clicking, which should make things a bit easier to interact with for those of us without surgeon hands. If you still find links hard to &quot;click&quot; on without holding your hand very still consider increasing the &quot;Drag Movement Threshold&quot; on the MeshPointerUI component.</li>
 <li>Adding support for another VR backend might not be too much work. Take a look at <code>VRInput.cs</code> and <code>VRBrowserHand.cs</code> to get a feel for what may need to happen.<ul class="list">
-<li>If you want to get hand tracking data from somewhere other than the Unity API, take a look at adjusting <code>VRBrowserHand.UpdatePreCull</code>.</li>
-<li>Buttons are read in the descendant classes of <code>VRInput</code> in <code>VRInput.cs</code>.</li>
+<li>Buttons and poses are read in the descendant classes of <code>VRInput</code> in <code>VRInput.cs</code>.</li>
 </ul>
 </li>
 </ul>
@@ -316,7 +371,7 @@ Debug.<span class="hljs-keyword">Log</span>(<span class="hljs-string">"Document 
 <h1 id="customization"><a class="header-link" href="#customization"></a>Customization</h1>
 <ul class="list">
 <li>Customize <code>alert()</code>, <code>prompt()</code>, <code>beforeUnload</code>, and password dialogs and the context menu by editing <code>ZFBrowser/Resources/Browser/Dialogs.html</code></li>
-<li>Customize error pages by editing <code>ZFBrowser/Resources/Browser/Errors.html</code><ul class="list">
+<li>Customize error pages by editing <code>ErrorGenerator.cs</code><ul class="list">
 <li>Hook these events by listening to <code>Browser.onLoadError</code>/<code>onCertError</code>/<code>onSadTab</code>.</li>
 </ul>
 </li>
@@ -408,14 +463,15 @@ Debug.<span class="hljs-keyword">Log</span>(<span class="hljs-string">"Document 
 <h2 id="architecture"><a class="header-link" href="#architecture"></a>Architecture</h2>
 <p>Chromium doesn&#39;t play nice with others. To keep everyone happy and fix many bugs, Chromium is actually run in a separate process and we talk to it via IPC (a mixture of named pipes for messages and shared memory for the rendered buffer). You&#39;ll notice that your game spawns a ZFGameBrowser process which in turn spawns the usual Chromium child processes; this is normal.</p>
 <h1 id="adobe-flash"><a class="header-link" href="#adobe-flash"></a>Adobe Flash</h1>
-<p>This version of ZFBrowser includes some experimental support for Adobe Flash. Using this is discouraged and support for it may be removed in the future.</p>
+<p>This version of ZFBrowser includes some experimental support for Adobe Flash. Using this is discouraged and support for it may be removed in the future. Additional, note that Adobe <a href="https://www.adobe.com/products/flashplayer/faq.html">plans to end support</a> for Flash at the end of 2020.</p>
+<p>Support for Flash is experimental. A command prompt window may flash while starting Flash content.</p>
 <p>Enabling Flash requires some extra steps; see below.</p>
 <h2 id="do-i-need-it?"><a class="header-link" href="#do-i-need-it?"></a>Do I need it?</h2>
 <p>The Web is an evolving place and ever-increasingly interactive web sties don&#39;t need Flash to support media-rich content.</p>
 <p>You need Flash if you want to:</p>
 <ul class="list">
 <li>Display content that is only available with Flash.</li>
-<li>Watch video that uses proprietary codecs, such as h.264. ZFBrowser doesn&#39;t have licenses for these codecs, but Flash does and many video streaming sites will fall back to using a Flash player to stream content if necessary.</li>
+<li>Watch video that uses proprietary codecs, such as h.264. ZFBrowser doesn&#39;t have licenses for these codecs, but Flash does and video streaming sites may fall back to using a Flash player to stream content if necessary.</li>
 </ul>
 <p>Note that outdated versions of the Flash plugin may not function. User interaction may be required to start Flash content.</p>
 <h2 id="for-myself-(manual-install)"><a class="header-link" href="#for-myself-(manual-install)"></a>For myself (manual install)</h2>
@@ -432,7 +488,7 @@ Debug.<span class="hljs-keyword">Log</span>(<span class="hljs-string">"Document 
 </li>
 <li>Install using the usual methods for your OS.</li>
 <li>Open up BrowserNative.cs. Under <code>commandLineSwitches</code> make sure <code>--enable-system-flash</code> is there.<ul class="list">
-<li>For Linux: Try these arguments instead: <ul class="list">
+<li>For Linux: Try these arguments instead:<ul class="list">
 <li><code>--ppapi-flash-path=/usr/lib/adobe-flashplugin/libpepflashplayer.so</code>, updating the path with the actual file location, if needed.</li>
 <li><code>--ppapi-flash-version=29.0.0.113</code>, replacing the version with your actual version (look in <code>&lt;install folder&gt;/manifest.json</code>).</li>
 </ul>
@@ -454,12 +510,6 @@ Debug.<span class="hljs-keyword">Log</span>(<span class="hljs-string">"Document 
 </ul>
 </li>
 <li>Set up the Flash installer to run when your application installs.</li>
-</ul>
-<h1 id="known-issues"><a class="header-link" href="#known-issues"></a>Known issues</h1>
-<ul class="list">
-<li>When closing the inspector, the page will become opaque.</li>
-<li>Support for Flash is experimental. A command prompt window may flash while starting Flash content.</li>
-<li>onFetch does not fire reliably due to some bad internal design. Consider using onLoad or another event instead.</li>
 </ul>
 <h1 id="get-help"><a class="header-link" href="#get-help"></a>Get Help</h1>
 <p>Need help? You might find an answer to your question <a href="https://zenfulcrum.com/contact">here</a>. If not, send me an <a href="mailto:support@zenfulcrum.com">email</a>!</p>

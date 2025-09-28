@@ -231,9 +231,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 2
   m_Convex: 0
-  m_CookingOptions: 14
+  m_InflateMesh: 0
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!64 &64732355649939724
@@ -245,9 +245,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 2
   m_Convex: 0
-  m_CookingOptions: 14
+  m_InflateMesh: 0
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!114 &114024988043671530
@@ -330,7 +330,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dragMovementThreshold: 20
   viewCamera: {fileID: 0}
-  enableMouseInput: 1
+  enableMouseInput: 0
   enableTouchInput: 0
   enableFPSInput: 0
   enableVRInput: 1

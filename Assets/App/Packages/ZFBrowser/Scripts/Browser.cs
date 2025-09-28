@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Text;
 using UnityEngine.Assertions;
 using UnityEngine.Serialization;
 
@@ -41,7 +42,7 @@ public partial class Browser : MonoBehaviour {
 		 * Controlling and interacting with the new window outside is limited, though you can use JavaScript calls
 		 * from the parent.
 		 * OS-level windows may have unexpected or incomplete behavior. Using this outside of debugging/testing
-		 * is not officially supported.
+		 * is not officially supported. Doesn't work with OS X+il2cpp.
 		 */
 		NewWindow,
 	}
@@ -201,17 +202,23 @@ Use SetNewWindowHandler to adjust at runtime.
 	 * Called when a page fails to load.
 	 * Use QueuePageReplacer to inject a custom error page.
 	 * (Top frame only.)
+	 * 
+	 * Try visiting http://255.255.255.255/ to test.
 	 */
 	public event Action<JSONNode> onFetchError = errCode => {};
 	/**
 	 * Called when an SSL cert fails checks.
 	 * Use QueuePageReplacer to inject a custom error page.
 	 * (Top frame only.)
+	 * 
+	 * Try visiting https://wrong.host.badssl.com/ to test.
 	 */
 	public event Action<JSONNode> onCertError = errInfo => {};
 	/**
 	 * Called when a renderer process dies/is killed.
 	 * Use QueuePageReplacer to inject a custom error page; you might also choose to try reloading once or twice.
+	 * 
+	 * Try visiting chrome://checkcrash/ to test.
 	 */
 	public event Action onSadTab = () => {};
 	/**
@@ -285,7 +292,7 @@ Use SetNewWindowHandler to adjust at runtime.
 
 	private bool newWindowHandlerSet = false;
 	/// <summary>
-	/// If 
+	/// If
 	/// </summary>
 	private INewWindowHandler newWindowHandler;
 
@@ -335,22 +342,21 @@ Use SetNewWindowHandler to adjust at runtime.
 			if (err["error"] == "ERR_ABORTED") return;
 
 			QueuePageReplacer(() => {
-				LoadHTML(Resources.Load<TextAsset>("Browser/Errors").text, Url);
-				CallFunction("setErrorInfo", err);
+				LoadDataURI(ErrorGenerator.GenerateFetchError(err));
 			}, -1000);
 		};
 
 		onCertError += err => {
 			QueuePageReplacer(() => {
-				LoadHTML(Resources.Load<TextAsset>("Browser/Errors").text, Url);
-				CallFunction("setErrorInfo", err);
+				LoadHTML(ErrorGenerator.GenerateCertError(err), Url);
 			}, -900);
 		};
 
 		onSadTab += () => {
+			// Try visiting chrome://checkcrash
 			QueuePageReplacer(() => {
-				LoadHTML(Resources.Load<TextAsset>("Browser/Errors").text, Url);
-				CallFunction("showCrash");
+				//LoadHTML sometimes works, but LoadDataURI works more reliably
+				LoadDataURI(ErrorGenerator.GenerateSadTabError());
 			}, -1000);
 		};
 
@@ -669,6 +675,26 @@ Use SetNewWindowHandler to adjust at runtime.
 	}
 
 	/// <summary>
+	/// Generates a data URI for the given content and loads that URI.
+	/// </summary>
+	/// <param name="text"></param>
+	/// <param name="mimeType"></param>
+	public void LoadDataURI(string text, string mimeType = "text/html") {
+		if (mimeType.StartsWith("text/") && !mimeType.Contains(";")) mimeType = mimeType + ";charset=UTF-8";
+		LoadDataURI(Encoding.UTF8.GetBytes(text), mimeType);
+	}
+
+	/// <summary>
+	/// Generates a data URI for the given content and loads that URI.
+	/// </summary>
+	/// <param name="text"></param>
+	/// <param name="mimeType"></param>
+	public void LoadDataURI(byte[] data, string mimeType) {
+		var dataStr = Convert.ToBase64String(data);
+		this.Url = "data:" + mimeType + ";base64," + dataStr;
+	}
+
+	/// <summary>
 	/// Sets how new popup windows are handled.
 	/// </summary>
 	/// <param name="action"></param>
@@ -800,6 +826,9 @@ Use SetNewWindowHandler to adjust at runtime.
 	 * Show the development tools for the current page.
 	 *
 	 * If {show} is false the dev tools will be hidden, if possible.
+	 *
+	 * Like NewWindowAction.NewWindow using this outside of debugging/testing
+	 * is not officially supported. Doesn't work with OS X+il2cpp.
 	 */
 	public void ShowDevTools(bool show = true) {
 		if (DeferUnready(() => ShowDevTools(show))) return;
@@ -884,48 +913,25 @@ Use SetNewWindowHandler to adjust at runtime.
 	}
 
 
-
-	/**
-	 * Evaluates JavaScript in the browser.
-	 * NB: This is JavaScript. Not UnityScript. If you try to feed this UnityScript it will choke and die.
-	 *
-	 * If IsLoaded is false, the script will be deferred until IsLoaded is true.
-	 *
-	 * The script is asynchronously executed in a separate process. To get the result value, yield on the returned
-	 * promise (in a coroutine) then take a look at promise.Value.
-	 *
-	 * To see script errors and debug issues, call ShowDevTools and use the inspector window to tackle
-	 * your problems. Also, keep an eye on console output (which gets forwarded to Debug.Log).
-	 *
-	 * If desired, you can fill out scriptURL with a URL for the file you are reading from. This can help fill out errors
-	 * with the correct filename and in some cases allow you to view the source in the inspector.
-	 * 
-	 * If cspFriendly is true, we won't use eval() to run the script. This keeps it from getting blocked by a
-	 * Content Security Policy, but we will be unable to handle and report syntax errors. If you wish to get a result
-	 * in this mode you must return it (e.g. "var a = 3; return a * 7;"). 
-	 * (Normally the result of the last statement is returned.)
-	 * 
-	 */
-
 	/// <summary>
 	/// Evaluates JavaScript in the browser.
-	/// 
+	///
 	/// (This is JavaScript. Not UnityScript. If you try to feed this UnityScript it will choke and die.)
-	/// 
+	///
 	///  If IsLoaded is false, the script will be deferred until IsLoaded is true.
-	/// 
+	///
 	/// The script is asynchronously executed in a separate process.
 	/// A promise (see the docs) is returned which you can use to inspect the last evaluated value.
 	/// For example:
 	///   browser.EvalJS("var a = 3; a + 3;").Then(ret => Debug.Log("Result: " + (int)ret).Done();
-	/// 
+	///
 	/// To see script errors and debug issues, call ShowDevTools and use the inspector window to tackle
 	/// your problems. Also, keep an eye on console output (which gets forwarded to Debug.Log).
-	/// 
+	///
 	/// If desired, you can fill out scriptURL with a URL for the file you are reading from. This can help fill out errors
 	/// with the correct filename and in some cases allow you to view the source in the inspector.
-	/// 
-	/// If the page you are viewing has a Content Security Policy (CSP) that prevents evaluating scripts 
+	///
+	/// If the page you are viewing has a Content Security Policy (CSP) that prevents evaluating scripts
 	/// don't use this function, use EvalJSCSP instead.
 	/// </summary>
 	/// <param name="script"></param>
@@ -954,20 +960,20 @@ Use SetNewWindowHandler to adjust at runtime.
 		else _EvalJS(resultJS, scriptURL);
 
 		return promise;
-	}	
-	
+	}
+
 	/// <summary>
 	/// Like EvalJS, but for pages with a Content Security Policy (CSP) that prevents evaluating scripts.
 	/// This will also work on regular pages, but it has some disadvantages, keep reading.
-	/// 
+	///
 	/// Unlike EvalJS:
 	///   If your script has syntax errors, you won't get the error in the returned promise, it will just not work.
 	///   To inspect a result you must `return` it:
 	///     browser.EvalJS("var a = 3; return a + 3;").Then(ret => Debug.Log("Result: " + (int)ret).Done();
-	/// 
+	///
 	/// This version of the function doens't use eval() to run the script. This keeps it from getting blocked by a
 	/// Content Security Policy, but we will be unable to handle and report syntax errors.
-	/// 
+	///
 	/// Don't forget to respect the user's privacy and any applicable ToS terms for the page you are manipulating.
 	/// </summary>
 	/// <param name="script"></param>
@@ -1127,7 +1133,7 @@ Use SetNewWindowHandler to adjust at runtime.
 		BrowserNative.RenderData renderData;
 
 		Profiler.BeginSample("Browser.UpdateTexture.zfb_getImage", this);
-		{
+		try {
 			renderData = BrowserNative.zfb_getImage(browserId, forceNextRender);
 			forceNextRender = false;
 
@@ -1137,8 +1143,9 @@ Use SetNewWindowHandler to adjust at runtime.
 				//Mismatch. Can happen, for example, when we resize but got an "old" image at the old resolution. (IPC is async.)
 				return;
 			}
+		} finally {
+			Profiler.EndSample();
 		}
-		Profiler.EndSample();
 
 
 		if (texture.mipmapCount == 1) {
