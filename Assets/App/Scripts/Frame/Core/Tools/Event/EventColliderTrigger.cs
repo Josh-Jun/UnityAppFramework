@@ -15,7 +15,9 @@ namespace App.Core.Tools
         }
 
         // Event delegates triggered.
-        [Header("OnTrigger Event")] [FormerlySerializedAs("onEnter")] [Space] [SerializeField]
+        [Header("OnTrigger Event")] 
+        [Space]
+        [SerializeField]
         private TriggerEvent m_OnEnter = new TriggerEvent();
 
         public TriggerEvent onTriggerEnter
@@ -25,7 +27,7 @@ namespace App.Core.Tools
         }
 
         // Event delegates triggered.
-        [FormerlySerializedAs("onStay")] [SerializeField]
+        [SerializeField]
         private TriggerEvent m_OnStay = new TriggerEvent();
 
         public TriggerEvent onTriggerStay
@@ -35,7 +37,7 @@ namespace App.Core.Tools
         }
 
         // Event delegates triggered.
-        [FormerlySerializedAs("onExit")] [SerializeField]
+        [SerializeField]
         private TriggerEvent m_OnExit = new TriggerEvent();
 
         public TriggerEvent onTriggerExit
