@@ -44,7 +44,7 @@ namespace App.Modules
         {
             AddEventMsg<object>("OpenWebView", OpenWebView);
             AddEventMsg("CloseWebView", CloseWebView);
-            AddEventMsg("CloseWebButtonEvent", View.CloseView);
+            AddEventMsg("CloseWebButtonEvent", () => { View.CloseView(); });
         }
 
         #region Life Cycle
