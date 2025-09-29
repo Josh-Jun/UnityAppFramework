@@ -18,7 +18,6 @@ namespace App.Core.Master
         private static int pointer = -1;
         private static void CreateUnityWebRequester()
         {
-            Log.I("CreateUnityWebRequester");
             if (pointer + 1 >= maxUnityWebRequesterNumber) return;
             pointer++;
             var uwr = new UnityWebRequester();
