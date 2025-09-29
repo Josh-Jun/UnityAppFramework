@@ -14,13 +14,14 @@ namespace App.Core.Master
         public string ViewName;
         public object obj;
     }
+
     public class ViewMaster : SingletonMono<ViewMaster>
     {
         #region Private Variable
 
         private static readonly Dictionary<string, ViewBase> ViewPairs = new Dictionary<string, ViewBase>();
-        
-        private static readonly Stack<StepData> ViewStepStack = new ();
+
+        private static readonly Stack<StepData> ViewStepStack = new();
 
         #region Go3D
 
@@ -56,7 +57,6 @@ namespace App.Core.Master
 
         #endregion
 
-
         #endregion
 
         #region Public Variable
@@ -64,6 +64,7 @@ namespace App.Core.Master
         #region Canvas2D
 
         public Camera UICamera2D => UICanvas2D.worldCamera;
+
         /// <summary> Canvas2D组件 </summary>
         public Canvas UICanvas2D => Canvas2D.GetComponent<Canvas>();
 
@@ -88,14 +89,19 @@ namespace App.Core.Master
 
         /// <summary> Canvas3D父物体 </summary>
         public Transform UIRoot3D => Canvas3D.transform;
+
         /// <summary> UI3D相机（一般为主相机） </summary>
         public Camera UICamera3D => UICanvas3Ds[0].worldCamera;
+
         /// <summary> 所有Canvas3D根RectTransform </summary>
         public List<RectTransform> UIRectTransform3Ds => RectTransform3Ds;
+
         /// <summary> 所有Canvas3D组件 </summary>
         public List<Canvas> UICanvas3Ds => Canvas3Ds;
+
         /// <summary> 所有Canvas3D CanvasScaler组件 </summary>
         public List<CanvasScaler> UICanvasScaler3Ds => CanvasScaler3Ds;
+
         /// <summary> 所有Canvas3D GraphicRaycaster组件 </summary>
         public List<GraphicRaycaster> UIGraphicRaycaster3Ds => GraphicRaycaster3Ds;
 
@@ -227,7 +233,7 @@ namespace App.Core.Master
                 kvp.Value.Refresh(count);
             }
         }
-        
+
         private void AddViewStep(ViewBase view, object args)
         {
             var obj = view.GetType().GetCustomAttributes(typeof(ViewOfAttribute), false).FirstOrDefault();
@@ -238,6 +244,18 @@ namespace App.Core.Master
                 ViewName = view.GetType().FullName,
                 obj = obj
             });
+        }
+
+        private void RemoveViewStep(ViewBase view)
+        {
+            var obj = view.GetType().GetCustomAttributes(typeof(ViewOfAttribute), false).FirstOrDefault();
+            if (obj is not ViewOfAttribute attribute) return;
+            if (attribute.Name is "Ask" or "Update" or "Loading") return;
+            
+            if (ViewStepStack.Count > 0)
+            {
+                ViewStepStack.Pop();
+            }
         }
 
         #endregion
@@ -405,6 +423,7 @@ namespace App.Core.Master
                 Log.W($"View {typeof(T).FullName} has no view");
                 return;
             }
+
             AddViewStep(view, obj);
             view.OpenView(obj);
         }
@@ -417,6 +436,7 @@ namespace App.Core.Master
                 Log.W($"View {scriptName} has no view");
                 return;
             }
+
             AddViewStep(view, obj);
             view.OpenView(obj);
         }
@@ -429,10 +449,9 @@ namespace App.Core.Master
                 Log.W($"View {typeof(T).FullName} has no view");
                 return;
             }
-            if (ViewStepStack.Count > 0)
-            {
-                ViewStepStack.Pop();
-            }
+
+            RemoveViewStep(view);
+
             if (isClear)
             {
                 RemoveView(view);
@@ -451,10 +470,9 @@ namespace App.Core.Master
                 Log.W($"View {scriptName} has no view");
                 return;
             }
-            if (ViewStepStack.Count > 0)
-            {
-                ViewStepStack.Pop();
-            }
+
+            RemoveViewStep(view);
+
             if (isClear)
             {
                 RemoveView(scriptName);
@@ -536,11 +554,11 @@ namespace App.Core.Master
             Destroy(go);
             ViewPairs.Remove(scriptName);
         }
-        
+
         public void GoBack()
         {
             if (ViewStepStack.Count <= 0) return;
-            
+
             var current = ViewStepStack.Pop();
             var currentView = GetView(current.ViewName);
             if (!currentView)
@@ -548,8 +566,9 @@ namespace App.Core.Master
                 Log.W($"View {current.ViewName} has no view");
                 return;
             }
+
             currentView.CloseView();
-            
+
             if (ViewStepStack.Count <= 0) return;
             var step = ViewStepStack.Peek();
             var view = GetView(step.ViewName);
@@ -558,6 +577,7 @@ namespace App.Core.Master
                 Log.W($"View {step.ViewName} has no view");
                 return;
             }
+
             view.OpenView(step.obj);
         }
 
