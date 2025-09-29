@@ -59,6 +59,7 @@ namespace App.Core
                 {
                     pair.Add(logic);
                 }
+                EventMaster.Instance.AddEventMethods(logic);
             }
         }
 

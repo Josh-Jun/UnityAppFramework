@@ -7,7 +7,6 @@
  * ===============================================
  * */
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -22,6 +21,7 @@ namespace App.Core.Master
         public object obj;
         public MethodInfo method;
     }
+
     public class EventMaster : SingletonMono<EventMaster>
     {
         private readonly Dictionary<string, EventData> Events = new Dictionary<string, EventData>();
@@ -31,41 +31,81 @@ namespace App.Core.Master
             InitEventMethods();
         }
 
+        public void AddEventMethods<T>(object obj)
+        {
+            var type = obj.GetType();
+            var methods = type.GetMethods().Where(info => info.GetCustomAttributes(typeof(EventAttribute), false).Any())
+                .ToList();
+            foreach (var ea in from method in methods
+                     let ea = method.GetCustomAttributes(typeof(EventAttribute), false).First() as EventAttribute
+                     let data = new EventData
+                     {
+                         method = method,
+                         obj = obj
+                     }
+                     where !Events.TryAdd(ea!.Event, data)
+                     select ea)
+            {
+                Log.W($"{ea!.Event} 该事件已存在");
+            }
+        }
+
+        public void AddEventMethods(ILogic logic)
+        {
+            var type = logic.GetType();
+            var methods = type.GetMethods().Where(info => info.GetCustomAttributes(typeof(EventAttribute), false).Any())
+                .ToList();
+            foreach (var ea in from method in methods
+                     let ea = method.GetCustomAttributes(typeof(EventAttribute), false).First() as EventAttribute
+                     let data = new EventData
+                     {
+                         method = method,
+                         obj = logic
+                     }
+                     where !Events.TryAdd(ea!.Event, data)
+                     select ea)
+            {
+                Log.W($"{ea!.Event} 该事件已存在");
+            }
+        }
+
         private void InitEventMethods(string assemblyString = "App.Module")
         {
             var assembly = Assembly.Load(assemblyString);
             var types = assembly.GetTypes();
-            
-            
+
             foreach (var type in types)
             {
-                var methods = type.GetMethods().Where(info => info.GetCustomAttributes(typeof(EventAttribute), false).Any()).ToList();
+                var methods = type.GetMethods()
+                    .Where(info => info.GetCustomAttributes(typeof(EventAttribute), false).Any()).ToList();
                 foreach (var method in methods)
                 {
-                    var attribute = method.GetCustomAttributes(typeof(EventAttribute), false).First() as EventAttribute;
+                    var ea = method.GetCustomAttributes(typeof(EventAttribute), false).First() as EventAttribute;
                     // attribute!.Event(事件名称，用来触发事件)
                     // type.FullName(脚本名称，用来查找脚本实例)
                     // method(方法)
-                    if (type.GetInterface(nameof(ISingleton)) != typeof(ISingleton) && !type.IsSubclassOf(typeof(MonoBehaviour)))
+                    if (!type.IsSubclassOf(typeof(MonoBehaviour)))
                     {
-                        Log.W($"{{{type.FullName}}} 未继承 ISingleton 使用Event特性标记的方法{{{method.Name}}}不起作用");
+                        Log.W($"{{{type.FullName}}} 未继承 MonoBehaviour 使用Event特性标记的方法{{{method.Name}}}不起作用");
                         continue;
                     }
-                    var data = new EventData()
+
+                    var instances = FindObjectsOfType(type, true).First(obj => obj.GetType() == type);
+                    if (!instances)
+                    {
+                        Log.W($"{{{type.FullName}}} 未找到实例对象");
+                        continue;
+                    }
+
+                    var data = new EventData
                     {
                         method = method,
+                        obj = instances
                     };
-                    if (type.IsSubclassOf(typeof(MonoBehaviour)))
+                    if (!Events.TryAdd(ea!.Event, data))
                     {
-                        var instances = FindObjectsOfType(type, true).First(obj => obj.GetType() == type);
-                        data.obj = instances;
+                        Log.W($"{ea!.Event} 该事件已存在");
                     }
-                    else
-                    {
-                        var singleton = SingletonManager.Instance.Get(type.FullName);
-                        data.obj = singleton;
-                    }
-                    Events.TryAdd(attribute!.Event, data);
                 }
             }
         }
@@ -80,12 +120,14 @@ namespace App.Core.Master
                     Log.W($"类对象{data.obj}中{eventName}事件对应的方法{data.method.Name}参数对应不上！！！");
                     return;
                 }
+
                 for (var i = 0; i < args.Length; i++)
                 {
                     if (args[i].GetType() == paramsInfo[i].ParameterType) continue;
                     Log.W($"参数类型不正确", ("目标类型", paramsInfo[i].ParameterType.Name), ("来源类型", args[i].GetType().Name));
                     return;
                 }
+
                 data.method.Invoke(data.obj, args);
             }
             else
