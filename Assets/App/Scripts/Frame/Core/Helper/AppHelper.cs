@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace App.Core.Helper
 {
-    public class AppHelper
+    public static class AppHelper
     {
         public static List<Type> GetAssemblyTypes<T>(string assemblyString = "App.Module")
         {
