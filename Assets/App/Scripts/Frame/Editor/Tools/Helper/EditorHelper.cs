@@ -121,7 +121,7 @@ namespace App.Editor.Helper
 
         #region GameViewResolution
 
-        private static int Orientation;
+        private static int Orientation = -1;
 
         public static void ChangeGameViewResolution(int orientation)
         {
@@ -133,6 +133,7 @@ namespace App.Editor.Helper
 
         public static void RestoreGameViewResolution()
         {
+            if(Orientation < 0) return;
             ChangeGameViewResolution(Orientation);
         }
 
