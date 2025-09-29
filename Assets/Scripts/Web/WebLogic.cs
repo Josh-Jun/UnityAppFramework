@@ -35,9 +35,9 @@ namespace App.Modules
     public class WebLogic : EventBase, ILogic
     {
         private WebView View => ViewMaster.Instance.GetView<WebView>();
-# if UNITY_EDITOR || UNITY_STANDALONE_WIN
+# if UNITY_EDITOR || UNITY_STANDALONE
         private Browser web;
-#elif UNITY_ANDROID && !UNITY_EDITOR || UNITY_IOS || UNITY_STANDALONE_OSX
+#elif UNITY_ANDROID || UNITY_IOS
         private UniWebView web;
 #endif
         public WebLogic()
@@ -79,7 +79,7 @@ namespace App.Modules
             {
                 isClear = data.isClear;
                 View.WebTitleTextMeshProUGUI.text = data.title;
-# if UNITY_EDITOR || UNITY_STANDALONE_WIN
+# if UNITY_EDITOR || UNITY_STANDALONE
                 if (!web)
                 {
                     var prefab = AssetsMaster.Instance.LoadAssetSync<GameObject>(AssetPath.Browser);
@@ -96,7 +96,7 @@ namespace App.Modules
                 {
                     web.LoadHTML(data.html);
                 }
-#elif UNITY_ANDROID && !UNITY_EDITOR || UNITY_IOS || UNITY_STANDALONE_OSX
+#elif UNITY_ANDROID || UNITY_IOS
                 if (!web)
                 {
                     var prefab = AssetsMaster.Instance.LoadAssetSync<GameObject>(AssetPath.UniWebView);
@@ -130,9 +130,9 @@ namespace App.Modules
             if(!isClear) return;
             if(!web) return;
             Object.Destroy(web.gameObject);
-# if UNITY_EDITOR || UNITY_STANDALONE_WIN
+# if UNITY_EDITOR || UNITY_STANDALONE
             web.CookieManager.ClearAll();
-#elif UNITY_ANDROID && !UNITY_EDITOR || UNITY_IOS || UNITY_STANDALONE_OSX
+#elif UNITY_ANDROID || UNITY_IOS
             web.CleanCache();
 #endif
             web = null;
