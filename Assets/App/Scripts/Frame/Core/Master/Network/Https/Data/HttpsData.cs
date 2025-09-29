@@ -2,7 +2,7 @@ using System;
 
 namespace App.Core.Master
 {
-    // 请求RequestData，请求结果ResponseData
+    // 请求数据RequestData，回包数据ResponseData
     /// <summary>
     /// Https请求结果
     /// </summary>

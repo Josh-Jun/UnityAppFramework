@@ -7,6 +7,7 @@
  * ===============================================
  * */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -24,7 +25,8 @@ namespace App.Core.Master
     public class EventMaster : SingletonMono<EventMaster>
     {
         private readonly Dictionary<string, EventData> Events = new Dictionary<string, EventData>();
-        protected override void OnSingletonMonoInit()
+
+        private void Awake()
         {
             InitEventMethods();
         }
