@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using App.Core.Helper;
 using App.Core.Tools;
 using UnityEngine;
@@ -12,11 +13,7 @@ namespace App.Core.Master
         private int timeId = 0; //下标
         private readonly Dictionary<UpdateMold, List<TimerData>> timerPairs = new Dictionary<UpdateMold, List<TimerData>>();
 
-        public float GameTime
-        {
-            private set { }
-            get { return Time.time; }
-        }
+        public float GameTime => Time.time;
 
         protected override void OnSingletonMonoInit()
         {
@@ -25,56 +22,41 @@ namespace App.Core.Master
 
         private void Update()
         {
-            if (timerPairs.ContainsKey(UpdateMold.Update))
+            if (!timerPairs.TryGetValue(UpdateMold.Update, out var timers)) return;
+            var count = timers.Count;
+            for (var i = 0; i < count; i++)
             {
-                var timers = timerPairs[UpdateMold.Update];
-                int count = timers.Count;
-                for (int i = 0; i < count; i++)
-                {
-                    var timer = timers[i];
-                    if (timer.isTime)
-                    {
-                        timer.addTime += Time.deltaTime;
-                        timer.cb(timer.addTime);
-                    }
-                }
+                var timer = timers[i];
+                if (!timer.isTime) continue;
+                timer.addTime += Time.deltaTime;
+                timer.cb(timer.addTime);
             }
         }
 
         private void FixedUpdate()
         {
-            if (timerPairs.ContainsKey(UpdateMold.FixedUpdate))
+            if (!timerPairs.TryGetValue(UpdateMold.FixedUpdate, out var timers)) return;
+            var count = timers.Count;
+            for (var i = 0; i < count; i++)
             {
-                var timers = timerPairs[UpdateMold.FixedUpdate];
-                int count = timers.Count;
-                for (int i = 0; i < count; i++)
-                {
-                    var timer = timers[i];
-                    if (timer.isTime)
-                    {
-                        timer.addTime += Time.fixedDeltaTime;
-                        var time = (float)Math.Round(timer.addTime, 2, MidpointRounding.AwayFromZero);
-                        timer.cb(time);
-                    }
-                }
+                var timer = timers[i];
+                if (!timer.isTime) continue;
+                timer.addTime += Time.fixedDeltaTime;
+                var time = (float)Math.Round(timer.addTime, 2, MidpointRounding.AwayFromZero);
+                timer.cb(time);
             }
         }
 
         private void LateUpdate()
         {
-            if (timerPairs.ContainsKey(UpdateMold.LateUpdate))
+            if (!timerPairs.TryGetValue(UpdateMold.LateUpdate, out var timers)) return;
+            var count = timers.Count;
+            for (var i = 0; i < count; i++)
             {
-                var timers = timerPairs[UpdateMold.LateUpdate];
-                int count = timers.Count;
-                for (int i = 0; i < count; i++)
-                {
-                    var timer = timers[i];
-                    if (timer.isTime)
-                    {
-                        timer.addTime += Time.deltaTime;
-                        timer.cb(timer.addTime);
-                    }
-                }
+                var timer = timers[i];
+                if (!timer.isTime) continue;
+                timer.addTime += Time.deltaTime;
+                timer.cb(timer.addTime);
             }
         }
 
@@ -107,13 +89,10 @@ namespace App.Core.Master
         {
             foreach (var data in timerPairs.Values)
             {
-                foreach (var t in data)
+                foreach (var t in data.Where(t => t.id == id))
                 {
-                    if (t.id == id)
-                    {
-                        t.isTime = false;
-                        break;
-                    }
+                    t.isTime = false;
+                    break;
                 }
             }
         }
@@ -123,13 +102,10 @@ namespace App.Core.Master
         {
             foreach (var data in timerPairs.Values)
             {
-                foreach (var t in data)
+                foreach (var t in data.Where(t => t.id == id))
                 {
-                    if (t.id == id)
-                    {
-                        t.isTime = true;
-                        break;
-                    }
+                    t.isTime = true;
+                    break;
                 }
             }
         }
@@ -139,13 +115,10 @@ namespace App.Core.Master
         {
             foreach (var data in timerPairs.Values)
             {
-                for (var i = 0; i < data.Count; i++)
+                foreach (var t in data.Where(t => t.id == id))
                 {
-                    if (data[i].id == id)
-                    {
-                        data.Remove(data[i]);
-                        break;
-                    }
+                    t.isTime = false;
+                    break;
                 }
             }
         }

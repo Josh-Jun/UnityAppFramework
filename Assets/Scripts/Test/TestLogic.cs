@@ -34,16 +34,6 @@ namespace App.Modules
         {
             View.OpenView();
             var target = GameObject.Find("Cube");
-            ViewMaster.Instance.OpenView<Render3D2UIView>(new RenderData()
-            {
-                Target = target,
-                Image = View.RawImageRawImage,
-                FollowOffset = Vector3.back * 10,
-                LookAtOffset = Vector3.up,
-                CanRotate = true,
-                CanScale = true,
-                PreserveComposition = false,
-            });
             TimeUpdateMaster.Instance.StartTimer(time =>
             {
                 if (Input.GetKeyDown(KeyCode.Q))
@@ -73,6 +63,25 @@ namespace App.Modules
                         title = "百度",
                         url = "https://www.baidu.com"
                     });
+                }
+
+                if (Input.GetKeyDown(KeyCode.Y))
+                {
+                    ViewMaster.Instance.OpenView<Render3D2UIView>(new RenderData()
+                    {
+                        Target = target,
+                        Image = View.RawImageRawImage,
+                        FollowOffset = Vector3.back * 10,
+                        LookAtOffset = Vector3.up,
+                        CanRotate = true,
+                        CanScale = true,
+                        PreserveComposition = false,
+                    });
+                }
+
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    ViewMaster.Instance.GoBack();
                 }
             });
         }

@@ -9,11 +9,18 @@ using Cysharp.Threading.Tasks;
 
 namespace App.Core.Master
 {
+    public class StepData
+    {
+        public string ViewName;
+        public object obj;
+    }
     public class ViewMaster : SingletonMono<ViewMaster>
     {
         #region Private Variable
 
         private static readonly Dictionary<string, ViewBase> ViewPairs = new Dictionary<string, ViewBase>();
+        
+        private static readonly Stack<StepData> ViewStepStack = new ();
 
         #region Go3D
 
@@ -220,6 +227,18 @@ namespace App.Core.Master
                 kvp.Value.Refresh(count);
             }
         }
+        
+        private void AddViewStep(ViewBase view, object args)
+        {
+            var obj = view.GetType().GetCustomAttributes(typeof(ViewOfAttribute), false).FirstOrDefault();
+            if (obj is not ViewOfAttribute attribute) return;
+            if (attribute.Name is "Ask" or "Update" or "Loading") return;
+            ViewStepStack.Push(new StepData()
+            {
+                ViewName = view.GetType().FullName,
+                obj = obj
+            });
+        }
 
         #endregion
 
@@ -386,7 +405,7 @@ namespace App.Core.Master
                 Log.W($"View {typeof(T).FullName} has no view");
                 return;
             }
-
+            AddViewStep(view, obj);
             view.OpenView(obj);
         }
 
@@ -398,7 +417,7 @@ namespace App.Core.Master
                 Log.W($"View {scriptName} has no view");
                 return;
             }
-
+            AddViewStep(view, obj);
             view.OpenView(obj);
         }
 
@@ -410,7 +429,10 @@ namespace App.Core.Master
                 Log.W($"View {typeof(T).FullName} has no view");
                 return;
             }
-
+            if (ViewStepStack.Count > 0)
+            {
+                ViewStepStack.Pop();
+            }
             if (isClear)
             {
                 RemoveView(view);
@@ -429,7 +451,10 @@ namespace App.Core.Master
                 Log.W($"View {scriptName} has no view");
                 return;
             }
-
+            if (ViewStepStack.Count > 0)
+            {
+                ViewStepStack.Pop();
+            }
             if (isClear)
             {
                 RemoveView(scriptName);
@@ -510,6 +535,30 @@ namespace App.Core.Master
             EventDispatcher.RemoveEventListener(go.name);
             Destroy(go);
             ViewPairs.Remove(scriptName);
+        }
+        
+        public void GoBack()
+        {
+            if (ViewStepStack.Count <= 0) return;
+            
+            var current = ViewStepStack.Pop();
+            var currentView = GetView(current.ViewName);
+            if (!currentView)
+            {
+                Log.W($"View {current.ViewName} has no view");
+                return;
+            }
+            currentView.CloseView();
+            
+            if (ViewStepStack.Count <= 0) return;
+            var step = ViewStepStack.Peek();
+            var view = GetView(step.ViewName);
+            if (!view)
+            {
+                Log.W($"View {step.ViewName} has no view");
+                return;
+            }
+            view.OpenView(step.obj);
         }
 
         public void RefreshRedDotCount(RedDotMold mold, int count)
