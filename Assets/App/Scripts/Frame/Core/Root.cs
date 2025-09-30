@@ -34,7 +34,7 @@ namespace App.Core
         {
             // 加载所有view
             ViewMaster.Instance.InitViewScripts();
-            // 初始化所有Logic脚本的Event特性（必须在所有View加载完成后）
+            // 初始化所有的Event特性（必须在所有View加载完成后）
             EventMaster.Instance.InitEventMethods(SceneLogicPairs);
             // 初始化Global的Logic脚本的Begin方法
             ExecuteSceneMethods(AssetPath.Global, "Begin");

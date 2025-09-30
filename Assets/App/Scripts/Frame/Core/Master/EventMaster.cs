@@ -63,7 +63,11 @@ namespace App.Core.Master
                 Log.W($"{ea!.Event} 该事件已存在");
             }
         }
-
+        /// <summary>
+        /// 在所有Logic和View加载完成后初始化所有事件
+        /// </summary>
+        /// <param name="pairs"></param>
+        /// <param name="assemblyString"></param>
         public void InitEventMethods(Dictionary<string, List<ILogic>> pairs, string assemblyString = "App.Module")
         {
             // 初始化所有Logic脚本的Event特性
@@ -78,7 +82,8 @@ namespace App.Core.Master
             {
                 AddEventMethods(view);
             }
-            // 添加所有MonoBehaviour脚本的Event特性(脚本必须提前挂到GameObject上)
+            // 添加所有MonoBehaviour脚本的Event特性
+            // 脚本必须提前挂到GameObject上,并且GameObject要在场景中已经加载,在所有View加载完成之后,可能需要手动添加
             var assembly = Assembly.Load(assemblyString);
             var types = assembly.GetTypes();
 
