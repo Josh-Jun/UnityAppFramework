@@ -24,45 +24,54 @@ namespace App.Core.Master
 
     public class EventMaster : SingletonMono<EventMaster>
     {
-        private readonly Dictionary<string, EventData> Events = new Dictionary<string, EventData>();
+        private readonly Dictionary<string, List<EventData>> Events = new();
 
         public void AddEventMethods(object obj)
         {
             var type = obj.GetType();
-            var methods = type.GetMethods().Where(info => info.GetCustomAttributes(typeof(EventAttribute), false).Any())
-                .ToList();
-            foreach (var ea in from method in methods
-                     let ea = method.GetCustomAttributes(typeof(EventAttribute), false).First() as EventAttribute
-                     let data = new EventData
-                     {
-                         method = method,
-                         obj = obj
-                     }
-                     where !Events.TryAdd(ea!.Event, data)
-                     select ea)
+            var methods = type.GetMethods().Where(info => info.GetCustomAttributes(typeof(EventAttribute), false).Any()).ToList();
+            foreach (var method in methods)
             {
-                Log.W($"{ea!.Event} 该事件已存在");
+                var ea = method.GetCustomAttributes(typeof(EventAttribute), false).First() as EventAttribute;
+                var data = new EventData
+                {
+                    method = method,
+                    obj = obj
+                };
+                if (Events.ContainsKey(ea!.Event))
+                {
+                    Events[ea.Event].Add(data);
+                }
+                else
+                {
+                    Events.Add(ea.Event, new List<EventData> { data });
+                }
             }
         }
 
         public void AddEventMethods(ILogic logic)
         {
             var type = logic.GetType();
-            var methods = type.GetMethods().Where(info => info.GetCustomAttributes(typeof(EventAttribute), false).Any())
-                .ToList();
-            foreach (var ea in from method in methods
-                     let ea = method.GetCustomAttributes(typeof(EventAttribute), false).First() as EventAttribute
-                     let data = new EventData
-                     {
-                         method = method,
-                         obj = logic
-                     }
-                     where !Events.TryAdd(ea!.Event, data)
-                     select ea)
+            var methods = type.GetMethods().Where(info => info.GetCustomAttributes(typeof(EventAttribute), false).Any()).ToList();
+            foreach (var method in methods)
             {
-                Log.W($"{ea!.Event} 该事件已存在");
+                var ea = method.GetCustomAttributes(typeof(EventAttribute), false).First() as EventAttribute;
+                var data = new EventData
+                {
+                    method = method,
+                    obj = logic
+                };
+                if (Events.ContainsKey(ea!.Event))
+                {
+                    Events[ea.Event].Add(data);
+                }
+                else
+                {
+                    Events.Add(ea.Event, new List<EventData> { data });
+                }
             }
         }
+
         /// <summary>
         /// 在所有Logic和View加载完成后初始化所有事件
         /// </summary>
@@ -76,12 +85,14 @@ namespace App.Core.Master
             {
                 AddEventMethods(logic);
             }
+
             // 添加所有View脚本的Event特性
             var views = ViewMaster.Instance.GetAllView();
             foreach (var view in views)
             {
                 AddEventMethods(view);
             }
+
             // 添加所有MonoBehaviour脚本的Event特性
             // 脚本必须提前挂到GameObject上,并且GameObject要在场景中已经加载,在所有View加载完成之后,可能需要手动添加
             var assembly = Assembly.Load(assemblyString);
@@ -97,7 +108,8 @@ namespace App.Core.Master
                     .Where(info => info.GetCustomAttributes(typeof(EventAttribute), false).Any()).ToList();
                 foreach (var method in methods)
                 {
-                    var ea = method.GetCustomAttributes(typeof(EventAttribute), false).FirstOrDefault() as EventAttribute;
+                    var ea =
+                        method.GetCustomAttributes(typeof(EventAttribute), false).FirstOrDefault() as EventAttribute;
                     // attribute!.Event(事件名称，用来触发事件)
                     // type.FullName(脚本名称，用来查找脚本实例)
                     // method(方法)
@@ -119,9 +131,14 @@ namespace App.Core.Master
                         method = method,
                         obj = instances
                     };
-                    if (!Events.TryAdd(ea!.Event, data))
+                    
+                    if (Events.ContainsKey(ea!.Event))
                     {
-                        Log.W($"{ea!.Event} 该事件已存在");
+                        Events[ea.Event].Add(data);
+                    }
+                    else
+                    {
+                        Events.Add(ea.Event, new List<EventData> { data });
                     }
                 }
             }
@@ -129,23 +146,26 @@ namespace App.Core.Master
 
         public void Execute(string eventName, params object[] args)
         {
-            if (Events.TryGetValue(eventName, out var data))
+            if (Events.TryGetValue(eventName, out var datas))
             {
-                var paramsInfo = data.method.GetParameters();
-                if (paramsInfo.Length != args.Length)
+                foreach (var data in datas)
                 {
-                    Log.W($"类对象{data.obj}中{eventName}事件对应的方法{data.method.Name}参数对应不上！！！");
-                    return;
-                }
+                    var paramsInfo = data.method.GetParameters();
+                    if (paramsInfo.Length != args.Length)
+                    {
+                        Log.W($"类对象{data.obj}中{eventName}事件对应的方法{data.method.Name}参数对应不上！！！");
+                        return;
+                    }
 
-                for (var i = 0; i < args.Length; i++)
-                {
-                    if (args[i].GetType() == paramsInfo[i].ParameterType) continue;
-                    Log.W($"参数类型不正确", ("目标类型", paramsInfo[i].ParameterType.Name), ("来源类型", args[i].GetType().Name));
-                    return;
-                }
+                    for (var i = 0; i < args.Length; i++)
+                    {
+                        if (args[i].GetType() == paramsInfo[i].ParameterType) continue;
+                        Log.W($"参数类型不正确", ("目标类型", paramsInfo[i].ParameterType.Name), ("来源类型", args[i].GetType().Name));
+                        return;
+                    }
 
-                data.method.Invoke(data.obj, args);
+                    data.method.Invoke(data.obj, args);
+                }
             }
             else
             {

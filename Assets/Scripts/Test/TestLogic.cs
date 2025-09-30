@@ -88,10 +88,6 @@ namespace App.Modules
                 {
                     EventMaster.Instance.Execute("TestEvent1", 10086);
                 }
-                if (Input.GetKeyDown(KeyCode.C))
-                {
-                    EventMaster.Instance.Execute("TestEvent2", 10086, "text");
-                }
             });
         }
         public void End()
@@ -120,6 +116,12 @@ namespace App.Modules
         public void TestEvent1(int index)
         {
             Log.I($"TestEvent = {index}");
+        }
+        
+        [Event("TestEvent0")]
+        public void TestEvent0()
+        {
+            Log.I($"TestEvent = 0");
         }
         
         #endregion
