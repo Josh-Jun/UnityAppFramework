@@ -79,6 +79,19 @@ namespace App.Modules
                 {
                     ViewMaster.Instance.GoBack();
                 }
+
+                if (Input.GetKeyDown(KeyCode.Z))
+                {
+                    EventMaster.Instance.Execute("TestEvent0");
+                }
+                if (Input.GetKeyDown(KeyCode.X))
+                {
+                    EventMaster.Instance.Execute("TestEvent1", 10086);
+                }
+                if (Input.GetKeyDown(KeyCode.C))
+                {
+                    EventMaster.Instance.Execute("TestEvent2", 10086, "text");
+                }
             });
         }
         public void End()
@@ -103,7 +116,11 @@ namespace App.Modules
 
         #region Logic
         
-        
+        [Event("TestEvent1")]
+        public void TestEvent1(int index)
+        {
+            Log.I($"TestEvent = {index}");
+        }
         
         #endregion
 

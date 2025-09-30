@@ -26,12 +26,7 @@ namespace App.Core.Master
     {
         private readonly Dictionary<string, EventData> Events = new Dictionary<string, EventData>();
 
-        private void Awake()
-        {
-            InitEventMethods();
-        }
-
-        public void AddEventMethods<T>(object obj)
+        public void AddEventMethods(object obj)
         {
             var type = obj.GetType();
             var methods = type.GetMethods().Where(info => info.GetCustomAttributes(typeof(EventAttribute), false).Any())
@@ -69,18 +64,35 @@ namespace App.Core.Master
             }
         }
 
-        private void InitEventMethods(string assemblyString = "App.Module")
+        public void InitEventMethods(Dictionary<string, List<ILogic>> pairs, string assemblyString = "App.Module")
         {
+            // 初始化所有Logic脚本的Event特性
+            var logics = pairs.SelectMany(x => x.Value).ToList();
+            foreach (var logic in logics)
+            {
+                AddEventMethods(logic);
+            }
+            // 添加所有View脚本的Event特性
+            var views = ViewMaster.Instance.GetAllView();
+            foreach (var view in views)
+            {
+                AddEventMethods(view);
+            }
+            // 添加所有MonoBehaviour脚本的Event特性(脚本必须提前挂到GameObject上)
             var assembly = Assembly.Load(assemblyString);
             var types = assembly.GetTypes();
 
             foreach (var type in types)
             {
+                var va = type.GetCustomAttributes(typeof(ViewOfAttribute), false).FirstOrDefault();
+                if (va is ViewOfAttribute) continue;
+                var la = type.GetCustomAttributes(typeof(LogicOfAttribute), false).FirstOrDefault();
+                if (la is LogicOfAttribute) continue;
                 var methods = type.GetMethods()
                     .Where(info => info.GetCustomAttributes(typeof(EventAttribute), false).Any()).ToList();
                 foreach (var method in methods)
                 {
-                    var ea = method.GetCustomAttributes(typeof(EventAttribute), false).First() as EventAttribute;
+                    var ea = method.GetCustomAttributes(typeof(EventAttribute), false).FirstOrDefault() as EventAttribute;
                     // attribute!.Event(事件名称，用来触发事件)
                     // type.FullName(脚本名称，用来查找脚本实例)
                     // method(方法)
@@ -90,7 +102,7 @@ namespace App.Core.Master
                         continue;
                     }
 
-                    var instances = FindObjectsOfType(type, true).First(obj => obj.GetType() == type);
+                    var instances = FindObjectsOfType(type, false).FirstOrDefault(obj => obj.GetType() == type);
                     if (!instances)
                     {
                         Log.W($"{{{type.FullName}}} 未找到实例对象");

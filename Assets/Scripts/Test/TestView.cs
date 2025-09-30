@@ -37,5 +37,11 @@ namespace App.Modules
             base.RegisterEvent();
 
         }
+
+        [Event("TestEvent0")]
+        public void TestEvent0()
+        {
+            Log.I("TestEvent");
+        }
     }
 }
