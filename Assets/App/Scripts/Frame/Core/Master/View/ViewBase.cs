@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using App.Core.Helper;
 using App.Core.Tools;
+using DG.Tweening;
 using UnityEngine;
 
 namespace App.Core.Master
@@ -9,6 +11,9 @@ namespace App.Core.Master
     {
         public bool ViewActive => gameObject.activeSelf;
         public ViewMold Mold { get; set; }
+        private static Sequence TweenSequence;
+        private static readonly List<Tweener> Tweeners = new List<Tweener>();
+
 
         [Obsolete("此方法已弃用，请使用InitWindow方法", true)]
         protected virtual void Awake()
@@ -36,19 +41,62 @@ namespace App.Core.Master
         public void OpenView(object obj = null)
         {
             transform.SetAsLastSibling();
-            if (gameObject.activeSelf) return;
+            if (gameObject.activeSelf)
+            {
+                Tweeners.Clear();
+                return;
+            }
             gameObject.SetActive(true);
             if (HasEvent($"Open{name}"))
                 SendEventMsg($"Open{name}", obj);
+            if (Tweeners.Count <= 0) return;
+            TweenSequence = DOTween.Sequence();
+            foreach (var tweener in Tweeners)
+            {
+                TweenSequence.Join(tweener);
+            }
+            TweenSequence.OnComplete(() =>
+            {
+                Tweeners.Clear();
+            });
+            TweenSequence.Play();
         }
 
         /// <summary>关闭窗口</summary>
         public void CloseView()
         {
-            if (!gameObject.activeSelf) return;
-            gameObject.SetActive(false);
-            if (HasEvent($"Close{name}"))
-                SendEventMsg($"Close{name}");
+            if (!gameObject.activeSelf)
+            {
+                Tweeners.Clear();
+                return;
+            }
+            if (Tweeners.Count <= 0)
+            {
+                gameObject.SetActive(false);
+                if (HasEvent($"Close{name}"))
+                    SendEventMsg($"Close{name}");
+            }
+            else
+            {
+                TweenSequence = DOTween.Sequence();
+                foreach (var tweener in Tweeners)
+                {
+                    TweenSequence.Join(tweener);
+                }
+                TweenSequence.OnComplete(() =>
+                {
+                    Tweeners.Clear();
+                    gameObject.SetActive(false);
+                    if (HasEvent($"Close{name}"))
+                        SendEventMsg($"Close{name}");
+                });
+                TweenSequence.Play();
+            }
+        }
+        
+        public void AddTweener(Tweener tweener)
+        {
+            Tweeners.Add(tweener);
         }
 
         public void SetAsLastSibling()
