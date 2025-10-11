@@ -387,15 +387,12 @@ namespace App.Core.Master
             var topPixel = Screen.safeArea.y + Screen.safeArea.height - Screen.height;
             var rightPixel = Screen.safeArea.x + Screen.safeArea.width - Screen.width;
 
-            UISafeArea2D.offsetMin = new Vector2(leftPixels, bottomPixels);
-            UISafeArea2D.offsetMax = new Vector2(rightPixel, topPixel);
-
             List<(Vector2 min, Vector2 max)> safeAreas = new()
             {
+                (new Vector2(leftPixels, bottomPixels), new Vector2(rightPixel, topPixel)),
+                (Vector2.up * bottomPixels, Vector2.up * topPixel),
+                (Vector2.right * leftPixels, Vector2.right * rightPixel),
                 (Vector2.zero, Vector2.zero),
-                (Vector2.down * bottomPixels, Vector2.down * topPixel),
-                (Vector2.left * leftPixels, Vector2.left * rightPixel),
-                (new Vector2(-leftPixels, -bottomPixels), new Vector2(-rightPixel, -topPixel)),
             };
 
             for (var i = 0; i < UIPanels.Count; i++)
