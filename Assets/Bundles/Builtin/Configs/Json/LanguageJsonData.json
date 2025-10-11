@@ -1,0 +1,14 @@
+{
+  "Languages": [
+    {
+      "Id": 1,
+      "Chinese": "男",
+      "English": "Boy"
+    },
+    {
+      "Id": 2,
+      "Chinese": "女",
+      "English": "Girl"
+    }
+  ]
+}

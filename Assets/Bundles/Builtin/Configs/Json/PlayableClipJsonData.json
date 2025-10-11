@@ -1,0 +1,19 @@
+{
+  "PlayableClips": [
+    {
+      "Id": 10000,
+      "Layer": 100,
+      "Path": "Assets/Bundles/Hotfix/Animator/Idle/Idle_0/MCU_am_Stand_Idle_ShiftL_Loop_01.anim"
+    },
+    {
+      "Id": 10001,
+      "Layer": 101,
+      "Path": "Assets/Bundles/Hotfix/Animator/Idle/Face/MouthClose.anim"
+    },
+    {
+      "Id": 10002,
+      "Layer": 101,
+      "Path": "Assets/Bundles/Hotfix/Animator/Idle/Eye/EyeBlink.anim"
+    }
+  ]
+}

@@ -4,8 +4,10 @@ public class AssetPath
     public const string App = "Assets/Bundles/Builtin/Prefabs/App.prefab";
     public const string AppScene = "Assets/Bundles/Builtin/Scenes/AppScene.unity";
     public const string LoadingScene = "Assets/Bundles/Builtin/Scenes/LoadingScene.unity";
-    public const string UserJsonData = "Assets/Bundles/Builtin/Configs/Json/UserJsonData.json";
-    public const string AdminXmlData = "Assets/Bundles/Builtin/Configs/Xml/AdminXmlData.xml";
+    public const string LanguageJsonData = "Assets/Bundles/Builtin/Configs/Json/LanguageJsonData.json";
+    public const string PlayableClipJsonData = "Assets/Bundles/Builtin/Configs/Json/PlayableClipJsonData.json";
+    public const string PlayableJsonData = "Assets/Bundles/Builtin/Configs/Json/PlayableJsonData.json";
+    public const string PlayableLayerJsonData = "Assets/Bundles/Builtin/Configs/Json/PlayableLayerJsonData.json";
     public const string ActionbarItem = "Assets/Bundles/Builtin/Prefabs/UI/Items/Ask/ActionbarItem.prefab";
     public const string DialogItem = "Assets/Bundles/Builtin/Prefabs/UI/Items/Ask/DialogItem.prefab";
     public const string SnackbarItem = "Assets/Bundles/Builtin/Prefabs/UI/Items/Ask/SnackbarItem.prefab";

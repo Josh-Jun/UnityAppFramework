@@ -1,0 +1,19 @@
+{
+  "PlayableLayers": [
+    {
+      "Id": 100,
+      "Layer": 0,
+      "LayerAvatarMask": ""
+    },
+    {
+      "Id": 101,
+      "Layer": 1,
+      "LayerAvatarMask": ""
+    },
+    {
+      "Id": 102,
+      "Layer": 2,
+      "LayerAvatarMask": ""
+    }
+  ]
+}

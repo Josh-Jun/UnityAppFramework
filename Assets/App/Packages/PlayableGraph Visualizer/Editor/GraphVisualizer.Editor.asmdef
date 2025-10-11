@@ -1,0 +1,18 @@
+{
+    "name": "GraphVisualizer.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:30a97380255c8cb468def43c9709139d"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

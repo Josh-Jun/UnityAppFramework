@@ -1,0 +1,30 @@
+{
+  "Playables": [
+    {
+      "Id": 10000,
+      "Name": "Idle",
+      "Clips": [10000],
+      "IsLoop": true,
+      "Icon": "",
+      "Prop": "",
+      "PropRoot": "",
+      "PropOffset": {"x":0,"y":0,"z":0},
+      "PropAngle": {"x":0,"y":0,"z":0},
+      "CanStop": 0,
+      "Type": 0
+    },
+    {
+      "Id": 10001,
+      "Name": "Eye",
+      "Clips": [10000,10002],
+      "IsLoop": true,
+      "Icon": "",
+      "Prop": "",
+      "PropRoot": "",
+      "PropOffset": {"x":0,"y":0,"z":0},
+      "PropAngle": {"x":0,"y":0,"z":0},
+      "CanStop": 0,
+      "Type": 0
+    }
+  ]
+}
