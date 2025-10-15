@@ -103,7 +103,7 @@ namespace App.Editor.Tools
         private static string target_path = $"{Application.dataPath}/App/Scripts/Runtime/Helper/Asset";
 
         [MenuItem("App/Editor/UpdateAssetPackage %#E", false, MENU_LEVEL)]
-        private static void UpdateAssetPackage()
+        public static void UpdateAssetPackage()
         {
             sb.Length = 0;
             var config = AssetDatabase.LoadAssetAtPath<AssetBundleCollectorSetting>(watchers[0]);

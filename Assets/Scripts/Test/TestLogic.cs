@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using App.Core.Helper;
 using App.Core.Master;
 using App.Core.Tools;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -87,6 +88,10 @@ namespace App.Modules
                 if (Input.GetKeyDown(KeyCode.X))
                 {
                     EventMaster.Instance.Execute("TestEvent1", 10086);
+                }
+                if (Input.GetKeyDown(KeyCode.C))
+                {
+                    ViewMaster.Instance.SwitchScreen(1).Forget();
                 }
             });
         }
