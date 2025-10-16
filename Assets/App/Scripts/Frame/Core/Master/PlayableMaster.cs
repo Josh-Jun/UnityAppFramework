@@ -129,6 +129,7 @@ namespace App.Core.Master
             {
                 var inputPlayable = rootPlayable.GetInput(i);
                 if (!inputPlayable.IsValid()) continue;
+                inputPlayable.SetInputWeight(i, 0f);
                 // 递归销毁子节点
                 DestroyConnectedPlayables(inputPlayable);
                 // 断开连接
