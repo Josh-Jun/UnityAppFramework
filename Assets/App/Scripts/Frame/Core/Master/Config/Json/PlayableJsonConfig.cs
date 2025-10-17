@@ -12,10 +12,10 @@ namespace App.Core.Master
     {
         private PlayableJsonData _data = new PlayableJsonData();
         private readonly Dictionary<int, Playable> _dict = new Dictionary<int, Playable>();
-        private const string assetPath = "Assets/App/Scripts/Frame/Core/Master/Config/Json/PlayableJsonConfig.cs";
+        private const string location = "Assets/Bundles/Builtin/Configs/Json/PlayableJsonData.json";
         public void Load()
         {
-            var textAsset = AssetsMaster.Instance.LoadAssetSync<TextAsset>(assetPath);
+            var textAsset = AssetsMaster.Instance.LoadAssetSync<TextAsset>(location);
             _data = JsonUtility.FromJson<PlayableJsonData>(textAsset.text);
             foreach (var data in _data.Playables)
             {

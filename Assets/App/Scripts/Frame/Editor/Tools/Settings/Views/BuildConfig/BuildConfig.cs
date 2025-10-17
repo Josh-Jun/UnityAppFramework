@@ -212,10 +212,10 @@ namespace App.Editor.View
             stringBuilder.AppendLine("    {");
             stringBuilder.AppendLine($"        private {data.sheetName}{mold}Data _data = new {data.sheetName}{mold}Data();");
             stringBuilder.AppendLine($"        private readonly Dictionary<int, {data.sheetName}> _dict = new Dictionary<int, {data.sheetName}>();");
-            stringBuilder.AppendLine($"        private const string assetPath = \"Assets/App/Scripts/Frame/Core/Master/Config/{mold}/{data.sheetName}{mold}Config.cs\";");
+            stringBuilder.AppendLine($"        private const string location = \"Assets/Bundles/Builtin/Configs/{mold}/{data.sheetName}{mold}Data.{mold.ToString().ToLower()}\";");
             stringBuilder.AppendLine("        public void Load()");
             stringBuilder.AppendLine("        {");
-            stringBuilder.AppendLine($"            var textAsset = AssetsMaster.Instance.LoadAssetSync<TextAsset>(assetPath);");
+            stringBuilder.AppendLine($"            var textAsset = AssetsMaster.Instance.LoadAssetSync<TextAsset>(location);");
             switch (mold)
             {
                 case ConfigMold.Json:

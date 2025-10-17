@@ -12,10 +12,10 @@ namespace App.Core.Master
     {
         private LanguageJsonData _data = new LanguageJsonData();
         private readonly Dictionary<int, Language> _dict = new Dictionary<int, Language>();
-        private const string assetPath = "Assets/App/Scripts/Frame/Core/Master/Config/Json/LanguageJsonConfig.cs";
+        private const string location = "Assets/Bundles/Builtin/Configs/Json/LanguageJsonData.json";
         public void Load()
         {
-            var textAsset = AssetsMaster.Instance.LoadAssetSync<TextAsset>(assetPath);
+            var textAsset = AssetsMaster.Instance.LoadAssetSync<TextAsset>(location);
             _data = JsonUtility.FromJson<LanguageJsonData>(textAsset.text);
             foreach (var data in _data.Languages)
             {

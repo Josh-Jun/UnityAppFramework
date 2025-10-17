@@ -12,10 +12,10 @@ namespace App.Core.Master
     {
         private TestJsonData _data = new TestJsonData();
         private readonly Dictionary<int, Test> _dict = new Dictionary<int, Test>();
-        private const string assetPath = "Assets/App/Scripts/Frame/Core/Master/Config/Json/TestJsonConfig.cs";
+        private const string location = "Assets/Bundles/Builtin/Configs/Json/TestJsonData.json";
         public void Load()
         {
-            var textAsset = AssetsMaster.Instance.LoadAssetSync<TextAsset>(assetPath);
+            var textAsset = AssetsMaster.Instance.LoadAssetSync<TextAsset>(location);
             _data = JsonUtility.FromJson<TestJsonData>(textAsset.text);
             foreach (var data in _data.Tests)
             {
