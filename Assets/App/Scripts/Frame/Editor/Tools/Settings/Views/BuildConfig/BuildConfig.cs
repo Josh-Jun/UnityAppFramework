@@ -208,16 +208,14 @@ namespace App.Editor.View
             stringBuilder.AppendLine("namespace App.Core.Master");
             stringBuilder.AppendLine("{");
             stringBuilder.AppendLine("    [Config]");
-            stringBuilder.AppendLine(
-                $"    public class {data.sheetName}{mold}Config : Singleton<{data.sheetName}{mold}Config>, IConfig");
+            stringBuilder.AppendLine($"    public class {data.sheetName}{mold}Config : Singleton<{data.sheetName}{mold}Config>, IConfig");
             stringBuilder.AppendLine("    {");
-            stringBuilder.AppendLine(
-                $"        private {data.sheetName}{mold}Data _data = new {data.sheetName}{mold}Data();");
-            stringBuilder.AppendLine(
-                $"        private readonly Dictionary<int, {data.sheetName}> _dict = new Dictionary<int, {data.sheetName}>();");
+            stringBuilder.AppendLine($"        private {data.sheetName}{mold}Data _data = new {data.sheetName}{mold}Data();");
+            stringBuilder.AppendLine($"        private readonly Dictionary<int, {data.sheetName}> _dict = new Dictionary<int, {data.sheetName}>();");
+            stringBuilder.AppendLine($"        private const string assetPath = \"Assets/App/Scripts/Frame/Core/Master/Config/{mold}/{data.sheetName}{mold}Config.cs\";");
             stringBuilder.AppendLine("        public void Load()");
             stringBuilder.AppendLine("        {");
-            stringBuilder.AppendLine($"            var textAsset = AssetsMaster.Instance.LoadAssetSync<TextAsset>(AssetPath.{data.sheetName}{mold}Data);");
+            stringBuilder.AppendLine($"            var textAsset = AssetsMaster.Instance.LoadAssetSync<TextAsset>(assetPath);");
             switch (mold)
             {
                 case ConfigMold.Json:
@@ -271,8 +269,7 @@ namespace App.Editor.View
 
             stringBuilder.Append("}");
 
-            var output =
-                $"{Application.dataPath}/App/Scripts/Frame/Core/Master/Config/{mold}/{data.sheetName}{mold}Config.cs";
+            var output = $"{Application.dataPath}/App/Scripts/Frame/Core/Master/Config/{mold}/{data.sheetName}{mold}Config.cs";
             SaveFile(output, stringBuilder);
         }
 
@@ -380,6 +377,7 @@ namespace App.Editor.View
             {
                 sb.Append("[");
             }
+            var arraySplit = array.Length > 1 ? "," : "";
             foreach (var value in array)
             {
                 if (typeStr.Contains("string"))
@@ -403,6 +401,13 @@ namespace App.Editor.View
                     var str = string.IsNullOrEmpty(value) ? "0" : $"{value}";
                     sb.Append($"{str}");
                 }
+
+                sb.Append(arraySplit);
+            }
+
+            if (!string.IsNullOrEmpty(arraySplit))
+            {
+                sb.Remove(sb.Length - 1, 1);
             }
 
             if (!typeStr.Contains("[]")) return sb.ToString();

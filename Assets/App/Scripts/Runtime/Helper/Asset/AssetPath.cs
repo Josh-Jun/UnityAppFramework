@@ -8,6 +8,7 @@ public class AssetPath
     public const string PlayableClipJsonData = "Assets/Bundles/Builtin/Configs/Json/PlayableClipJsonData.json";
     public const string PlayableJsonData = "Assets/Bundles/Builtin/Configs/Json/PlayableJsonData.json";
     public const string PlayableLayerJsonData = "Assets/Bundles/Builtin/Configs/Json/PlayableLayerJsonData.json";
+    public const string TestJsonData = "Assets/Bundles/Builtin/Configs/Json/TestJsonData.json";
     public const string ActionbarItem = "Assets/Bundles/Builtin/Prefabs/UI/Items/Ask/ActionbarItem.prefab";
     public const string DialogItem = "Assets/Bundles/Builtin/Prefabs/UI/Items/Ask/DialogItem.prefab";
     public const string SnackbarItem = "Assets/Bundles/Builtin/Prefabs/UI/Items/Ask/SnackbarItem.prefab";

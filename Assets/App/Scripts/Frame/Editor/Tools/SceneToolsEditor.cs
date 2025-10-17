@@ -215,8 +215,6 @@ namespace App.Editor.Tools
 
             s_Initialized = true;
             EditorApplication.update -= OnUpdate;
-
-            Debug.Log("CruToolbar initialized successfully.");
         }
 
         private static readonly List<ToolbarToggleItem> ToolbarToggleItems = new ()
@@ -351,8 +349,6 @@ namespace App.Editor.Tools
             s_ToolbarType = null;
 
             s_Initialized = false;
-
-            Debug.Log("CruToolbar cleaned up.");
         }
     }
 

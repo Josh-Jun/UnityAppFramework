@@ -1,11 +1,3 @@
-/* *
- * ===============================================
- * author      : Josh@win
- * e-mail      : shijun_z@163.com
- * create time : 2025年10月11 14:47
- * function    : 
- * ===============================================
- * */
 using System;
 using UnityEngine;
 using App.Core.Tools;
@@ -20,9 +12,10 @@ namespace App.Core.Master
     {
         private PlayableClipJsonData _data = new PlayableClipJsonData();
         private readonly Dictionary<int, PlayableClip> _dict = new Dictionary<int, PlayableClip>();
+        private const string assetPath = "Assets/App/Scripts/Frame/Core/Master/Config/Json/PlayableClipJsonConfig.cs";
         public void Load()
         {
-            var textAsset = AssetsMaster.Instance.LoadAssetSync<TextAsset>(AssetPath.PlayableClipJsonData);
+            var textAsset = AssetsMaster.Instance.LoadAssetSync<TextAsset>(assetPath);
             _data = JsonUtility.FromJson<PlayableClipJsonData>(textAsset.text);
             foreach (var data in _data.PlayableClips)
             {

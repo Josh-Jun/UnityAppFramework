@@ -39,26 +39,19 @@ namespace App.Editor.Tools
             head.AppendLine(" * */");
             
             var newFilePath = newFileMeta.Replace(".meta", "");
-            if (Path.GetExtension(newFilePath) == ".txt" || Path.GetExtension(newFilePath) == ".cs")
-            {
-                var realPath = Application.dataPath.Replace("Assets", "") + newFilePath;
-                if (File.Exists(realPath))
-                {
-                    var scriptContent = File.ReadAllText(realPath);
-                    // 这里实现自定义的一些规则
-                    // scriptContent = scriptContent.Replace("#SCRIPTNAME#", Path.GetFileNameWithoutExtension(newFilePath));
-                    var name = Path.GetFileNameWithoutExtension(newFilePath);
-                    for (int i = 0; i < temps.Length; i++)
-                    {
-                        name = name.Replace(temps[i], "");
-                    }
+            if (Path.GetExtension(newFilePath) != ".txt" && Path.GetExtension(newFilePath) != ".cs") return;
+            var realPath = Application.dataPath.Replace("Assets", "") + newFilePath;
+            if (!File.Exists(realPath)) return;
+            var scriptContent = File.ReadAllText(realPath);
+            // 这里实现自定义的一些规则
+            // scriptContent = scriptContent.Replace("#SCRIPTNAME#", Path.GetFileNameWithoutExtension(newFilePath));
+            var name = Path.GetFileNameWithoutExtension(newFilePath);
+            name = temps.Aggregate(name, (current, t) => current.Replace(t, ""));
 
-                    scriptContent = scriptContent.Replace("#MODULE#", name);
-                    scriptContent = scriptContent.Insert(0, head.ToString());
+            scriptContent = scriptContent.Replace("#MODULE#", name);
+            scriptContent = scriptContent.Insert(0, head.ToString());
 
-                    File.WriteAllText(realPath, scriptContent);
-                }
-            }
+            File.WriteAllText(realPath, scriptContent);
         }
 
         #endregion
@@ -83,7 +76,7 @@ namespace App.Editor.Tools
         
         #region 自动生成资源包枚举类型 Win(Ctrl+Shift+E) Mac(Cmd+Shift+E)
         
-        private static string[] watchers = new[]
+        private static readonly string[] watchers = new[]
         {
             "Assets/Settings/AssetBundleCollectorSetting.asset"
         };
@@ -100,7 +93,7 @@ namespace App.Editor.Tools
             return paths;
         }
         private static StringBuilder sb = new StringBuilder(1024);
-        private static string target_path = $"{Application.dataPath}/App/Scripts/Runtime/Helper/Asset";
+        private static readonly string target_path = $"{Application.dataPath}/App/Scripts/Runtime/Helper/Asset";
 
         [MenuItem("App/Editor/UpdateAssetPackage %#E", false, MENU_LEVEL)]
         public static void UpdateAssetPackage()
@@ -216,17 +209,10 @@ namespace App.Editor.Tools
         {
             var path = $"{Application.dataPath}/Bundles/{folder}";
             var fileInfos = new List<FileInfo>();
-            if (Directory.Exists(path))
-            {
-                var direction = new DirectoryInfo(path);
-                var files = direction.GetFiles("*", SearchOption.AllDirectories);
-                foreach (var t in files)
-                {
-                    if(IgnoreExtensions.Contains(t.Extension)) continue;
-                    fileInfos.Add(t);
-                }
-            }
-
+            if (!Directory.Exists(path)) return fileInfos;
+            var direction = new DirectoryInfo(path);
+            var files = direction.GetFiles("*", SearchOption.AllDirectories);
+            fileInfos.AddRange(files.Where(t => !IgnoreExtensions.Contains(t.Extension)));
             return fileInfos;
         }
         
@@ -310,11 +296,9 @@ namespace App.Editor.Tools
             var str = "";
             for (var i = 0; i < path.Split('/').Length; i++)
             {
-                if (i != 0)
-                {
-                    var _str = "/" + path.Split('/')[i];
-                    str += _str;
-                }
+                if (i == 0) continue;
+                var _str = "/" + path.Split('/')[i];
+                str += _str;
             }
 
             return str;
@@ -339,14 +323,11 @@ namespace App.Editor.Tools
             CopyFile(sourceDirectory, destDirectory);
             //拷贝子目录       
             //获取所有子目录名称
-            string[] directionName = Directory.GetDirectories(sourceDirectory);
-            foreach (string directionPath in directionName)
+            var directionName = Directory.GetDirectories(sourceDirectory);
+            foreach (var directionPath in directionName)
             {
                 //根据每个子目录名称生成对应的目标子目录名称
-                string directionPathTemp =
-                    Path.Combine(destDirectory,
-                        directionPath.Substring(sourceDirectory.Length +
-                                                1)); // destDirectory + "\\" + directionPath.Substring(sourceDirectory.Length + 1);
+                var directionPathTemp = Path.Combine(destDirectory, directionPath[(sourceDirectory.Length + 1)..]);
                 //递归下去
                 CopyDirectory(directionPath, directionPathTemp);
             }
@@ -355,14 +336,11 @@ namespace App.Editor.Tools
         public static void CopyFile(string sourceDirectory, string destDirectory)
         {
             //获取所有文件名称
-            string[] fileName = Directory.GetFiles(sourceDirectory);
-            foreach (string filePath in fileName)
+            var fileName = Directory.GetFiles(sourceDirectory);
+            foreach (var filePath in fileName)
             {
                 //根据每个文件名称生成对应的目标文件名称
-                string filePathTemp =
-                    Path.Combine(destDirectory,
-                        filePath.Substring(sourceDirectory.Length +
-                                           1)); // destDirectory + "\\" + filePath.Substring(sourceDirectory.Length + 1);
+                var filePathTemp = Path.Combine(destDirectory, filePath[(sourceDirectory.Length + 1)..]);
                 //若不存在，直接复制文件；若存在，覆盖复制
                 if (File.Exists(filePathTemp))
                 {
@@ -519,16 +497,7 @@ namespace App.Editor.Tools
 
         private static bool IsGuid(string text)
         {
-            foreach (var c in text)
-            {
-                if (
-                    !((c >= '0' && c <= '9') ||
-                      (c >= 'a' && c <= 'z'))
-                )
-                    return false;
-            }
-
-            return true;
+            return text.All(c => (c >= '0' && c <= '9') || (c >= 'a' && c <= 'z'));
         }
 
         private static string MakeRelativePath(string fromPath, string toPath)

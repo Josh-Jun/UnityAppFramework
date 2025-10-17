@@ -135,7 +135,11 @@ namespace App.Modules
         
         private void OpenTestView(object obj)
         {
-            
+            Log.I($"TestView Open = {TestJsonConfig.Instance.Get(5).Pos}");
+            foreach (var pos in TestJsonConfig.Instance.Get(5).PosArr)
+            {
+                Log.I($"TestView Open = {pos}");
+            }
         }
         private void CloseTestView()
         {
