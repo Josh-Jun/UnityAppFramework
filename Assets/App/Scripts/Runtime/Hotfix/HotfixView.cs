@@ -15,9 +15,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.Networking;
-using System.Runtime.InteropServices;
-using System.Text;
-
 
 #if UNITY_EDITOR
 using UnityEditor;

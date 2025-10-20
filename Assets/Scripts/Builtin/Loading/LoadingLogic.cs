@@ -58,7 +58,7 @@ namespace App.Modules
         
         private int _timeId;
 
-        private void LoadYaScene()
+        private void LoadYAScene()
         {
             if (SceneMaster.Instance.CurrentScene != null)
             {
@@ -80,7 +80,7 @@ namespace App.Modules
             }
         }
 
-        private async UniTask LoadAbScene()
+        private async UniTask LoadABScene()
         {
             if (SceneMaster.Instance.CurrentScene != null)
             {
@@ -132,10 +132,10 @@ namespace App.Modules
             switch (SceneMaster.Instance.TargetScene.Mold)
             {
                 case LoadSceneMold.YAScene:
-                    LoadYaScene();
+                    LoadYAScene();
                     break;
                 case LoadSceneMold.ABScene:
-                    LoadAbScene().Forget();
+                    LoadABScene().Forget();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
