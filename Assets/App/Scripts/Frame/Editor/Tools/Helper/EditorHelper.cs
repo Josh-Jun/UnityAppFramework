@@ -121,20 +121,29 @@ namespace App.Editor.Helper
 
         #region GameViewResolution
 
-        private static int Orientation = -1;
+        private const int DefaultOrientation = 0;
+        private const int DefaultWidth = 1170;
+        private const int DefaultHeight = 2532;
+        private static int CurrentOrientation = -1;
 
         public static void ChangeGameViewResolution(int orientation)
         {
-            Orientation = Screen.width < Screen.height ? 0 : 1;
-            var width = orientation == 0 ? 1170 : 2532;
-            var height = orientation == 0 ? 2532 : 1170;
+            if (CurrentOrientation == orientation) return;
+            CurrentOrientation = orientation;
+            var width = orientation == 0 ? DefaultWidth : DefaultHeight;
+            var height = orientation == 0 ? DefaultHeight : DefaultWidth;
             SetGameViewSize(width, height);
+        }
+        
+        public static void SwitchGameViewResolution()
+        {
+            var orientation = CurrentOrientation > 0 ? 0 : 1;
+            ChangeGameViewResolution(orientation);
         }
 
         public static void RestoreGameViewResolution()
         {
-            if(Orientation < 0) return;
-            ChangeGameViewResolution(Orientation);
+            ChangeGameViewResolution(DefaultOrientation);
         }
 
         public static void ClearGameViewCustomSize()
