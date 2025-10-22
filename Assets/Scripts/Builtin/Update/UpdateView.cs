@@ -13,6 +13,7 @@ using App.Core.Tools;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using YooAsset;
 
 namespace App.Modules
 {
@@ -61,12 +62,12 @@ namespace App.Modules
         {
             text_Content.text = value;
         }
-        public void SetDownloadProgress(int totalDownloadCount, int currentDownloadCount, long totalDownloadBytes, long currentDownloadBytes)
+        public void SetDownloadProgress(DownloadUpdateData data)
         {
-            var progress = currentDownloadBytes / (float)totalDownloadBytes;
+            var progress = data.CurrentDownloadBytes / (float)data.TotalDownloadBytes;
             slider_Progress.value = Mathf.Clamp(progress, 0, 1);
             text_Progress.text = $"{progress * 100:F2}%";
-            text.text = $"{currentDownloadBytes / 1048576f:F2}M/{totalDownloadBytes / 1048576f:F2}M\n{currentDownloadCount}/{totalDownloadCount}";
+            text.text = $"{data.CurrentDownloadBytes / 1048576f:F2}M/{data.TotalDownloadBytes / 1048576f:F2}M\n{data.CurrentDownloadCount}/{data.TotalDownloadCount}";
         }
         public void SetUpdateTipsActive(bool active)
         {

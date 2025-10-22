@@ -56,7 +56,7 @@ namespace App.Modules
             _view.SetProgressBarActive(true);
             UniTask.Void(async () =>
             {
-                _downloader.OnDownloadProgressCallback = _view.SetDownloadProgress;
+                _downloader.DownloadUpdateCallback = _view.SetDownloadProgress;
                 _downloader.BeginDownload();
                 await _downloader.Task;
                 await Assets.ClearPackageUnusedCacheBundleFiles(AssetPackage.HotfixPackage);

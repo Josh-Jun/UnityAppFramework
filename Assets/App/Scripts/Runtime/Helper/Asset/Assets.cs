@@ -46,7 +46,7 @@ public static class Assets
         return null;
     }
 
-    public static async UniTask UpdatePackage(AssetPackage assetPackage, DownloaderOperation.OnDownloadProgress onDownloadProgress, bool isBuiltinPackage = false)
+    public static async UniTask UpdatePackage(AssetPackage assetPackage, DownloaderOperation.DownloadUpdate onDownloadProgress, bool isBuiltinPackage = false)
     {
         var package = await CreatePackageAsync(assetPackage, isBuiltinPackage);
         // 请求资源清单的版本信息
@@ -65,19 +65,19 @@ public static class Assets
                     Debug.Log("没有需要下载的资源");
                     return;
                 }
-                downloader.OnDownloadOverCallback = (succeed) =>
+                downloader.DownloadFinishCallback = (succeed) =>
                 {
                     UniTask.Void(async () =>
                     {
                         await ClearPackageUnusedCacheBundleFiles(assetPackage);
                     });
                 };
-                downloader.OnDownloadErrorCallback = (fileName, error) =>
+                downloader.DownloadErrorCallback = errorData =>
                 {
-                    Debug.Log($"YooAssets DownloadError:[{fileName}][{error}]");
+                    Debug.Log($"YooAssets DownloadError:[{errorData.FileName}][{errorData.ErrorInfo}]");
                 };
-                downloader.OnDownloadProgressCallback = onDownloadProgress;
-                downloader.OnStartDownloadFileCallback += (fileName, error) => { };
+                downloader.DownloadUpdateCallback = onDownloadProgress;
+                downloader.DownloadFileBeginCallback += fileData => { };
                 downloader.BeginDownload();
                 await downloader.Task;
             }
@@ -103,14 +103,9 @@ public static class Assets
         switch (Global.AppConfig.AssetPlayMode)
         {
             case EPlayMode.EditorSimulateMode:
-                var simulateBuildParam = new EditorSimulateBuildParam
-                {
-                    PackageName = $"{assetPackage}" //指定包裹名称
-                };
-                var simulateBuildResult = EditorSimulateModeHelper.SimulateBuild(simulateBuildParam);
-
-                var editorFileSystemParams =
-                    FileSystemParameters.CreateDefaultEditorFileSystemParameters(simulateBuildResult);
+                var simulateBuildResult = EditorSimulateModeHelper.SimulateBuild($"{assetPackage}");
+                var packageRoot = simulateBuildResult.PackageRootDirectory;
+                var editorFileSystemParams = FileSystemParameters.CreateDefaultEditorFileSystemParameters(packageRoot);
                 var initEditorParameters = new EditorSimulateModeParameters
                 {
                     EditorFileSystemParameters = editorFileSystemParams
@@ -191,7 +186,7 @@ public static class Assets
     public static async UniTask ClearPackageAllCacheBundleFiles(AssetPackage assetPackage = AssetPackage.BuiltinPackage)
     {
         var package = YooAssets.GetPackage($"{assetPackage}");
-        var operation = package.ClearCacheBundleFilesAsync(EFileClearMode.ClearAllBundleFiles);
+        var operation = package.ClearCacheFilesAsync(EFileClearMode.ClearAllBundleFiles);
         await operation.Task;
 
         if (operation.Status == EOperationStatus.Succeed)
@@ -208,7 +203,7 @@ public static class Assets
     public static async UniTask ClearPackageUnusedCacheBundleFiles(AssetPackage assetPackage = AssetPackage.BuiltinPackage)
     {
         var package = YooAssets.GetPackage($"{assetPackage}");
-        var operation = package.ClearCacheBundleFilesAsync(EFileClearMode.ClearUnusedBundleFiles);
+        var operation = package.ClearCacheFilesAsync(EFileClearMode.ClearUnusedBundleFiles);
         await operation.Task;
 
         if (operation.Status == EOperationStatus.Succeed)
@@ -225,7 +220,7 @@ public static class Assets
     public static async UniTask ClearPackageCacheBundleFilesByTags(string[] tags, AssetPackage assetPackage = AssetPackage.BuiltinPackage)
     {
         var package = YooAssets.GetPackage($"{assetPackage}");
-        var operation = package.ClearCacheBundleFilesAsync(EFileClearMode.ClearBundleFilesByTags, tags);
+        var operation = package.ClearCacheFilesAsync(EFileClearMode.ClearBundleFilesByTags, tags);
         await operation.Task;
 
         if (operation.Status == EOperationStatus.Succeed)

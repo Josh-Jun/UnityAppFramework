@@ -15,6 +15,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.Networking;
+using YooAsset;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -114,16 +115,16 @@ namespace App.Runtime.Hotfix
         }
 
         #region Hotfix
-        public void SetDownloadProgress(int totalDownloadCount, int currentDownloadCount, long totalDownloadBytes, long currentDownloadBytes)
+        public void SetDownloadProgress(DownloadUpdateData data)
         {
             if (!_slider.gameObject.activeSelf)
             {
                 _slider.gameObject.SetActive(true);
             }
-            var progress = currentDownloadBytes / (float)totalDownloadBytes;
-            _slider.value = Mathf.Clamp(progress, _min, 1);
+            var progress = data.CurrentDownloadBytes / (float)data.TotalDownloadBytes;
+            _slider.value = Mathf.Clamp(progress, 0, 1);
             _progressText.text = $"{(progress * 100):00}%";
-            _text.text = $"{(currentDownloadBytes / 1048576f):F}M/{(totalDownloadBytes / 1048576f):F}M\n{currentDownloadCount}/{totalDownloadCount}";
+            _text.text = $"{data.CurrentDownloadBytes / 1048576f:F2}M/{data.TotalDownloadBytes / 1048576f:F2}M\n{data.CurrentDownloadCount}/{data.TotalDownloadCount}";
         }
         #endregion
 
