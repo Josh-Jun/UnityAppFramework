@@ -120,13 +120,13 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.gif.gifplayer": {
-      "version": "https://github.com/Josh-Jun/UnityPackageManager.git#gifplayer/1.0.0",
+      "version": "https://github.com/Josh-Jun/UnityPackageManager.git?path=/Assets/Packages/GifPlayer",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "5bac9da572ef9c9e65af368a44c127df28205bc1"
+      "hash": "2de9450c45088e646c1ded3baffc15d556485254"
     },
     "com.unity.ide.rider": {
       "version": "3.0.34",
@@ -314,13 +314,13 @@
       }
     },
     "com.unity.ui.videoplayer": {
-      "version": "https://github.com/Josh-Jun/UnityPackageManager.git#uivideoplayer/1.0.0",
+      "version": "https://github.com/Josh-Jun/UnityPackageManager.git?path=/Assets/Packages/UIVideoPlayer",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "5acbd1c5c9caa3f34d6cefa23ba22c68a0872b19"
+      "hash": "fcc223b80541914a667d456d062b6cb002907e91"
     },
     "com.unity.visualscripting": {
       "version": "1.9.4",
