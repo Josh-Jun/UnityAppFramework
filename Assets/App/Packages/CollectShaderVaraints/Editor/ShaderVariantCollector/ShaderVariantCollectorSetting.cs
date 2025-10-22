@@ -3,7 +3,7 @@ using UnityEditor;
 
 public class ShaderVariantCollectorSetting : ScriptableObject
 {
-    private const string DefaultSavePath = "Assets/MyShaderVariants.shadervariants";
+    private const string DefaultSavePath = "Assets/Bundles/Builtin/Shaders/ShaderVariant/ShaderVariants.shadervariants";
 
     public static string GeFileSavePath(string packageName)
     {
