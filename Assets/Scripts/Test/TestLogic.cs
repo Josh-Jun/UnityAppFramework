@@ -66,6 +66,15 @@ namespace App.Modules
                 {
                     View.Move(Vector3.zero, 0.2f).OpenView();
                 }
+                if (Input.GetKeyDown(KeyCode.T))
+                {
+                    var sprite = AssetsMaster.Instance.LoadAssetSync<Sprite>(AssetPath.launcher_bg);
+                    var data = new BackgroundData()
+                    {
+                        sprite = sprite,
+                    };
+                    ViewMaster.Instance.OpenView<BackgroundView>(data);
+                }
 
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
