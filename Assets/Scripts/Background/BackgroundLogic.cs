@@ -190,6 +190,10 @@ namespace App.Modules
                 UpdatePosition();
                 UpdateScale();
                 UpdateBillboarding();
+        
+#if UNITY_EDITOR
+                SendEventMsg("SetBackgroundData", data);
+#endif
             }
             else
             {
