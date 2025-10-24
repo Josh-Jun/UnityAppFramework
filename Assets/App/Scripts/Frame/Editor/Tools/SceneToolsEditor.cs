@@ -225,7 +225,7 @@ namespace App.Editor.Tools
                 imageOn = AssetDatabase.LoadAssetAtPath<Texture>("Assets/App/Scripts/Frame/Editor/Tools/Images/auto_play_on.png"),
                 imageOff = AssetDatabase.LoadAssetAtPath<Texture>("Assets/App/Scripts/Frame/Editor/Tools/Images/auto_play_off.png"),
                 tooltip = "Auto Play Launcher Scene",
-                isToggleOn = Menu.GetChecked(MENU_AUTO_PLAY_PATH),
+                isToggleOn = PlayerPrefs.GetInt(GetKey(MENU_AUTO_PLAY_PATH)) == 1,
             },
             new ToolbarToggleItem
             {
@@ -233,7 +233,7 @@ namespace App.Editor.Tools
                 imageOn = AssetDatabase.LoadAssetAtPath<Texture>("Assets/App/Scripts/Frame/Editor/Tools/Images/restore_view_on.png"),
                 imageOff = AssetDatabase.LoadAssetAtPath<Texture>("Assets/App/Scripts/Frame/Editor/Tools/Images/restore_view_off.png"),
                 tooltip = "Restore GameView Resolution",
-                isToggleOn = Menu.GetChecked(MENU_RESTORE_GAME_VIEW_PATH),
+                isToggleOn = PlayerPrefs.GetInt(GetKey(MENU_RESTORE_GAME_VIEW_PATH)) == 1,
             },
         };
         
