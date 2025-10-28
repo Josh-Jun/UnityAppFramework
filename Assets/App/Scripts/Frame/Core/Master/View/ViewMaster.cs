@@ -15,6 +15,31 @@ namespace App.Core.Master
         public object obj;
     }
 
+    /// <summary>红点类型</summary>
+    [Flags]
+    public enum RedDotMold
+    {
+        MainMail = 1 << 0,
+        SystemMail = 1 << 1,
+        MsgCenterMail = 1 << 2,
+        FriendMail = 1 << 3,
+        GiftMail = 1 << 4,
+    }
+    
+    /// <summary>红点描点位置</summary>
+    public enum RedDotAnchor
+    {
+        UpperLeft,
+        UpperCenter,
+        UpperRight,
+        MiddleLeft,
+        MiddleCenter,
+        MiddleRight,
+        LowerLeft,
+        LowerCenter,
+        LowerRight,
+    }
+
     public class ViewMaster : SingletonMono<ViewMaster>
     {
         #region Private Variable
