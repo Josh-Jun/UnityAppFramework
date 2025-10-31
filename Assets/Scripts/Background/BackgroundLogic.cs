@@ -35,6 +35,7 @@ namespace App.Modules
         public float sizeMultiplier = 1.0f;
         public bool useWorldSpace = true;
         public bool billboard = true;
+        public bool realTimeUpdate = true;
     }
     
     [LogicOf("Background", AssetPath.Global)]
@@ -175,10 +176,20 @@ namespace App.Modules
                 View.BackgroundSpriteRenderer.transform.rotation = ViewMaster.Instance.UICamera3D.transform.rotation;
             }
         }
+
+        private void Update(float time)
+        {
+            if (backgroundData is not { realTimeUpdate: true }) return;
+            UpdatePosition();
+            UpdateScale();
+            UpdateBillboarding();
+        }
         
         #endregion
 
         #region View Logic
+
+        private int timeId;
 
         private void OpenBackgroundView(object obj)
         {
@@ -187,10 +198,8 @@ namespace App.Modules
                 backgroundData = data;
                 View.BackgroundSpriteRenderer.SetGameObjectActive();
                 View.BackgroundSpriteRenderer.sprite = backgroundData.sprite;
-                UpdatePosition();
-                UpdateScale();
-                UpdateBillboarding();
-        
+                timeId = TimeUpdateMaster.Instance.StartTimer(Update, UpdateMold.FixedUpdate);
+                
 #if UNITY_EDITOR
                 SendEventMsg("SetBackgroundData", data);
 #endif
@@ -200,10 +209,12 @@ namespace App.Modules
                 Log.W("OpenRender3D2UIView obj is not RenderData");
             }
         }
+
         private void CloseBackgroundView()
         {
             View.BackgroundSpriteRenderer.sprite = null;
             View.BackgroundSpriteRenderer.SetGameObjectActive(false);
+            TimeUpdateMaster.Instance.EndTimer(timeId);
         }
         
         #endregion

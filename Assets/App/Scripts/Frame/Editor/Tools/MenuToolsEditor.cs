@@ -200,7 +200,7 @@ namespace App.Editor.Tools
                 var key = file.Name.Split('.')[0];
                 var value = file.FullName.Replace("\\", "/").Replace(Application.dataPath, "Assets");
                 if(key.Contains("-")) continue;
-                stringBuilder.AppendLine($"    public const string {key.TrimAll()} = \"{value}\";");
+                stringBuilder.AppendLine($"    public const string {key.TrimAll().Replace("@", "_")} = \"{value}\";");
             }
         }
         

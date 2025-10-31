@@ -72,6 +72,7 @@ namespace App.Modules
                     var data = new BackgroundData()
                     {
                         sprite = sprite,
+                        sizeMultiplier = 1.1f,
                     };
                     ViewMaster.Instance.OpenView<BackgroundView>(data);
                 }
