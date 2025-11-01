@@ -198,7 +198,7 @@ namespace App.Modules
                 backgroundData = data;
                 View.BackgroundSpriteRenderer.SetGameObjectActive();
                 View.BackgroundSpriteRenderer.sprite = backgroundData.sprite;
-                timeId = TimeUpdateMaster.Instance.StartTimer(Update, UpdateMold.FixedUpdate);
+                timeId = TimeUpdateMaster.Instance.StartTimer(Update);
                 
 #if UNITY_EDITOR
                 SendEventMsg("SetBackgroundData", data);
