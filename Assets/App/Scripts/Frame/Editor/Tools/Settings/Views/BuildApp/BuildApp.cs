@@ -269,6 +269,13 @@ namespace App.Editor.View
 
         #region YooAssetBuild
 
+        /// <summary>
+        ///  是否全量构建内置包（按需求设置）
+        ///  1、True：BuiltinPackage和HotfixPackage全都放在包内，首次打开不会热更，包体会大一些
+        ///  2、False：BuiltinPackage在包内，HotfixPackage需要在首次打开时热更下来，包体会小一些
+        /// </summary>
+        private static bool IsFullBuiltinPackage => false;
+
         private static void BuildAssets()
         {
             FileUtil.DeleteFileOrDirectory(Application.streamingAssetsPath + "/AssetBundles");
@@ -281,14 +288,20 @@ namespace App.Editor.View
                     YooAssetBuild(EditorUserBuildSettings.activeBuildTarget, AssetPackage.HotfixPackage, version, EBuildinFileCopyOption.ClearAndCopyAll);
                     break;
                 case EPlayMode.HostPlayMode:
-                {
-                    var buildParameters = YooAssetBuild(EditorUserBuildSettings.activeBuildTarget, AssetPackage.HotfixPackage, version, EBuildinFileCopyOption.None);
-                    OnlyCopyPackageManifestFile(buildParameters);
+                    if (IsFullBuiltinPackage)
+                    {
+                        YooAssetBuild(EditorUserBuildSettings.activeBuildTarget, AssetPackage.HotfixPackage, version, EBuildinFileCopyOption.ClearAndCopyAll);
+                    }
+                    else
+                    {
+                        var buildParameters = YooAssetBuild(EditorUserBuildSettings.activeBuildTarget, AssetPackage.HotfixPackage, version, EBuildinFileCopyOption.None);
+                        OnlyCopyPackageManifestFile(buildParameters);
+                    }
                     break;
-                }
-                case EPlayMode.EditorSimulateMode:
                 case EPlayMode.WebPlayMode:
                     break;
+                case EPlayMode.CustomPlayMode:
+                case EPlayMode.EditorSimulateMode:
                 default:
                     throw new ArgumentOutOfRangeException();
             }
