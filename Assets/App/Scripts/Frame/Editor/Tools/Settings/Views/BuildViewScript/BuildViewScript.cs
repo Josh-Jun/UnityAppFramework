@@ -22,6 +22,7 @@ namespace App.Editor.View
         public bool active;
         public List<ViewData> views = new List<ViewData>();
     }
+
     [Serializable]
     public class ViewData
     {
@@ -29,6 +30,7 @@ namespace App.Editor.View
         public string path;
         public List<ComponentData> components = new List<ComponentData>();
     }
+
     [Serializable]
     public class ComponentData
     {
@@ -44,28 +46,31 @@ namespace App.Editor.View
         private VisualTreeAsset view_item;
         private ObjectField uiGameObjectField;
 
-        private readonly string scriptViewPath = $"{EditorHelper.BaseEditorPath()}/Tools/Settings/Views/BuildViewScript/ui_view_script.txt";
-        private readonly string scriptLogicPath = $"{EditorHelper.BaseEditorPath()}/Tools/Settings/Views/BuildViewScript/ui_logic_script.txt";
+        private readonly string scriptViewPath =
+            $"{EditorHelper.BaseEditorPath()}/Tools/Settings/Views/BuildViewScript/ui_view_script.txt";
+
+        private readonly string scriptLogicPath =
+            $"{EditorHelper.BaseEditorPath()}/Tools/Settings/Views/BuildViewScript/ui_logic_script.txt";
 
         private readonly string cachePath = $"{Application.dataPath.Replace("Assets", "")}Data/cache/viewscript";
-        
+
         private VisualElement parent;
         private VisualElement type;
         private VisualElement child;
-        private VisualElement btns;
+        private VisualElement buttons;
         private Foldout rootFoldout;
         private TreeView treeView;
-        
+
         private DropdownField pathField;
         private DropdownField uiComponentField;
 
         private ViewData _selectedViewData;
 
-        private ViewScriptData _viewScriptData = null;
-        
+        private ViewScriptData _viewScriptData;
+
         private GameObject rootGameObject;
 
-        private bool isCreateLogic = false;
+        private bool isCreateLogic;
 
         public void OnCreate(VisualElement root)
         {
@@ -73,18 +78,19 @@ namespace App.Editor.View
             view_item = EditorHelper.GetEditorWindowsAsset<VisualTreeAsset>($"BuildViewScript/view_item.uxml");
             //获取根节点Foldout
             rootFoldout = root.Q<Foldout>("UIView");
-            
+
             type = root.Q<VisualElement>("Type");
             parent = root.Q<VisualElement>("Root");
             child = root.Q<VisualElement>("Child");
-            btns = root.Q<VisualElement>("Btns");
-            btns.Q<Label>().text = "请选择对象并选择需要操作的组件";
+            buttons = root.Q<VisualElement>("Btns");
+            buttons.Q<Label>().text = "请选择对象并选择需要操作的组件";
             type.style.display = DisplayStyle.None;
             parent.style.display = DisplayStyle.None;
-            btns.style.display = DisplayStyle.None;
-            
+            buttons.style.display = DisplayStyle.None;
+
             root.Q<Toggle>("CreateLogic").value = isCreateLogic;
-            root.Q<Toggle>("CreateLogic").RegisterCallback<ChangeEvent<bool>>((evt) => { isCreateLogic = evt.newValue; });
+            root.Q<Toggle>("CreateLogic")
+                .RegisterCallback<ChangeEvent<bool>>((evt) => { isCreateLogic = evt.newValue; });
 
             //获取对象ObjectField，并进行初始化
             uiGameObjectField = root.Q<ObjectField>("UIGameObject");
@@ -93,18 +99,18 @@ namespace App.Editor.View
             {
                 OnObjectFieldChange(evt.newValue as GameObject);
             });
-            
+
             rootFoldout.RegisterCallback<ChangeEvent<bool>>(evt =>
             {
                 if (!evt.newValue)
                 {
-                    btns.Q<Label>().text = "";
+                    buttons.Q<Label>().text = "";
                     _selectedViewData = null;
                     RefreshView(_selectedViewData);
                 }
                 else
                 {
-                    btns.Q<Label>().text = "请选择对象并添加需要操作的组件";
+                    buttons.Q<Label>().text = "请选择对象并添加需要操作的组件";
                 }
             });
 
@@ -113,13 +119,13 @@ namespace App.Editor.View
             root.Q<Button>("BtnSaveData").clicked += SaveData;
             root.Q<Button>("BtnClearData").clicked += ClearData;
             treeView = root.Q<TreeView>("TreeView");
-            
+
             //删除和添加按钮设置图标和添加事件
             root.Q<Button>("btn_remove").style.backgroundImage =
                 new StyleBackground((Texture2D)EditorGUIUtility.IconContent("d_CollabDeleted Icon").image);
             root.Q<Button>("btn_add").style.backgroundImage =
                 new StyleBackground((Texture2D)EditorGUIUtility.IconContent("d_CollabCreate Icon").image);
-            
+
             root.Q<Button>("btn_remove").clicked += () =>
             {
                 if (_selectedViewData == null) return;
@@ -154,21 +160,20 @@ namespace App.Editor.View
 
         public void OnUpdate()
         {
-            
         }
+
         public void OnDestroy()
         {
-            
         }
-        
+
         private void SaveData()
         {
             var view_script_name = rootFoldout.text;
-            
+
             var json = JsonUtility.ToJson(_viewScriptData, true);
             File.WriteAllText($"{cachePath}/{view_script_name}.json", json);
         }
-        
+
         private void ClearData()
         {
             var view_script_name = rootFoldout.text;
@@ -177,6 +182,7 @@ namespace App.Editor.View
             {
                 File.Delete(file);
             }
+
             OnObjectFieldChange(rootGameObject);
         }
 
@@ -223,21 +229,21 @@ namespace App.Editor.View
                     Directory.CreateDirectory(script_path);
                 }
             }
-            
+
             if (File.Exists(view_script_path))
             {
                 File.Delete(view_script_path);
             }
-            
+
             File.WriteAllText(view_script_path, view_script);
             if (isCreateLogic)
             {
                 File.WriteAllText(logic_script_path, logic_script);
             }
-            
+
             var json = JsonUtility.ToJson(_viewScriptData, true);
             File.WriteAllText($"{cachePath}/{view_script_name}.json", json);
-            
+
             AssetDatabase.Refresh();
         }
 
@@ -252,36 +258,30 @@ namespace App.Editor.View
             rootGameObject = go;
             parent.style.display = go ? DisplayStyle.Flex : DisplayStyle.None;
             type.style.display = go ? DisplayStyle.Flex : DisplayStyle.None;
-            btns.style.display = go ? DisplayStyle.Flex : DisplayStyle.None;
-            if(go == null) return;
+            buttons.style.display = go ? DisplayStyle.Flex : DisplayStyle.None;
+            if (!go) return;
             _viewScriptData = LoadViewData(go.name);
-            btns.Q<Label>().text = "请选择对象并添加需要操作的组件";
+            buttons.Q<Label>().text = "请选择对象并添加需要操作的组件";
             rootFoldout.text = go.name;
-            
+
             var view_mold = type.Q<EnumField>("ViewMold");
             view_mold.Init(_viewScriptData?.mold ?? ViewMold.UI2D);
             view_mold.RegisterCallback<ChangeEvent<string>>((evt) =>
             {
-                var mold = (ViewMold)System.Enum.Parse(typeof(ViewMold), evt.newValue);
+                var mold = (ViewMold)Enum.Parse(typeof(ViewMold), evt.newValue);
                 _viewScriptData.mold = mold;
             });
-            
+
             var layer = type.Q<IntegerField>("Layer");
             layer.value = _viewScriptData?.layer ?? 0;
             layer.RegisterCallback<ChangeEvent<int>>((evt) => { _viewScriptData.layer = evt.newValue; });
-            
+
             var active = type.Q<Toggle>("Active");
             active.value = _viewScriptData?.active ?? false;
             active.RegisterCallback<ChangeEvent<bool>>((evt) => { _viewScriptData.active = evt.newValue; });
-            
-            var items = new List<TreeViewItemData<ViewData>>();
 
-            foreach (Transform transform in go.transform)
-            {
-                var treeViewItemData = GetTreeViewItemData(transform);
-                items.Add(treeViewItemData);
-            }
-            
+            var items = (from Transform transform in go.transform select GetTreeViewItemData(transform)).ToList();
+
             treeView.SetRootItems(items);
             treeView.makeItem = MakeTreeViewItem;
             treeView.bindItem = BindTreeViewItem;
@@ -290,18 +290,14 @@ namespace App.Editor.View
             treeView.Rebuild();
         }
 
-        private TreeViewItemData<ViewData> GetTreeViewItemData(Transform parent, string path = "")
+        private TreeViewItemData<ViewData> GetTreeViewItemData(Transform root, string path = "")
         {
-            var childTreeViewItemData = new List<TreeViewItemData<ViewData>>();
-            var currentPath = path == string.Empty ? parent.name : path + "/" + parent.name;
-            foreach (Transform transform in parent)
-            {
-                var itemData = GetTreeViewItemData(transform, currentPath);
-                childTreeViewItemData.Add(itemData);
-            }
-            
-            var uiViewData = new ViewData { path = currentPath, name = parent.name };
-            var vd = _viewScriptData.views.FirstOrDefault(d=>d.path == currentPath);
+            var currentPath = path == string.Empty ? root.name : path + "/" + root.name;
+            var childTreeViewItemData =
+                (from Transform transform in root select GetTreeViewItemData(transform, currentPath)).ToList();
+
+            var uiViewData = new ViewData { path = currentPath, name = root.name };
+            var vd = _viewScriptData.views.FirstOrDefault(d => d.path == currentPath);
             if (vd != null && vd.path == currentPath)
             {
                 uiViewData = vd;
@@ -311,14 +307,15 @@ namespace App.Editor.View
                 _viewScriptData.views.Add(uiViewData);
             }
 
-            return new TreeViewItemData<ViewData>(parent.GetInstanceID(), uiViewData, childTreeViewItemData);
+            return new TreeViewItemData<ViewData>(root.GetInstanceID(), uiViewData, childTreeViewItemData);
         }
 
         private VisualElement MakeTreeViewItem()
         {
-            var item = new Label { style = { marginTop = 2 }};
+            var item = new Label { style = { marginTop = 2 } };
             return item;
         }
+
         private void BindTreeViewItem(VisualElement ve, int index)
         {
             var item = ve as Label;
@@ -328,13 +325,14 @@ namespace App.Editor.View
                 item.text = data.name;
             }
         }
+
         private void OnItemsChosen(IEnumerable<object> objs)
         {
             var enumerable = objs as object[] ?? objs.ToArray();
-            if(!enumerable.Any()) return;
+            if (!enumerable.Any()) return;
             if (enumerable.First() is not ViewData data) return;
             _selectedViewData = data;
-            btns.Q<Label>().text = data.path;
+            buttons.Q<Label>().text = data.path;
             RefreshView(data);
         }
 
@@ -344,7 +342,7 @@ namespace App.Editor.View
         private void RefreshView(ViewData data)
         {
             child.Clear();
-            if(data == null) return;
+            if (data == null) return;
             for (var i = 0; i < data.components.Count; i++)
             {
                 var index = i;
@@ -361,12 +359,12 @@ namespace App.Editor.View
                 var dropdownField = item.Q<DropdownField>("UIComponent");
                 dropdownField.choices = names;
                 dropdownField.value = data.components[index].fullname;
-                
+
                 dropdownField.RegisterCallback<ChangeEvent<string>>((evt) =>
                 {
                     data.components[index] = _components[names.IndexOf(evt.newValue)];
                 });
-                
+
                 child.Add(item);
             }
         }
@@ -375,6 +373,7 @@ namespace App.Editor.View
         /// 获取UI组件
         /// </summary>
         /// <param name="go"></param>
+        /// <param name="cds"></param>
         /// <returns></returns>
         private List<ComponentData> GetComponents(GameObject go, List<ComponentData> cds = null)
         {
@@ -387,103 +386,100 @@ namespace App.Editor.View
                 {
                     continue;
                 }
-                
+
                 var data = new ComponentData
                 {
                     name = go.name.TrimAll(),
                     type = component.GetType().Name,
                     fullname = component.GetType().FullName,
-                    eventType = IsEvent(component) ? component is UnityEngine.UI.Button ? 1 : 2 : 0,
+                    eventType = GetEventType(component),
                     isPublic = true,
                 };
                 if (cds != null)
                 {
                     var result = cds.Any(cd => data.fullname == cd.fullname);
-                    if(result) continue;
+                    if (result) continue;
                 }
+
                 components.Add(data);
             }
+
             return components;
         }
 
         private string CreatePrivateVariableContent()
         {
-            StringBuilder sb = new StringBuilder();
-            foreach (var uiViewData in _viewScriptData.views)
+            var sb = new StringBuilder();
+            foreach (var str in from uiViewData in _viewScriptData.views
+                     from t in uiViewData.components
+                     let cType = t.type
+                     let name = $"{uiViewData.name}{cType}".ToLower()
+                     select $"\t\tprivate {cType} {name};")
             {
-                for (int i = 0; i < uiViewData.components.Count; i++)
-                {
-                    var type = uiViewData.components[i].type;
-                    var name = $"{uiViewData.name}{type}".ToLower();
-                    string str = $"\t\tprivate {type} {name};";
-                    sb.AppendLine(str);
-                }
+                sb.AppendLine(str);
             }
-        
+
             return sb.ToString();
         }
-        
+
         private string CreatePublicVariableContent()
         {
             var sb = new StringBuilder();
-            foreach (var uiViewData in _viewScriptData.views)
+            foreach (var str in from uiViewData in _viewScriptData.views
+                     from t in uiViewData.components
+                     where t.isPublic
+                     let name = $"{t.name}{t.type}"
+                     select $"\t\tpublic {t.type} {name} {{ get {{ return {name.ToLower()}; }} }}")
             {
-                foreach (var t in uiViewData.components)
-                {
-                    if (t.isPublic)
-                    {
-                        var name = $"{t.name}{t.type}";
-                        string str = $"\t\tpublic {t.type} {name} {{ get {{ return {name.ToLower()}; }} }}";
-                        sb.AppendLine(str);
-                    }
-                }
+                sb.AppendLine(str);
             }
+
             return sb.ToString();
         }
-        
-        
+
+
         private string CreateRegisterContent()
         {
             var sb = new StringBuilder();
-            foreach (var uiViewData in _viewScriptData.views)
+            foreach (var str in _viewScriptData.views.SelectMany(uiViewData => from t in uiViewData.components
+                         let str = ""
+                         let tName = t.type
+                         let name = $"{uiViewData.name}{tName}"
+                         select t.eventType switch
+                         {
+                             1 =>
+                                 $"\t\t\t{name}.onClick.AddListener(() => {{ SendEventMsg(\"{name}Event\"); }});",
+                             2 =>
+                                 $"\t\t\t{name}.onValueChanged.AddListener((arg) => {{ SendEventMsg(\"{name}Event\", arg); }});",
+                             3 =>
+                                 $"\t\t\t{name}.onValueChanged.AddListener((arg) => {{ SendEventMsg(\"{name}Event\", arg); }});\n" +
+                                 $"\t\t\t{name}.onSubmit.AddListener((arg) => {{ SendEventMsg(\"{name}SubmitEvent\", arg); }});\n" +
+                                 $"\t\t\t{name}.onSelect.AddListener((arg) => {{ SendEventMsg(\"{name}SelectEvent\", arg); }});\n" +
+                                 $"\t\t\t{name}.onDeselect.AddListener((arg) => {{ SendEventMsg(\"{name}DeselectEvent\", arg); }});",
+                             _ => str
+                         }
+                         into str
+                         where !string.IsNullOrEmpty(str)
+                         select str))
             {
-                foreach (var t in uiViewData.components)
-                {
-                    var str = "";
-                    var tName = t.type;
-                    var name = $"{uiViewData.name}{tName}";
-                    str = t.eventType switch
-                    {
-                        1 =>
-                            $"\t\t\t{name}.onClick.AddListener(() => {{ SendEventMsg(\"{name}Event\"); }});",
-                        2 =>
-                            $"\t\t\t{name}.onValueChanged.AddListener((arg) => {{ SendEventMsg(\"{name}Event\", arg); }});",
-                        _ => str
-                    };
-                    if (!string.IsNullOrEmpty(str))
-                    {
-                        sb.AppendLine(str);
-                    }
-                }
+                sb.AppendLine(str);
             }
-        
+
             return sb.ToString();
         }
-        
+
         private string CreateInitContent()
         {
             var sb = new StringBuilder();
-            foreach (var uiViewData in _viewScriptData.views)
+            foreach (var str in _viewScriptData.views.SelectMany(uiViewData =>
+                         from t in uiViewData.components
+                         let name = $"{t.name}{t.type}"
+                         let path = $"\"{uiViewData.path}\""
+                         select $"\t\t\t{name.ToLower()} = this.FindComponent<{t.type}>({path});"))
             {
-                foreach (var t in uiViewData.components)
-                {
-                    var name = $"{t.name}{t.type}";
-                    var path = $"\"{uiViewData.path}\"";
-                    var str = $"\t\t\t{name.ToLower()} = this.FindComponent<{t.type}>({path});";
-                    sb.AppendLine(str);
-                }
+                sb.AppendLine(str);
             }
-        
+
             return sb.ToString();
         }
 
@@ -494,19 +490,19 @@ namespace App.Editor.View
             {
                 foreach (var t in uiViewData.components)
                 {
-                    if(t.eventType == 0) continue;
-                    var eventType = GetEventType(t.type);
+                    if (t.eventType == 0) continue;
+                    var eventType = GetEventParameterType(t.type);
                     var tName = t.type;
                     var name = $"{uiViewData.name}{tName}";
                     var str = string.IsNullOrEmpty(eventType) ? "" : "arg";
                     sb.AppendLine($"\t\t\tAddEventMsg{eventType}(\"{name}Event\", ({str})=>{{ }});");
                 }
             }
-        
+
             return sb.ToString();
         }
 
-        private string GetEventType(string typeName)
+        private string GetEventParameterType(string typeName)
         {
             return typeName switch
             {
@@ -514,23 +510,23 @@ namespace App.Editor.View
                 "Dropdown" or "TMP_Dropdown" => "<int>",
                 "Slider" or "Scrollbar" => "<float>",
                 "Toggle" => "<bool>",
-                "ScrollRect" => "<Vector2>",
                 _ => ""
             };
         }
 
-        private bool IsEvent(Component component)
+        private int GetEventType(Component component)
         {
-            return component is 
-                UnityEngine.UI.Button or 
-                UnityEngine.UI.InputField or 
-                UnityEngine.UI.Dropdown or 
-                UnityEngine.UI.Slider or 
-                UnityEngine.UI.Toggle or 
-                UnityEngine.UI.ScrollRect or 
-                UnityEngine.UI.Scrollbar or 
-                TMPro.TMP_InputField or 
-                TMPro.TMP_Dropdown;
+            return component switch
+            {
+                UnityEngine.UI.Button => 1,
+                TMPro.TMP_Dropdown or
+                    UnityEngine.UI.Toggle or
+                    UnityEngine.UI.Dropdown or
+                    UnityEngine.UI.Slider => 2,
+                UnityEngine.UI.InputField or
+                    TMPro.TMP_InputField => 3,
+                _ => 0
+            };
         }
     }
 }
