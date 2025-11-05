@@ -37,6 +37,7 @@ namespace App.Modules
                 var go = Instantiate(_prefab, transform);
                 var text = go.GetComponentInChildren<TextMeshProUGUI>();
                 text.text = item.BtnName;
+                text.color = item.Color.ToColor();
                 var button = go.GetComponent<Button>();
                 button.onClick.RemoveAllListeners();
                 button.onClick.AddListener(Hide);

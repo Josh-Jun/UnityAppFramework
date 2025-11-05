@@ -34,7 +34,7 @@ namespace App.Modules
         // 显示时间（只有Toast和Snackbar使用）
         public float time;
         // 按钮事件 （按钮显示名称，按钮事件）
-        public List<(string BtnName, Action Event)> Events = new();
+        public List<(string BtnName, string Color, Action Event)> Events = new();
         // 上（1），中（0），下（-1）
         public int pos;
     }
@@ -93,10 +93,10 @@ namespace App.Modules
                         mold = AskMold.Dialog,
                         title = "Dialog标题",
                         connect = $"Dialog测试内容",
-                        Events = new List<(string BtnName, Action Event)>()
+                        Events = new List<(string BtnName, string Color, Action Event)>()
                         {
-                            ("确认1", () => { Log.I("确认点击事件"); }),
-                            ("取消2", () => { Log.I("取消点击事件"); }),
+                            ("确认1", Color.red.ToHex(), () => { Log.I("确认点击事件"); }),
+                            ("取消2", Color.blue.ToHex(), () => { Log.I("取消点击事件"); }),
                         }
                     });
                 }
@@ -106,13 +106,13 @@ namespace App.Modules
                     View.OpenView(new AskData()
                     {
                         mold = AskMold.Actionbar,
-                        Events = new List<(string BtnName, Action Event)>()
+                        Events = new List<(string BtnName, string Color, Action Event)>()
                         {
-                            ("事件1", () => { Log.I("事件1点击事件"); }),
-                            ("事件2", () => { Log.I("事件2点击事件"); }),
-                            ("事件3", () => { Log.I("事件3点击事件"); }),
-                            ("事件4", () => { Log.I("事件4点击事件"); }),
-                            ("事件5", () => { Log.I("事件5点击事件"); }),
+                            ("事件1", "", () => { Log.I("事件1点击事件"); }),
+                            ("事件2", "", () => { Log.I("事件2点击事件"); }),
+                            ("事件3", "", () => { Log.I("事件3点击事件"); }),
+                            ("事件4", "", () => { Log.I("事件4点击事件"); }),
+                            ("事件5", "#FF6363", () => { Log.I("事件5点击事件"); }),
                         }
                     });
                 }

@@ -1676,16 +1676,16 @@ namespace App.Core.Tools
         
         public static string SetColor(this string str, Color color)
         {
-            return $"<color=#{ColorUtility.ToHtmlStringRGB(color)}>{str}</color>";
+            return $"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>{str}</color>";
         }
 
         public static Color ToColor(this string str)
         {
-            if (ColorUtility.TryParseHtmlString(str, out var color))
-            {
-                return color;
-            }
-            return Color.black;
+            return ColorUtility.TryParseHtmlString(str, out var color) ? color : Color.black;
+        }
+        public static string ToHex(this Color color)
+        {
+            return $"#{ColorUtility.ToHtmlStringRGBA(color)}";
         }
 
         #endregion

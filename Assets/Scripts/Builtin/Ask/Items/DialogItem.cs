@@ -45,6 +45,7 @@ namespace App.Modules
             {
                 if(!string.IsNullOrEmpty(data.Events[0].BtnName))
                     _confirmText.text = data.Events[0].BtnName;
+                _confirmText.color = data.Events[0].Color.ToColor();
                 _confirm.onClick.AddListener(() => { data.Events[0].Event?.Invoke(); });
             }
 
@@ -52,6 +53,7 @@ namespace App.Modules
             {
                 if(!string.IsNullOrEmpty(data.Events[1].BtnName))
                     _cancelText.text = data.Events[1].BtnName;
+                _cancelText.color = data.Events[1].Color.ToColor();
                 _cancel.onClick.AddListener(() => { data.Events[1].Event?.Invoke(); });
             }
             _confirm.onClick.AddListener(Hide);
