@@ -13,14 +13,12 @@ namespace App.Modules
     [ViewOf("Ask", ViewMold.UI2D, AssetPath.AskView, false, 4)]
     public class AskView : ViewBase
     {
-		private RectTransform backgroundrecttransform;
-
-		public RectTransform BackgroundRectTransform { get { return backgroundrecttransform; } }
+		public RectTransform BackgroundRectTransform;
 
         protected override void InitView()
         {
             base.InitView();
-			backgroundrecttransform = this.FindComponent<RectTransform>("Background");
+			BackgroundRectTransform = this.FindComponent<RectTransform>("Background");
 
         }
 

@@ -21,14 +21,12 @@ namespace App.Modules
     [ViewOf("Background", ViewMold.Go3D, AssetPath.BackgroundView, false, 0)]
     public class BackgroundView : ViewBase
     {
-		private SpriteRenderer backgroundspriterenderer;
-
-		public SpriteRenderer BackgroundSpriteRenderer { get { return backgroundspriterenderer; } }
+		public SpriteRenderer BackgroundSpriteRenderer;
 
         protected override void InitView()
         {
             base.InitView();
-			backgroundspriterenderer = this.FindComponent<SpriteRenderer>("Background");
+			BackgroundSpriteRenderer = this.FindComponent<SpriteRenderer>("Background");
 
         }
 

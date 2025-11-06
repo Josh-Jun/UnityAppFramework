@@ -13,17 +13,14 @@ namespace App.Modules
     [ViewOf("Loading", ViewMold.UI2D, AssetPath.LoadingView, false, 7)]
     public class LoadingView : ViewBase
     {
-		private TextMeshProUGUI progresstextmeshprougui;
-		private Slider loadingsliderslider;
-
-		public TextMeshProUGUI ProgressTextMeshProUGUI { get { return progresstextmeshprougui; } }
-		public Slider LoadingSliderSlider { get { return loadingsliderslider; } }
+	    public TextMeshProUGUI ProgressTextMeshProUGUI;
+	    public Slider LoadingSliderSlider;
 
         protected override void InitView()
         {
             base.InitView();
-			progresstextmeshprougui = this.FindComponent<TextMeshProUGUI>("LoadingSlider/Fill Area/Fill/Progress");
-			loadingsliderslider = this.FindComponent<Slider>("LoadingSlider");
+			ProgressTextMeshProUGUI = this.FindComponent<TextMeshProUGUI>("LoadingSlider/Fill Area/Fill/Progress");
+			LoadingSliderSlider = this.FindComponent<Slider>("LoadingSlider");
 
         }
 

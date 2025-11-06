@@ -21,20 +21,16 @@ namespace App.Modules
     [ViewOf("Web", ViewMold.UI2D, AssetPath.WebView, false, 3)]
     public class WebView : ViewBase
     {
-		private RectTransform webpanelrecttransform;
-		private TextMeshProUGUI webtitletextmeshprougui;
-		private Button closewebbutton;
-
-		public RectTransform WebPanelRectTransform { get { return webpanelrecttransform; } }
-		public TextMeshProUGUI WebTitleTextMeshProUGUI { get { return webtitletextmeshprougui; } }
-		public Button CloseWebButton { get { return closewebbutton; } }
+		public RectTransform WebPanelRectTransform;
+		public TextMeshProUGUI WebTitleTextMeshProUGUI;
+		public Button CloseWebButton;
 
         protected override void InitView()
         {
             base.InitView();
-			webpanelrecttransform = this.FindComponent<RectTransform>("WebPanel");
-			webtitletextmeshprougui = this.FindComponent<TextMeshProUGUI>("WebTitle");
-			closewebbutton = this.FindComponent<Button>("CloseWeb");
+			WebPanelRectTransform = this.FindComponent<RectTransform>("WebPanel");
+			WebTitleTextMeshProUGUI = this.FindComponent<TextMeshProUGUI>("WebTitle");
+			CloseWebButton = this.FindComponent<Button>("CloseWeb");
 
         }
 

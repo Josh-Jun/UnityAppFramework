@@ -205,8 +205,7 @@ namespace App.Editor.View
             view_script = view_script.Replace("#LAYER#", $"{_viewScriptData.layer}");
             view_script = view_script.Replace("#MODULE#", folder_name);
             view_script = view_script.Replace("#SCRIPTNAME#", view_script_name);
-            view_script = view_script.Replace("#VARIABLE#", CreatePrivateVariableContent());
-            view_script = view_script.Replace("#GETSET#", CreatePublicVariableContent());
+            view_script = view_script.Replace("#VARIABLE#", CreatePublicVariableContent());
             view_script = view_script.Replace("#INIT#", CreateInitContent());
             view_script = view_script.Replace("#REGISTER#", CreateRegisterContent());
             view_script = view_script.Replace("#OPEN#", "");
@@ -407,21 +406,6 @@ namespace App.Editor.View
             return components;
         }
 
-        private string CreatePrivateVariableContent()
-        {
-            var sb = new StringBuilder();
-            foreach (var str in from uiViewData in _viewScriptData.views
-                     from t in uiViewData.components
-                     let cType = t.type
-                     let name = $"{uiViewData.name}{cType}".ToLower()
-                     select $"\t\tprivate {cType} {name};")
-            {
-                sb.AppendLine(str);
-            }
-
-            return sb.ToString();
-        }
-
         private string CreatePublicVariableContent()
         {
             var sb = new StringBuilder();
@@ -429,7 +413,7 @@ namespace App.Editor.View
                      from t in uiViewData.components
                      where t.isPublic
                      let name = $"{t.name}{t.type}"
-                     select $"\t\tpublic {t.type} {name} {{ get {{ return {name.ToLower()}; }} }}")
+                     select $"\t\tpublic {t.type} {name};")
             {
                 sb.AppendLine(str);
             }
@@ -475,7 +459,7 @@ namespace App.Editor.View
                          from t in uiViewData.components
                          let name = $"{t.name}{t.type}"
                          let path = $"\"{uiViewData.path}\""
-                         select $"\t\t\t{name.ToLower()} = this.FindComponent<{t.type}>({path});"))
+                         select $"\t\t\t{name} = this.FindComponent<{t.type}>({path});"))
             {
                 sb.AppendLine(str);
             }
