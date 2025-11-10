@@ -7,6 +7,7 @@
  * ===============================================
  * */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using App.Core.Tools;
@@ -20,8 +21,10 @@ namespace App.Core.Master
     {
         public string name;
         public Animator animator;
+        public Action onComplete;
         public PlayableGraph graph;
         public AnimationPlayableOutput output;
+        public AnimationLayerMixerPlayable LayerMixer;
     }
     
     public class PlayableMaster : SingletonMonoEvent<PlayableMaster>
@@ -33,12 +36,12 @@ namespace App.Core.Master
         {
             var data = new PlayableData()
             {
-                name = name,
+                name = key,
                 animator = animator,
-                graph = PlayableGraph.Create($"{name}Graph"),
+                graph = PlayableGraph.Create($"{key}Graph"),
             };
-            data.output = AnimationPlayableOutput.Create(data.graph, $"{name}OutPut", animator);
-            _playables.Add(name, data);
+            data.output = AnimationPlayableOutput.Create(data.graph, $"{key}OutPut", animator);
+            _playables.Add(key, data);
 #if UNITY_EDITOR
             GraphVisualizerClient.Show(data.graph);
 #endif
@@ -46,14 +49,14 @@ namespace App.Core.Master
 
         public void Remove(string  key)
         {
-            if (!_playables.TryGetValue(name, out var playable)) return;
+            if (!_playables.TryGetValue(key, out var playable)) return;
             playable.graph.Destroy();
-            _playables.Remove(name);
+            _playables.Remove(key);
         }
         
         public void Play(string key, int id)
         {
-            if (!_playables.TryGetValue(name, out var data)) return;
+            if (!_playables.TryGetValue(key, out var data)) return;
             var playable = PlayableJsonConfig.Instance.Get(id);
 
             var clipPairs = new Dictionary<int, List<AnimationClip>>();
@@ -74,23 +77,23 @@ namespace App.Core.Master
             }
 
             var duration = 0f;
-            var layer = AnimationLayerMixerPlayable.Create(data.graph, playable.Clips.Length);
-            data.output.SetSourcePlayable(layer);
+            data.LayerMixer = AnimationLayerMixerPlayable.Create(data.graph, playable.Clips.Length);
+            data.output.SetSourcePlayable(data.LayerMixer);
             for (var i = 0; i < clipPairs.Count; i++)
             {
                 var layerConfig = PlayableLayerJsonConfig.Instance.Get(clipPairs.ElementAt(i).Key);
                 var value = clipPairs.ElementAt(i).Value;
                 if (!string.IsNullOrEmpty(layerConfig.LayerAvatarMask))
                 {
-                    // layer.SetLayerAdditive((uint)layerConfig.Layer, true);
+                    // data.LayerMixer.SetLayerAdditive((uint)layerConfig.Layer, true);
                     var mask = AssetsMaster.Instance.LoadAssetSync<AvatarMask>(layerConfig.LayerAvatarMask);
-                    layer.SetLayerMaskFromAvatarMask((uint)layerConfig.Layer,  mask);
+                    data.LayerMixer.SetLayerMaskFromAvatarMask((uint)layerConfig.Layer,  mask);
                 }
                 foreach (var clip in value)
                 {
                     var clipPlayable = AnimationClipPlayable.Create(data.graph, clip);
-                    data.graph.Connect(clipPlayable, 0, layer, layerConfig.Layer);
-                    layer.SetInputWeight(layerConfig.Layer, 1f);
+                    data.graph.Connect(clipPlayable, 0, data.LayerMixer, layerConfig.Layer);
+                    data.LayerMixer.SetInputWeight(layerConfig.Layer, 1f);
                     if (duration < clip.length)
                     {
                         duration = clip.length;
@@ -107,40 +110,7 @@ namespace App.Core.Master
         private void OnAnimationCompleted(PlayableData data)
         {
             TimeTaskMaster.Instance.DeleteTimeTask(timeTask);
-            if (!data.output.IsOutputValid()) return;
-
-            // 获取输出连接的源 Playable
-            var sourcePlayable = data.output.GetSourcePlayable();
-
-            if (!sourcePlayable.IsValid()) return;
-            // 递归销毁所有连接的节点
-            DestroyConnectedPlayables(sourcePlayable);
-
-            // 断开输出连接
-            data.output.SetSourcePlayable(UnityEngine.Playables.Playable.Null);
-        }
-
-        private void DestroyConnectedPlayables(UnityEngine.Playables.Playable rootPlayable)
-        {
-            if (!rootPlayable.IsValid()) return;
-
-            // 遍历所有输入连接
-            for (var i = 0; i < rootPlayable.GetInputCount(); i++)
-            {
-                var inputPlayable = rootPlayable.GetInput(i);
-                if (!inputPlayable.IsValid()) continue;
-                inputPlayable.SetInputWeight(i, 0f);
-                // 递归销毁子节点
-                DestroyConnectedPlayables(inputPlayable);
-                // 断开连接
-                rootPlayable.DisconnectInput(i);
-            }
-
-            // 销毁当前 Playable
-            if (rootPlayable.IsValid())
-            {
-                rootPlayable.Destroy();
-            }
+            data.onComplete?.Invoke();
         }
 
         private void OnDestroy()
