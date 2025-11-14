@@ -20,12 +20,17 @@ namespace App.Modules
     {
         private GameObject _prefab;
         private Button _cancel;
+        private Button _background;
         private void Awake()
         {
             _prefab = this.FindGameObject("Cancel");
             _cancel = _prefab.GetComponent<Button>();
             _cancel.onClick.RemoveAllListeners();
             _cancel.onClick.AddListener(Hide);
+            var background = transform.parent.Find("Background");
+            _background = background.GetOrAddComponent<Button>();
+            _background.transition = Selectable.Transition.None;
+            _background.onClick.AddListener(Hide);
         }
 
         public override void Show(AskData data)
@@ -43,6 +48,13 @@ namespace App.Modules
                 button.onClick.AddListener(Hide);
                 button.onClick.AddListener(() => { item.Event?.Invoke(); });
             }
+        }
+        
+        protected override void Hide()
+        {
+            _background.onClick.RemoveAllListeners();
+            Destroy(_background);
+            base.Hide();
         }
     }
 }
