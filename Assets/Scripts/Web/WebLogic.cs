@@ -16,7 +16,7 @@ using App.Core.Tools;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
-# if UNITY_EDITOR || UNITY_STANDALONE
+# if UNITY_EDITOR_WIN || UNITY_STANDALONE
 using ZenFulcrum.EmbeddedBrowser;
 #endif
 
