@@ -3,88 +3,97 @@
  * author      : Josh@win
  * e-mail      : shijun_z@163.com
  * create time : 2025年8月4 8:55
- * function    : 
+ * function    :
  * ===============================================
  * */
+
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Net.WebSockets;
-using System.Text;
-using System.Threading;
 using App.Core.Tools;
-using Cysharp.Threading.Tasks;
-using UnityEngine;
 
 namespace App.Core.Master
 {
     public class WebSocketMaster : SingletonMonoEvent<WebSocketMaster>
     {
-        private ClientWebSocket _clientWebSocket;
-        private CancellationTokenSource _cancellationToken;
-        private bool _isConnecting = false;
-        public Action<string> OnReceiveMessage { get; set; }
-
-        public void Connect(string url, Action callback = null)
+        private readonly Dictionary<string, WebSocketClient> _webSocketClients = new();
+        private readonly Dictionary<string, Dictionary<string, string>> headerPairs = new();
+        private void Awake()
         {
-            _clientWebSocket = new ClientWebSocket();
-            _cancellationToken = new CancellationTokenSource();
-            var uri = new Uri(url);
-            _clientWebSocket.ConnectAsync(uri, _cancellationToken.Token).ContinueWith(async t =>
+            TimeTaskMaster.Instance.AddTimeTask(() =>
             {
-                _isConnecting = true;
-                callback?.Invoke();
-                await Receive();
-            });
-        }
-        public void Close()
-        {
-            if (!_isConnecting) return;
-            _isConnecting = false;
-            _clientWebSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", CancellationToken.None);
-            _clientWebSocket.Dispose();
-            _cancellationToken.Cancel();
+                foreach (var pair in _webSocketClients)
+                {
+                    Log.I(pair.Value.ClientWebSocket.State);
+                    if (pair.Value.ClientWebSocket.State is WebSocketState.None or WebSocketState.Closed)
+                        pair.Value.Connect(pair.Key);
+                }
+            }, 5, TimeUnit.Second, 0);
         }
 
-        public void Send(string msg)
+        public void Connect(string url, Action onConnectCompleted = null, Action<string> onReceiveMessage = null, Action onConnectError = null)
         {
-            UniTask.Void(async () =>
+            if (!_webSocketClients.TryGetValue(url, out var client))
             {
-                if (!_isConnecting) return;
-                var bytes = Encoding.UTF8.GetBytes(msg);
-                var array = new ArraySegment<byte>(bytes);
-                await _clientWebSocket.SendAsync(array, WebSocketMessageType.Text, true, _cancellationToken.Token);
-            });
+                client = new WebSocketClient();
+                _webSocketClients.Add(url, client);
+                client.OnConnectCompleted += onConnectCompleted;
+                client.OnReceiveMessage += onReceiveMessage;
+                client.OnConnectError += onConnectError;
+            }
+            foreach (var pair in headerPairs[url])
+            {
+                client.AddHeader(pair.Key, pair.Value);
+            }
+            client.Connect(url);
+        }
+        
+        public void AddHeader(string url, string key, string value)
+        {
+            if (!headerPairs.ContainsKey(url))
+            {
+                var pair = new Dictionary<string, string> { { key, value } };
+                headerPairs.Add(url, pair);
+            }
+            else
+            {
+                if (!headerPairs[url].ContainsKey(key))
+                {
+                    headerPairs[url].Add(key, value);
+                }
+            }
         }
 
-        public void Send(byte[] bytes)
+        public void Disconnect(string url)
         {
-            UniTask.Void(async () =>
+            if (_webSocketClients.TryGetValue(url, out var client))
             {
-                if (!_isConnecting) return;
-                if (bytes == null || bytes.Length <= 0) return;
-                var array = new ArraySegment<byte>(bytes);
-                await _clientWebSocket.SendAsync(array, WebSocketMessageType.Binary, true, _cancellationToken.Token);
-            });
+                client.Connect(url);
+            }
         }
 
-        private async UniTask Receive()
+        public void Send(string url, byte[] bytes)
         {
-            while (true)
+            if (_webSocketClients.TryGetValue(url, out var client))
             {
-                if (!_isConnecting) return;
-                var result = new byte[1024];
-                var message = new ArraySegment<byte>(result);
-                await _clientWebSocket.ReceiveAsync(message, new CancellationToken());
-                var msg = Encoding.UTF8.GetString(result);
-                await UniTask.SwitchToMainThread();
-                OnReceiveMessage?.Invoke(msg);
+                client.Send(bytes);
+            }
+        }
+
+        public void Send(string url, string content)
+        {
+            if (_webSocketClients.TryGetValue(url, out var client))
+            {
+                client.Send(content);
             }
         }
 
         private void OnDestroy()
         {
-            Close();
+            foreach (var client in _webSocketClients.Values)
+            {
+                client.Disconnect();
+            }
         }
     }
 }
