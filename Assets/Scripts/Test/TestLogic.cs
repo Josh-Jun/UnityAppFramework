@@ -40,10 +40,10 @@ namespace App.Modules
                 Target = target,
                 Image = View.RawImageRawImage,
                 FollowOffset = Vector3.back * 10,
-                LookAtOffset = Vector3.up,
+                LookAtOffset = Vector3.zero,
                 CanRotate = true,
                 CanScale = true,
-                PreserveComposition = false,
+                ScaleRange = (-10f, 7f)
             });
             TimeUpdateMaster.Instance.StartTimer(time =>
             {

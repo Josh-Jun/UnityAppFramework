@@ -16,7 +16,6 @@ namespace App.Modules
     {
 		public Camera RenderCamera;
 		public CinemachineVirtualCamera CinemachineCinemachineVirtualCamera;
-		public CinemachineFollowZoom CinemachineCinemachineFollowZoom;
 		public CinemachineCameraOffset CinemachineCinemachineCameraOffset;
 
         protected override void InitView()
@@ -24,7 +23,6 @@ namespace App.Modules
             base.InitView();
 			RenderCamera = this.FindComponent<Camera>("Render");
 			CinemachineCinemachineVirtualCamera = this.FindComponent<CinemachineVirtualCamera>("Cinemachine");
-			CinemachineCinemachineFollowZoom = this.FindComponent<CinemachineFollowZoom>("Cinemachine");
 			CinemachineCinemachineCameraOffset = this.FindComponent<CinemachineCameraOffset>("Cinemachine");
 
         }

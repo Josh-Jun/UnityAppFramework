@@ -30,7 +30,7 @@ namespace App.Modules
 
         public bool CanRotate; // 是否可以旋转
         public bool CanScale; // 是否可以缩放
-        public bool PreserveComposition; // 保持中间显示
+        public (float Near, float Far) ScaleRange; // 缩放范围
     }
 
     [LogicOf("Render3D2UI", AssetPath.Global)]
@@ -81,10 +81,10 @@ namespace App.Modules
         private void SetFollowOffset(Vector3 offset)
         {
             _renderData.FollowOffset = offset;
-            var followOffset = View.CinemachineCinemachineVirtualCamera.GetCinemachineComponent<Cinemachine.CinemachineTransposer>().m_FollowOffset;
+            var followOffset = transposer.m_FollowOffset;
             DOTween.To(() => followOffset, x => followOffset = x, offset, 0.3f).OnUpdate(() =>
             {
-                View.CinemachineCinemachineVirtualCamera.GetCinemachineComponent<Cinemachine.CinemachineTransposer>().m_FollowOffset = followOffset;
+                transposer.m_FollowOffset = followOffset;
             });
         }
 
@@ -136,7 +136,10 @@ namespace App.Modules
                         var currentMagnitude = (touchZero.position - touchOne.position).magnitude;
                         var difference = currentMagnitude - prevMagnitude;
 
-                        View.CinemachineCinemachineFollowZoom.m_Width -= difference * 0.0005f;
+                        var offset = View.CinemachineCinemachineCameraOffset.m_Offset;
+                        offset.z -= difference * 0.0005f;
+                        var offsetZ = Mathf.Clamp(offset.z, _renderData.ScaleRange.Near, _renderData.ScaleRange.Far);
+                        View.CinemachineCinemachineCameraOffset.m_Offset = new Vector3(offset.x, offset.y, offsetZ);
                     }
 
                     break;
@@ -150,17 +153,16 @@ namespace App.Modules
             if (_renderData.CanScale)
             {
                 var scale = Input.GetAxis("Mouse ScrollWheel");
-                View.CinemachineCinemachineFollowZoom.m_Width -= scale * 10f;
+                var offset = View.CinemachineCinemachineCameraOffset.m_Offset;
+                offset.z += scale * 10f;
+                var offsetZ = Mathf.Clamp(offset.z, _renderData.ScaleRange.Near, _renderData.ScaleRange.Far);
+                View.CinemachineCinemachineCameraOffset.m_Offset = new Vector3(offset.x, offset.y, offsetZ);
             }
 
-            if (_renderData.CanRotate)
-            {
-                if (Input.GetMouseButton(0))
-                {
-                    var delta = Input.GetAxis("Mouse X") * 10f;
-                    _renderData.Target.transform.Rotate(0, -delta * RotateSpeed * Time.deltaTime, 0);
-                }
-            }
+            if (!_renderData.CanRotate) return;
+            if (!Input.GetMouseButton(0)) return;
+            var delta = Input.GetAxis("Mouse X") * 10f;
+            _renderData.Target.transform.Rotate(0, -delta * RotateSpeed * Time.deltaTime, 0);
         }
 #endif
 
@@ -171,11 +173,10 @@ namespace App.Modules
 #if UNITY_EDITOR
         private int _timeId;
 #endif
-
+        private Cinemachine.CinemachineTransposer transposer;
         private void OpenRender3D2UIView(object obj)
         {
             View.RenderCamera.SetGameObjectActive();
-            View.CinemachineCinemachineFollowZoom.m_Width = 11.5f;
             if (obj is RenderData data)
             {
                 _renderData = data;
@@ -191,9 +192,9 @@ namespace App.Modules
                 View.RenderCamera.Render();
                 View.OpenView();
                 // 设置相机偏移
-                View.CinemachineCinemachineVirtualCamera.GetCinemachineComponent<Cinemachine.CinemachineTransposer>().m_FollowOffset = data.FollowOffset;
+                transposer = View.CinemachineCinemachineVirtualCamera.GetCinemachineComponent<Cinemachine.CinemachineTransposer>();
+                transposer.m_FollowOffset = data.FollowOffset;
                 View.CinemachineCinemachineCameraOffset.m_Offset = data.LookAtOffset;
-                View.CinemachineCinemachineCameraOffset.m_PreserveComposition = data.PreserveComposition;
                 // 设置相机目标
                 View.CinemachineCinemachineVirtualCamera.Follow = data.Target.transform;
                 View.CinemachineCinemachineVirtualCamera.LookAt = data.Target.transform;
