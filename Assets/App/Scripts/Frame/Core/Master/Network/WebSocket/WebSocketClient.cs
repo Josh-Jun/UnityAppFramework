@@ -34,10 +34,6 @@ namespace App.Core.Master
             try
             {
                 ClientWebSocket ??= new ClientWebSocket();
-                if (ClientWebSocket.State == WebSocketState.Open)
-                {
-                    Disconnect();
-                }
                 cancellationTokenSource ??= new CancellationTokenSource();
                 var uri = new Uri(url);
                 foreach (var pair in headerPairs)

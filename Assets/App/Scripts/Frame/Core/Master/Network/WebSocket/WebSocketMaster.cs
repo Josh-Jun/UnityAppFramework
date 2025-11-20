@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.WebSockets;
 using App.Core.Tools;
 
@@ -22,11 +23,9 @@ namespace App.Core.Master
         {
             TimeTaskMaster.Instance.AddTimeTask(() =>
             {
-                foreach (var pair in _webSocketClients)
+                foreach (var pair in _webSocketClients.Where(pair => pair.Value.ClientWebSocket.State is WebSocketState.None or WebSocketState.Closed))
                 {
-                    Log.I(pair.Value.ClientWebSocket.State);
-                    if (pair.Value.ClientWebSocket.State is WebSocketState.None or WebSocketState.Closed)
-                        pair.Value.Connect(pair.Key);
+                    pair.Value.Connect(pair.Key);
                 }
             }, 5, TimeUnit.Second, 0);
         }
@@ -41,9 +40,13 @@ namespace App.Core.Master
                 client.OnReceiveMessage += onReceiveMessage;
                 client.OnConnectError += onConnectError;
             }
-            foreach (var pair in headerPairs[url])
+
+            if (headerPairs.TryGetValue(url, out var headerPair))
             {
-                client.AddHeader(pair.Key, pair.Value);
+                foreach (var pair in headerPair)
+                {
+                    client.AddHeader(pair.Key, pair.Value);
+                }
             }
             client.Connect(url);
         }
@@ -68,8 +71,9 @@ namespace App.Core.Master
         {
             if (_webSocketClients.TryGetValue(url, out var client))
             {
-                client.Connect(url);
+                client.Disconnect();
             }
+            _webSocketClients.Remove(url);
         }
 
         public void Send(string url, byte[] bytes)
