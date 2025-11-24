@@ -49,7 +49,7 @@ namespace App.Core
             {
                 var la = type.GetCustomAttributes(typeof(LogicOfAttribute), false).First();
                 if (la is not LogicOfAttribute attribute) continue;
-                if (!AppHelper.GetBoolData(attribute.Name)) continue;
+                if (!AppHelper.GetData<bool>(attribute.Name)) continue;
                 var obj = Activator.CreateInstance(type);
                 var logic = obj as ILogic;
                 if (!SceneLogicPairs.TryGetValue(attribute.Scene, out var pair))

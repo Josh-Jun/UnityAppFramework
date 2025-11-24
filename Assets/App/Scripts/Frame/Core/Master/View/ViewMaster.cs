@@ -356,7 +356,7 @@ namespace App.Core.Master
                 if (ViewPairs.ContainsKey(type.FullName!)) continue;
                 var obj = type.GetCustomAttributes(typeof(ViewOfAttribute), false).FirstOrDefault();
                 if (obj is not ViewOfAttribute attribute) continue;
-                if (!AppHelper.GetBoolData(attribute.Name)) continue;
+                if (!AppHelper.GetData<bool>(attribute.Name)) continue;
                 CreateView(type, attribute);
             }
 
@@ -385,7 +385,7 @@ namespace App.Core.Master
         {
             var type = AppHelper.GetAssemblyType<T>();
             var attribute = new ViewOfAttribute(viewName, mold, location, state, layer);
-            if (!AppHelper.GetBoolData(attribute.Name)) return null;
+            if (!AppHelper.GetData<bool>(attribute.Name)) return null;
             var view = CreateView(type, attribute);
             return view as T;
         }
@@ -534,7 +534,7 @@ namespace App.Core.Master
                 return null;
             }
 
-            if (!AppHelper.GetBoolData(attribute.Name)) return null;
+            if (!AppHelper.GetData<bool>(attribute.Name)) return null;
             var scriptName = type.Namespace == string.Empty ? type.Name : type.FullName;
             if (ViewPairs.ContainsKey(scriptName!)) return ViewPairs[scriptName] as T;
             var view = CreateView(type, attribute);
@@ -552,7 +552,7 @@ namespace App.Core.Master
                 return null;
             }
 
-            if (!AppHelper.GetBoolData(attribute.Name)) return null;
+            if (!AppHelper.GetData<bool>(attribute.Name)) return null;
             if (ViewPairs.ContainsKey(scriptName!)) return ViewPairs[scriptName];
             var view = CreateView(type, attribute);
             return view;
