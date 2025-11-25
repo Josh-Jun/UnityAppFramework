@@ -55,19 +55,13 @@ namespace App.Editor.Tools
         [MenuItem(MENU_AUTO_PLAY_PATH, false, MENU_LEVEL)]
         public static void AutoOpenScene()
         {
-            var auto_play_key = GetKey(MENU_AUTO_PLAY_PATH);
-            Menu.SetChecked(MENU_AUTO_PLAY_PATH, PlayerPrefs.GetInt(auto_play_key) != 1);
-            var value = Menu.GetChecked(MENU_AUTO_PLAY_PATH) ? 1 : 0;
-            PlayerPrefs.SetInt(auto_play_key, value);
+            ToolbarToggleItems[MENU_AUTO_PLAY_PATH].isToggleOn = !ToolbarToggleItems[MENU_AUTO_PLAY_PATH].isToggleOn;
         }
 
         [MenuItem(MENU_RESTORE_GAME_VIEW_PATH, false, MENU_LEVEL)]
         public static void RestoreGameView()
         {
-            var restore_game_view_key = GetKey(MENU_RESTORE_GAME_VIEW_PATH);
-            Menu.SetChecked(MENU_RESTORE_GAME_VIEW_PATH, PlayerPrefs.GetInt(restore_game_view_key) != 1);
-            var value = Menu.GetChecked(MENU_RESTORE_GAME_VIEW_PATH) ? 1 : 0;
-            PlayerPrefs.SetInt(restore_game_view_key, value);
+            ToolbarToggleItems[MENU_RESTORE_GAME_VIEW_PATH].isToggleOn = !ToolbarToggleItems[MENU_RESTORE_GAME_VIEW_PATH].isToggleOn;
         }
 
         private static void OpenScene(int index = 0)
@@ -217,23 +211,31 @@ namespace App.Editor.Tools
             EditorApplication.update -= OnUpdate;
         }
 
-        private static readonly List<ToolbarToggleItem> ToolbarToggleItems = new ()
+        private static readonly Dictionary<string, ToolbarToggleItem> ToolbarToggleItems = new ()
         {
-            new ToolbarToggleItem
             {
-                key = MENU_AUTO_PLAY_PATH,
-                imageOn = AssetDatabase.LoadAssetAtPath<Texture>("Assets/App/Scripts/Frame/Editor/Tools/Images/auto_play_on.png"),
-                imageOff = AssetDatabase.LoadAssetAtPath<Texture>("Assets/App/Scripts/Frame/Editor/Tools/Images/auto_play_off.png"),
-                tooltip = "Auto Play Launcher Scene",
-                isToggleOn = PlayerPrefs.GetInt(GetKey(MENU_AUTO_PLAY_PATH)) == 1,
+                MENU_AUTO_PLAY_PATH,
+                new ToolbarToggleItem
+                {
+                    key = MENU_AUTO_PLAY_PATH,
+                    imageOn = AssetDatabase.LoadAssetAtPath<Texture>("Assets/App/Scripts/Frame/Editor/Tools/Images/auto_play_on.png"),
+                    imageOff = AssetDatabase.LoadAssetAtPath<Texture>("Assets/App/Scripts/Frame/Editor/Tools/Images/auto_play_off.png"),
+                    tooltip = "Auto Play Launcher Scene",
+                    isToggleOn = PlayerPrefs.GetInt(GetKey(MENU_AUTO_PLAY_PATH)) == 1,
+                }
+                
             },
-            new ToolbarToggleItem
             {
-                key = MENU_RESTORE_GAME_VIEW_PATH,
-                imageOn = AssetDatabase.LoadAssetAtPath<Texture>("Assets/App/Scripts/Frame/Editor/Tools/Images/restore_view_on.png"),
-                imageOff = AssetDatabase.LoadAssetAtPath<Texture>("Assets/App/Scripts/Frame/Editor/Tools/Images/restore_view_off.png"),
-                tooltip = "Restore GameView Resolution",
-                isToggleOn = PlayerPrefs.GetInt(GetKey(MENU_RESTORE_GAME_VIEW_PATH)) == 1,
+                MENU_RESTORE_GAME_VIEW_PATH,
+                new ToolbarToggleItem
+                {
+                    key = MENU_RESTORE_GAME_VIEW_PATH,
+                    imageOn = AssetDatabase.LoadAssetAtPath<Texture>("Assets/App/Scripts/Frame/Editor/Tools/Images/restore_view_on.png"),
+                    imageOff = AssetDatabase.LoadAssetAtPath<Texture>("Assets/App/Scripts/Frame/Editor/Tools/Images/restore_view_off.png"),
+                    tooltip = "Restore GameView Resolution",
+                    isToggleOn = PlayerPrefs.GetInt(GetKey(MENU_RESTORE_GAME_VIEW_PATH)) == 1,
+                }
+                
             },
         };
         
@@ -297,7 +299,7 @@ namespace App.Editor.Tools
             {
                 GUILayout.BeginHorizontal();
                 
-                foreach (var toolbar in ToolbarToggleItems)
+                foreach (var toolbar in ToolbarToggleItems.Values)
                 {
                     GUILayout.Space(4);
                     var image = toolbar.isToggleOn ? toolbar.imageOn : toolbar.imageOff;
