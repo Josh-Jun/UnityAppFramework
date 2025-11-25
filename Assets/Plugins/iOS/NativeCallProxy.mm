@@ -6,6 +6,7 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <Photos/Photos.h>
 #import <CoreTelephony/CTCellularData.h>
+#import <Accelerate/Accelerate.h>
 
 // 日志宏定义
 #define LOG_INFO(msg, ...) NSLog(@"[INFO] " msg, ##__VA_ARGS__)
@@ -27,7 +28,7 @@ static dispatch_once_t onceToken;
 
 extern "C" {
     // 内部使用的消息发送函数
-    static void SendUnityMessage(const char* method, const char* msg) {
+extern void SendUnityMessage(const char *method, const char *msg) {
         if (UnityGetMainWindow() == nil) {
             LOG_ERROR(@"Unity window not available when sending message");
             return;
@@ -36,17 +37,17 @@ extern "C" {
         UnitySendMessage("Master", method, msg ? msg : "");
     }
     
-    void SendMsg(const char* msg) {
+extern void SendMsg(const char *msg) {
         SendUnityMessage("ReceiveNativeMsg", msg);
     }
     
-    void ReceiveUnityMsg(const char* msg) {
+extern void ReceiveUnityMsg(const char *msg) {
         LOG_INFO(@"Received Unity message: %s", msg);
         // 可添加消息处理逻辑
     }
 
     // 退出unity显示原生界面
-    void ShowHostMainWindow(const char* msg) {
+extern void ShowHostMainWindow(const char *msg) {
         UnityPause(true);
         @try {
             if (api && [api respondsToSelector:@selector(showHostMainWindow:)]) {
@@ -62,7 +63,7 @@ extern "C" {
     }
     
     // 获取原生界面数据
-    const char* GetNativeData(const char* key) {
+extern const char * GetNativeData(const char *key) {
         @try {
             if (api && [api respondsToSelector:@selector(getAppData:)]) {
                 NSString *keyStr = [NSString stringWithUTF8String:key ? key : ""];
@@ -79,7 +80,7 @@ extern "C" {
     }
     
     // 震动效果
-    void NativeVibrate() {
+extern void NativeVibrate() {
         @try {
             if (@available(iOS 10.0, *)) {
                 UIImpactFeedbackGenerator *generator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleMedium];
@@ -95,7 +96,7 @@ extern "C" {
     }
     
     // 打开应用设置
-    void OpenNativeSettings() {
+extern void OpenNativeSettings() {
         @try {
             NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
             UIApplication *app = [UIApplication sharedApplication];
@@ -118,10 +119,8 @@ extern "C" {
     }
     
     // 判断是否有相关权限
-    bool HasNativeAuthorizedPermission(const char* permission) {
+    extern bool HasNativeUserAuthorizedPermission(const char *permission) {
         @try {
-            if (!permission) return false;
-            
             NSString *permStr = [NSString stringWithUTF8String:permission];
             
             if ([permStr isEqualToString:@"Networking"]) {
@@ -151,18 +150,13 @@ extern "C" {
     }
     
     // 请求相关权限
-    void RequestUserPermission(const char* permission) {
+extern void RequestNativeUserPermission(const char *permission) {
         @try {
-            if (!permission) {
-                SendMsg("{\"Name\":\"Invalid\",\"Data\":0}");
-                return;
-            }
-            
             NSString *permStr = [NSString stringWithUTF8String:permission];
                 
             if ([permStr isEqualToString:@"Networking"]) {
                 // 网络权限在iOS上无法主动请求，只能检测状态
-                int status = HasNativeAuthorizedPermission(permission) ? 1 : 0;
+                int status = HasNativeUserAuthorizedPermission(permission) ? 1 : 0;
                 NSString *data = [NSString stringWithFormat:@"{\"Name\":\"%@\",\"Data\":%d}", permStr, status];
                 SendMsg([data UTF8String]);
             }

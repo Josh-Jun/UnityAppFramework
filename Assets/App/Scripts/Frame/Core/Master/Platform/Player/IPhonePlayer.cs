@@ -1,28 +1,10 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using App.Core.Helper;
 using UnityEngine;
 
 namespace App.Core.Master
 {
     public class IPhonePlayer : PlatformMaster
     {
-#if UNITY_IOS && !UNITY_EDITOR
-        [System.Runtime.InteropServices.DllImport("__Internal")]
-        private static extern IntPtr GetNativeData(IntPtr key);
-        [System.Runtime.InteropServices.DllImport("__Internal")]
-        private static extern void ShowHostMainWindow(IntPtr msg);
-        [System.Runtime.InteropServices.DllImport("__Internal")]
-        private static extern void NativeVibrate();
-        [System.Runtime.InteropServices.DllImport("__Internal")]
-        private static extern void OpenNativeSettings();
-        [System.Runtime.InteropServices.DllImport("__Internal")]
-        private static extern bool HasNativeUserAuthorizedPermission(IntPtr permission);
-        [System.Runtime.InteropServices.DllImport("__Internal")]
-        private static extern void RequestNativeUserPermission(IntPtr permission);
-        [System.Runtime.InteropServices.DllImport("__Internal")]
-        private static extern void ReceiveUnityMsg(IntPtr msg);
-#endif
-
         public override bool IsEditor { get; } = false;
         public override string Name { get; } = "iOS";
         public override string PlatformName { get; } = "ios";
@@ -36,14 +18,14 @@ namespace App.Core.Master
         {
             Log.I("SendMsgToNative", ("Data", msg));
 #if UNITY_IOS && !UNITY_EDITOR
-            ReceiveUnityMsg(Marshal.StringToHGlobalAnsi(msg));
+            iOS.ReceiveUnityMsg(msg);
 #endif
         }
         public override void OpenAppSetting()
         {
             Log.I("OpenAppSetting IPhone");
 #if UNITY_IOS && !UNITY_EDITOR
-            OpenNativeSettings();
+            iOS.OpenNativeSettings();
 #endif
         }
 
@@ -51,9 +33,9 @@ namespace App.Core.Master
         {
             Log.I("RequestUserPermission", ("Permission", permission));
 #if UNITY_IOS && !UNITY_EDITOR
-            if(!HasNativeUserAuthorizedPermission(Marshal.StringToHGlobalAnsi(permission)))
+            if(!iOS.HasNativeUserAuthorizedPermission(permission))
             {
-                RequestNativeUserPermission(Marshal.StringToHGlobalAnsi(permission));
+                iOS.RequestNativeUserPermission(permission);
             }
 #endif
         }
@@ -74,7 +56,7 @@ namespace App.Core.Master
         {
             Log.I("Vibrate IPhone");
 #if UNITY_IOS && !UNITY_EDITOR
-            NativeVibrate();
+            iOS.NativeVibrate();
 #endif
         }
         public override void InstallApp(string appPath)
@@ -87,10 +69,7 @@ namespace App.Core.Master
         public override string GetAppData(string key)
         {
 #if UNITY_IOS && !UNITY_EDITOR
-            IntPtr ptr = GetNativeData(Marshal.StringToHGlobalAnsi(key));
-            string result = Marshal.PtrToStringAnsi(ptr);
-            // 这里如果 native 端有分配内存，记得释放
-            return result;
+            return iOS.GetNativeData(key);
 #else
             return null;
 #endif
@@ -99,7 +78,7 @@ namespace App.Core.Master
         {
             Log.I("Quit IPhone");
 #if UNITY_IOS && !UNITY_EDITOR
-            ShowHostMainWindow(Marshal.StringToHGlobalAnsi(""));
+            iOS.ShowHostMainWindow("");
 #endif
         }
     }

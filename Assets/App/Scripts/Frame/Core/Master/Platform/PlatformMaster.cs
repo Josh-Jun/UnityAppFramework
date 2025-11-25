@@ -10,30 +10,16 @@ namespace App.Core.Master
         {
             get
             {
-                if (_instance == null)
+                if (_instance != null) return _instance;
+                _instance = Application.platform switch
                 {
-                    switch (Application.platform)
-                    {
-                        case RuntimePlatform.OSXPlayer:
-                            _instance = new WindowPlayer();
-                            break;
-                        case RuntimePlatform.WindowsPlayer:
-                            _instance = new WindowPlayer();
-                            break;
-                        case RuntimePlatform.IPhonePlayer:
-                            _instance = new IPhonePlayer();
-                            break;
-                        case RuntimePlatform.Android:
-                            _instance = new AndroidPlayer();
-                            break;
-                        case RuntimePlatform.WindowsEditor:
-                        case RuntimePlatform.OSXEditor:
-                            _instance = new EditorPlayer();
-                            break;
-                        default:
-                            break;
-                    }
-                }
+                    RuntimePlatform.OSXPlayer => new OSXPlayer(),
+                    RuntimePlatform.WindowsPlayer => new WindowPlayer(),
+                    RuntimePlatform.IPhonePlayer => new IPhonePlayer(),
+                    RuntimePlatform.Android => new AndroidPlayer(),
+                    RuntimePlatform.WindowsEditor or RuntimePlatform.OSXEditor => new EditorPlayer(),
+                    _ => _instance
+                };
 
                 return _instance;
             }
