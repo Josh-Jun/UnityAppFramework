@@ -54,9 +54,9 @@ namespace App.Editor.View
 
         private readonly string cachePath = $"{Application.dataPath.Replace("Assets", "")}Data/cache/viewscript";
 
-        private VisualElement parent;
+        private VisualElement root;
         private VisualElement type;
-        private VisualElement child;
+        private VisualElement children;
         private VisualElement buttons;
         private Foldout rootFoldout;
         private TreeView treeView;
@@ -80,12 +80,12 @@ namespace App.Editor.View
             rootFoldout = root.Q<Foldout>("UIView");
 
             type = root.Q<VisualElement>("Type");
-            parent = root.Q<VisualElement>("Root");
-            child = root.Q<VisualElement>("Child");
+            this.root = root.Q<VisualElement>("Root");
+            children = root.Q<VisualElement>("Child");
             buttons = root.Q<VisualElement>("Btns");
             buttons.Q<Label>().text = "请选择对象并选择需要操作的组件";
             type.style.display = DisplayStyle.None;
-            parent.style.display = DisplayStyle.None;
+            this.root.style.display = DisplayStyle.None;
             buttons.style.display = DisplayStyle.None;
 
             root.Q<Toggle>("CreateLogic").value = isCreateLogic;
@@ -255,7 +255,7 @@ namespace App.Editor.View
             RefreshView(null);
             _viewScriptData = null;
             rootGameObject = go;
-            parent.style.display = go ? DisplayStyle.Flex : DisplayStyle.None;
+            root.style.display = go ? DisplayStyle.Flex : DisplayStyle.None;
             type.style.display = go ? DisplayStyle.Flex : DisplayStyle.None;
             buttons.style.display = go ? DisplayStyle.Flex : DisplayStyle.None;
             if (!go) return;
@@ -278,8 +278,9 @@ namespace App.Editor.View
             var active = type.Q<Toggle>("Active");
             active.value = _viewScriptData?.active ?? false;
             active.RegisterCallback<ChangeEvent<bool>>((evt) => { _viewScriptData.active = evt.newValue; });
-
-            var items = (from Transform transform in go.transform select GetTreeViewItemData(transform)).ToList();
+            
+            // // 构建树形结构
+            var items = CreateTreeStructure(go);
 
             treeView.SetRootItems(items);
             treeView.makeItem = MakeTreeViewItem;
@@ -288,25 +289,56 @@ namespace App.Editor.View
             treeView.selectionType = SelectionType.Single;
             treeView.Rebuild();
         }
-
-        private TreeViewItemData<ViewData> GetTreeViewItemData(Transform root, string path = "")
+        
+        private List<TreeViewItemData<ViewData>> CreateTreeStructure(GameObject go)
         {
-            var currentPath = path == string.Empty ? root.name : path + "/" + root.name;
-            var childTreeViewItemData =
-                (from Transform transform in root select GetTreeViewItemData(transform, currentPath)).ToList();
-
-            var uiViewData = new ViewData { path = currentPath, name = root.name };
-            var vd = _viewScriptData.views.FirstOrDefault(d => d.path == currentPath);
-            if (vd != null && vd.path == currentPath)
+            var queue = new Queue<(Transform Parent, string Path, List<TreeViewItemData<ViewData>> ParentItem)>();
+            var tree = new List<TreeViewItemData<ViewData>>();
+            // 从根节点开始
+            foreach (Transform child in go.transform)
             {
-                uiViewData = vd;
-            }
-            else
-            {
-                _viewScriptData.views.Add(uiViewData);
-            }
+                var data = new ViewData { path = child.name, name = child.name };
+                var vd = _viewScriptData.views.FirstOrDefault(d => d.path == child.name);
+                if (vd != null && vd.path == child.name)
+                {
+                    data = vd;
+                }
+                else
+                {
+                    _viewScriptData.views.Add(data);
+                }
 
-            return new TreeViewItemData<ViewData>(root.GetInstanceID(), uiViewData, childTreeViewItemData);
+                var childItem = new List<TreeViewItemData<ViewData>>(child.childCount);
+                var item = new TreeViewItemData<ViewData>(child.GetInstanceID(), data, childItem);
+                tree.Add(item);
+                queue.Enqueue((child, child.name, childItem));
+            }
+            while (queue.Count > 0)
+            {
+                var (parent, path, items) = queue.Dequeue();
+                
+                // 将子物体加入队列
+                foreach (Transform child in parent)
+                {
+                    var childPath = path + "/" + child.name;
+                    var data = new ViewData { path = child.name, name = childPath };
+                    var vd = _viewScriptData.views.FirstOrDefault(d => d.path == childPath);
+                    if (vd != null && vd.path == childPath)
+                    {
+                        data = vd;
+                    }
+                    else
+                    {
+                        _viewScriptData.views.Add(data);
+                    }
+                    
+                    var childItem = new List<TreeViewItemData<ViewData>>(child.childCount);
+                    var item = new TreeViewItemData<ViewData>(child.GetInstanceID(), data, childItem);
+                    items.Add(item);
+                    queue.Enqueue((child, childPath, childItem));
+                }
+            }
+            return tree;
         }
 
         private VisualElement MakeTreeViewItem()
@@ -340,7 +372,7 @@ namespace App.Editor.View
         /// </summary>
         private void RefreshView(ViewData data)
         {
-            child.Clear();
+            children.Clear();
             if (data == null) return;
             for (var i = 0; i < data.components.Count; i++)
             {
@@ -364,7 +396,7 @@ namespace App.Editor.View
                     data.components[index] = _components[names.IndexOf(evt.newValue)];
                 });
 
-                child.Add(item);
+                children.Add(item);
             }
         }
 
