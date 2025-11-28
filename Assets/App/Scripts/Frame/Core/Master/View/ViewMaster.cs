@@ -244,6 +244,7 @@ namespace App.Core.Master
             };
             view.SetLayer(layerName);
             var vb = view.AddComponent(type) as ViewBase;
+            if (vb) vb.Mold = attribute.View;
             view.SetActive(false);
             ViewPairs.Add(type.FullName!, vb);
             if (attribute.Active) vb?.OpenView();

@@ -46,10 +46,14 @@ namespace App.Core.Master
                 Tweeners.Clear();
                 return;
             }
+            if (Mold is ViewMold.UI2D)
+                transform.RectTransform().anchoredPosition = Vector2.zero;
             gameObject.SetActive(true);
             if (HasEvent($"Open{name}"))
                 SendEventMsg($"Open{name}", obj);
             if (Tweeners.Count <= 0) return;
+            if (Mold is not ViewMold.UI2D) return;
+            transform.RectTransform().anchoredPosition = Vector2.left * Screen.width;
             TweenSequence = DOTween.Sequence();
             foreach (var tweener in Tweeners)
             {
@@ -70,7 +74,7 @@ namespace App.Core.Master
                 Tweeners.Clear();
                 return;
             }
-            if (Tweeners.Count <= 0)
+            if (Tweeners.Count <= 0 || Mold is not ViewMold.UI2D)
             {
                 gameObject.SetActive(false);
                 if (HasEvent($"Close{name}"))
