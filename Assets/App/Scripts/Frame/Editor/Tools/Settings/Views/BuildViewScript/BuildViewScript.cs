@@ -321,7 +321,7 @@ namespace App.Editor.View
                 foreach (Transform child in parent)
                 {
                     var childPath = path + "/" + child.name;
-                    var data = new ViewData { path = child.name, name = childPath };
+                    var data = new ViewData { path = childPath, name = child.name };
                     var vd = _viewScriptData.views.FirstOrDefault(d => d.path == childPath);
                     if (vd != null && vd.path == childPath)
                     {
