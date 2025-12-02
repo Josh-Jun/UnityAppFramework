@@ -47,13 +47,12 @@ namespace App.Core.Master
                 return;
             }
             if (Mold is ViewMold.UI2D)
-                transform.RectTransform().anchoredPosition = Vector2.zero;
+                transform.RectTransform().anchoredPosition = CloseAnchoredPosition;
             gameObject.SetActive(true);
             if (HasEvent($"Open{name}"))
                 SendEventMsg($"Open{name}", obj);
             if (Tweeners.Count <= 0) return;
             if (Mold is not ViewMold.UI2D) return;
-            transform.RectTransform().anchoredPosition = Vector2.left * Screen.width;
             TweenSequence = DOTween.Sequence();
             foreach (var tweener in Tweeners)
             {
@@ -65,7 +64,7 @@ namespace App.Core.Master
             });
             TweenSequence.Play();
         }
-
+        private Vector3 CloseAnchoredPosition = Vector3.zero;
         /// <summary>关闭窗口</summary>
         public void CloseView()
         {
@@ -76,6 +75,7 @@ namespace App.Core.Master
             }
             if (Tweeners.Count <= 0 || Mold is not ViewMold.UI2D)
             {
+                CloseAnchoredPosition = Vector3.zero;
                 gameObject.SetActive(false);
                 if (HasEvent($"Close{name}"))
                     SendEventMsg($"Close{name}");
@@ -90,6 +90,7 @@ namespace App.Core.Master
                 TweenSequence.OnComplete(() =>
                 {
                     Tweeners.Clear();
+                    CloseAnchoredPosition = transform.RectTransform().anchoredPosition;
                     gameObject.SetActive(false);
                     if (HasEvent($"Close{name}"))
                         SendEventMsg($"Close{name}");
