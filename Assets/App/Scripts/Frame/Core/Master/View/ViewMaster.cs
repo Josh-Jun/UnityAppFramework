@@ -26,7 +26,7 @@ namespace App.Core.Master
         GiftMail = 1 << 4,
     }
     
-    /// <summary>红点描点位置</summary>
+    /// <summary>红点锚点位置</summary>
     public enum RedDotAnchor
     {
         UpperLeft,
@@ -161,6 +161,8 @@ namespace App.Core.Master
 
         private const int Panel2DCount = 8;
         private const int Canvas3DCount = 2;
+        
+        private readonly string[] suffix = { "HV", "LR", "UD", "NO" };
 
         private void InitUICanvas()
         {
@@ -177,9 +179,15 @@ namespace App.Core.Master
                 var go = Instantiate(item2D, UISafeArea2D);
                 var p = go.GetComponent<RectTransform>();
                 UIPanels.Add(p);
-                go.name = $"Panel[{i}]";
             }
-
+            
+            for (var i = 0; i < UIPanels.Count; i++)
+            {
+                var index = i % 4;
+                var go_name = $"SafeArea[{i}]-[{suffix[index]}]";
+                UIPanels[i].name = go_name;
+            }
+            
             #endregion
 
             #region UI3D
