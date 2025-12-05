@@ -9,9 +9,9 @@ namespace App.Core.Master
     /// </summary>
     public partial class SocketMaster : SingletonMonoEvent<SocketMaster>
     {
-        public void ConnectUdpServer()
+        public void ConnectUdpServer(int port)
         {
-            LanSocketUdpClient.Instance.ConnectServer(Global.SocketPort);
+            LanSocketUdpClient.Instance.ConnectServer(port);
         }
         
         public void SendToUdpServer(string msg)

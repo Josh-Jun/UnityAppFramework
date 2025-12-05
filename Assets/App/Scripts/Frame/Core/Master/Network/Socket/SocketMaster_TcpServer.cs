@@ -11,9 +11,9 @@ namespace App.Core.Master
     public partial class SocketMaster : SingletonMonoEvent<SocketMaster>
     {
         /// <summary> 开启Tcp服务端 </summary>
-        public void StartTcpServer()
+        public void StartTcpServer(string ip, int port)
         {
-            LanSocketTcpServer.Instance.StartServer(Global.SocketServer, Global.SocketPort);
+            LanSocketTcpServer.Instance.StartServer(ip, port);
         }
 
         /// <summary> 给所有客户端发送消息 </summary>
