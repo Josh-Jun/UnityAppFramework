@@ -26,7 +26,7 @@ namespace App.Core.Master
      [Serializable]
      public class PushMsg : SocketMsg
      {
-         public List<string> clients; //外部参数
+         public List<string> clients = new(); //客户端列表, 长度为0则推送给所有
          public string eventName; //事件名
          public string data; //参数数组
      }
