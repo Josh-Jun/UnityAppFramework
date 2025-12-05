@@ -11,21 +11,10 @@ namespace App.Core.Tools
     {
         private UnityWebRequest uwr = new();
         private readonly Dictionary<string, string> headerPairs = new Dictionary<string, string>();
-        private UnityWebRequestAsyncOperation uwrao;
+        private UnityWebRequestAsyncOperation async;
 
         /// <summary> 是否下载完 </summary>
-        public bool IsDone
-        {
-            get
-            {
-                if (uwr != null)
-                {
-                    return uwr.isDone;
-                }
-
-                return false;
-            }
-        }
+        public bool IsDone => uwr is { isDone: true };
 
         /// <summary> 获取当前下载大小(b) </summary>
         public long DownloadedLength
@@ -60,13 +49,11 @@ namespace App.Core.Tools
             headerPairs.TryAdd(key, value);
         }
 
-        public void Destory()
+        public void Destroy()
         {
-            if (uwr != null)
-            {
-                uwr.Dispose();
-                uwr = null;
-            }
+            if (uwr == null) return;
+            uwr.Dispose();
+            uwr = null;
         }
 
         /// <summary>
@@ -88,7 +75,7 @@ namespace App.Core.Tools
                 return;
             }
 
-            ao.completed += (async) =>
+            ao.completed += (a) =>
             {
                 var totalLength = Convert.ToInt64(head.GetResponseHeader("Content-Length"));
                 head.Dispose();
@@ -108,11 +95,7 @@ namespace App.Core.Tools
                     {
                         Debug.LogError($"[Error:Download Body] {uwr.error}");
                     }
-
-                    callBack?.Invoke(totalLength, fileLength);
-                    return;
                 }
-
                 callBack?.Invoke(totalLength, fileLength);
             };
         }
@@ -133,8 +116,8 @@ namespace App.Core.Tools
             }
 
             uwr.downloadHandler = new DownloadHandlerBuffer();
-            uwrao = uwr.SendWebRequest();
-            uwrao.completed += (ao) =>
+            async = uwr.SendWebRequest();
+            async.completed += (ao) =>
             {
                 if (string.IsNullOrEmpty(uwr.error))
                 {
@@ -158,8 +141,8 @@ namespace App.Core.Tools
             }
             uwr.downloadHandler = new DownloadHandlerBuffer();
             uwr.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(data));
-            uwrao = uwr.SendWebRequest();
-            uwrao.completed += (ao) =>
+            async = uwr.SendWebRequest();
+            async.completed += (ao) =>
             {
                 if (string.IsNullOrEmpty(uwr.error))
                 {
@@ -183,8 +166,8 @@ namespace App.Core.Tools
             }
             uwr.downloadHandler = new DownloadHandlerBuffer();
             uwr.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(data));
-            uwrao = uwr.SendWebRequest();
-            uwrao.completed += (ao) =>
+            async = uwr.SendWebRequest();
+            async.completed += (ao) =>
             {
                 if (string.IsNullOrEmpty(uwr.error))
                 {
@@ -213,8 +196,8 @@ namespace App.Core.Tools
             }
 
             uwr.downloadHandler = new DownloadHandlerBuffer();
-            uwrao = uwr.SendWebRequest();
-            uwrao.completed += (ao) =>
+            async = uwr.SendWebRequest();
+            async.completed += (ao) =>
             {
                 if (string.IsNullOrEmpty(uwr.error))
                 {
@@ -244,8 +227,8 @@ namespace App.Core.Tools
 
             var downloadHandlerTexture = new DownloadHandlerTexture();
             uwr.downloadHandler = downloadHandlerTexture;
-            uwrao = uwr.SendWebRequest();
-            uwrao.completed += (ao) =>
+            async = uwr.SendWebRequest();
+            async.completed += (ao) =>
             {
                 if (string.IsNullOrEmpty(uwr.error))
                 {
@@ -275,8 +258,8 @@ namespace App.Core.Tools
 
             var downloadHandlerAssetBundle = new DownloadHandlerAssetBundle(uwr.url, 0);
             uwr.downloadHandler = downloadHandlerAssetBundle;
-            uwrao = uwr.SendWebRequest();
-            uwrao.completed += (ao) =>
+            async = uwr.SendWebRequest();
+            async.completed += (ao) =>
             {
                 if (string.IsNullOrEmpty(uwr.error))
                 {
@@ -307,8 +290,8 @@ namespace App.Core.Tools
 
             var downloadHandlerAudioClip = new DownloadHandlerAudioClip(uwr.url, audioType);
             uwr.downloadHandler = downloadHandlerAudioClip;
-            uwrao = uwr.SendWebRequest();
-            uwrao.completed += (ao) =>
+            async = uwr.SendWebRequest();
+            async.completed += (ao) =>
             {
                 if (string.IsNullOrEmpty(uwr.error))
                 {
@@ -340,8 +323,8 @@ namespace App.Core.Tools
 
             uwr.uploadHandler = new UploadHandlerRaw(formData.data);
             uwr.downloadHandler = new DownloadHandlerBuffer();
-            uwrao = uwr.SendWebRequest();
-            uwrao.completed += (ao) =>
+            async = uwr.SendWebRequest();
+            async.completed += (ao) =>
             {
                 if (string.IsNullOrEmpty(uwr.error))
                 {
@@ -374,8 +357,8 @@ namespace App.Core.Tools
             var bodyRaw = Encoding.UTF8.GetBytes(postData);
             uwr.uploadHandler = new UploadHandlerRaw(bodyRaw);
             uwr.downloadHandler = new DownloadHandlerBuffer();
-            uwrao = uwr.SendWebRequest();
-            uwrao.completed += (ao) =>
+            async = uwr.SendWebRequest();
+            async.completed += (ao) =>
             {
                 if (string.IsNullOrEmpty(uwr.error))
                 {
@@ -412,8 +395,8 @@ namespace App.Core.Tools
 
             uwr.uploadHandler = new UploadHandlerRaw(form.data);
             uwr.downloadHandler = new DownloadHandlerBuffer();
-            uwrao = uwr.SendWebRequest();
-            uwrao.completed += (ao) =>
+            async = uwr.SendWebRequest();
+            async.completed += (ao) =>
             {
                 if (string.IsNullOrEmpty(uwr.error))
                 {
@@ -444,8 +427,8 @@ namespace App.Core.Tools
 
             uwr.uploadHandler = new UploadHandlerRaw(contentBytes);
             uwr.downloadHandler = new DownloadHandlerBuffer();
-            uwrao = uwr.SendWebRequest();
-            uwrao.completed += (ao) =>
+            async = uwr.SendWebRequest();
+            async.completed += (ao) =>
             {
                 if (string.IsNullOrEmpty(uwr.error))
                 {
@@ -477,8 +460,8 @@ namespace App.Core.Tools
             var contentBytes = Encoding.UTF8.GetBytes(content);
             uwr.uploadHandler = new UploadHandlerRaw(contentBytes);
             uwr.downloadHandler = new DownloadHandlerBuffer();
-            uwrao = uwr.SendWebRequest();
-            uwrao.completed += (ao) =>
+            async = uwr.SendWebRequest();
+            async.completed += (ao) =>
             {
                 if (string.IsNullOrEmpty(uwr.error))
                 {

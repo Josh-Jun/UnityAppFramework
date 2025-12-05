@@ -5,7 +5,7 @@ using App.Core.Tools;
 namespace App.Core.Master
 {
     /// <summary>
-    /// Socket局域网UDP服务器
+    /// Socket局域网UDP客户端
     /// </summary>
     public partial class SocketMaster : SingletonMonoEvent<SocketMaster>
     {
