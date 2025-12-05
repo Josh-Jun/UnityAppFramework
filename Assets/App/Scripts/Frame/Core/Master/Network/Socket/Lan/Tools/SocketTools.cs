@@ -5,20 +5,8 @@ using System.Text;
 
 namespace App.Core.Master
 {
-	public enum LogLevel
-	{
-		None,
-		Warn,
-		Error,
-		Info
-	}
-
 	public static class SocketTools
 	{
-		public static bool log = true;
-
-		public static Action<string, int> logCallBack = null;
-
 		public static byte[] PackageNetMsg<T>(T msg) where T : SocketMsg
 		{
 			return PackageLengthInfo(Serialize(msg));
@@ -59,44 +47,6 @@ namespace App.Core.Master
 			using var serializationStream = new MemoryStream(bs);
 			var binaryFormatter = new BinaryFormatter();
 			return (T)binaryFormatter.Deserialize(serializationStream);
-		}
-
-		public static void LogMsg(string msg, LogLevel lv = LogLevel.None)
-		{
-			if (!log)
-			{
-				return;
-			}
-
-			msg = DateTime.Now.ToLongTimeString() + " >> " + msg;
-			if (logCallBack != null)
-			{
-				logCallBack(msg, (int)lv);
-				return;
-			}
-
-			switch (lv)
-			{
-				case LogLevel.None:
-					Console.WriteLine(msg);
-					break;
-				case LogLevel.Warn:
-					Console.WriteLine("//--------------------Warn--------------------//");
-					Console.WriteLine(msg);
-					break;
-				case LogLevel.Error:
-					Console.WriteLine("//--------------------Error--------------------//");
-					Console.WriteLine(msg);
-					break;
-				case LogLevel.Info:
-					Console.WriteLine("//--------------------Info--------------------//");
-					Console.WriteLine(msg);
-					break;
-				default:
-					Console.WriteLine("//--------------------Error--------------------//");
-					Console.WriteLine(msg + " >> Unknow Log Type\n");
-					break;
-			}
 		}
 	}
 }

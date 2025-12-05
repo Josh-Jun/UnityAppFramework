@@ -1,87 +1,79 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
+using App.Core.Tools;
+using UnityEngine;
+using UnityEngine.Events;
 
 namespace App.Core.Master
 {
-	public class SocketUdp<T> where T : SessionUdpBase, new()
-	{
-		public readonly T session = new();
+    public class SocketUdp<T> where T : SocketUdpBase, new()
+    {
+        private readonly Socket _socket = new(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        private IPEndPoint iep;
 
-		private readonly Socket socketUdp = new(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        private EndPoint ep;
 
-		private IPEndPoint iep;
+        private Thread thread;
 
-		private EndPoint ep;
+        public T session = new T();
+        
+        public void StartServer(int port)
+        {
+            try
+            {
+                _socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
+                iep = new IPEndPoint(IPAddress.Broadcast, port);
+                ep = iep;
+                thread = new Thread(StartServerReceive);
+                thread.Start();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Start TcpSocketServer Error:{e.Message}");
+            }
+        }
 
-		private Thread thread;
+        private void StartServerReceive()
+        {
+            session.BeginReceiveData(_socket, ep, thread);
+            session.SendMsg("");
+            session.ReceiveData();
+        }
 
-		public void StartAsServer(int port, Action<bool> cb = null)
-		{
-			try
-			{
-				socketUdp.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
-				iep = new IPEndPoint(IPAddress.Broadcast, port);
-				ep = iep;
-				thread = new Thread(StartServerReceive);
-				thread.Start();
-				SocketTools.LogMsg("Udp服务端开启成功!", LogLevel.Info);
-				cb?.Invoke(true);
-			}
-			catch (Exception ex)
-			{
-				SocketTools.LogMsg("Udp服务端开启失败!" + ex.Message, LogLevel.Error);
-				cb?.Invoke(false);
-			}
-		}
+        public void ConnectServer(int port)
+        {
+            try
+            {
+                iep = new IPEndPoint(IPAddress.Any, port);
+                _socket.Bind(iep);
+                ep = iep;
+                thread = new Thread(StartClientReceive);
+                thread.Start();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Start TcpSocketClient Error:{e.Message}");
+            }
+        }
 
-		private void StartServerReceive()
-		{
-			session.StartReceiveData(socketUdp, ep, thread);
-			session.SendMsg();
-			session.ReceiveData();
-		}
+        private void StartClientReceive()
+        {
+            session.BeginReceiveData(_socket, ep, thread);
+            session.ReceiveData();
+        }
 
-		public void StartAsClient(int port, Action<bool> cb = null)
-		{
-			try
-			{
-				iep = new IPEndPoint(IPAddress.Any, port);
-				socketUdp.Bind(iep);
-				ep = iep;
-				thread = new Thread(StartClientReceive);
-				thread.Start();
-				SocketTools.LogMsg("Udp客户端开启成功!", LogLevel.Info);
-				cb?.Invoke(true);
-			}
-			catch (Exception ex)
-			{
-				SocketTools.LogMsg("Udp客户端开启失败!" + ex.Message, LogLevel.Error);
-				cb?.Invoke(false);
-			}
-		}
-
-		private void StartClientReceive()
-		{
-			session.StartReceiveData(socketUdp, ep, thread);
-			session.ReceiveData();
-		}
-
-		public void Close()
-		{
-			if (thread != null)
-			{
-				thread.Interrupt();
-				thread.Abort();
-			}
-
-			if (socketUdp != null)
-			{
-				socketUdp.Close();
-			}
-
-			SocketTools.LogMsg("UDP已关闭...", LogLevel.Info);
-		}
-	}
+        public void Close()
+        {
+            if (thread != null)
+            {
+                thread.Interrupt();
+                thread.Abort();
+            }
+            _socket?.Close();
+        }
+    }
 }

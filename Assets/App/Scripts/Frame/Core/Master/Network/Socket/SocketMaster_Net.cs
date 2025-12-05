@@ -18,14 +18,14 @@ namespace App.Core.Master
         
         public void ConnectNetServer(string host, int port, Action callback = null)
         {
-            NetSocketMaster.Instance.Connect(host, port, callback);
-            NetSocketMaster.Instance.OnDisConnected += OnDisConnected;
-            NetSocketMaster.Instance.OnReceiveMessage += OnReceiveMessage;
+            NetSocketClient.Instance.Connect(host, port, callback);
+            NetSocketClient.Instance.OnDisConnected += OnDisConnected;
+            NetSocketClient.Instance.OnReceiveMessage += OnReceiveMessage;
         }
 
         public void SendMessage(PB_MSG_CMD cmd, IMessage message, Action<IMessage> callback = null, bool autoRemoveCallback = false)
         {
-            NetSocketMaster.Instance.Send((int)cmd, message);
+            NetSocketClient.Instance.Send((int)cmd, message);
             var str = cmd.ToString().Replace("C2S", "S2C");
             var scMsgCmd = (PB_MSG_CMD)Enum.Parse(typeof(PB_MSG_CMD), str, false);
 
@@ -112,7 +112,7 @@ namespace App.Core.Master
 
         private void OnApplicationQuit()
         {
-            NetSocketMaster.Instance.Close();
+            NetSocketClient.Instance.Close();
         }
 
         private class NetworkEventHandler

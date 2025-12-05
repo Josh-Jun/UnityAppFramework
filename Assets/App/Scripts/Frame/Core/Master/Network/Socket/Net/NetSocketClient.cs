@@ -24,13 +24,13 @@ namespace App.Core.Master
         public int msgId;
         public byte[] data;
     }
-    public class NetSocketMaster : SingletonEvent<NetSocketMaster>
+    public class NetSocketClient : SingletonEvent<NetSocketClient>
     {
         private TcpClient _client;
         private NetworkStream _network;
         private readonly MemoryStream _memory;
         private readonly BinaryReader _reader;
-        
+        private const int timeout = 5000;
         private const int MaxRead = 8192;
         private readonly byte[] _byteBuffer = new byte[MaxRead];
 
@@ -38,14 +38,14 @@ namespace App.Core.Master
 
         public Action OnDisConnected { set; get; }
 
-        public NetSocketMaster()
+        public NetSocketClient()
         {
             _memory = new MemoryStream();
             _reader = new BinaryReader(_memory);
         }
 
         private int _timeId = -1;
-        private static readonly string _lock = "lockNetSocket"; 
+        private const string _lock = "lockNetSocket";
         private readonly Queue<NetMsgData> _messageQueue = new Queue<NetMsgData>();
 
         public void Connect(string host, int port, Action callback = null)
@@ -55,14 +55,14 @@ namespace App.Core.Master
             
             _client = null;
             _client = new TcpClient();
-            _client.SendTimeout = 1000;
-            _client.ReceiveTimeout = 1000;
+            _client.SendTimeout = timeout;
+            _client.ReceiveTimeout = timeout;
             _client.NoDelay = true;
             try
             {
                 _client.BeginConnect(host, port, (ar) => {
                     _network = _client.GetStream();
-                    _client.GetStream().BeginRead(_byteBuffer, 0, MaxRead, OnRead, null);
+                    _network.BeginRead(_byteBuffer, 0, MaxRead, OnRead, null);
                     callback?.Invoke();
                 }, null);
             }
@@ -89,10 +89,10 @@ namespace App.Core.Master
             try
             {
                 var bytesRead = 0;
-                lock (_client.GetStream())
+                lock (_network)
                 {
                     // 读取字节流到缓冲区
-                    bytesRead = _client.GetStream().EndRead(result);
+                    bytesRead = _network.EndRead(result);
                 }
                 if (bytesRead < 1)
                 {
@@ -102,11 +102,11 @@ namespace App.Core.Master
                     return;
                 }
                 OnReceive(_byteBuffer, bytesRead);   //分析数据包内容，抛给逻辑层
-                lock (_client.GetStream())
+                lock (_network)
                 {
                     // 分析完，再次监听服务器发过来的新消息
                     Array.Clear(_byteBuffer, 0, _byteBuffer.Length);   //清空数组
-                    _client.GetStream().BeginRead(_byteBuffer, 0, MaxRead, OnRead, null);
+                    _network.BeginRead(_byteBuffer, 0, MaxRead, OnRead, null);
                 }
             }
             catch (Exception e)
@@ -199,8 +199,8 @@ namespace App.Core.Master
                 result = ms.ToArray();
             }
 
-            var lengh = (ushort)(result.Length + 2);
-            buffer.WriteUShort(lengh);
+            var length = (ushort)(result.Length + 2);
+            buffer.WriteUShort(length);
             buffer.WriteUShort((ushort)cmd);
             buffer.WriteBytes(result);
             WriteMessage(buffer.ToBytes());

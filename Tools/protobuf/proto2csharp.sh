@@ -8,7 +8,7 @@ do
 done
 # step2 copy
 base_target_dir=$(dirname $(dirname ${base_dir}))
-target_dir=${base_target_dir}/Assets/App/Scripts/Frame/Core/Master/Network/Socket/Data/
+target_dir=${base_target_dir}/Assets/App/Scripts/Frame/Core/Master/Network/Socket/Net/Data/
 for file in ${base_dir}/output/*.cs
 do
 	cp $file ${target_dir}

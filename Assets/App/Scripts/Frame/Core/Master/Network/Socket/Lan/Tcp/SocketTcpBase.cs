@@ -1,56 +1,72 @@
-﻿using System;
+/* *
+ * ===============================================
+ * author      : Josh@win
+ * e-mail      : shijun_z@163.com
+ * create time : 2025年12月4 15:14
+ * function    : 
+ * ===============================================
+ * */
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using UnityEngine;
+using UnityEngine.Events;
 
 namespace App.Core.Master
 {
-    public class SessionTcpBase
+    public class SocketTcpBase
     {
-        private Socket socketTcp;
+        private Socket _socket;
+        private Action _clearCallback;
 
-        private Action closeCallBack;
+        public string Ip => ((IPEndPoint)_socket.RemoteEndPoint).Address.ToString();
+        public int Port => ((IPEndPoint)_socket.RemoteEndPoint).Port;
 
-        public void StartRcvData(Socket socket, Action closeCallBack)
+        public void BeginReceiveData(Socket socket, Action callback)
         {
             try
             {
-                this.socketTcp = socket;
-                this.closeCallBack = closeCallBack;
+                _socket = socket;
+                _clearCallback = callback;
                 OnConnected();
-                var pEPkg = new SocketPackage();
-                socket.BeginReceive(pEPkg.headBuffer, 0, pEPkg.headLength, SocketFlags.None, ReceiveHeadData, pEPkg);
+                var package = new SocketPackage();
+                _socket.BeginReceive(package.headBuffer, 0, SocketPackage.headLength, SocketFlags.None, ReceiveHeadData, package);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                SocketTools.LogMsg("StartRcvData:" + ex.Message, LogLevel.Error);
+                Debug.LogError($"Tcp ReceiveData Error:{e.Message}");
             }
         }
-
+        
         private void ReceiveHeadData(IAsyncResult ar)
         {
             try
             {
                 var package = (SocketPackage)ar.AsyncState;
-                if (socketTcp.Available == 0)
+                if (_socket.Available == 0)
                 {
                     OnDisConnected();
                     Clear();
                 }
                 else
                 {
-                    var num = socketTcp.EndReceive(ar);
+                    var num = _socket.EndReceive(ar);
                     if (num > 0)
                     {
                         package.headIndex += num;
-                        if (package.headIndex < package.headLength)
+                        if (package.headIndex < SocketPackage.headLength)
                         {
-                            socketTcp.BeginReceive(package.headBuffer, package.headIndex,
-                                package.headLength - package.headIndex, SocketFlags.None, ReceiveHeadData, package);
+                            _socket.BeginReceive(package.headBuffer, package.headIndex,
+                                SocketPackage.headLength - package.headIndex, SocketFlags.None, ReceiveHeadData, package);
                         }
                         else
                         {
                             package.InitBodyBuffer();
-                            socketTcp.BeginReceive(package.bodyBuffer, 0, package.bodyLength, SocketFlags.None,
+                            _socket.BeginReceive(package.bodyBuffer, 0, package.bodyLength, SocketFlags.None,
                                 ReceiveBodyData, package);
                         }
                     }
@@ -61,9 +77,9 @@ namespace App.Core.Master
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                SocketTools.LogMsg("ReceiveHeadError:" + ex.Message, LogLevel.Error);
+                Debug.LogError($"Tcp ReceiveHead Error:{e.Message}");
             }
         }
 
@@ -72,21 +88,20 @@ namespace App.Core.Master
             try
             {
                 var package = (SocketPackage)ar.AsyncState;
-                var num = socketTcp.EndReceive(ar);
+                var num = _socket.EndReceive(ar);
                 if (num > 0)
                 {
                     package.bodyIndex += num;
                     if (package.bodyIndex < package.bodyLength)
                     {
-                        socketTcp.BeginReceive(package.bodyBuffer, package.bodyIndex,
+                        _socket.BeginReceive(package.bodyBuffer, package.bodyIndex,
                             package.bodyLength - package.bodyIndex, SocketFlags.None, ReceiveBodyData, package);
                     }
                     else
                     {
-                        var msg = Encoding.UTF8.GetString(package.bodyBuffer);
-                        OnReciveMsg(msg);
+                        OnReceiveMsg(package.bodyBuffer);
                         package.ResetData();
-                        socketTcp.BeginReceive(package.headBuffer, 0, package.headLength, SocketFlags.None,
+                        _socket.BeginReceive(package.headBuffer, 0, SocketPackage.headLength, SocketFlags.None,
                             ReceiveHeadData, package);
                     }
                 }
@@ -96,9 +111,26 @@ namespace App.Core.Master
                     Clear();
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                SocketTools.LogMsg("RcvBodyError:" + ex.Message, LogLevel.Error);
+                Debug.LogError($"Tcp ReceiveBody Error:{e.Message}");
+            }
+        }
+        
+        public void SendMsg(byte[] msg)
+        {
+            var data = SocketTools.PackageLengthInfo(msg);
+            try
+            {
+                var networkStream = new NetworkStream(_socket);
+                if (networkStream.CanWrite)
+                {
+                    networkStream.BeginWrite(data, 0, data.Length, SendCallBack, networkStream);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Tcp SndMsg Error:{e.Message}");
             }
         }
 
@@ -107,35 +139,18 @@ namespace App.Core.Master
             var data = SocketTools.PackageLengthInfo(msg);
             try
             {
-                var networkStream = new NetworkStream(socketTcp);
+                var networkStream = new NetworkStream(_socket);
                 if (networkStream.CanWrite)
                 {
                     networkStream.BeginWrite(data, 0, data.Length, SendCallBack, networkStream);
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                SocketTools.LogMsg("SndMsgError:" + ex.Message, LogLevel.Error);
+                Debug.LogError($"Tcp SndMsg Error:{e.Message}");
             }
         }
-
-        public void SendMsg(byte[] _data)
-        {
-            var data = SocketTools.PackageLengthInfo(_data);
-            try
-            {
-                var networkStream = new NetworkStream(socketTcp);
-                if (networkStream.CanWrite)
-                {
-                    networkStream.BeginWrite(data, 0, data.Length, SendCallBack, networkStream);
-                }
-            }
-            catch (Exception ex)
-            {
-                SocketTools.LogMsg("SndMsgError:" + ex.Message, LogLevel.Error);
-            }
-        }
-
+        
         private void SendCallBack(IAsyncResult ar)
         {
             using var networkStream = (NetworkStream)ar.AsyncState;
@@ -145,31 +160,31 @@ namespace App.Core.Master
                 networkStream.Flush();
                 networkStream.Close();
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                SocketTools.LogMsg("SndMsgError:" + ex.Message, LogLevel.Error);
+                Debug.LogError($"Tcp SendCallBack Error:{e.Message}");
             }
         }
-
+        
         public void Clear()
         {
-            closeCallBack?.Invoke();
-            socketTcp.Close();
+            _clearCallback?.Invoke();
+            _socket.Close();
         }
-
+        
         protected virtual void OnConnected()
         {
-            SocketTools.LogMsg("New Session Connected.", LogLevel.Info);
+            
         }
 
-        protected virtual void OnReciveMsg(string msg)
+        protected virtual void OnReceiveMsg(byte[] msg)
         {
-            SocketTools.LogMsg("Receive Network Message.", LogLevel.Info);
+            
         }
 
         protected virtual void OnDisConnected()
         {
-            SocketTools.LogMsg("Session Disconnected.", LogLevel.Info);
+            
         }
     }
 }

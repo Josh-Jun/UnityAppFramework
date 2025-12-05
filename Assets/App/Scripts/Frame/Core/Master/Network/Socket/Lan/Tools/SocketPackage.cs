@@ -4,9 +4,9 @@ namespace App.Core.Master
 {
 	internal class SocketPackage
 	{
-		public int headLength = 4;
+		public const int headLength = 4;
 
-		public byte[] headBuffer = null;
+		public readonly byte[] headBuffer = null;
 
 		public int headIndex = 0;
 

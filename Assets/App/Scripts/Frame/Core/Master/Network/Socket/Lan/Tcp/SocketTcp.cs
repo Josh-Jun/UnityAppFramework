@@ -2,176 +2,115 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-
+using System.Text;
+using App.Core.Tools;
+using UnityEngine;
+using UnityEngine.Events;
 
 namespace App.Core.Master
 {
-	public class SocketTcp<T> where T : SessionTcpBase, new()
-	{
-		private readonly Socket socketTcp = null;
+    public class SocketTcp<T> where T : SocketTcpBase, new()
+    {
+        private readonly Socket _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        private const int timeout = 5000;
+        private const int backlog = 100;
 
-		public T session = null;
+        public T server;
 
-		private readonly int backlog = 100;
+        public readonly List<T> clients = new();
 
-		private readonly List<T> sessionList = new List<T>();
+        public void StartServer(string ip, int port)
+        {
+            try
+            {
+                _socket.SendTimeout = timeout;
+                _socket.ReceiveTimeout = timeout;
+                _socket.Bind(new IPEndPoint(IPAddress.Parse(ip), port));
+                _socket.Listen(backlog);
+                _socket.BeginAccept(ClientConnectCallBack, _socket);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Start TcpSocketServer Error:{e.Message}");
+            }
+        }
 
-		private readonly int overtime = 5000;
+        private void ClientConnectCallBack(IAsyncResult ar)
+        {
+            try
+            {
+                var socket = _socket.EndAccept(ar);
+                var client = new T();
+                client.BeginReceiveData(socket, () =>
+                {
+                    if (clients.Contains(client))
+                    {
+                        clients.Remove(client);
+                    }
+                });
+                clients.Add(client);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
 
-		private Action<bool> serverCallBack;
+            _socket.BeginAccept(ClientConnectCallBack, _socket);
+        }
 
-		private Action<bool> clientCallBack;
+        public void ConnectServer(string ip, int port)
+        {
+            try
+            {
+                _socket.SendTimeout = timeout;
+                _socket.ReceiveTimeout = timeout;
+                var ar = _socket.BeginConnect(new IPEndPoint(IPAddress.Parse(ip), port), ServerConnectCallBack, null);
+                var flag = ar.AsyncWaitHandle.WaitOne(timeout, true);
+                if (!flag)
+                {
+                    Close();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Start TcpSocketClient Error:{e.Message}");
+            }
+        }
 
-		public SocketTcp()
-		{
-			socketTcp = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-		}
+        private void ServerConnectCallBack(IAsyncResult ar)
+        {
+            try
+            {
+                _socket.EndConnect(ar);
+                server = new T();
+                server.BeginReceiveData(_socket, () =>
+                {
+                    
+                });
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Start TcpSocketClient Error:{e.Message}");
+            }
+        }
 
-		public void StartAsServer(string ip, int port, Action<bool> cb = null)
-		{
-			try
-			{
-				serverCallBack = cb;
-				socketTcp.Bind(new IPEndPoint(IPAddress.Parse(ip), port));
-				socketTcp.Listen(backlog);
-				socketTcp.BeginAccept(ClientConnectCallBack, socketTcp);
-				SocketTools.LogMsg("Tcp服务端开启成功！正在等待连接......", LogLevel.Info);
-				serverCallBack?.Invoke(true);
-			}
-			catch (Exception ex)
-			{
-				SocketTools.LogMsg("Tcp服务端开启失败：" + ex.Message, LogLevel.Error);
-				serverCallBack?.Invoke(false);
-			}
-		}
+        public void Close()
+        {
+            try
+            {
+                if (_socket == null) return;
+                if (_socket.Connected)
+                {
+                    _socket.Shutdown(SocketShutdown.Both);
+                }
 
-		private void ClientConnectCallBack(IAsyncResult ar)
-		{
-			try
-			{
-				var socket = socketTcp.EndAccept(ar);
-				var sessionTcpBase = new T();
-				sessionTcpBase.StartRcvData(socket, delegate
-				{
-					if (sessionList.Contains(sessionTcpBase))
-					{
-						sessionList.Remove(sessionTcpBase);
-						SocketTools.LogMsg("客户端断开连接......", LogLevel.Info);
-					}
-				});
-				sessionList.Add(sessionTcpBase);
-				SocketTools.LogMsg("Tcp连接客户端成功！正在接收数据......", LogLevel.Info);
-			}
-			catch (Exception ex)
-			{
-				SocketTools.LogMsg("Tcp服务器关闭：" + ex.Message, LogLevel.Error);
-				serverCallBack?.Invoke(false);
-			}
-
-			socketTcp.BeginAccept(ClientConnectCallBack, socketTcp);
-		}
-
-		public void StartAsClient_IP(string ip, int port, Action<bool> cb = null)
-		{
-			try
-			{
-				clientCallBack = cb;
-				var asyncResult = socketTcp.BeginConnect(new IPEndPoint(IPAddress.Parse(ip), port),
-					ServerConnectCallBack, socketTcp);
-				var flag = asyncResult.AsyncWaitHandle.WaitOne(overtime, exitContext: true);
-				if (!flag)
-				{
-					Close();
-					SocketTools.LogMsg("Tcp客户端连接超时", LogLevel.Error);
-					clientCallBack?.Invoke(flag);
-				}
-			}
-			catch (Exception ex)
-			{
-				SocketTools.LogMsg("Tcp客户端启动失败：" + ex.Message, LogLevel.Error);
-				clientCallBack?.Invoke(obj: false);
-			}
-		}
-
-		public void StartAsClient_Name(string name, int port, Action<bool> cb = null)
-		{
-			try
-			{
-				clientCallBack = cb;
-				var asyncResult = socketTcp.BeginConnect(
-					new IPEndPoint(Dns.GetHostEntry(name).AddressList[0], port), ServerConnectCallBack, socketTcp);
-				var flag = asyncResult.AsyncWaitHandle.WaitOne(overtime, exitContext: true);
-				if (!flag)
-				{
-					Close();
-					SocketTools.LogMsg("Tcp客户端连接超时", LogLevel.Error);
-					clientCallBack?.Invoke(flag);
-				}
-			}
-			catch (Exception ex)
-			{
-				SocketTools.LogMsg("Tcp客户端启动失败：" + ex.Message, LogLevel.Error);
-				clientCallBack?.Invoke(false);
-			}
-		}
-
-		private void ServerConnectCallBack(IAsyncResult ar)
-		{
-			try
-			{
-				socketTcp.EndConnect(ar);
-				session = new T();
-				session.StartRcvData(socketTcp, delegate
-				{
-					SocketTools.LogMsg("Tcp服务器断开连接......", LogLevel.Info);
-					clientCallBack?.Invoke(false);
-				});
-				SocketTools.LogMsg("Tcp连接服务器成功！正在接收数据......", LogLevel.Info);
-				clientCallBack?.Invoke(true);
-			}
-			catch (Exception ex)
-			{
-				SocketTools.LogMsg("Tcp客户端关闭：" + ex.Message, LogLevel.Error);
-				clientCallBack?.Invoke(false);
-			}
-		}
-
-		public bool Close()
-		{
-			try
-			{
-				serverCallBack = null;
-				clientCallBack = null;
-				if (socketTcp != null)
-				{
-					if (socketTcp.Connected)
-					{
-						socketTcp.Shutdown(SocketShutdown.Both);
-					}
-
-					socketTcp.Close();
-				}
-
-				return true;
-			}
-			catch (Exception arg)
-			{
-				SocketTools.LogMsg("Tcp关闭Socket错误：" + arg, LogLevel.Error);
-				return false;
-			}
-		}
-
-		public void SetLog(bool log = true, Action<string, int> logCallBack = null)
-		{
-			if (!log)
-			{
-				SocketTools.log = false;
-			}
-
-			if (logCallBack != null)
-			{
-				SocketTools.logCallBack = logCallBack;
-			}
-		}
-	}
+                _socket.Close();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Close TcpSocketClient Error:{e.Message}");
+            }
+        }
+    }
 }
