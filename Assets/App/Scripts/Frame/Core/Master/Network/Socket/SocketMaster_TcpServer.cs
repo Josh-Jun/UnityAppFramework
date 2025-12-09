@@ -108,7 +108,7 @@ namespace App.Core.Master
         }
         
         /// <summary> 客户端转发客户端(1人) </summary>
-        public void C2CPushMsgClient(PushMsg msg)
+        public void ForwardClientMsgToClient(PushMsg msg)
         {
             var list = LanSocketTcpServer.Instance.GetClients(msg.clients);
             foreach (var client in list)
@@ -118,7 +118,7 @@ namespace App.Core.Master
         }
         
         /// <summary> 客户端转发客户端(多人) </summary>
-        public void C2CPushMsgClientList(PushMsg msg)
+        public void ForwardClientMsgToClientList(PushMsg msg)
         {
             var list = LanSocketTcpServer.Instance.GetClients(msg.clients);
             foreach (var client in list)
@@ -128,7 +128,7 @@ namespace App.Core.Master
         }
         
         /// <summary> 客户端转发客户端(移除自己) </summary>
-        public void C2CPushMsgOtherClient(SocketTcpClient session, PushMsg msg)
+        public void ForwardClientMsgToOtherClient(SocketTcpClient session, PushMsg msg)
         {
             var list = LanSocketTcpServer.Instance.GetAllClient();
             foreach (var client in list.Where(item => item.Ip != session.Ip))
@@ -138,7 +138,7 @@ namespace App.Core.Master
         }
         
         /// <summary> 客户端转发客户端(所有人) </summary>
-        public void C2CPushMsgAllClient(PushMsg msg)
+        public void ForwardClientMsgToAllClient(PushMsg msg)
         {
             var list = LanSocketTcpServer.Instance.GetAllClient();
             foreach (var client in list)

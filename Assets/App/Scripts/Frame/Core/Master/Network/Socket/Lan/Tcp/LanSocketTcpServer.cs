@@ -85,17 +85,17 @@ namespace App.Core.Master
                     SocketMaster.Instance.ReceiveClientMsg((PushMsg)msgPack.msg);
                     break;
                 case (int)LAN_CMD.CCMsg_All:
-                    SocketMaster.Instance.C2CPushMsgAllClient((PushMsg)msgPack.msg);
+                    SocketMaster.Instance.ForwardClientMsgToAllClient((PushMsg)msgPack.msg);
                     break;
                 case (int)LAN_CMD.CCMsg_One:
-                    SocketMaster.Instance.C2CPushMsgClient((PushMsg)msgPack.msg);
+                    SocketMaster.Instance.ForwardClientMsgToClient((PushMsg)msgPack.msg);
                     break;
                 case (int)LAN_CMD.CCMsg_List:
-                    SocketMaster.Instance.C2CPushMsgClientList((PushMsg)msgPack.msg);
+                    SocketMaster.Instance.ForwardClientMsgToClientList((PushMsg)msgPack.msg);
                     break;
                 case (int)LAN_CMD.CCMsg_UnSelf:
                     var client = msgPack.session as SocketTcpClient;
-                    SocketMaster.Instance.C2CPushMsgOtherClient(client, (PushMsg)msgPack.msg);
+                    SocketMaster.Instance.ForwardClientMsgToOtherClient(client, (PushMsg)msgPack.msg);
                     break;
                 default:
                     break;
