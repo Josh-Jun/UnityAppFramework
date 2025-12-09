@@ -36,11 +36,11 @@ namespace App.Core.Master
             {
                 callback?.Invoke(success);
                 if (success) return;
-                AutoReConnect(ip, port, callback);
+                AutoRestart(ip, port, callback);
             });
         }
         
-        private void AutoReConnect(string ip, int port, Action<bool> callback)
+        public void AutoRestart(string ip, int port, Action<bool> callback)
         {
             TimeTaskMaster.Instance.AddTimeTask(() =>
             {
@@ -52,7 +52,7 @@ namespace App.Core.Master
                     {
                         callback?.Invoke(success);
                         if (success) return;
-                        AutoReConnect(ip, port, callback);
+                        AutoRestart(ip, port, callback);
                     }, 1);
                 });
             }, 1);

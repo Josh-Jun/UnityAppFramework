@@ -15,7 +15,11 @@ namespace App.Core.Master
         {
             LanSocketTcpServer.Instance.StartServer(ip, port, callback);
         }
-
+        /// <summary> 自动重启服务端 </summary>
+        public void AutoRestartTcpServer(string ip, int port, Action<bool> callback)
+        {
+            LanSocketTcpServer.Instance.AutoRestart(ip, port, callback);
+        }
         /// <summary> 给所有客户端发送消息 </summary>
         public void ServerSendMsgToAllClient(string eventName, string data)
         {
