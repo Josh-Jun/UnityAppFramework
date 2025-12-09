@@ -10,9 +10,9 @@ namespace App.Core.Master
     /// </summary>
     public partial class SocketMaster : SingletonMonoEvent<SocketMaster>
     {
-        public void ConnectTcpServer(string ip, int port)
+        public void ConnectTcpServer(string ip, int port, Action<bool> callback)
         {
-            LanSocketTcpClient.Instance.ConnectServer(ip, port);
+            LanSocketTcpClient.Instance.ConnectServer(ip, port, callback);
         }
 
         public void ClientSendMsgToServer(string eventName, string data)

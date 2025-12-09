@@ -25,7 +25,12 @@ namespace App.Core.Master
         {
             TIME_UPDATE_ID = TimeUpdateMaster.Instance.StartTimer(Update);
             server = new SocketUdp<SocketUdpClient>();
-            server.StartServer(port);
+            server.StartServer(port, success =>
+            {
+                if (success) return;
+                server?.Close();
+                StartServer(port);
+            });
         }
         /// <summary>发送消息 </summary>
         public void SendMsg(string msg)

@@ -24,11 +24,34 @@ namespace App.Core.Master
 
         private int TIME_UPDATE_ID = -1;
         
-        public void ConnectServer(string ip, int port)
+        public void ConnectServer(string ip, int port, Action<bool> callback)
         {
             TIME_UPDATE_ID = TimeUpdateMaster.Instance.StartTimer(Update);
             client = new SocketTcp<SocketTcpServer>();
-            client.ConnectServer(ip, port);
+            client.ConnectServer(ip, port, success =>
+            {
+                callback?.Invoke(success);
+                if (success) return;
+                AutoReConnect(ip, port, callback);
+            });
+        }
+        
+        private void AutoReConnect(string ip, int port, Action<bool> callback)
+        {
+            TimeTaskMaster.Instance.AddTimeTask(() =>
+            {
+                Close();
+                client = new SocketTcp<SocketTcpServer>();
+                client.ConnectServer(ip, port, success =>
+                {
+                    TimeTaskMaster.Instance.AddFrameTask(() =>
+                    {
+                        callback?.Invoke(success);
+                        if (success) return;
+                        AutoReConnect(ip, port, callback);
+                    }, 1);
+                });
+            }, 1);
         }
 
         private void Update(float time)

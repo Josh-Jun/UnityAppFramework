@@ -33,7 +33,7 @@ namespace App.Modules
         public string iconUrl;
         // 显示时间（只有Toast和Snackbar使用）
         public float time;
-        // 按钮事件 （按钮显示名称，按钮事件）
+        // 按钮事件 （按钮显示名称，按钮名称字体颜色，按钮事件）
         public List<(string BtnName, string Color, Action Event)> Events = new();
         // 上（1），中（0），下（-1）
         public int pos;

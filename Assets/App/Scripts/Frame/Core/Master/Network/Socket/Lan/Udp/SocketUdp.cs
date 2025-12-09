@@ -19,20 +19,23 @@ namespace App.Core.Master
 
         private Thread thread;
 
-        public T session = new T();
+        public T session;
         
-        public void StartServer(int port)
+        public void StartServer(int port, Action<bool> callback)
         {
             try
             {
+                session = new T();
                 _socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
                 iep = new IPEndPoint(IPAddress.Broadcast, port);
                 ep = iep;
                 thread = new Thread(StartServerReceive);
                 thread.Start();
+                callback?.Invoke(true);
             }
             catch (Exception e)
             {
+                callback?.Invoke(false);
                 Debug.LogError($"Start TcpSocketServer Error:{e.Message}");
             }
         }
@@ -44,18 +47,21 @@ namespace App.Core.Master
             session.ReceiveData();
         }
 
-        public void ConnectServer(int port)
+        public void ConnectServer(int port, Action<bool> callback)
         {
             try
             {
+                session = new T();
                 iep = new IPEndPoint(IPAddress.Any, port);
                 _socket.Bind(iep);
                 ep = iep;
                 thread = new Thread(StartClientReceive);
                 thread.Start();
+                callback?.Invoke(true);
             }
             catch (Exception e)
             {
+                callback?.Invoke(false);
                 Debug.LogError($"Start TcpSocketClient Error:{e.Message}");
             }
         }

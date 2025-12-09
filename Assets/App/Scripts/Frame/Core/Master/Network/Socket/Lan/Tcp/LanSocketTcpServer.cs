@@ -28,11 +28,34 @@ namespace App.Core.Master
         public List<SocketTcpClient> GetClients(List<string> ips) => server.clients.FindAll(c => ips.Contains(c.Ip));
         public List<SocketTcpClient> GetAllClient() => server.clients;
 
-        public void StartServer(string ip, int port)
+        public void StartServer(string ip, int port, Action<bool> callback)
         {
             TIME_UPDATE_ID = TimeUpdateMaster.Instance.StartTimer(Update);
             server = new SocketTcp<SocketTcpClient>();
-            server.StartServer(ip, port);
+            server.StartServer(ip, port, success =>
+            {
+                callback?.Invoke(success);
+                if (success) return;
+                AutoReConnect(ip, port, callback);
+            });
+        }
+        
+        private void AutoReConnect(string ip, int port, Action<bool> callback)
+        {
+            TimeTaskMaster.Instance.AddTimeTask(() =>
+            {
+                Close();
+                server = new SocketTcp<SocketTcpClient>();
+                server.StartServer(ip, port, success =>
+                {
+                    TimeTaskMaster.Instance.AddFrameTask(() =>
+                    {
+                        callback?.Invoke(success);
+                        if (success) return;
+                        AutoReConnect(ip, port, callback);
+                    }, 1);
+                });
+            }, 1);
         }
 
         private void Update(float time)

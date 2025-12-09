@@ -16,21 +16,25 @@ namespace App.Core.Master
         private const int backlog = 100;
 
         public T server;
-
+        private Action<bool> serverConnectCallback;
         public readonly List<T> clients = new();
+        private Action<bool> clientConnectCallback;
 
-        public void StartServer(string ip, int port)
+        public void StartServer(string ip, int port, Action<bool> callback)
         {
             try
             {
+                serverConnectCallback = callback;
                 _socket.SendTimeout = timeout;
                 _socket.ReceiveTimeout = timeout;
                 _socket.Bind(new IPEndPoint(IPAddress.Parse(ip), port));
                 _socket.Listen(backlog);
                 _socket.BeginAccept(ClientConnectCallBack, _socket);
+                serverConnectCallback?.Invoke(true);
             }
             catch (Exception e)
             {
+                serverConnectCallback?.Invoke(false);
                 Debug.LogError($"Start TcpSocketServer Error:{e.Message}");
             }
         }
@@ -52,21 +56,24 @@ namespace App.Core.Master
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                serverConnectCallback?.Invoke(false);
+                Debug.LogError($"Connect TcpSocketServer Error:{e.Message}");
                 throw;
             }
 
             _socket.BeginAccept(ClientConnectCallBack, _socket);
         }
 
-        public void ConnectServer(string ip, int port)
+        public void ConnectServer(string ip, int port, Action<bool> callback)
         {
             try
             {
+                clientConnectCallback = callback;
                 _socket.SendTimeout = timeout;
                 _socket.ReceiveTimeout = timeout;
                 var ar = _socket.BeginConnect(new IPEndPoint(IPAddress.Parse(ip), port), ServerConnectCallBack, null);
                 var flag = ar.AsyncWaitHandle.WaitOne(timeout, true);
+                clientConnectCallback?.Invoke(flag);
                 if (!flag)
                 {
                     Close();
@@ -74,6 +81,7 @@ namespace App.Core.Master
             }
             catch (Exception e)
             {
+                clientConnectCallback?.Invoke(false);
                 Debug.LogError($"Start TcpSocketClient Error:{e.Message}");
             }
         }
@@ -86,11 +94,13 @@ namespace App.Core.Master
                 server = new T();
                 server.BeginReceiveData(_socket, () =>
                 {
-                    
+                    clientConnectCallback?.Invoke(false);
                 });
+                clientConnectCallback?.Invoke(true);
             }
             catch (Exception e)
             {
+                clientConnectCallback?.Invoke(false);
                 Debug.LogError($"Start TcpSocketClient Error:{e.Message}");
             }
         }
@@ -99,6 +109,8 @@ namespace App.Core.Master
         {
             try
             {
+                serverConnectCallback = null;
+                clientConnectCallback = null;
                 if (_socket == null) return;
                 if (_socket.Connected)
                 {
