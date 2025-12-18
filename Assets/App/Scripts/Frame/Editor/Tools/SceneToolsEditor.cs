@@ -75,7 +75,7 @@ namespace App.Editor.Tools
                 EditorSceneManager.OpenScene(scene.path);
             }
         }
-
+        // [InitializeOnLoadMethod]
         private static void EditorApplication_PlayModeStateChanged(PlayModeStateChange obj)
         {
             switch (obj)
@@ -117,6 +117,8 @@ namespace App.Editor.Tools
                 case PlayModeStateChange.ExitingPlayMode: //停止播放立即监听
                     // Debug.Log("在退出播放模式时，在编辑器处于编辑模式之前发生。");
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(obj), obj, null);
             }
         }
 

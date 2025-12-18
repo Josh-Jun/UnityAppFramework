@@ -8,7 +8,7 @@ namespace App.Core.Tools
     /// </summary>
     public class AudioTools
     {
-        private const int ReScaleFactor = 32767;
+        private const float ReScaleFactor = 32768f;
         /// <summary>
         /// AudioClip转byte[]
         /// </summary>
@@ -51,7 +51,7 @@ namespace App.Core.Tools
                 samples[i / 2] = ft;
             }
 
-            var audioClip = AudioClip.Create("audioClip", samples.Length, 1, frequency, false);
+            var audioClip = AudioClip.Create("clip", samples.Length, 1, frequency, false);
             audioClip.SetData(samples, 0);
 
             return audioClip;

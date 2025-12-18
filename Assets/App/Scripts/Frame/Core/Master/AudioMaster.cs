@@ -53,6 +53,11 @@ namespace App.Core.Master
         public void PushAudioBase64(string base64Chunk)
         {
             var wavBytes = Convert.FromBase64String(base64Chunk);
+            PushAudioBytes(wavBytes);
+        }
+
+        public void PushAudioBytes(byte[] wavBytes)
+        {
             // 转成 short[]
             var pcm16 = new short[wavBytes.Length / 2];
             Buffer.BlockCopy(wavBytes, 0, pcm16, 0, wavBytes.Length);
@@ -60,18 +65,12 @@ namespace App.Core.Master
             var samples = new float[pcm16.Length];
             for (var i = 0; i < pcm16.Length; i++)
                 samples[i] = pcm16[i] / 32768f;
-            lock (_audioQueue)
-            {
-                _audioQueue.Enqueue(samples);
-            }
+            PushAudio(samples);
         }
 
         public void PushAudio(float[] samples)
         {
-            lock (_audioQueue)
-            {
-                _audioQueue.Enqueue(samples);
-            }
+            _audioQueue.Enqueue(samples);
         }
 
         private bool isStreamAudioPlaying = false;
@@ -105,10 +104,7 @@ namespace App.Core.Master
         public void StopStreamAudio(string sourceName)
         {
             if(string.IsNullOrEmpty(sourceName)) return;
-            lock (_audioQueue)
-            {
-                _audioQueue.Clear();
-            }
+            _audioQueue.Clear();
             isStreamAudioPlaying = false;
             GetEffectAudio(sourceName).clip = null;
             GetEffectAudio(sourceName).Stop();
@@ -125,16 +121,9 @@ namespace App.Core.Master
             effectAudios[sourceName].playOnAwake = false;
         }
 
-        public AudioSource GetEffectAudio(string sourceName = null)
+        private AudioSource GetEffectAudio(string sourceName = null)
         {
             return string.IsNullOrEmpty(sourceName) ? defaultEffectAudio : effectAudios.GetValueOrDefault(sourceName, defaultEffectAudio);
-        }
-
-        public void RemoveEffectAudio(string sourceName)
-        {
-            if (!effectAudios.TryGetValue(sourceName, out var effectAudio)) return;
-            Destroy(effectAudio.gameObject);
-            effectAudios.Remove(sourceName);
         }
 
         /// <summary>
