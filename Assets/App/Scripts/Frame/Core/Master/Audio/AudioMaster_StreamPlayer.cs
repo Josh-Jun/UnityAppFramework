@@ -16,14 +16,13 @@ namespace App.Core.Master
         private int streamSampleRate = 8000;
         private int streamChannels = 1;
         private const float initialBufferTime = 0.2f; // 初始缓冲时间（秒）
-        private const int streamBufferSize = 24000;         // 缓冲区最大缓存样本数（例如约3秒）
-        private const int clipLengthSeconds = 300;    // 流式 AudioClip 的总时长（秒），避免很快自然播放结束
+        private const int streamBufferSize = 24000; // 缓冲区最大缓存样本数（例如约3秒）
+        private const int clipLengthSeconds = 300; // 流式 AudioClip 的总时长（秒），避免很快自然播放结束
 
         // 播放状态
         private bool isInitialized = false;
         private bool isPlaying = false;
         private bool isFirstChunk = true;
-        private bool finalChunkReceived = false;
         private int bufferReadPosition = 0;
         private int totalSamplesWritten = 0;
 
@@ -56,10 +55,10 @@ namespace App.Core.Master
             stream.transform.SetParent(background.transform);
             streamAudioSource = stream.GetOrAddComponent<AudioSource>();
             streamAudioSource.playOnAwake = false;
-            
+
             streamTimeId = TimeUpdateMaster.Instance.StartTimer(StreamUpdate);
         }
-        
+
         private void StreamUpdate(float time)
         {
             // 定期检查缓冲区状态
@@ -67,8 +66,9 @@ namespace App.Core.Master
             MonitorBufferStatus();
             lastBufferSizeCheck = Time.time;
         }
+
         private AudioSource streamAudioSource;
-        
+
         public void InitStreamAudioPlayer(int sampleRate, int channels, float multiplier)
         {
             if (isInitialized) return;
@@ -93,24 +93,24 @@ namespace App.Core.Master
             isInitialized = true;
             Debug.Log($"音频系统初始化完成，采样率：{sampleRate}Hz，声道：{channels}，缓冲区：{streamBufferSize}样本");
         }
-        
-        public void AddAudioData(string base64Chunk, bool isFinalChunk = false)
+
+        public void AddAudioData(string base64Chunk)
         {
             var pcmData = Convert.FromBase64String(base64Chunk);
-            AddAudioData(pcmData, isFinalChunk);
+            AddAudioData(pcmData);
         }
-        
+
         /// <summary>
         /// 添加新的音频数据块
         /// </summary>
-        public void AddAudioData(byte[] pcmData, bool isFinalChunk = false)
+        public void AddAudioData(byte[] pcmData)
         {
             // 转换数据格式
             var floatData = ConvertByteToFloat16(pcmData);
-            AddAudioData(floatData, isFinalChunk);
+            AddAudioData(floatData);
         }
-        
-        public void AddAudioData(float[] floatData, bool isFinalChunk = false)
+
+        public void AddAudioData(float[] floatData)
         {
             // 处理第一个数据块的特殊逻辑：只写入缓冲，不进入队列，避免被重复读取
             if (isFirstChunk)
@@ -125,15 +125,9 @@ namespace App.Core.Master
                     audioStreamQueue.Enqueue(floatData);
                 }
             }
-
-            // 如果是最终数据块，设置标志
-            if (isFinalChunk)
-            {
-                StartCoroutine(MarkAsFinalChunk());
-            }
         }
 
-        
+
         public void SetStreamAudioVolume(float volume)
         {
             if (streamAudioSource)
@@ -149,6 +143,7 @@ namespace App.Core.Master
                 streamAudioSource.mute = mute;
             }
         }
+
         /// <summary>
         /// 处理第一个数据块
         /// </summary>
@@ -202,12 +197,8 @@ namespace App.Core.Master
             {
                 // 刷新缓冲区数据
                 RefillBufferFromQueue();
-
-                // 检查播放状态
-                CheckPlaybackCompletion();
-
                 // 控制刷新频率
-                yield return new WaitForSeconds(0.05f);
+                yield return new WaitForEndOfFrame();
             }
         }
 
@@ -216,8 +207,6 @@ namespace App.Core.Master
         /// </summary>
         private void OnAudioReadCallback(float[] data)
         {
-            var hasData = false;
-
             lock (bufferLock)
             {
                 for (var i = 0; i < data.Length; i++)
@@ -226,7 +215,6 @@ namespace App.Core.Master
                     {
                         data[i] = audioStreamBuffer[bufferReadPosition];
                         bufferReadPosition++;
-                        hasData = true;
                     }
                     else
                     {
@@ -237,27 +225,6 @@ namespace App.Core.Master
             }
 
             totalSamplesWritten += data.Length;
-
-            // 如果没有数据可读，检查是否可以停止
-            if (hasData) return;
-            int queueCount;
-            int unplayedSamples;
-
-            lock (queueLock)
-            {
-                queueCount = audioStreamQueue.Count;
-            }
-
-            lock (bufferLock)
-            {
-                unplayedSamples = Mathf.Max(0, audioStreamBuffer.Count - bufferReadPosition);
-            }
-
-            // 只有在明确收到最终数据块，且缓冲与队列都为空时才停止
-            if (finalChunkReceived && queueCount == 0 && unplayedSamples == 0)
-            {
-                StartCoroutine(FadeOutAndStop());
-            }
         }
 
         /// <summary>
@@ -296,52 +263,11 @@ namespace App.Core.Master
         }
 
         /// <summary>
-        /// 检查播放完成状态
-        /// </summary>
-        private void CheckPlaybackCompletion()
-        {
-            lock (bufferLock)
-            {
-                lock (queueLock)
-                {
-                    // 检查是否还有未播放的数据
-                    if (!finalChunkReceived || audioStreamQueue.Count != 0 || GetUnplayedDuration() <= 0)
-                    {
-                        StartCoroutine(FadeOutAndStop());
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// 淡出并停止播放
-        /// </summary>
-        private IEnumerator FadeOutAndStop()
-        {
-            if (!isPlaying) yield break;
-
-            const float duration = 0.1f;
-            var startVolume = streamAudioSource.volume;
-            var timer = 0f;
-
-            while (timer < duration)
-            {
-                timer += Time.deltaTime;
-                streamAudioSource.volume = Mathf.Lerp(startVolume, 0f, timer / duration);
-                yield return null;
-            }
-
-            StopPlayback();
-            streamAudioSource.volume = startVolume;
-
-            Debug.Log("音频播放完成");
-        }
-
-        /// <summary>
         /// 停止播放
         /// </summary>
         public void StopPlayback()
         {
+            Debug.Log("停止播放");
             if (streamAudioSource && streamAudioSource.isPlaying)
             {
                 streamAudioSource.Stop();
@@ -349,7 +275,6 @@ namespace App.Core.Master
 
             isPlaying = false;
             isFirstChunk = true;
-            finalChunkReceived = false;
 
             lock (queueLock)
             {
@@ -361,23 +286,6 @@ namespace App.Core.Master
                 audioStreamBuffer.Clear();
                 bufferReadPosition = 0;
             }
-
-            if (EventDispatcher.HasEventListener("StreamAudioPlayEnd"))
-            {
-                EventDispatcher.TriggerEvent("StreamAudioPlayEnd");
-            }
-        }
-
-        /// <summary>
-        /// 标记为最终数据块
-        /// </summary>
-        private IEnumerator MarkAsFinalChunk()
-        {
-            // 等待一小段时间确保所有数据都已处理
-            yield return new WaitForSeconds(0.5f);
-
-            finalChunkReceived = true;
-            Debug.Log("接收到最终数据块，播放结束后将在数据播放完毕后停止");
         }
 
         /// <summary>
@@ -391,7 +299,7 @@ namespace App.Core.Master
         /// <summary>
         /// 获取未播放时长（秒）
         /// </summary>
-        private float GetUnplayedDuration()
+        public float GetUnplayedDuration()
         {
             lock (bufferLock)
             {
@@ -405,14 +313,14 @@ namespace App.Core.Master
         /// </summary>
         private void MonitorBufferStatus()
         {
+#if UNITY_EDITOR
             var bufferDuration = GetBufferDuration();
             var unplayedDuration = GetUnplayedDuration();
-
-            if (!isPlaying) return;
             lock (queueLock)
             {
                 Debug.Log($"缓冲区状态 - 总缓冲: {bufferDuration:F2}s, 未播放: {unplayedDuration:F2}s, 队列: {audioStreamQueue.Count}块");
             }
+#endif
         }
 
         /// <summary>
@@ -481,8 +389,10 @@ namespace App.Core.Master
             {
                 Destroy(streamingClip);
             }
+
             TimeUpdateMaster.Instance.EndTimer(streamTimeId);
         }
+
         /// <summary>
         /// 重置播放器状态
         /// </summary>
@@ -491,7 +401,6 @@ namespace App.Core.Master
             StopPlayback();
             isFirstChunk = true;
             totalSamplesWritten = 0;
-            finalChunkReceived = false;
 
             Debug.Log("播放器已重置");
         }
