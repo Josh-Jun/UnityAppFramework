@@ -391,7 +391,7 @@ namespace App.Core.Master
         /// <summary>
         /// 获取未播放时长（秒）
         /// </summary>
-        public float GetUnplayedDuration()
+        private float GetUnplayedDuration()
         {
             lock (bufferLock)
             {
