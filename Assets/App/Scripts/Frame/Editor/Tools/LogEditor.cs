@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 using UnityEditor;
 
@@ -7,7 +8,7 @@ namespace App.Editor.Tools
     {
         private class LogEditorConfig
         {
-            public string logScriptPath = "";
+            public readonly string logScriptPath;
             public int instanceID = 0;
 
             public LogEditorConfig(string logScriptPath)
@@ -17,7 +18,7 @@ namespace App.Editor.Tools
         }
 
         //Add your custom Log class here  
-        private static LogEditorConfig[] _logEditorConfig = new LogEditorConfig[]
+        private static readonly LogEditorConfig[] _logEditorConfig = new LogEditorConfig[]
         {
             new LogEditorConfig("Assets/App/Scripts/Frame/Core/Tools/Log/Log.cs"),
         };
@@ -25,26 +26,24 @@ namespace App.Editor.Tools
         [UnityEditor.Callbacks.OnOpenAssetAttribute(-1)]
         private static bool OnOpenAsset(int instanceID, int line)
         {
-            for (int i = _logEditorConfig.Length - 1; i >= 0; --i)
+            for (var i = _logEditorConfig.Length - 1; i >= 0; --i)
             {
                 var configTmp = _logEditorConfig[i];
                 UpdateLogInstanceID(configTmp);
-                if (instanceID == configTmp.instanceID)
+                if (instanceID != configTmp.instanceID) continue;
+                var track = GetStackTrace();
+                if (!string.IsNullOrEmpty(track))
                 {
-                    var statckTrack = GetStackTrace();
-                    if (!string.IsNullOrEmpty(statckTrack))
-                    {
-                        var fileNames = statckTrack.Split('\n');
-                        var fileName = GetCurrentFullFileName(fileNames);
-                        var fileLine = LogFileNameToFileLine(fileName);
-                        fileName = GetRealFileName(fileName);
+                    var fileNames = track.Split('\n');
+                    var fileName = GetCurrentFullFileName(fileNames);
+                    var fileLine = LogFileNameToFileLine(fileName);
+                    fileName = GetRealFileName(fileName);
 
-                        AssetDatabase.OpenAsset(AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(fileName), fileLine);
-                        return true;
-                    }
-
-                    break;
+                    AssetDatabase.OpenAsset(AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(fileName), fileLine);
+                    return true;
                 }
+
+                break;
             }
 
             return false;
@@ -55,31 +54,26 @@ namespace App.Editor.Tools
             var consoleWindowType = typeof(EditorWindow).Assembly.GetType("UnityEditor.ConsoleWindow");
             var fieldInfo =
                 consoleWindowType.GetField("ms_ConsoleWindow", BindingFlags.Static | BindingFlags.NonPublic);
+            if (fieldInfo == null) return "";
             var consoleWindowInstance = fieldInfo.GetValue(null);
 
-            if (null != consoleWindowInstance)
-            {
-                if ((object)EditorWindow.focusedWindow == consoleWindowInstance)
-                {
-                    // Get ListViewState in ConsoleWindow  
-                    // var listViewStateType = typeof(EditorWindow).Assembly.GetType("UnityEditor.ListViewState");  
-                    // fieldInfo = consoleWindowType.GetField("m_ListView", BindingFlags.Instance | BindingFlags.NonPublic);  
-                    // var listView = fieldInfo.GetValue(consoleWindowInstance);  
+            if (null == consoleWindowInstance) return "";
+            if (EditorWindow.focusedWindow != (EditorWindow)consoleWindowInstance) return "";
+            // Get ListViewState in ConsoleWindow  
+            // var listViewStateType = typeof(EditorWindow).Assembly.GetType("UnityEditor.ListViewState");  
+            // fieldInfo = consoleWindowType.GetField("m_ListView", BindingFlags.Instance | BindingFlags.NonPublic);  
+            // var listView = fieldInfo.GetValue(consoleWindowInstance);  
 
-                    // Get row in listViewState  
-                    // fieldInfo = listViewStateType.GetField("row", BindingFlags.Instance | BindingFlags.Public);  
-                    // int row = (int)fieldInfo.GetValue(listView);  
+            // Get row in listViewState  
+            // fieldInfo = listViewStateType.GetField("row", BindingFlags.Instance | BindingFlags.Public);  
+            // int row = (int)fieldInfo.GetValue(listView);  
 
-                    // Get m_ActiveText in ConsoleWindow  
-                    fieldInfo = consoleWindowType.GetField("m_ActiveText",
-                        BindingFlags.Instance | BindingFlags.NonPublic);
-                    string activeText = fieldInfo.GetValue(consoleWindowInstance).ToString();
-
-                    return activeText;
-                }
-            }
-
-            return "";
+            // Get m_ActiveText in ConsoleWindow  
+            fieldInfo = consoleWindowType.GetField("m_ActiveText",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            if (fieldInfo == null) return "";
+            var activeText = fieldInfo.GetValue(consoleWindowInstance).ToString();
+            return activeText;
         }
 
         private static void UpdateLogInstanceID(LogEditorConfig config)
@@ -90,9 +84,9 @@ namespace App.Editor.Tools
             }
 
             var assetLoadTmp = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(config.logScriptPath);
-            if (null == assetLoadTmp)
+            if (!assetLoadTmp)
             {
-                throw new System.Exception("not find asset by path=" + config.logScriptPath);
+                throw new Exception("not find asset by path=" + config.logScriptPath);
             }
 
             config.instanceID = assetLoadTmp.GetInstanceID();
@@ -100,26 +94,22 @@ namespace App.Editor.Tools
 
         private static string GetCurrentFullFileName(string[] fileNames)
         {
-            string retValue = "";
-            int findIndex = -1;
+            var retValue = "";
+            var findIndex = -1;
 
-            for (int i = fileNames.Length - 1; i >= 0; --i)
+            for (var i = fileNames.Length - 1; i >= 0; --i)
             {
-                bool isCustomLog = false;
-                for (int j = _logEditorConfig.Length - 1; j >= 0; --j)
+                var isCustomLog = false;
+                for (var j = _logEditorConfig.Length - 1; j >= 0; --j)
                 {
-                    if (fileNames[i].Contains(_logEditorConfig[j].logScriptPath))
-                    {
-                        isCustomLog = true;
-                        break;
-                    }
-                }
-
-                if (isCustomLog)
-                {
-                    findIndex = i;
+                    if (!fileNames[i].Contains(_logEditorConfig[j].logScriptPath)) continue;
+                    isCustomLog = true;
                     break;
                 }
+
+                if (!isCustomLog) continue;
+                findIndex = i;
+                break;
             }
 
             if (findIndex >= 0 && findIndex < fileNames.Length - 1)
@@ -132,8 +122,8 @@ namespace App.Editor.Tools
 
         private static string GetRealFileName(string fileName)
         {
-            int indexStart = fileName.IndexOf("(at ") + "(at ".Length;
-            int indexEnd = ParseFileLineStartIndex(fileName) - 1;
+            var indexStart = fileName.IndexOf("(at ", StringComparison.Ordinal) + "(at ".Length;
+            var indexEnd = ParseFileLineStartIndex(fileName) - 1;
 
             fileName = fileName.Substring(indexStart, indexEnd - indexStart);
             return fileName;
@@ -141,9 +131,9 @@ namespace App.Editor.Tools
 
         private static int LogFileNameToFileLine(string fileName)
         {
-            int findIndex = ParseFileLineStartIndex(fileName);
-            string stringParseLine = "";
-            for (int i = findIndex; i < fileName.Length; ++i)
+            var findIndex = ParseFileLineStartIndex(fileName);
+            var stringParseLine = "";
+            for (var i = findIndex; i < fileName.Length; ++i)
             {
                 var charCheck = fileName[i];
                 if (!IsNumber(charCheck))
@@ -161,11 +151,11 @@ namespace App.Editor.Tools
 
         private static int ParseFileLineStartIndex(string fileName)
         {
-            int retValue = -1;
-            for (int i = fileName.Length - 1; i >= 0; --i)
+            var retValue = -1;
+            for (var i = fileName.Length - 1; i >= 0; --i)
             {
                 var charCheck = fileName[i];
-                bool isNumber = IsNumber(charCheck);
+                var isNumber = IsNumber(charCheck);
                 if (isNumber)
                 {
                     retValue = i;
@@ -184,7 +174,7 @@ namespace App.Editor.Tools
 
         private static bool IsNumber(char c)
         {
-            return c >= '0' && c <= '9';
+            return c is >= '0' and <= '9';
         }
     }
 }

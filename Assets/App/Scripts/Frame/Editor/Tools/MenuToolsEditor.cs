@@ -16,49 +16,12 @@ namespace App.Editor.Tools
 {
     public class MenuToolsEditor : AssetModificationProcessor
     {
-        private const int MENU_LEVEL = 1;
-        
-        #region 脚本模板导入修改命名空间
-
-        private static StringBuilder head = new StringBuilder(1024);
-        private static string[] temps = { "Logic", "View" };
-        /// <summary>  
-        /// 此函数在asset被创建完，文件已经生成到磁盘上，但是没有生成.meta文件和import之前被调用  
-        /// </summary>  
-        /// <param name="newFileMeta">newfilemeta 是由创建文件的path加上.meta组成的</param>  
-        public static void OnWillCreateAsset(string newFileMeta)
-        {
-            head.Length = 0;
-            head.AppendLine("/* *");
-            head.AppendLine(" * ===============================================");
-            head.AppendLine($" * author      : {EditorHelper.GetGitConfig("user.name")}");
-            head.AppendLine($" * e-mail      : {EditorHelper.GetGitConfig("user.email")}");
-            head.AppendLine($" * create time : {DateTime.Now.Year}年{DateTime.Now.Month}月{DateTime.Now.Day} {DateTime.Now.Hour}:{DateTime.Now.Minute}");
-            head.AppendLine(" * function    : ");
-            head.AppendLine(" * ===============================================");
-            head.AppendLine(" * */");
-            
-            var newFilePath = newFileMeta.Replace(".meta", "");
-            if (Path.GetExtension(newFilePath) != ".txt" && Path.GetExtension(newFilePath) != ".cs") return;
-            var realPath = Application.dataPath.Replace("Assets", "") + newFilePath;
-            if (!File.Exists(realPath)) return;
-            var scriptContent = File.ReadAllText(realPath);
-            // 这里实现自定义的一些规则
-            // scriptContent = scriptContent.Replace("#SCRIPTNAME#", Path.GetFileNameWithoutExtension(newFilePath));
-            var name = Path.GetFileNameWithoutExtension(newFilePath);
-            name = temps.Aggregate(name, (current, t) => current.Replace(t, ""));
-
-            scriptContent = scriptContent.Replace("#MODULE#", name);
-            scriptContent = scriptContent.Insert(0, head.ToString());
-
-            File.WriteAllText(realPath, scriptContent);
-        }
-
-        #endregion
+        private static StringBuilder sb = new(1024);
+        private static readonly string target_path = $"{Application.dataPath}/App/Scripts/Runtime/Helper/Asset";
         
         #region 自动更新签名文件设置
 
-        [MenuItem("App/Editor/UpdateKeystore %#K", false, MENU_LEVEL)]
+        [MenuItem("App/Editor/UpdateKeystore %#K", false, EditorHelper.MENU_LEVEL)]
         public static void UpdateKeystore()
         {
             if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.Android)
@@ -74,48 +37,9 @@ namespace App.Editor.Tools
 
         #endregion
         
-        #region 自动生成资源包枚举类型 Win(Ctrl+Shift+E) Mac(Cmd+Shift+E)
-        
-        private static readonly string[] watchers = new[]
-        {
-            "Assets/Settings/AssetBundleCollectorSetting.asset"
-        };
-        public static string[] OnWillSaveAssets(string[] paths)
-        {
-            foreach (var path in paths)
-            {
-                // 生成资源包枚举
-                if (path == watchers[0])
-                {
-                    UpdateAssetPackage();
-                }
-            }
-            return paths;
-        }
-        private static StringBuilder sb = new StringBuilder(1024);
-        private static readonly string target_path = $"{Application.dataPath}/App/Scripts/Runtime/Helper/Asset";
-
-        [MenuItem("App/Editor/UpdateAssetPackage %#E", false, MENU_LEVEL)]
-        public static void UpdateAssetPackage()
-        {
-            sb.Length = 0;
-            var config = AssetDatabase.LoadAssetAtPath<AssetBundleCollectorSetting>(watchers[0]);
-            sb.AppendLine("public enum AssetPackage");
-            sb.AppendLine("{");
-            foreach (var package in config.Packages)
-            {
-                sb.AppendLine($"    {package.PackageName},");
-            }
-            sb.AppendLine("}");
-            File.WriteAllText($"{target_path}/AssetPackage.cs", sb.ToString());
-            AssetDatabase.Refresh();
-        }
-
-        #endregion
-
         #region 拷贝模板脚本到Unity脚本模板路径 Win(Ctrl+Shift+T) Mac(Cmd+Shift+T)
 
-        [MenuItem("App/Editor/CopyTemplateScripts %#T", false, MENU_LEVEL)]
+        [MenuItem("App/Editor/CopyTemplateScripts %#T", false, EditorHelper.MENU_LEVEL)]
         public static void CopyTemplateScripts()
         {
             var template_script_path = $"{Application.dataPath}/{EditorHelper.BaseEditorPath()}/Tools/ScriptTemplates";
@@ -142,7 +66,7 @@ namespace App.Editor.Tools
         #region Protobuf2CS Win(Ctrl+Shift+Y) Mac(Cmd+Shift+Y)
 
         
-        [MenuItem("App/Editor/Protobuf2CS %#Y", false, MENU_LEVEL)]
+        [MenuItem("App/Editor/Protobuf2CS %#Y", false, EditorHelper.MENU_LEVEL)]
         public static void Protobuf2CS()
         {
             var cdPath = Application.dataPath.Replace("Assets", "Tools/protobuf");
@@ -171,11 +95,31 @@ namespace App.Editor.Tools
         }
 
         #endregion
+
+        #region 生成资源包枚举类型 Win(Ctrl+Shift+E) Mac(Cmd+Shift+E)
+
+        [MenuItem("App/Editor/UpdateAssetPackage %#E", false, EditorHelper.MENU_LEVEL)]
+        public static void UpdateAssetPackage()
+        {
+            sb.Length = 0;
+            var config = AssetDatabase.LoadAssetAtPath<AssetBundleCollectorSetting>(EditorHelper.watchers[0]);
+            sb.AppendLine("public enum AssetPackage");
+            sb.AppendLine("{");
+            foreach (var package in config.Packages)
+            {
+                sb.AppendLine($"    {package.PackageName},");
+            }
+            sb.AppendLine("}");
+            File.WriteAllText($"{target_path}/AssetPackage.cs", sb.ToString());
+            AssetDatabase.Refresh();
+        }
+
+        #endregion
         
         #region 更新资源路径配置文件（自动/手动）Win(Ctrl+Shift+R) Mac(Cmd+Shift+R)
         
         [DidReloadScripts]
-        [MenuItem("App/Editor/UpdateAssetPath %#R", false, MENU_LEVEL)]
+        [MenuItem("App/Editor/UpdateAssetPath %#R", false, EditorHelper.MENU_LEVEL)]
         public static void UpdateAssetPath()
         {
             sb.Length = 0;

@@ -18,12 +18,18 @@ namespace App.Editor.Helper
         void OnDestroy();
     }
 
-    public class EditorHelper
+    public static class EditorHelper
     {
         private const string FileName = "App.Editor";
         private const string Extension = "asmdef";
 
         public const string AppConfigPath = "Assets/Resources/AppConfig.asset";
+        public const int MENU_LEVEL = 1;
+        
+        public static readonly string[] watchers = new[]
+        {
+            "Assets/Settings/AssetBundleCollectorSetting.asset"
+        };
 
         public static string BaseEditorPath(string filename = FileName, string extension = Extension)
         {

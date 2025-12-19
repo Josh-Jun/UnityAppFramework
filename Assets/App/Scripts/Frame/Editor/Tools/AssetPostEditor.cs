@@ -9,7 +9,7 @@
 
 using UnityEditor;
 
-public class PostAssetEditor : AssetPostprocessor 
+public class AssetPostEditor : AssetPostprocessor 
 {
     private void OnPreprocessTexture()
     {

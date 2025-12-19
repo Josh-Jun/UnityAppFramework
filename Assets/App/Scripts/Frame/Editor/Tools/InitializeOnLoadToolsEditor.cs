@@ -10,8 +10,7 @@ using UnityEngine.UIElements;
 
 namespace App.Editor.Tools
 {
-    [InitializeOnLoad]
-    public class SceneToolsEditor
+    public static class InitializeOnLoadToolsEditor
     {
         private const int MENU_LEVEL = 0;
         private const string MENU_AUTO_PLAY_PATH = "App/Editor/Launcher/AutoPLay _F8";
@@ -30,7 +29,8 @@ namespace App.Editor.Tools
         private static bool s_Initialized = false;
         private static bool s_InitializationFailed = false;
 
-        static SceneToolsEditor()
+        [InitializeOnLoadMethod]
+        public static void InitializeOnLoad()
         {
             EditorApplication.playModeStateChanged += EditorApplication_PlayModeStateChanged;
             var auto_play_key = GetKey(MENU_AUTO_PLAY_PATH);

@@ -8,7 +8,7 @@ namespace App.Editor.Helper
     /// <summary>
     /// 功能:Excel工具 
     /// </summary>
-    public class ExcelHelper
+    public static class ExcelHelper
     {
         public static void WriteExcel(string path, List<ExcelData> excel)
         {
