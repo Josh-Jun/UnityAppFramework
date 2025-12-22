@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 
 namespace App.Editor.Tools
 {
-    public static class InitializeOnLoadToolsEditor
+    public static class ToolbarEditor
     {
         private const int MENU_LEVEL = 0;
         private const string MENU_AUTO_PLAY_PATH = "App/Editor/Launcher/AutoPLay _F8";

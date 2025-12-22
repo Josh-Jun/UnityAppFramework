@@ -17,7 +17,7 @@ using UnityEngine;
 
 namespace App.Editor.Tools
 {
-    public class AssetModificationEditor : AssetModificationProcessor
+    public class AssetModifyEditor : AssetModificationProcessor
     {
         #region 脚本模板导入修改命名空间
         
