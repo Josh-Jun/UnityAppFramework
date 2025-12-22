@@ -313,9 +313,22 @@ namespace App.Core.Master
         /// </summary>
         private void MonitorBufferStatus()
         {
-#if UNITY_EDITOR
             var bufferDuration = GetBufferDuration();
             var unplayedDuration = GetUnplayedDuration();
+            lock (queueLock)
+            {
+                if (isPlaying)
+                {
+                    if (unplayedDuration <= 0 && audioStreamQueue.Count == 0)
+                    {
+                        if (EventDispatcher.HasEventListener("StreamAudioPlayCompleted"))
+                        {
+                            EventDispatcher.TriggerEvent("StreamAudioPlayCompleted");
+                        }
+                    }
+                }
+            }
+#if UNITY_EDITOR
             lock (queueLock)
             {
                 Debug.Log($"缓冲区状态 - 总缓冲: {bufferDuration:F2}s, 未播放: {unplayedDuration:F2}s, 队列: {audioStreamQueue.Count}块");
