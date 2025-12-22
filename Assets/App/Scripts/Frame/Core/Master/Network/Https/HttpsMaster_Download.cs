@@ -13,6 +13,29 @@ namespace App.Core.Master
         private const string AudioCachePath = "Cache/Audios/";
         private const string AssetBundleCachePath = "Cache/AssetBundles/";
 
+        public void ClearDownloadCache()
+        {
+            var path = PlatformMaster.Instance.GetDataPath("Cache");
+            FileTools.DeleteFolder(path);
+        }
+        
+        public void ClearTextureCache()
+        {
+            var path = PlatformMaster.Instance.GetDataPath("Cache/Textures");
+            FileTools.DeleteFolder(path);
+        }
+        
+        public void ClearAudioCache()
+        {
+            var path = PlatformMaster.Instance.GetDataPath("Cache/Audios");
+            FileTools.DeleteFolder(path);
+        }
+        
+        public void ClearAssetBundleCache()
+        {
+            var path = PlatformMaster.Instance.GetDataPath("Cache/AssetBundles");
+            FileTools.DeleteFolder(path);
+        }
 
         public string DownloadTexture(string url, Action<Texture2D> callback)
         {
