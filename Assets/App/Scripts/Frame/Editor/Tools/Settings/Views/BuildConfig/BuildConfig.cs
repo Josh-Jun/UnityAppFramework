@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using App.Core.Helper;
 using App.Editor.Helper;
 using UnityEditor;
@@ -21,14 +22,15 @@ namespace App.Editor.View
     {
         private readonly string excelPath = $"{Application.dataPath.Replace("Assets", "")}Data/excel";
 
-        private Dictionary<string, List<ConfigData>> excels = new Dictionary<string, List<ConfigData>>();
+        private readonly Dictionary<string, List<ConfigData>> excels = new();
+        private List<FileInfo> files = new();
 
         private ConfigMold ConfigMold;
-        
+
         private VisualElement sheet_root;
         private VisualTreeAsset sheet_item;
         private Button build_sheets_button;
-        
+
         private int select_index = 0;
 
         public void OnCreate(VisualElement root)
@@ -51,24 +53,38 @@ namespace App.Editor.View
             };
             root.Q<Button>("BuildAll").clicked += ApplyConfig;
 
-            excels = GetConfigData();
+            files = GetFiles();
 
             sheet_root = root.Q<VisualElement>("SheetRoot");
             var excel_list = root.Q<ListView>("ExcelList");
-            
-            excel_list.itemsSource = excels.Keys.ToList();
+
+            excel_list.itemsSource = files.Select(file => file.Name).ToList();
             excel_list.makeItem = MakeListItem;
             excel_list.bindItem = BindListItem;
             excel_list.selectionType = SelectionType.Single;
             excel_list.selectedIndicesChanged += OnItemsChosen;
             excel_list.SetSelection(select_index);
         }
+
         private void OnItemsChosen(IEnumerable<int> objs)
         {
             foreach (var index in objs)
             {
                 sheet_root.Clear();
-                var sheets = excels[excels.Keys.ToList()[index]];
+                if (!excels.TryGetValue(files[index].Name, out var sheets))
+                {
+                    var excelDatas = ExcelHelper.ReadExcel(files[index].FullName);
+                    var list = (from data in excelDatas
+                        where !data.sheetName.Contains("#")
+                        select new ConfigData
+                        {
+                            name = data.sheetName, excelData = data
+                        }).ToList();
+                    excels.Add(files[index].Name, list);
+                }
+
+                sheets = excels[files[index].Name];
+
                 foreach (var sheet in sheets)
                 {
                     var _sheet = sheet_item.CloneTree();
@@ -77,16 +93,19 @@ namespace App.Editor.View
                     _sheet.Q<Button>().tooltip = $"Build {sheet.name} to config";
                     sheet_root.Add(_sheet);
                 }
+
                 select_index = index;
-                build_sheets_button.tooltip = $"Build {excels.Keys.ToList()[index]} all sheet to config";
+                build_sheets_button.tooltip = $"Build {files[index].Name} all sheet to config";
             }
         }
+
         private void BindListItem(VisualElement ve, int index)
         {
             if (ve is not Label label) return;
-            label.text = excels.Keys.ToList()[index];
+            label.text = files[index].Name;
             label.name = index.ToString();
         }
+
         private static VisualElement MakeListItem()
         {
             var label = new Label
@@ -99,6 +118,7 @@ namespace App.Editor.View
             };
             return label;
         }
+
         public void OnUpdate()
         {
         }
@@ -107,25 +127,10 @@ namespace App.Editor.View
         {
         }
 
-        private Dictionary<string, List<ConfigData>> GetConfigData()
+        private List<FileInfo> GetFiles()
         {
-            var datas = new Dictionary<string, List<ConfigData>>();
-            var files = EditorHelper.GetFiles(excelPath, "xlsx");
-            foreach (var file in files)
-            {
-                if (file.Name.Contains("~$")) continue;
-                if (datas.ContainsKey(file.Name)) continue;
-                var excelDatas = ExcelHelper.ReadExcel(file.FullName);
-                var list = (from data in excelDatas
-                    where !data.sheetName.Contains("#")
-                    select new ConfigData
-                    {
-                        name = data.sheetName, excelData = data
-                    }).ToList();
-                datas.Add(file.Name, list);
-            }
-
-            return datas;
+            var fileInfos = EditorHelper.GetFiles(excelPath, "xlsx");
+            return fileInfos.Where(fi => !fi.Name.Contains("~$")).ToList();
         }
 
         private void ApplyConfig()
@@ -208,14 +213,19 @@ namespace App.Editor.View
             stringBuilder.AppendLine("namespace App.Core.Master");
             stringBuilder.AppendLine("{");
             stringBuilder.AppendLine("    [Config]");
-            stringBuilder.AppendLine($"    public class {data.sheetName}{mold}Config : Singleton<{data.sheetName}{mold}Config>, IConfig");
+            stringBuilder.AppendLine(
+                $"    public class {data.sheetName}{mold}Config : Singleton<{data.sheetName}{mold}Config>, IConfig");
             stringBuilder.AppendLine("    {");
-            stringBuilder.AppendLine($"        private {data.sheetName}{mold}Data _data = new {data.sheetName}{mold}Data();");
-            stringBuilder.AppendLine($"        private readonly Dictionary<int, {data.sheetName}> _dict = new Dictionary<int, {data.sheetName}>();");
-            stringBuilder.AppendLine($"        private const string location = \"Assets/Bundles/Builtin/Configs/{mold}/{data.sheetName}{mold}Data.{mold.ToString().ToLower()}\";");
+            stringBuilder.AppendLine(
+                $"        private {data.sheetName}{mold}Data _data = new {data.sheetName}{mold}Data();");
+            stringBuilder.AppendLine(
+                $"        private readonly Dictionary<int, {data.sheetName}> _dict = new Dictionary<int, {data.sheetName}>();");
+            stringBuilder.AppendLine(
+                $"        private const string location = \"Assets/Bundles/Builtin/Configs/{mold}/{data.sheetName}{mold}Data.{mold.ToString().ToLower()}\";");
             stringBuilder.AppendLine("        public void Load()");
             stringBuilder.AppendLine("        {");
-            stringBuilder.AppendLine($"            var textAsset = AssetsMaster.Instance.LoadAssetSync<TextAsset>(location);");
+            stringBuilder.AppendLine(
+                $"            var textAsset = AssetsMaster.Instance.LoadAssetSync<TextAsset>(location);");
             switch (mold)
             {
                 case ConfigMold.Json:
@@ -269,7 +279,8 @@ namespace App.Editor.View
 
             stringBuilder.Append("}");
 
-            var output = $"{Application.dataPath}/App/Scripts/Frame/Core/Master/Config/{mold}/{data.sheetName}{mold}Config.cs";
+            var output =
+                $"{Application.dataPath}/App/Scripts/Frame/Core/Master/Config/{mold}/{data.sheetName}{mold}Config.cs";
             SaveFile(output, stringBuilder);
         }
 
@@ -353,7 +364,8 @@ namespace App.Editor.View
                             continue;
                         }
                     }
-                    var _str = c == data.datas.GetLength(1) -1 ? "" : ",";
+
+                    var _str = c == data.datas.GetLength(1) - 1 ? "" : ",";
                     stringBuilder.AppendLine($"      \"{data.datas[4, c]}\": {GetJsonData(dataStr, typeStr)}{_str}");
                 }
 
@@ -377,6 +389,7 @@ namespace App.Editor.View
             {
                 sb.Append("[");
             }
+
             var arraySplit = array.Length > 1 ? "," : "";
             foreach (var value in array)
             {
@@ -384,7 +397,7 @@ namespace App.Editor.View
                 {
                     sb.Append($"\"{value}\"");
                 }
-                else if(typeStr.Contains("Vector3"))
+                else if (typeStr.Contains("Vector3"))
                 {
                     if (string.IsNullOrEmpty(value))
                     {
@@ -429,12 +442,13 @@ namespace App.Editor.View
                 for (var c = 3; c < data.datas.GetLength(1); c++)
                 {
                     if ($"{data.datas[1, c]}".Contains("#") || $"{data.datas[2, c]}".Contains("#")) continue;
-                    
-                    if (data.datas[5, c].ToString().Contains("int") || data.datas[5, c].ToString().Contains("long") || data.datas[5, c].ToString().Contains("float"))
+
+                    if (data.datas[5, c].ToString().Contains("int") || data.datas[5, c].ToString().Contains("long") ||
+                        data.datas[5, c].ToString().Contains("float"))
                     {
                         data.datas[r, c] ??= 0;
                     }
-                    
+
                     if ($"{data.datas[4, c]}" == "Id")
                     {
                         if (!ids.Contains($"{data.datas[r, c]}"))
@@ -447,6 +461,7 @@ namespace App.Editor.View
                             continue;
                         }
                     }
+
                     stringBuilder.Append($" {data.datas[4, c]}=\"{data.datas[r, c]}\"");
                 }
 

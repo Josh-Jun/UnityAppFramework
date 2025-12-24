@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using OfficeOpenXml;
 using UnityEngine;
 
@@ -18,7 +19,6 @@ namespace App.Editor.Helper
             }
 
             var fs = new FileStream(path, FileMode.Create);
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using var package = new ExcelPackage(fs);
             for (var i = 0; i < excel.Count; i++)
             {
@@ -27,7 +27,7 @@ namespace App.Editor.Helper
                 {
                     for (var c = 1; c < excel[i].datas.GetLength(1); c++)
                     {
-                        worksheet.Cells[r, c].Value = excel[i].datas[r,c];
+                        worksheet.Cells[r, c].Value = excel[i].datas[r, c];
                     }
                 }
             }
@@ -35,35 +35,36 @@ namespace App.Editor.Helper
             package.Save();
         }
 
-        public static List<ExcelData> ReadExcel(string path)
+        public static List<ExcelData> ReadExcel(string filePath)
         {
-            if (!File.Exists(path))
+            if (!File.Exists(filePath))
             {
-                Debug.LogError($"Not Found Excel: {path}");
+                Debug.LogError($"Not Found Excel: {filePath}");
             }
 
-            using var fs = new FileStream(path, FileMode.Open);
+            using var fs = new FileStream(filePath, FileMode.Open);
             var excel = new List<ExcelData>();
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using var package = new ExcelPackage(fs);
-            foreach (var worksheet in package.Workbook.Worksheets)
+            Parallel.ForEach(package.Workbook.Worksheets, worksheet =>
             {
-                if(worksheet.Dimension == null) continue;
                 var data = new ExcelData
                 {
                     sheetName = worksheet.Name,
-                    datas = new object[worksheet.Dimension.End.Row + 1,worksheet.Dimension.End.Column + 1]
+                    datas = new object[worksheet.Dimension.End.Row + 1, worksheet.Dimension.End.Column + 1]
                 };
-                for (int c = worksheet.Dimension.Start.Column, c1 = worksheet.Dimension.End.Column; c <= c1; c++)
+                lock (excel)
                 {
-                    for (int r = worksheet.Dimension.Start.Row, r1 = worksheet.Dimension.End.Row; r <= r1; r++)
+                    for (int c = worksheet.Dimension.Start.Column, c1 = worksheet.Dimension.End.Column; c <= c1; c++)
                     {
-                        data.datas[r,c] = worksheet.GetValue(r, c);
+                        for (int r = worksheet.Dimension.Start.Row, r1 = worksheet.Dimension.End.Row; r <= r1; r++)
+                        {
+                            data.datas[r, c] = worksheet.GetValue(r, c);
+                        }
                     }
-                }
 
-                excel.Add(data);
-            }
+                    excel.Add(data);
+                }
+            });
 
             return excel;
         }
