@@ -23,6 +23,23 @@ namespace App.Editor.Tools
 {
     public static class BuildViewScriptEditor
     {
+        private static readonly Dictionary<GUIContent, GenericMenu.MenuFunction2> LayerGenericMenus = new()
+        {
+            { new GUIContent("0"), obj => { SetViewLayer(0); } },
+            { new GUIContent("1"), obj => { SetViewLayer(1); } },
+            { new GUIContent("2"), obj => { SetViewLayer(2); } },
+            { new GUIContent("3"), obj => { SetViewLayer(3); } },
+            { new GUIContent("4"), obj => { SetViewLayer(4); } },
+            { new GUIContent("5"), obj => { SetViewLayer(5); } },
+            { new GUIContent("6"), obj => { SetViewLayer(6); } },
+            { new GUIContent("7"), obj => { SetViewLayer(7); } },
+        };
+        private static readonly Dictionary<GUIContent, GenericMenu.MenuFunction2> MoldGenericMenus = new()
+        {
+            { new GUIContent("UI2D"), obj => { SetViewMold(ViewMold.UI2D); } },
+            { new GUIContent("UI3D"), obj => { SetViewMold(ViewMold.UI3D); } },
+            { new GUIContent("Go3D"), obj => { SetViewMold(ViewMold.Go3D); } },
+        };
         private const float MinWindowWidth = 360; // 设置显示图标和Toggle的最小窗口宽度
         private static readonly List<Type> ViewTypes = EditorHelper.GetAssemblyTypes<ViewBase>();
         private static readonly ViewOfAttribute ViewAttribute = new("", ViewMold.UI2D, "");
@@ -59,8 +76,8 @@ namespace App.Editor.Tools
             }
 
             DrawViewActiveToggle(rect, attribute.Active, isDisabled);
-            DrawViewLayer(rect, attribute.Layer);
-            DrawViewMold(rect, attribute.View);
+            DrawViewLayer(rect, attribute.Layer, isDisabled);
+            DrawViewMold(rect, attribute.View, isDisabled);
         }
         
         private static void DrawViewActiveToggle(Rect rect, bool active, bool isDisabled = true)
@@ -74,22 +91,63 @@ namespace App.Editor.Tools
             EditorGUI.EndDisabledGroup();
         }
         
-        private static void DrawViewLayer(Rect rect, int layer)
+        private static void DrawViewLayer(Rect rect, int layer, bool isDisabled = true)
         {
             var r = new Rect(rect);
             r.x += r.width - 80;
             r.width = 64;
+            
+            if (!isDisabled)
+            {
+                OnHierarchyGUIGenericMenu(r, LayerGenericMenus);
+            }
+            
+            EditorGUI.BeginDisabledGroup(isDisabled);
             var style = new GUIStyle(EditorStyles.label) { normal = new GUIStyleState() { textColor = Color.yellow } };
             GUI.Label(r, $"层级:[{layer}]", style);
+            EditorGUI.EndDisabledGroup();
         }
         
-        private static void DrawViewMold(Rect rect, ViewMold viewMold)
+        private static void DrawViewMold(Rect rect, ViewMold viewMold, bool isDisabled = true)
         {
             var r = new Rect(rect);
             r.x += r.width - 160;
             r.width = 72;
+            
+            if (!isDisabled)
+            {
+                OnHierarchyGUIGenericMenu(r, MoldGenericMenus);
+            }
+
+            EditorGUI.BeginDisabledGroup(isDisabled);
             var style = new GUIStyle(EditorStyles.label) { normal = new GUIStyleState() { textColor = Color.green } };
             GUI.Label(r, $"类型:[{viewMold}]", style);
+            EditorGUI.EndDisabledGroup();
+        }
+
+        private static void OnHierarchyGUIGenericMenu(Rect rect, Dictionary<GUIContent, GenericMenu.MenuFunction2>  menus)
+        {
+            if (Event.current == null || !rect.Contains(Event.current.mousePosition) || Event.current.button != 1 || Event.current.type > EventType.MouseUp) return;
+            if (!Selection.activeGameObject) return;
+            // 创建 GenericMenu
+            var menu = new GenericMenu();
+            foreach (var item in menus)
+            {
+                menu.AddItem(item.Key, false, item.Value, Selection.activeGameObject);
+            }
+            // 在鼠标位置显示菜单
+            menu.ShowAsContext();
+            Event.current.Use();
+        }
+
+        private static void SetViewLayer(int layer)
+        {
+            ViewAttribute.SetLayer(layer);
+        }
+        
+        private static void SetViewMold(ViewMold viewMold)
+        {
+            ViewAttribute.SetViewMold(viewMold);
         }
         
         /// <summary>
@@ -186,79 +244,6 @@ namespace App.Editor.Tools
             BuildLogicScript(Selection.activeGameObject);
         }
         
-        [MenuItem("GameObject/Set View Mold/UI2D",  false, MenuItemPriority)]
-        public static void SetViewMoldUI2D()
-        {
-            ViewAttribute.SetViewMold(ViewMold.UI2D);
-        }
-        [MenuItem("GameObject/Set View Mold/UI3D",  false, MenuItemPriority)]
-        public static void SetViewMoldUI3D()
-        {
-            ViewAttribute.SetViewMold(ViewMold.UI3D);
-        }
-        [MenuItem("GameObject/Set View Mold/Go3D",  false, MenuItemPriority)]
-        public static void SetViewMoldGo3D()
-        {
-            ViewAttribute.SetViewMold(ViewMold.Go3D);
-        }
-        
-        [MenuItem("GameObject/Set View Layer/0", false, MenuItemPriority)]
-        public static void SetViewLayer0()
-        {
-            ViewAttribute.SetLayer(0);
-        }
-        [MenuItem("GameObject/Set View Layer/1", false, MenuItemPriority)]
-        public static void SetViewLayer1()
-        {
-            ViewAttribute.SetLayer(1);
-        }
-        [MenuItem("GameObject/Set View Layer/2", false, MenuItemPriority)]
-        public static void SetViewLayer2()
-        {
-            ViewAttribute.SetLayer(2);
-        }
-        [MenuItem("GameObject/Set View Layer/3", false, MenuItemPriority)]
-        public static void SetViewLayer3()
-        {
-            ViewAttribute.SetLayer(3);
-        }
-        [MenuItem("GameObject/Set View Layer/4", false, MenuItemPriority)]
-        public static void SetViewLayer4()
-        {
-            ViewAttribute.SetLayer(4);
-        }
-        [MenuItem("GameObject/Set View Layer/5", false, MenuItemPriority)]
-        public static void SetViewLayer5()
-        {
-            ViewAttribute.SetLayer(5);
-        }
-        [MenuItem("GameObject/Set View Layer/6", false, MenuItemPriority)]
-        public static void SetViewLayer6()
-        {
-            ViewAttribute.SetLayer(6);
-        }
-        [MenuItem("GameObject/Set View Layer/7", false, MenuItemPriority)]
-        public static void SetViewLayer7()
-        {
-            ViewAttribute.SetLayer(7);
-        }
-        
-        // 只有选中了 GameObject 时才可用
-        [MenuItem("GameObject/Set View Layer/0", true)]
-        [MenuItem("GameObject/Set View Layer/1", true)]
-        [MenuItem("GameObject/Set View Layer/2", true)]
-        [MenuItem("GameObject/Set View Layer/3", true)]
-        [MenuItem("GameObject/Set View Layer/4", true)]
-        [MenuItem("GameObject/Set View Layer/5", true)]
-        [MenuItem("GameObject/Set View Layer/6", true)]
-        [MenuItem("GameObject/Set View Layer/7", true)]
-        [MenuItem("GameObject/Set View Mold/UI2D", true)]
-        [MenuItem("GameObject/Set View Mold/UI3D", true)]
-        [MenuItem("GameObject/Set View Mold/Go3D", true)]
-        public static bool ValidateMenuItemSetViewData()
-        {
-            return Selection.activeGameObject && Selection.activeGameObject.name.EndsWith("View") && ViewTypes.All(t => t.Name != Selection.activeGameObject.name) && Selection.activeGameObject.name != "UpdateView";
-        }
         [MenuItem("GameObject/Build View&&Logic Script", true)]
         [MenuItem("GameObject/Build View Script", true)]
         public static bool ValidateMenuItemBuildViewScript()
