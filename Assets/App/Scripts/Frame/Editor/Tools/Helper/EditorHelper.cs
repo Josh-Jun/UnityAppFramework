@@ -75,6 +75,13 @@ namespace App.Editor.Helper
             var obj = Activator.CreateInstance(type); //创建此类型实例
             return obj as IToolkitEditor;
         }
+        
+        public static List<Type> GetAssemblyTypes<T>(string assemblyString = "App.Module")
+        {
+            var assembly = Assembly.Load(assemblyString);
+            var types = assembly.GetTypes();
+            return types.Where(type => type.Name != typeof(T).Name && typeof(T).IsAssignableFrom(type)).ToList();
+        }
 
         public static List<string> GetScriptName(string assemblyName, string type, bool fullname = true)
         {

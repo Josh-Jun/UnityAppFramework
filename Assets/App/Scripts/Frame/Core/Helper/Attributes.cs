@@ -46,6 +46,32 @@ namespace App.Core.Helper
             this.Active = Active;
             this.Location = Location;
         }
+#if UNITY_EDITOR
+        public void SetLocation(string location)
+        {
+            this.Location = location;
+        }
+        
+        public void SetName(string name)
+        {
+            this.Name = name;
+        }
+
+        public void SetActive(bool active)
+        {
+            this.Active = active;
+        }
+
+        public void SetLayer(int layer)
+        {
+            this.Layer = layer;
+        }
+
+        public void SetViewMold(ViewMold view)
+        {
+            this.View = view;
+        }
+#endif
     }
 
     [AttributeUsage(AttributeTargets.Class)]
