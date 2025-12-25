@@ -69,19 +69,19 @@ namespace App.Editor.View
             
         }
         
-        private AnimationCurve EaseToCurve(Ease ease)
+        private AnimationCurve EaseToCurve(Ease easer)
         {
             // 创建一个新的AnimationCurve
-            AnimationCurve curve = new AnimationCurve();
+            var curve = new AnimationCurve();
  
-            for (int i = 0; i < POINT_COUNT; i++)
+            for (var i = 0; i < POINT_COUNT; i++)
             {
                 var t1 = i * 1f;
-                var v1 = POINT_COUNT * Evaluate(ease, t1, POINT_COUNT, _overshootOrAmplitude, _period);
+                var v1 = POINT_COUNT * Evaluate(easer, t1, POINT_COUNT, _overshootOrAmplitude, _period);
                 curve.AddKey(t1, v1);
 
                 var t2 = (i + 1) * 1f;
-                var v2 = POINT_COUNT * Evaluate(ease, t2, POINT_COUNT, _overshootOrAmplitude, _period);
+                var v2 = POINT_COUNT * Evaluate(easer, t2, POINT_COUNT, _overshootOrAmplitude, _period);
                 curve.AddKey(t2, v2);
             }
  

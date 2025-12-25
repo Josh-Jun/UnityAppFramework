@@ -318,10 +318,9 @@ namespace App.Core.Master
             const string script = "App.Editor.Helper.EditorHelper";
             const string assembly = "App.Editor";
             const string function = "ChangeGameViewResolution";
-            var type = AppHelper.GetAssemblyType(script, assembly);
-            var helper = Activator.CreateInstance(type);
-            var method = type.GetMethod(function);
-            method?.Invoke(helper, new object[] { orientation });
+            var type = System.Reflection.Assembly.Load(assembly).GetType(script);
+            var method = type.GetMethod(function, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+            method?.Invoke(null, new object[] { orientation });
 #endif
             switch (orientation)
             {
