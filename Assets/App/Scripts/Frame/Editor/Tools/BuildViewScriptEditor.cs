@@ -8,7 +8,6 @@
  * */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,7 +15,6 @@ using System.Reflection;
 using System.Text;
 using App.Core.Helper;
 using App.Core.Master;
-using App.Core.Tools;
 using App.Editor.Helper;
 using UnityEngine;
 using UnityEditor;
@@ -27,7 +25,7 @@ namespace App.Editor.Tools
     {
         private const float MinWindowWidth = 360; // 设置显示图标和Toggle的最小窗口宽度
         private static readonly List<Type> ViewTypes = EditorHelper.GetAssemblyTypes<ViewBase>();
-        private static ViewOfAttribute ViewAttribute = new ViewOfAttribute("", ViewMold.UI2D, "");
+        private static readonly ViewOfAttribute ViewAttribute = new("", ViewMold.UI2D, "");
         private static readonly string scriptViewPath = $"{EditorHelper.BaseEditorPath()}/Tools/LogicViewScript/ui_view_script.txt";
         private static readonly string scriptLogicPath = $"{EditorHelper.BaseEditorPath()}/Tools/LogicViewScript/ui_logic_script.txt";
 
