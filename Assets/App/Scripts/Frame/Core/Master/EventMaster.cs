@@ -25,11 +25,12 @@ namespace App.Core.Master
     public class EventMaster : SingletonMono<EventMaster>
     {
         private readonly Dictionary<string, List<EventData>> Events = new();
+        private const BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public;
 
         public void AddEventMethods(object obj)
         {
             var type = obj.GetType();
-            var methods = type.GetMethods().Where(info => info.GetCustomAttributes(typeof(EventAttribute), false).Any()).ToList();
+            var methods = type.GetMethods(flags).Where(info => info.GetCustomAttributes(typeof(EventAttribute), false).Any()).ToList();
             foreach (var method in methods)
             {
                 var ea = method.GetCustomAttributes(typeof(EventAttribute), false).First() as EventAttribute;
@@ -52,7 +53,7 @@ namespace App.Core.Master
         public void AddEventMethods(ILogic logic)
         {
             var type = logic.GetType();
-            var methods = type.GetMethods().Where(info => info.GetCustomAttributes(typeof(EventAttribute), false).Any()).ToList();
+            var methods = type.GetMethods(flags).Where(info => info.GetCustomAttributes(typeof(EventAttribute), false).Any()).ToList();
             foreach (var method in methods)
             {
                 var ea = method.GetCustomAttributes(typeof(EventAttribute), false).First() as EventAttribute;
@@ -104,7 +105,7 @@ namespace App.Core.Master
                 if (va is ViewOfAttribute) continue;
                 var la = type.GetCustomAttributes(typeof(LogicOfAttribute), false).FirstOrDefault();
                 if (la is LogicOfAttribute) continue;
-                var methods = type.GetMethods()
+                var methods = type.GetMethods(flags)
                     .Where(info => info.GetCustomAttributes(typeof(EventAttribute), false).Any()).ToList();
                 foreach (var method in methods)
                 {
