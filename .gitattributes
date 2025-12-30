@@ -4,3 +4,4 @@
 "*.asset" filter=lfs diff=lfs merge=lfs -text
 "Chromium[[:space:]]Embedded[[:space:]]Framework" filter=lfs diff=lfs merge=lfs -text
 Excel2CSharp.exe filter=lfs diff=lfs merge=lfs -text
+Excel2CSharp filter=lfs diff=lfs merge=lfs -text
