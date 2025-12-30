@@ -20,7 +20,7 @@ namespace App.Editor.View
 
     public class BuildConfig : IToolkitEditor
     {
-        private readonly string excelPath = $"{Application.dataPath.Replace("Assets", "")}Data/excel";
+        private readonly string excelPath = $"{Application.dataPath.Replace("Assets", "")}Tools/config/excel";
 
         private readonly Dictionary<string, List<ConfigData>> excels = new();
         private List<FileInfo> files = new();
