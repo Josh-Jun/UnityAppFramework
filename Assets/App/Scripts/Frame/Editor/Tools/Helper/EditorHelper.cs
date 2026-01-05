@@ -141,6 +141,7 @@ namespace App.Editor.Helper
 
         public static void ChangeGameViewResolution(int orientation)
         {
+            if (EditorUserBuildSettings.activeBuildTarget is not (BuildTarget.Android or BuildTarget.iOS)) return;
             if (CurrentOrientation == orientation) return;
             CurrentOrientation = orientation;
             var width = orientation == 0 ? DefaultWidth : DefaultHeight;
