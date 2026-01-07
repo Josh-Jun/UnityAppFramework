@@ -18,7 +18,7 @@ namespace App.Core.Master
         //建立连接
         protected override void OnConnected()
         {
-            
+            Log.I("UDP已连接服务端");
         }
 
         //收到数据
@@ -31,7 +31,7 @@ namespace App.Core.Master
         //断开连接
         protected override void OnDisConnected()
         {
-            
+            Log.I("UDP已断开服务端");
         }
     }
 }

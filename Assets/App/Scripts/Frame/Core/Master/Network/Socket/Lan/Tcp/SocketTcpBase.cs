@@ -46,35 +46,31 @@ namespace App.Core.Master
         {
             try
             {
+                if (_socket == null) return;
+                if (!_socket.Connected) return;
                 var package = (SocketPackage)ar.AsyncState;
                 if (_socket.Available == 0)
                 {
                     OnDisConnected();
                     Clear();
+                    return;
+                }
+                var num = _socket.EndReceive(ar);
+                if (num > 0)
+                {
+                    package.headIndex += num;
+                    if (package.headIndex < SocketPackage.headLength)
+                    {
+                        _socket.BeginReceive(package.headBuffer, package.headIndex, SocketPackage.headLength - package.headIndex, SocketFlags.None, ReceiveHeadData, package);
+                        return;
+                    }
+                    package.InitBodyBuffer();
+                    _socket.BeginReceive(package.bodyBuffer, 0, package.bodyLength, SocketFlags.None, ReceiveBodyData, package);
                 }
                 else
                 {
-                    var num = _socket.EndReceive(ar);
-                    if (num > 0)
-                    {
-                        package.headIndex += num;
-                        if (package.headIndex < SocketPackage.headLength)
-                        {
-                            _socket.BeginReceive(package.headBuffer, package.headIndex,
-                                SocketPackage.headLength - package.headIndex, SocketFlags.None, ReceiveHeadData, package);
-                        }
-                        else
-                        {
-                            package.InitBodyBuffer();
-                            _socket.BeginReceive(package.bodyBuffer, 0, package.bodyLength, SocketFlags.None,
-                                ReceiveBodyData, package);
-                        }
-                    }
-                    else
-                    {
-                        OnDisConnected();
-                        Clear();
-                    }
+                    OnDisConnected();
+                    Clear();
                 }
             }
             catch (Exception e)
@@ -87,6 +83,8 @@ namespace App.Core.Master
         {
             try
             {
+                if (_socket == null) return;
+                if (!_socket.Connected) return;
                 var package = (SocketPackage)ar.AsyncState;
                 var num = _socket.EndReceive(ar);
                 if (num > 0)
@@ -94,16 +92,12 @@ namespace App.Core.Master
                     package.bodyIndex += num;
                     if (package.bodyIndex < package.bodyLength)
                     {
-                        _socket.BeginReceive(package.bodyBuffer, package.bodyIndex,
-                            package.bodyLength - package.bodyIndex, SocketFlags.None, ReceiveBodyData, package);
+                        _socket.BeginReceive(package.bodyBuffer, package.bodyIndex, package.bodyLength - package.bodyIndex, SocketFlags.None, ReceiveBodyData, package);
+                        return;
                     }
-                    else
-                    {
-                        OnReceiveMsg(package.bodyBuffer);
-                        package.ResetData();
-                        _socket.BeginReceive(package.headBuffer, 0, SocketPackage.headLength, SocketFlags.None,
-                            ReceiveHeadData, package);
-                    }
+                    OnReceiveMsg(package.bodyBuffer);
+                    package.ResetData();
+                    _socket.BeginReceive(package.headBuffer, 0, SocketPackage.headLength, SocketFlags.None, ReceiveHeadData, package);
                 }
                 else
                 {
@@ -117,6 +111,23 @@ namespace App.Core.Master
             }
         }
         
+        public void SendMsg(SocketMsg msg)
+        {
+            var data = SocketTools.PackageNetMsg(msg);
+            try
+            {
+                var networkStream = new NetworkStream(_socket);
+                if (networkStream.CanWrite)
+                {
+                    networkStream.BeginWrite(data, 0, data.Length, SendCallBack, networkStream);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Tcp SndMsg Error:{e.Message}");
+            }
+        }
+
         public void SendMsg(byte[] msg)
         {
             var data = SocketTools.PackageLengthInfo(msg);
@@ -153,9 +164,9 @@ namespace App.Core.Master
         
         private void SendCallBack(IAsyncResult ar)
         {
-            using var networkStream = (NetworkStream)ar.AsyncState;
             try
             {
+                var networkStream = (NetworkStream)ar.AsyncState;
                 networkStream.EndWrite(ar);
                 networkStream.Flush();
                 networkStream.Close();

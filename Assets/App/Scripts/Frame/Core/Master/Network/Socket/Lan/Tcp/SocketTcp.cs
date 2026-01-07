@@ -71,7 +71,7 @@ namespace App.Core.Master
                 clientConnectCallback = callback;
                 _socket.SendTimeout = timeout;
                 _socket.ReceiveTimeout = timeout;
-                var ar = _socket.BeginConnect(new IPEndPoint(IPAddress.Parse(ip), port), ServerConnectCallBack, null);
+                var ar = _socket.BeginConnect(new IPEndPoint(IPAddress.Parse(ip), port), ServerConnectCallBack, _socket);
                 var flag = ar.AsyncWaitHandle.WaitOne(timeout, true);
                 clientConnectCallback?.Invoke(flag);
                 if (!flag)
@@ -112,11 +112,8 @@ namespace App.Core.Master
                 serverConnectCallback = null;
                 clientConnectCallback = null;
                 if (_socket == null) return;
-                if (_socket.Connected)
-                {
-                    _socket.Shutdown(SocketShutdown.Both);
-                }
-
+                if (!_socket.Connected) return;
+                _socket.Shutdown(SocketShutdown.Both);
                 _socket.Close();
             }
             catch (Exception e)

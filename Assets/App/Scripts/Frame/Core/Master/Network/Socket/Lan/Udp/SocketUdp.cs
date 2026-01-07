@@ -26,8 +26,8 @@ namespace App.Core.Master
             try
             {
                 session = new T();
-                _socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
-                iep = new IPEndPoint(IPAddress.Broadcast, port);
+                iep = new IPEndPoint(IPAddress.Any, port);
+                _socket.Bind(iep);
                 ep = iep;
                 thread = new Thread(StartServerReceive);
                 thread.Start();
@@ -43,7 +43,6 @@ namespace App.Core.Master
         private void StartServerReceive()
         {
             session.BeginReceiveData(_socket, ep, thread);
-            session.SendMsg("");
             session.ReceiveData();
         }
 
@@ -52,8 +51,8 @@ namespace App.Core.Master
             try
             {
                 session = new T();
-                iep = new IPEndPoint(IPAddress.Any, port);
-                _socket.Bind(iep);
+                _socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
+                iep = new IPEndPoint(IPAddress.Broadcast, port);
                 ep = iep;
                 thread = new Thread(StartClientReceive);
                 thread.Start();
@@ -69,6 +68,7 @@ namespace App.Core.Master
         private void StartClientReceive()
         {
             session.BeginReceiveData(_socket, ep, thread);
+            session.SendMsg("");
             session.ReceiveData();
         }
 

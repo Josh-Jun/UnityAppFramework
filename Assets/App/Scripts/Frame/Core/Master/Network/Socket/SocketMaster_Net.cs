@@ -109,10 +109,5 @@ namespace App.Core.Master
         private void OnDisConnected()
         {
         }
-
-        private void OnApplicationQuit()
-        {
-            NetSocketClient.Instance.Close();
-        }
     }
 }

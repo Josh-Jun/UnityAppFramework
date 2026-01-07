@@ -118,8 +118,7 @@ namespace App.Core.Master
             if (client == null) return;
             try
             {
-                var bytes = SocketTools.PackageNetMsg(msg);
-                client.SendMsg(bytes);
+                client.SendMsg(msg);
             }
             catch (Exception e)
             {
@@ -133,8 +132,7 @@ namespace App.Core.Master
             if (client == null) return;
             try
             {
-                var bytes = SocketTools.PackageLengthInfo(msg);
-                client.SendMsg(bytes);
+                client.SendMsg(msg);
             }
             catch (Exception e)
             {
@@ -148,7 +146,7 @@ namespace App.Core.Master
             if (client == null) return;
             try
             {
-                client.SendMsg(SocketTools.PackageLengthInfo(bytes));
+                client.SendMsg(bytes);
             }
             catch (Exception e)
             {
@@ -158,14 +156,7 @@ namespace App.Core.Master
 
         public void Close()
         {
-            if (server is { server: not null })
-            {
-                server.clients.Clear();
-                server.server.Clear();
-                server.Close();
-                server = null;
-            }
-
+            server?.Close();
             TimeUpdateMaster.Instance.EndTimer(TIME_UPDATE_ID);
         }
     }

@@ -19,7 +19,7 @@ namespace App.Core.Master
         //建立连接
         protected override void OnConnected()
         {
-            
+            Log.I("UDP客户端已连接");
         }
 
         //收到数据
@@ -32,7 +32,7 @@ namespace App.Core.Master
         //断开连接
         protected override void OnDisConnected()
         {
-            
+            Log.I("UDP客户端已断开");
         }
     }
 }

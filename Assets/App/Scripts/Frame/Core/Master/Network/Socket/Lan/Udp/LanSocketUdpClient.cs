@@ -23,11 +23,11 @@ namespace App.Core.Master
         /// <summary> 初始化客户端 </summary>
         public void ConnectServer(int port)
         {
-            
             TIME_UPDATE_ID = TimeUpdateMaster.Instance.StartTimer(Update);
             client = new SocketUdp<SocketUdpServer>();
             client.ConnectServer(port, success =>
             {
+                Log.I($"ConnectUdpServer:{success}");
                 if (success) return;
                 client?.Close();
                 ConnectServer(port);
@@ -58,7 +58,7 @@ namespace App.Core.Master
         /// <summary>消息分发 </summary>
         private void HandOutMsg(string msg)
         {
-            
+            SocketMaster.Instance.ReceiveUdpServerMsg(msg);
         }
         /// <summary>退出Udp </summary>
         public void Close()

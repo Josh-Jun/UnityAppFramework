@@ -27,6 +27,7 @@ namespace App.Core.Master
             server = new SocketUdp<SocketUdpClient>();
             server.StartServer(port, success =>
             {
+                Log.I($"StartUdpServer:{success}");
                 if (success) return;
                 server?.Close();
                 StartServer(port);
@@ -56,7 +57,7 @@ namespace App.Core.Master
         /// <summary>消息分发 </summary>
         private void HandOutMsg(string msg)
         {
-            
+            SocketMaster.Instance.ReceiveUdpClientMsg(msg);
         }
         /// <summary>退出Udp </summary>
         public void Close()
