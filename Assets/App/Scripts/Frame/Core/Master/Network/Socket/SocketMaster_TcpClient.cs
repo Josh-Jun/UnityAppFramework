@@ -23,42 +23,42 @@ namespace App.Core.Master
         }
 
         /// <summary> 客户端发送消息给服务端 </summary>
-        public void ClientSendMsgToServer(string eventName, string data)
+        public void ClientSendMsgToServer(string eventName, string data = "")
         {
             var msg = GetClientGameMsg(LAN_CMD.CSMsg, eventName, data);
             LanSocketTcpClient.Instance.SendMsg(msg);
         }
 
         /// <summary> 客户端发送消息给所有客户端（包括自己） </summary>
-        public void ClientSendMsgToAllClient(string eventName, string data)
+        public void ClientSendMsgToAllClient(string eventName, string data = "")
         {
             var msg = GetClientGameMsg(LAN_CMD.CCMsg_All, eventName, data);
             LanSocketTcpClient.Instance.SendMsg(msg);
         }
 
         /// <summary> 客户端发送消息给其他客户端（不包括自己） </summary>
-        public void ClientSendMsgToOtherClient(string eventName, string data)
+        public void ClientSendMsgToOtherClient(string eventName, string data = "")
         {
             var msg = GetClientGameMsg(LAN_CMD.CCMsg_UnSelf, eventName, data);
             LanSocketTcpClient.Instance.SendMsg(msg);
         }
 
         /// <summary> 客户端发送消息给客户端（一个） </summary>
-        public void ClientSendMsgToClient(string eventName, string data, string client)
+        public void ClientSendMsgToClient(string eventName, string client, string data = "")
         {
             var msg = GetClientGameMsg(LAN_CMD.CCMsg_One, eventName, data, new List<string> { client });
             LanSocketTcpClient.Instance.SendMsg(msg);
         }
 
         /// <summary> 客户端发送消息给客户端列表（多个） </summary>
-        public void ClientSendMsgToClientList(string eventName, string data, List<string> clients)
+        public void ClientSendMsgToClientList(string eventName, List<string> clients, string data = "")
         {
             var msg = GetClientGameMsg(LAN_CMD.CCMsg_List, eventName, data, clients);
             LanSocketTcpClient.Instance.SendMsg(msg);
         }
 
         /// <summary> 获取消息包 </summary>
-        private PushMsg GetClientGameMsg(LAN_CMD cmd, string eventName, string data, List<string> clients = null)
+        private PushMsg GetClientGameMsg(LAN_CMD cmd, string eventName, string data = "", List<string> clients = null)
         {
             return new PushMsg
             {

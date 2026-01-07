@@ -21,7 +21,7 @@ namespace App.Core.Master
             LanSocketTcpServer.Instance.AutoRestart(ip, port, callback);
         }
         /// <summary> 给所有客户端发送消息 </summary>
-        public void ServerSendMsgToAllClient(string eventName, string data)
+        public void ServerSendMsgToAllClient(string eventName, string data = "")
         {
             var msg = GetServerGameMsg(LAN_CMD.SCMsg_All, eventName, data);
             var list = LanSocketTcpServer.Instance.GetAllClient();
@@ -32,7 +32,7 @@ namespace App.Core.Master
         }
 
         /// <summary> 给客户端列表发送消息 </summary>
-        public void ServerSendMsgToClientList(string eventName, List<string> clients, string data)
+        public void ServerSendMsgToClientList(string eventName, List<string> clients, string data = "")
         {
             var msg = GetServerGameMsg(LAN_CMD.SCMsg_All, eventName, data);
             var list = LanSocketTcpServer.Instance.GetClients(clients);
@@ -43,7 +43,7 @@ namespace App.Core.Master
         }
 
         /// <summary> 给客户端列表发送消息 </summary>
-        public void ServerSendMsgToClientList(string eventName, List<SocketTcpClient> clients, string data)
+        public void ServerSendMsgToClientList(string eventName, List<SocketTcpClient> clients, string data = "")
         {
             var msg = GetServerGameMsg(LAN_CMD.SCMsg_All, eventName, data);
             foreach (var item in clients)
@@ -53,18 +53,18 @@ namespace App.Core.Master
         }
 
         /// <summary> 给单个客户端发送消息 </summary>
-        public void ServerSendMsgToClient(string eventName, SocketTcpClient client, string data)
+        public void ServerSendMsgToClient(string eventName, SocketTcpClient client, string data = "")
         {
             var msg = GetServerGameMsg(LAN_CMD.SCMsg_All, eventName, data);
             LanSocketTcpServer.Instance.SendMsg(client, msg);
         }
 
         /// <summary> 给单个客户端发送消息 </summary>
-        public void ServerSendMsgToClient(string eventName, string ip, string data)
+        public void ServerSendMsgToClient(string eventName, string client, string data = "")
         {
             var msg = GetServerGameMsg(LAN_CMD.SCMsg_All, eventName, data);
-            var client = LanSocketTcpServer.Instance.GetClient(ip);
-            LanSocketTcpServer.Instance.SendMsg(client, msg);
+            var item = LanSocketTcpServer.Instance.GetClient(client);
+            LanSocketTcpServer.Instance.SendMsg(item, msg);
         }
 
         /// <summary> 获取消息包 </summary>
