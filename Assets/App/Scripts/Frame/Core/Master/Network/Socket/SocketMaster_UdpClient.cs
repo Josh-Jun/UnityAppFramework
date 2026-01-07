@@ -26,5 +26,10 @@ namespace App.Core.Master
                 SendEventMsg("ReceiveUdpServerMsg", msg);
             }
         }
+
+        public void CloseUdpClient()
+        {
+            LanSocketUdpClient.Instance.Close();
+        }
     }
 }

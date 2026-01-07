@@ -18,14 +18,6 @@ namespace App.Core.Master
 {
     public partial class SocketMaster : SingletonMonoEvent<SocketMaster>
     {
-        private void OnApplicationQuit()
-        {
-            NetSocketClient.Instance.Close();
-            LanSocketTcpClient.Instance.Close();
-            LanSocketTcpServer.Instance.Close();
-            LanSocketUdpClient.Instance.Close();
-            LanSocketUdpServer.Instance.Close();
-        }
         /// <summary>
         /// 序列化
         /// </summary>

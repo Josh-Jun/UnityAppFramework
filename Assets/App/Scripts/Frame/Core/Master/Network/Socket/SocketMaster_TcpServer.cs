@@ -150,5 +150,10 @@ namespace App.Core.Master
                 LanSocketTcpServer.Instance.SendMsg(client, msg);
             }
         }
+
+        public void CloseTcpServer()
+        {
+            LanSocketTcpServer.Instance.Close();
+        }
     }
 }

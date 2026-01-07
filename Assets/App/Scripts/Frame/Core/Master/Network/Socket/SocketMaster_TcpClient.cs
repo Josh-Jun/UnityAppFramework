@@ -87,5 +87,10 @@ namespace App.Core.Master
                 SendEventMsg(eventName, msg.data);
             }
         }
+
+        public void CloseTcpClient()
+        {
+            LanSocketTcpClient.Instance.Close();
+        }
     }
 }
