@@ -42,6 +42,16 @@ namespace App.Core.Master
             }
         }
 
+        /// <summary> 给客户端列表发送消息 </summary>
+        public void ServerSendMsgToClientList(string eventName, List<SocketTcpClient> clients, string data)
+        {
+            var msg = GetServerGameMsg(LAN_CMD.SCMsg_All, eventName, data);
+            foreach (var item in clients)
+            {
+                LanSocketTcpServer.Instance.SendMsg(item, msg);
+            }
+        }
+
         /// <summary> 给单个客户端发送消息 </summary>
         public void ServerSendMsgToClient(string eventName, SocketTcpClient client, string data)
         {
@@ -55,28 +65,6 @@ namespace App.Core.Master
             var msg = GetServerGameMsg(LAN_CMD.SCMsg_All, eventName, data);
             var client = LanSocketTcpServer.Instance.GetClient(ip);
             LanSocketTcpServer.Instance.SendMsg(client, msg);
-        }
-
-        /// <summary> 给客户端发送消息(移除自己) </summary>
-        public void ServerSendMsgToOtherClient(string eventName, string deviceId, string data)
-        {
-            var msg = GetServerGameMsg(LAN_CMD.SCMsg_All, eventName, data);
-            var list = LanSocketTcpServer.Instance.GetAllClient();
-            foreach (var item in list.Where(item => item.Ip != deviceId))
-            {
-                LanSocketTcpServer.Instance.SendMsg(item, msg);
-            }
-        }
-
-        /// <summary> 给客户端发送消息(移除自己) </summary>
-        public void ServerSendMsgToOtherClient(string eventName, SocketTcpClient client, string data)
-        {
-            var msg = GetServerGameMsg(LAN_CMD.SCMsg_All, eventName, data);
-            var list = LanSocketTcpServer.Instance.GetAllClient();
-            foreach (var item in list.Where(item => item.Ip != client.Ip))
-            {
-                LanSocketTcpServer.Instance.SendMsg(item, msg);
-            }
         }
 
         /// <summary> 获取消息包 </summary>
