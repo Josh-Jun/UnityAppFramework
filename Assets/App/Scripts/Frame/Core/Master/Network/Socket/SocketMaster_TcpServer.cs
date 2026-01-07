@@ -123,7 +123,7 @@ namespace App.Core.Master
         public void ForwardClientMsgToOtherClient(SocketTcpClient session, PushMsg msg)
         {
             var list = LanSocketTcpServer.Instance.GetAllClient();
-            foreach (var client in list.Where(item => item.Ip != session.Ip))
+            foreach (var client in list.Where(item => item != session))
             {
                 LanSocketTcpServer.Instance.SendMsg(client, msg);
             }
