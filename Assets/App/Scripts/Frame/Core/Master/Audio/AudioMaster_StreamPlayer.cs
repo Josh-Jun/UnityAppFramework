@@ -267,7 +267,6 @@ namespace App.Core.Master
         /// </summary>
         public void StopPlayback()
         {
-            Debug.Log("停止播放");
             if (streamAudioSource && streamAudioSource.isPlaying)
             {
                 streamAudioSource.Stop();
@@ -329,6 +328,7 @@ namespace App.Core.Master
                 }
             }
 #if UNITY_EDITOR
+            if (!isPlaying) return;
             lock (queueLock)
             {
                 Debug.Log($"缓冲区状态 - 总缓冲: {bufferDuration:F2}s, 未播放: {unplayedDuration:F2}s, 队列: {audioStreamQueue.Count}块");
@@ -414,8 +414,6 @@ namespace App.Core.Master
             StopPlayback();
             isFirstChunk = true;
             totalSamplesWritten = 0;
-
-            Debug.Log("播放器已重置");
         }
     }
 }
