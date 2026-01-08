@@ -63,8 +63,11 @@ namespace App.Core.Master
         public void ServerSendMsgToClient(string eventName, string client, string data = "")
         {
             var msg = GetServerGameMsg(LAN_CMD.SCMsg_All, eventName, data);
-            var item = LanSocketTcpServer.Instance.GetClient(client);
-            LanSocketTcpServer.Instance.SendMsg(item, msg);
+            var list = LanSocketTcpServer.Instance.GetClients(new List<string>{ client });
+            foreach (var item in list)
+            {
+                LanSocketTcpServer.Instance.SendMsg(item, msg);
+            }
         }
 
         /// <summary> 获取消息包 </summary>
