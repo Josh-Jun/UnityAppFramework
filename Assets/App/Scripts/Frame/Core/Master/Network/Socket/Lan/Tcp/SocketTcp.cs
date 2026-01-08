@@ -71,13 +71,12 @@ namespace App.Core.Master
                 clientConnectCallback = callback;
                 _socket.SendTimeout = timeout;
                 _socket.ReceiveTimeout = timeout;
-                var ar = _socket.BeginConnect(new IPEndPoint(IPAddress.Parse(ip), port), ServerConnectCallBack, _socket);
+                var ar = _socket.BeginConnect(new IPEndPoint(IPAddress.Parse(ip), port), ServerConnectCallBack,
+                    _socket);
                 var flag = ar.AsyncWaitHandle.WaitOne(timeout, true);
-                clientConnectCallback?.Invoke(flag);
-                if (!flag)
-                {
-                    Close();
-                }
+                if (flag) return;
+                clientConnectCallback?.Invoke(false);
+                Close();
             }
             catch (Exception e)
             {
@@ -92,10 +91,7 @@ namespace App.Core.Master
             {
                 _socket.EndConnect(ar);
                 server = new T();
-                server.BeginReceiveData(_socket, () =>
-                {
-                    clientConnectCallback?.Invoke(false);
-                });
+                server.BeginReceiveData(_socket, () => { clientConnectCallback?.Invoke(false); });
                 clientConnectCallback?.Invoke(true);
             }
             catch (Exception e)
