@@ -87,15 +87,18 @@ namespace App.Core.Master
                 Log.E("消息事件名不可为空！");
                 return;
             }
-        
-            var data = msg.data;
-            if (data == null)
+            if (!HasEvent(eventName))
+            {
+                Log.W($"消息事件名:[{eventName}]未找到");
+                return;
+            }
+            if (msg.data == null)
             {
                 SendEventMsg(eventName);
             }
             else
             {
-                SendEventMsg(eventName, data);
+                SendEventMsg(eventName, msg.data);
             }
         }
         
