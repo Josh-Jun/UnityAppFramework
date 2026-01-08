@@ -23,8 +23,7 @@ namespace App.Core.Master
         private readonly Queue<MsgPackage> msgPackageQueue = new(); //消息队列(Server)
 
         private int TIME_UPDATE_ID = -1;
-        
-        public SocketTcpClient GetClient(string ip) => server.clients.Find(c => c.Ip == ip);
+
         public List<SocketTcpClient> GetClients(List<string> ips) => server.clients.FindAll(c => ips.Contains(c.Ip));
         public List<SocketTcpClient> GetAllClient() => server.clients;
 
