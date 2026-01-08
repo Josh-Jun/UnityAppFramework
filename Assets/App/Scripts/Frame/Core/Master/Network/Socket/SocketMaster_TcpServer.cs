@@ -34,6 +34,7 @@ namespace App.Core.Master
         /// <summary> 给客户端列表发送消息 </summary>
         public void ServerSendMsgToClientList(string eventName, List<string> clients, string data = "")
         {
+            clients = clients.Distinct(StringComparer.Ordinal).ToList();
             var msg = GetServerGameMsg(LAN_CMD.SCMsg_All, eventName, data);
             var list = LanSocketTcpServer.Instance.GetClients(clients);
             foreach (var item in list)

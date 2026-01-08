@@ -53,6 +53,7 @@ namespace App.Core.Master
         /// <summary> 客户端发送消息给客户端列表（多个） </summary>
         public void ClientSendMsgToClientList(string eventName, List<string> clients, string data = "")
         {
+            clients = clients.Distinct(StringComparer.Ordinal).ToList();
             var msg = GetClientGameMsg(LAN_CMD.CCMsg_List, eventName, data, clients);
             LanSocketTcpClient.Instance.SendMsg(msg);
         }
