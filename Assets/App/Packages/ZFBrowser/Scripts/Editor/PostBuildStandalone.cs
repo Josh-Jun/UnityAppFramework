@@ -73,7 +73,7 @@ class PostBuildStandalone {
 		else buildName = Regex.Match(buildFile, @"\/([^\/]+?)(\.x86(_64)?)?$").Groups[1].Value;
 
 		var buildPath = Directory.GetParent(buildFile);
-		var dataPath = buildPath + "/" + buildName + "_Data";
+		var dataPath = buildPath + "/build/bin/" + buildName + "_Data";
 		var pluginsPath = dataPath + "/Plugins/";
 
 
