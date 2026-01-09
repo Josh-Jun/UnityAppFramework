@@ -225,11 +225,20 @@ namespace App.Editor.View
             var develop =  appConfig.DevelopmentMold.ToString().ToLower();
             var date = $"{DateTime.Now.Year}{DateTime.Now.Month:00}{DateTime.Now.Day:00}";
             var suffix = appConfig.NativeApp ? "" : ".apk";
-            var name = $"{package}_{channel}_v{version}_{develop}_{date}{suffix}";
-            
-            if(EditorUserBuildSettings.activeBuildTarget == BuildTarget.iOS)
+
+            var name = EditorUserBuildSettings.activeBuildTarget switch
             {
-                name = $"{package}_{channel}_v{version}_{develop}";
+                BuildTarget.Android => $"{package}_{channel}_v{version}_{develop}_{date}{suffix}",
+                BuildTarget.iOS => $"{date}/{package}_{channel}_v{version}_{develop}",
+                BuildTarget.StandaloneWindows64 => $"{date}/{package}_{channel}_v{version}_{develop}/{Application.productName}.exe",
+                BuildTarget.StandaloneOSX => $"{date}/{package}_{channel}_v{version}_{develop}/{Application.productName}.app",
+                _ => $""
+            };
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                Debug.Log("Build App Name not set");
+                return;
             }
             
             EditorUserBuildSettings.SwitchActiveBuildTarget(EditorUserBuildSettings.selectedBuildTargetGroup,

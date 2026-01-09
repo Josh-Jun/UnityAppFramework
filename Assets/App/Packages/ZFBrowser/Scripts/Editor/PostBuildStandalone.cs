@@ -68,12 +68,15 @@ class PostBuildStandalone {
 
 		Debug.Log("ZFBrowser: Post processing " + buildFile + " as " + buildType);
 
+		// HybridCLR设置
+		string path = buildFile.Contains("StrippedAOTDllsTempProj") ? "build/bin/" : "";
+
 		string buildName;
 		if (windows) buildName = Regex.Match(buildFile, @"/([^/]+)\.exe$").Groups[1].Value;
 		else buildName = Regex.Match(buildFile, @"\/([^\/]+?)(\.x86(_64)?)?$").Groups[1].Value;
 
 		var buildPath = Directory.GetParent(buildFile);
-		var dataPath = buildPath + "/build/bin/" + buildName + "_Data";
+		var dataPath = buildPath + "/" + path + buildName + "_Data";
 		var pluginsPath = dataPath + "/Plugins/";
 
 
