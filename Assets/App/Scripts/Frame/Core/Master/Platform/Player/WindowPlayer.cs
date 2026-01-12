@@ -29,7 +29,7 @@ namespace App.Core.Master
 
         public override string GetDataPath(string folder)
         {
-            return $"{Application.dataPath.Replace("Assets", "")}{folder}";
+            return $"{Application.dataPath.Replace("/Assets", "")}/{folder}";
         }
         public override string GetAssetsPath(string folder)
         {
