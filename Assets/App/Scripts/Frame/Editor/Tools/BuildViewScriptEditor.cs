@@ -45,6 +45,7 @@ namespace App.Editor.Tools
         private static readonly ViewOfAttribute ViewAttribute = new("", ViewMold.UI2D, "");
         private static readonly string scriptViewPath = $"{EditorHelper.BaseEditorPath()}/Tools/LogicViewScript/ui_view_script.txt";
         private static readonly string scriptLogicPath = $"{EditorHelper.BaseEditorPath()}/Tools/LogicViewScript/ui_logic_script.txt";
+        private static readonly string scriptItemPath = $"{EditorHelper.BaseEditorPath()}/Tools/LogicViewScript/ui_item_script.txt";
 
         private const string prefix = "LV_";
         
@@ -223,6 +224,38 @@ namespace App.Editor.Tools
             File.WriteAllText(logic_script_path, logic_script);
             AssetDatabase.Refresh();
         }
+
+        public static void BuildItemScript(GameObject gameObject)
+        {
+            var item_path = Path.Combine(Application.dataPath, scriptItemPath);
+            var item_script = File.ReadAllText(item_path);
+            var item_script_name = gameObject.name;
+            var script_path = Path.Combine(Application.dataPath, $"Scripts/Items");
+            var item_script_path = Path.Combine(script_path, $"{item_script_name}.cs");
+            item_script = item_script.Replace("#SCRIPTNAME#", item_script_name);
+            item_script = item_script.Replace("#VARIABLE#", CreatePublicVariableContent());
+            item_script = item_script.Replace("#INIT#", CreateInitContent());
+            item_script = item_script.Replace("#REGISTER#", CreateRegisterContent());
+            
+            var files = EditorHelper.GetFiles(Path.Combine(Application.dataPath, $"Scripts"), "cs");
+            var item = files.FirstOrDefault(f => f.Name == $"{item_script_name}.cs");
+            if (item != null) item_script_path = item.FullName;
+            if (item == null)
+            {
+                if (!Directory.Exists(script_path))
+                {
+                    Directory.CreateDirectory(script_path);
+                }
+            }
+
+            if (File.Exists(item_script_path))
+            {
+                File.Delete(item_script_path);
+            }
+
+            File.WriteAllText(item_script_path, item_script);
+            AssetDatabase.Refresh();
+        }
         
         #region MenuItem
         private const int MenuItemPriority = -1;
@@ -243,10 +276,23 @@ namespace App.Editor.Tools
             BuildViewScript();
             BuildLogicScript(Selection.activeGameObject);
         }
+        // 为创建自定义对象添加一个菜单。
+        // 优先级为10确保它与其他同类菜单项在一组，并传播到hierarchy 下拉菜单和hierarchy 上下文菜单。
+        [MenuItem("GameObject/Build Item Script", false, MenuItemPriority)]
+        public static void BuildItemScript()
+        {
+            views = GetViewScriptData(Selection.activeGameObject);
+            BuildItemScript(Selection.activeGameObject);
+        }
         
+        [MenuItem("GameObject/Build Item Script", true)]
+        public static bool ValidateMenuItemBuildItemScript()
+        {
+            return Selection.activeGameObject && Selection.activeGameObject.name.EndsWith("Item");
+        }
         [MenuItem("GameObject/Build View&&Logic Script", true)]
         [MenuItem("GameObject/Build View Script", true)]
-        public static bool ValidateMenuItemBuildViewScript()
+        public static bool ValidateMenuItemBuildScript()
         {
             return Selection.activeGameObject && Selection.activeGameObject.name.EndsWith("View") && Selection.activeGameObject.name != "UpdateView";
         }
@@ -263,6 +309,7 @@ namespace App.Editor.Tools
             // 从根节点开始
             foreach (Transform child in go.transform)
             {
+                if (child.name.EndsWith("Item")) continue; // 剔除Item对象
                 queue.Enqueue((child, child.name));
                 if (!child.name.StartsWith(prefix)) continue;
                 var data = new ViewData
@@ -280,6 +327,7 @@ namespace App.Editor.Tools
                 // 将子物体加入队列
                 foreach (Transform child in parent)
                 {
+                    if (child.name.EndsWith("Item")) continue; // 剔除Item对象
                     var childPath = path + "/" + child.name;
                     queue.Enqueue((child, childPath));
                     if (!child.name.StartsWith(prefix)) continue;

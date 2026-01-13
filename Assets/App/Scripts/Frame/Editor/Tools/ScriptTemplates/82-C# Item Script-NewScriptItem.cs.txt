@@ -1,0 +1,27 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using App.Core.Helper;
+using App.Core.Master;
+using App.Core.Tools;
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
+namespace App.Modules
+{
+    public class #SCRIPTNAME# : ItemBase
+    {
+        protected override void InitItem()
+        {
+            base.InitItem();
+            #NOTRIM#
+        }
+
+        protected override void RegisterEvent()
+        {
+            base.RegisterEvent();
+            #NOTRIM#
+        }
+    }
+}

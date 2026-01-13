@@ -32,7 +32,7 @@ namespace App.Core.Master
         {
         }
 
-        /// <summary>注册消息事件,默认删除此事件</summary>
+        /// <summary>注册消息事件</summary>
         protected virtual void RegisterEvent()
         {
         }
