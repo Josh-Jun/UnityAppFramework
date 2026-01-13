@@ -263,6 +263,7 @@ namespace App.Editor.Tools
             // 从根节点开始
             foreach (Transform child in go.transform)
             {
+                queue.Enqueue((child, child.name));
                 if (!child.name.StartsWith(prefix)) continue;
                 var data = new ViewData
                 {
@@ -271,7 +272,6 @@ namespace App.Editor.Tools
                     components = GetComponents(child.gameObject)
                 };
                 list.Add(data);
-                queue.Enqueue((child, child.name));
             }
             while (queue.Count > 0)
             {
@@ -280,16 +280,16 @@ namespace App.Editor.Tools
                 // 将子物体加入队列
                 foreach (Transform child in parent)
                 {
-                    if (!child.name.StartsWith(prefix)) continue;
                     var childPath = path + "/" + child.name;
+                    queue.Enqueue((child, childPath));
+                    if (!child.name.StartsWith(prefix)) continue;
                     var data = new ViewData
                     {
                         path = childPath, 
                         name = child.name.Substring(prefix.Length, child.name.Length - prefix.Length),
                         components = GetComponents(child.gameObject)
                     };
-                    views.Add(data);
-                    queue.Enqueue((child, childPath));
+                    list.Add(data);
                 }
             }
             return list;
@@ -406,6 +406,10 @@ namespace App.Editor.Tools
                     var name = $"{uiViewData.name}{tName}";
                     var str = string.IsNullOrEmpty(eventType) ? "" : "arg";
                     sb.AppendLine($"\t\t\tAddEventMsg{eventType}(\"{name}Event\", ({str})=>{{ }});");
+                    if (t.eventType != 3) continue;
+                    sb.AppendLine($"\t\t\tAddEventMsg{eventType}(\"{name}SubmitEvent\", ({str})=>{{ }});");
+                    sb.AppendLine($"\t\t\tAddEventMsg{eventType}(\"{name}SelectEvent\", ({str})=>{{ }});");
+                    sb.AppendLine($"\t\t\tAddEventMsg{eventType}(\"{name}DeselectEvent\", ({str})=>{{ }});");
                 }
             }
 
