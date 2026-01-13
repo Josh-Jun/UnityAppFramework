@@ -141,14 +141,12 @@ namespace App.Core.Master
             {
                 try
                 {
-                    var ws = ClientWebSocket;
-                    ClientWebSocket = null;
-                    if (ws is { State: WebSocketState.Open or WebSocketState.CloseReceived })
+                    if (ClientWebSocket is { State: WebSocketState.Open or WebSocketState.CloseReceived })
                     {
                         try
                         {
                             var ct = new CancellationTokenSource(TimeSpan.FromSeconds(3));
-                            await ws.CloseAsync(
+                            await ClientWebSocket.CloseAsync(
                                 WebSocketCloseStatus.NormalClosure,
                                 "Client closing",
                                 ct.Token);
@@ -161,7 +159,7 @@ namespace App.Core.Master
                     // 现在再取消内部 token，通知接收循环退出
                     cancellationTokenSource?.Cancel();
                     cancellationTokenSource = null;
-                    ws?.Dispose();
+                    ClientWebSocket?.Dispose();
                 }
                 finally
                 {
