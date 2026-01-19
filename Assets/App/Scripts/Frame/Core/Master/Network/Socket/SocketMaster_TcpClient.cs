@@ -84,7 +84,7 @@ namespace App.Core.Master
                 Log.W($"消息事件名:[{eventName}]未找到");
                 return;
             }
-            if (msg.data == null)
+            if (string.IsNullOrWhiteSpace(msg.data))
             {
                 SendEventMsg(eventName);
             }
