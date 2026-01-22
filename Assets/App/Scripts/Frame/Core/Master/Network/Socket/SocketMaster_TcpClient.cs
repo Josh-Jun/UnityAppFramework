@@ -23,6 +23,13 @@ namespace App.Core.Master
         }
 
         /// <summary> 客户端发送消息给服务端 </summary>
+        public void ClientSendHeartbeatToServer(string eventName)
+        {
+            var msg = GetClientGameMsg(LAN_CMD.CSHeartbeat, eventName);
+            LanSocketTcpClient.Instance.SendMsg(msg);
+        }
+
+        /// <summary> 客户端发送消息给服务端 </summary>
         public void ClientSendMsgToServer(string eventName, string data = "")
         {
             var msg = GetClientGameMsg(LAN_CMD.CSMsg, eventName, data);

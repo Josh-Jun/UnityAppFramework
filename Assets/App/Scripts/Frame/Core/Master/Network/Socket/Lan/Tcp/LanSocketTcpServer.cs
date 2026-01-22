@@ -72,6 +72,7 @@ namespace App.Core.Master
         /// <summary>消息分发</summary>
         private void HandOutMsg(MsgPackage msgPack)
         {
+            var client = msgPack.session as SocketTcpClient;
             switch (msgPack.msg.cmd)
             {
                 case (int)LAN_CMD.None:
@@ -93,8 +94,10 @@ namespace App.Core.Master
                     SocketMaster.Instance.ForwardClientMsgToClientList((PushMsg)msgPack.msg);
                     break;
                 case (int)LAN_CMD.CCMsg_UnSelf:
-                    var client = msgPack.session as SocketTcpClient;
                     SocketMaster.Instance.ForwardClientMsgToOtherClient(client, (PushMsg)msgPack.msg);
+                    break;
+                case (int)LAN_CMD.CSHeartbeat:
+                    SendMsg(client, new PushMsg { cmd = (int)LAN_CMD.SCHeartbeat, eventName = ((PushMsg)msgPack.msg).eventName });
                     break;
                 default:
                     break;

@@ -63,7 +63,7 @@ namespace App.Core.Master
         /// <summary>退出Udp </summary>
         public void Close()
         {
-            if (client != null && client.session != null)
+            if (client is { session: not null })
             {
                 client.session.Close();
                 client.Close();

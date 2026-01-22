@@ -43,5 +43,7 @@ namespace App.Core.Master
          CCMsg_One = 7,    //客户端=>客户端(one)
          CCMsg_List = 8,   //客户端=>客户端(list)
          CCMsg_UnSelf = 9, //客户端=>客户端(!self)
+         SCHeartbeat = 10, //服务端=>客户端
+         CSHeartbeat = 11, //客户端=>客户端
      }
 }
