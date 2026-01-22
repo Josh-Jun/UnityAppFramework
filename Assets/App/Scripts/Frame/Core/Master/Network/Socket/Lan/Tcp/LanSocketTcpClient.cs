@@ -41,17 +41,8 @@ namespace App.Core.Master
             TimeTaskMaster.Instance.AddTimeTask(() =>
             {
                 Close();
-                client = new SocketTcp<SocketTcpServer>();
-                client.ConnectServer(ip, port, success =>
-                {
-                    TimeTaskMaster.Instance.AddFrameTask(() =>
-                    {
-                        callback?.Invoke(success);
-                        if (success) return;
-                        AutoReconnect(ip, port, callback);
-                    }, 1);
-                });
-            }, 1);
+                ConnectServer(ip, port, callback);
+            }, 3);
         }
 
         private void Update(float time)
