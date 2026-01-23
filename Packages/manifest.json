@@ -13,6 +13,7 @@
     "com.unity.collab-proxy": "2.7.1",
     "com.unity.gif.gifplayer": "https://github.com/Josh-Jun/UnityPackageManager.git?path=/Assets/Packages/GifPlayer",
     "com.unity.ide.rider": "3.0.36",
+    "com.unity.ide.traecn": "https://github.com/dennyguotf/com.unity.ide.traeCN.git",
     "com.unity.ide.visualstudio": "2.0.22",
     "com.unity.ide.vscode": "1.2.5",
     "com.unity.inputsystem": "1.14.0",

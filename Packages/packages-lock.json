@@ -144,6 +144,15 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.ide.traecn": {
+      "version": "https://github.com/dennyguotf/com.unity.ide.traeCN.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.test-framework": "1.1.9"
+      },
+      "hash": "bab10dde3bbc0bd2cd1954bfcbeee14f1c761a41"
+    },
     "com.unity.ide.visualstudio": {
       "version": "2.0.22",
       "depth": 0,
