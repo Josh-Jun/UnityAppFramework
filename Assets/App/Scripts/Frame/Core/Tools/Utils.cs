@@ -1,11 +1,8 @@
 using UnityEngine;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Reflection;
+using System.Net;
 
 namespace App.Core.Tools
 {
@@ -24,28 +21,25 @@ namespace App.Core.Tools
         {
             get
             {
-                var output = "";
-                foreach (var item in NetworkInterface.GetAllNetworkInterfaces())
+                var output = "127.0.0.1";
+                try
                 {
-#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-                    NetworkInterfaceType _type1 = NetworkInterfaceType.Wireless80211;
-                    NetworkInterfaceType _type2 = NetworkInterfaceType.Ethernet;
+                    // 获取本机所有网络接口
+                    var host = Dns.GetHostEntry(Dns.GetHostName());
 
-                    if ((item.NetworkInterfaceType == _type1 || item.NetworkInterfaceType == _type2) &&
-                        item.OperationalStatus == OperationalStatus.Up)
-#endif
+                    foreach (var ip in host.AddressList)
                     {
-                        foreach (var ip in item.GetIPProperties().UnicastAddresses)
+                        // 筛选IPv4地址且不是回环地址
+                        if (ip.AddressFamily == AddressFamily.InterNetwork && !System.Net.IPAddress.IsLoopback(ip))
                         {
-                            //IPv4
-                            if (ip.Address.AddressFamily == AddressFamily.InterNetwork)
-                            {
-                                output = ip.Address.ToString();
-                            }
+                            output = ip.ToString();
                         }
                     }
                 }
-
+                catch (Exception e)
+                {
+                    Debug.LogError("获取IP地址失败: " + e.Message);
+                }
                 return output;
             }
         }
