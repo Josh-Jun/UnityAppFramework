@@ -55,8 +55,6 @@ namespace App.Core.Master
             stream.transform.SetParent(background.transform);
             streamAudioSource = stream.GetOrAddComponent<AudioSource>();
             streamAudioSource.playOnAwake = false;
-
-            streamTimeId = TimeUpdateMaster.Instance.StartTimer(StreamUpdate);
         }
 
         private void StreamUpdate(float time)
@@ -92,6 +90,13 @@ namespace App.Core.Master
 
             isInitialized = true;
             Debug.Log($"音频系统初始化完成，采样率：{sampleRate}Hz，声道：{channels}，缓冲区：{streamBufferSize}样本");
+
+            streamTimeId = TimeUpdateMaster.Instance.StartTimer(StreamUpdate);
+        }
+        
+        public void SetStreamAudioSource(AudioSource source)
+        {
+            streamAudioSource = source;
         }
 
         public void AddAudioData(string base64Chunk)
@@ -130,17 +135,17 @@ namespace App.Core.Master
 
         public void SetStreamAudioVolume(float volume)
         {
-            if (streamAudioSource)
+            if (StreamAudioSource)
             {
-                streamAudioSource.volume = volume;
+                StreamAudioSource.volume = volume;
             }
         }
 
         public void SetStreamAudioMute(bool mute)
         {
-            if (streamAudioSource)
+            if (StreamAudioSource)
             {
-                streamAudioSource.mute = mute;
+                StreamAudioSource.mute = mute;
             }
         }
 
@@ -178,8 +183,8 @@ namespace App.Core.Master
             totalSamplesWritten = 0;
 
             // 开始播放
-            streamAudioSource.clip = streamingClip;
-            streamAudioSource.Play();
+            StreamAudioSource.clip = streamingClip;
+            StreamAudioSource.Play();
             isPlaying = true;
 
             Debug.Log($"开始播放，初始缓冲: {GetBufferDuration():F2}s");
@@ -267,9 +272,9 @@ namespace App.Core.Master
         /// </summary>
         public void StopPlayback()
         {
-            if (streamAudioSource && streamAudioSource.isPlaying)
+            if (StreamAudioSource && StreamAudioSource.isPlaying)
             {
-                streamAudioSource.Stop();
+                StreamAudioSource.Stop();
             }
 
             isPlaying = false;
