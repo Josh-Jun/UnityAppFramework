@@ -18,18 +18,22 @@ namespace App.Core.Tools
         /// <summary> DateTime2TimeStamp </summary>
         public static long ToTimeStamp(this DateTime target, bool ms = true)
         {
-            var from = new DateTime(1970, 1, 1, 0, 0, 0);
-            var ts = target.ToUniversalTime() - TimeZoneInfo.ConvertTimeToUtc(from, TimeZoneInfo.Local);
-            var timestamp = ms ? Convert.ToInt64(ts.TotalMilliseconds) : Convert.ToInt64(ts.TotalSeconds);
+            // Unix起始时间：1970-01-01 00:00:00 UTC
+            var unixStart = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            // 将输入时间转为UTC时间，避免时区偏差
+            var dateTimeUtc = target.ToUniversalTime();
+            // 计算时间差
+            var timeSpan = dateTimeUtc - unixStart;
+            var timestamp = ms ? Convert.ToInt64(timeSpan.TotalMilliseconds) : Convert.ToInt64(timeSpan.TotalSeconds);
             return timestamp;
         }
 
         /// <summary> TimeStamp2DateTime </summary>
         public static DateTime ToDateTime(this long timestamp, bool ms = true)
         {
-            var from = new DateTime(1970, 1, 1, 0, 0, 0);
-            var target = ms ? from.AddMilliseconds(timestamp) : from.AddSeconds(timestamp);
-            return target;
+            var unixStart = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var utcTime = ms ? unixStart.AddMilliseconds(timestamp) : unixStart.AddSeconds(timestamp);
+            return utcTime.ToLocalTime();
         }
 
         #endregion

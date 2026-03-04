@@ -6,6 +6,8 @@
  * function    : 
  * ===============================================
  * */
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using App.Core.Helper;
@@ -102,6 +104,15 @@ namespace App.Modules
                 if (Input.GetKeyDown(KeyCode.C))
                 {
                     ViewMaster.Instance.SwitchScreen(1).Forget();
+                }
+
+                if (Input.GetKeyDown(KeyCode.F3))
+                {
+                    WebSocketMaster.Instance.StartASR();
+                }
+                if (Input.GetKeyDown(KeyCode.F4))
+                {
+                    WebSocketMaster.Instance.StopASR();
                 }
             });
         }

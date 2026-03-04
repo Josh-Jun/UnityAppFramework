@@ -15,7 +15,7 @@ using App.Core.Tools;
 
 namespace App.Core.Master
 {
-    public class WebSocketMaster : SingletonMonoEvent<WebSocketMaster>
+    public partial class WebSocketMaster : SingletonMonoEvent<WebSocketMaster>
     {
         private readonly Dictionary<string, WebSocketClient> _webSocketClients = new();
         private readonly Dictionary<string, Dictionary<string, string>> headerPairs = new();
@@ -30,7 +30,7 @@ namespace App.Core.Master
             }, 5, TimeUnit.Second, 0);
         }
 
-        public void Connect(string url, Action onConnectCompleted = null, Action<string> onReceiveMessage = null, Action onConnectError = null)
+        private void Connect(string url, Action onConnectCompleted = null, Action<string> onReceiveMessage = null, Action onConnectError = null)
         {
             if (!_webSocketClients.TryGetValue(url, out var client))
             {
@@ -51,7 +51,7 @@ namespace App.Core.Master
             client.Connect(url);
         }
         
-        public void AddHeader(string url, string key, string value)
+        private void AddHeader(string url, string key, string value)
         {
             if (!headerPairs.ContainsKey(url))
             {
@@ -67,16 +67,16 @@ namespace App.Core.Master
             }
         }
 
-        public void Disconnect(string url)
+        private void Disconnect(string url)
         {
             if (_webSocketClients.TryGetValue(url, out var client))
             {
                 client.Disconnect();
+                _webSocketClients.Remove(url);
             }
-            _webSocketClients.Remove(url);
         }
 
-        public void Send(string url, byte[] bytes)
+        private void Send(string url, byte[] bytes)
         {
             if (_webSocketClients.TryGetValue(url, out var client))
             {
@@ -84,7 +84,7 @@ namespace App.Core.Master
             }
         }
 
-        public void Send(string url, string content)
+        private void Send(string url, string content)
         {
             if (_webSocketClients.TryGetValue(url, out var client))
             {

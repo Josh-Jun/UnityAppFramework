@@ -111,10 +111,7 @@ namespace App.Core.Master
                     if (result.MessageType == WebSocketMessageType.Close)
                     {
                         Debug.Log("Server initiated close.");
-                        await ClientWebSocket.CloseAsync(
-                            WebSocketCloseStatus.NormalClosure,
-                            "OK",
-                            CancellationToken.None);
+                        Disconnect();
                         break;
                     }
                     // 正确使用 Count（必要时处理分片，这里假设消息不分片）
@@ -139,6 +136,7 @@ namespace App.Core.Master
         {
             UniTask.Void(async () =>
             {
+                if(ClientWebSocket.State == WebSocketState.Aborted) return;
                 try
                 {
                     if (ClientWebSocket is { State: WebSocketState.Open or WebSocketState.CloseReceived })
