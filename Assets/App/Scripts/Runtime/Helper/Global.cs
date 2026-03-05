@@ -2,9 +2,10 @@ using System.Collections.Generic;
 using System.Reflection;
 using App.Runtime.CloudCtrl;
 using App.Runtime.Helper;
+using App.Runtime.UDP;
 using UnityEngine;
 
-public class Global
+public static class Global
 {
     public static AppConfig AppConfig;
 
@@ -20,6 +21,8 @@ public class Global
     public static Dictionary<string, Assembly> AssemblyPairs { get; } = new();
     
     public static CloudCtrl CloudCtrl = new();
+    
+    public static ServerData ServerData;
     
     public static string PlatformName
     {

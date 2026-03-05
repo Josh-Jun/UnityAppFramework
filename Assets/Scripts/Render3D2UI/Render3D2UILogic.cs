@@ -152,7 +152,7 @@ namespace App.Modules
         {
             if (_renderData.CanScale)
             {
-                var scale = Input.GetAxis("Mouse ScrollWheel");
+                var scale = Input.GetAxis($"Mouse ScrollWheel");
                 var offset = View.CinemachineCinemachineCameraOffset.m_Offset;
                 offset.z += scale * 10f;
                 var offsetZ = Mathf.Clamp(offset.z, _renderData.ScaleRange.Near, _renderData.ScaleRange.Far);
@@ -161,7 +161,7 @@ namespace App.Modules
 
             if (!_renderData.CanRotate) return;
             if (!Input.GetMouseButton(0)) return;
-            var delta = Input.GetAxis("Mouse X") * 10f;
+            var delta = Input.GetAxis($"Mouse X") * 10f;
             _renderData.Target.transform.Rotate(0, -delta * RotateSpeed * Time.deltaTime, 0);
         }
 #endif
