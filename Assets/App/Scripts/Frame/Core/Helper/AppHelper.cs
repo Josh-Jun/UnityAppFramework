@@ -5,8 +5,9 @@ using System.Reflection;
 
 namespace App.Core.Helper
 {
-    public static class AppHelper
+    public static partial class AppHelper
     {
+        public const bool AutoHotfix = false;
         
         public static List<Type> GetAssemblyTypes<T>(string assemblyString = "App.Module")
         {

@@ -46,6 +46,7 @@ namespace App.Modules
                     // 需要下载,弹出更新界面
                     _view.SetContentText($"有{_downloader.TotalDownloadCount}个资源需要下载,总大小{_downloader.TotalDownloadBytes / 1048576f:F2}M");
                     _view.SetUpdateTipsActive(true);
+                    if (AppHelper.AutoHotfix) UpdateNow();
                 }
             });
         }

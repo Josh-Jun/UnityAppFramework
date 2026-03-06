@@ -5,7 +5,7 @@ using App.Runtime.Helper;
 using App.Runtime.UDP;
 using UnityEngine;
 
-public static class Global
+public static partial class Global
 {
     public static AppConfig AppConfig;
 
