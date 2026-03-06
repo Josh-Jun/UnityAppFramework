@@ -25,6 +25,8 @@ namespace App.Runtime.Hotfix
 {
     public class HotfixView : MonoBehaviour
     {
+        public static HotfixView Instance;
+        
         public bool ShowAgree = true;
         #region Hotfix
 
@@ -52,6 +54,8 @@ namespace App.Runtime.Hotfix
 
         private void Awake()
         {
+            Instance = this;
+            
             #region Hotfix
             _slider = transform.Find("Slider").GetComponent<Slider>();
             _text = transform.Find("Slider/Text").GetComponent<TextMeshProUGUI>();
