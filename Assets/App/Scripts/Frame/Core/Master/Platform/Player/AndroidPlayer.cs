@@ -4,7 +4,7 @@ using UnityEngine.Android;
 
 namespace App.Core.Master
 {
-    public class AndroidPlayer : PlatformMaster
+    public partial class AndroidPlayer : PlatformMaster
     {
         private const string AppMainPackage = "com.unity3d.player.UnityPlayer";
         private const string AppToolsPackage = "com.debug.tools.AndroidHelper";

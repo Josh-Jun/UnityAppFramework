@@ -2,7 +2,7 @@
 
 namespace App.Core.Master
 {
-    public class WindowPlayer : PlatformMaster
+    public partial class WindowPlayer : PlatformMaster
     {
         public override bool IsEditor { get; } = false;
         public override string Name { get; } = "Windows";

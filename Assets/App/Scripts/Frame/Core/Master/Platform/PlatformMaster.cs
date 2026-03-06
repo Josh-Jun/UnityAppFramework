@@ -2,7 +2,7 @@
 
 namespace App.Core.Master
 {
-    public abstract class PlatformMaster
+    public abstract partial class PlatformMaster
     {
         private static PlatformMaster _instance;
 

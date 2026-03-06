@@ -9,7 +9,7 @@ namespace App.Core.Master
         public string Name;
         public string Data;
     }
-    public class PlatformMsgReceiver : SingletonMonoEvent<PlatformMsgReceiver>
+    public partial class PlatformMsgReceiver : SingletonMonoEvent<PlatformMsgReceiver>
     {
         protected override void OnSingletonMonoInit()
         {

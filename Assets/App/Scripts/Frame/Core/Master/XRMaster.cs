@@ -15,7 +15,7 @@ using UnityEngine;
 
 namespace App.Core.Master
 {
-    public class XRMaster : SingletonMonoEvent<XRMaster>
+    public partial class XRMaster : SingletonMonoEvent<XRMaster>
     {
         private Transform XRRoot;
         private void Awake()

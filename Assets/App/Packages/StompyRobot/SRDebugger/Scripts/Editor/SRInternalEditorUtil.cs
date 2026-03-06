@@ -57,6 +57,11 @@ namespace SRDebugger.Editor
             return p;
         }
 
+        public static string GetSettingPath(string relativeToRoot)
+        {
+            return Path.Combine($"{Application.dataPath}/Settings/SRDebugger", relativeToRoot);
+        }
+
         public static T LoadResource<T>(string path) where T : UnityEngine.Object
         {
             var p = GetAssetPath(path);
@@ -78,9 +83,9 @@ namespace SRDebugger.Editor
 
         public static class EditorSettings
         {
-            internal const string SettingsFilePath = "/usr/Resources/SRDebugger/Settings.asset";
+            internal const string SettingsFilePath = "/usr/Settings.asset";
 
-            internal const string DisabledSettingsFilePath = "/usr" + SRDebugEditor.DisabledDirectoryPostfix + "/Resources/SRDebugger/Settings.asset";
+            internal const string DisabledSettingsFilePath = "/usr" + SRDebugEditor.DisabledDirectoryPostfix + "/Settings.asset";
 
             private static Settings _instance;
 
@@ -146,7 +151,7 @@ namespace SRDebugger.Editor
                 }
 
                 // Check if there is a 'disabled' settings file, we don't want to create a new settings file if a disabled one exists.
-                string disabledSettingsFile = SRInternalEditorUtil.GetAssetPath(DisabledSettingsFilePath);
+                string disabledSettingsFile = SRInternalEditorUtil.GetSettingPath(DisabledSettingsFilePath);
                 if (File.Exists(disabledSettingsFile))
                 {
                     message = "A settings file already exists but is disabled. Please ensure SRDebugger is correctly enabled or disabled.";
@@ -154,7 +159,7 @@ namespace SRDebugger.Editor
                 }
 
                 // Get resources folder path
-                var settingsAssetPath = SRInternalEditorUtil.GetAssetPath(SettingsFilePath);
+                var settingsAssetPath = SRInternalEditorUtil.GetSettingPath(SettingsFilePath);
 
                 // Load existing asset.
                 if (File.Exists(settingsAssetPath))

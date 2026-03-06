@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace App.Core.Master
 {
-    public class IPhonePlayer : PlatformMaster
+    public partial class IPhonePlayer : PlatformMaster
     {
         public override bool IsEditor { get; } = false;
         public override string Name { get; } = "iOS";

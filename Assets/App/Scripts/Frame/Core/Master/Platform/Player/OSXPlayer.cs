@@ -2,7 +2,7 @@
 
 namespace App.Core.Master
 {
-    public class OSXPlayer : PlatformMaster
+    public partial class OSXPlayer : PlatformMaster
     {
         public override bool IsEditor { get; } = false;
         public override string Name { get; } = "MacOS";

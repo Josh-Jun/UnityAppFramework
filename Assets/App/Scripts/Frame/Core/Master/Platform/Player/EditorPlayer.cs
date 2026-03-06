@@ -5,7 +5,7 @@ using UnityEditor;
 
 namespace App.Core.Master
 {
-    public class EditorPlayer : PlatformMaster
+    public partial class EditorPlayer : PlatformMaster
     {
         public override bool IsEditor { get; } = true;
         public override string Name { get; } = "Android";

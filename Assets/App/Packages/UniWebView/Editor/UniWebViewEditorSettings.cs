@@ -6,7 +6,7 @@ using System.IO;
 
 public class UniWebViewEditorSettings: ScriptableObject
 {
-    private const string AssetPath = "Assets/App/Packages/UniWebView/Editor/UniWebView/settings.asset";
+    private const string AssetPath = "Assets/Settings/UniWebView/settings.asset";
 
     [SerializeField]
     internal bool usesCleartextTraffic = false;
@@ -54,7 +54,7 @@ public class UniWebViewEditorSettings: ScriptableObject
         if (settings == null) {
             settings = ScriptableObject.CreateInstance<UniWebViewEditorSettings>();
 
-            Directory.CreateDirectory("Assets/App/Packages/UniWebView/Editor/UniWebView/");
+            Directory.CreateDirectory("Assets/Settings/UniWebView/");
             AssetDatabase.CreateAsset(settings, AssetPath);
             AssetDatabase.SaveAssets();
         }
