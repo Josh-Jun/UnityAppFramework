@@ -59,7 +59,7 @@ namespace SRDebugger.Editor
 
         public static string GetSettingPath(string relativeToRoot)
         {
-            return Path.Combine($"{Application.dataPath}/Settings/SRDebugger", relativeToRoot);
+            return $"Assets/Settings/SRDebugger{relativeToRoot}";
         }
 
         public static T LoadResource<T>(string path) where T : UnityEngine.Object
@@ -83,9 +83,9 @@ namespace SRDebugger.Editor
 
         public static class EditorSettings
         {
-            internal const string SettingsFilePath = "/usr/Settings.asset";
+            internal const string SettingsFilePath = "/usr/Resources/Settings.asset";
 
-            internal const string DisabledSettingsFilePath = "/usr" + SRDebugEditor.DisabledDirectoryPostfix + "/Settings.asset";
+            internal const string DisabledSettingsFilePath = "/usr" + SRDebugEditor.DisabledDirectoryPostfix + "/Resources/Settings.asset";
 
             private static Settings _instance;
 
