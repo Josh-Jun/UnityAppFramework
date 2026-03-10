@@ -27,7 +27,11 @@ namespace App.Runtime.Hotfix
     {
         public static HotfixView Instance;
         
-        public bool ShowAgree = true;
+        public bool ShowAgreePanel = true;
+        
+        public string userAgreementUrl;
+        public string privacyPolicyUrl;
+        
         #region Hotfix
 
         private Slider _slider;
@@ -109,7 +113,7 @@ namespace App.Runtime.Hotfix
 
         public void Startup(Action callback)
         {
-            if (PlayerPrefs.HasKey(Agreement) || !ShowAgree)
+            if (PlayerPrefs.HasKey(Agreement) || !ShowAgreePanel)
             {
                 callback?.Invoke();
                 return;
@@ -151,11 +155,12 @@ namespace App.Runtime.Hotfix
         /// <param name="index"></param> 0:用户协议 1:隐私政策 <summary />
         private IEnumerator OpenAgreePanel(int index)
         {
+            if (string.IsNullOrEmpty(userAgreementUrl) || !string.IsNullOrEmpty(privacyPolicyUrl)) yield break;
             _agreePanel.SetActive(true);
             var title = index == 0 ? "用户协议" : "隐私政策";
-            var api = index == 0 ? "/common/user_agreement" : "/common/privacy_policy";
+            var url = index == 0 ? userAgreementUrl : privacyPolicyUrl;
             _agreeTitle.text = title;
-            using var request = UnityWebRequest.Get(Global.HttpServer + api);
+            using var request = UnityWebRequest.Get(url);
             yield return request.SendWebRequest();
 
             if (request.result == UnityWebRequest.Result.Success)

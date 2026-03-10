@@ -18,12 +18,9 @@ namespace App.Runtime.CloudCtrl
 {
     public static class CloudCtrlRequester
     {
-        private const string CloudCtrlAPI = "";
-
-        public static void Post()
+        public static void Post(string url)
         {
-            if (string.IsNullOrEmpty(CloudCtrlAPI)) return;
-            var url = $"{Global.HttpServer}{CloudCtrlAPI}";
+            if (string.IsNullOrEmpty(url)) return;
             var data = new CloudCtrlData()
             {
                 bundleId = Application.identifier,
@@ -60,9 +57,8 @@ namespace App.Runtime.CloudCtrl
             });
         }
 
-        public static void Get()
+        public static void Get(string url)
         {
-            var url = $"{Global.CdnServer}/App/{Application.identifier}/{Global.PlatformName}/v{Application.version}/app.json?timestamp={DateTime.Now.Ticks}";
             UniTask.Void(async () =>
             {
                 using var request = new UnityWebRequest();

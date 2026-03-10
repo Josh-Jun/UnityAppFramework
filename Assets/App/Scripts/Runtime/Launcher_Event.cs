@@ -20,7 +20,7 @@ namespace App.Runtime
         private void LoadAppConfigCompletedEvent()
         {
             // 获取云控数据
-            CloudCtrlRequester.Post();
+            CloudCtrlRequester.Post(null);
         }
     
         private void HotfixBeforeEvent()

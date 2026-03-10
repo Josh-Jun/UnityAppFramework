@@ -799,7 +799,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f3bbe0a583a74d679f22f7241c6b914, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowAgree: 1
+  ShowAgreePanel: 1
+  userAgreementUrl: 
+  privacyPolicyUrl: 
 --- !u!1 &828226082
 GameObject:
   m_ObjectHideFlags: 0
