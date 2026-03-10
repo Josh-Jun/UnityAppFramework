@@ -37,16 +37,19 @@ namespace App.Modules
         {
             View.OpenView();
             var target = GameObject.Find("Cube");
-            ViewMaster.Instance.OpenView<Render3D2UIView>(new RenderData()
+            if (target != null)
             {
-                Target = target,
-                Image = View.RawImageRawImage,
-                FollowOffset = Vector3.back * 10,
-                LookAtOffset = Vector3.zero,
-                CanRotate = true,
-                CanScale = true,
-                ScaleRange = (-10f, 7f)
-            });
+                ViewMaster.Instance.OpenView<Render3D2UIView>(new RenderData()
+                {
+                    Target = target,
+                    Image = View.RawImageRawImage,
+                    FollowOffset = Vector3.back * 10,
+                    LookAtOffset = Vector3.zero,
+                    CanRotate = true,
+                    CanScale = true,
+                    ScaleRange = (-10f, 7f)
+                });
+            }
             TimeUpdateMaster.Instance.StartTimer(time =>
             {
                 if (Input.GetKeyDown(KeyCode.Q))

@@ -38,7 +38,7 @@ namespace App.Core
             EventMaster.Instance.InitEventMethods(SceneLogicPairs);
             // 初始化Global的Logic脚本的Begin方法
             ExecuteSceneMethods(AssetPath.Global, "Begin");
-            Assets.LoadSceneAsync(AssetPath.MainScene, AssetPackage.HotfixPackage);
+            Assets.LoadSceneAsync(AssetPath.MainScene);
         }
 
         /// <summary>初始化所有Logic脚本</summary>

@@ -55,26 +55,5 @@ namespace App.Editor.Tools
         }
         
         #endregion
-        
-        #region 自动生成资源包枚举类型
-        
-        /// <summary>  
-        /// 此函数在asset保存前被调用 
-        /// </summary>  
-        /// <param name="paths">paths 要保存的文件路径集合</param> 
-        public static string[] OnWillSaveAssets(string[] paths)
-        {
-            foreach (var path in paths)
-            {
-                // 生成资源包枚举
-                if (path == EditorHelper.watchers[0])
-                {
-                    MenuToolsEditor.UpdateAssetPackage();
-                }
-            }
-            return paths;
-        }
-
-        #endregion
     }
 }

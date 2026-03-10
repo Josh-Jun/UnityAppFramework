@@ -96,26 +96,6 @@ namespace App.Editor.Tools
 
         #endregion
 
-        #region 生成资源包枚举类型 Win(Ctrl+Shift+E) Mac(Cmd+Shift+E)
-
-        [MenuItem("App/Editor/UpdateAssetPackage %#E", false, EditorHelper.MENU_LEVEL)]
-        public static void UpdateAssetPackage()
-        {
-            sb.Length = 0;
-            var config = AssetDatabase.LoadAssetAtPath<AssetBundleCollectorSetting>(EditorHelper.watchers[0]);
-            sb.AppendLine("public enum AssetPackage");
-            sb.AppendLine("{");
-            foreach (var package in config.Packages)
-            {
-                sb.AppendLine($"    {package.PackageName},");
-            }
-            sb.AppendLine("}");
-            File.WriteAllText($"{target_path}/AssetPackage.cs", sb.ToString());
-            AssetDatabase.Refresh();
-        }
-
-        #endregion
-        
         #region 更新资源路径配置文件（自动/手动）Win(Ctrl+Shift+R) Mac(Cmd+Shift+R)
         
         [DidReloadScripts]

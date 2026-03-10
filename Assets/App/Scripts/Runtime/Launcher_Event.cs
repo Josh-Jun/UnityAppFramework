@@ -17,26 +17,30 @@ namespace App.Runtime
     {
         public bool RunUDPClient = false;
         
-        private void HotfixReadyCompletedEvent()
+        private void LoadAppConfigCompletedEvent()
         {
             // 获取云控数据
             CloudCtrlRequester.Post();
         }
     
-        private async UniTask HotfixBeforeEvent()
+        private void HotfixBeforeEvent()
         {
-            if (RunUDPClient)
+            UniTask.Void(async () =>
             {
-                // UDP获取服务器TCP连接数据
-                Global.ServerData = await UDPClient.GetServerData();
-            }
-            await UniTask.CompletedTask;
+                if (RunUDPClient)
+                {
+                    CanMoveNext = false;
+                    // UDP获取服务器TCP连接数据
+                    Global.ServerData = await UDPClient.GetServerData();
+                    CanMoveNext = true;
+                }
+            });
+            
         }
     
-        private async UniTask HotfixAfterEvent()
+        private void HotfixAfterEvent()
         {
             CodeLoader.Start();
-            await UniTask.CompletedTask;
         }
     }
 }
