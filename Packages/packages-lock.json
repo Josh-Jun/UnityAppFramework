@@ -14,17 +14,59 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "73654e76d28386dbc7766f803e2cb7a243e331e6"
+      "hash": "4feac30cb2e105992986c737f7f54992b8300e1a"
     },
     "com.cysharp.unitask": {
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "f213ff497e4ff462a77319cf677cf20cc0860ca9"
+      "hash": "a9e27c03d411d2fca01cc7410c24c97cd77cb539"
+    },
+    "com.lvlvlv.3rds": {
+      "version": "https://github.com/Josh-Jun/UnityPackageManager.git?path=Packages/App.3rds",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "2acd5bf72ac2fff00c0410994bda3101e3f8e100"
+    },
+    "com.lvlvlv.app": {
+      "version": "https://github.com/Josh-Jun/UnityPackageManager.git?path=Packages/App.Core",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.lvlvlv.3rds": "0.0.1",
+        "com.lvlvlv.gifplayer": "1.0.0",
+        "com.lvlvlv.uideoplayer": "1.0.0",
+        "com.cysharp.unitask": "2.5.10",
+        "com.code-philosophy.hybridclr": "8.11.0",
+        "com.tuyoogame.yooasset": "2.3.18",
+        "com.unity.cinemachine": "2.10.6",
+        "com.unity.scriptablebuildpipeline": "1.21.25",
+        "com.unity.assetbundlebrowser": "1.7.0"
+      },
+      "hash": "6539601620f2d95f7f492659ae5d1149ded6ddc9"
+    },
+    "com.lvlvlv.gifplayer": {
+      "version": "https://github.com/Josh-Jun/UnityPackageManager.git?path=Packages/GifPlayer",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0"
+      },
+      "hash": "9a7f4731fb18bf3956f651c829245d4c18dd2aea"
+    },
+    "com.lvlvlv.uideoplayer": {
+      "version": "https://github.com/Josh-Jun/UnityPackageManager.git?path=Packages/UIVideoPlayer",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0"
+      },
+      "hash": "2acd5bf72ac2fff00c0410994bda3101e3f8e100"
     },
     "com.tuyoogame.yooasset": {
-      "version": "2.3.16",
+      "version": "2.3.18",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -102,8 +144,8 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.cinemachine": {
-      "version": "2.10.4",
-      "depth": 0,
+      "version": "2.10.6",
+      "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.test-framework": "1.1.31"
@@ -140,15 +182,6 @@
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
-    },
-    "com.unity.gif.gifplayer": {
-      "version": "https://github.com/Josh-Jun/UnityPackageManager.git?path=/Assets/Packages/GifPlayer",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.unity.ugui": "1.0.0"
-      },
-      "hash": "2de9450c45088e646c1ded3baffc15d556485254"
     },
     "com.unity.ide.rider": {
       "version": "3.0.36",
@@ -356,15 +389,6 @@
         "com.unity.modules.ui": "1.0.0",
         "com.unity.modules.imgui": "1.0.0"
       }
-    },
-    "com.unity.ui.videoplayer": {
-      "version": "https://github.com/Josh-Jun/UnityPackageManager.git?path=/Assets/Packages/UIVideoPlayer",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.unity.ugui": "1.0.0"
-      },
-      "hash": "fcc223b80541914a667d456d062b6cb002907e91"
     },
     "com.unity.visualscripting": {
       "version": "1.9.4",
