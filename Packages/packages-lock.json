@@ -28,7 +28,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "2acd5bf72ac2fff00c0410994bda3101e3f8e100"
+      "hash": "1f3f4554cb73c1298b68bca409a7729328017dae"
     },
     "com.lvlvlv.app": {
       "version": "https://github.com/Josh-Jun/UnityPackageManager.git?path=Packages/App.Core",
@@ -45,7 +45,7 @@
         "com.unity.scriptablebuildpipeline": "1.21.25",
         "com.unity.assetbundlebrowser": "1.7.0"
       },
-      "hash": "6539601620f2d95f7f492659ae5d1149ded6ddc9"
+      "hash": "1f3f4554cb73c1298b68bca409a7729328017dae"
     },
     "com.lvlvlv.gifplayer": {
       "version": "https://github.com/Josh-Jun/UnityPackageManager.git?path=Packages/GifPlayer",
