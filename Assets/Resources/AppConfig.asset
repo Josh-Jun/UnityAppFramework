@@ -15,6 +15,7 @@ MonoBehaviour:
   EnableLog: 1
   DevelopmentMold: 2
   AssetPlayMode: 0
+  IsFullBuiltinPackage: 0
   AppFrameRate: 60
   ChannelPackage: 0
   NativeApp: 0
