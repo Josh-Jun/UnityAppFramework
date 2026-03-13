@@ -36,7 +36,7 @@ namespace App.Modules
         public void Begin()
         {
             View.OpenView();
-            var target = GameObject.Find("Cube");
+            var target = GameObject.CreatePrimitive(PrimitiveType.Cube);
             if (target != null)
             {
                 ViewMaster.Instance.OpenView<Render3D2UIView>(new RenderData()
