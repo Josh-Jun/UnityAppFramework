@@ -45,7 +45,7 @@
         "com.unity.scriptablebuildpipeline": "1.21.25",
         "com.unity.assetbundlebrowser": "1.7.0"
       },
-      "hash": "4a5fe884e6fcabebbae0fda8142022c601ba1dc3"
+      "hash": "2127a0b09e1cf07d577c9cad8624bf0153e60d91"
     },
     "com.lvlvlv.gifplayer": {
       "version": "https://github.com/Josh-Jun/UnityPackageManager.git?path=Packages/GifPlayer",
