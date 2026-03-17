@@ -43,9 +43,10 @@
         "com.tuyoogame.yooasset": "2.3.18",
         "com.unity.cinemachine": "2.10.6",
         "com.unity.scriptablebuildpipeline": "1.21.25",
-        "com.unity.assetbundlebrowser": "1.7.0"
+        "com.unity.assetbundlebrowser": "1.7.0",
+        "com.yasirkula.nativegallery": "1.9.1"
       },
-      "hash": "0f6a10cb32bea661a5c958668e5d2bc8656c4ad7"
+      "hash": "b5fbd2eec8c9ef0f3feb339f12e212db511a5b8a"
     },
     "com.lvlvlv.gifplayer": {
       "version": "https://github.com/Josh-Jun/UnityPackageManager.git?path=Packages/GifPlayer",
