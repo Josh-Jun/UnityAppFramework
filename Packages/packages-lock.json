@@ -28,7 +28,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "1f3f4554cb73c1298b68bca409a7729328017dae"
+      "hash": "e68894b0f80e35c13ba40308a7c6b0cccce03d1b"
     },
     "com.lvlvlv.app": {
       "version": "https://github.com/Josh-Jun/UnityPackageManager.git?path=Packages/App.Core",
@@ -362,7 +362,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.textmeshpro": {
-      "version": "3.0.7",
+      "version": "3.0.9",
       "depth": 0,
       "source": "registry",
       "dependencies": {
