@@ -2,8 +2,8 @@
  * ===============================================
  * author      : Josh@win
  * e-mail      : shijun_z@163.com
- * create time : 2025年8月4 8:55
- * function    :
+ * create time : 2026年3月16 10:54
+ * function    : 
  * ===============================================
  * */
 
@@ -84,18 +84,21 @@ namespace App.Core.Master
 
         private string sentence;
         private readonly StringBuilder sentenceBuilder = new();
+        private bool isBeginTranscription = false;
         /// <summary>
         /// WebSocket接收消息
         /// </summary>
         /// <param name="msg"></param>
         private void OnReceiveMessage(string msg)
         {
-            // Log.I("WebSocket收到消息", ("ws_asr_msg", msg));
+            Log.I("WebSocket收到消息", ("ws_asr_msg", msg));
             var response = JsonUtility.FromJson<ASRResponseData>(msg);
             switch (response.action)
             {
                 case ASR_STARTED:
+                    Log.I("开始录音", ("data", response.data));
                     AudioMaster.Instance.StartRecording();
+                    isBeginTranscription = false;
                     break;
                 case ASR_RESULT:
                     // Log.I("result:", ("data", response.data));
@@ -111,17 +114,36 @@ namespace App.Core.Master
                                 SendEventMsg("OnTranscriptionSentenceEnd", sentence);
                             }
                             sentenceBuilder.Append(sentence);
+                            isBeginTranscription = false;
+                        }
+                        else
+                        {
+                            if (!isBeginTranscription)
+                            {
+                                isBeginTranscription = true;
+                                if (HasEvent("OnTranscriptionSentenceBegin"))
+                                {
+                                    SendEventMsg("OnTranscriptionSentenceBegin");
+                                }
+                            }
                         }
                     }
                     else
                     {
+                        if (sentenceBuilder.Length == 0)
+                        {
+                            sentence = GetFullSentence(data.cn.st.rt);
+                            sentenceBuilder.Append(sentence);
+                        }
                         // 识别完成
                         if (HasEvent("OnTranscriptionCompleted"))
                         {
                             SendEventMsg("OnTranscriptionCompleted", sentenceBuilder.ToString());
                         }
-                        Log.I("result:", ("sentence", sentenceBuilder));
+                        Log.I("result:", ("sentence", sentenceBuilder.ToString()));
                         sentenceBuilder.Length = 0;
+                        isBeginTranscription = false;
+                        Disconnect(asrURL);
                     }
                     break;
                 case ASR_ERROR:
@@ -159,8 +181,8 @@ namespace App.Core.Master
         {
             AudioMaster.Instance.StopRecording();
             TimeTaskMaster.Instance.DeleteTimeTask(timeTaskId);
-            Send(asrURL, $"{{\"end\": true}}");
-            Disconnect(asrURL);
+            var end = $"{{\"end\": true}}";
+            Send(asrURL, end);
         }
         /// <summary>
         /// 生成加密签名
