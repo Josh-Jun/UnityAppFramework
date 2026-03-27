@@ -24,14 +24,14 @@
       "hash": "a9e27c03d411d2fca01cc7410c24c97cd77cb539"
     },
     "com.lvlvlv.3rds": {
-      "version": "https://github.com/Josh-Jun/UnityPackageManager.git?path=Packages/App.3rds",
+      "version": "https://gitee.com/shijun_z/UnityPackageManager.git?path=Packages/App.3rds",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "e68894b0f80e35c13ba40308a7c6b0cccce03d1b"
+      "hash": "f720028b2ca523e1cf65bcd08b5fecaed491f4c4"
     },
     "com.lvlvlv.app": {
-      "version": "https://github.com/Josh-Jun/UnityPackageManager.git?path=Packages/App.Core",
+      "version": "https://gitee.com/shijun_z/UnityPackageManager.git?path=Packages/App.Core",
       "depth": 0,
       "source": "git",
       "dependencies": {
@@ -49,22 +49,22 @@
       "hash": "f720028b2ca523e1cf65bcd08b5fecaed491f4c4"
     },
     "com.lvlvlv.gifplayer": {
-      "version": "https://github.com/Josh-Jun/UnityPackageManager.git?path=Packages/GifPlayer",
+      "version": "https://gitee.com/shijun_z/UnityPackageManager.git?path=Packages/GifPlayer",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "9a7f4731fb18bf3956f651c829245d4c18dd2aea"
+      "hash": "f720028b2ca523e1cf65bcd08b5fecaed491f4c4"
     },
     "com.lvlvlv.uideoplayer": {
-      "version": "https://github.com/Josh-Jun/UnityPackageManager.git?path=Packages/UIVideoPlayer",
+      "version": "https://gitee.com/shijun_z/UnityPackageManager.git?path=Packages/UIVideoPlayer",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "2acd5bf72ac2fff00c0410994bda3101e3f8e100"
+      "hash": "f720028b2ca523e1cf65bcd08b5fecaed491f4c4"
     },
     "com.tuyoogame.yooasset": {
       "version": "2.3.18",
