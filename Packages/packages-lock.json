@@ -28,7 +28,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "f720028b2ca523e1cf65bcd08b5fecaed491f4c4"
+      "hash": "f2aabc005e143fab4819ed6c9d167d86d41d46b5"
     },
     "com.lvlvlv.app": {
       "version": "https://gitee.com/shijun_z/UnityPackageManager.git?path=Packages/App.Core",
@@ -44,9 +44,10 @@
         "com.unity.cinemachine": "2.10.6",
         "com.unity.scriptablebuildpipeline": "1.21.25",
         "com.unity.assetbundlebrowser": "1.7.0",
-        "com.yasirkula.nativegallery": "1.9.1"
+        "com.yasirkula.nativegallery": "1.9.1",
+        "com.yasirkula.nativefilepicker": "1.4.1"
       },
-      "hash": "f720028b2ca523e1cf65bcd08b5fecaed491f4c4"
+      "hash": "f2aabc005e143fab4819ed6c9d167d86d41d46b5"
     },
     "com.lvlvlv.gifplayer": {
       "version": "https://gitee.com/shijun_z/UnityPackageManager.git?path=Packages/GifPlayer",
@@ -400,6 +401,13 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
+    },
+    "com.yasirkula.nativefilepicker": {
+      "version": "https://github.com/yasirkula/UnityNativeFilePicker.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "4fbc21600667ce8dbcfbfce1f159776dc9a52f15"
     },
     "com.yasirkula.nativegallery": {
       "version": "https://github.com/yasirkula/UnityNativeGallery.git",
