@@ -97,7 +97,7 @@ Shader "UI/RoundedRectangle"
                 OUT.vertex = UnityObjectToClipPos(OUT.worldPosition);
                 
                 OUT.texcoord = TRANSFORM_TEX(v.texcoord, _MainTex);
-                OUT.color = v.color * _Color;
+                OUT.color = pow(v.color,2.2) * _Color;
                 
                 // Convert UV to local position for rounded rectangle calculation
                 // Center the coordinates and scale by size
