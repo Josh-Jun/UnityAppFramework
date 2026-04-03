@@ -200,6 +200,9 @@ namespace App.Modules
                 View.BackgroundSpriteRenderer.sprite = backgroundData.sprite;
                 timeId = TimeUpdateMaster.Instance.StartTimer(Update);
                 
+                UpdatePosition();
+                UpdateScale();
+                UpdateBillboarding();
 #if UNITY_EDITOR
                 SendEventMsg("SetBackgroundData", data);
 #endif
