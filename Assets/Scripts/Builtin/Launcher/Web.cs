@@ -27,7 +27,6 @@ public class Web : MonoBehaviour
     private void LoadWebHtml(string html)
     {
 #if UNITY_ANDROID || UNITY_IOS
-        Debug.Log(html);
         web.LoadHTMLString(html, "text/html");
         web.Show();
 #endif
