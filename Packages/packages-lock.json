@@ -28,7 +28,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "d2675d8cbbee4ade86a2f0d3b44fa378ea87fc88"
+      "hash": "c69f9561cf8e070c85aebd72220ea6e2f1206749"
     },
     "com.lvlvlv.app": {
       "version": "https://gitee.com/Josh-Jun/UnityPackageManager.git?path=Packages/App.Core",

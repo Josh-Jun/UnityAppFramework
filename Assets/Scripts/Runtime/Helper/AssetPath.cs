@@ -14,7 +14,6 @@ public partial class AssetPath
     public const string DatePicker = "Assets/Bundles/Hotfix/Prefabs/UI/Items/DatePicker.prefab";
     public const string BackgroundView = "Assets/Bundles/Hotfix/Prefabs/Models/Views/Background/BackgroundView.prefab";
     public const string Render3D2UIView = "Assets/Bundles/Hotfix/Prefabs/Models/Views/Render3D2UI/Render3D2UIView.prefab";
-    public const string Browser = "Assets/Bundles/Hotfix/Prefabs/UI/Items/Web/Browser.prefab";
     public const string UniWebView = "Assets/Bundles/Hotfix/Prefabs/UI/Items/Web/UniWebView.prefab";
     public const string TestView = "Assets/Bundles/Hotfix/Prefabs/UI/Views/Test/TestView.prefab";
     public const string WebView = "Assets/Bundles/Hotfix/Prefabs/UI/Views/Web/WebView.prefab";
