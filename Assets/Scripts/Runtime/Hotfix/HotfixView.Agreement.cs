@@ -22,8 +22,8 @@ namespace App.Runtime.Hotfix
 {
     public partial class HotfixView
     {
-        private const string UserAgreementUrl = "https://ciyuanbanlv.oss-cn-beijing.aliyuncs.com/html/PrivacyAgree.html";
-        private const string PrivacyPolicyUrl = "https://ciyuanbanlv.oss-cn-beijing.aliyuncs.com/html/PrivacyAgree.html";
+        private const string UserAgreementUrl = "";
+        private const string PrivacyPolicyUrl = "";
         
         private GameObject _agree;
         private TextMeshProUGUI _connect;
