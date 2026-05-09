@@ -26,7 +26,7 @@ namespace App.Modules
     // autoCalculateDistance: 自动计算最佳距离
     // billboard: 是否始终面向相机
     [Serializable]
-    public class BackgroundData
+    public class BackgroundData : ViewBaseData
     {
         public Sprite sprite;
         public FitMode fitMode = FitMode.Cover;
@@ -45,7 +45,7 @@ namespace App.Modules
         private BackgroundData backgroundData;
         public BackgroundLogic()
         {
-	        AddEventMsg<object>("OpenBackgroundView", OpenBackgroundView);
+	        AddEventMsg<ViewBaseData>("OpenBackgroundView", OpenBackgroundView);
 	        AddEventMsg("CloseBackgroundView", CloseBackgroundView);
 
         }
@@ -191,9 +191,9 @@ namespace App.Modules
 
         private int timeId;
 
-        private void OpenBackgroundView(object obj)
+        private void OpenBackgroundView(ViewBaseData baseData)
         {
-            if (obj is BackgroundData data)
+            if (baseData is BackgroundData data)
             {
                 backgroundData = data;
                 View.BackgroundSpriteRenderer.SetGameObjectActive();

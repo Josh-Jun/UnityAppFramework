@@ -26,7 +26,7 @@ namespace App.Modules
         
         public TestLogic()
         {
-	        AddEventMsg<object>("OpenTestView", OpenTestView);
+	        AddEventMsg<ViewBaseData>("OpenTestView", OpenTestView);
 	        AddEventMsg("CloseTestView", CloseTestView);
 
         }
@@ -157,7 +157,7 @@ namespace App.Modules
 
         #region View Logic
         
-        private void OpenTestView(object obj)
+        private void OpenTestView(ViewBaseData baseData)
         {
             Log.I($"TestView Open = {TestJsonConfig.Instance.Get(5).Pos}");
             foreach (var pos in TestJsonConfig.Instance.Get(5).PosArr)

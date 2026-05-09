@@ -21,7 +21,7 @@ using Object = UnityEngine.Object;
 
 namespace App.Modules
 {
-    public class RenderData
+    public class RenderData : ViewBaseData
     {
         public GameObject Target;
         public RawImage Image;
@@ -42,7 +42,7 @@ namespace App.Modules
 
         public Render3D2UILogic()
         {
-            AddEventMsg<object>("OpenRender3D2UIView", OpenRender3D2UIView);
+            AddEventMsg<ViewBaseData>("OpenRender3D2UIView", OpenRender3D2UIView);
             AddEventMsg("CloseRender3D2UIView", CloseRender3D2UIView);
 
             AddEventMsg<bool>("SetRenderRotationEnable", SetRenderRotationEnable);
@@ -174,10 +174,10 @@ namespace App.Modules
         private int _timeId;
 #endif
         private Cinemachine.CinemachineTransposer transposer;
-        private void OpenRender3D2UIView(object obj)
+        private void OpenRender3D2UIView(ViewBaseData baseData)
         {
             View.RenderCamera.SetGameObjectActive();
-            if (obj is RenderData data)
+            if (baseData is RenderData data)
             {
                 _renderData = data;
                 // 相机设置

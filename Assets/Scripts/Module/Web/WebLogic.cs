@@ -23,7 +23,7 @@ using ZenFulcrum.EmbeddedBrowser;
 namespace App.Modules
 {
     [Serializable]
-    public class WebData
+    public class WebData : ViewBaseData
     {
         public string title;
         public string url;
@@ -42,7 +42,7 @@ namespace App.Modules
 #endif
         public WebLogic()
         {
-            AddEventMsg<object>("OpenWebView", OpenWebView);
+            AddEventMsg<ViewBaseData>("OpenWebView", OpenWebView);
             AddEventMsg("CloseWebView", CloseWebView);
             AddEventMsg("CloseWebButtonEvent", () => { View.CloseView(); });
         }
@@ -73,9 +73,9 @@ namespace App.Modules
 
         #region View Logic
 
-        private void OpenWebView(object obj)
+        private void OpenWebView(ViewBaseData baseData)
         {
-            if (obj is WebData data)
+            if (baseData is WebData data)
             {
                 isClear = data.isClear;
                 View.WebTitleTextMeshProUGUI.text = data.title;
