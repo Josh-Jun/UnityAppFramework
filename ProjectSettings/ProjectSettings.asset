@@ -176,6 +176,8 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
     Android: com.debuger.MyUnityFramework
+    Standalone: com.debuger.MyUnityFramework
+    iPhone: com.debuger.MyUnityFramework
   buildNumber:
     Standalone: 0
     VisionOS: 0
@@ -816,6 +818,7 @@ PlayerSettings:
   platformArchitecture: {}
   scriptingBackend:
     Android: 1
+    Standalone: 1
   il2cppCompilerConfiguration: {}
   il2cppCodeGeneration: {}
   managedStrippingLevel:
@@ -933,4 +936,4 @@ PlayerSettings:
   hmiLoadingImage: {fileID: 0}
   platformRequiresReadableAssets: 0
   virtualTexturingSupportEnabled: 0
-  insecureHttpOption: 0
+  insecureHttpOption: 2
