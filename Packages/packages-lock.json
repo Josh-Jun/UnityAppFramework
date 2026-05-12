@@ -28,7 +28,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "c18e6b5b38b2f10e8c7cae3a01dd273ef6938a13"
+      "hash": "c78d12084cfc567bb3fc8752192d04d1981be7b9"
     },
     "com.lvlvlv.app": {
       "version": "https://gitee.com/Josh-Jun/UnityPackageManager.git?path=Packages/App.Core",
@@ -47,7 +47,7 @@
         "com.yasirkula.nativegallery": "1.9.1",
         "com.yasirkula.nativefilepicker": "1.4.1"
       },
-      "hash": "c18e6b5b38b2f10e8c7cae3a01dd273ef6938a13"
+      "hash": "c78d12084cfc567bb3fc8752192d04d1981be7b9"
     },
     "com.lvlvlv.gifplayer": {
       "version": "https://gitee.com/Josh-Jun/UnityPackageManager.git?path=Packages/GifPlayer",
