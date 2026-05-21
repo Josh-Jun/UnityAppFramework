@@ -80,7 +80,9 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
-  _Radius: 1
+  m_Radius: 0
+  m_UseBlur: 0
+  m_ColorPower: 1
 --- !u!114 &2037614080553157019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,7 +132,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2368418822008283083}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ba62d37a61a8b44880560c4c6abc0a1, type: 3}
+  m_Script: {fileID: 11500000, guid: 0895ed1e3b5ed4362ae3eeead9bbc4c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2556743816866875366
@@ -200,8 +202,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2f8452e69305a3d47ac0b4e45b351e54, type: 2}
-  m_sharedMaterial: {fileID: 321799591729806930, guid: 2f8452e69305a3d47ac0b4e45b351e54,
+  m_fontAsset: {fileID: 11400000, guid: 32a473e20d72341378dec78888544622, type: 2}
+  m_sharedMaterial: {fileID: -8389693894973881311, guid: 32a473e20d72341378dec78888544622,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
