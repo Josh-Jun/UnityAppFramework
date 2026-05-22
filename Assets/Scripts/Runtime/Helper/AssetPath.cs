@@ -10,6 +10,9 @@ public partial class AssetPath
     public const string DialogItem = "Assets/Bundles/Builtin/Prefabs/UI/Items/Ask/DialogItem.prefab";
     public const string SnackbarItem = "Assets/Bundles/Builtin/Prefabs/UI/Items/Ask/SnackbarItem.prefab";
     public const string ToastItem = "Assets/Bundles/Builtin/Prefabs/UI/Items/Ask/ToastItem.prefab";
+    public const string AskView = "Assets/Bundles/Builtin/Prefabs/UI/Views/Ask/AskView.prefab";
+    public const string LoadingView = "Assets/Bundles/Builtin/Prefabs/UI/Views/Loading/LoadingView.prefab";
+    public const string UpdateView = "Assets/Bundles/Builtin/Prefabs/UI/Views/Update/UpdateView.prefab";
     public const string launcher_bg = "Assets/Bundles/Hotfix/Images/UI/launcher_bg.png";
     public const string DatePicker = "Assets/Bundles/Hotfix/Prefabs/UI/Items/DatePicker.prefab";
     public const string BackgroundView = "Assets/Bundles/Hotfix/Prefabs/Models/Views/Background/BackgroundView.prefab";
