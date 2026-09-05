@@ -11,17 +11,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-
-public class WebEventData : CrossAssemblyEventDataBase
-{
-    public string html;
-}
 
 namespace App.Runtime.Hotfix
 {
@@ -37,27 +34,9 @@ namespace App.Runtime.Hotfix
 
         private GameObject _agreePanel;
         private TextMeshProUGUI _agreeTitle;
+        private UniWebView web;
 
         private Action agreeEvent;
-
-        private const string WEB_EVENT_ARG_CONFIG_PATH = "Launcher/WebEventArgConfig";
-        private CrossAssemblyEventArgConfig WebEventArgConfig;
-
-        private void Start()
-        {
-            WebEventArgConfig = Resources.Load<CrossAssemblyEventArgConfig>(WEB_EVENT_ARG_CONFIG_PATH);
-        }
-
-        private void OnEnable()
-        {
-            HotfixEventArgConfig.AddListener(ShowAgreePanelEvent);
-        }
-
-        private void OnDisable()
-        {
-            HotfixEventArgConfig.RemoveListener(ShowAgreePanelEvent);
-        }
-
         private void Init()
         {
             _agree = transform.Find("Agree").gameObject;
@@ -96,17 +75,17 @@ namespace App.Runtime.Hotfix
 
             _agreePanel = transform.Find("AgreePanel").gameObject;
             _agreeTitle = _agreePanel.transform.Find("Title").GetComponent<TextMeshProUGUI>();
+            web =  _agreePanel.transform.Find("WebPanel/UniWeb").GetComponent<UniWebView>();
 
             if (_agreePanel.activeSelf)
                 _agreePanel.SetActive(false);
         }
 
-        private void ShowAgreePanelEvent(CrossAssemblyEventDataBase dataBase)
+        private void ShowAgreePanelEvent(object obj)
         {
             Init();
-            Debug.Log("ShowAgreePanelEvent");
-            if (dataBase is not HotfixEventData data) return;
-            agreeEvent = data.callback;
+            if (obj is not Action action) return;
+            agreeEvent = action;
             _agree.SetActive(true);
         }
         
@@ -133,10 +112,10 @@ namespace App.Runtime.Hotfix
 
             if (request.result == UnityWebRequest.Result.Success)
             {
-                WebEventArgConfig.Execute(new WebEventData()
-                {
-                    html = request.downloadHandler.text
-                });
+#if UNITY_ANDROID || UNITY_IOS
+                web.LoadHTMLString(request.downloadHandler.text, "text/html");
+                web.Show();
+#endif
             }
             else
             {
