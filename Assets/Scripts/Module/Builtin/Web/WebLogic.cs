@@ -115,12 +115,12 @@ namespace App.Modules
         private void CloseWebView()
         {
             if(!isClear) return;
+# if UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR_OSX
             if(!web) return;
             Object.Destroy(web.gameObject);
-# if UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR_OSX
             web.CleanCache();
-#endif
             web = null;
+#endif
         }
 
         #endregion
