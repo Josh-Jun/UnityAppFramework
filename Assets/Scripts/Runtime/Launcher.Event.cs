@@ -6,17 +6,42 @@
  * function    : 
  * ===============================================
  * */
+
+using System;
 using App.Runtime.CloudCtrl;
 using App.Runtime.Code;
 using App.Runtime.UDP;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace App.Runtime
 {
     public partial class Launcher
     {
         public bool RunUDPClient = false;
-        
+
+        private void Start()
+        {
+            LauncherEventArgConfig.AddListener(LauncherEvent);
+        }
+
+        private void LauncherEvent(CrossAssemblyEventDataBase dataBase)
+        {
+            if (dataBase is not LauncherEventData data) return;
+            switch (data.EventName)
+            {
+                case "LoadAppConfigCompletedEvent":
+                    LoadAppConfigCompletedEvent();
+                    break;
+                case "HotfixBeforeEvent":
+                    HotfixBeforeEvent();
+                    break;
+                case "HotfixAfterEvent":
+                    HotfixAfterEvent();
+                    break;
+            }
+        }
+
         private void LoadAppConfigCompletedEvent()
         {
             // 获取云控数据

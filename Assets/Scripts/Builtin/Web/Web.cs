@@ -17,17 +17,21 @@ public class Web : MonoBehaviour
     #if UNITY_ANDROID || UNITY_IOS
     private UniWebView web;
     #endif
-
+    private const string WEB_EVENT_ARG_CONFIG_PATH = "Launcher/WebEventArgConfig";
+    private CrossAssemblyEventArgConfig WebEventArgConfig;
     private void Awake()
     {
 #if UNITY_ANDROID || UNITY_IOS
         web = GetComponentInChildren<UniWebView>();
 #endif
+        WebEventArgConfig = Resources.Load<CrossAssemblyEventArgConfig>(WEB_EVENT_ARG_CONFIG_PATH);
+        WebEventArgConfig.AddListener(LoadWebHtml);
     }
-    private void LoadWebHtml(string html)
+    private void LoadWebHtml(CrossAssemblyEventDataBase dataBase)
     {
+        if(dataBase is not WebEventData data) return;
 #if UNITY_ANDROID || UNITY_IOS
-        web.LoadHTMLString(html, "text/html");
+        web.LoadHTMLString(data.html, "text/html");
         web.Show();
 #endif
     }

@@ -4,7 +4,7 @@
     "com.code-philosophy.hybridclr": "https://gitee.com/focus-creative-games/hybridclr_unity.git",
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
     "com.lvlvlv.3rds": "https://gitee.com/Josh-Jun/UnityPackageManager.git?path=Packages/App.3rds",
-    "com.lvlvlv.app": "https://gitee.com/Josh-Jun/UnityPackageManager.git?path=Packages/App.Core",
+    "com.lvlvlv.app": "https://gitee.com/Josh-Jun/UnityPackageManager.git?path=Packages/App.Frame",
     "com.lvlvlv.gifplayer": "https://gitee.com/Josh-Jun/UnityPackageManager.git?path=Packages/GifPlayer",
     "com.lvlvlv.uideoplayer": "https://gitee.com/Josh-Jun/UnityPackageManager.git?path=Packages/UIVideoPlayer",
     "com.tuyoogame.yooasset": "2.3.18",
