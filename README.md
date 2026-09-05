@@ -29,39 +29,59 @@
 ## 目录结构
 
 ```text
-3rds/                         第三方插件
-Bundles/                      资源包目录
-  Arts/                       原始资源
-  Builtin/                    首包内置资源
-    Audios/                   音频文件
-    Configs/                  Excel 导表数据配置
-    Dlls/                     HybridCLR 热更 DLL
-    Images/                   图片资源
-    Prefabs/                  预制体
-    Scenes/                   场景
-    Shaders/                  Shader 文件
-    Videos/                   视频文件
-  Hotfix/                     热更资源
-    Audios/
-    Images/
-    Prefabs/
-    Scenes/
-    Videos/
-Plugins/                      Unity 插件目录
-Resources/                    Unity 资源目录
-  AppConfig.asset             应用配置
-  EnvironmentConfig.asset     开发环境配置
-Scripts/                      项目脚本
-  Core/                       核心框架局部类
-  Hybrid/                     Hybrid 自动生成与热更相关文件
-    Ask/                      弹窗功能
-    Loading/                  Loading 加载场景
-    Update/                   资源热更
-  Module/                     功能模块代码
-  Runtime/                    Runtime 脚本局部类
-Settings/                     URP 等设置文件
-StreamingAssets/              内置 AssetBundle 输出目录
-  AssetBundles/
+UnityAppFramework
+├── 3rds
+│   └── 第三方插件
+│
+├── Bundles
+│   ├── Arts
+│   │   └── 原始资源目录
+│   │
+│   ├── Builtin
+│   │   ├── Audios       首包内置音频
+│   │   ├── Configs      Excel 导表配置数据
+│   │   ├── Dlls         HybridCLR 热更 DLL
+│   │   ├── Images       首包内置图片
+│   │   ├── Prefabs      首包内置预制体
+│   │   ├── Scenes       首包内置场景
+│   │   ├── Shaders      Shader 文件
+│   │   └── Videos       首包内置视频
+│   │
+│   └── Hotfix
+│       ├── Audios       可热更音频
+│       ├── Images       可热更图片
+│       ├── Prefabs      可热更预制体
+│       ├── Scenes       可热更场景
+│       └── Videos       可热更视频
+│
+├── Plugins
+│   └── Unity 插件目录
+│
+├── Resources
+│   ├── AppConfig.asset          应用配置文件
+│   └── EnvironmentConfig.asset  开发环境配置文件
+│
+├── Scripts
+│   ├── Core
+│   │   └── 核心框架局部类
+│   │
+│   ├── Hybrid
+│   │   ├── Ask          弹窗功能
+│   │   ├── Loading      Loading 加载场景功能
+│   │   └── Update       资源热更功能
+│   │
+│   ├── Module
+│   │   └── 功能模块代码
+│   │
+│   └── Runtime
+│       └── Runtime 脚本局部类
+│
+├── Settings
+│   └── URP 等项目设置文件
+│
+└── StreamingAssets
+    └── AssetBundles
+        └── 内置 AssetBundle 存放目录
 ```
 
 > 注意：框架核心代码通过 Unity Package 管理，通常不建议直接修改核心包内容。
@@ -300,4 +320,3 @@ Logic 构造方法通常用于注册事件。自动创建的 Logic 会默认添�
 - 热更资源优先通过 `AssetsMaster` 加载
 - 第三方插件调用优先使用 `XMaster` 跨程序集事件桥接
 - 日志建议统一使用框架封装的 Log 工具，方便开关和输出管理
-
