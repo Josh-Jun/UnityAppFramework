@@ -35,7 +35,7 @@ namespace App.Runtime.Hotfix
 
         private Action agreeEvent;
 
-        // private UniWebView web;
+        private UniWebView web;
 
         private void OnEnable()
         {
@@ -85,7 +85,7 @@ namespace App.Runtime.Hotfix
 
             _agreePanel = transform.Find("AgreePanel").gameObject;
             _agreeTitle = _agreePanel.transform.Find("Title").GetComponent<TextMeshProUGUI>();
-            // web =  _agreePanel.transform.Find("WebPanel/UniWeb").GetComponent<UniWebView>();
+            web =  _agreePanel.transform.Find("WebPanel/UniWeb").GetComponent<UniWebView>();
 
             if (_agreePanel.activeSelf)
                 _agreePanel.SetActive(false);
@@ -123,8 +123,8 @@ namespace App.Runtime.Hotfix
 
             if (request.result == UnityWebRequest.Result.Success)
             {
-                // web.LoadHTMLString(request.downloadHandler.text, "text/html");
-                // web.Show();
+                web.LoadHTMLString(request.downloadHandler.text, "text/html");
+                web.Show();
             }
             else
             {
