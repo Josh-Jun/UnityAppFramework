@@ -62,15 +62,20 @@ UnityAppFramework
 │   └── EnvironmentConfig.asset  开发环境配置文件
 │
 ├── Scripts
+│   ├── Builtin
+│   │   └── 主要是默认程序集桥接脚本
+│   │
 │   ├── Core
 │   │   └── 核心框架局部类
 │   │
-│   ├── Hybrid
-│   │   ├── Ask          弹窗功能
-│   │   ├── Loading      Loading 加载场景功能
-│   │   └── Update       资源热更功能
-│   │
 │   ├── Module
+│   │   ├── Builtin
+│   │   │   ├── Ask          弹窗功能
+│   │   │   ├── Loading      Loading 加载场景功能
+│   │   │   ├── Update       资源热更功能
+│   │   │   ├── Background   图片背景功能
+│   │   │   ├── Render3D2UI  3D对象渲染在ui上
+│   │   │   └── Web          内嵌网页功能
 │   │   └── 功能模块代码
 │   │
 │   └── Runtime
