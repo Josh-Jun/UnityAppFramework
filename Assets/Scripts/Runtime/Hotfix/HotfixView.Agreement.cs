@@ -37,7 +37,7 @@ namespace App.Runtime.Hotfix
         private UniWebView web;
 
         private Action agreeEvent;
-        private void Init()
+        private void InitAgreement()
         {
             _agree = transform.Find("Agree").gameObject;
             _connect = _agree.transform.Find("Connect").GetComponent<TextMeshProUGUI>();
@@ -81,10 +81,9 @@ namespace App.Runtime.Hotfix
                 _agreePanel.SetActive(false);
         }
 
-        private void ShowAgreePanelEvent(object obj)
+        private void ShowAgreePanelEvent(Action action)
         {
-            Init();
-            if (obj is not Action action) return;
+            InitAgreement();
             agreeEvent = action;
             _agree.SetActive(true);
         }
