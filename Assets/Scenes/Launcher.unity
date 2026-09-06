@@ -2877,6 +2877,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e188e512bde8d5c49bdaa979be38f266, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  web: {fileID: 0}
+  WebEventArgConfig: {fileID: 0}
 --- !u!114 &8859252082057978041
 MonoBehaviour:
   m_ObjectHideFlags: 0

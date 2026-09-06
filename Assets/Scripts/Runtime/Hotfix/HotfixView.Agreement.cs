@@ -18,11 +18,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class WebEventData : CrossAssemblyEventDataBase
-{
-    public string html;
-}
-
 namespace App.Runtime.Hotfix
 {
     public partial class HotfixView
@@ -40,13 +35,7 @@ namespace App.Runtime.Hotfix
 
         private Action agreeEvent;
 
-        private const string WEB_EVENT_ARG_CONFIG_PATH = "Launcher/WebEventArgConfig";
-        private CrossAssemblyEventArgConfig WebEventArgConfig;
-
-        private void Start()
-        {
-            WebEventArgConfig = Resources.Load<CrossAssemblyEventArgConfig>(WEB_EVENT_ARG_CONFIG_PATH);
-        }
+        // private UniWebView web;
 
         private void OnEnable()
         {
@@ -96,6 +85,7 @@ namespace App.Runtime.Hotfix
 
             _agreePanel = transform.Find("AgreePanel").gameObject;
             _agreeTitle = _agreePanel.transform.Find("Title").GetComponent<TextMeshProUGUI>();
+            // web =  _agreePanel.transform.Find("WebPanel/UniWeb").GetComponent<UniWebView>();
 
             if (_agreePanel.activeSelf)
                 _agreePanel.SetActive(false);
@@ -133,10 +123,8 @@ namespace App.Runtime.Hotfix
 
             if (request.result == UnityWebRequest.Result.Success)
             {
-                WebEventArgConfig.Execute(new WebEventData()
-                {
-                    html = request.downloadHandler.text
-                });
+                // web.LoadHTMLString(request.downloadHandler.text, "text/html");
+                // web.Show();
             }
             else
             {

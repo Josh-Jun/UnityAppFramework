@@ -294,7 +294,7 @@ Logic 构造方法通常用于注册事件。自动创建的 Logic 会默认添�
 接入流程：
 
 1. 创建跨程序集事件的 ScriptableObject 配置表
-2. 如事件需要参数，则创建继承自 `CrossAssemblyEventDataBase` 的数据类
+2. 如事件需要参数，则创建继承自 `CrossAssemblyEventDataBase` 的数据类，这些类必须放到App.Runtime程序集下
 3. 调用端通常在 `Modules` 脚本中通过 `XMaster.Execute` 传入配置表资源路径
 4. 第三方功能在默认程序集或 `Builtin` 目录中创建桥接脚本
 5. 桥接脚本注册监听事件，并根据参数执行第三方插件能力
