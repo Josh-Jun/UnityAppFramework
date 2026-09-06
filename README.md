@@ -5,7 +5,7 @@
 ## 远程仓库
 
 - GitHub：[Josh-Jun/UnityAppFramework](https://github.com/Josh-Jun/UnityAppFramework)
-- Gitee：[shijun_z/UnityAppFramework](https://gitee.com/shijun_z/UnityAppFramework)
+- Gitee：[Josh-Jun/UnityAppFramework](https://gitee.com/Josh-Jun/UnityAppFramework)
 
 ## 框架特点
 
@@ -25,6 +25,11 @@
 - [YooAsset](https://www.yooasset.com/docs/Introduce)：Unity 资源管理与热更新系统
 - UniTask：Unity 高性能 async/await 异步库
 - NativeGallery：Android / iOS 图库与相册交互插件
+- NativeFilePicker：Android / iOS 文件交互插件
+- UniWebView：Android / iOS 网页内嵌插件
+- XCharts：UGUI表格插件
+- SuperScrollView：无限滑动列表插件
+- StompyRobot（SRDebugger）：真机调试工具
 
 ## 目录结构
 
