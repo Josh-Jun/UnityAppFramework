@@ -245,8 +245,8 @@ Logic 构造方法通常用于注册事件。自动创建的 Logic 会默认添�
 | --- | --- |
 | AutoPlay Launcher | 无论当前处于哪个场景，运行时自动切到 Launcher，停止后回到原场景 |
 | RestoreGameView | 编辑器运行时自动适配横竖屏 GameView |
-| UpdateAssetPath | 更新资源路径文件 `AssetPath.cs` |
-| UpdateAssetPackage | 更新资源包枚举 `AssetPackage.cs` |
+| UpdateAssetPath | 更新资源路径字符串常量文件 `AssetPath.cs` |
+| UpdateAssetPackage | 更新资源包名称字符串常量文件 `AssetPackage.cs` |
 | Protobuf2CS | 将 `Tools/protobuf/proto` 下的 proto 文件转换成 C# 类 |
 | UpdateKeystore | 更新 Android 签名别名与密码配置 |
 | CopyTemplateScripts | 复制 Logic / View 脚本模板到 Unity 安装目录 |
