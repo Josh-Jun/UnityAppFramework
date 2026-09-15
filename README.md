@@ -23,13 +23,13 @@
 
 - [HybridCLR](https://hybridclr.doc.code-philosophy.com/)：Unity 全平台 C# 热更新方案
 - [YooAsset](https://www.yooasset.com/docs/Introduce)：Unity 资源管理与热更新系统
-- UniTask：Unity 高性能 async/await 异步库
-- NativeGallery：Android / iOS 图库与相册交互插件
-- NativeFilePicker：Android / iOS 文件交互插件
-- UniWebView：Android / iOS 网页内嵌插件
-- XCharts：UGUI表格插件
-- SuperScrollView：无限滑动列表插件
-- StompyRobot（SRDebugger）：真机调试工具
+- [UniTask](https://github.com/Cysharp/UniTask)：Unity 高性能 async/await 异步库
+- [NativeGallery](https://github.com/yasirkula/UnityNativeGallery)：Android / iOS 图库与相册交互插件
+- [NativeFilePicker](https://github.com/yasirkula/UnityNativeFilePicker)：Android / iOS 文件交互插件
+- [UniWebView](https://uniwebview.com/)：Android / iOS 网页内嵌插件
+- [XCharts](https://xcharts-team.github.io/)：UGUI表格插件
+- [SuperScrollView](https://assetstore.unity.com/packages/tools/gui/ugui-super-scrollview-86572)：无限滑动列表插件
+- [StompyRobot（SRDebugger）](https://stompyrobot.uk/tools/srdebugger/)：真机调试工具
 
 ## 目录结构
 
