@@ -15,13 +15,13 @@ namespace App.Core.Master
     public partial class XMaster
     {
         private static readonly Dictionary<string,CrossAssemblyEventConfig> _scriptableObjects = new();
-        private static readonly Dictionary<string,CrossAssemblyEventArgConfig> _scriptableObjectsArg = new();
+        private static readonly Dictionary<string,CrossAssemblyEventArgsConfig> _scriptableObjectsArg = new();
 
-        public void Execute(string path, CrossAssemblyEventDataBase data)
+        public void Execute(string path, CrossAssemblyEventArgsDataBase data)
         {
             if (!_scriptableObjectsArg.TryGetValue(path, out var config))
             {
-                config = AssetsMaster.Instance.LoadAssetSync<CrossAssemblyEventArgConfig>(path);
+                config = AssetsMaster.Instance.LoadAssetSync<CrossAssemblyEventArgsConfig>(path);
                 if (config)
                 {
                     _scriptableObjectsArg.Add(path, config);

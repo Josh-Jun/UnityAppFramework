@@ -22,13 +22,13 @@ namespace App.Runtime
 
         private void Start()
         {
-            LauncherEventArgConfig.AddListener(LauncherEvent);
+            LauncherEventArgsConfig.AddListener(LauncherEvent);
         }
 
-        private void LauncherEvent(CrossAssemblyEventDataBase dataBase)
+        private void LauncherEvent(CrossAssemblyEventArgsDataBase dataBase)
         {
-            if (dataBase is not LauncherEventData data) return;
-            switch (data.EventName)
+            if (dataBase is not CrossAssemblyEventArgsData<string> data) return;
+            switch (data.Arg)
             {
                 case "LoadAppConfigCompletedEvent":
                     LoadAppConfigCompletedEvent();

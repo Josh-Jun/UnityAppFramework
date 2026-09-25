@@ -7,6 +7,7 @@
     "com.lvlvlv.app": "https://gitee.com/Josh-Jun/UnityPackageManager.git?path=Packages/App.Frame",
     "com.lvlvlv.gifplayer": "https://gitee.com/Josh-Jun/UnityPackageManager.git?path=Packages/GifPlayer",
     "com.lvlvlv.uideoplayer": "https://gitee.com/Josh-Jun/UnityPackageManager.git?path=Packages/UIVideoPlayer",
+    "com.lvlvlv.xlocalization": "https://gitee.com/Josh-Jun/UnityPackageManager.git?path=Packages/XLocalization",
     "com.tuyoogame.yooasset": "2.3.18",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",

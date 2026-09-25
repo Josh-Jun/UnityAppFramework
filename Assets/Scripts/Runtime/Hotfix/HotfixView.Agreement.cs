@@ -9,9 +9,10 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -39,12 +40,12 @@ namespace App.Runtime.Hotfix
 
         private void OnEnable()
         {
-            HotfixEventArgConfig.AddListener(ShowAgreePanelEvent);
+            HotfixEventArgsConfig.AddListener(ShowAgreePanelEvent);
         }
 
         private void OnDisable()
         {
-            HotfixEventArgConfig.RemoveListener(ShowAgreePanelEvent);
+            HotfixEventArgsConfig.RemoveListener(ShowAgreePanelEvent);
         }
 
         private void Init()
@@ -91,12 +92,12 @@ namespace App.Runtime.Hotfix
                 _agreePanel.SetActive(false);
         }
 
-        private void ShowAgreePanelEvent(CrossAssemblyEventDataBase dataBase)
+        private void ShowAgreePanelEvent(CrossAssemblyEventArgsDataBase dataBase)
         {
             Init();
             Debug.Log("ShowAgreePanelEvent");
-            if (dataBase is not HotfixEventData data) return;
-            agreeEvent = data.callback;
+            if (dataBase is not CrossAssemblyEventArgsData<Action> data) return;
+            agreeEvent = data.Arg;
             _agree.SetActive(true);
         }
         

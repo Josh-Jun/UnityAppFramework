@@ -844,6 +844,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f3bbe0a583a74d679f22f7241c6b914, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EVENT_CONFIG_PATH: Launcher/HotfixEventArgsConfig
   ShowAgreePanel: 1
 --- !u!1 &828226082
 GameObject:
@@ -1129,6 +1130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RunUDPClient: 0
+  EVENT_CONFIG_PATH: Launcher/LauncherEventArgsConfig
 --- !u!1 &1116959037
 GameObject:
   m_ObjectHideFlags: 0
@@ -2774,7 +2776,6 @@ GameObject:
   - component: {fileID: 96886355657692487}
   - component: {fileID: 7244923518498767132}
   - component: {fileID: 1412305944670616035}
-  - component: {fileID: 7244923518498767133}
   - component: {fileID: 4916590653657191776}
   m_Layer: 5
   m_Name: UniWeb
@@ -2865,20 +2866,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4346526205334541921}
   m_CullTransparentMesh: 1
---- !u!114 &7244923518498767133
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4346526205334541921}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e188e512bde8d5c49bdaa979be38f266, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  web: {fileID: 0}
-  WebEventArgConfig: {fileID: 0}
 --- !u!114 &8859252082057978041
 MonoBehaviour:
   m_ObjectHideFlags: 0

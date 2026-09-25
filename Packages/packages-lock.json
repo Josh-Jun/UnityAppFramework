@@ -47,7 +47,7 @@
         "com.yasirkula.nativegallery": "1.9.1",
         "com.yasirkula.nativefilepicker": "1.4.1"
       },
-      "hash": "084385d7ac6642e1df8960132695947febe6a995"
+      "hash": "1e2d7a2273c73b29e4c1a39924eb6fb0dfdf146d"
     },
     "com.lvlvlv.gifplayer": {
       "version": "https://gitee.com/Josh-Jun/UnityPackageManager.git?path=Packages/GifPlayer",
@@ -66,6 +66,16 @@
         "com.unity.ugui": "1.0.0"
       },
       "hash": "c3645b84acce775f1b649569a4b13b5be1dc6512"
+    },
+    "com.lvlvlv.xlocalization": {
+      "version": "https://gitee.com/Josh-Jun/UnityPackageManager.git?path=Packages/XLocalization",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0",
+        "com.unity.textmeshpro": "3.0.7"
+      },
+      "hash": "29a73fc74dbd084129b92f52e1becf0643af0e5f"
     },
     "com.tuyoogame.yooasset": {
       "version": "2.3.18",
