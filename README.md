@@ -308,7 +308,7 @@ Logic 构造方法通常用于注册事件。自动创建的 Logic 会默认添�
    2. CrossAssemblyEventArgsConfig（带参数）
 2. 内置默认数据类：
    1. CrossAssemblyEventArgsDataBase（基类，不带参数）
-   2. CrossAssemblyEventArgsData<T1>（一个参数）
+   2. CrossAssemblyEventArgsData\<T\>（一个参数）
    3. CrossAssemblyEventArgsData<T1, T2>（两个参数）
    4. CrossAssemblyEventArgsData<T1, T2, T3>（三个参数）
    5. CrossAssemblyEventArgsData<T1, T2, T3, T4>（四个参数）
