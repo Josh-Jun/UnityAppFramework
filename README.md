@@ -123,10 +123,9 @@ UnityAppFramework
 
 正式启动后会依次完成：
 
-1. 初始化所有 View
-2. 初始化 Event 特性
-3. 调用全局 Logic 的 `Begin` 生命周期方法
-4. 加载主场景
+1. 根据View加载模式初始化相应View脚本
+2. 调用全局 Logic 的 `Begin` 生命周期方法
+3. 加载主场景
 
 ## 热更新与资源管理
 
@@ -281,6 +280,7 @@ Logic 构造方法通常用于注册事件。自动创建的 Logic 会默认添�
 - `EnableLog`：日志开关
 - `DevelopmentMold`：开发环境，支持 Sandbox、Test、Local、Release
 - `AssetPlayMode`：资源加载模式，支持 EditorSimulateMode、OfflinePlayMode、HostPlayMode、WebPlayMode
+- `ViewLoadMold`：View加载模式，支持 Full（全量）、AsScene（根据场景加载）、AsRequired（按需加载）
 - `IsFullBuiltinPackage`：是否全量包
 - `AppFrameRate`：默认帧率
 - `ChannelPackage`：渠道包
