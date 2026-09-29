@@ -58,8 +58,6 @@ namespace App.Modules
 
         public void Begin()
         {
-            View.BackgroundRectTransform.SetGameObjectActive(false);
-
 #if ENABLE_TEST
             TimeUpdateMaster.Instance.StartTimer((time) =>
             {

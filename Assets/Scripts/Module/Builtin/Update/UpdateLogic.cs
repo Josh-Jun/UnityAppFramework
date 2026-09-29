@@ -78,7 +78,7 @@ namespace App.Modules
         
         public void End()
         {
-            
+            ViewMaster.Instance.RemoveView<UpdateView>();
         }
         public void AppPause(bool pause)
         {
