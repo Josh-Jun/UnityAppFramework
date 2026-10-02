@@ -8,7 +8,14 @@
  * */
 using App.Runtime.UDP;
 
+public enum AsrChannel
+{
+    aliyun,
+    xfyun,
+}
+
 public static partial class Global
 {
+    public const AsrChannel WSAsrChannel = AsrChannel.aliyun;
     public static ServerData ServerData;
 }
