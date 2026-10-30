@@ -18,8 +18,6 @@ namespace App.Runtime
 {
     public partial class Launcher
     {
-        public bool RunUDPClient = false;
-
         private void Start()
         {
             LauncherEventArgsConfig.AddListener(LauncherEvent);
@@ -52,7 +50,7 @@ namespace App.Runtime
         {
             UniTask.Void(async () =>
             {
-                if (RunUDPClient)
+                if (Global.RunUDPClient)
                 {
                     CanMoveNext = false;
                     // UDP获取服务器TCP连接数据
@@ -60,7 +58,6 @@ namespace App.Runtime
                     CanMoveNext = true;
                 }
             });
-            
         }
     
         private void HotfixAfterEvent()

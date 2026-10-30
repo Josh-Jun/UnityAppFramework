@@ -10,12 +10,13 @@ using App.Runtime.UDP;
 
 public enum AsrChannel
 {
-    aliyun,
-    xfyun,
+    AL_YUN,
+    XF_YUN,
 }
 
 public static partial class Global
 {
-    public const AsrChannel WSAsrChannel = AsrChannel.aliyun;
+    public const bool RunUDPClient = false;
+    public const AsrChannel WSAsrChannel = AsrChannel.AL_YUN;
     public static ServerData ServerData;
 }

@@ -75,7 +75,7 @@ namespace App.Core.Master
         {
             switch (Global.WSAsrChannel)
             {
-                case AsrChannel.xfyun:
+                case AsrChannel.XF_YUN:
                 {
                     var timestamp = DateTime.Now.ToTimeStamp(false);
                     var sign = GenerateSignStr1(timestamp);
@@ -85,7 +85,7 @@ namespace App.Core.Master
                     timeTaskId = TimeTaskMaster.Instance.AddTimeTask(SendAudioData, intervalTime, TimeUnit.Millisecond, 0);
                     break;
                 }
-                case AsrChannel.aliyun:
+                case AsrChannel.AL_YUN:
                 {
                     _taskId = Guid.NewGuid().ToString("N");
 
@@ -114,12 +114,12 @@ namespace App.Core.Master
             AudioMaster.Instance.StopRecording();
             switch (Global.WSAsrChannel)
             {
-                case AsrChannel.xfyun:
+                case AsrChannel.XF_YUN:
                 {
                     EndTranscription();
                     break;
                 }
-                case AsrChannel.aliyun:
+                case AsrChannel.AL_YUN:
                 {
                     StopTranscription();
                     break;
@@ -137,7 +137,7 @@ namespace App.Core.Master
         {
             switch (Global.WSAsrChannel)
             {
-                case AsrChannel.xfyun:
+                case AsrChannel.XF_YUN:
                 {
                     lock (queueLock)
                     {
@@ -148,7 +148,7 @@ namespace App.Core.Master
                     }
                     break;
                 }
-                case AsrChannel.aliyun:
+                case AsrChannel.AL_YUN:
                 {
                     Send(asrURL, audioData);
                     break;
@@ -167,12 +167,12 @@ namespace App.Core.Master
             // Log.I("WebSocket收到消息", ("ws_asr_msg", msg));
             switch (Global.WSAsrChannel)
             {
-                case AsrChannel.xfyun:
+                case AsrChannel.XF_YUN:
                 {
                     XF_OnReceiveMessage(msg);
                     break;
                 }
-                case AsrChannel.aliyun:
+                case AsrChannel.AL_YUN:
                 {
                     AL_OnReceiveMessage(msg);
                     break;
